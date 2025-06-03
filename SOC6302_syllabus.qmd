@@ -1,11 +1,242 @@
 ---
 title: "Stats for Sociologists"
+subtitle: "SOC6302H1F"
+format:
+  html:
+    toc: true
+    output-file: index
+  pdf:
+    toc: false
+    number-sections: true
+    number-depth: 3
+    geometry:
+      - top=2cm
+      - bottom=3cm
+      - left=2.5cm
+      - right=2.5cm
+  docx: 
+    toc: false
+    number-sections: true
+    number-depth: 3
+    geometry:
+      - top=2cm
+      - bottom=3cm
+      - left=2.5cm
+      - right=2.5cm
+block-headings: false
+filters:
+    - openlinksinnewpage
 ---
 
-## Quarto
+```{r, include=FALSE}
 
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+if(!require(tidyverse)){
+  install.packages("tidyverse")
+  library(tidyverse)
+}
 
-```{r}
-1 + 1
+if(!require(knitr)){
+  install.packages("knitr")
+  library(knitr)
+}
+
+if(!require(flextable)){
+  install.packages("flextable")
+  library(flextable)
+}
+
+if(!require(googledrive)){
+  install.packages("googledrive")
+  library(googledrive)
+}
+
+if(!require(googlesheets4)){
+  install.packages("googlesheets4")
+  library(googlesheets4)
+}
+
+if(!require(tinytex)){
+  install.packages("tinytex")
+  library(tinytex)
+}
+
+## sheets reauth with specified token and email address
+drive_deauth()
+googledrive::drive_auth(
+  cache = ".secrets",
+  email = "joannapepin@gmail.com"
+)
+
+# Give google sheets the same authorization
+gs4_auth(token = drive_token())
+
+
 ```
+
+Fall 2025
+
+**Schedule:** Tuesdays, 10AM - 12PM (Lab 12PM - 1PM)
+
+**Instructor:** Joanna R. Pepin \[j.pepin\@utoronto.ca\]
+
+**Teaching Assistant:** Somebody Great \[somebody.great\@mail.utoronto.ca\]
+
+**Office Hours:** By appointment
+
+# Course Description
+
+This course introduces fundamental concepts and approaches to analyzing quantitative data, with a focus on social scientific topics and examples. Concepts covered include descriptive statistics, sampling distributions, hypothesis testing, correlation, and linear regression. This course has three principal goals. First, students will learn how to hand-calculate the statistics discussed in class. Second, students will learn how to use statistical software to compute these statistics (either R or Stata). Third, students will learn how to interpret and evaluate statistics published in academic articles.
+
+## Course Objectives
+
+Students who successfully complete this course will be able to competently select and compute descriptive and basic inferential statistics, will have an introductory knowledge of statistical programming, and will be able to read and interpret basic statistics as they appear in academic publications. More specifically, by the end of the course, students should be able to…
+
+-   summarize and describe data distributions.
+-   explain the statistical theory underlying hypothesis testing.
+-   evaluate hypotheses about group differences in means and the association between variables.
+-   interpret basic statistics in published academic articles.
+-   demonstrate basic proficiency in using R.
+
+# Course Materials and Resources
+
+**MATERIALS**
+
+There is no required textbook for this course.
+
+You will need to bring a laptop computer to class, as you are expected to interact and program throughout course sessions and the lab.
+
+**SOFTWARE**
+
+The statistical programming language for this course will be [R](https://www.r-project.org/about.html). Computations are executed from a set of typed commands which is easiest to undertake through [RStudio](https://rstudio.com/products/rstudio/), an editor which allows you to see your code and output. Both R and RStudio are free to download to your own personal computer:
+
+1.  Download [R](https://cran.rstudio.com/)
+2.  Download [RStudio (free version)](https://rstudio.com/products/rstudio/download/)
+
+You will also need regular access to a word processor (e.g., Microsoft Office, LibreOffice, or Google Docs) and strong, reliable internet for this class.
+
+# Components
+
+All assignments, evaluations, and tests must be submitted via Quercus.
+
+```{r echo = FALSE}
+Assessment <- c("Homework (HW 1-4)", "Midterm", "Flash Presentation", "Research Brief")
+Worth      <- c("40%", "20%", "15%", "25%")
+Due        <- c("Variable", "October 21st", "TBD", "November 25th")
+
+summary    <- data.frame(Assessment, Worth, Due)
+```
+
+```{r echo = FALSE}
+flextable(summary) %>%
+  set_table_properties(width = 1, layout = "autofit") %>%
+  theme_zebra() %>%
+    bg(bg = "#18BC9C", part = "header") %>%
+      color(color = "white", part = "header")
+```
+
+# Schedule
+
+```{r message =FALSE, echo=FALSE}
+sched <- read_sheet("1W3SSN_HG9hULeiVC66upl57uxtXntY96xCs9ru5yWe4", sheet = "Schedule")
+#sched$Dates <- as.Date(sched$Dates)
+
+```
+
+```{r, echo = FALSE}
+flextable(sched) %>%
+  set_table_properties(width = 1, layout = "autofit") %>%
+  theme_zebra() %>%
+    bg(bg = "#18BC9C", part = "header") %>%
+      color(color = "white", part = "header") %>%
+  color(color = "#E74C3C", i = 8, j = "Topic") %>%
+  bold(bold = TRUE, i = 8, j = "Topic") %>%
+  color(color = "#18BC9C", i = 9, j = "Topic") %>%
+  bold(bold = TRUE, i = 9, j = "Topic") %>%
+  color(color = "#E74C3C", i = 13, j = "Topic") %>%
+  bold(bold = TRUE, i = 13, j = "Topic") %>%
+  italic(italic = TRUE, i = 14, j = "Dates")
+```
+
+# Evaluation
+
+## Homework (40%)
+
+Four homework assignments will be assigned throughout the semester. Homework assignments will include a mixture of conceptual and applied (computational) questions; in the latter case, directions will specify whether calculations should be done by hand or using R. Each homework will be weighted equally.
+
+Assignments are due by the beginning of class on the specified date. They should be uploaded to the designated spot on Quercus (NOT emailed to your professor or TA). Show your work, round numbers appropriately (when doing calculations retain at least four decimal places; when presenting your final answer, round to two decimal places), and be neat and organized.
+
+You may work together in small groups on homework assignments. Remember, however, that working through the homework is the best preparation for the exam and a measure of your understanding of course material. Even if you work with others, you must write up and turn in your own homework.
+
+## Midterm (20%)
+
+The midterm will consist of multiple-choice questions which assess conceptual understanding of the course material and ability to compute the statistics discussed. You will not use R during the exams; however, I may ask you to interpret R coding syntax and output.
+
+## Flash Presentation (15%)
+
+You will give a short (approximately 5-7 minutes) presentation on your research brief. You will be required to submit the slides (about 5 slides) for your presentation to Quercus. Details on the flash presentation will be given at a later date.
+
+## Research Brief (25%)
+
+You will apply the skills you’ve been learning to answer a research question that is of interest to you. Your Research Brief should include:
+
+-   **Question**: a clearly worded research question that can be answered with quantitative data.
+-   **Data**: a description of the data you are using, including a description of all variables and how they are coded. A table of descriptive statistics of the total sample and key comparison groups and a narrative of the table.
+-   **Plan of Analysis**: a description of your analysis (i.e., how are you going to use the data to answer the research question?)
+-   **Results**: a presentation of the results, including a regression table and a figure.
+-   **Discussion**: Provide an interpretation of the results – that is, given the results, what is the answer to the question? Are there any other possible interpretations? What limitations might there be in your data or analysis that affect how well we can answer the question?
+
+Details on the research brief, including choice of datasets, will be given at a later date.
+
+**NOTE:** To keep you on track and to provide feedback along the way, you will submit Table 01 (including your research question and data section) earlier in the semester (5%). Your complete research brief submitted at the end of the semester will therefore be 20% of your final grade.
+
+## Grading Scale
+
+Final grades will adhere to the [Arts and Sciences Graduate Grade Scale](https://www.registrar.utoronto.ca/records-academics/transcripts/grading-scales-notations/).
+
+Research briefs will be graded as follows:
+
+| Grade | Score | Meaning |
+|-----------------|-----------------|--------------------------------------|
+| Excellent | 5 | Strong evidence of original thinking; good organization; capacity to analyze and synthesize; superior grasp of course material with sound critical evaluations. |
+| Good | 4 | Evidence of grasp of course material, some evidence of critical capacity and analytic ability; reasonable evidence of critical and analytic skills. |
+| Adequate | 3 | Evidence of familiarity with course material and some evidence that critical and analytic skills have been developed. |
+| Marginal | 2 | Some evidence of familiarity with the subject matter and weakness in critical and analytic skills; |
+| Inadequate | 1 | Little evidence of even superficial understanding of subject matter; limited critical and analytic skills; irrelevant use of course material. |
+
+# Course Policies
+
+## Assignment Submission
+
+All written work must be typed, double-spaced, with 1-inch margins using 11- or 12-point Times New Roman, Aptos, Calibri, or Roboto.
+
+Written work must be submitted via Quercus. No work will be accepted over e-mail. Files should be in PDF or .doc(x) format or as a .R script if requested. Other file formats will not be graded and will be treated as unsubmitted assignments. It is your responsibility to ensure that the file itself is readable, which can be confirmed by downloading the file once it is uploaded to the assignment submission page on Quercus. Unreadable files are missed assignments.
+
+## Late Policy & Course Extensions
+
+Falling behind in a statistics course generally makes learning expotentially more difficult and thus, late work is generally not accepted. However, a due date for a homework assignment can be extended for a legitimate reason with proper documentation (e.g., illness, family emergency, religious observance, accessibility accommodation) according to UofT's guidelines. Late Research Briefs will be penalized at a rate of 2% per day up to 10% (5 days) and will not be accepted thereafter, except where there are legitimate, documented reasons beyond a student’s control. Flash Presentations, given their in class participatory nature, cannot be extended.
+
+***Note:*** Extensions beyond the term end date (not the last day of instruction but the actual end of term, e.g., the last day of a fall term class may be December 1st, but the term ends December 23rd) requires a discussion with the instructor and the graduate office, as well as completion of an SGS request for an extension of course work form. These forms will be considered by the graduate office and are not automatically approved.
+
+## Academic Integrity
+
+Students are expected to know and adhere to the University’s principles of academic integrity. Copying, plagiarizing, falsifying medical certificates, or other forms of academic misconduct will not be tolerated. Any act of plagiarism or other unethical behavior will be addressed in accordance with University guidelines. Please see the [Code of Behaviour on Academic Matters](http://www.governingcouncil.utoronto.ca/policies/behaveac.htm) for specific information on academic integrity at UofT.
+
+## Plagiarism Detection
+
+Turnitin plagiarism detection software is integrated within Quercus. It uses text matching technology as a method to uphold the University’s high academic integrity standards to detect any potential plagiarism. The terms that apply to the University’s use of this tool are described on the [Centre for Teaching Support & Innovation](https://uoft.me/pdt-faq.) web site. I am not comfortable with the widespread use of this software, which effectively provides large quantities of student work to a for-profit company whose future business uses may include using it to train machine learning and AI tools. Consequently, none of the assignments for this course are set for automatic review by Turnitin. However, if I have reason to suspect plagiarism, I may use this tool to detect plagiarism.
+
+If you object to your work being subject to review by Turnitin, add a comment when you submit your assignment. If I do find that we need to review your assignment for plagiarism and you have asked that I not use Turnitin, I will ask that you provide sufficient secondary material (e.g., reading notes, outlines of the paper, rough drafts of the final draft, etc.) to establish that the paper you submit is truly yours. If you cannot or decline to provide the requested documentation and do not consent to us using Turnitin for review, I will decline to mark the assignment.
+
+**Plagiarism:** Be careful to avoid plagiarism. It is a serious academic offense with serious penalties (see the [Code of Behavior on Academic Matters](https://governingcouncil.utoronto.ca/secretariat/policies/code-behaviour-academic-matters-july-1-2019)). Do not present someone else’s ideas as your own. Give proper references to others’ ideas, and use quotation marks if you are quoting. When in doubt, err on the side of a reference. Turning in an old paper, or large parts thereof, for credit in a second (or third etc.) course, is considered an academic offense that results in students being referred off to the Office of Academic Integrity.
+
+## Artificial Intelligence
+
+Students may choose to use generative artificial intelligence (AI) tools as they work through the assignments. I encourage you to limit your use to technical coding support/reference, grammar/copy editing, and outlining. Be aware that AI tools are often wrong, overly generic, and lacking in critical nuance. My expectations for you are considerably higher than that. You will need to be more persuasive and creative at linking sociological research with empirical data, thinking critically, and making connections between data and theory than any of these tools. Over-reliance on AI will prevent you from learning the skills necessary to complete work at the level expected for this class. Students are ultimately accountable for the work they submit.
+
+## Accessibility and Student Accommodations
+
+Students with diverse learning styles and needs are welcome in this course. The University of Toronto is committed to accessibility. If you require accommodations or have any accessibility concerns, please visit <http://studentlife.utoronto.ca/as> as soon as possible.
+
+## Equity and Diversity Statement
+
+The University of Toronto is committed to equity and respect for diversity. All members of the learning environment in this course should strive to create an atmosphere of mutual respect. As a course instructor, I will neither condone nor tolerate behaviour that undermines the dignity or self-esteem of any individual in this course and wish to be alerted to any attempt to create an intimidating or hostile environment. It is our collective responsibility to create a space that is inclusive and welcomes discussion. Discrimination, harassment and hate speech will not be tolerated. Additional information and reports on Equity and Diversity at the University of Toronto is available at [http://equity.hrandequity.utoronto.ca](http://equity.hrandequity.utoronto.ca/).

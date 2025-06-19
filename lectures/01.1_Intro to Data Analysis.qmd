@@ -15,7 +15,6 @@ editor:
     wrap: 72
 ---
 
-
 ```{r warning = FALSE, error = FALSE, message = FALSE}
 # Loading libraries
 library(tidyverse)
@@ -31,40 +30,78 @@ c_palette <- c("#3498DB",
 
 ```
 
-#  {data-menu-title="Agenda" background-image="images/calendar.png" background-size="100px" background-repeat="repeat"}
+# Agenda {data-menu-title="Agenda" background-image="images/calendar.png" background-size="100px" background-repeat="repeat"}
+
+-   Introduction to Data Analysis
+-   Frequency Distributions
+-   Lab 01
+
+# Introduction to Data Analysis {.theme-section .smaller}
 
 :::::: columns
-::: {.column width="50%"}
-<h3>Topics</h3>
-
--   Intro. to Data Analysis
--   Frequency??
+::: {.column width="33%"}
+-   UNIT OF ANALYSIS\
+-   POPULATION\
+-   SAMPLE\
+-   N & n
 :::
 
-:::: {.column width="50%"}
-<h3>Terms</h3>
-
-::: {style="font-size: 80%; color: #3498DB"}
-DESCRIPTIVE STATISTICS\
-INFERENTIAL STATISTICS\
-TIDY DATA\
-VARIABLES NOMINAL\
-ORDINAL\
-INTERVAL-RATIO\
-DICHOTOMOUS\
-CODEBOOK
+::: {.column width="40%"}
+-   DESCRIPTIVE STATISTICS\
+-   INFERENTIAL STATISTICS\
+-   TIDY DATA\
+-   VARIABLES\
 :::
-::::
+
+::: {.column width="24%"}
+-   NOMINAL\
+-   ORDINAL\
+-   INTERVAL-RATIO\
+-   DICHOTOMOUS\
+:::
 ::::::
 
-# Introduction to Data Analysis {.theme-section}
+## Unit of Analysis
 
-##  {#slide4-id data-menu-title="Descriptive vs Inferential"}  
+::: {style="color: #e74c3c; font-size: 150%; font-family: 'Shadows Into Light'"}
+Who or what is being studied?
+:::
+
+<br>  
+
+::: callout-tip
+# POPULATION
+
+All units of analysis (people, institutions, groups, etc.) in which the
+researcher is interested.
+:::
+
+<br>
+
+::: callout-tip
+# SAMPLE
+
+A subset of people (or institutions, groups, etc.) selected from a
+population.
+:::
+
+## Notation
+
+[**N**]{style="font-size: 200%; color: #E74C3C;"} refers to
+**population** size
+
+<br>
+
+[***n***]{style="font-size: 200%; color: #E74C3C;"} refers to **sample**
+size
+
+##  {#slide4-id data-menu-title="Descriptive vs Inferential"}
 
 ::: callout-tip
 ## DESCRIPTIVE STATISTICS
 
-Procedures that help us organize and describe data collected from a sample or population.
+Procedures that help us organize and describe data collected from a
+sample or population.
 :::
 
 <br>
@@ -72,22 +109,129 @@ Procedures that help us organize and describe data collected from a sample or po
 ::: callout-tip
 ## INFERENTIAL STATISTICS
 
-Making underlying predictions or inferences about a population using observations and analyses from a sample.
+Making underlying predictions or inferences about a population using
+observations and analyses from a sample.
 :::
 
+:::: {.content-visible when-profile="speaker"}
+::: notes
+DESCRIPTIVE STATISTICS - Procedures that help us organize and describe
+data collected from a sample or population. INFERENTIAL STATISTICS -
+Making underlying predictions or inferences about a population using
+observations and analyses from a sample.
+:::
+::::
 
-##  {#slide5-id data-menu-title="Practice"}
+##  {.quiz-question .smaller background-image="images/clipboard-question.png" background-size="100px" background-repeat="repeat"}
 
-::: {style="font-size: 150%; color: #F39C12"}
-{{< fa clipboard-question >}} PRACTICE
+::: {style="color: #F39C12"}
+{{< fa clipboard-question >}} **Which of the following is an example of
+descriptive statistics?**
 :::
 
-<br>
+-   [The average age of UofT students is 21 years.]{.correct
+    data-explanation="💯 Correct!"}
+-   [Students who study more than 10 hours a week are more likely to
+    achieve higher
+    grades]{data-explanation="😲 This statement reflects a correlation between variables."}
+-   [About 65% of U of T undergrads feels socially connected, based on a
+    sample of 300
+    students.]{data-explanation="The phrase 'based on' in the statement means inferences are being made."}
+-   [A hypothesis test shows a significant relationship between income
+    and education
+    level]{data-explanation="Hypothesis testing is by definition an inference."}
 
-## Quiz question goes here {.quiz-question background-image="images/clipboard-question.png" background-size="100px" background-repeat="repeat"}
+## Tidy Data
 
-- Option 1
-- [Option 2 which is correct]{.correct}
-- Option 3
-- Option 4
+![](images/01/tidy-data.png)
+
+##  {#slide7-id data-menu-title="Variables"}
+
+::: callout-tip
+## VARIABLES
+
+Any factor, trait, or condition that can exist in differing amounts or
+types.
+:::
+
+![](images/01/variable.png)
+
+## Measurement Levels {#slide8-id}
+
+:::: r-stack
+::: {style="font-size: 80%"}
+[**Nominal**]{style="color: #18BC9C;"}\
+A variable made up of categories that cannot be ordered
+
+[**Ordinal**]{style="color: #18BC9C;"}\
+A variable made up of ranked categories, with no systematic or
+measurable numeric difference between the categories.
+
+[**Interval-ratio** (aka continuous)]{style="color: #18BC9C;"}\
+A variable with categories that are ordered and expressed in the same
+units.
+
+[**Dichotomous** (aka binary)]{style="color: #18BC9C;"}\
+A variable with only two categories.
+:::
+
+![](images/01/levels.png){.fragment fragment-index="1"}
+::::
+
+##  {.quiz-question .smaller background-image="images/clipboard-question.png" background-size="100px" background-repeat="repeat"}
+
+::: {style="color: #F39C12"}
+{{< fa clipboard-question >}} **Which of the following is an example of
+a nominal level of measurement?**
+:::
+
+-   [The type of religion a person identifies with (e.g., Christianity,
+    Islam, Judaism)]{.correct data-explanation="💯 Correct!"}
+-   [The number of children in a
+    household]{data-explanation="This could be an ordinal or a continuous variable."}
+-   [The income of a family in
+    dollars]{data-explanation="This is a continuous variable."}
+-   [A ranking of provinces by marriage
+    rate.]{data-explanation="This would be an ordinal variable."}
+
+##  {.quiz-question .smaller background-image="images/clipboard-question.png" background-size="100px" background-repeat="repeat"}
+
+::: {style="color: #F39C12"}
+{{< fa clipboard-question >}} **Which level of measurement is used when
+ranking neighborhoods by crime rate (e.g., low, medium, high)?**
+:::
+
+-   [Ordinal]{.correct data-explanation="💯 Correct!"}
+-   [Nominal]{data-explanation="There is an order to the categories."}
+-   [Dichotomous]{data-explanation="There are more than two categories"}
+-   [Continuous]{data-explanation="😲 Grouping by rate makes this categorical."}
+
+# Frequency Distributions {.theme-section .smaller}
+
+::::: columns
+::: {.column width="40%"}
+-   FREQUENCY DISTRIBUTION\
+-   RELATIVE FREQUENCY DISTRIBUTION
+:::
+
+::: {.column width="24%"}
+-   PROPORTION\
+-   PERCENTAGE\
+-   CUMULATIVE\
+-   RATE\
+:::
+
+::: {.column width="33%"}
+-   BAR GRAPH\
+-   HISTOGRAM\
+-   LINE GRAPH\
+-   STATISTICAL MAP
+:::
+::::
+
+# Lab 01 {.theme-section .smaller}
+
+-   CODEBOOK
+
+##  {data-menu-title="Why use codebooks"}
 

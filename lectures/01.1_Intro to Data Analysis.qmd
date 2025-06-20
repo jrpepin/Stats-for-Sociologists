@@ -17,8 +17,25 @@ editor:
 
 ```{r warning = FALSE, error = FALSE, message = FALSE}
 # Loading libraries
-library(tidyverse)
-library(gghighlight)
+
+# Install packages not yet installed & load them
+pacman::p_load(
+  tidyverse,
+  gssr,        # load U.S. gss data
+  haven,       # work with labeled data
+  labelled,    # use labels as values
+  kableExtra,  # pretty tables
+  flextable,   # formatted pretty tables
+  conflicted   # declare primary packages
+)
+
+
+conflict_prefer("is.labelled", "haven")
+conflict_prefer("filter", "dplyr")
+conflict_scout() # Identify the conflicts
+
+## Load all gss
+data(gss_all)
 
 # Define color palette
 c_palette <- c("#3498DB",
@@ -30,23 +47,23 @@ c_palette <- c("#3498DB",
 
 # Agenda {data-menu-title="Agenda" background-image="images/calendar.png" background-size="100px" background-repeat="repeat"}
 
-::::: columns
+:::::: columns
 ::: {.column width="50%"}
 -   Introduction to Data Analysis
 -   Frequency Distributions
 -   Lab 01
 :::
 
-::: {.column width="50%"}
+:::: {.column width="50%"}
 ::: {.my-box .smaller}
- 📖 [**Readings**]{style="color: #18BC9C; font-size: 150%; font-family: 'Shadows Into Light'"}
+📖
+[**Readings**]{style="color: #18BC9C; font-size: 150%; font-family: 'Shadows Into Light'"}
 
-1.   What's the point?
-2.   Being a Statistician Means Never Having to Say You're Certain
-
-:::
+1.  What's the point?
+2.  Being a Statistician Means Never Having to Say You're Certain
 :::
 ::::
+::::::
 
 # Introduction to Data Analysis {.theme-section .smaller}
 
@@ -79,7 +96,7 @@ c_palette <- c("#3498DB",
 Who or what is being studied?
 :::
 
-<br>  
+<br>
 
 ::: callout-tip
 # POPULATION
@@ -97,7 +114,7 @@ A subset of people (or institutions, groups, etc.) selected from a
 population.
 :::
 
-## Notation
+## Notation {#slide5-id background-image="images/01/pop-sample.png" background-size="contain"}
 
 [**N**]{style="font-size: 200%; color: #E74C3C;"} refers to
 **population** size
@@ -133,7 +150,6 @@ Making underlying predictions or inferences about a population using
 observations and analyses from a sample.
 :::
 ::::
-
 
 ## Tidy Data
 
@@ -191,7 +207,6 @@ descriptive statistics?**
     and education
     level]{data-explanation="Hypothesis testing is by definition an inference."}
 
-
 ##  {.quiz-question .smaller background-image="images/clipboard-question.png" background-size="100px" background-repeat="repeat"}
 
 ::: {style="color: #F39C12"}
@@ -222,7 +237,7 @@ ranking neighborhoods by crime rate (e.g., low, medium, high)?**
 
 # Frequency Distributions {.theme-section .smaller}
 
-::::: columns
+:::::: columns
 ::: {.column width="40%"}
 -   FREQUENCY DISTRIBUTION\
 -   RELATIVE FREQUENCY DISTRIBUTION
@@ -241,32 +256,107 @@ ranking neighborhoods by crime rate (e.g., low, medium, high)?**
 -   LINE GRAPH\
 -   STATISTICAL MAP
 :::
-::::
+::::::
 
 ##  {#slide14-id data-menu-title="Distributions"}
 
 ::: callout-tip
-## DISTRIBUTION 
+## DISTRIBUTION
 
-Shows all the possible values (or intervals) of the data and how often they occur.
+Shows all the possible values (or intervals) of the data and how often
+they occur.
 :::
 
-<br> 
+<br>
 
 ::: callout-tip
-## FREQUENCY DISTRIBUTION 
+## FREQUENCY DISTRIBUTION
 
-A table reporting the number of observations falling into each category of the variable.
+A table reporting the number of observations falling into each category
+of the variable.
 :::
-
 
 ![](images/01/distributions.png)
 
+
 ##  {#slide15-id data-menu-title="Distribution table"}
 
-![](images/01/table01.png "Frequency table presenting attitudes about sex before marriage from the 2024 U.S. GSS.")
+**Table 1. Attitudes about sex before marriage**
+
+```{r}
+gss_all$premarsx <-as_factor(zap_missing(gss_all$premarsx))
+gss_all$sex <-as_factor(zap_missing(gss_all$sex))
+
+gss_all %>%
+  select(id, year, sex, premarsx) %>%
+  filter(year == 2024, !is.na(premarsx)) %>%
+  count(premarsx, sort = TRUE
+        ) -> freq_premarsx
+
+freq_premarsx %>%
+  summarise(across(where(is.numeric), sum)) %>%
+  mutate(premarsx = "Total"
+         ) -> total_row
+
+# combine
+table_premarsx <- rbind(freq_premarsx, total_row)
+```
+
+::: {.panel-tabset}
+
+### Tab A
+```{r}
+# Render the table
+table_premarsx %>%
+  flextable() %>%
+  set_table_properties(width = 1, layout = "autofit") %>%
+  theme_zebra() %>%
+  bg(bg = "#18BC9C", part = "header") %>%
+  color(color = "white", part = "header") %>%
+  fontsize(size = 22, part = "all") 
+```
 
 
+### Tab B
+
+```{r}
+table_premarsx %>%
+  flextable() %>%
+  set_table_properties(width = 1, layout = "autofit") %>%
+  theme_zebra() %>%
+  bg(bg = "#18BC9C", part = "header") %>%
+  color(color = "white", part = "header") %>%
+  fontsize(size = 22, part = "all") %>%
+  color(color = "#E74C3C", i = 5, j = "n")
+```
+
+[The number of respondents who answered this survey question.]{style="color: #E74C3C; font-family: 'Shadows Into Light'"}  
+
+### Tab C
+
+```{r}
+table_premarsx %>%
+  flextable() %>%
+  set_table_properties(width = 1, layout = "autofit") %>%
+  theme_zebra() %>%
+  bg(bg = "#18BC9C", part = "header") %>%
+  color(color = "white", part = "header") %>%
+  fontsize(size = 22, part = "all") %>%
+  color(color = "#E74C3C", i = 3, j = "n")
+```
+
+[The number of respondents who said pre-marital sex was "**wrong only sometimes**."]{style="color: #E74C3C; font-family: 'Shadows Into Light'"}  
+
+
+:::
+
+::: aside
+[*Source: U.S. General Social Survey 2024*]{style="color: $gray-500"}
+:::
+
+##  {#slide16-id data-menu-title="Distribution table"}
+
+next flextable goes here.
 
 # Lab 01 {.theme-section .smaller}
 
@@ -274,3 +364,4 @@ A table reporting the number of observations falling into each category of the v
 
 ##  {data-menu-title="Why use codebooks"}
 
+will add later

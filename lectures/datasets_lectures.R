@@ -22,12 +22,13 @@ pacman::p_load(
   expss,
   gtsummary,
   jtools,
-  ggpmisc, # linear regression line on plots
+  ggpmisc,    # linear regression line on plots
   conflicted,
   sjlabelled,
+  labelled,   # use labels as values
   gtsummary,
   srvyr,
-  openxlsx # import Guttmacher data
+  openxlsx    # import Guttmacher data
 )
 
 
@@ -48,8 +49,9 @@ gss24 <- gss_get_yr(2024)
 data01 <- gss_all %>%
   select(id, year, sex, premarsx)
 
-data01$premarsx <- labelled::to_character(data01$premarsx)
-data01$sex <- labelled::to_character(data01$sex)
+data01$premarsx <-as_factor(zap_missing(data01$premarsx))
+data01$sex <-as_factor(zap_missing(data01$sex))
+
 
 data01 %>%
   filter(year == 2024, !is.na(premarsx)) %>%
@@ -60,9 +62,25 @@ data01 %>%
   group_by(sex) %>%
   count(premarsx, sort = TRUE) %>%
   pivot_wider(
-    names_from = sex, # Make 'sex' the column headers
-    values_from = n) # Fill with the count values
+    names_from = sex,
+    values_from = n,
+    values_fill = 0
+  ) -> freq_premarsx 
 
+freq_premarsx %>%
+  kable()
+
+# create total row
+total_row <- freq_premarsx %>%
+  summarise(across(where(is.numeric), sum)) %>%
+  mutate(premarsx = "Total") %>%
+  select(names(freq_premarsx))  # ensure column order matches
+
+# combine
+table_premarsx <- rbind(freq_premarsx, total_row)
+
+table_premarsx %>%
+  kable()
 
 
 # Lab 01 -----------------------------------------------------------------------

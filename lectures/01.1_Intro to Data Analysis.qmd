@@ -356,7 +356,52 @@ table_premarsx %>%
 
 ##  {#slide16-id data-menu-title="Distribution table"}
 
-next flextable goes here.
+[Are women more likely than men to say premarital sex is "**not wrong at all**?"]{style="color: #E74C3C; font-size: 150%; font-family: 'Shadows Into Light'"}  
+
+<br>
+
+**Table 2. Attitudes about sex before marriage by gender**
+```{r}
+gss_all$premarsx <-as_factor(zap_missing(gss_all$premarsx))
+gss_all$sex <-as_factor(zap_missing(gss_all$sex))
+
+gss_all %>%
+  select(id, year, sex, premarsx) %>%
+  filter(!is.na(premarsx), !is.na(sex)) %>%
+  group_by(sex) %>%
+  count(premarsx, sort = TRUE) %>%
+  pivot_wider(
+    names_from = sex,
+    values_from = n,
+    values_fill = 0
+  ) -> freq_premarsx 
+
+# create total row
+total_row <- freq_premarsx %>%
+  summarise(across(where(is.numeric), sum)) %>%
+  mutate(premarsx = "Total") %>%
+  select(names(freq_premarsx))  # ensure column order matches
+
+# combine
+table_premarsx <- rbind(freq_premarsx, total_row)
+
+# Render the table
+table_premarsx %>%
+  flextable() %>%
+  set_table_properties(width = 1, layout = "autofit") %>%
+  theme_zebra() %>%
+  bg(bg = "#18BC9C", part = "header") %>%
+  color(color = "white", part = "header") %>%
+  fontsize(size = 22, part = "all") %>%
+  color(color = "#E74C3C", i = 1, j = "female") %>%
+  color(color = "#E74C3C", i = 1, j = "male")
+
+```
+
+
+::: aside
+[*Source: U.S. General Social Survey 1972-2024*]{style="color: $gray-500"}
+:::
 
 # Lab 01 {.theme-section .smaller}
 

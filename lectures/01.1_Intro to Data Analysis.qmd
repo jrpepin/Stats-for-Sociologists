@@ -4,7 +4,10 @@ format:
   revealjs:
     controls: true
     theme: [default, custom.scss]
+    include-in-header:
+    - file: mathjax-color.html
     slide-number: c
+    math: mathjax
 revealjs-plugins:
   - quiz
 embed-resources: true
@@ -15,35 +18,31 @@ editor:
     wrap: 72
 ---
 
-```{r warning = FALSE, error = FALSE, message = FALSE}
-# Loading libraries
+```{r setup, include = FALSE}
 
-# Install packages not yet installed & load them
-pacman::p_load(
-  tidyverse,
-  gssr,        # load U.S. gss data
-  haven,       # work with labeled data
-  labelled,    # use labels as values
-  kableExtra,  # pretty tables
-  flextable,   # formatted pretty tables
-  conflicted   # declare primary packages
-)
-
-
-conflict_prefer("is.labelled", "haven")
-conflict_prefer("filter", "dplyr")
-conflict_scout() # Identify the conflicts
+## Load packages, custom functions, and styles
+source("custom-setup-styles.R")
 
 ## Load all gss
 data(gss_all)
 
-# Define color palette
-c_palette <- c("#3498DB",
-               "#E74C3C",
-               "#18BC9C",
-               "#F39C12")
+# Color in math equations
+# https://egallic.fr/Recherche/aide-memoire/quarto_equation_colors.html#colors-in-equations-with-revealjs
 
 ```
+
+::: cell
+$$
+\definecolor{mathBlack}{RGB}{0,0,0}
+\definecolor{mathOrange}{RGB}{253, 126, 20}
+\definecolor{mathLightGreen}{RGB}{32, 201, 151}
+\definecolor{mathGreen}{RGB}{24, 188, 156}
+\definecolor{mathYellow}{RGB}{253, 156, 18}
+\definecolor{mathBlue}{RGB}{52, 152, 219}
+\definecolor{mathRed}{RGB}{231, 76, 60}
+\definecolor{mathPurple}{RGB}{111, 66, 193}
+$$
+:::
 
 # Agenda {data-menu-title="Agenda" background-image="images/calendar.png" background-size="100px" background-repeat="repeat"}
 
@@ -99,7 +98,7 @@ Who or what is being studied?
 <br>
 
 ::: callout-tip
-# POPULATION
+## **POPULATION**
 
 All units of analysis (people, institutions, groups, etc.) in which the
 researcher is interested.
@@ -108,7 +107,7 @@ researcher is interested.
 <br>
 
 ::: callout-tip
-# SAMPLE
+## **SAMPLE**
 
 A subset of people (or institutions, groups, etc.) selected from a
 population.
@@ -188,7 +187,7 @@ A variable with only two categories.
 ![](images/01/levels.png){.fragment fragment-index="1"}
 ::::
 
-##  {.quiz-question .smaller background-image="images/clipboard-question.png" background-size="100px" background-repeat="repeat"}
+##  {.quiz-question .smaller data-menu-title="Knowledge Check" background-image="images/clipboard-question.png" background-size="100px" background-repeat="repeat"}
 
 ::: {style="color: #F39C12"}
 {{< fa clipboard-question >}} **Which of the following is an example of
@@ -207,7 +206,7 @@ descriptive statistics?**
     and education
     level]{data-explanation="Hypothesis testing is by definition an inference."}
 
-##  {.quiz-question .smaller background-image="images/clipboard-question.png" background-size="100px" background-repeat="repeat"}
+##  {.quiz-question .smaller data-menu-title="Knowledge Check" background-image="images/clipboard-question.png" background-size="100px" background-repeat="repeat"}
 
 ::: {style="color: #F39C12"}
 {{< fa clipboard-question >}} **Which of the following is an example of
@@ -223,7 +222,7 @@ a nominal level of measurement?**
 -   [A ranking of provinces by marriage
     rate.]{data-explanation="This would be an ordinal variable."}
 
-##  {.quiz-question .smaller background-image="images/clipboard-question.png" background-size="100px" background-repeat="repeat"}
+##  {.quiz-question .smaller data-menu-title="Knowledge Check" background-image="images/clipboard-question.png" background-size="100px" background-repeat="repeat"}
 
 ::: {style="color: #F39C12"}
 {{< fa clipboard-question >}} **Which level of measurement is used when
@@ -278,10 +277,7 @@ of the variable.
 
 ![](images/01/distributions.png)
 
-
-##  {#slide15-id data-menu-title="Distribution table"}
-
-**Table 1. Attitudes about sex before marriage**
+##  {#slide15-id data-menu-title="Distribution tables"}
 
 ```{r}
 gss_all$premarsx <-as_factor(zap_missing(gss_all$premarsx))
@@ -290,8 +286,7 @@ gss_all$sex <-as_factor(zap_missing(gss_all$sex))
 gss_all %>%
   select(id, year, sex, premarsx) %>%
   filter(year == 2024, !is.na(premarsx)) %>%
-  count(premarsx, sort = TRUE
-        ) -> freq_premarsx
+  count(premarsx) -> freq_premarsx
 
 freq_premarsx %>%
   summarise(across(where(is.numeric), sum)) %>%
@@ -300,67 +295,66 @@ freq_premarsx %>%
 
 # combine
 table_premarsx <- rbind(freq_premarsx, total_row)
+
 ```
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ### Tab A
+
+**Table 1. Attitudes about sex before marriage**
+
 ```{r}
 # Render the table
 table_premarsx %>%
   flextable() %>%
-  set_table_properties(width = 1, layout = "autofit") %>%
-  theme_zebra() %>%
-  bg(bg = "#18BC9C", part = "header") %>%
-  color(color = "white", part = "header") %>%
-  fontsize(size = 22, part = "all") 
+  style_flextable()
 ```
 
+[**Survey question**: *There's been a lot of discussion about the way morals and attitudes about sex are changing in this country. If a man and woman have sex relations before marriage, do you think it is \_\_\_\_\_\_\_\_\_.*]{style="font-size: 50%"}
 
 ### Tab B
 
+**Table 1. Attitudes about sex before marriage**
+
 ```{r}
 table_premarsx %>%
   flextable() %>%
-  set_table_properties(width = 1, layout = "autofit") %>%
-  theme_zebra() %>%
-  bg(bg = "#18BC9C", part = "header") %>%
-  color(color = "white", part = "header") %>%
-  fontsize(size = 22, part = "all") %>%
+  style_flextable() %>%
   color(color = "#E74C3C", i = 5, j = "n")
 ```
 
-[The number of respondents who answered this survey question.]{style="color: #E74C3C; font-family: 'Shadows Into Light'"}  
+[The number of respondents who answered this survey
+question.]{style="color: #E74C3C; font-family: 'Shadows Into Light'"}
 
 ### Tab C
+
+**Table 1. Attitudes about sex before marriage**
 
 ```{r}
 table_premarsx %>%
   flextable() %>%
-  set_table_properties(width = 1, layout = "autofit") %>%
-  theme_zebra() %>%
-  bg(bg = "#18BC9C", part = "header") %>%
-  color(color = "white", part = "header") %>%
-  fontsize(size = 22, part = "all") %>%
+  style_flextable() %>%
   color(color = "#E74C3C", i = 3, j = "n")
 ```
 
-[The number of respondents who said pre-marital sex was "**wrong only sometimes**."]{style="color: #E74C3C; font-family: 'Shadows Into Light'"}  
-
-
+[The number of respondents who said pre-marital sex was "**wrong only
+sometimes**."]{style="color: #E74C3C; font-family: 'Shadows Into Light'"}
 :::
 
 ::: aside
 [*Source: U.S. General Social Survey 2024*]{style="color: $gray-500"}
 :::
 
-##  {#slide16-id data-menu-title="Distribution table"}
+##  {#slide16-id .smaller data-menu-title="Think Like a Statistician" background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
 
-[Are women more likely than men to say premarital sex is "**not wrong at all**?"]{style="color: #E74C3C; font-size: 150%; font-family: 'Shadows Into Light'"}  
+[{{< fa regular lightbulb >}} Are women more likely than men to say
+premarital sex is "**not wrong at
+all**"?]{style="color: #F39C12; font-size: 175%; font-family: 'Shadows Into Light'"}
 
 <br>
 
 **Table 2. Attitudes about sex before marriage by gender**
+
 ```{r}
 gss_all$premarsx <-as_factor(zap_missing(gss_all$premarsx))
 gss_all$sex <-as_factor(zap_missing(gss_all$sex))
@@ -369,7 +363,7 @@ gss_all %>%
   select(id, year, sex, premarsx) %>%
   filter(!is.na(premarsx), !is.na(sex)) %>%
   group_by(sex) %>%
-  count(premarsx, sort = TRUE) %>%
+  count(premarsx) %>%
   pivot_wider(
     names_from = sex,
     values_from = n,
@@ -385,23 +379,186 @@ total_row <- freq_premarsx %>%
 # combine
 table_premarsx <- rbind(freq_premarsx, total_row)
 
+# Get number of rows
+n_rows <- nrow(table_premarsx) # fixing transparency
+
 # Render the table
 table_premarsx %>%
   flextable() %>%
-  set_table_properties(width = 1, layout = "autofit") %>%
-  theme_zebra() %>%
-  bg(bg = "#18BC9C", part = "header") %>%
-  color(color = "white", part = "header") %>%
-  fontsize(size = 22, part = "all") %>%
-  color(color = "#E74C3C", i = 1, j = "female") %>%
-  color(color = "#E74C3C", i = 1, j = "male")
+  style_flextable() %>%
+  # Manually add zebra stripes with solid colors
+  bg(i = seq(1, n_rows, by = 2), bg = "white", part = "body") %>% # fixing transparency
+  bg(i = seq(2, n_rows, by = 2), bg = "#F2F2F2", part = "body")
 
 ```
 
+::: aside
+[*Source: U.S. General Social Survey
+1972-2024*]{style="color: $gray-500"}
+:::
+
+##  {#slide17-id data-menu-title="Relative Frequency Distributions"}
+
+::: callout-tip
+## RELATIVE FREQUENCY DISTRIBUTION
+
+A table showing the proportion or percentage for each value of a
+variable.
+:::
+
+<br>
+
+[**Proportions**]{style="font-size: 125%"} are between 0 and 1.0.
+
+::: smaller
+Proportion = count (f) / total number of cases (N).
+:::
+
+<br>
+
+[**Percentages**]{style="font-size: 125%"} are between 0 and 100.
+
+::: smaller
+Percentage = proportion × 100.
+:::
+
+##  {#slide18-id .smaller data-menu-title="Your Data Take" background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
+
+```{r}
+
+gss_all$premarsx <- droplevels(gss_all$premarsx)
+
+# Create frequency & proportions table
+tab <- gss_all %>%
+  filter(!is.na(premarsx), !is.na(sex)) %>%
+  group_by(sex, premarsx) %>%
+  summarise(n = n(), .groups = "drop") %>%
+  group_by(sex) %>%
+  mutate(percent = round(100 * n / sum(n), 0)) %>%
+  ungroup() %>%
+    pivot_wider(
+    names_from = sex, values_from = c(n, percent)) 
+
+# Add totals row
+tab_totals <- tab %>%
+  summarise(across(where(is.numeric), sum, na.rm = TRUE)) %>%
+  mutate(premarsx = "Total")
+
+# Combine with original table
+tab_with_totals <- bind_rows(tab, tab_totals)
+```
+
+::: panel-tabset
+
+### Tab A
+
+**Table 2. Attitudes about sex before marriage by gender**
+
+```{r}
+## Pretty table
+tab_with_totals %>%
+  select(premarsx, n_male, percent_male, n_female, percent_female) %>%
+  flextable() %>% 
+  style_flextable() %>%
+  set_header_labels(
+    n_male = "n",    percent_male = "%",
+    n_female = "n",  percent_female = "%") %>%
+  add_header_row(
+    values = c("", "Men", "Women"),
+    colwidths = c(1, 2, 2)) %>%
+  align(j = c(2, 3, 4, 5), align = "center", part = "all") %>%
+  color(color = "#18bc9c", i = 4, j = 4) %>%
+  color(color = "#fd7e14", i = 5, j = 4) %>%
+  color(color = "#e74c3c", i = 4, j = 5)
+
+```
+
+$\frac{\color{mathGreen}{11{,}086}}{\color{mathOrange}{25{,}382}} = 0.4367 \times 100 = \color{mathRed}{43.7\%}$
+
+[{{< fa mitten >}} **TIP**: Total of a % column should always sum to 100!]{style="color: #3498DB"}
+
+
+### Tab B
+
+**Table 2. Attitudes about sex before marriage by gender**
+
+```{r}
+## Pretty table
+tab_with_totals %>%
+  select(premarsx, n_male, percent_male, n_female, percent_female) %>%
+  flextable() %>% 
+  style_flextable() %>%
+  set_header_labels(
+    n_male = "n",    percent_male = "%",
+    n_female = "n",  percent_female = "%") %>%
+  add_header_row(
+    values = c("", "Men", "Women"),
+    colwidths = c(1, 2, 2)) %>%
+  align(j = c(2, 3, 4, 5), align = "center", part = "all") %>%
+  color(color = "#E74C3C", i = 4, j = 3) %>%
+  color(color = "#E74C3C", i = 4, j = 5)
+
+```
+
+[{{< fa lightbulb >}} A greater proportion of men (53%) than women (44%)
+say premarital sex is "**not wrong at
+all**."]{style="color: #E74C3C; font-size: 150%; font-family: 'Shadows Into Light'"}
+
+:::
 
 ::: aside
-[*Source: U.S. General Social Survey 1972-2024*]{style="color: $gray-500"}
+[*Source: U.S. General Social Survey
+1972-2024*]{style="color: $gray-500"}
 :::
+
+##  {#slide20-id data-menu-title="Cumulative Frequency Distributions" .smaller}
+
+::: callout-tip
+## CUMULATIVE FREQUENCY DISTRIBUTION
+
+The number or percentage of observations at or below a given category.
+:::
+
+<br>  
+
+**Table 3. Attitudes about sex before marriage, with cumulative percentages**
+
+```{r}
+gss_all$premarsx <- droplevels(gss_all$premarsx)
+
+# Create frequency & proportions table
+tab <- gss_all %>%
+  filter(year == 2024, !is.na(premarsx)) %>%
+  group_by(premarsx) %>%
+  summarise(n = n(), .groups = "drop") %>%
+  mutate(percent = round(100 * n / sum(n), 0),
+         cum_percent = round(cumsum(percent), 0)) %>%
+  ungroup() 
+
+# Add totals row
+tab_totals <- tab %>%
+  summarise(across(where(is.numeric), sum, na.rm = TRUE)) %>%
+  mutate(premarsx = "Total")
+
+# Combine with original table
+tab_with_totals <- bind_rows(tab, tab_totals)
+
+## Pretty table
+tab_with_totals %>%
+  flextable() %>% 
+  style_flextable() %>%
+  set_header_labels(
+    n = "n",    percent = "%",
+    cum_percent = "cumulative %") %>%
+  color(color = "#18bc9c", i = 1, j = 3) %>%
+  color(color = "#fd7e14", i = 2, j = 3) %>%
+  color(color = "#e74c3c", i = 2, j = 4)
+```
+
+
+${\color{mathGreen} 17} + {\color{mathOrange} 6} = {\color{mathRed} 23\%}$
+
+
 
 # Lab 01 {.theme-section .smaller}
 

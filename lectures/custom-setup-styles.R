@@ -1,16 +1,15 @@
-
 # custom-setup
 
 ## Install packages not yet installed & load them
 pacman::p_load(
   tidyverse,
-  gssr,         # load U.S. gss data
-  haven,        # work with labeled data
-  labelled,     # use labels as values
-  kableExtra,   # pretty tables
-  flextable,    # formatted pretty tables
+  gssr, # load U.S. gss data
+  haven, # work with labeled data
+  labelled, # use labels as values
+  kableExtra, # pretty tables
+  flextable, # formatted pretty tables
   summarytools, # easy descriptive statistics
-  conflicted    # declare primary packages
+  conflicted # declare primary packages
 )
 
 ## Address important conflicts
@@ -22,10 +21,12 @@ conflict_scout() # Identify the conflicts
 # custom-formatting
 
 ## Define color palette
-c_palette <- c("#3498DB",
-               "#E74C3C",
-               "#18BC9C",
-               "#F39C12")
+c_palette <- c(
+  "#3498DB",
+  "#E74C3C",
+  "#18BC9C",
+  "#F39C12"
+)
 
 ## Flextbale formatting
 style_flextable <- function(ft) {

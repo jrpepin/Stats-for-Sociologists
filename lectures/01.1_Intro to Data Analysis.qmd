@@ -20,7 +20,6 @@ editor:
 ---
 
 ```{r setup, include = FALSE}
-
 ## Load packages, custom functions, and styles
 source("custom-setup-styles.R")
 
@@ -29,7 +28,6 @@ data(gss_all)
 
 # Color in math equations
 # https://egallic.fr/Recherche/aide-memoire/quarto_equation_colors.html#colors-in-equations-with-revealjs
-
 ```
 
 # Agenda {data-menu-title="Agenda" background-image="images/calendar.png" background-size="100px" background-repeat="repeat"}
@@ -288,8 +286,8 @@ of the variable.
 ##  {#slide15-id data-menu-title="Distribution tables"}
 
 ```{r}
-gss_all$premarsx <-as_factor(zap_missing(gss_all$premarsx))
-gss_all$sex <-as_factor(zap_missing(gss_all$sex))
+gss_all$premarsx <- as_factor(zap_missing(gss_all$premarsx))
+gss_all$sex <- as_factor(zap_missing(gss_all$sex))
 
 gss_all %>%
   select(id, year, sex, premarsx) %>%
@@ -298,12 +296,10 @@ gss_all %>%
 
 freq_premarsx %>%
   summarise(across(where(is.numeric), sum)) %>%
-  mutate(premarsx = "Total"
-         ) -> total_row
+  mutate(premarsx = "Total") -> total_row
 
 # combine
 table_premarsx <- rbind(freq_premarsx, total_row)
-
 ```
 
 ::: panel-tabset
@@ -367,8 +363,8 @@ all**"?]{style="color: #F39C12; font-size: 175%; font-family: 'Shadows Into Ligh
 **Table 2. Attitudes about sex before marriage by gender**
 
 ```{r}
-gss_all$premarsx <-as_factor(zap_missing(gss_all$premarsx))
-gss_all$sex <-as_factor(zap_missing(gss_all$sex))
+gss_all$premarsx <- as_factor(zap_missing(gss_all$premarsx))
+gss_all$sex <- as_factor(zap_missing(gss_all$sex))
 
 gss_all %>%
   select(id, year, sex, premarsx) %>%
@@ -379,13 +375,13 @@ gss_all %>%
     names_from = sex,
     values_from = n,
     values_fill = 0
-  ) -> freq_premarsx 
+  ) -> freq_premarsx
 
 # create total row
 total_row <- freq_premarsx %>%
   summarise(across(where(is.numeric), sum)) %>%
   mutate(premarsx = "Total") %>%
-  select(names(freq_premarsx))  # ensure column order matches
+  select(names(freq_premarsx)) # ensure column order matches
 
 # combine
 table_premarsx <- rbind(freq_premarsx, total_row)
@@ -400,7 +396,6 @@ table_premarsx %>%
   # Manually add zebra stripes with solid colors
   bg(i = seq(1, n_rows, by = 2), bg = "white", part = "body") %>% # fixing transparency
   bg(i = seq(2, n_rows, by = 2), bg = "#F2F2F2", part = "body")
-
 ```
 
 ::: aside
@@ -436,7 +431,6 @@ Percentage = proportion × 100.
 ##  {#slide18-id .smaller data-menu-title="Your Data Take" background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
 
 ```{r}
-
 gss_all$premarsx <- droplevels(gss_all$premarsx)
 
 # Create frequency & proportions table
@@ -447,8 +441,9 @@ tab <- gss_all %>%
   group_by(sex) %>%
   mutate(percent = round(100 * n / sum(n), 0)) %>%
   ungroup() %>%
-    pivot_wider(
-    names_from = sex, values_from = c(n, percent)) 
+  pivot_wider(
+    names_from = sex, values_from = c(n, percent)
+  )
 
 # Add totals row
 tab_totals <- tab %>%
@@ -468,19 +463,20 @@ tab_with_totals <- bind_rows(tab, tab_totals)
 ## Pretty table
 tab_with_totals %>%
   select(premarsx, n_male, percent_male, n_female, percent_female) %>%
-  flextable() %>% 
+  flextable() %>%
   style_flextable() %>%
   set_header_labels(
-    n_male = "n",    percent_male = "%",
-    n_female = "n",  percent_female = "%") %>%
+    n_male = "n", percent_male = "%",
+    n_female = "n", percent_female = "%"
+  ) %>%
   add_header_row(
     values = c("", "Men", "Women"),
-    colwidths = c(1, 2, 2)) %>%
+    colwidths = c(1, 2, 2)
+  ) %>%
   align(j = c(2, 3, 4, 5), align = "center", part = "all") %>%
   color(color = "#18bc9c", i = 4, j = 4) %>%
   color(color = "#fd7e14", i = 5, j = 4) %>%
   color(color = "#e74c3c", i = 4, j = 5)
-
 ```
 
 $\frac{\color{mathGreen}{11{,}086}}{\color{mathOrange}{25{,}382}} = 0.4367 \times 100 = \color{mathRed}{43.7\%}$
@@ -496,18 +492,19 @@ $\frac{\color{mathGreen}{11{,}086}}{\color{mathOrange}{25{,}382}} = 0.4367 \time
 ## Pretty table
 tab_with_totals %>%
   select(premarsx, n_male, percent_male, n_female, percent_female) %>%
-  flextable() %>% 
+  flextable() %>%
   style_flextable() %>%
   set_header_labels(
-    n_male = "n",    percent_male = "%",
-    n_female = "n",  percent_female = "%") %>%
+    n_male = "n", percent_male = "%",
+    n_female = "n", percent_female = "%"
+  ) %>%
   add_header_row(
     values = c("", "Men", "Women"),
-    colwidths = c(1, 2, 2)) %>%
+    colwidths = c(1, 2, 2)
+  ) %>%
   align(j = c(2, 3, 4, 5), align = "center", part = "all") %>%
   color(color = "#E74C3C", i = 4, j = 3) %>%
   color(color = "#E74C3C", i = 4, j = 5)
-
 ```
 
 [{{< fa lightbulb >}} A greater proportion of men (53%) than women (44%)
@@ -541,9 +538,11 @@ tab <- gss_all %>%
   filter(year == 2024, !is.na(premarsx)) %>%
   group_by(premarsx) %>%
   summarise(n = n(), .groups = "drop") %>%
-  mutate(percent = round(100 * n / sum(n), 0),
-         cum_percent = round(cumsum(percent), 0)) %>%
-  ungroup() 
+  mutate(
+    percent = round(100 * n / sum(n), 0),
+    cum_percent = round(cumsum(percent), 0)
+  ) %>%
+  ungroup()
 
 # Add totals row
 tab_totals <- tab %>%
@@ -555,11 +554,12 @@ tab_with_totals <- bind_rows(tab, tab_totals)
 
 ## Pretty table
 tab_with_totals %>%
-  flextable() %>% 
+  flextable() %>%
   style_flextable() %>%
   set_header_labels(
-    n = "n",    percent = "%",
-    cum_percent = "cumulative %") %>%
+    n = "n", percent = "%",
+    cum_percent = "cumulative %"
+  ) %>%
   color(color = "#18bc9c", i = 1, j = 3) %>%
   color(color = "#fd7e14", i = 2, j = 3) %>%
   color(color = "#e74c3c", i = 2, j = 4)

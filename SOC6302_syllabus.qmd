@@ -29,33 +29,32 @@ filters:
 ---
 
 ```{r, include=FALSE}
-
-if(!require(tidyverse)){
+if (!require(tidyverse)) {
   install.packages("tidyverse")
   library(tidyverse)
 }
 
-if(!require(knitr)){
+if (!require(knitr)) {
   install.packages("knitr")
   library(knitr)
 }
 
-if(!require(flextable)){
+if (!require(flextable)) {
   install.packages("flextable")
   library(flextable)
 }
 
-if(!require(googledrive)){
+if (!require(googledrive)) {
   install.packages("googledrive")
   library(googledrive)
 }
 
-if(!require(googlesheets4)){
+if (!require(googlesheets4)) {
   install.packages("googlesheets4")
   library(googlesheets4)
 }
 
-if(!require(tinytex)){
+if (!require(tinytex)) {
   install.packages("tinytex")
   library(tinytex)
 }
@@ -69,8 +68,6 @@ googledrive::drive_auth(
 
 # Give google sheets the same authorization
 gs4_auth(token = drive_token())
-
-
 ```
 
 Fall 2025
@@ -120,34 +117,33 @@ All assignments, evaluations, and tests must be submitted via Quercus.
 
 ```{r echo = FALSE}
 Assessment <- c("Homework (HW 1-4)", "Midterm", "Flash Presentation", "Research Brief")
-Worth      <- c("40%", "20%", "15%", "25%")
-Due        <- c("Variable", "October 21", "TBD", "November 25")
+Worth <- c("40%", "20%", "15%", "25%")
+Due <- c("Variable", "October 21", "TBD", "November 25")
 
-summary    <- data.frame(Assessment, Worth, Due)
+summary <- data.frame(Assessment, Worth, Due)
 ```
 
 ```{r echo = FALSE}
 flextable(summary) %>%
   set_table_properties(width = 1, layout = "autofit") %>%
   theme_zebra() %>%
-    bg(bg = "#18BC9C", part = "header") %>%
-      color(color = "white", part = "header")
+  bg(bg = "#18BC9C", part = "header") %>%
+  color(color = "white", part = "header")
 ```
 
 # Schedule
 
 ```{r message =FALSE, echo=FALSE}
 sched <- read_sheet("1W3SSN_HG9hULeiVC66upl57uxtXntY96xCs9ru5yWe4", sheet = "Schedule")
-#sched$Dates <- as.Date(sched$Dates)
-
+# sched$Dates <- as.Date(sched$Dates)
 ```
 
 ```{r, echo = FALSE}
 flextable(sched) %>%
   set_table_properties(width = 1, layout = "autofit") %>%
   theme_zebra() %>%
-    bg(bg = "#18BC9C", part = "header") %>%
-      color(color = "white", part = "header") %>%
+  bg(bg = "#18BC9C", part = "header") %>%
+  color(color = "white", part = "header") %>%
   color(color = "#E74C3C", i = 8, j = "Topic") %>%
   bold(bold = TRUE, i = 8, j = "Topic") %>%
   color(color = "#18BC9C", i = 9, j = "Topic") %>%

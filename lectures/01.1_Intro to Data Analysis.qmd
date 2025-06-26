@@ -2,6 +2,7 @@
 title: "Intro to Data Analysis"
 format: 
   revealjs:
+    multiplex: true
     controls: true
     theme: [default, custom.scss]
     include-in-header:
@@ -42,7 +43,8 @@ data(gss_all)
 
 :::: {.column width="50%"}
 ::: {.my-box .smaller}
-[{{< fa book >}} **Readings**]{style="color: #18BC9C; font-size: 150%; font-family: 'Shadows Into Light'"}
+[{{< fa book >}}
+**Readings**]{style="color: #18BC9C; font-size: 150%; font-family: 'Shadows Into Light'"}
 
 1.  What's the point?
 2.  Being a Statistician Means Never Having to Say You're Certain
@@ -81,10 +83,10 @@ $$
 :::
 
 ::: {.column width="24%"}
+-   DICHOTOMOUS\
 -   NOMINAL\
 -   ORDINAL\
 -   INTERVAL-RATIO\
--   DICHOTOMOUS\
 :::
 ::::::
 
@@ -96,7 +98,7 @@ Who or what is being studied?
 
 <br>
 
-::: {.callout-tip icon=false}
+::: {.callout-tip icon="false"}
 ## {{< fa pen-to-square >}} **POPULATION**
 
 All units of analysis (people, institutions, groups, etc.) in which the
@@ -105,7 +107,7 @@ researcher is interested.
 
 <br>
 
-::: {.callout-tip icon=false}
+::: {.callout-tip icon="false"}
 ## {{< fa pen-to-square >}} **SAMPLE**
 
 A subset of people (or institutions, groups, etc.) selected from a
@@ -124,7 +126,7 @@ size
 
 ##  {#slide4-id data-menu-title="Descriptive vs Inferential"}
 
-::: {.callout-tip icon=false}
+::: {.callout-tip icon="false"}
 ## {{< fa pen-to-square >}} DESCRIPTIVE STATISTICS
 
 Procedures that help us organize and describe data collected from a
@@ -133,7 +135,7 @@ sample or population.
 
 <br>
 
-::: {.callout-tip icon=false}
+::: {.callout-tip icon="false"}
 ## {{< fa pen-to-square >}} INFERENTIAL STATISTICS
 
 Making underlying predictions or inferences about a population using
@@ -155,7 +157,7 @@ observations and analyses from a sample.
 
 ##  {#slide7-id data-menu-title="Variables"}
 
-::: {.callout-tip icon=false}
+::: {.callout-tip icon="false"}
 ## {{< fa pen-to-square >}} VARIABLES
 
 Any factor, trait, or condition that can exist in differing amounts or
@@ -168,6 +170,9 @@ types.
 
 :::: r-stack
 ::: {style="font-size: 80%"}
+[**Dichotomous** (aka binary)]{style="color: #18BC9C;"}\
+A variable with only two categories.
+
 [**Nominal**]{style="color: #18BC9C;"}\
 A variable made up of categories that cannot be ordered
 
@@ -175,15 +180,19 @@ A variable made up of categories that cannot be ordered
 A variable made up of ranked categories, with no systematic or
 measurable numeric difference between the categories.
 
-[**Interval-ratio** (aka continuous)]{style="color: #18BC9C;"}\
+[**Continuous** (aka interval-ratio)]{style="color: #18BC9C;"}\
 A variable with categories that are ordered and expressed in the same
 units.
-
-[**Dichotomous** (aka binary)]{style="color: #18BC9C;"}\
-A variable with only two categories.
 :::
 
 ![](images/01/levels.png){.fragment fragment-index="1"}
+::::
+
+:::: {.content-visible when-profile="speaker"}
+::: notes
+Binary, nominal, and ordinal variables are all categorical variables.\
+Inteval-ratio are continous variables.
+:::
 ::::
 
 ##  {.quiz-question .smaller data-menu-title="Knowledge Check" background-image="images/clipboard-question.png" background-size="100px" background-repeat="repeat"}
@@ -258,7 +267,7 @@ ranking neighborhoods by crime rate (e.g., low, medium, high)?**
 
 ##  {#slide14-id data-menu-title="Distributions"}
 
-::: {.callout-tip icon=false}
+::: {.callout-tip icon="false"}
 ## {{< fa pen-to-square >}} DISTRIBUTION
 
 Shows all the possible values (or intervals) of the data and how often
@@ -267,7 +276,7 @@ they occur.
 
 <br>
 
-::: {.callout-tip icon=false}
+::: {.callout-tip icon="false"}
 ## {{< fa pen-to-square >}} FREQUENCY DISTRIBUTION
 
 A table reporting the number of observations falling into each category
@@ -309,7 +318,10 @@ table_premarsx %>%
   style_flextable()
 ```
 
-[**Survey question**: *There's been a lot of discussion about the way morals and attitudes about sex are changing in this country. If a man and woman have sex relations before marriage, do you think it is \_\_\_\_\_\_\_\_\_.*]{style="font-size: 50%"}
+[**Survey question**: *There's been a lot of discussion about the way
+morals and attitudes about sex are changing in this country. If a man
+and woman have sex relations before marriage, do you think it is
+\_\_\_\_\_\_\_\_\_.*]{style="font-size: 50%"}
 
 ### Tab B
 
@@ -398,7 +410,7 @@ table_premarsx %>%
 
 ##  {#slide17-id data-menu-title="Relative Frequency Distributions"}
 
-::: {.callout-tip icon=false}
+::: {.callout-tip icon="false"}
 ## {{< fa pen-to-square >}} RELATIVE FREQUENCY DISTRIBUTION
 
 A table showing the proportion or percentage for each value of a
@@ -448,7 +460,6 @@ tab_with_totals <- bind_rows(tab, tab_totals)
 ```
 
 ::: panel-tabset
-
 ### Tab A
 
 **Table 2. Attitudes about sex before marriage by gender**
@@ -474,8 +485,8 @@ tab_with_totals %>%
 
 $\frac{\color{mathGreen}{11{,}086}}{\color{mathOrange}{25{,}382}} = 0.4367 \times 100 = \color{mathRed}{43.7\%}$
 
-[{{< fa mitten >}} **TIP**: Total of a % column should always sum to 100!]{style="color: #3498DB"}
-
+[{{< fa mitten >}} **TIP**: Total of a % column should always sum to
+100!]{style="color: #3498DB"}
 
 ### Tab B
 
@@ -502,7 +513,6 @@ tab_with_totals %>%
 [{{< fa lightbulb >}} A greater proportion of men (53%) than women (44%)
 say premarital sex is "**not wrong at
 all**."]{style="color: #E74C3C; font-size: 150%; font-family: 'Shadows Into Light'"}
-
 :::
 
 ::: aside
@@ -510,17 +520,18 @@ all**."]{style="color: #E74C3C; font-size: 150%; font-family: 'Shadows Into Ligh
 1972-2024*]{style="color: $gray-500"}
 :::
 
-##  {#slide20-id data-menu-title="Cumulative Frequency Distributions" .smaller}
+##  {#slide20-id .smaller data-menu-title="Cumulative Frequency Distributions"}
 
-::: {.callout-tip icon=false}
+::: {.callout-tip icon="false"}
 ## {{< fa pen-to-square >}} CUMULATIVE FREQUENCY DISTRIBUTION
 
 The number or percentage of observations at or below a given category.
 :::
 
-<br>  
+<br>
 
-**Table 3. Attitudes about sex before marriage, with cumulative percentages**
+**Table 3. Attitudes about sex before marriage, with cumulative
+percentages**
 
 ```{r}
 gss_all$premarsx <- droplevels(gss_all$premarsx)
@@ -554,10 +565,122 @@ tab_with_totals %>%
   color(color = "#e74c3c", i = 2, j = 4)
 ```
 
-
 ${\color{mathGreen} 17} + {\color{mathOrange} 6} = {\color{mathRed} 23\%}$
 
+##  {data-menu-title="Rates"}
 
+::: {.callout-tip icon="false"}
+## {{< fa pen-to-square >}} **RATES**
+
+$\frac{Actual\;occurrences}{possible\;occurrences}$
+:::
+
+<br>
+
+::: {style="font-size: 75%"}
+**Examples:**
+
+-   [Canada's divorce
+    rate](https://www150.statcan.gc.ca/n1/daily-quotidien/220309/dq220309a-eng.htm)
+    decreased from 12.7 per 1,000 in 1991 to 5.6 per 1,000 in 2020.\
+-   The [2021 suicide
+    rate](https://health-infobase.canada.ca/mental-health/suicide-self-harm/suicide-mortality.html)
+    of 14.8 per 100,000 population for middle aged Canadians (30-59
+    years old) was the highest of any age group.\
+-   [Canada's total fertility
+    rate](https://www150.statcan.gc.ca/n1/daily-quotidien/240925/dq240925c-eng.htm)
+    reached a new low in 2023 of 1.26 children per woman.
+:::
+
+##  {data-menu-title="Distributions & Measurement Levels"}
+
+**Nominal variables:**\
+can have [frequency distributions]{style="color: #18bc9c"}, cannot have
+[cumulative frequency distributions]{style="color: #e74c3c"}
+
+<br>
+
+**Ordinal:**\
+can have [frequency distributions]{style="color: #18bc9c"} and
+[cumulative frequency distributions]{style="color: #18bc9c"}
+
+<br>
+
+**Interval-ratio:**\
+can have [frequency distributions]{style="color: #18bc9c"}, [cumulative
+frequency distributions]{style="color: #18bc9c"}, and
+[rates]{style="color: #18bc9c"}
+
+##  {data-menu-title="Bar Graphs"}
+
+:::: r-stack
+::: {style="font-size: 90%"}
+A [**bar graph**]{style="color: #18bc9c"} is used:\
+for **nominal** or **ordinal** variables,
+
+to show frequencies or percentages,
+
+using separated rectangles, with height proportional\
+to the frequency or percentage.
+:::
+
+![](https://raw.githubusercontent.com/jrpepin/Now-You-CanadaKnow/refs/heads/main/figs/transgender.png){.fragment
+fragment-index="1"}
+::::
+
+##  {data-menu-title="Histograms"}
+
+:::: r-stack
+::: {style="font-size: 90%"}
+A [**histogram**]{style="color: #18bc9c"} is used:\
+for **interval-ratio** variables,
+
+to show frequencies or percentages,
+
+using separated rectangles, with height proportional\
+to the frequency or percentage.
+:::
+
+![](images/01/histogram.png){.fragment fragment-index="1"}
+::::
+
+##  {data-menu-title="Line Graphs"}
+
+:::: r-stack
+::: {style="font-size: 90%"}
+A [**line graph**]{style="color: #18bc9c"} is used:\
+for **interval-ratio** variables,
+
+to show frequencies or percentages,
+
+joining by category the frequency or average with a line.
+:::
+
+![](https://raw.githubusercontent.com/jrpepin/Now-You-CanadaKnow/refs/heads/main/figs/gini.png){.fragment
+fragment-index="1"}
+::::
+
+##  {data-menu-title="Statistical Map"}
+
+:::: r-stack
+::: {style="font-size: 90%"}
+A [**statistical map**]{style="color: #18bc9c"} is used:\
+for **interval-ratio** variables,
+
+to show geographical variations, often in ratios,
+
+using variation in color or hue.
+:::
+
+![](images/01/map.png){.fragment
+fragment-index="1"}
+::::
+
+:::: {.content-visible when-profile="speaker"}
+::: notes
+https://health-infobase.canada.ca/mental-health/suicide-self-harm/suicide-mortality.html 
+:::
+::::
 
 # Lab 01 {.theme-section .smaller}
 

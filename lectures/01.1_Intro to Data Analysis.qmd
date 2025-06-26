@@ -289,14 +289,14 @@ of the variable.
 gss_all$premarsx <- as_factor(zap_missing(gss_all$premarsx))
 gss_all$sex <- as_factor(zap_missing(gss_all$sex))
 
-gss_all %>%
+freq_premarsx <- gss_all %>%
   select(id, year, sex, premarsx) %>%
   filter(year == 2024, !is.na(premarsx)) %>%
-  count(premarsx) -> freq_premarsx
+  count(premarsx)
 
-freq_premarsx %>%
+total_row <- freq_premarsx %>%
   summarise(across(where(is.numeric), sum)) %>%
-  mutate(premarsx = "Total") -> total_row
+  mutate(premarsx = "Total")
 
 # combine
 table_premarsx <- rbind(freq_premarsx, total_row)
@@ -366,7 +366,7 @@ all**"?]{style="color: #F39C12; font-size: 175%; font-family: 'Shadows Into Ligh
 gss_all$premarsx <- as_factor(zap_missing(gss_all$premarsx))
 gss_all$sex <- as_factor(zap_missing(gss_all$sex))
 
-gss_all %>%
+freq_premarsx <- gss_all %>%
   select(id, year, sex, premarsx) %>%
   filter(!is.na(premarsx), !is.na(sex)) %>%
   group_by(sex) %>%
@@ -375,7 +375,7 @@ gss_all %>%
     names_from = sex,
     values_from = n,
     values_fill = 0
-  ) -> freq_premarsx
+  )
 
 # create total row
 total_row <- freq_premarsx %>%
@@ -393,8 +393,8 @@ n_rows <- nrow(table_premarsx) # fixing transparency
 table_premarsx %>%
   flextable() %>%
   style_flextable() %>%
-  # Manually add zebra stripes with solid colors
-  bg(i = seq(1, n_rows, by = 2), bg = "white", part = "body") %>% # fixing transparency
+  # Manually add zebra stripes with solid colors w/o transparency
+  bg(i = seq(1, n_rows, by = 2), bg = "white", part = "body") %>%
   bg(i = seq(2, n_rows, by = 2), bg = "#F2F2F2", part = "body")
 ```
 

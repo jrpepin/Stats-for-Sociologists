@@ -29,35 +29,17 @@ filters:
 ---
 
 ```{r, include=FALSE}
-if (!require(tidyverse)) {
-  install.packages("tidyverse")
-  library(tidyverse)
-}
 
-if (!require(knitr)) {
-  install.packages("knitr")
-  library(knitr)
-}
-
-if (!require(flextable)) {
-  install.packages("flextable")
-  library(flextable)
-}
-
-if (!require(googledrive)) {
-  install.packages("googledrive")
-  library(googledrive)
-}
-
-if (!require(googlesheets4)) {
-  install.packages("googlesheets4")
-  library(googlesheets4)
-}
-
-if (!require(tinytex)) {
-  install.packages("tinytex")
-  library(tinytex)
-}
+## Install packages not yet installed & load them
+pacman::p_load(
+  tidyverse,
+  knitr,
+  flextable, # formatted pretty tables
+  googledrive,
+  googlesheets4,
+  tinytex,
+  conflicted # declare primary packages
+)
 
 ## sheets reauth with specified token and email address
 drive_deauth()
@@ -116,7 +98,8 @@ You will also need regular access to a word processor (e.g., Microsoft Office, L
 All assignments, evaluations, and tests must be submitted via Quercus.
 
 ```{r echo = FALSE}
-Assessment <- c("Homework (HW 1-4)", "Midterm", "Flash Presentation", "Research Brief")
+Assessment <- c("Homework (HW 1-4)", "Midterm", 
+                "Flash Presentation", "Research Brief")
 Worth <- c("40%", "20%", "15%", "25%")
 Due <- c("Variable", "October 21", "TBD", "November 25")
 
@@ -134,8 +117,8 @@ flextable(summary) %>%
 # Schedule
 
 ```{r message =FALSE, echo=FALSE}
-sched <- read_sheet("1W3SSN_HG9hULeiVC66upl57uxtXntY96xCs9ru5yWe4", sheet = "Schedule")
-# sched$Dates <- as.Date(sched$Dates)
+sched <- read_sheet("1W3SSN_HG9hULeiVC66upl57uxtXntY96xCs9ru5yWe4", 
+                    sheet = "Schedule")
 ```
 
 ```{r, echo = FALSE}

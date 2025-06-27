@@ -17,10 +17,16 @@ filters:
 editor: 
   markdown: 
     wrap: 72
-
+execute: 
+  echo: true
 ---
 
-```{r setup, include = FALSE}
+```{r echo=FALSE}
+
+#| label: setup
+#| message: false
+#| include: false
+
 ## Load packages, custom functions, and styles
 source("custom-setup-styles.R")
 
@@ -28,40 +34,444 @@ source("custom-setup-styles.R")
 # https://egallic.fr/Recherche/aide-memoire/quarto_equation_colors.html#colors-in-equations-with-revealjs
 ```
 
-
 # Agenda {data-menu-title="Agenda" background-image="images/calendar.png" background-size="100px" background-repeat="repeat"}
 
--    How R Works
--    R Workflow
--    Learning to Code
+-   Learning to Code
+-   How R & RStudio Work
+-   R & RStudio Workflow
+-   Get Started
 
+# Learning to Code {.theme-section}
 
-## Filepaths
+## Technology
 
-Adopt a project-based workflow to avoid changing file paths
+:::: r-stack
+::: {style="font-size: 70%"}
+You're not just learning the statistical concepts in this course, but
+how to produce the statistics. Analyzing data requires learning to use
+new technology.
 
-here:here() # set the file path to the root of the project
+<br>
 
-## file names should be
+Learning statistical software to analyze data can be really fun. You get
+to learn about real world social problems!
 
--   machine-readable
--   humand-readable
--   play well with default-ordering
+<br>
 
-## reproducibility 
-
-session_info() # software documentation
-
-Quarto: The tool you'll use to create reproducible computational documents. 
-Every piece of assignment you hand in will be a Quarto document.
-
-::: callout-note
-You are likely familiar with word processors like MS Word or Google Docs.
-We will not be using these in this class.
-Instead, the words you would write in such a document, as well as your R code, 
-will go into a Quarto document. 
-You will *render* the document (more on what this means later) 
-to get a document out that has your words, code, and the output of that code.
-Everything in one place, beautifully formatted!
+But, it can also be frustrating. There's even a bingo card of common
+errors (i.e. bugs) that new statistical programmers will expect to
+experience.
 :::
 
+![](images/01/bingo.png){.fragment fragment-index="1" width="85%"}
+::::
+
+## Why am I making you learn something so frustrating?
+
+Calculating the statistics by hand quickly gets cumbersome, time
+consuming, and difficult.
+
+Good social science is built on replication.
+
+::: notes
+You'll learn the statistical techniques using small sample sizes, but to
+really understand the social world, datasets typically have 100s,
+1,000s, even 100,000s of values.
+
+It is impractical, and more prone to errors, for scientists to replicate
+research by hand. Replication of statistical procedures helps catch
+minor coding errors, highlights unusual decisions made by researchers,
+inappropriate statistical techniques, and corrupted data.
+:::
+
+## But technology presents its own challenges.
+
+Replication using technology requires researchers to use sometimes
+unfamiliar software, working on devices with unique environments and
+settings.
+
+When it feels like the technology is preventing you from getting to the
+course content, take a deep breath, and **remember that building your
+technology skills is part of this course.**
+
+## Grappling
+
+Learning to use statistical software necessitates
+[grappling](https://www.edutopia.org/blog/4-tips-teaching-problem-solving-from-student-anna-pelletiere).
+
+<br>
+
+::: {style="color: #18BC9C; font-size: 75%; font-family: 'Shadows Into Light'"}
+“Grappling is like perseverance, but it goes beyond that. Perseverance
+means trying again and again, even after you’ve failed. Grappling
+implies trying even before you fail the first time.
+
+It’s thinking, “First, I’ll work with it independently. Okay, I’m really
+not understanding it. Let me go back to my notes. Okay, I have solved
+for the first part of it. Now I have the second part of it. Okay, I got
+the question wrong; let me try again. Maybe I can ask my peer now.”
+
+Grappling is working hard to make sure you understand the problem fully,
+and then using every resource at your fingertips to solve it.”
+:::
+
+::: notes
+In this course, this means you'll put your active learning skills to
+use. You, not your professor or TA, will work through encountered
+problems. You, of course, will be supported and coached through the
+entire process. Working with statistical software will become easier as
+you build your skills in problem-solving errors. Unfortunately, it gets
+increasingly difficult if you rely on others to solve the issue, as the
+errors stack-up.
+:::
+
+##  {data-menu-title="Debugging"}
+
+:::::: columns
+:::: {.column width="25%"}
+::: {style="color: #18BC9C; font-size: 90%; font-family: 'Shadows Into Light'"}
+Most statistical analyses happen not because the person is a math
+genius, but because they persisted through the minefield of technical
+issues by being **excellent problem-solvers.**
+:::
+::::
+
+::: {.column width="75%"}
+![](images/01/debugging.png)
+:::
+::::::
+
+::: notes
+Get comfortable with making mistakes right now. Your code is not
+expected to be perfect the first time. Remember, identifying and fixing
+errors in your own code is such an inherent part of the process, there's
+even a name for it: **debugging**.
+:::
+
+## Coding is mostly Googling
+
+It is a misperception that the best statistical analysts sit down at
+their computers and type code from memory.
+
+Much of process of coding is copying code from somewhere else and
+modifying it to fit your particular situation.
+
+::: notes
+Learning to analyze data with software requires a lot of practice and
+attention to detail. It also requires a lot of time searching the
+internet for help. Learning to identify the right words and phrases in a
+Google search is part of building your coding skills.
+:::
+
+## When you get stuck, there are many options to get unstuck
+
+::: {style="font-size: 50%"}
+-   Review the slides. Pay very close attention to small details.
+-   Try something else to see if you get a new error.
+-   Use Google to search for possible answers or new explanations.
+-   Watch a help video on YouTube on the topic.
+-   Re-start your web-browser or device.
+-   Try another web-browser or device.
+-   Ask a peer. Or an advanced student.
+-   Start or join a weekly study group.
+-   Post the question on the class discussion board.
+:::
+
+When none of these strategies fix the issue, it is time to ask for help.
+
+
+## How to get help  
+  
+The same replication principles should be used when asking for help.  
+    
+![](images/01/repro_ex.png "Loneliness on internet without an answer to a coding question")
+
+::: notes
+The best quantitative researchers produce a trail for their code so that future 
+researchers can replicate their analysis.  
+:::
+  
+## Create a trail!
+  
+**Make someone else to feel your pain!**  
+
+<br>
+
+When asking for help, do what you can to **create a reproducible example.** 
+
+::: {style="font-size: 70%"}
+-   Assume others know nothing about your issue.\ 
+-   Describe your steps to create the problem so that someone else can replicate it.\ 
+-   This means clearly describing the issue and the steps you've already taken to solve it.\ 
+:::
+  
+## Good etiquette  
+
+[**Search for answers before posting your question.**]{style="color: #18BC9C;"}\
+
+**Describe the problem.**  
+"It doesn't work" isn't descriptive enough.\  
+  
+**Describe your environment.**  
+What operating system are you using? Which R version? What packages? Dataset?\
+  
+**Describe the solution.**  
+Confirm if a solution offered works. 
+Or, if you solve it on your own, post how you solved it.
+
+
+## Help in this class
+  
+In this class, the fastest way to get help on Lab Assignments is during class 
+time and lab sessions.  
+
+<br>  
+
+The second fastest way is to post your reproducible example on the class 
+discussion board.  
+  
+::: notes
+If none of these solve your problem, draft an email to your TA, with detailed 
+notes about the problem and the troubleshooting steps you've already taken. 
+You might be surprised how often even writing the problem out in detail helps 
+you find the answer on your own. Send your email if you still need assistance.  
+:::
+
+
+# How R & RStudio Work {.theme-section}
+
+## R-script
+
+Open RStudio, then click the dropdown arrow next to the “New File” icon,
+and then “R script.”
+
+![](videos/01/R-script.mp4){width="65%"}
+
+::: aside
+Alternatively, hold down "Ctrl" + "Shift" + "N."
+:::
+
+::: notes
+An R-script is a file that will contain the documentation of the code of
+what you tell R to do.
+:::
+
+## Panes
+
+:::: r-stack
+::: {style="font-size: 80%"}
+When your script is open, you’ll see four key regions or “panes” in the
+interface:
+
+1.  **Source pane:** where you can edit and save R scripts or author
+    computational documents like Quarto and R Markdown.
+
+2.  **Console pane:** is used to write short interactive R commands.
+
+3.  **Environment pane:** displays temporary R objects created during
+    that R session.
+
+4.  **Output pane:** displays the plots, tables, or HTML outputs of
+    executed code along with files saved to disk.
+:::
+
+![](images/01/panes.png){.fragment fragment-index="1"}
+::::
+
+::: notes
+Console pane: best for exploring.\
+Source pane: best for documenting.
+:::
+
+## File Types
+
+There are many file types, but these are key to an R & RStudio workflow
+(and likely new to you):
+
+::: {style="font-size: 70%"}
+| Extension | Description |
+|----------------------|-------------------------------------------------|
+| .R | R scripts store a sequence of R commands (code) that can be run all at once or line by line. |
+| .qmd | Quarto Markdown creates reproducible documents that contain a combination of text, code, and output. |
+| .Rdata (or sometimes .rda) | These store and load R objects—like data frames. |
+| .Rproj | RStudio project file (keeps project settings). |
+:::
+
+## Packages
+
+R comes with basic tools, but **packages** extend the capabilities of
+base R (what you already installed). An R package is like a toolbox: a
+collection of functions, data, and documentation that help you do
+specific tasks using R.
+
+<br>
+
+::: {style="font-size: 70%"}
+You'll install each package (only once per system):
+:::
+
+```{r}
+#| label: install
+#| message: false
+
+install.packages("tidyverse")
+```
+
+<br>
+
+::: {style="font-size: 70%"}
+You'll load each package (every time you use it):
+:::
+
+```{r}
+#| label: load
+#| message: false
+
+library(tidyverse)
+```
+
+## Support
+
+[R - Intro RStudio Interface](https://youtu.be/opy-v0WAHXM)
+
+[EasyR - Getting started with R the easy
+way](https://youtu.be/K9-zDmq737I)
+
+# R & RStudio Workflow {.theme-section}
+
+## Replication
+
+**The guiding principle for workflow.**
+
+A workflow of data analysis is a process for managing all aspects of
+data analysis.
+
+Planning, documenting, and organizing your work; cleaning the data;
+creating, renaming, and verifying variables; performing and presenting
+statistical analyses; producing replicable results; and archiving what
+you have done are all integral parts of your workflow.
+
+::: aside
+Source: (Long 2008)
+:::
+
+## Steps in a workflow
+
+|  |  |
+|-------------------------------|-----------------------------------------|
+| **Set up** | Systematic organization of the project and project files. |
+| **Familiarize self with data** | Skipping takes more time in the long run. |
+| **Process data** | Takes the [**MOST**]{style="color: #e74c3c;"} time. |
+| **Running analyses** | What people **THINK** takes the most time. |
+| **Presenting results** | What people (wrongly) think does not take time. |
+
+## RStudio Projects
+
+RStudio projects give you tools for a an organized and reproducible
+workflow.
+
+Create an RStudio project for each data analysis project. Everything you
+need is in one place, and cleanly separated from all the other projects
+that you are working on.
+
+::: {style="font-size: 80%"}
+-   local data files to load into RStudio.
+-   scripts to edit or run in bits or as a whole.
+-   Save your outputs (plots and cleaned data).
+:::
+
+::: note
+Source:
+<https://docs.posit.co/ide/user/ide/get-started/#hello-rstudio-projects>
+:::
+
+## Create a RStudio Project
+
+To create a new project in RStudio, use the File \> New Project command.
+
+In the New Project wizard that pops up, select New Directory, then New
+Project.
+
+Name the project “SOC6302” and then click the Create Project button.
+
+This will launch you into a new RStudio Project inside a new folder
+called “SOC6302”.
+
+## Filepaths {.smaller}
+
+Adopting a project-based workflow avoids changing file paths.
+
+<br>
+
+::::: columns
+::: {.column width="60%"}
+**ABSOLUTE FILE PATHS**
+
+Department of Sociology\
+Unit 17100, 17th Floor, Ontario Power Building\
+700 University Ave., Toronto, ON M5G 1Z5
+
+[`C:\Users\Pepin\GitHub\SOC6302\scripts`]{style="color: #fd7e14"}
+:::
+
+::: {.column width="40%"}
+**RELATIVE FILE PATHS**
+
+Take the left side elevators to the 17th floor.\
+Go through the double doors and a take a right.\
+First door on your left.
+
+[**here(scripts)**]{style="color: #20c997"}
+:::
+:::::
+
+## `here()`
+
+here:here() \# set the file path to the root of the project
+
+## File names
+
+should be
+
+-   machine-readable
+-   human-readable
+-   play well with default-ordering
+
+## reproducibility
+
+session_info() \# software documentation
+
+Quarto: The tool you'll use to create reproducible computational
+documents. Every piece of assignment you hand in will be a Quarto
+document.
+
+::: callout-note
+You are likely familiar with word processors like MS Word or Google
+Docs. We will not be using these in this class. Instead, the words you
+would write in such a document, as well as your R code, will go into a
+Quarto document. You will *render* the document (more on what this means
+later) to get a document out that has your words, code, and the output
+of that code. Everything in one place, beautifully formatted!
+:::
+
+## Blank slate
+
+:::: r-stack
+::: {style="font-size: 80%"}
+Clear the memory at every restart of RStudio by turning off the
+automatic saving of your workspace and .Rdata files with you quit
+RStudio. This is important for reproducibility, debugging, and avoiding
+littering your computer with unnecessary files.
+
+Set this via:
+
+1.  Tools \> Global Options
+2.  Uncheck “Restore .RData into Workspace at Startup”
+3.  Choose "Never" on the “Save workspace to .RData on exit”.
+4.  Click "Apply" and "OK".
+:::
+
+![](images/01/blank-slate.png){.fragment fragment-index="1" width="45%"}
+::::
+
+# Get Started {.theme-section}

@@ -461,13 +461,44 @@ later) to get a document out that has your words, code, and the output
 of that code. Everything in one place, beautifully formatted!
 :::
 
+## RScript vs Quarto
+
+:::: columns
+::: {.column width="50%"}
+### RScript
+
+great for learning, exploring and tinkering.
+
+rerun it without attention to formatting or markdown.
+
+:::
+
+
+::: {.column width="50%"}
+### Quarto
+
+great for communicating analysis and results
+
+combines narrative explanation with code output (results.
+
+:::
+::::
+
 ## Documentation
 
+::: r-stack
+
 ![](images/01/documentation.png)
+
+![](images/01/pound.png){.fragment fragment-index="1"}
+
+:::
 
 ::: notes
 In .R scripts and Quarto, you can document your code.
 Err on the side of over documentation. Your future self will thank you.
+In .R scripts, the way to make a comment rather than a command, 
+is to put a pound sign in front of the text.
 :::
 
 ## Blank slate
@@ -507,7 +538,7 @@ You'll install each package (only once per system):
 :::
 
 ```{r}
-#| label: install
+#| label: install-ex
 #| message: false
 
 install.packages("tidyverse")
@@ -520,11 +551,20 @@ You'll load each package (every time you use it):
 :::
 
 ```{r}
-#| label: load
+#| label: load-ex
 #| message: false
 
 library(tidyverse)
 ```
+
+## Comprehensive R Archive Network (CRAN)
+
+CRAN is like an App Store for R. It hosts R packages, documentation, and source 
+code contributed by users worldwide. It is mediated (e.g., quality control), 
+making it incredibly reliable.  
+  
+R users can easily install, update, and share R packages using 
+`install.packages()`.
 
 ## Support
 
@@ -543,14 +583,116 @@ way](https://youtu.be/K9-zDmq737I)
 
 ## Open RStudio
 
-Open your SOC6302 Project 
+<br> 
+
+Open your SOC6302 Project  
 ([See slide on Creating RStudio Projects](#slideRStudioProj-id))
 
+<br> 
 
-## reproducibility
+Download and open your first [code-along]()
 
-session_info() \# software documentation
+
+## Packages
+
+We'll use the following packages:
+
+-   `here()` (relative file paths)
+-   `tidyverse()` (data wrangling)
+-   `gssr()` (U.S. General Social Survey data)
+-   `gssrdoc()` (GSS documentation)
+
+## Install `here()` and `tidyverse()`
+
+Let's install the two packages that are available on CRAN. 
+
+<br>
+
+Copy and paste the following code into your Console pane. Then hit enter.
+
+``` {r}
+#| eval: false
+#| message: false
+#| label: install-here
+
+
+install.packages("here")
+```
+
+<br> 
+
+Then, do the same to install the tidyverse package.
+
+``` {r}
+#| eval: false
+#| message: false
+#| label: install-tidyverse
+
+install.packages("tidyverse")
+```
+
+
+## Install `gssr()` and `gssrdoc()`
+
+```{r}
+#| eval: false
+#| message: false
+#| label: install-gss
+
+
+# Install 'gssr' from 'ropensci' universe
+install.packages('gssr', repos =
+  c('https://kjhealy.r-universe.dev', 'https://cloud.r-project.org'))
+
+# Also recommended: install 'gssrdoc' as well
+install.packages('gssrdoc', repos =
+  c('https://kjhealy.r-universe.dev', 'https://cloud.r-project.org'))
+```
+
+## Load the packages
+
+```{r}
+#| message: false
+#| label: load
+
+library(here)
+library(tidyverse)
+library(gssr)
+library(gssrdoc)
+```
+
+
+## Environment
+
+```{r}
+#| message: false
+#| label: enviro
+
+# software documentation
+sessionInfo()
+
+```
+
+## Project Structure
+
+Let's set up your project structure using the `here()` package.
+
+![](https://raw.githubusercontent.com/allisonhorst/stats-illustrations/master/rstats-artwork/here.png)
+
 
 ## `here()`
 
-here:here() \# set the file path to the root of the project
+```{r}
+#| message: false
+#| label: here
+
+# set the file path to the root of the project
+here()
+
+```
+
+## Environment
+
+session_info() \# software documentation
+
+YAML Ain't Markup Language

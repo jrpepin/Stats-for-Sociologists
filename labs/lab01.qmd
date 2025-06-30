@@ -37,15 +37,23 @@ source("custom-setup-styles.R")
 # Agenda {data-menu-title="Agenda" background-image="images/calendar.png" background-size="100px" background-repeat="repeat"}
 
 -   Learning to Code
--   How R & RStudio Work
 -   R & RStudio Workflow
--   Get Started
+-   Getting Started
+
+
+# Learning objectives
+
+By the end of the lab, you will be able to ...
+
+-   setup a reproducible workflow using R and RStudio\
+-   familiarize yourself with a dataset using R and RStudio\
+-   create a reproducible report using Quarto\
 
 # Learning to Code {.theme-section}
 
-## Technology
+## Technology is fun!
 
-:::: r-stack
+<br>
 
 ::: {style="font-size: 90%"}
 You're not just learning the statistical concepts in this course, but
@@ -56,20 +64,36 @@ new technology.
 
 Learning statistical software to analyze data can be really fun. You get
 to learn about real world social problems!
+:::
+
+## Technology is challenging!
+
+:::: r-stack
+::: {style="font-size: 90%"}
+It can be frustrating.
 
 <br>
 
-But, it can also be frustrating. There's even a bingo card of common
-errors (i.e. bugs) that new statistical programmers will expect to
-experience.
+When it feels like the technology is preventing you from getting to the
+course content, take a deep breath, and **remember that building your
+technology skills is part of this course.**
 :::
 
 ![](images/01/bingo.png){.fragment fragment-index="1" width="85%"}
 ::::
 
+::: notes
+Replication using technology requires researchers to sometimes use
+unfamiliar software, working on devices with unique environments and
+settings.
+
+There's even a bingo card of common errors (i.e. bugs) that new
+statistical programmers will expect to experience.
+:::
+
 ## Why am I making you learn something so frustrating?
 
-<br>  
+<br>
 
 Calculating the statistics by hand quickly gets cumbersome, time
 consuming, and difficult.
@@ -89,34 +113,22 @@ minor coding errors, highlights unusual decisions made by researchers,
 inappropriate statistical techniques, and corrupted data.
 :::
 
-## But technology presents its own challenges.
-
-<br>
-
-Replication using technology requires researchers to sometimes use 
-unfamiliar software, working on devices with unique environments and
-settings.
-
-<br>
-
-When it feels like the technology is preventing you from getting to the
-course content, take a deep breath, and **remember that building your
-technology skills is part of this course.**
-
 ## Grappling
 
 Learning to use statistical software necessitates
 [grappling](https://www.edutopia.org/blog/4-tips-teaching-problem-solving-from-student-anna-pelletiere).
 
-<br>
-
 ::: {style="color: #18BC9C; font-size: 90%; font-family: 'Shadows Into Light'"}
 Grappling implies trying even before you fail the first time.
+
+<br>
 
 It’s thinking, “First, I’ll work with it independently. Okay, I’m really
 not understanding it. Let me go back to my notes. Okay, I have solved
 for the first part of it. Now I have the second part of it. Okay, I got
 the question wrong; let me try again. Maybe I can ask my peer now.”
+
+<br>
 
 Grappling is working hard to make sure you understand the problem fully,
 and then using every resource at your fingertips to solve it.”
@@ -135,22 +147,17 @@ errors stack-up.
 ##  {data-menu-title="Debugging"}
 
 :::::: columns
-
 :::: {.column width="25%"}
-
 ::: {style="font-size: 95%; font-family: 'Shadows Into Light'"}
 Most statistical analyses happen not because the person is a math
 genius, but because they persisted through the minefield of technical
-issues by being **excellent problem-solvers.**
-
+issues by being [**excellent problem-solvers.**]{style="color: #18BC9C"}
 :::
-
 ::::
 
 ::: {.column width="75%"}
 ![](images/01/debugging.png)
 :::
-
 ::::::
 
 ::: notes
@@ -162,7 +169,7 @@ even a name for it: **debugging**.
 
 ## Coding is mostly Googling
 
-<br> 
+<br>
 
 It is a misconception that the best statistical analysts sit down at
 their computers and type code from memory.
@@ -181,7 +188,7 @@ Google search is part of building your coding skills.
 
 ## When you get stuck...
 
-...there are many options to get unstuck
+[**...there are many options to get unstuck:**]{style="color: #18BC9C"}
 
 ::: {style="font-size: 70%"}
 -   Review the slides. Pay very close attention to small details.
@@ -202,74 +209,204 @@ When none of these strategies fix the issue, it is time to ask for help.
 
 ## Help in this class
 
-Before requesting an individual meeting with a TA: 
+[**Before requesting an individual meeting with a
+TA:**]{style="color: #E74C3C"}
 
--    Spend a sufficient amount of time working on it on your own. 
--    Ask two of your peers. 
--    Post the question on the class discussion board.
-
-When emailing:
-
--    Explain what troubleshooting steps you’ve already taken.\ 
--    Report who you’ve already asked for help.\ 
-
-::: notes
-If none of these solve your problem, draft an email to your TA, with detailed 
-notes about the problem and the troubleshooting steps you've already taken. 
-You might be surprised how often even writing the problem out in detail helps 
-you find the answer on your own. Send your email if you still need assistance. 
+::: {style="font-size: 75%"}
+-   Spend a sufficient amount of time working on it on your own.
+-   Ask two of your peers.
+-   Post the question on the class discussion board.
 :::
 
-## Replication principles should be used when asking for help. {data-menu-title="Help & Replication"}
-    
+[**When emailing:**]{style="color: #E74C3C"}
+
+::: {style="font-size: 75%"}
+-   Explain what troubleshooting steps you’ve already taken. 
+-   Report who you’ve already asked for help. 
+:::
+
+::: notes
+If none of these solve your problem, draft an email to your TA, with
+detailed notes about the problem and the troubleshooting steps you've
+already taken. You might be surprised how often even writing the problem
+out in detail helps you find the answer on your own. Send your email if
+you still need assistance.
+:::
+
+## Create a trail! {data-menu-title="Help & Replication"}
+
 ![](images/01/repro_ex.png "Loneliness on internet without an answer to a coding question")
 
 ::: notes
-The best quantitative researchers produce a trail for their code so that future 
-researchers can replicate their analysis.  
+Use replication principles when asking for help. The best quantitative
+researchers produce a trail for their code so that future researchers
+can replicate their analysis.
 :::
-  
-## Create a trail
+
+## Create a reproducible example
 
 <br>
 
-::: {style="color: #18BC9C; font-size: 120%; font-family: 'Shadows Into Light'"}
-**Make someone else to feel your pain!**  
+::: {style="color: #18BC9C; font-size: 150%; font-family: 'Shadows Into Light'"}
+**Goal: Make someone else to feel your pain!**
 :::
-
-<br>
-
-**Create a reproducible example.** 
 
 ::: {style="font-size: 80%"}
--   Assume others know nothing about your issue.\ 
--   Describe your steps to create the problem so that someone else can replicate it.\ 
--   This means clearly describing the issue and the steps you've already taken to solve it.\ 
+-   Assume others know nothing about your issue. 
+-   Describe your steps to create the problem so that someone else can
+    replicate it. 
+-   This means clearly describing the issue and the steps you've already
+    taken to solve it. 
 :::
-  
-## Good etiquette  
+
+## Good etiquette
 
 **Search for answers before posting your question.**\
-[Let me google that for you.]{style="color: #18BC9C; font-family: 'Shadows Into Light'"}\ 
+[Let me google that for you.
+🙄]{style="color: #18BC9C; font-family: 'Shadows Into Light'"} 
 
-**Describe the problem.**  
-["It doesn't work" isn't descriptive enough.]{style="color: #18BC9C; font-family: 'Shadows Into Light'"}\  
-  
-**Describe your environment.**  
-[What operating system are you using? Which R version? What packages? Dataset?]{style="color: #18BC9C; font-family: 'Shadows Into Light'"}\
-  
-**Describe the solution.**  
-[Confirm if a solution offered works. 
-Or, if you solve it on your own, post how you solved it.]{style="color: #18BC9C; font-family: 'Shadows Into Light'"}
+**Describe the problem.**\
+["It doesn't work" isn't descriptive
+enough.]{style="color: #18BC9C; font-family: 'Shadows Into Light'"} 
+
+**Describe your environment.**\
+[What operating system are you using? Which R version? What packages?
+Dataset?]{style="color: #18BC9C; font-family: 'Shadows Into Light'"}\
+
+**Describe the solution.**\
+[Confirm if a solution offered works. Or, if you solve it on your own,
+post how you solved
+it.]{style="color: #18BC9C; font-family: 'Shadows Into Light'"}
+
+##  {data-menu-title="Process Focused" background-image="images/01/debug-flow.png" background-size="contain"}
+
+::: notes
+Try to stay focused on being in the process, not the outcome.
+:::
+
+# R & RStudio Workflow {.theme-section}
+
+## Replication
+
+[**The guiding principle for workflow.**]{style="color: #18BC9C"}
+
+A workflow of data analysis is a process for managing all aspects of
+data analysis.
+
+<br>
+
+Planning, documenting, and organizing your work; cleaning the data;
+creating, renaming, and verifying variables; performing and presenting
+statistical analyses; producing replicable results; and archiving what
+you have done are all integral parts of your workflow.
+
+::: aside
+Source: (Long 2008)
+:::
+
+## Steps in a workflow
+
+|  |  |
+|-------------------------------|-----------------------------------------|
+| **Set up** | Systematic organization of the project and project files. |
+| **Familiarize self with data** | Skipping takes more time in the long run. |
+| **Process data** | Takes the [**MOST**]{style="color: #e74c3c;"} time. |
+| **Running analyses** | What people **THINK** takes the most time. |
+| **Presenting results** | What people (wrongly) think does not take time. |
+
+## File types
+
+There are many file types, but these are key to an R & RStudio workflow
+(and likely new to you):
+
+::: {style="font-size: 70%"}
+| Extension | Description |
+|-----------------------|-------------------------------------------------|
+| .Rproj | RStudio project file (keeps project settings). |
+| .R | R scripts store a sequence of R commands (code) that can be run all at once or line by line. |
+| .qmd | Quarto Markdown creates reproducible documents that contain a combination of text, code, and output. |
+| .Rdata (or sometimes .rda) | These store and load R objects—like data frames. |
+:::
+
+## File names
+
+should be:
+
+-   machine-readable
+-   human-readable
+-   play well with default-ordering
 
 
+## RStudio Projects
 
-# How R & RStudio Work {.theme-section}
+<br>
+
+Create a **RStudio project** for each data analysis project.
+
+It supports an organized and reproducible workflow, cleanly separated
+from all other projects that you are working on. Everything you need in
+one place:
+
+::: {style="font-size: 80%"}
+-   local data files to load into RStudio.
+-   scripts to edit or run in bits or as a whole.
+-   Save your outputs (plots and cleaned data).
+:::
+
+::: notes
+Source:
+<https://docs.posit.co/ide/user/ide/get-started/#hello-rstudio-projects>
+:::
+
+## Filepaths {.smaller}
+
+Adopting a project-based workflow avoids changing file paths.
+
+<br>
+
+::::: columns
+::: {.column width="60%"}
+**ABSOLUTE FILE PATHS**
+
+Department of Sociology\
+Unit 17100, 17th Floor, Ontario Power Building\
+700 University Ave., Toronto, ON M5G 1Z5
+
+[`C:\Users\Pepin\GitHub\SOC6302\scripts`]{style="color: #fd7e14"}
+:::
+
+::: {.column width="40%"}
+**RELATIVE FILE PATHS**
+
+Take the left side elevators to the 17th floor.\
+Go through the double doors and a take a right.\
+First door on your left.
+
+[**here(scripts)**]{style="color: #20c997"}
+:::
+:::::
+
+## Create a RStudio Project {#slideRStudioProj-id}
+
+<br>
+
+To create a new project in RStudio, click: [File \> New
+Project]{style="color: #3498DB"}.
+
+In the New Project wizard that pops up, select: [New Directory, then New
+Project]{style="color: #3498DB"}.
+
+Name the project “SOC6302” and click: [Create
+Project]{style="color: #3498DB"}.
+
+This will launch you into a new RStudio Project inside a new folder
+called “SOC6302”.
 
 ## R-script
 
-Open RStudio, then click the dropdown arrow next to the “New File” icon,
-and then “R script.”
+Open RStudio, then click the dropdown arrow next to the "[New File
+icon]{style="color: #3498DB"}," and then "[R
+script]{style="color: #3498DB"}."
 
 ![](videos/01/R-script.mp4){width="65%"}
 
@@ -285,7 +422,6 @@ what you tell R to do.
 ## Panes
 
 :::: r-stack
-
 ::: {style="font-size: 80%"}
 When your script is open, you’ll see four key regions or “panes” in the
 interface:
@@ -303,7 +439,6 @@ interface:
 :::
 
 ![](images/01/panes.png){.fragment fragment-index="1"}
-
 ::::
 
 ::: notes
@@ -311,19 +446,52 @@ Console pane: best for exploring.\
 Source pane: best for documenting.
 :::
 
-## File Types
+## Quarto
 
-There are many file types, but these are key to an R & RStudio workflow
-(and likely new to you):
+Quarto: The tool you'll use to create reproducible computational
+documents. Every piece of assignment you hand in will be a Quarto
+document.
 
-::: {style="font-size: 70%"}
-| Extension | Description |
-|----------------------|-------------------------------------------------|
-| .R | R scripts store a sequence of R commands (code) that can be run all at once or line by line. |
-| .qmd | Quarto Markdown creates reproducible documents that contain a combination of text, code, and output. |
-| .Rdata (or sometimes .rda) | These store and load R objects—like data frames. |
-| .Rproj | RStudio project file (keeps project settings). |
+::: callout-note
+You are likely familiar with word processors like MS Word or Google
+Docs. We will not be using these in this class. Instead, the words you
+would write in such a document, as well as your R code, will go into a
+Quarto document. You will *render* the document (more on what this means
+later) to get a document out that has your words, code, and the output
+of that code. Everything in one place, beautifully formatted!
 :::
+
+## Documentation
+
+![](images/01/documentation.png)
+
+::: notes
+In .R scripts and Quarto, you can document your code.
+Err on the side of over documentation. Your future self will thank you.
+:::
+
+## Blank slate
+
+:::: r-stack
+::: {style="font-size: 80%"}
+Clear the memory at every restart of RStudio by turning off the
+automatic saving of your workspace and .Rdata files with you quit
+RStudio. This is important for reproducibility, debugging, and avoiding
+littering your computer with unnecessary files.
+
+Set this via:
+
+1.  [Tools \> Global Options]{style="color: #3498DB"}.
+2.  [Uncheck “Restore .RData into Workspace at
+    Startup”]{style="color: #3498DB"}.
+3.  Choose "[Never]{style="color: #3498DB"}" on the “Save workspace to
+    .RData on exit”.
+4.  Click "[Apply]{style="color: #3498DB"}" and
+    "[OK]{style="color: #3498DB"}".
+:::
+
+![](images/01/blank-slate.png){.fragment fragment-index="1" width="45%"}
+::::
 
 ## Packages
 
@@ -360,148 +528,29 @@ library(tidyverse)
 
 ## Support
 
+Some help videos and further explanation:
+
 [R - Intro RStudio Interface](https://youtu.be/opy-v0WAHXM)
 
 [EasyR - Getting started with R the easy
 way](https://youtu.be/K9-zDmq737I)
 
-# R & RStudio Workflow {.theme-section}
 
-## Replication
 
-**The guiding principle for workflow.**
 
-A workflow of data analysis is a process for managing all aspects of
-data analysis.
 
-Planning, documenting, and organizing your work; cleaning the data;
-creating, renaming, and verifying variables; performing and presenting
-statistical analyses; producing replicable results; and archiving what
-you have done are all integral parts of your workflow.
+# Getting Started {.theme-section}
 
-::: aside
-Source: (Long 2008)
-:::
+## Open RStudio
 
-## Steps in a workflow
+Open your SOC6302 Project 
+([See slide on Creating RStudio Projects](#slideRStudioProj-id))
 
-|  |  |
-|-------------------------------|-----------------------------------------|
-| **Set up** | Systematic organization of the project and project files. |
-| **Familiarize self with data** | Skipping takes more time in the long run. |
-| **Process data** | Takes the [**MOST**]{style="color: #e74c3c;"} time. |
-| **Running analyses** | What people **THINK** takes the most time. |
-| **Presenting results** | What people (wrongly) think does not take time. |
-
-## RStudio Projects
-
-RStudio projects give you tools for a an organized and reproducible
-workflow.
-
-Create an RStudio project for each data analysis project. Everything you
-need is in one place, and cleanly separated from all the other projects
-that you are working on.
-
-::: {style="font-size: 80%"}
--   local data files to load into RStudio.
--   scripts to edit or run in bits or as a whole.
--   Save your outputs (plots and cleaned data).
-:::
-
-::: notes
-Source:
-<https://docs.posit.co/ide/user/ide/get-started/#hello-rstudio-projects>
-:::
-
-## Create a RStudio Project
-
-To create a new project in RStudio, use the File \> New Project command.
-
-In the New Project wizard that pops up, select New Directory, then New
-Project.
-
-Name the project “SOC6302” and then click the Create Project button.
-
-This will launch you into a new RStudio Project inside a new folder
-called “SOC6302”.
-
-## Filepaths {.smaller}
-
-Adopting a project-based workflow avoids changing file paths.
-
-<br>
-
-::::: columns
-
-::: {.column width="60%"}
-**ABSOLUTE FILE PATHS**
-
-Department of Sociology\
-Unit 17100, 17th Floor, Ontario Power Building\
-700 University Ave., Toronto, ON M5G 1Z5
-
-[`C:\Users\Pepin\GitHub\SOC6302\scripts`]{style="color: #fd7e14"}
-:::
-
-::: {.column width="40%"}
-**RELATIVE FILE PATHS**
-
-Take the left side elevators to the 17th floor.\
-Go through the double doors and a take a right.\
-First door on your left.
-
-[**here(scripts)**]{style="color: #20c997"}
-:::
-
-:::::
-
-## `here()`
-
-here:here() \# set the file path to the root of the project
-
-## File names
-
-should be
-
--   machine-readable
--   human-readable
--   play well with default-ordering
 
 ## reproducibility
 
 session_info() \# software documentation
 
-Quarto: The tool you'll use to create reproducible computational
-documents. Every piece of assignment you hand in will be a Quarto
-document.
+## `here()`
 
-::: callout-note
-You are likely familiar with word processors like MS Word or Google
-Docs. We will not be using these in this class. Instead, the words you
-would write in such a document, as well as your R code, will go into a
-Quarto document. You will *render* the document (more on what this means
-later) to get a document out that has your words, code, and the output
-of that code. Everything in one place, beautifully formatted!
-:::
-
-## Blank slate
-
-:::: r-stack
-::: {style="font-size: 80%"}
-Clear the memory at every restart of RStudio by turning off the
-automatic saving of your workspace and .Rdata files with you quit
-RStudio. This is important for reproducibility, debugging, and avoiding
-littering your computer with unnecessary files.
-
-Set this via:
-
-1.  Tools \> Global Options
-2.  Uncheck “Restore .RData into Workspace at Startup”
-3.  Choose "Never" on the “Save workspace to .RData on exit”.
-4.  Click "Apply" and "OK".
-:::
-
-![](images/01/blank-slate.png){.fragment fragment-index="1" width="45%"}
-::::
-
-# Get Started {.theme-section}
+here:here() \# set the file path to the root of the project

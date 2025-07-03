@@ -35,7 +35,7 @@ data(gss_all)
 :::::: columns
 ::: {.column width="50%"}
 -   Introduction to Data Analysis
--   Frequency Distributions
+-   Learning to Code
 :::
 
 :::: {.column width="50%"}
@@ -239,452 +239,240 @@ ranking neighborhoods by crime rate (e.g., low, medium, high)?**
 -   [Dichotomous]{data-explanation="There are more than two categories"}
 -   [Continuous]{data-explanation="😲 Grouping by rate makes this categorical."}
 
-# Frequency Distributions {.theme-section .smaller}
+
+
+
+# Learning to Code {.theme-section}
+
+## Technology is fun!
+
+<br>
+
+::: {style="font-size: 90%"}
+You're not just learning the statistical concepts in this course, but
+how to produce the statistics. Analyzing data requires learning to use
+new technology.
+
+<br>
+
+Learning statistical software to analyze data can be really fun. You get
+to learn about real world social problems!
+:::
+
+## Technology is challenging!
+
+:::: r-stack
+::: {style="font-size: 90%"}
+It can be frustrating.
+
+<br>
+
+When it feels like the technology is preventing you from getting to the
+course content, take a deep breath, and **remember that building your
+technology skills is part of this course.**
+:::
+
+![](images/01/bingo.png){.fragment fragment-index="1" width="85%"}
+::::
+
+::: notes
+Replication using technology requires researchers to sometimes use
+unfamiliar software, working on devices with unique environments and
+settings.
+
+There's even a bingo card of common errors (i.e. bugs) that new
+statistical programmers will expect to experience.
+:::
+
+## Why am I making you learn something so frustrating?
+
+<br>
+
+Calculating the statistics by hand quickly gets cumbersome, time
+consuming, and difficult.
+
+<br>
+
+Good social science is built on replication.
+
+::: notes
+You'll learn the statistical techniques using small sample sizes, but to
+really understand the social world, datasets typically have 100s,
+1,000s, even 100,000s of values.
+
+It is impractical, and more prone to errors, for scientists to replicate
+research by hand. Replication of statistical procedures helps catch
+minor coding errors, highlights unusual decisions made by researchers,
+inappropriate statistical techniques, and corrupted data.
+:::
+
+## Grappling
+
+Learning to use statistical software necessitates
+[grappling](https://www.edutopia.org/blog/4-tips-teaching-problem-solving-from-student-anna-pelletiere).
+
+::: {style="color: #18BC9C; font-size: 90%; font-family: 'Shadows Into Light'"}
+Grappling implies trying even before you fail the first time.
+
+<br>
+
+It’s thinking, “First, I’ll work with it independently. Okay, I’m really
+not understanding it. Let me go back to my notes. Okay, I have solved
+for the first part of it. Now I have the second part of it. Okay, I got
+the question wrong; let me try again. Maybe I can ask my peer now.”
+
+<br>
+
+Grappling is working hard to make sure you understand the problem fully,
+and then using every resource at your fingertips to solve it.”
+:::
+
+::: notes
+In this course, this means you'll put your active learning skills to
+use. You, not your professor or TA, will work through encountered
+problems. You, of course, will be supported and coached through the
+entire process. Working with statistical software will become easier as
+you build your skills in problem-solving errors. Unfortunately, it gets
+increasingly difficult if you rely on others to solve the issue, as the
+errors stack-up.
+:::
+
+##  {data-menu-title="Debugging"}
 
 :::::: columns
-::: {.column width="40%"}
--   FREQUENCY DISTRIBUTION\
--   RELATIVE FREQUENCY DISTRIBUTION
+:::: {.column width="25%"}
+::: {style="font-size: 95%; font-family: 'Shadows Into Light'"}
+Most statistical analyses happen not because the person is a math
+genius, but because they persisted through the minefield of technical
+issues by being [**excellent problem-solvers.**]{style="color: #18BC9C"}
 :::
+::::
 
-::: {.column width="24%"}
--   PROPORTION\
--   PERCENTAGE\
--   CUMULATIVE\
--   RATE\
-:::
-
-::: {.column width="33%"}
--   BAR GRAPH\
--   HISTOGRAM\
--   LINE GRAPH\
--   STATISTICAL MAP
+::: {.column width="75%"}
+![](images/01/debugging.png)
 :::
 ::::::
 
-##  {#slide14-id data-menu-title="Distributions"}
-
-::: {.callout-tip icon="false"}
-## {{< fa pen-to-square >}} DISTRIBUTION
-
-Shows all the possible values (or intervals) of the data and how often
-they occur.
+::: notes
+Get comfortable with making mistakes right now. Your code is not
+expected to be perfect the first time. Remember, identifying and fixing
+errors in your own code is such an inherent part of the process, there's
+even a name for it: **debugging**.
 :::
+
+## Coding is mostly Googling
 
 <br>
 
-::: {.callout-tip icon="false"}
-## {{< fa pen-to-square >}} FREQUENCY DISTRIBUTION
-
-A table reporting the number of observations falling into each category
-of the variable.
-:::
-
-![](images/01/distributions.png)
-
-##  {#slide15-id data-menu-title="Distribution tables"}
-
-```{r}
-gss_all$premarsx <- as_factor(zap_missing(gss_all$premarsx))
-gss_all$sex <- as_factor(zap_missing(gss_all$sex))
-
-freq_premarsx <- gss_all %>%
-  select(id, year, sex, premarsx) %>%
-  filter(year == 2024, !is.na(premarsx)) %>%
-  count(premarsx)
-
-total_row <- freq_premarsx %>%
-  summarise(across(where(is.numeric), sum)) %>%
-  mutate(premarsx = "Total")
-
-# combine
-table_premarsx <- rbind(freq_premarsx, total_row)
-```
-
-::: panel-tabset
-### Tab A
-
-**Table 1. Attitudes about sex before marriage**
-
-```{r}
-# Render the table
-table_premarsx %>%
-  flextable() %>%
-  style_flextable()
-```
-
-[**Survey question**: *There's been a lot of discussion about the way
-morals and attitudes about sex are changing in this country. If a man
-and woman have sex relations before marriage, do you think it is
-\_\_\_\_\_\_\_\_\_.*]{style="font-size: 50%"}
-
-### Tab B
-
-**Table 1. Attitudes about sex before marriage**
-
-```{r}
-table_premarsx %>%
-  flextable() %>%
-  style_flextable() %>%
-  color(color = "#E74C3C", i = 5, j = "n")
-```
-
-[The number of respondents who answered this survey
-question.]{style="color: #E74C3C; font-family: 'Shadows Into Light'"}
-
-### Tab C
-
-**Table 1. Attitudes about sex before marriage**
-
-```{r}
-table_premarsx %>%
-  flextable() %>%
-  style_flextable() %>%
-  color(color = "#E74C3C", i = 3, j = "n")
-```
-
-[The number of respondents who said pre-marital sex was "**wrong only
-sometimes**."]{style="color: #E74C3C; font-family: 'Shadows Into Light'"}
-:::
-
-::: aside
-[*Source: U.S. General Social Survey 2024*]{style="color: $gray-500"}
-:::
-
-##  {#slide16-id .smaller data-menu-title="Think Like a Statistician" background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
-
-[{{< fa regular lightbulb >}} Are women more likely than men to say
-premarital sex is "**not wrong at
-all**"?]{style="color: #F39C12; font-size: 175%; font-family: 'Shadows Into Light'"}
+It is a misconception that the best statistical analysts sit down at
+their computers and type code from memory.
 
 <br>
 
-**Table 2. Attitudes about sex before marriage by gender**
+Much of process of coding is copying code from somewhere else and
+modifying it to fit your particular situation.
 
-```{r}
-gss_all$premarsx <- as_factor(zap_missing(gss_all$premarsx))
-gss_all$sex <- as_factor(zap_missing(gss_all$sex))
-
-freq_premarsx <- gss_all %>%
-  select(id, year, sex, premarsx) %>%
-  filter(!is.na(premarsx), !is.na(sex)) %>%
-  group_by(sex) %>%
-  count(premarsx) %>%
-  pivot_wider(
-    names_from = sex,
-    values_from = n,
-    values_fill = 0
-  )
-
-# create total row
-total_row <- freq_premarsx %>%
-  summarise(across(where(is.numeric), sum)) %>%
-  mutate(premarsx = "Total") %>%
-  select(names(freq_premarsx)) # ensure column order matches
-
-# combine
-table_premarsx <- rbind(freq_premarsx, total_row)
-
-# Get number of rows
-n_rows <- nrow(table_premarsx) # fixing transparency
-
-# Render the table
-table_premarsx %>%
-  flextable() %>%
-  style_flextable() %>%
-  # Manually add zebra stripes with solid colors w/o transparency
-  bg(i = seq(1, n_rows, by = 2), bg = "white", part = "body") %>%
-  bg(i = seq(2, n_rows, by = 2), bg = "#F2F2F2", part = "body")
-```
-
-::: aside
-[*Source: U.S. General Social Survey
-1972-2024*]{style="color: $gray-500"}
+::: notes
+Learning to analyze data with software requires a lot of practice and
+attention to detail. It also requires a lot of time searching the
+internet for help. Learning to identify the right words and phrases in a
+Google search is part of building your coding skills.
 :::
 
-##  {#slide17-id data-menu-title="Relative Frequency Distributions"}
+## When you get stuck...
 
-::: {.callout-tip icon="false"}
-## {{< fa pen-to-square >}} RELATIVE FREQUENCY DISTRIBUTION
+[**...there are many options to get unstuck:**]{style="color: #18BC9C"}
 
-A table showing the proportion or percentage for each value of a
-variable.
+::: {style="font-size: 70%"}
+-   Review the slides. Pay very close attention to small details.
+-   Try something else to see if you get a new error.
+-   Use Google to search for possible answers or new explanations.
+-   Watch a help video on YouTube on the topic.
+-   Re-start your web-browser or device.
+-   Try another web-browser or device.
+-   Ask a peer. Or an advanced student.
+-   Start or join a weekly study group.
+-   Post the question on the class discussion board.
+-   Email your TA
 :::
 
-<br>
-
-[**Proportions**]{style="font-size: 125%"} are between 0 and 1.0.
-
-::: smaller
-Proportion = count (f) / total number of cases (N).
+::: notes
+When none of these strategies fix the issue, it is time to ask for help.
 :::
 
-<br>
+## Help in this class
 
-[**Percentages**]{style="font-size: 125%"} are between 0 and 100.
-
-::: smaller
-Percentage = proportion × 100.
-:::
-
-##  {#slide18-id .smaller data-menu-title="Your Data Take" background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
-
-```{r}
-gss_all$premarsx <- droplevels(gss_all$premarsx)
-
-# Create frequency & proportions table
-tab <- gss_all %>%
-  filter(!is.na(premarsx), !is.na(sex)) %>%
-  group_by(sex, premarsx) %>%
-  summarise(n = n(), .groups = "drop") %>%
-  group_by(sex) %>%
-  mutate(percent = round(100 * n / sum(n), 0)) %>%
-  ungroup() %>%
-  pivot_wider(
-    names_from = sex, values_from = c(n, percent)
-  )
-
-# Add totals row
-tab_totals <- tab %>%
-  summarise(across(where(is.numeric), sum, na.rm = TRUE)) %>%
-  mutate(premarsx = "Total")
-
-# Combine with original table
-tab_with_totals <- bind_rows(tab, tab_totals)
-```
-
-::: panel-tabset
-### Tab A
-
-**Table 2. Attitudes about sex before marriage by gender**
-
-```{r}
-## Pretty table
-tab_with_totals %>%
-  select(premarsx, n_male, percent_male, n_female, percent_female) %>%
-  flextable() %>%
-  style_flextable() %>%
-  set_header_labels(
-    n_male = "n", percent_male = "%",
-    n_female = "n", percent_female = "%"
-  ) %>%
-  add_header_row(
-    values = c("", "Men", "Women"),
-    colwidths = c(1, 2, 2)
-  ) %>%
-  align(j = c(2, 3, 4, 5), align = "center", part = "all") %>%
-  color(color = "#18bc9c", i = 4, j = 4) %>%
-  color(color = "#fd7e14", i = 5, j = 4) %>%
-  color(color = "#e74c3c", i = 4, j = 5)
-```
-
-$\frac{\color{mathGreen}{11{,}086}}{\color{mathOrange}{25{,}382}} = 0.4367 \times 100 = \color{mathRed}{43.7\%}$
-
-[{{< fa mitten >}} **TIP**: Total of a % column should always sum to
-100!]{style="color: #3498DB"}
-
-### Tab B
-
-**Table 2. Attitudes about sex before marriage by gender**
-
-```{r}
-## Pretty table
-tab_with_totals %>%
-  select(premarsx, n_male, percent_male, n_female, percent_female) %>%
-  flextable() %>%
-  style_flextable() %>%
-  set_header_labels(
-    n_male = "n", percent_male = "%",
-    n_female = "n", percent_female = "%"
-  ) %>%
-  add_header_row(
-    values = c("", "Men", "Women"),
-    colwidths = c(1, 2, 2)
-  ) %>%
-  align(j = c(2, 3, 4, 5), align = "center", part = "all") %>%
-  color(color = "#E74C3C", i = 4, j = 3) %>%
-  color(color = "#E74C3C", i = 4, j = 5)
-```
-
-[{{< fa lightbulb >}} A greater proportion of men (53%) than women (44%)
-say premarital sex is "**not wrong at
-all**."]{style="color: #E74C3C; font-size: 150%; font-family: 'Shadows Into Light'"}
-:::
-
-::: aside
-[*Source: U.S. General Social Survey
-1972-2024*]{style="color: $gray-500"}
-:::
-
-##  {#slide20-id .smaller data-menu-title="Cumulative Frequency Distributions"}
-
-::: {.callout-tip icon="false"}
-## {{< fa pen-to-square >}} CUMULATIVE FREQUENCY DISTRIBUTION
-
-The number or percentage of observations at or below a given category.
-:::
-
-<br>
-
-**Table 3. Attitudes about sex before marriage, with cumulative
-percentages**
-
-```{r}
-gss_all$premarsx <- droplevels(gss_all$premarsx)
-
-# Create frequency & proportions table
-tab <- gss_all %>%
-  filter(year == 2024, !is.na(premarsx)) %>%
-  group_by(premarsx) %>%
-  summarise(n = n(), .groups = "drop") %>%
-  mutate(
-    percent = round(100 * n / sum(n), 0),
-    cum_percent = round(cumsum(percent), 0)
-  ) %>%
-  ungroup()
-
-# Add totals row
-tab_totals <- tab %>%
-  summarise(across(where(is.numeric), sum, na.rm = TRUE)) %>%
-  mutate(premarsx = "Total")
-
-# Combine with original table
-tab_with_totals <- bind_rows(tab, tab_totals)
-
-## Pretty table
-tab_with_totals %>%
-  flextable() %>%
-  style_flextable() %>%
-  set_header_labels(
-    n = "n", percent = "%",
-    cum_percent = "cumulative %"
-  ) %>%
-  color(color = "#18bc9c", i = 1, j = 3) %>%
-  color(color = "#fd7e14", i = 2, j = 3) %>%
-  color(color = "#e74c3c", i = 2, j = 4)
-```
-
-${\color{mathGreen} 17} + {\color{mathOrange} 6} = {\color{mathRed} 23\%}$
-
-##  {data-menu-title="Rates"}
-
-::: {.callout-tip icon="false"}
-## {{< fa pen-to-square >}} **RATES**
-
-$\frac{Actual\;occurrences}{possible\;occurrences}$
-:::
-
-<br>
+[**Before requesting an individual meeting with a
+TA:**]{style="color: #E74C3C"}
 
 ::: {style="font-size: 75%"}
-**Examples:**
-
--   [Canada's divorce
-    rate](https://www150.statcan.gc.ca/n1/daily-quotidien/220309/dq220309a-eng.htm)
-    decreased from 12.7 per 1,000 in 1991 to 5.6 per 1,000 in 2020.\
--   The [2021 suicide
-    rate](https://health-infobase.canada.ca/mental-health/suicide-self-harm/suicide-mortality.html)
-    of 14.8 per 100,000 population for middle aged Canadians (30-59
-    years old) was the highest of any age group.\
--   [Canada's total fertility
-    rate](https://www150.statcan.gc.ca/n1/daily-quotidien/240925/dq240925c-eng.htm)
-    reached a new low in 2023 of 1.26 children per woman.
+-   Spend a sufficient amount of time working on it on your own.
+-   Ask two of your peers.
+-   Post the question on the class discussion board.
 :::
 
-##  {data-menu-title="Distributions & Measurement Levels"}
+[**When emailing:**]{style="color: #E74C3C"}
 
-**Nominal variables:**\
-can have [frequency distributions]{style="color: #18bc9c"}, cannot have
-[cumulative frequency distributions]{style="color: #e74c3c"}
-
-<br>
-
-**Ordinal:**\
-can have [frequency distributions]{style="color: #18bc9c"} and
-[cumulative frequency distributions]{style="color: #18bc9c"}
-
-<br>
-
-**Interval-ratio:**\
-can have [frequency distributions]{style="color: #18bc9c"}, [cumulative
-frequency distributions]{style="color: #18bc9c"}, and
-[rates]{style="color: #18bc9c"}
-
-##  {data-menu-title="Bar Graphs"}
-
-:::: r-stack
-::: {style="font-size: 90%"}
-A [**bar graph**]{style="color: #18bc9c"} is used:\
-for **nominal** or **ordinal** variables,
-
-to show frequencies or percentages,
-
-using separated rectangles, with height proportional\
-to the frequency or percentage.
+::: {style="font-size: 75%"}
+-   Explain what troubleshooting steps you’ve already taken. 
+-   Report who you’ve already asked for help. 
 :::
 
-![](https://raw.githubusercontent.com/jrpepin/Now-You-CanadaKnow/refs/heads/main/figs/transgender.png){.fragment
-fragment-index="1"}
-::::
-
-##  {data-menu-title="Histograms"}
-
-:::: r-stack
-::: {style="font-size: 90%"}
-A [**histogram**]{style="color: #18bc9c"} is used:\
-for **interval-ratio** variables,
-
-to show frequencies or percentages,
-
-using separated rectangles, with height proportional\
-to the frequency or percentage.
-:::
-
-![](images/01/histogram.png){.fragment fragment-index="1"}
-::::
-
-##  {data-menu-title="Line Graphs"}
-
-:::: r-stack
-::: {style="font-size: 90%"}
-A [**line graph**]{style="color: #18bc9c"} is used:\
-for **interval-ratio** variables,
-
-to show frequencies or percentages,
-
-joining by category the frequency or average with a line.
-:::
-
-![](https://raw.githubusercontent.com/jrpepin/Now-You-CanadaKnow/refs/heads/main/figs/gini.png){.fragment
-fragment-index="1"}
-::::
-
-##  {data-menu-title="Statistical Map"}
-
-:::: r-stack
-::: {style="font-size: 90%"}
-A [**statistical map**]{style="color: #18bc9c"} is used:\
-for **interval-ratio** variables,
-
-to show geographical variations, often in ratios,
-
-using variation in color or hue.
-:::
-
-![](images/01/map.png){.fragment
-fragment-index="1"}
-::::
-
-:::: {.content-visible when-profile="speaker"}
 ::: notes
-https://health-infobase.canada.ca/mental-health/suicide-self-harm/suicide-mortality.html 
+If none of these solve your problem, draft an email to your TA, with
+detailed notes about the problem and the troubleshooting steps you've
+already taken. You might be surprised how often even writing the problem
+out in detail helps you find the answer on your own. Send your email if
+you still need assistance.
 :::
-::::
 
-# Lab 01 {.theme-section .smaller}
+## Create a trail! {data-menu-title="Help & Replication"}
 
--   CODEBOOK
+![](images/01/repro_ex.png "Loneliness on internet without an answer to a coding question")
 
-##  {data-menu-title="Why use codebooks"}
+::: notes
+Use replication principles when asking for help. The best quantitative
+researchers produce a trail for their code so that future researchers
+can replicate their analysis.
+:::
 
-will add later
+## Create a reproducible example
+
+<br>
+
+::: {style="color: #18BC9C; font-size: 150%; font-family: 'Shadows Into Light'"}
+**Goal: Make someone else feel your pain!**
+:::
+
+::: {style="font-size: 80%"}
+-   Assume others know nothing about your issue. 
+-   Describe your steps to create the problem so that someone else can
+    replicate it. 
+-   This means clearly describing the issue and the steps you've already
+    taken to solve it. 
+:::
+
+## Good etiquette
+
+**Search for answers before posting your question.**\
+[Let me google that for you.
+🙄]{style="color: #18BC9C; font-family: 'Shadows Into Light'"} 
+
+**Describe the problem.**\
+["It doesn't work" isn't descriptive
+enough.]{style="color: #18BC9C; font-family: 'Shadows Into Light'"} 
+
+**Describe your environment.**\
+[What operating system are you using? Which R version? What packages?
+Dataset?]{style="color: #18BC9C; font-family: 'Shadows Into Light'"}\
+
+**Describe the solution.**\
+[Confirm if a solution offered works. Or, if you solve it on your own,
+post how you solved
+it.]{style="color: #18BC9C; font-family: 'Shadows Into Light'"}
+
+##  {data-menu-title="Process Focused" background-image="images/01/debug-flow.png" background-size="contain"}
+
+::: notes
+Try to stay focused on being in the process, not the outcome.
+:::

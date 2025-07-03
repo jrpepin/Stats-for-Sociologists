@@ -37,8 +37,8 @@ source("custom-setup-styles.R")
 
 # Agenda {data-menu-title="Agenda" background-image="images/calendar.png" background-size="100px" background-repeat="repeat"}
 
--   Learning to Code
 -   R & RStudio Workflow
+-   Quarto
 -   Getting Started
 
 # Learning objectives
@@ -49,240 +49,6 @@ By the end of the lab, you will be able to ...
 -   familiarize yourself with a dataset using R and RStudio\
 -   create a reproducible report using Quarto\
 
-# Learning to Code {.theme-section}
-
-## Technology is fun!
-
-<br>
-
-::: {style="font-size: 90%"}
-You're not just learning the statistical concepts in this course, but
-how to produce the statistics. Analyzing data requires learning to use
-new technology.
-
-<br>
-
-Learning statistical software to analyze data can be really fun. You get
-to learn about real world social problems!
-:::
-
-## Technology is challenging!
-
-:::: r-stack
-::: {style="font-size: 90%"}
-It can be frustrating.
-
-<br>
-
-When it feels like the technology is preventing you from getting to the
-course content, take a deep breath, and **remember that building your
-technology skills is part of this course.**
-:::
-
-![](images/01/bingo.png){.fragment fragment-index="1" width="85%"}
-::::
-
-::: notes
-Replication using technology requires researchers to sometimes use
-unfamiliar software, working on devices with unique environments and
-settings.
-
-There's even a bingo card of common errors (i.e. bugs) that new
-statistical programmers will expect to experience.
-:::
-
-## Why am I making you learn something so frustrating?
-
-<br>
-
-Calculating the statistics by hand quickly gets cumbersome, time
-consuming, and difficult.
-
-<br>
-
-Good social science is built on replication.
-
-::: notes
-You'll learn the statistical techniques using small sample sizes, but to
-really understand the social world, datasets typically have 100s,
-1,000s, even 100,000s of values.
-
-It is impractical, and more prone to errors, for scientists to replicate
-research by hand. Replication of statistical procedures helps catch
-minor coding errors, highlights unusual decisions made by researchers,
-inappropriate statistical techniques, and corrupted data.
-:::
-
-## Grappling
-
-Learning to use statistical software necessitates
-[grappling](https://www.edutopia.org/blog/4-tips-teaching-problem-solving-from-student-anna-pelletiere).
-
-::: {style="color: #18BC9C; font-size: 90%; font-family: 'Shadows Into Light'"}
-Grappling implies trying even before you fail the first time.
-
-<br>
-
-It’s thinking, “First, I’ll work with it independently. Okay, I’m really
-not understanding it. Let me go back to my notes. Okay, I have solved
-for the first part of it. Now I have the second part of it. Okay, I got
-the question wrong; let me try again. Maybe I can ask my peer now.”
-
-<br>
-
-Grappling is working hard to make sure you understand the problem fully,
-and then using every resource at your fingertips to solve it.”
-:::
-
-::: notes
-In this course, this means you'll put your active learning skills to
-use. You, not your professor or TA, will work through encountered
-problems. You, of course, will be supported and coached through the
-entire process. Working with statistical software will become easier as
-you build your skills in problem-solving errors. Unfortunately, it gets
-increasingly difficult if you rely on others to solve the issue, as the
-errors stack-up.
-:::
-
-##  {data-menu-title="Debugging"}
-
-:::::: columns
-:::: {.column width="25%"}
-::: {style="font-size: 95%; font-family: 'Shadows Into Light'"}
-Most statistical analyses happen not because the person is a math
-genius, but because they persisted through the minefield of technical
-issues by being [**excellent problem-solvers.**]{style="color: #18BC9C"}
-:::
-::::
-
-::: {.column width="75%"}
-![](images/01/debugging.png)
-:::
-::::::
-
-::: notes
-Get comfortable with making mistakes right now. Your code is not
-expected to be perfect the first time. Remember, identifying and fixing
-errors in your own code is such an inherent part of the process, there's
-even a name for it: **debugging**.
-:::
-
-## Coding is mostly Googling
-
-<br>
-
-It is a misconception that the best statistical analysts sit down at
-their computers and type code from memory.
-
-<br>
-
-Much of process of coding is copying code from somewhere else and
-modifying it to fit your particular situation.
-
-::: notes
-Learning to analyze data with software requires a lot of practice and
-attention to detail. It also requires a lot of time searching the
-internet for help. Learning to identify the right words and phrases in a
-Google search is part of building your coding skills.
-:::
-
-## When you get stuck...
-
-[**...there are many options to get unstuck:**]{style="color: #18BC9C"}
-
-::: {style="font-size: 70%"}
--   Review the slides. Pay very close attention to small details.
--   Try something else to see if you get a new error.
--   Use Google to search for possible answers or new explanations.
--   Watch a help video on YouTube on the topic.
--   Re-start your web-browser or device.
--   Try another web-browser or device.
--   Ask a peer. Or an advanced student.
--   Start or join a weekly study group.
--   Post the question on the class discussion board.
--   Email your TA
-:::
-
-::: notes
-When none of these strategies fix the issue, it is time to ask for help.
-:::
-
-## Help in this class
-
-[**Before requesting an individual meeting with a
-TA:**]{style="color: #E74C3C"}
-
-::: {style="font-size: 75%"}
--   Spend a sufficient amount of time working on it on your own.
--   Ask two of your peers.
--   Post the question on the class discussion board.
-:::
-
-[**When emailing:**]{style="color: #E74C3C"}
-
-::: {style="font-size: 75%"}
--   Explain what troubleshooting steps you’ve already taken. 
--   Report who you’ve already asked for help. 
-:::
-
-::: notes
-If none of these solve your problem, draft an email to your TA, with
-detailed notes about the problem and the troubleshooting steps you've
-already taken. You might be surprised how often even writing the problem
-out in detail helps you find the answer on your own. Send your email if
-you still need assistance.
-:::
-
-## Create a trail! {data-menu-title="Help & Replication"}
-
-![](images/01/repro_ex.png "Loneliness on internet without an answer to a coding question")
-
-::: notes
-Use replication principles when asking for help. The best quantitative
-researchers produce a trail for their code so that future researchers
-can replicate their analysis.
-:::
-
-## Create a reproducible example
-
-<br>
-
-::: {style="color: #18BC9C; font-size: 150%; font-family: 'Shadows Into Light'"}
-**Goal: Make someone else feel your pain!**
-:::
-
-::: {style="font-size: 80%"}
--   Assume others know nothing about your issue. 
--   Describe your steps to create the problem so that someone else can
-    replicate it. 
--   This means clearly describing the issue and the steps you've already
-    taken to solve it. 
-:::
-
-## Good etiquette
-
-**Search for answers before posting your question.**\
-[Let me google that for you.
-🙄]{style="color: #18BC9C; font-family: 'Shadows Into Light'"} 
-
-**Describe the problem.**\
-["It doesn't work" isn't descriptive
-enough.]{style="color: #18BC9C; font-family: 'Shadows Into Light'"} 
-
-**Describe your environment.**\
-[What operating system are you using? Which R version? What packages?
-Dataset?]{style="color: #18BC9C; font-family: 'Shadows Into Light'"}\
-
-**Describe the solution.**\
-[Confirm if a solution offered works. Or, if you solve it on your own,
-post how you solved
-it.]{style="color: #18BC9C; font-family: 'Shadows Into Light'"}
-
-##  {data-menu-title="Process Focused" background-image="images/01/debug-flow.png" background-size="contain"}
-
-::: notes
-Try to stay focused on being in the process, not the outcome.
-:::
 
 # R & RStudio Workflow {.theme-section}
 
@@ -336,7 +102,7 @@ should be:
 -   human-readable
 -   play well with default-ordering
 
-## RStudio Projects
+## RStudio projects
 
 <br>
 
@@ -385,7 +151,24 @@ First door on your left.
 :::
 :::::
 
-## Panes
+## Tour: RStudio Panes {background-image="images/file-video-solid.png" background-size="100px" background-repeat="repeat"}
+
+<br>
+
+::: {style="color: #18BC9C; font-size: 300%; font-family: 'Shadows Into Light'"}
+Sit back and enjoy the show!
+:::
+
+::: notes
+-   YAML Ain't Markup Language
+-   code chunk (+ code comments)
+-   narrative (heading levels)
+-   render
+-   run
+:::
+
+
+## Tour recap: Panes
 
 ::::: r-stack
 :::: {style="font-size: 80%"}
@@ -423,56 +206,6 @@ RStudio.
 ::: notes
 Console pane: best for exploring.\
 Source pane: best for documenting.
-:::
-
-## Quarto
-
-Quarto: The tool you'll use to create reproducible computational
-documents. Every piece of assignment you hand in will be a Quarto
-document.
-
-::: callout-note
-You are likely familiar with word processors like MS Word or Google
-Docs. We will not be using these in this class. Instead, the words you
-would write in such a document, as well as your R code, will go into a
-Quarto document. You will *render* the document (more on what this means
-later) to get a document out that has your words, code, and the output
-of that code. Everything in one place, beautifully formatted!
-:::
-
-##  {#slide28-id data-menu-title="RScript vs Quarto"}
-
-::::: columns
-::: {.column width="50%"}
-### [RScript]{style="color: #18BC9C;"}
-
-great for learning, exploring and tinkering.
-
-rerun it without attention to formatting or markdown.
-:::
-
-::: {.column width="50%"}
-### [Quarto]{style="color: #18BC9C;"}
-
-great for communicating analysis and results
-
-combines narrative explanation with code output (results.
-:::
-:::::
-
-## Documentation
-
-::: r-stack
-![](images/01/documentation.png)
-
-![](images/01/pound.png){.fragment fragment-index="1"}
-:::
-
-::: notes
-In .R scripts and Quarto, you can document your code. Err on the side of
-over documentation. Your future self will thank you. In .R scripts, the
-way to make a comment rather than a command, is to put a pound sign in
-front of the text.
 :::
 
 ## Blank slate
@@ -548,6 +281,93 @@ Some help videos and further explanation:
 
 [EasyR - Getting started with R the easy
 way](https://youtu.be/K9-zDmq737I)
+
+
+# Quarto {.theme-section}
+
+## Quarto
+
+The tool you'll use to create reproducible computational
+documents. Every piece of assignment you hand in will be a Quarto
+document.
+
+-   Fully reproducible reports
+-   R code + narrative
+
+::: notes
+You are likely familiar with word processors like MS Word or Google
+Docs. We will not be using these in this class. Instead, the words you
+would write in such a document, as well as your R code, will go into a
+Quarto document. You will *render* the document (more on what this means
+later) to get a document out that has your words, code, and the output
+of that code. Everything in one place, beautifully formatted!
+:::
+
+##  {#slide28-id data-menu-title="RScript vs Quarto"}
+
+::::: columns
+::: {.column width="50%"}
+### [RScript]{style="color: #18BC9C;"}
+
+great for learning, exploring and tinkering.
+
+rerun it without attention to formatting or markdown.
+:::
+
+::: {.column width="50%"}
+### [Quarto]{style="color: #18BC9C;"}
+
+great for communicating analysis and results
+
+combines narrative explanation with code output (results.
+:::
+:::::
+
+## Documentation
+
+::: r-stack
+![](images/01/documentation.png)
+
+![](images/01/pound.png){.fragment fragment-index="1"}
+:::
+
+::: notes
+In .R scripts and Quarto, you can document your code. Err on the side of
+over documentation. Your future self will thank you. In .R scripts, the
+way to make a comment rather than a command, is to put a pound sign in
+front of the text.
+:::
+
+## Tour: Quarto {background-image="images/file-video-solid.png" background-size="100px" background-repeat="repeat"}
+
+<br>
+
+::: {style="color: #18BC9C; font-size: 300%; font-family: 'Shadows Into Light'"}
+Sit back and enjoy the show!
+:::
+
+::: notes
+-   YAML Ain't Markup Language
+-   code chunk (+ code comments)
+-   narrative (heading levels)
+-   render
+-   run
+:::
+
+## Tour recap: Quarto
+
+![](images/01/quarto.png)
+
+::: aside
+Source: [Dr. Mine Çetinkaya-Rundel](https://sta199-f24.github.io/slides/01-meet-the-toolkit-slides.html#/tour-recap-quarto)
+:::
+
+
+## How will we use Quarto?
+
+-    Every code-along and milestone will be a Quarto document
+-    The scaffolding will decrease over the course
+-    You will create and submit a Quarto document for your research project
 
 # Getting Started {.theme-section}
 
@@ -643,6 +463,11 @@ install.packages('gssrdoc', repos =
   c('https://kjhealy.r-universe.dev', 'https://cloud.r-project.org'))
 ```
 
+::: {.callout-tip icon="false"}
+## {{< fa pen-to-square >}}
+R ignores text after #. These comments describe syntax.
+:::
+
 ## Load the packages
 
 ```{r}
@@ -666,7 +491,8 @@ sessionInfo()
 
 ```
 
-## Project Structure
+
+## Project structure
 
 Let's set up your project structure using the `here()` package.
 
@@ -674,9 +500,10 @@ Let's set up your project structure using the `here()` package.
 
 ## `here()`
 
-First, let's just establish our project directory
+First, let's establish our project directory
 
 ```{r}
+#| eval: false
 #| message: false
 #| label: here
 
@@ -685,7 +512,11 @@ here()
 
 ```
 
-## Example Folder Structure {.smaller}
+<br>
+
+Next, we'll create sub-folders.  
+
+## Example folder structure {.smaller}
 
 ::::: columns
 :::: {.column width="60%"}
@@ -769,7 +600,7 @@ here()
 ::::
 :::::
 
-## Create a Folder Structure 
+## Create a folder structure 
 with `here()` and `dir.create()`
 
 ```{r}
@@ -784,7 +615,7 @@ dir.create(here("milestones"), recursive = TRUE)
 dir.create(here("project"), recursive = TRUE)
 ```
 
-## Create Sub-folders
+## Create sub-folders
 with `here()` and `dir.create()`
 
 ```{r}
@@ -800,9 +631,13 @@ dir.create(here("project", "outputs"), recursive = TRUE)
 ```
 
 
-# Check your work
+## Check your work
 
 ```{r}
+#| eval: false
+#| message: false
+#| label: list-files
+
 # Your SOC6302 class folder
 list.files(path = here())
 
@@ -811,11 +646,152 @@ list.files(path = here("project"))
 
 ```
 
-## Save code-along into correct folder
+## Save code-along 
 
-ggsave(here("code-alongs"),code-along-01.qmd)
+<br>
+
+Save this code-along in your newly created "code-along" sub-folder.  
+  
+<br>  
+
+There's no command in the R console to save scripts— 
+you use the editor's [File]{style="color: #3498DB"} > 
+[Save As]{style="color: #3498DB"} or Ctrl+S.
+
+##  Meet your data
+
+:::: columns
+::: {.column width="50%"}
+![](images/01/meet.png)
+:::
+
+::: {.column width="50%"}
+We're going to use data from the 
+[U.S. General Social Survey (GSS)](https://gss.norc.org/us/en/gss/about-the-gss.html). 
+:::
+::::
 
 
-# YAML
+## Load your data
 
-YAML Ain't Markup Language
+```{r}
+# Load the data (will appear in your Global Environment pane)
+data(gss_all)
+
+# Preview the datatable which is automatically named gss_all
+gss_all
+
+```
+
+::: notes
+A “tibble” is another name for “tidy dataset,” 
+meaning that the data is organized in structured, clear rows and columns. 
+“(75,699 × 6,867)” means that the dataset contains 1000 rows and 12 columns. 
+Commonly, in social sciences, rows are referred to as “observations” and 
+columns as “variables.” 
+In our case, there are 75,699 observations and 6,867 variables.
+:::
+
+## Names
+To see the variables available in the dataset, use the `names()` command.
+
+```{r}
+#| message: false
+#| label: names
+
+names(gss_all)
+```
+
+##  {data-menu-title="Why use codebooks"}
+
+![](images/01/caution.png)
+
+::: notes
+Author Naomi Wolf wrote a book about the treatment of homosexuality in 19th 
+century England. She reported that it was punishable by death since “sodomy” 
+charges were followed by “death recorded” in the judicial logs. However, 
+“sodomy” referred to a host of other sexual offenses, and “death recorded” 
+specifically means they weren’t killed because their death was recorded but not 
+carried out.  
+  
+Paul Dolan wrote a book about how marriage makes you miserable. A key part of 
+his evidence was that in the American Time Use Survey, married people surveyed 
+about their happiness when the spouse was present reported being happy, but when 
+the spouse was absent they reported being unhappy. Covering up unhappiness in 
+front of their spouse, truly miserable! But while Dolan read spouse 
+present/absent as “spouse is in the room during questioning”, 
+it actually meant “spouse together/separated.” He was comparing couples that 
+were together vs. couples that were separating!
+
+:::
+
+## Codebook
+
+The [GSS documentation](https://gss.norc.org/us/en/gss/get-documentation.html) 
+is available online in .pdf form.  
+
+The .pdfs will be useful for general overviews.  
+  
+For specific variable information, it will be helpful to use the documentation
+you'll load into RStudio.  
+
+```{r}
+
+# Load the codebook
+data(gss_dict)
+
+```
+
+## Variable documentation
+
+For information about a specific GSS variable,  
+type `?varname` at the console.
+
+In the output pane, the Help tab will show the variable documentation.
+
+::: {.callout-tip icon="false"}
+## {{< fa pen-to-square >}}
+Replace "varname" with the name of a variable.  
+Example: `?meovrwrk`
+:::
+
+## Documentation example
+
+```{r}
+#| echo: false
+#| message: false
+#| label: meovrwrk-help
+
+cat(readLines("images/01/meovrwrk.txt"), sep = "\n")
+```
+
+::: notes
+Variable name: meovrwrk  
+Variable label: Men hurt family when focus on work too much  
+1994 was the first year of the survey.  
+695 respondents agreed with the statement.  
+iap -- missing. 
+Values:  the numeric and response category key (1 = strongly agree)
+:::
+
+## Variables
+
+You can access the variables (i.e., columns) using the $ operator, 
+as shown using the `table()` function
+
+::: {.callout-tip icon="false"}
+## {{< fa pen-to-square >}}
+
+The variable names are case sensitive. 
+In this dataset, all variables are lowercase.  
+:::
+  
+```{r}
+table(gss_all$meovrwrk)
+```
+
+::: notes
+2436 respondents were coded as `1` on this variable. What does that mean? 
+Go back to the help page.
+:::
+

@@ -137,7 +137,7 @@ Department of Sociology\
 Unit 17100, 17th Floor, Ontario Power Building\
 700 University Ave., Toronto, ON M5G 1Z5
 
-[`C:\Users\Pepin\GitHub\SOC6302\scripts`]{style="color: #fd7e14"}
+`C:\Users\Pepin\GitHub\SOC6302\scripts`
 :::
 
 ::: {.column width="40%"}
@@ -147,11 +147,11 @@ Take the left side elevators to the 17th floor.\
 Go through the double doors and a take a right.\
 First door on your left.
 
-[**here(scripts)**]{style="color: #20c997"}
+`here`([scripts]{style="color: #18BC9C"})
 :::
 :::::
 
-## Tour: RStudio Panes {background-image="images/file-video-solid.png" background-size="100px" background-repeat="repeat"}
+## Tour: RStudio Panes {background-image="images/watch.png" background-size="100px" background-repeat="repeat"}
 
 <br>
 
@@ -207,6 +207,25 @@ RStudio.
 Console pane: best for exploring.\
 Source pane: best for documenting.
 :::
+
+## R-scripts and Quarto
+
+Open RStudio, then click the dropdown arrow next to the "[New File
+icon]{style="color: #3498DB"}," and then "[R
+script]{style="color: #3498DB"}" or "[Quarto Document]{style="color: #3498DB"}."
+
+![](videos/01/R-script.mp4){width="65%"}
+
+::: aside
+Alternatively, hold down "Ctrl" + "Shift" + "N."
+:::
+
+::: notes
+An R-script is a file that will contain the documentation of the code of
+what you tell R to do.
+:::
+
+
 
 ## Blank slate
 
@@ -273,7 +292,7 @@ You'll load each package (every time you use it):
 library(tidyverse)
 ```
 
-## Support
+## Support {background-image="images/file-video-solid.png" background-size="100px" background-repeat="repeat"}
 
 Some help videos and further explanation:
 
@@ -338,7 +357,7 @@ way to make a comment rather than a command, is to put a pound sign in
 front of the text.
 :::
 
-## Tour: Quarto {background-image="images/file-video-solid.png" background-size="100px" background-repeat="repeat"}
+## Tour: Quarto {background-image="images/watch.png" background-size="100px" background-repeat="repeat"}
 
 <br>
 
@@ -371,10 +390,6 @@ Source: [Dr. Mine Çetinkaya-Rundel](https://sta199-f24.github.io/slides/01-meet
 
 # Getting Started {.theme-section}
 
-## Your first code-along
-
-Download and open [code-along-01]()
-
 ## Create a RStudio Project {#slideRStudioProj-id}
 
 <br>
@@ -391,22 +406,10 @@ Project]{style="color: #3498DB"}.
 This will launch you into a new RStudio Project inside a new folder
 called “SOC6302”.
 
-## R-script
+## Your first code-along
 
-Open RStudio, then click the dropdown arrow next to the "[New File
-icon]{style="color: #3498DB"}," and then "[R
-script]{style="color: #3498DB"}."
+Download and open [code-along-01.qmd]()
 
-![](videos/01/R-script.mp4){width="65%"}
-
-::: aside
-Alternatively, hold down "Ctrl" + "Shift" + "N."
-:::
-
-::: notes
-An R-script is a file that will contain the documentation of the code of
-what you tell R to do.
-:::
 
 ## Packages
 
@@ -423,8 +426,8 @@ Let's install the two packages that are available on CRAN.
 
 <br>
 
-Copy and paste the following code into your Console pane. Then hit
-enter.
+Copy and paste the following code into your 
+[Console pane]{style="color: #F39C12;"}. Then hit enter.
 
 ```{r}
 #| eval: false
@@ -514,7 +517,7 @@ here()
 
 <br>
 
-Next, we'll create sub-folders.  
+Next, we'll create folders within our project.  
 
 ## Example folder structure {.smaller}
 
@@ -601,7 +604,7 @@ Next, we'll create sub-folders.
 :::::
 
 ## Create a folder structure 
-with `here()` and `dir.create()`
+using `here()` and `dir.create()`
 
 ```{r}
 #| eval: false
@@ -616,7 +619,7 @@ dir.create(here("project"), recursive = TRUE)
 ```
 
 ## Create sub-folders
-with `here()` and `dir.create()`
+using `here()` and `dir.create()`
 
 ```{r}
 #| eval: false
@@ -632,6 +635,7 @@ dir.create(here("project", "outputs"), recursive = TRUE)
 
 
 ## Check your work
+report a list of folders and or files in the R-project folders and sub-folder.
 
 ```{r}
 #| eval: false
@@ -654,7 +658,7 @@ Save this code-along in your newly created "code-along" sub-folder.
   
 <br>  
 
-There's no command in the R console to save scripts— 
+There's no command in the R console to save scripts or Quarto files— 
 you use the editor's [File]{style="color: #3498DB"} > 
 [Save As]{style="color: #3498DB"} or Ctrl+S.
 
@@ -675,6 +679,8 @@ We're going to use data from the
 ## Load your data
 
 ```{r}
+#| label: gssdata
+
 # Load the data (will appear in your Global Environment pane)
 data(gss_all)
 
@@ -736,6 +742,7 @@ For specific variable information, it will be helpful to use the documentation
 you'll load into RStudio.  
 
 ```{r}
+#| label: gsscodebook
 
 # Load the codebook
 data(gss_dict)
@@ -755,7 +762,7 @@ Replace "varname" with the name of a variable.
 Example: `?meovrwrk`
 :::
 
-## Documentation example
+## Variable documentation example
 
 ```{r}
 #| echo: false
@@ -764,6 +771,7 @@ Example: `?meovrwrk`
 
 cat(readLines("images/01/meovrwrk.txt"), sep = "\n")
 ```
+
 
 ::: notes
 Variable name: meovrwrk  
@@ -787,11 +795,14 @@ In this dataset, all variables are lowercase.
 :::
   
 ```{r}
+#| label: meovrwrk-table
+
 table(gss_all$meovrwrk)
 ```
 
-::: notes
+::: {style="color: #E74C3C; font-size: 90%; font-family: 'Shadows Into Light'"}
 2436 respondents were coded as `1` on this variable. What does that mean? 
-Go back to the help page.
 :::
+
+
 

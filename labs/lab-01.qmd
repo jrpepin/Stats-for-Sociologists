@@ -160,11 +160,10 @@ Sit back and enjoy the show!
 :::
 
 ::: notes
--   YAML Ain't Markup Language
--   code chunk (+ code comments)
--   narrative (heading levels)
--   render
--   run
+-   open R script or Quarto document
+-   Environment (data values, functions)
+-   Plots, Help, Viewer
+-   Console -- typing
 :::
 
 
@@ -370,7 +369,8 @@ Sit back and enjoy the show!
 -   code chunk (+ code comments)
 -   narrative (heading levels)
 -   render
--   run
+-   run (line vs code chunk)
+-   source and visual
 :::
 
 ## Tour recap: Quarto
@@ -692,21 +692,33 @@ gss_all
 ::: notes
 A “tibble” is another name for “tidy dataset,” 
 meaning that the data is organized in structured, clear rows and columns. 
-“(75,699 × 6,867)” means that the dataset contains 1000 rows and 12 columns. 
+“(75,699 × 6,867)” means the dataset contains 75,699 rows and 6,867 columns. 
 Commonly, in social sciences, rows are referred to as “observations” and 
 columns as “variables.” 
-In our case, there are 75,699 observations and 6,867 variables.
+In our case, there are 75,699 observations (e.g., respondents) 
+and 6,867 variables.
 :::
 
-## Names
-To see the variables available in the dataset, use the `names()` command.
+## Load GSS 2024
 
 ```{r}
-#| message: false
-#| label: names
+#| label: gss24
 
-names(gss_all)
+# Get the data only for the 2024 survey respondents
+gss24 <- gss_get_yr(2024)
+
+# look at the first 6 rows of the dataframe
+head(gss24)
+
 ```
+
+## Browse dataframe
+
+With your mouse, go to the environment panel (upper-right) and click on the 
+“gss24” object. It pops up and you can browse through it.  
+
+This is often a good idea to get a first feel for the data, but only if your 
+dataset is relatively small.
 
 ##  {data-menu-title="Why use codebooks"}
 
@@ -749,6 +761,23 @@ data(gss_dict)
 
 ```
 
+
+## Names
+
+To see the variables available in the dataset, use the `names()` command.
+
+```{r}
+#| message: false
+#| label: names
+
+names(gss_all)
+```
+
+::: {.callout-tip icon="false"}
+## {{< fa pen-to-square >}}
+This command is best to use with smaller datasets. 
+:::
+
 ## Variable documentation
 
 For information about a specific GSS variable,  
@@ -782,6 +811,26 @@ iap -- missing.
 Values:  the numeric and response category key (1 = strongly agree)
 :::
 
+
+## Variable documentation example cont.
+
+We often want to know which years a question was asked. 
+We can find this out for one or more variables with `gss_which_years()`.
+
+```{r}
+#| label: which-years
+
+gss_which_years(gss_all, meovrwrk)
+
+```
+
+::: {.callout-tip icon="false"}
+## {{< fa pen-to-square >}} **TIP**
+If run in the console, to see all rows, 
+wrap the code in the `print()` command:
+`print(gss_which_years(gss_all, fefam), n = 40)`
+:::
+
 ## Variables
 
 You can access the variables (i.e., columns) using the $ operator, 
@@ -805,4 +854,15 @@ table(gss_all$meovrwrk)
 :::
 
 
+## Cross-tables
+
+The table command also let's you create a table with two variables.
+
+```{r}
+#| label: crosstab
+
+# 1st variable is the rows, 2nd variable is the columns.
+table(gss_all$year, gss_all$meovrwrk)
+
+```
 

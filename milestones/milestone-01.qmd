@@ -5,9 +5,10 @@ format: html
 ---
 
 # Environment
+
 Update the YAML with your first and last name.
 
-Load the packages from the code-along. (Install it not already done so.)
+Load the packages from the code-along. (Install first if not already done so.)
 
 ```{r}
 #| label: load
@@ -18,17 +19,15 @@ library(gssr)
 library(gssrdoc)
 ```
 
-
 # Add Documentation
-Run and add narrative (outside code chunks) or comments (inside the code chunks)
-to the R chunks below.
+
+Run the code and add **narrative** (outside code chunks) or **comments** (inside the code chunks) to the R chunks below.
 
 ```{r}
 #| label: here
 
 here()
 ```
-
 
 ```{r}
 #| label: list-files
@@ -38,10 +37,46 @@ list.files(path = here())
 list.files(path = here("project"))
 ```
 
-
 ```{r}
 #| label: time
 
 Sys.time()
 ```
 
+# Explore the GSS
+
+Load all years of the gss data. Then, use the `gss_get_yr()` command to load the data only for the 2024 survey respondents.
+
+*Hint*: Use the code from code-along-01.qmd
+
+```{r}
+#| label: gss-datasets
+
+# Load the data (will appear in your Global Environment pane)
+data(gss_all)
+ 
+# load the gss 2024 data (add your code below)
+
+```
+
+Use R to answer the questions below. Show your work (e.g., R code) when appropriate. Add narration and comments throughout.
+
+-   Report the survey question that corresponds to the `fefam` variable.
+
+-   What type is the `fefam` variable? (nominal, ordinal, interval-ratio, dichotomous)? Justify your answer.
+
+-   Which years of the survey did the `fefam` variable appear?
+
+-   What value corresponds with "agree" for this variable?
+
+-   How many people "strongly agree" with the `fefam` statement in 2024?
+
+-   Create a crosstab of the `happy` and `sex` variables using only the 2024 survey data. How many women were `very happy`? How many men were `very happy`?
+
+# Meet the IPUMS Data
+
+<https://www.ipums.org/overview>
+
+<https://cran.r-project.org/web/packages/ipumsr/vignettes/ipums.html>
+
+<https://tech.popdata.org/ipumsr/>

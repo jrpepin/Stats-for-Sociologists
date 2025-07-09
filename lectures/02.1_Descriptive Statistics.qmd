@@ -1,0 +1,545 @@
+---
+title: "Descriptive Statistics"
+format: 
+  revealjs:
+    multiplex: true
+    controls: true
+    theme: [default, custom.scss]
+    include-in-header:
+    - file: mathjax-color.html
+    slide-number: c
+    math: mathjax
+revealjs-plugins:
+  - quiz
+embed-resources: true
+filters:
+    - openlinksinnewpage
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+```{r setup, include = FALSE}
+## Load packages, custom functions, and styles
+source("custom-setup-styles.R")
+
+## Load all gss
+data(gss_all)
+
+# Color in math equations
+# https://egallic.fr/Recherche/aide-memoire/quarto_equation_colors.html#colors-in-equations-with-revealjs
+```
+
+# Agenda {data-menu-title="Agenda" background-image="images/calendar.png" background-size="100px" background-repeat="repeat"}
+
+:::::: columns
+::: {.column width="50%"}
+-   Frequency Distributions
+-   Central Tendency
+-   Variability
+:::
+
+:::: {.column width="50%"}
+::: {.my-box .smaller}
+[{{< fa book >}}
+**Readings**]{style="color: #18BC9C; font-size: 150%; font-family: 'Shadows Into Light'"}
+
+1.  Being a Statistician Means Never Having to Say You're Certain
+
+:::
+::::
+::::::
+
+::: cell
+$$
+\definecolor{mathBlack}{RGB}{0,0,0}
+\definecolor{mathOrange}{RGB}{253, 126, 20}
+\definecolor{mathLightGreen}{RGB}{32, 201, 151}
+\definecolor{mathGreen}{RGB}{24, 188, 156}
+\definecolor{mathYellow}{RGB}{253, 156, 18}
+\definecolor{mathBlue}{RGB}{52, 152, 219}
+\definecolor{mathRed}{RGB}{231, 76, 60}
+\definecolor{mathPurple}{RGB}{111, 66, 193}
+$$
+:::
+
+# Frequency Distributions {.theme-section .smaller}
+
+:::::: columns
+::: {.column width="40%"}
+-   FREQUENCY DISTRIBUTION\
+-   RELATIVE FREQUENCY DISTRIBUTION
+:::
+
+::: {.column width="24%"}
+-   PROPORTION\
+-   PERCENTAGE\
+-   CUMULATIVE\
+-   RATE\
+:::
+
+::: {.column width="33%"}
+-   BAR GRAPH\
+-   HISTOGRAM\
+-   LINE GRAPH\
+-   STATISTICAL MAP
+:::
+::::::
+
+## Objectives {.smaller}
+
+:::: columns
+::: {.column width="50%"}
+-    Calculate proportions and percentages
+-    Construct and analyze frequency, percentage, and cumulative distributions
+
+:::
+
+::: {.column width="50%"}
+![](images/02/snail01.png)
+
+:::
+::::
+
+##  {#slide14-id data-menu-title="Distributions"}
+
+::: {.callout-tip icon="false"}
+## {{< fa pen-to-square >}} DISTRIBUTION
+
+Shows all the possible values (or intervals) of the data and how often
+they occur.
+:::
+
+<br>
+
+::: {.callout-tip icon="false"}
+## {{< fa pen-to-square >}} FREQUENCY DISTRIBUTION
+
+A table reporting the number of observations falling into each category
+of the variable.
+:::
+
+![](images/02/distributions.png)
+
+##  {#slide15-id data-menu-title="Distribution tables"}
+
+```{r}
+gss_all$premarsx <- as_factor(zap_missing(gss_all$premarsx))
+gss_all$sex <- as_factor(zap_missing(gss_all$sex))
+
+freq_premarsx <- gss_all %>%
+  select(id, year, sex, premarsx) %>%
+  filter(year == 2024, !is.na(premarsx)) %>%
+  count(premarsx)
+
+total_row <- freq_premarsx %>%
+  summarise(across(where(is.numeric), sum)) %>%
+  mutate(premarsx = "Total")
+
+# combine
+table_premarsx <- rbind(freq_premarsx, total_row)
+```
+
+::: panel-tabset
+### Tab A
+
+**Table 1. Attitudes about sex before marriage**
+
+```{r}
+# Render the table
+table_premarsx %>%
+  flextable() %>%
+  style_flextable()
+```
+
+[**Survey question**: *There's been a lot of discussion about the way
+morals and attitudes about sex are changing in this country. If a man
+and woman have sex relations before marriage, do you think it is
+\_\_\_\_\_\_\_\_\_.*]{style="font-size: 50%"}
+
+### Tab B
+
+**Table 1. Attitudes about sex before marriage**
+
+```{r}
+table_premarsx %>%
+  flextable() %>%
+  style_flextable() %>%
+  color(color = "#E74C3C", i = 5, j = "n")
+```
+
+[The number of respondents who answered this survey
+question.]{style="color: #E74C3C; font-family: 'Shadows Into Light'"}
+
+### Tab C
+
+**Table 1. Attitudes about sex before marriage**
+
+```{r}
+table_premarsx %>%
+  flextable() %>%
+  style_flextable() %>%
+  color(color = "#E74C3C", i = 3, j = "n")
+```
+
+[The number of respondents who said pre-marital sex was "**wrong only
+sometimes**."]{style="color: #E74C3C; font-family: 'Shadows Into Light'"}
+:::
+
+::: aside
+[*Source: U.S. General Social Survey 2024*]{style="color: $gray-500"}
+:::
+
+##  {#slide16-id .smaller data-menu-title="Think Like a Statistician" background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
+
+[{{< fa regular lightbulb >}} Are women more likely than men to say
+premarital sex is "**not wrong at
+all**"?]{style="color: #F39C12; font-size: 175%; font-family: 'Shadows Into Light'"}
+
+<br>
+
+**Table 2. Attitudes about sex before marriage by gender**
+
+```{r}
+gss_all$premarsx <- as_factor(zap_missing(gss_all$premarsx))
+gss_all$sex <- as_factor(zap_missing(gss_all$sex))
+
+freq_premarsx <- gss_all %>%
+  select(id, year, sex, premarsx) %>%
+  filter(!is.na(premarsx), !is.na(sex)) %>%
+  group_by(sex) %>%
+  count(premarsx) %>%
+  pivot_wider(
+    names_from = sex,
+    values_from = n,
+    values_fill = 0
+  )
+
+# create total row
+total_row <- freq_premarsx %>%
+  summarise(across(where(is.numeric), sum)) %>%
+  mutate(premarsx = "Total") %>%
+  select(names(freq_premarsx)) # ensure column order matches
+
+# combine
+table_premarsx <- rbind(freq_premarsx, total_row)
+
+# Get number of rows
+n_rows <- nrow(table_premarsx) # fixing transparency
+
+# Render the table
+table_premarsx %>%
+  flextable() %>%
+  style_flextable() %>%
+  # Manually add zebra stripes with solid colors w/o transparency
+  bg(i = seq(1, n_rows, by = 2), bg = "white", part = "body") %>%
+  bg(i = seq(2, n_rows, by = 2), bg = "#F2F2F2", part = "body")
+```
+
+::: aside
+[*Source: U.S. General Social Survey
+1972-2024*]{style="color: $gray-500"}
+:::
+
+##  {#slide17-id data-menu-title="Relative Frequency Distributions"}
+
+::: {.callout-tip icon="false"}
+## {{< fa pen-to-square >}} RELATIVE FREQUENCY DISTRIBUTION
+
+A table showing the proportion or percentage for each value of a
+variable.
+:::
+
+<br>
+
+[**Proportions**]{style="font-size: 125%"} are between 0 and 1.0.
+
+::: smaller
+Proportion = count (f) / total number of cases (N).
+:::
+
+<br>
+
+[**Percentages**]{style="font-size: 125%"} are between 0 and 100.
+
+::: smaller
+Percentage = proportion × 100.
+:::
+
+##  {#slide18-id .smaller data-menu-title="Your Data Take" background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
+
+```{r}
+gss_all$premarsx <- droplevels(gss_all$premarsx)
+
+# Create frequency & proportions table
+tab <- gss_all %>%
+  filter(!is.na(premarsx), !is.na(sex)) %>%
+  group_by(sex, premarsx) %>%
+  summarise(n = n(), .groups = "drop") %>%
+  group_by(sex) %>%
+  mutate(percent = round(100 * n / sum(n), 0)) %>%
+  ungroup() %>%
+  pivot_wider(
+    names_from = sex, values_from = c(n, percent)
+  )
+
+# Add totals row
+tab_totals <- tab %>%
+  summarise(across(where(is.numeric), sum, na.rm = TRUE)) %>%
+  mutate(premarsx = "Total")
+
+# Combine with original table
+tab_with_totals <- bind_rows(tab, tab_totals)
+```
+
+::: panel-tabset
+### Tab A
+
+**Table 2. Attitudes about sex before marriage by gender**
+
+```{r}
+## Pretty table
+tab_with_totals %>%
+  select(premarsx, n_male, percent_male, n_female, percent_female) %>%
+  flextable() %>%
+  style_flextable() %>%
+  set_header_labels(
+    n_male = "n", percent_male = "%",
+    n_female = "n", percent_female = "%"
+  ) %>%
+  add_header_row(
+    values = c("", "Men", "Women"),
+    colwidths = c(1, 2, 2)
+  ) %>%
+  align(j = c(2, 3, 4, 5), align = "center", part = "all") %>%
+  color(color = "#18bc9c", i = 4, j = 4) %>%
+  color(color = "#fd7e14", i = 5, j = 4) %>%
+  color(color = "#e74c3c", i = 4, j = 5)
+```
+
+$\frac{\color{mathGreen}{11{,}086}}{\color{mathOrange}{25{,}382}} = 0.4367 \times 100 = \color{mathRed}{43.7\%}$
+
+[{{< fa mitten >}} **TIP**: Total of a % column should always sum to
+100!]{style="color: #3498DB"}
+
+### Tab B
+
+**Table 2. Attitudes about sex before marriage by gender**
+
+```{r}
+## Pretty table
+tab_with_totals %>%
+  select(premarsx, n_male, percent_male, n_female, percent_female) %>%
+  flextable() %>%
+  style_flextable() %>%
+  set_header_labels(
+    n_male = "n", percent_male = "%",
+    n_female = "n", percent_female = "%"
+  ) %>%
+  add_header_row(
+    values = c("", "Men", "Women"),
+    colwidths = c(1, 2, 2)
+  ) %>%
+  align(j = c(2, 3, 4, 5), align = "center", part = "all") %>%
+  color(color = "#E74C3C", i = 4, j = 3) %>%
+  color(color = "#E74C3C", i = 4, j = 5)
+```
+
+[{{< fa lightbulb >}} A greater proportion of men (53%) than women (44%)
+say premarital sex is "**not wrong at
+all**."]{style="color: #E74C3C; font-size: 150%; font-family: 'Shadows Into Light'"}
+:::
+
+::: aside
+[*Source: U.S. General Social Survey
+1972-2024*]{style="color: $gray-500"}
+:::
+
+##  {#slide20-id .smaller data-menu-title="Cumulative Frequency Distributions"}
+
+::: {.callout-tip icon="false"}
+## {{< fa pen-to-square >}} CUMULATIVE FREQUENCY DISTRIBUTION
+
+The number or percentage of observations at or below a given category.
+:::
+
+<br>
+
+**Table 3. Attitudes about sex before marriage, with cumulative
+percentages**
+
+```{r}
+gss_all$premarsx <- droplevels(gss_all$premarsx)
+
+# Create frequency & proportions table
+tab <- gss_all %>%
+  filter(year == 2024, !is.na(premarsx)) %>%
+  group_by(premarsx) %>%
+  summarise(n = n(), .groups = "drop") %>%
+  mutate(
+    percent = round(100 * n / sum(n), 0),
+    cum_percent = round(cumsum(percent), 0)
+  ) %>%
+  ungroup()
+
+# Add totals row
+tab_totals <- tab %>%
+  summarise(across(where(is.numeric), sum, na.rm = TRUE)) %>%
+  mutate(premarsx = "Total")
+
+# Combine with original table
+tab_with_totals <- bind_rows(tab, tab_totals)
+
+## Pretty table
+tab_with_totals %>%
+  flextable() %>%
+  style_flextable() %>%
+  set_header_labels(
+    n = "n", percent = "%",
+    cum_percent = "cumulative %"
+  ) %>%
+  color(color = "#18bc9c", i = 1, j = 3) %>%
+  color(color = "#fd7e14", i = 2, j = 3) %>%
+  color(color = "#e74c3c", i = 2, j = 4)
+```
+
+${\color{mathGreen} 17} + {\color{mathOrange} 6} = {\color{mathRed} 23\%}$
+
+##  {data-menu-title="Rates"}
+
+::: {.callout-tip icon="false"}
+## {{< fa pen-to-square >}} **RATES**
+
+$\frac{Actual\;occurrences}{possible\;occurrences}$
+:::
+
+<br>
+
+::: {style="font-size: 75%"}
+**Examples:**
+
+-   [Canada's divorce
+    rate](https://www150.statcan.gc.ca/n1/daily-quotidien/220309/dq220309a-eng.htm)
+    decreased from 12.7 per 1,000 in 1991 to 5.6 per 1,000 in 2020.\
+-   The [2021 suicide
+    rate](https://health-infobase.canada.ca/mental-health/suicide-self-harm/suicide-mortality.html)
+    of 14.8 per 100,000 population for middle aged Canadians (30-59
+    years old) was the highest of any age group.\
+-   [Canada's total fertility
+    rate](https://www150.statcan.gc.ca/n1/daily-quotidien/240925/dq240925c-eng.htm)
+    reached a new low in 2023 of 1.26 children per woman.
+:::
+
+##  {data-menu-title="Distributions & Measurement Levels"}
+
+**Nominal variables:**\
+can have [frequency distributions]{style="color: #18bc9c"}, cannot have
+[cumulative frequency distributions]{style="color: #e74c3c"}
+
+<br>
+
+**Ordinal:**\
+can have [frequency distributions]{style="color: #18bc9c"} and
+[cumulative frequency distributions]{style="color: #18bc9c"}
+
+<br>
+
+**Interval-ratio:**\
+can have [frequency distributions]{style="color: #18bc9c"}, [cumulative
+frequency distributions]{style="color: #18bc9c"}, and
+[rates]{style="color: #18bc9c"}
+
+##  {data-menu-title="Bar Graphs"}
+
+:::: r-stack
+::: {style="font-size: 90%"}
+A [**bar graph**]{style="color: #18bc9c"} is used:\
+for **nominal** or **ordinal** variables,
+
+to show frequencies or percentages,
+
+using separated rectangles, with height proportional\
+to the frequency or percentage.
+:::
+
+![](https://raw.githubusercontent.com/jrpepin/Now-You-CanadaKnow/refs/heads/main/figs/transgender.png){.fragment
+fragment-index="1"}
+::::
+
+##  {data-menu-title="Histograms"}
+
+:::: r-stack
+::: {style="font-size: 90%"}
+A [**histogram**]{style="color: #18bc9c"} is used:\
+for **interval-ratio** variables,
+
+to show frequencies or percentages,
+
+using separated rectangles, with height proportional\
+to the frequency or percentage.
+:::
+
+![](images/02/histogram.png){.fragment fragment-index="1"}
+::::
+
+##  {data-menu-title="Line Graphs"}
+
+:::: r-stack
+::: {style="font-size: 90%"}
+A [**line graph**]{style="color: #18bc9c"} is used:\
+for **interval-ratio** variables,
+
+to show frequencies or percentages,
+
+joining by category the frequency or average with a line.
+:::
+
+![](https://raw.githubusercontent.com/jrpepin/Now-You-CanadaKnow/refs/heads/main/figs/gini.png){.fragment
+fragment-index="1"}
+::::
+
+##  {data-menu-title="Statistical Map"}
+
+:::: r-stack
+::: {style="font-size: 90%"}
+A [**statistical map**]{style="color: #18bc9c"} is used:\
+for **interval-ratio** variables,
+
+to show geographical variations, often in ratios,
+
+using variation in color or hue.
+:::
+
+![](images/02/map.png){.fragment
+fragment-index="1"}
+::::
+
+:::: {.content-visible when-profile="speaker"}
+::: notes
+https://health-infobase.canada.ca/mental-health/suicide-self-harm/suicide-mortality.html 
+:::
+::::
+
+# Central Tendency {.theme-section .smaller}
+
+:::::: columns
+::: {.column width="40%"}
+-   
+-   
+:::
+
+::: {.column width="24%"}
+-   
+-   
+-   
+-   
+:::
+
+::: {.column width="33%"}
+-   
+-   
+-   
+-   
+:::
+::::::
+

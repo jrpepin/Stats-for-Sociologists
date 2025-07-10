@@ -56,7 +56,7 @@ $$
 \definecolor{mathLightGreen}{RGB}{32, 201, 151}
 \definecolor{mathGreen}{RGB}{24, 188, 156}
 \definecolor{mathYellow}{RGB}{253, 156, 18}
-\definecolor{mathBlue}{RGB}{52, 152, 219}
+\definecolor{c}{RGB}{52, 152, 219}
 \definecolor{mathRed}{RGB}{231, 76, 60}
 \definecolor{mathPurple}{RGB}{111, 66, 193}
 $$
@@ -235,7 +235,7 @@ table_premarsx %>%
 ```
 
 ::: aside
-[*Source: U.S. General Social Survey 1972-2024*]
+\[*Source: U.S. General Social Survey 1972-2024*\]
 :::
 
 ##  {#slide17-id data-menu-title="Relative Frequency Distributions"}
@@ -405,7 +405,6 @@ ${\color{mathGreen} 17} + {\color{mathOrange} 6} = {\color{mathRed} 23\%}$
 Source: U.S. General Social Survey 2024
 :::
 
-
 ##  {data-menu-title="Rates"}
 
 ::: {.callout-tip icon="false"}
@@ -523,20 +522,19 @@ https://health-infobase.canada.ca/mental-health/suicide-self-harm/suicide-mortal
 # Central Tendency {.theme-section .smaller}
 
 :::::: columns
-::: {.column width="20%"}
+::: {.column width="25%"}
 -   MEAN\
 -   MEDIAN\
 -   MODE\
 :::
 
-::: {.column width="35%"}
+::: {.column width="30%"}
 -   OUTLIER
--   MOVING AVERAGE
 -   PERCENTILE
+-   BIMODAL
 :::
 
 ::: {.column width="45%"}
--   BIMODAL
 -   SYMMETRICAL DISTRIBUTION\
 -   POSITIVELY SKEWED DISTRIBUTION\
 -   NEGATIVELY SKEWED DISTRIBUTION
@@ -710,9 +708,8 @@ tab_with_totals %>%
   color(color = "#e74c3c", i = 3, j = 4)
 ```
 
-
-[*Source: U.S. General Social Survey 2022*]{style="color: $gray-300; font-size: 50%"}
-
+[*Source: U.S. General Social Survey
+2022*]{style="color: $gray-300; font-size: 50%"}
 
 ### Tab C
 
@@ -743,8 +740,9 @@ Two values or categories with the highest frequency.
 :::::: panel-tabset
 ### Tab A
 
-**Finding the [mode]{style="color: #18BC9C"} in a list:** \$7, 2, 1, 3,
-4, 1, 5, 1, 2 \$
+**Finding the [mode]{style="color: #18BC9C"} in a list:**
+
+$7, 2, 1, 3, 4, 1, 5, 1, 2$
 
 1.  Put the list in order: $1, 1, 1, 2, 2, 3, 4, 5, 7$
 2.  Pick the most frequent number: $1$
@@ -787,9 +785,8 @@ tab_with_totals %>%
   color(color = "#e74c3c", i = 2, j = 3)
 ```
 
-
-[*Source: U.S. General Social Survey 2024*]{style="color: $gray-300; font-size: 50%"}
-
+[*Source: U.S. General Social Survey
+2024*]{style="color: $gray-300; font-size: 50%"}
 
 [{{< fa mitten >}} **TIP**: MOST respondents said others are "looking
 out for themselves"]{style="color: #3498DB"}
@@ -832,71 +829,284 @@ The [**MEAN**]{style="color: #18bc9c"} can ONLY be determined for
 
 ![](images/02/skewed-pos.png)
 
-
 ## Negatively Skewed Distribution
 
 ![](images/02/skewed-neg.png)
 
+# Variability {.theme-section .smaller}
+
+-   RANGE\
+-   INTERQUARTILE RANGE\
+-   VARIANCE\
+-   STANDARD DEVIATION
+
+## Objectives {.smaller}
+
+::::: columns
+::: column
+-   Explain the importance of measuring variability.\
+-   Calculate and interpret the range, interquartile range, variance,
+    and standard deviation.\
+-   Identify the relative strengths and weaknesses of the measures.
+:::
+
+::: column
+![](images/02/snail03.png)
+:::
+:::::
+
+## Measures of Variability
+
+<br>
+
+::: {style="color: #18BC9C; font-size: 150%; font-family: 'Shadows Into Light'"}
+Describe the diversity in a distribution, for **interval-ratio**
+variables.
+:::
+
+They reveal how spread out the values in your dataset are.
+
+## Range
+
+::: {.callout-tip icon="false"}
+## {{< fa pen-to-square >}} RANGE
+
+The difference between the highest and lowest values in a distribution.
+:::
+
+-   The strength of the range is that it is easy to calculate and simple
+    to understand.\
+-   The weakness of the range is that it is based only on the lowest and
+    the highest scores, which could be atypical and therefore it may be
+    misleading.
+
+##  {data-menu-title="Range cont."}
+
+**Finding the [range]{style="color: #18BC9C"} in a list:**
+$26,  23,  28,  27,  24,  25,  32,  25,  28,  25,  25,  26,  27,  26,  27,  25$
+
+1.  Put the list in order:
+    ${\color{mathBlue} 23}, 24, 25, 25, 25, 25, 25, 26, 26, 26, 27, 27, 27, 28, 28, {\color{mathRed} 32}$
+2.  Subtract the min from the max:
+    ${\color{mathRed} 32} - {\color{mathBlue} 23} = 9$
+
+## Interquartile Range
+
+::: {.callout-tip icon="false"}
+## {{< fa pen-to-square >}} INTERQUARTILE RANGE (IQR)
+
+The width of the middle 50% of the distribution.
+:::
+
+![](images/02/IQR.png)
+
+##  {data-menu-title="IQR cont."}
+
+::: panel-tabset
+### Tab A {.smaller}
+
+[**IQR**]{style="color: #18BC9C"} **in a list** with an **odd** number
+of observations:
+
+$2, 3, 3, 4, 4, 6, 7, 7, 7, 8, 9, 11, 12$
+
+1.  [Q1]{style="color: #F39C12"} is the median of the numbers below the
+    [median]{style="color: #3498DB"}:
+    ${\color{mathOrange} 2, 3, 3, 4, 4, 6,} {\color{mathBlue} 7},
+    7, 7, 8, 9, 11, 12$ ($\frac{3 + 4}{2}$)
+    $= {\color{mathOrange} 3.5}$\
+2.  [Q3]{style="color: #E74C3C"} is the median of the numbers above the
+    [median]{style="color: #3498DB"}:
+    $2, 3, 3, 4, 4, 6, {\color{mathBlue} 7},
+    {\color{mathRed}7, 7, 8, 9, 11, 12}$ ($\frac{8 + 9}{2}$)
+    $= {\color{mathRed} 8.5}$\
+3.  Subtract Q1 from Q3:
+    ${\color{mathRed} 8.5} - {\color{mathOrange} 3.5} = 5$
+
+### Tab B {.smaller}
+
+[**IQR**]{style="color: #18BC9C"} **in a list** with an **even** number
+of observations:
+
+$3, 4, 5, 7, 9, 10, 11, 13$
+
+1.  [Q1]{style="color: #F39C12"} is the median of the numbers below the
+    [median]{style="color: #3498DB"}: ${\color{mathOrange} 3, 4, 5, 7, }
+    9, 10, 11, 13$ ($\frac{4 + 5}{2}$) $= {\color{mathOrange} 4.5}$\
+2.  [Q3]{style="color: #E74C3C"} is the median of the numbers above the
+    [median]{style="color: #3498DB"}: $3, 4, 5, 7,
+    {\color{mathRed}9, 10, 11, 13}$ ($\frac{10 + 11}{2}$)
+    $= {\color{mathRed} 10.5}$\
+3.  Subtract Q1 from Q3:
+    ${\color{mathRed} 10.5} - {\color{mathOrange} 4.5} = 6$
+
+[{{< fa mitten >}} **TIP**: The median of the list is
+$8$.]{style="color: #3498DB"}
+:::
+
+## Standard Deviation
+
+::: {.callout-tip icon="false"}
+## {{< fa pen-to-square >}} STANDARD DEVIATION
+
+A measure of variation for interval-ratio variables.
+:::
+
+<br>
+
+::: {style="color: #18BC9C; font-size: 150%; font-family: 'Shadows Into Light'"}
+Along the way to calculating the standard deviation, you calculate the
+[**variance**]{style="color: #F39C12;"} of a distribution.
+:::
+
+## Standard Deviation Forumulas
+
+![](images/02/sd.png)
+
+::: notes
+Note there are two formula's for calculating the standard deviation (and
+variance). Technically, instead of summing the "squared deviations from
+the mean" and dividing the sum from the total number of observations,
+when using a sample, statisticians divide by the total number of
+observations minus one.
+
+Once the sample sizes become large enough, there's a negligible
+difference between the two. **In this course, we're not going to worry
+about the difference.** Always use the population variance and standard
+deviation equations.
+:::
+
+## Standard Deviation in 5 Steps
+
+1.  Calculate the mean.\
+2.  Subtract the mean from every value (deviation from the mean).\
+3.  Square each “deviation from the mean.”\
+4.  Calculate the mean of the squared “deviations from the mean.”\
+5.  Take the square root of this new mean!\
+
+[{{< fa mitten >}} **TIP**: The mean of the squared "deviations from the
+mean" is the variance!]{style="color: #3498DB"}
+
+##  {data-menu-title="Standard Deviation cont."}
+
+:::: panel-tabset
+### Step 1 {.smaller}
+
+$2,3,4,7,9$
+
+**1.  Calculate the mean $\bar{X}$**
+
+<br>  
+
+$\frac{2 + 3 + 4 + 7 +9}{5} = 5$
+
+### Step 2 {.smaller}
+
+$2,3,4,7,9$
+
+<br> 
+
+**2.  Subtract the mean ($\bar{X}$) from every value ($X$)**
+
+![](images/02/step02.png)
+
+### Step 3 {.smaller}
+
+**3. Square each difference**
+
+![](images/02/step03.png)
+
+### Step 4 {.smaller}
+
+**4. Calculate the mean of the squares**
+
+![](images/02/step04.png)
+
+$\frac{9 + 4 +1 + 4 +16}{5} = 6.8$
+
+[{{< fa mitten >}} **TIP**: 6.8 is known as the
+variance!]{style="color: #3498DB"}
+
+### Step 5 {.smaller}
+
+**5. Take the square root of the variance**
+
+$\sqrt{6.8} = 2.6$
+
+I expect the average \[*whatever you're studying*\] to differ by \[*your
+standard deviation*\] from the mean.
+
+<br>
+
+**Example**: Mean: 5; SD: 2.6
+
+::: {style="color: #18BC9C; font-family: 'Shadows Into Light'"}
+I expect the average \[number of household family members\] to differ by
+\[2.6 people\] from the mean \[of 5 people per household\].
+:::
+::::
+
+# Knowledge Check
+
 ##  {.quiz-question .smaller data-menu-title="Knowledge Check" background-image="images/clipboard-question.png" background-size="100px" background-repeat="repeat"}
 
 ::: {style="color: #F39C12"}
-{{< fa clipboard-question >}} What is the best measure of central tendency for the
-**racial composition of students at UofT**?
+{{< fa clipboard-question >}} What is the best measure of central
+tendency for the **racial composition of students at UofT**?
 :::
 
--   [Mode]{.correct
-    data-explanation="💯 Correct!"}
+-   [Mode]{.correct data-explanation="💯 Correct!"}
 -   [Median]{data-explanation="😲 This is a nominal variable."}
 -   [Mean]{data-explanation="😲 This is an nominal variable."}
 
 ##  {.quiz-question .smaller data-menu-title="Knowledge Check" background-image="images/clipboard-question.png" background-size="100px" background-repeat="repeat"}
 
 ::: {style="color: #F39C12"}
-{{< fa clipboard-question >}} What is the best measure of central tendency for the
-**distance traveled to work each day by Toronto residents**?
+{{< fa clipboard-question >}} What is the best measure of central
+tendency for the **distance traveled to work each day by Toronto
+residents**?
 :::
 
 -   [Mode]{data-explanation="😲 This is an interval-ratio variable."}
--   [Median]{.correct
-    data-explanation="💯 Correct!"}
+-   [Median]{.correct data-explanation="💯 Correct!"}
 -   [Mean]{data-explanation="This would be okay if there's no outliers."}
 
 ##  {.quiz-question .smaller data-menu-title="Knowledge Check" background-image="images/clipboard-question.png" background-size="100px" background-repeat="repeat"}
 
 ::: {style="color: #F39C12"}
-{{< fa clipboard-question >}} What is the best measure of central tendency for the
-**age at marriage**?
+{{< fa clipboard-question >}} What is the best measure of central
+tendency for the **age at marriage**?
 :::
 
 -   [Mode]{data-explanation="😲 What if the distribution is bi-modal (young marriages vs older marriages?"}
--   [Median]{.correct
-    data-explanation="💯 Correct!"}
+-   [Median]{.correct data-explanation="💯 Correct!"}
 -   [Mean]{data-explanation="What would 2nd and 3rd marriages do to the mean?"}
 
 ##  {.quiz-question .smaller data-menu-title="Knowledge Check" background-image="images/clipboard-question.png" background-size="100px" background-repeat="repeat"}
 
 ::: {style="color: #F39C12"}
-{{< fa clipboard-question >}} **What is the likely distribution of** 
+{{< fa clipboard-question >}} **What is the likely distribution of**
 **age at first childbirth?**
 :::
 
 -   [Symmetrical]{data-explanation="There aren't outliers?"}
--   [Positively Skewed]{.correct
-    data-explanation="💯 Correct!"}
--   [Negatively skewed]{data-explanation="You can’t have children below a biological age. Some delay childbirth into 40s+"}
-
+-   [Positively Skewed]{.correct data-explanation="💯 Correct!"}
+-   [Negatively
+    skewed]{data-explanation="You can’t have children below a biological age. Some delay childbirth into 40s+"}
 
 ##  {.quiz-question .smaller data-menu-title="Knowledge Check" background-image="images/clipboard-question.png" background-size="100px" background-repeat="repeat"}
 
 ::: {style="color: #F39C12"}
-{{< fa clipboard-question >}} **What is the median of the table on the next slide?** 
+{{< fa clipboard-question >}} **What is the median of the table on the
+next slide?**
 :::
 
--   [almost daily]{data-explanation="Hint: Use the cumulative % column."}
+-   [almost
+    daily]{data-explanation="Hint: Use the cumulative % column."}
 -   [once or twice a week]{data-explanation="😲 This is the mode."}
 -   [several times a month]{.correct data-explanation="💯 Correct!"}
--   [about once a month]{data-explanation="Hint: The median contains the 50th percentile."}
-
+-   [about once a
+    month]{data-explanation="Hint: The median contains the 50th percentile."}
 
 ## Knowledge Check Table {.smaller background-image="images/clipboard-question.png" background-size="100px" background-repeat="repeat"}
 
@@ -936,3 +1146,103 @@ tab_with_totals %>%
 ::: aside
 Source: U.S. General Social Survey 2022-2024
 :::
+
+## Knowledge Check {background-image="images/clipboard-question.png" background-size="100px" background-repeat="repeat"}
+
+:::: panel-tabset
+### Question
+
+Top Home Runs in 2022\
+$62, 46, 40, 40, 38$
+
+<br>
+
+::: {style="color: #F39C12; font-size: 150%; font-family: 'Shadows Into Light'"}
+**What's the standard deviation?**
+:::
+
+### Show Your Work
+
+![](images/02/kc-baseball.png)
+
+### Answer
+
+N = 5\
+MEAN = 45.2\
+VARIANCE = 77.76\
+**SD = 8.82**
+::::
+
+## Knowledge Check {background-image="images/clipboard-question.png" background-size="100px" background-repeat="repeat"}
+
+:::: panel-tabset
+### Question
+
+Women’s Basketball Points Leaders 2022 $29.1, 27.4, 26.9, 25.2, 23.2$
+
+<br>
+
+::: {style="color: #F39C12; font-size: 150%; font-family: 'Shadows Into Light'"}
+**What's the standard deviation?**
+:::
+
+### Show Your Work
+
+![](images/02/kc-wnba.png)
+
+### Answer
+
+N = 5\
+MEAN = 26.36\
+VARIANCE = 4.04\
+**SD = 2.01**
+::::
+
+##  {.quiz-question .smaller data-menu-title="Knowledge Check" background-image="images/clipboard-question.png" background-size="100px" background-repeat="repeat"}
+
+::: {style="color: #F39C12"}
+{{< fa clipboard-question >}} **Is there more variability in top home
+run leaders or top point earners in women’s basketball?**
+:::
+
+-   [Home runs, because the standard deviation is
+    smaller.]{data-explanation="Higher SD means greater variation."}
+-   [Womn's points, because the standard deviation is
+    smaller.]{data-explanation="Higher SD means greater variation."}
+-   [Home runs, because the standard deviation is larger.]{.correct
+    data-explanation="💯 Correct!"}
+-   [We can't compare between
+    sports.]{data-explanation="Standard deviations allow us to compare across metrics because they are **standardized. Neat!**"}
+
+::: aside
+[{{< fa mitten >}} **Hint**: Compare the SD from the previous two
+slides!]{style="color: #3498DB"}
+:::
+
+## Support {.smaller background-image="images/file-video-solid.png" background-size="100px" background-repeat="repeat"}
+
+[Overview of the measures of central
+tendency](https://youtu.be/B1HEzNTGeZ4)
+
+[Difference between the mean, median, and
+mode](https://www.youtube.com/watch?v=kn83BA7cRNM)
+
+[Finding the median in a table](https://youtu.be/2_sdgFJxb_U)
+
+[Median in a histogram](https://youtu.be/xTwDmnEEb9E)
+
+[Overview of the measures of variability](https://youtu.be/6xFN-bitbcc)
+
+[Calculate measures of
+variability](https://www.youtube.com/watch?v=R4yfNi_8Kqw)
+
+[Calculate the range](https://youtu.be/0HS1P3vhNBU)
+
+[Calculate the quartiles](https://youtu.be/4L5J49T0He4)
+
+[Calculate the IQR](https://youtu.be/RMOmAn2ShR0)
+
+[Calculate variance and standard
+deviation](https://www.youtube.com/watch?v=WVx3MYd-Q9w)
+
+[Interpret the standard deviation](https://youtu.be/MRqtXL2WX2M)

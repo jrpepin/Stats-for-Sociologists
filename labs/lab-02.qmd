@@ -1,0 +1,163 @@
+---
+title: "Lab 02"
+format:
+  revealjs:
+    multiplex: false
+    controls: true
+    theme: [default, custom.scss]
+    highlight-style: atom-one
+    include-in-header:
+    - file: mathjax-color.html
+    slide-number: c
+    math: mathjax
+revealjs-plugins:
+  - quiz
+embed-resources: true
+filters:
+    - openlinksinnewpage
+editor: 
+  markdown: 
+    wrap: 72
+execute: 
+  echo: true
+---
+
+```{r echo=FALSE}
+
+#| label: setup
+#| message: false
+#| include: false
+
+## Load packages, custom functions, and styles
+source("custom-setup-styles.R")
+
+# Color in math equations
+# https://egallic.fr/Recherche/aide-memoire/quarto_equation_colors.html#colors-in-equations-with-revealjs
+```
+
+# Agenda {data-menu-title="Agenda" background-image="images/calendar.png" background-size="100px" background-repeat="repeat"}
+
+-   Frequency Distributions
+-   Central Tendency
+-   Variability
+
+# Learning objectives
+
+By the end of the lab, you will be able to ...
+
+-   A
+-   B
+-   C
+
+# Code-along 02
+
+Download and open [code-along-02.qmd]()
+
+# Frequency Distributions {.theme-section}
+
+## Packages
+
+Load the standard packages.
+
+```{r}
+#| message: false
+#| label: load
+
+library(here)
+library(tidyverse)
+library(gssr)
+library(gssrdoc)
+```
+
+<br>
+
+Install and load the
+[`summarytools`](https://cran.r-project.org/web/packages/summarytools/vignettes/introduction.html)
+package.
+
+```{r}
+#| message: false
+#| label: install
+#| eval: false
+
+install.packages("summarytools")
+```
+
+<br>
+
+```{r}
+#| message: false
+#| label: summarytools
+
+library(summarytools)
+```
+
+## Load your data & codebook
+
+```{r}
+#| message: false
+#| label: gssdata
+
+# Load the data (will appear in your Global Environment pane)
+data(gss_all)
+
+# Load the codebook
+data(gss_dict)
+
+
+```
+
+## Table
+
+Change the code below to show the table for the `premarsx` variable.
+
+```{r}
+#| label: premarsx-table-ca
+#| eval: false
+
+table(gss_all$________)
+```
+
+```{r}
+#| label: premarsx-table
+#| echo: false
+
+table(gss_all$premarsx)
+```
+
+## Labels
+
+Use
+[`haven::as_factor`](https://haven.tidyverse.org/reference/as_factor.html)
+to see the value labels instead of the value numbers.
+
+```{r}
+#| label: premarsx-label
+
+table(as_factor(gss_all$premarsx))
+```
+
+## Better Labels
+
+```{r}
+#| label: premarsx-label-2
+#| code-line-numbers: "1|2|3"
+#| output-location: fragment
+
+gss_all$premarsx <- zap_missing(gss_all$premarsx)
+gss_all$premarsx <- as_factor(gss_all$premarsx)
+table(gss_all$premarsx)
+```
+
+. . .
+
+<br>
+
+```{r}
+#| label: premarsx-label-3
+#| code-line-numbers: "1|2"
+#| output-location: fragment
+
+gss_all$premarsx <- droplevels(gss_all$premarsx)
+table(gss_all$premarsx)
+```

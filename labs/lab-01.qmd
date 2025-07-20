@@ -717,6 +717,8 @@ head(gss24)
 With your mouse, go to the environment panel (upper-right) and click on the 
 “gss24” object. It pops up and you can browse through it.  
 
+<br>
+
 This is often a good idea to get a first feel for the data, but only if your 
 dataset is relatively small.
 
@@ -749,6 +751,8 @@ The [GSS documentation](https://gss.norc.org/us/en/gss/get-documentation.html)
 is available online in .pdf form.  
 
 The .pdfs will be useful for general overviews.  
+
+<br>
   
 For specific variable information, it will be helpful to use the documentation
 you'll load into RStudio.  
@@ -767,11 +771,15 @@ data(gss_dict)
 To see the variables available in the dataset, use the `names()` command.
 
 ```{r}
+#| eval: false
 #| message: false
 #| label: names
 
 names(gss_all)
 ```
+
+
+<br> 
 
 ::: {.callout-tip icon="false"}
 ## {{< fa pen-to-square >}}
@@ -783,7 +791,11 @@ This command is best to use with smaller datasets.
 For information about a specific GSS variable,  
 type `?varname` at the console.
 
+<br>
+
 In the output pane, the Help tab will show the variable documentation.
+
+<br>
 
 ::: {.callout-tip icon="false"}
 ## {{< fa pen-to-square >}}
@@ -812,10 +824,12 @@ Values:  the numeric and response category key (1 = strongly agree)
 :::
 
 
-## Variable documentation example cont.
+## {data-menu-title="Variable documentation example cont."}
 
-We often want to know which years a question was asked. 
-We can find this out for one or more variables with `gss_which_years()`.
+We can find this which years one or more variables were asked with `gss_which_years()`.
+
+:::::: columns
+:::: column
 
 ```{r}
 #| label: which-years
@@ -824,24 +838,29 @@ gss_which_years(gss_all, meovrwrk)
 
 ```
 
+::::
+
+:::: column
 ::: {.callout-tip icon="false"}
 ## {{< fa pen-to-square >}} **TIP**
 If run in the console, to see all rows, 
 wrap the code in the `print()` command:
 `print(gss_which_years(gss_all, fefam), n = 40)`
 :::
+::::
+
+::::::
 
 ## Variables
 
-You can access the variables (i.e., columns) using the $ operator, 
+You can access the variables (i.e., columns) using the `$` operator, 
 as shown using the `table()` function
 
-::: {.callout-tip icon="false"}
-## {{< fa pen-to-square >}}
+<br>
 
 The variable names are case sensitive. 
 In this dataset, all variables are lowercase.  
-:::
+
   
 ```{r}
 #| label: meovrwrk-table
@@ -854,7 +873,7 @@ table(gss_all$meovrwrk)
 :::
 
 
-## Cross-tables
+## Cross-tabs
 
 The table command also let's you create a table with two variables.
 

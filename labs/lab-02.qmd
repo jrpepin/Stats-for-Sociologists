@@ -55,6 +55,18 @@ Download and open [code-along-02.qmd]()
 
 # Frequency Distributions {.theme-section}
 
+##  {data-menu-title="Think Like a Statistician" background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
+
+Political polarization is high in the U.S. these days.
+
+Using the most recent survey data, do more liberals than conservatives
+think sex before marriage is 'not wrong at all.'
+
+<br>
+
+[{{< fa regular lightbulb >}} How do we answer that
+question?]{style="color: #F39C12; font-size: 175%; font-family: 'Shadows Into Light'"}
+
 ## Packages
 
 Load the standard packages.
@@ -98,55 +110,36 @@ library(summarytools)
 #| message: false
 #| label: gssdata
 
-# Load the data (will appear in your Global Environment pane)
-data(gss_all)
+# Get the data only for the 2024 survey respondents
+gss24 <- gss_get_yr(2024)
 
 # Load the codebook
 data(gss_dict)
 
-
 ```
+
+## Variable Descriptions
+
+Let's familiarize ourselves with the `premarsx` and `polviews`
+variables.  
+
+<br>
+  
+In the console, type `?premarsx` and hit enter. The Help pane will show
+you the question text and response options and values.  
+
+<br>
+
+Now, do the same for `polviews`.
 
 ## Table
 
-Change the code below to show the table for the `premarsx` variable.
+Add a line below to also see a table for the `polviews` variable.
 
 ```{r}
-#| label: premarsx-table-ca
-#| eval: false
+#| label: table-premarsx
 
-table(gss_all$________)
-```
-
-```{r}
-#| label: premarsx-table
-#| echo: false
-
-table(gss_all$premarsx)
-```
-
-## Labels
-
-Use
-[`haven::as_factor`](https://haven.tidyverse.org/reference/as_factor.html)
-to see the value labels instead of the value numbers.
-
-```{r}
-#| label: premarsx-label
-
-table(as_factor(gss_all$premarsx))
-```
-
-## Better Labels
-
-```{r}
-#| label: premarsx-label-2
-#| code-line-numbers: "1|2|3"
-#| output-location: fragment
-
-gss_all$premarsx <- zap_missing(gss_all$premarsx)
-gss_all$premarsx <- as_factor(gss_all$premarsx)
-table(gss_all$premarsx)
+table(gss24$premarsx)
 ```
 
 . . .
@@ -154,10 +147,131 @@ table(gss_all$premarsx)
 <br>
 
 ```{r}
-#| label: premarsx-label-3
+#| label: table-polviews
+
+table(gss24$polviews)
+```
+
+## Labels 
+
+Use
+[`haven::as_factor`](https://haven.tidyverse.org/reference/as_factor.html)
+to see the value labels instead of the value numbers. Then, do the same for `polviews`.
+
+
+```{r}
+#| label: label.01-premarsx
+#| output-location: column-fragment
+
+table(as_factor(gss24$premarsx))
+```
+
+
+## Labels {.scrollable}
+
+```{r}
+#| label: label.01-polviews
+#| output-location: column
+
+table(as_factor(gss24$polviews))
+```
+
+
+## Better Labels
+
+Let's use `zap_missing` and `as_factor` to clean these up. Then, do the
+same for the `polviews` variable.
+
+```{r}
+#| label: label.02-premarsx
+#| code-line-numbers: "1|2|3"
+#| output-location: fragment
+
+gss24$premarsx <- zap_missing(gss24$premarsx)
+gss24$premarsx <- as_factor(gss24$premarsx)
+table(gss24$premarsx)
+```
+
+
+## Better Labels {.scrollable}
+
+```{r}
+#| label: label.02-polviews
+
+# polviews
+gss24$polviews <- zap_missing(gss24$polviews)
+gss24$polviews <- as_factor(gss24$polviews)
+table(gss24$polviews)
+```
+
+## Better Labels cont.
+
+Let's get ride of the empty levels in `premarsx`.
+
+Then, do the same for `polviews`.
+
+```{r}
+#| label: label.03-premarsx
 #| code-line-numbers: "1|2"
 #| output-location: fragment
 
-gss_all$premarsx <- droplevels(gss_all$premarsx)
-table(gss_all$premarsx)
+gss24$premarsx <- droplevels(gss24$premarsx)
+table(gss24$premarsx)
 ```
+
+## Better Labels cont.
+
+```{r}
+#| label: label.03--polviews
+#| eval: false
+
+gss24$polviews <- droplevels(gss24$polviews)
+table(gss24$polviews)
+```
+
+
+## Frequency Table {.smaller}
+
+Make a frequency table. One of `summarytools` main purposes is to help
+cleaning and preparing data for further analysis. Pay attention to the
+missing values.
+
+```{r}
+freq(gss24$premarsx) 
+```
+
+## Pretty Frequency Table
+
+Using `report.nas = FALSE` suppresses the missing data.\
+The `headings = FALSE` parameter suppresses the heading section.
+
+<br>
+
+```{r}
+freq(gss24$premarsx, report.nas = FALSE, headings = FALSE) 
+```
+
+##  {.quiz-question data-menu-title="Knowledge Check" background-image="images/clipboard-question.png" background-size="100px" background-repeat="repeat"}
+
+::: {style="color: #F39C12"}
+{{< fa clipboard-question >}} Based on your table, what percentage of
+respondents believe sex before marriage is 'almost always wrong'?
+:::
+
+-   [8.52]{.correct data-explanation="💯 Correct!"}
+-   [24.71]{data-explanation="😲 This is the % who think premartial sex is 'always wrong'."}
+-   [33.23]{data-explanation="😲 This is the % who think premarital sex is 'always' OR 'almost always wrong'."}
+-   [19.05]{data-explanation="😲 This is % who think premarital sex is 'wrong only sometimes'."}
+
+##  {.quiz-question data-menu-title="Knowledge Check" background-image="images/clipboard-question.png" background-size="100px" background-repeat="repeat"}
+
+::: {style="color: #F39C12"}
+{{< fa clipboard-question >}} Based on your table, what percentage of
+respondents believe sex before marriage is 'always' or 'almost always
+wrong'?
+:::
+
+-   [33.23]{.correct data-explanation="💯 Correct!"}
+-   [24.71]{data-explanation="😲 This is the % who think premartial sex is 'always wrong'."}
+-   [8.52]{data-explanation="😲 This is the % who think premarital sex is 'almost always wrong'."}
+-   [19.05]{data-explanation="😲 This is % who think premarital sex is 'wrong only sometimes'."}

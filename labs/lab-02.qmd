@@ -57,10 +57,10 @@ Download and open [code-along-02.qmd]()
 
 ##  {data-menu-title="Think Like a Statistician" background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
 
-Political polarization is high in the U.S. these days.
+Political polarization is high in the U.S. today.
 
 Using the most recent survey data, do more liberals than conservatives
-think sex before marriage is 'not wrong at all.'
+think sex before marriage is 'not wrong at all'?
 
 <br>
 
@@ -161,7 +161,7 @@ to see the value labels instead of the value numbers. Then, do the same for `pol
 
 ```{r}
 #| label: label.01-premarsx
-#| output-location: column-fragment
+#| output-location: column
 
 table(as_factor(gss24$premarsx))
 ```
@@ -179,8 +179,8 @@ table(as_factor(gss24$polviews))
 
 ## Better Labels
 
-Let's use `zap_missing` and `as_factor` to clean these up. Then, do the
-same for the `polviews` variable.
+Let's use `zap_missing` and `as_factor` to clean these up for `premarsex`. 
+<br>
 
 ```{r}
 #| label: label.02-premarsx
@@ -193,22 +193,9 @@ table(gss24$premarsx)
 ```
 
 
-## Better Labels {.scrollable}
-
-```{r}
-#| label: label.02-polviews
-
-# polviews
-gss24$polviews <- zap_missing(gss24$polviews)
-gss24$polviews <- as_factor(gss24$polviews)
-table(gss24$polviews)
-```
-
 ## Better Labels cont.
 
-Let's get ride of the empty levels in `premarsx`.
-
-Then, do the same for `polviews`.
+Let's get rid of the empty levels in `premarsx`.
 
 ```{r}
 #| label: label.03-premarsx
@@ -219,37 +206,89 @@ gss24$premarsx <- droplevels(gss24$premarsx)
 table(gss24$premarsx)
 ```
 
-## Better Labels cont.
+
+## Manipulating Variables
+
+For `polviews`, let's combine categories to make it easier to interpret. 
+This is easier to do when the values remain as numbers.  
+
+Let's remind ourselves what the values correspond with each label.
 
 ```{r}
-#| label: label.03--polviews
-#| eval: false
+#| label: levels-polviews-01
 
-gss24$polviews <- droplevels(gss24$polviews)
-table(gss24$polviews)
+table(as_factor(gss24$polviews, levels = "both")) # both shows value and label
 ```
+
+
+## Manipulating Variables
+
+```{r}
+#| label: levels-polviews-02
+
+#gss24 %>%
+# mutate(poldum = case_when(
+ #  polviews ))
+```
+
+Tip: [pipes](https://www.tidyverse.org/blog/2023/04/base-vs-magrittr-pipe/)
 
 
 ## Frequency Table {.smaller}
 
 Make a frequency table. One of `summarytools` main purposes is to help
 cleaning and preparing data for further analysis. Pay attention to the
-missing values.
+missing values. Then, do the same for `polviews`.
 
 ```{r}
+#| label: freq.01-premarsx
+
 freq(gss24$premarsx) 
+```
+
+
+## Frequency Table {.smaller}
+
+```{r}
+#| label: freq.01-polviews
+
+freq(gss24$polviews) 
 ```
 
 ## Pretty Frequency Table
 
 Using `report.nas = FALSE` suppresses the missing data.\
-The `headings = FALSE` parameter suppresses the heading section.
+The `headings = FALSE` parameter suppresses the heading section. 
+Then, do the same for `polviews`.
 
 <br>
 
 ```{r}
+#| label: freq.02-premarsx
+
 freq(gss24$premarsx, report.nas = FALSE, headings = FALSE) 
 ```
+
+## Pretty Frequency Table {.smaller}
+
+:::::: columns
+::: {.column width="70%"}
+
+```{r}
+#| label: freq.02-polviews
+
+freq(gss24$polviews, report.nas = FALSE, headings = FALSE) 
+```
+::::
+
+::: {.column width="30%"}
+This is a lot of categories. Let's condense them to make it easier to interpret.
+::::
+
+::::::
+
+
+
 
 ##  {.quiz-question data-menu-title="Knowledge Check" background-image="images/clipboard-question.png" background-size="100px" background-repeat="repeat"}
 

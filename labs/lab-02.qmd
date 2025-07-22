@@ -38,6 +38,7 @@ source("custom-setup-styles.R")
 
 # Agenda {data-menu-title="Agenda" background-image="images/calendar.png" background-size="100px" background-repeat="repeat"}
 
+-   Intro. to data
 -   Frequency Distributions
 -   Central Tendency & Variability
 
@@ -49,23 +50,11 @@ By the end of the lab, you will be able to ...
 -   create useful frequency tables
 -   produce measures of central tendency and variability
 
-# Code-along 02
+# Code-along 02 {.theme-section}
 
 Download and open [code-along-02.qmd]()
 
-# Frequency Distributions {.theme-section}
-
-##  {data-menu-title="Think Like a Statistician" background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
-
-Political polarization is high in the U.S. today and attitudes about gender and 
-family behavior have been heavily debated.  
-  
-Using the most recent survey, do more liberals than conservatives
-think sex before marriage is '*not wrong at all*'?
-
-<br>
-
-[{{< fa regular lightbulb >}} **How do we find out?**]{style="color: #F39C12; font-size: 175%; font-family: 'Shadows Into Light'"}
+# Intro. to data
 
 ## Packages
 
@@ -118,15 +107,91 @@ data(gss_dict)
 
 ```
 
+## Code-chunks
+
+![](images/02/code-chunks.png)
+
+-   chunk labels are helpful for describing what the code is doing, for
+    jumping between code cells in the editor, and for troubleshooting
+-   message: false hides any messages emitted by the code in your
+    rendered document
+
+::: aside
+Source: [Dr. Mine
+Çetinkaya-Rundel](https://sta199-f24.github.io/slides/03-grammar-of-data-transformation-slides.html#/recap-code-cells-aka-code-chunks)
+:::
+
+## function(argument)
+
+Functions are (most often) verbs, followed by what they will be applied
+to in parentheses:
+
+<br>
+
+```{r}
+#| eval: false
+#| message: false
+#| label: function
+
+do_this(to_this)
+do_that(to_this, to_that, with_those)
+```
+
+::: Source: [Dr. Mine
+Çetinkaya-Rundel](https://sta199-f24.github.io/slides/01-meet-the-toolkit-slides.html#/functionargument)
+:::
+
+## `dplyr` grammar
+
+What's the advantage of
+[`dplyr`](https://cran.r-project.org/web/packages/dplyr/readme/README.html)
+grammar? We can sequence data manipulation!
+
+```{r}
+#| label: descr03
+#| code-line-numbers: "1|2|3|4-5|6"
+
+gss24 |> 
+  filter(!is.na(sex))  |>
+  group_by(sex) |>
+  descr(hrs1,
+        stats = "common") |> # <1>
+  tb() 
+
+```
+
+## variable types
+
+## pipes 
+
+<https://sta199-f24.github.io/slides/03-grammar-of-data-transformation-slides.html#/the-pipe>
+
+
+# Frequency Distributions {.theme-section}
+
+##  {data-menu-title="Think Like a Statistician" background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
+
+Political polarization is high in the U.S. today and attitudes about
+gender and family behavior have been heavily debated.
+
+Using the most recent survey, do more liberals than conservatives think
+sex before marriage is '*not wrong at all*'?
+
+<br>
+
+[{{< fa regular lightbulb >}} **How do we find
+out?**]{style="color: #F39C12; font-size: 175%; font-family: 'Shadows Into Light'"}
+
+
 ## Variable Descriptions
 
 Let's familiarize ourselves with the `premarsx` and `polviews`
-variables.  
+variables.
 
 <br>
-  
+
 In the console, type `?premarsx` and hit enter. The Help pane will show
-you the question text, response options and values.  
+you the question text, response options and values.
 
 <br>
 
@@ -134,7 +199,7 @@ Now, do the same for `polviews`.
 
 ## Table
 
-Run this code to see the frequency table for the `premarsx` variable. 
+Run this code to see the frequency table for the `premarsx` variable.
 Then, add a line below to also see a table for the `polviews` variable.
 
 ```{r}
@@ -153,19 +218,18 @@ table(gss24$premarsx)
 table(gss24$polviews)
 ```
 
-## Labels 
+## Labels
 
 Use
 [`haven::as_factor`](https://haven.tidyverse.org/reference/as_factor.html)
-to see the value labels instead of the value numbers. Then, do the same for `polviews`.
-
+to see the value labels instead of the value numbers. Then, do the same
+for `polviews`.
 
 ```{r}
 #| label: label.01-premarsx
 
 table(as_factor(gss24$premarsx))
 ```
-
 
 ## Labels {.scrollable}
 
@@ -174,7 +238,6 @@ table(as_factor(gss24$premarsx))
 
 table(as_factor(gss24$polviews))
 ```
-
 
 ## Better Labels {.smaller}
 
@@ -193,7 +256,6 @@ table(gss24$premarsx)
 1.  Get rid of all the 'missing' levels (just missing)
 2.  Apply the labels instead of numeric values
 
-
 ## Better Labels cont.
 
 Let's get rid of the empty levels in `premarsx`.
@@ -207,11 +269,10 @@ gss24$premarsx <- droplevels(gss24$premarsx)
 table(gss24$premarsx)
 ```
 
-
 ## Manipulating Variables
 
-For `polviews`, let's combine categories to ease interpretation. 
-This is easiest when the levels are numeric.  
+For `polviews`, let's combine categories to ease interpretation. This is
+easiest when the levels are numeric.
 
 Let's remind ourselves what the values correspond with each label.
 
@@ -220,7 +281,6 @@ Let's remind ourselves what the values correspond with each label.
 
 table(as_factor(gss24$polviews, levels = "both")) # both shows value and label
 ```
-
 
 ## Manipulating Variables {.smaller}
 
@@ -241,21 +301,23 @@ gss24 <- gss24 |> # <1>
 
 ```
 
-1. Save over the dataset with an added variable.
-2. Creates a new variable by assigning labels based on values of `polviews`
-3. Set everything else to "missing"
-4. Convert the variable to factor with specified level order
+1.  Save over the dataset with an added variable.
+2.  Creates a new variable by assigning labels based on values of
+    `polviews`
+3.  Set everything else to "missing"
+4.  Convert the variable to factor with specified level order
 
 <br>
 
 ::: {.callout-tip icon="false"}
 ## {{< fa pen-to-square >}} [Pipes](https://www.tidyverse.org/blog/2023/04/base-vs-magrittr-pipe/)
+
 can be written as `|>` or `%>%`
 :::
 
-## Manipulating Variables {.smaller}
+## Frequency Table {.smaller}
 
-Always double check your work. 
+Always double check your work.
 
 <br>
 
@@ -263,7 +325,7 @@ Always double check your work.
 table(gss24$polviews, gss24$pol3cat)
 ```
 
-## Frequency Table {.smaller}
+## Relative Frequency Table {.smaller}
 
 Make a frequency table. One of `summarytools` main purposes is to help
 cleaning and preparing data for further analysis. Pay attention to the
@@ -278,8 +340,7 @@ freq(gss24$pol3cat)
 
 ```
 
-
-## Frequency Table {.smaller}
+## Relative Frequency Table {.smaller}
 
 ```{r}
 #| label: freq.01-premarsx
@@ -288,11 +349,11 @@ freq(gss24$premarsx)
 
 ```
 
-## Pretty Frequency Table
+## Pretty Tables
 
 Using `report.nas = FALSE` suppresses the missing data.\
-The `headings = FALSE` parameter suppresses the heading section. 
-Do the same for `premarsx`.
+The `headings = FALSE` parameter suppresses the heading section. Do the
+same for `premarsx`.
 
 <br>
 
@@ -302,7 +363,7 @@ Do the same for `premarsx`.
 freq(gss24$pol3cat, report.nas = FALSE, headings = FALSE) 
 ```
 
-## Pretty Frequency Table 
+## Pretty Tables
 
 ```{r}
 #| label: freq.02-premarsx
@@ -337,7 +398,7 @@ wrong'?
 
 ## Cross-tab
 
-The `table()` command gives us the frequencies. 
+The `table()` function gives us the frequencies.
 
 <br>
 
@@ -351,7 +412,7 @@ table(gss24$premarsx, gss24$pol3cat)
 
 We want to add the **column** percentages...
 
-## Cross-tab with % 
+## Relative Frequency Cross-tab
 
 ```{r}
 #| label: crosstab-02
@@ -364,20 +425,23 @@ ctable(gss24$premarsx, gss24$pol3cat, # <1>
        useNA = "no") # <4>
 ```
 
-1. Change from `table()` to `ctable()`.
-2. The "c" gives column %; "r" would give row %.
-3. This adds the % symbols to the table.
-4. Exclude the missing levels from the table.  
+1.  Change from `table()` to `ctable()`.
+2.  The "c" gives column %; "r" would give row %.
+3.  This adds the % symbols to the table.
+4.  Exclude the missing levels from the table.
 
 ##  {.smaller data-menu-title="Your Data Take" background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
 
 ::: {style="color: #f39c12; font-size: 250%; font-family: 'Shadows Into Light'"}
-**{{< fa regular lightbulb >}} What's your conclusion to our initial research question?**
+{{< fa regular lightbulb >}} **What's your conclusion to our initial
+research question?**
 :::
 
 <br>
 
-% who think sex relations before marriage is __________, by political views
+\% who think sex relations before marriage is \_\_\_\_\_\_\_\_\_\_, by
+political views
+
 ```{r}
 #| label: crosstab-02-output
 #| echo: false
@@ -389,8 +453,8 @@ ctable(gss24$premarsx, gss24$pol3cat, prop = "c", format = "p", useNA = "no")
 
 ## Mode
 
-Remember, the **mode** is the category with the greatest frequency 
-(or the largest percentage). Let's find it for the `premarsx` variable.
+Remember, the **mode** is the category with the greatest frequency (or
+the largest percentage). Let's find it for the `premarsx` variable.
 
 <br>
 
@@ -403,10 +467,12 @@ freq(gss24$premarsx, report.nas = FALSE)
 
 ## Median
 
-We can use the same table we generated before to identify the **median**. 
-This time, let's use [dplyr grammar]() to  produce the same table
- 
-Remember, use the cumulative percentage to locate the **50th percentile**.
+We can use the same table we generated before to identify the
+**median**. This time, let's use [dplyr grammar]() to produce the same
+table
+
+Remember, use the cumulative percentage to locate the **50th
+percentile**.
 
 ```{r}
 #| label: median
@@ -418,9 +484,9 @@ gss24 |> # <1>
 
 ```
 
-1. Use `dplyr` grammar, starting with the name of the df and a pipe
-2. Use the `freq()` command as usual
-3. Add the `tb()` command to turn the table into a `tibble`
+1.  Use `dplyr` grammar, starting with the name of the df and a pipe
+2.  Use the `freq()` function as usual
+3.  Add the `tb()` function to turn the table into a `tibble`
 
 ## Mean
 
@@ -432,7 +498,8 @@ freq(gss24$hrs1, report.nas = FALSE, headings = FALSE)
 ```
 
 ::: aside
-Question 1a. If working, full or part time: how many hours did you work last week, at all jobs?
+Question 1a. If working, full or part time: how many hours did you work
+last week, at all jobs?
 :::
 
 ## Mean
@@ -445,12 +512,13 @@ median(gss24$hrs1, na.rm=TRUE)
 
 ```
 
-1. `na.rm` is a logical evaluating to TRUE or FALSE indicating whether NA values should be stripped before the computation proceeds.
+1.  `na.rm` is a logical evaluating to TRUE or FALSE indicating whether
+    NA values should be stripped before the computation proceeds.
 
 ::: aside
-Question 1a. If working, full or part time: how many hours did you work last week, at all jobs?
+Question 1a. If working, full or part time: how many hours did you work
+last week, at all jobs?
 :::
-
 
 ## `summary()`
 
@@ -487,22 +555,6 @@ gss24 |>
 
 ```
 
-1. Which stats to produce. Either “all” (default), “fivenum”, “common” (see Details), or a selection. See ?descr
-
-## `dplyr` grammar
-
-What's the advantage of `dplyr` grammar? We can sequence data manipulation!  
-
-```{r}
-#| label: descr03
-#| code-line-numbers: "1|2|3|4-5|6"
-
-gss24 |> 
-  filter(!is.na(sex))  |>
-  group_by(sex) |>
-  descr(hrs1,
-        stats = "common") |> # <1>
-  tb() 
-
-```
+1.  Which stats to produce. Either “all” (default), “fivenum”, “common”
+    (see Details), or a selection. See ?descr
 

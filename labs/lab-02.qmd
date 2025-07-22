@@ -10,6 +10,7 @@ format:
     - file: mathjax-color.html
     slide-number: c
     math: mathjax
+    code-annotations: hover
 revealjs-plugins:
   - quiz
 embed-resources: true
@@ -38,16 +39,15 @@ source("custom-setup-styles.R")
 # Agenda {data-menu-title="Agenda" background-image="images/calendar.png" background-size="100px" background-repeat="repeat"}
 
 -   Frequency Distributions
--   Central Tendency
--   Variability
+-   Central Tendency & Variability
 
 # Learning objectives
 
 By the end of the lab, you will be able to ...
 
--   A
--   B
--   C
+-   implement basic variable manipulation
+-   create useful frequency tables
+-   produce measures of central tendency and variability
 
 # Code-along 02
 
@@ -57,15 +57,15 @@ Download and open [code-along-02.qmd]()
 
 ##  {data-menu-title="Think Like a Statistician" background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
 
-Political polarization is high in the U.S. today.
-
-Using the most recent survey data, do more liberals than conservatives
-think sex before marriage is 'not wrong at all'?
+Political polarization is high in the U.S. today and attitudes about gender and 
+family behavior have been heavily debated.  
+  
+Using the most recent survey, do more liberals than conservatives
+think sex before marriage is '*not wrong at all*'?
 
 <br>
 
-[{{< fa regular lightbulb >}} How do we answer that
-question?]{style="color: #F39C12; font-size: 175%; font-family: 'Shadows Into Light'"}
+[{{< fa regular lightbulb >}} **How do we find out?**]{style="color: #F39C12; font-size: 175%; font-family: 'Shadows Into Light'"}
 
 ## Packages
 
@@ -126,7 +126,7 @@ variables.
 <br>
   
 In the console, type `?premarsx` and hit enter. The Help pane will show
-you the question text and response options and values.  
+you the question text, response options and values.  
 
 <br>
 
@@ -134,7 +134,8 @@ Now, do the same for `polviews`.
 
 ## Table
 
-Add a line below to also see a table for the `polviews` variable.
+Run this code to see the frequency table for the `premarsx` variable. 
+Then, add a line below to also see a table for the `polviews` variable.
 
 ```{r}
 #| label: table-premarsx
@@ -161,7 +162,6 @@ to see the value labels instead of the value numbers. Then, do the same for `pol
 
 ```{r}
 #| label: label.01-premarsx
-#| output-location: column
 
 table(as_factor(gss24$premarsx))
 ```
@@ -171,26 +171,27 @@ table(as_factor(gss24$premarsx))
 
 ```{r}
 #| label: label.01-polviews
-#| output-location: column
 
 table(as_factor(gss24$polviews))
 ```
 
 
-## Better Labels
+## Better Labels {.smaller}
 
-Let's use `zap_missing` and `as_factor` to clean these up for `premarsex`. 
-<br>
+Let's clean up the levels for `premarsx`.
 
 ```{r}
 #| label: label.02-premarsx
 #| code-line-numbers: "1|2|3"
 #| output-location: fragment
 
-gss24$premarsx <- zap_missing(gss24$premarsx)
-gss24$premarsx <- as_factor(gss24$premarsx)
-table(gss24$premarsx)
+gss24$premarsx <- zap_missing(gss24$premarsx) # <1>
+gss24$premarsx <- as_factor(gss24$premarsx) # <2>
+table(gss24$premarsx) 
 ```
+
+1.  Get rid of all the 'missing' levels (just missing)
+2.  Apply the labels instead of numeric values
 
 
 ## Better Labels cont.
@@ -209,8 +210,8 @@ table(gss24$premarsx)
 
 ## Manipulating Variables
 
-For `polviews`, let's combine categories to make it easier to interpret. 
-This is easier to do when the values remain as numbers.  
+For `polviews`, let's combine categories to ease interpretation. 
+This is easiest when the levels are numeric.  
 
 Let's remind ourselves what the values correspond with each label.
 
@@ -221,74 +222,93 @@ table(as_factor(gss24$polviews, levels = "both")) # both shows value and label
 ```
 
 
-## Manipulating Variables
+## Manipulating Variables {.smaller}
 
 ```{r}
 #| label: levels-polviews-02
+#| code-line-numbers: "1|2|3-5|6|7-8|9"
 
-#gss24 %>%
-# mutate(poldum = case_when(
- #  polviews ))
+
+gss24 <- gss24 |> # <1>
+ mutate(pol3cat = case_when( # <2>
+   polviews >= 1 & polviews <= 3 ~ "Liberal", # <2>
+   polviews == 4 ~ "Moderate", # <2>
+   polviews >= 5 & polviews <= 7 ~ "Conservative", # <2>
+   TRUE ~ NA_character_), # <3>
+  pol3cat = factor(pol3cat, # <4>
+                 levels = c("Liberal", "Moderate", "Conservative")) # <4>
+  )
+
 ```
 
-Tip: [pipes](https://www.tidyverse.org/blog/2023/04/base-vs-magrittr-pipe/)
+1. Save over the dataset with an added variable.
+2. Creates a new variable by assigning labels based on values of `polviews`
+3. Set everything else to "missing"
+4. Convert the variable to factor with specified level order
 
+<br>
+
+::: {.callout-tip icon="false"}
+## {{< fa pen-to-square >}} [Pipes](https://www.tidyverse.org/blog/2023/04/base-vs-magrittr-pipe/)
+can be written as `|>` or `%>%`
+:::
+
+## Manipulating Variables {.smaller}
+
+Always double check your work. 
+
+<br>
+
+```{r}
+table(gss24$polviews, gss24$pol3cat)
+```
 
 ## Frequency Table {.smaller}
 
 Make a frequency table. One of `summarytools` main purposes is to help
 cleaning and preparing data for further analysis. Pay attention to the
-missing values. Then, do the same for `polviews`.
+missing values. Then, do the same for `premarsx`.
+
+<br>
 
 ```{r}
-#| label: freq.01-premarsx
+#| label: freq.01-pol3cat
 
-freq(gss24$premarsx) 
+freq(gss24$pol3cat) 
+
 ```
 
 
 ## Frequency Table {.smaller}
 
 ```{r}
-#| label: freq.01-polviews
+#| label: freq.01-premarsx
 
-freq(gss24$polviews) 
+freq(gss24$premarsx) 
+
 ```
 
 ## Pretty Frequency Table
 
 Using `report.nas = FALSE` suppresses the missing data.\
 The `headings = FALSE` parameter suppresses the heading section. 
-Then, do the same for `polviews`.
+Do the same for `premarsx`.
 
 <br>
+
+```{r}
+#| label: freq.02-pol3cat
+
+freq(gss24$pol3cat, report.nas = FALSE, headings = FALSE) 
+```
+
+## Pretty Frequency Table 
 
 ```{r}
 #| label: freq.02-premarsx
 
 freq(gss24$premarsx, report.nas = FALSE, headings = FALSE) 
 ```
-
-## Pretty Frequency Table {.smaller}
-
-:::::: columns
-::: {.column width="70%"}
-
-```{r}
-#| label: freq.02-polviews
-
-freq(gss24$polviews, report.nas = FALSE, headings = FALSE) 
-```
-::::
-
-::: {.column width="30%"}
-This is a lot of categories. Let's condense them to make it easier to interpret.
-::::
-
-::::::
-
-
-
 
 ##  {.quiz-question data-menu-title="Knowledge Check" background-image="images/clipboard-question.png" background-size="100px" background-repeat="repeat"}
 
@@ -297,10 +317,10 @@ This is a lot of categories. Let's condense them to make it easier to interpret.
 respondents believe sex before marriage is 'almost always wrong'?
 :::
 
--   [8.52]{.correct data-explanation="💯 Correct!"}
--   [24.71]{data-explanation="😲 This is the % who think premartial sex is 'always wrong'."}
--   [33.23]{data-explanation="😲 This is the % who think premarital sex is 'always' OR 'almost always wrong'."}
--   [19.05]{data-explanation="😲 This is % who think premarital sex is 'wrong only sometimes'."}
+-   [5.77]{.correct data-explanation="💯 Correct!"}
+-   [16.88]{data-explanation="😲 This is the % who think premartial sex is 'always wrong'."}
+-   [22.65]{data-explanation="😲 This is the % who think premarital sex is 'always' OR 'almost always wrong'."}
+-   [12.20]{data-explanation="😲 This is % who think premarital sex is 'wrong only sometimes'."}
 
 ##  {.quiz-question data-menu-title="Knowledge Check" background-image="images/clipboard-question.png" background-size="100px" background-repeat="repeat"}
 
@@ -310,7 +330,179 @@ respondents believe sex before marriage is 'always' or 'almost always
 wrong'?
 :::
 
--   [33.23]{.correct data-explanation="💯 Correct!"}
--   [24.71]{data-explanation="😲 This is the % who think premartial sex is 'always wrong'."}
--   [8.52]{data-explanation="😲 This is the % who think premarital sex is 'almost always wrong'."}
--   [19.05]{data-explanation="😲 This is % who think premarital sex is 'wrong only sometimes'."}
+-   [22.65]{.correct data-explanation="💯 Correct!"}
+-   [16.88]{data-explanation="😲 This is the % who think premartial sex is 'always wrong'."}
+-   [5.77]{data-explanation="😲 This is the % who think premarital sex is 'almost always wrong'."}
+-   [12.20]{data-explanation="😲 This is % who think premarital sex is 'wrong only sometimes'."}
+
+## Cross-tab
+
+The `table()` command gives us the frequencies. 
+
+<br>
+
+```{r}
+#| label: crosstab-01
+
+table(gss24$premarsx, gss24$pol3cat)
+```
+
+<br>
+
+We want to add the **column** percentages...
+
+## Cross-tab with % 
+
+```{r}
+#| label: crosstab-02
+#| code-line-numbers: "1|2|3|4"
+#| eval: false
+
+ctable(gss24$premarsx, gss24$pol3cat, # <1>
+       prop = "c", # <2>
+       format = "p", # <3>
+       useNA = "no") # <4>
+```
+
+1. Change from `table()` to `ctable()`.
+2. The "c" gives column %; "r" would give row %.
+3. This adds the % symbols to the table.
+4. Exclude the missing levels from the table.  
+
+##  {.smaller data-menu-title="Your Data Take" background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
+
+::: {style="color: #f39c12; font-size: 250%; font-family: 'Shadows Into Light'"}
+**{{< fa regular lightbulb >}} What's your conclusion to our initial research question?**
+:::
+
+<br>
+
+% who think sex relations before marriage is __________, by political views
+```{r}
+#| label: crosstab-02-output
+#| echo: false
+
+ctable(gss24$premarsx, gss24$pol3cat, prop = "c", format = "p", useNA = "no") 
+```
+
+# Central Tendency & Variability {.theme-section}
+
+## Mode
+
+Remember, the **mode** is the category with the greatest frequency 
+(or the largest percentage). Let's find it for the `premarsx` variable.
+
+<br>
+
+```{r}
+#| label: mode
+
+freq(gss24$premarsx, report.nas = FALSE) 
+
+```
+
+## Median
+
+We can use the same table we generated before to identify the **median**. 
+This time, let's use [dplyr grammar]() to  produce the same table
+ 
+Remember, use the cumulative percentage to locate the **50th percentile**.
+
+```{r}
+#| label: median
+#| code-line-numbers: "1|2|3"
+
+gss24 |> # <1>
+  freq(premarsx, report.nas = FALSE) |> # <2>
+  tb() # <3> 
+
+```
+
+1. Use `dplyr` grammar, starting with the name of the df and a pipe
+2. Use the `freq()` command as usual
+3. Add the `tb()` command to turn the table into a `tibble`
+
+## Mean
+
+```{r}
+#| label: freq-numeric
+
+freq(gss24$hrs1, report.nas = FALSE, headings = FALSE) 
+
+```
+
+::: aside
+Question 1a. If working, full or part time: how many hours did you work last week, at all jobs?
+:::
+
+## Mean
+
+```{r}
+#| label: mean-median
+
+mean(gss24$hrs1, na.rm=TRUE) # <1>
+median(gss24$hrs1, na.rm=TRUE)
+
+```
+
+1. `na.rm` is a logical evaluating to TRUE or FALSE indicating whether NA values should be stripped before the computation proceeds.
+
+::: aside
+Question 1a. If working, full or part time: how many hours did you work last week, at all jobs?
+:::
+
+
+## `summary()`
+
+<br>
+
+```{r}
+#| label: summary
+
+summary(gss24$hrs1)
+
+```
+
+## Variability: `descr()`
+
+<br>
+
+```{r}
+#| label: desc01
+
+descr(gss24$hrs1)
+
+```
+
+## Variability: `descr()`
+
+```{r}
+#| label: descr02
+#| code-line-numbers: "1|2|3|4"
+
+gss24 |> 
+  descr(hrs1,
+        stats = "common") |> # <1>
+  tb() 
+
+```
+
+1. Which stats to produce. Either “all” (default), “fivenum”, “common” (see Details), or a selection. See ?descr
+
+## `dplyr` grammar
+
+What's the advantage of `dplyr` grammar? We can sequence data manipulation!  
+
+```{r}
+#| label: descr03
+#| code-line-numbers: "1|2|3|4-5|6"
+
+gss24 |> 
+  filter(!is.na(sex))  |>
+  group_by(sex) |>
+  descr(hrs1,
+        stats = "common") |> # <1>
+  tb() 
+
+```
+

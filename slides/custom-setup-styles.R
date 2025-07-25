@@ -9,6 +9,9 @@ pacman::p_load(
   kableExtra, # pretty tables
   flextable, # formatted pretty tables
   summarytools, # easy descriptive statistics
+  learnr, # interactive practice questions & coding
+  fontawesome, # icons
+  gfonts, # shadows into light font
   conflicted # declare primary packages
 )
 

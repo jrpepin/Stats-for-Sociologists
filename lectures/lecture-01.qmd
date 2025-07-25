@@ -192,7 +192,7 @@ There are four key regions or “panes” in the interface:
     with files saved to disk.
 
 ::: {.callout-tip icon="false"}
-## {{< fa mitten >}} Heads Up!
+## {{< fa pen >}} Heads Up!
 
 The top-left panel (source pane) and can be launched by opening any editable file in
 RStudio.
@@ -482,7 +482,7 @@ install.packages('gssrdoc', repos =
 ```
 
 ::: {.callout-tip icon="false"}
-## {{< fa mitten >}} Heads Up!
+## {{< fa pen >}} Heads Up!
 R ignores text after #. These comments describe syntax.
 :::
 
@@ -797,7 +797,7 @@ names(gss_all)
 <br> 
 
 ::: {.callout-tip icon="false"}
-## {{< fa mitten >}} Heads Up!
+## {{< fa pen >}} Heads Up!
 This command is best to use with smaller datasets. 
 :::
 
@@ -813,7 +813,7 @@ In the output pane, the Help tab will show the variable documentation.
 <br>
 
 ::: {.callout-tip icon="false"}
-## {{< fa mitten >}} Heads Up!
+## {{< fa pen >}} Heads Up!
 Replace "varname" with the name of a variable.  
 Example: `?meovrwrk`
 :::
@@ -843,8 +843,6 @@ Values:  the numeric and response category key (1 = strongly agree)
 We can find which years one or more variables were asked with the 
 `gss_which_years()` function.
 
-:::::: columns
-:::: column
 
 ```{r}
 #| label: which-years
@@ -853,17 +851,58 @@ gss_which_years(gss_all, meovrwrk)
 
 ```
 
-::::
-
-:::: column
 ::: {.callout-tip icon="false"}
-## {{< fa mitten >}} Heads Up!
+## {{< fa pen >}} Heads Up!
 If run in the console, to see all rows, 
 wrap the code in the `print()` command:
-`print(gss_which_years(gss_all, fefam), n = 40)`
+`print(gss_which_years(gss_all, meovrwrk), n = 40)`
 :::
-::::
 
-::::::
+## Variables
+
+You can access the variables (i.e., columns) using the `$` operator, 
+as shown using the `table()` function.
+
+The variable names are case sensitive. 
+In this dataset, all variables are lowercase.  
+
+<br>
+  
+```{r}
+#| label: meovrwrk-table-gss_all
+
+table(gss_all$meovrwrk)
+```
+
+::: {style="color: #E74C3C; font-size: 90%; font-family: 'Shadows Into Light'"}
+2,436 respondents were coded as `1` on this variable. What does that mean? 
+:::
 
 
+## Variables: Practice
+
+Let's look at only the 2024 respondents.  
+  
+Change the code to show just the `gss24` respondents.  
+  
+Then, add text to your code-along that interprets the results for the `2` value.
+
+<br>
+
+```{r}
+#| label: meovrwrk-table-gss24
+
+# Replaced gss_all with gss24
+table(gss24$meovrwrk)
+```
+
+## Quarto: Render {.smaller}
+
+Finally, let's `render` your code-along-01 and see the results!  
+
+![](images/01/quarto.png){width="200%"}
+
+::: {.callout-tip icon="false"}
+## {{< fa pen >}} Heads Up!
+Click the down arrow next to `render` to choose whether to preview within RStudio's Viewer Pane or in your browser.
+:::

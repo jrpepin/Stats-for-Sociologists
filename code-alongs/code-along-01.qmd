@@ -1,6 +1,6 @@
 ---
 title: "Code-Along 01"
-format: html
+format: pdf
 ---
 
 ## Packages
@@ -159,7 +159,7 @@ head(gss24)
 
 ```
 
-With your mouse, go to the environment panel (upper-right) and click on the “gss24” object. It pops up and you can browse through it.
+With your mouse, go to the environment panel (upper-right) and click on the `gss24` object. It pops up and you can browse through it.
 
 This is often a good idea to get a first feel for the data, but only if your dataset is relatively small.
 
@@ -181,6 +181,7 @@ To see the variables available in the dataset, use the `names()` command. This c
 
 ```{r}
 #| label: names
+#| eval: false # copy/paste this code in the Console; don't run in Quarto
 
 names(gss_all)
 ```
@@ -191,10 +192,11 @@ For information about a specific GSS variable, type `?varname` at the console.
 
 In the output pane, the Help tab will show the variable documentation.
 
-Example: `?meovrwrk`
+Example:
 
 ```{r}
 #| label: meovrwrk-help
+#| eval: false # copy/paste this code in the Console; don't run in Quarto
 
 ?meovrwrk
 ```
@@ -220,26 +222,30 @@ gss_which_years(gss_all, meovrwrk)
 
 If run in the console, to see all rows, wrap the code in the `print()` command:
 
-`print(gss_which_years(gss_all, fefam), n = 40)`
+`print(gss_which_years(gss_all, meovrwrk), n = 40)`
 
-You can access the variables (i.e., columns) using the \$ operator, as shown using the `table()` function
+You can access the variables (i.e., columns) using the `$` operator, as shown using the table() function
 
 (NOTE: The variable names are case sensitive. In this dataset, all variables are lowercase.)
 
 ```{r}
-#| label: meovrwrk-table
+#| label: meovrwrk-table-gss_all
 
+table(gss_all$meovrwrk)
+
+```
+
+2436 respondents were coded as 1 on this variable. What does that mean? (Look at the help page.)
+
+Let's look at only the 2024 respondents. Change the code to show just the `gss24` respondents. Then, add text to your code-along that interprets the results for the `2` value.
+
+```{r}
+#| label: meovrwrk-table-gss24
+
+# Replace gss_all with gss24 and then run the code.
 table(gss_all$meovrwrk)
 ```
 
-2436 respondents were coded as `1` on this variable. What does that mean? (Look at the help page.)
+## Quarto: Render
 
-The table command also let's you create a table with two variables.
-
-```{r}
-#| label: crosstab
-
-# 1st variable is the rows, 2nd variable is the columns.
-table(gss_all$year, gss_all$meovrwrk)
-
-```
+Finally, let's `render` your code-along-01 and view the results.

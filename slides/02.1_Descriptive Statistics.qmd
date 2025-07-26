@@ -203,7 +203,7 @@ gss_all$premarsx <- as_factor(zap_missing(gss_all$premarsx))
 gss_all$sex <- as_factor(zap_missing(gss_all$sex))
 
 freq_premarsx <- gss_all %>%
-  select(id, year, sex, premarsx) %>%
+  select(sex, premarsx) %>%
   filter(!is.na(premarsx), !is.na(sex)) %>%
   group_by(sex) %>%
   count(premarsx) %>%

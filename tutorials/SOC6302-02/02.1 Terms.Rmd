@@ -5,6 +5,9 @@ output:
     progressive: true
     allow_skip: false
     theme: flatly
+    mathjax: default
+    includes:
+      in_header: mathjax-color.html
     css: css/mystyle.css
     df_print: "paged"
 runtime: shiny_prerendered
@@ -23,6 +26,9 @@ source("custom-setup-styles.R")
 ## Load all gss
 data(gss_all)
 
+# Get the data only for the 2024 survey respondents
+gss24 <- gss_get_yr(2024)
+
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
@@ -38,6 +44,7 @@ knitr::opts_chunk$set(echo = TRUE)
   });
 </script>
 ```
+
 
 ## Basic Statistical Terminology
 
@@ -113,7 +120,7 @@ people, institutions, groups, things, countries, states, and so on.
 Rarely do scientists have the time to study an entire population of
 interest, so we usually take a sample.
 
-::: my-callout
+::: my-def
 #### POPULATION
 
 All units of analysis (people, institutions, groups, etc.) in which the
@@ -122,7 +129,7 @@ researcher is interested.
 
 <br>
 
-::: my-callout
+::: my-def
 #### SAMPLE
 
 A subset of people (or institutions, groups, etc.) selected from a
@@ -160,7 +167,7 @@ Lowercase letters are often used when describing a sample.
 In this course, you will learn about descriptive and inferential
 statistics. There are two types of statistics:
 
-::: my-callout
+::: my-def
 #### DESCRIPTIVE STATISTICS
 
 Procedures that help us organize and describe data collected from a
@@ -169,7 +176,7 @@ sample or population.
 
 <br>
 
-::: my-callout
+::: my-def
 #### INFERENTIAL STATISTICS
 
 Making underlying predictions or inferences about a *population* using
@@ -231,7 +238,7 @@ represents a single variable.**
 ![](images/variable.png "Cartoon graph with a thought bubble saying 'Wait. What's a variable?'"){width="60%"}
 <br />
 
-::: my-callout
+::: my-def
 #### VARIABLES
 
 Any factor, trait, or condition that can exist in differing amounts or
@@ -348,12 +355,14 @@ Are lots of people middle class or are some people very poor and some people rea
   
 To answer these questions, researchers analyze the *distribution* of the data.  
   
-::: my-callout
+::: my-def
 #### DISTRIBUTION:
 Shows all the possible values (or intervals) of the data and how often they occur.
 :::
+
+<br>
   
-::: my-callout
+::: my-def
 #### FREQUENCY DISTRIBUTION
 
 A table reporting the number of observations falling into each category
@@ -362,7 +371,7 @@ of the variable.
 
 <br>
 
-![](images/distributions.png "Three graphs with different frequency distributions."){ width=60% }
+![](images/distributions.png "Three graphs with different frequency distributions."){ width=100% }
 
 <br />    
 
@@ -376,46 +385,331 @@ The first column includes the variable and the response categories.
 The second column reports the number of cases in each category, 
 as well as the total number of cases (i.e., sum of all frequencies).  
 
-
-```{r}
-#| echo = FALSE
-
-gss_all$premarsx <- as_factor(zap_missing(gss_all$premarsx))
-gss_all$sex <- as_factor(zap_missing(gss_all$sex))
-
-freq_premarsx <- gss_all %>%
-  select(id, year, sex, premarsx) %>%
-  filter(year == 2024, !is.na(premarsx)) %>%
-  count(premarsx)
-
-total_row <- freq_premarsx %>%
-  summarise(across(where(is.numeric), sum)) %>%
-  mutate(premarsx = "Total")
-
-# combine
-table_premarsx <- rbind(freq_premarsx, total_row)
-```
-
 <br>
 
-**Table 1. Attitudes about sex before marriage**
+**Table 01. Attitudes about sex before marriage**
 
 ```{r}
 #| label: table01
 #| echo: false
+#| eval: false
+
+gss24$premarsx <- zap_missing(gss24$premarsx) 
+gss24$premarsx <- as_factor(gss24$premarsx)
+gss24$premarsx <- droplevels(gss24$premarsx)
+
+freq_premarsx <- gss24 |>
+  select(id, sex, premarsx) |>
+  filter(!is.na(premarsx)) |>
+  count(premarsx)
+
+total_row <- freq_premarsx|>
+  summarise(across(where(is.numeric), sum)) |>
+  mutate(premarsx = "Total")
+
+# combine
+table_premarsx <- rbind(freq_premarsx, total_row)
 
 # Render the table
 table_premarsx %>%
   flextable() %>%
   style_flextable()
+
+# [Source: U.S. General Social Survey, 2024]{style="color: #grey80; font-size: 80%"}
 ```
 
-[Source: U.S. General Social Survey, 2024]{style="color: #grey80; font-size: 80%"}
+![](images/table01.png "Table 01. Attitudes about sex before marriage."){ width=100% }
+
 
 [**Survey question**: *There's been a lot of discussion about the way
 morals and attitudes about sex are changing in this country. If a man
 and woman have sex relations before marriage, do you think it is
 \_\_\_\_\_\_\_\_\_\_\_\_.*]{style="font-size: 80%"}
+
+<br>
+
+Frequency tables are important for understanding data, but sometimes they can be misleading if the frequencies aren't considered in context. 
+
+Let's look at an example.  
+
+::: my-think
+#### Think Like a Statistician:
+Are women more likely than men to say premarital sex is "*not wrong at all*"?
+:::
+
+<br>
+
+We start by looking at the frequency table that shows men and women's number of responses for each category.
+
+**Table 02. Attitudes about sex before marriage by gender**
+
+```{r}
+#| label: table02
+#| echo: false
+
+gss_all$premarsx <- as_factor(zap_missing(gss_all$premarsx))
+gss_all$sex <- as_factor(zap_missing(gss_all$sex))
+
+freq_premarsx <- gss_all %>%
+  select(sex, premarsx) %>%
+  filter(!is.na(premarsx), !is.na(sex)) %>%
+  group_by(sex) %>%
+  count(premarsx) %>%
+  pivot_wider(
+    names_from = sex,
+    values_from = n,
+    values_fill = 0
+  )
+
+# create total row
+total_row <- freq_premarsx %>%
+  summarise(across(where(is.numeric), sum)) %>%
+  mutate(premarsx = "Total") %>%
+  select(names(freq_premarsx)) # ensure column order matches
+
+# combine
+table_premarsx <- rbind(freq_premarsx, total_row)
+
+# Get number of rows
+n_rows <- nrow(table_premarsx) # fixing transparency
+
+# Render the table
+table_premarsx %>%
+  flextable() %>%
+  style_flextable() %>%
+  # Manually add zebra stripes with solid colors w/o transparency
+  bg(i = seq(1, n_rows, by = 2), bg = "white", part = "body") %>%
+  bg(i = seq(2, n_rows, by = 2), bg = "#F2F2F2", part = "body")
+```
+
+[Source: U.S. General Social Survey, 1972-2024]{style="color: #grey80; font-size: 80%"}
+
+<br>
+
+The table shows that 10,672 men and 11,086 women in the survey stated sex before marriage was 'not wrong at all.'  
+
+If 414 more women than men thought premarital sex was "not wrong at all", 
+why can't we conclude that women are more likely than men to think sex before marriage is '*not wrong at all*?' 
+
+###
+
+### Relative Frequency Distributions
+
+Examine the table again to see the total number of men and women in the sample. 
+More women than men answered the survey, which we didn't consider when comparing the frequencies alone.
+
+::: my-def
+#### RELATIVE FREQUENCY DISTRIBUTION
+
+A table showing the proportion or percentage for each value of a
+variable.
+:::
+
+To account for the greater number of women than men in our sample, we use a 'relative frequency distribution,' showing either proportions or percentages to make our comparison. 
+
+[**Proportions**]{style="font-size: 125%"} are between 0 and 1.0.
+
+$Proportion = \frac{f}{n}$
+
+[**Percentages**]{style="font-size: 125%"} are between 0 and 100.
+
+$Percentage = proportion × 100.$
+
+In our table, we need two numbers to make the calculations.  
+
+1.   The count of men who said sex before marriage was 'not wrong at all' (f = 10,672)  
+2.   The total number of men who answered the survey question (n = 20,234)
+  
+  
+$\frac{10,672}{20,234} = .53$
+
+This is the proportion of men who said sex before marriage was 'not wrong at all.'  
+  
+It's often easier to talk about these numbers in percentages. So, we just multiply the proportion (.53) by 100.  
+
+**53% of men said sex before marriage was 'not wrong at all.'**  
+
+Let's use R as a calculator to do the same thing for women.
+
+Click the `Run Code` button below.
+
+```{r calc, exercise=TRUE}
+(11086/25382)*100
+```
+
+```{r calc-solution}
+(11086/25382)*100
+```
+
+<div id="calc-hint">
+**HINT:** Just push the `Run Code` button to see the output.
+</div>
+<br />
+
+In other words, **44% of women said sex before marriage was 'not wrong at all.'**
+  
+<br>
+
+When do the same calculation for each category for both men and women, 
+we can display these numbers in a **frequency table**. 
+
+**Table 03. Attitudes about sex before marriage by gender**  
+
+```{r}
+#| label: table03
+#| echo: false
+
+gss_all$premarsx <- droplevels(gss_all$premarsx)
+
+# Create frequency & proportions table
+tab <- gss_all %>%
+  filter(!is.na(premarsx), !is.na(sex)) %>%
+  group_by(sex, premarsx) %>%
+  summarise(n = n(), .groups = "drop") %>%
+  group_by(sex) %>%
+  mutate(percent = round(100 * n / sum(n), 0)) %>%
+  ungroup() %>%
+  pivot_wider(
+    names_from = sex, values_from = c(n, percent)
+  )
+
+# Add totals row
+tab_totals <- tab %>%
+  summarise(across(where(is.numeric), \(x) sum(x, na.rm = TRUE))) %>%
+  mutate(premarsx = "Total")
+
+# Combine with original table
+tab_with_totals <- bind_rows(tab, tab_totals)
+
+## Pretty table
+tab_with_totals %>%
+  select(premarsx, n_male, percent_male, n_female, percent_female) %>%
+  flextable() %>%
+  style_flextable() %>%
+  set_header_labels(
+    n_male = "n", percent_male = "%",
+    n_female = "n", percent_female = "%"
+  ) %>%
+  add_header_row(
+    values = c("", "Men", "Women"),
+    colwidths = c(1, 2, 2)
+  ) %>%
+  align(j = c(2, 3, 4, 5), align = "center", part = "all") %>%
+  color(color = "#3498DB", i = 1, j = 3) |>
+  color(color = "#3498DB", i = 2, j = 3) |>
+  color(color = "#3498DB", i = 3, j = 3) |>
+  color(color = "#3498DB", i = 4, j = 3) |>
+  color(color = "#3498DB", i = 5, j = 3) |>
+  bold(i = 5, j = 3, bold = TRUE)
+```
+
+[Source: U.S. General Social Survey, 1972-2024]{style="color: #grey80; font-size: 80%"}
+
+::: my-tip
+#### Heads Up!
+Percentage columns ALWAYS sum to 100%. 
+
+${21 + 7 + 19 + 53 = 100\%}$
+:::
+
+<br>
+
+Let's review our findings: 53% of men but only 44% of women reported sex before marriage was 'not wrong at all.' 
+
+::: my-take
+#### Your Data Take!
+A greater proportion of men (53%) than women (44%) say premarital sex is "*not wrong at all*."
+:::
+
+To summarize, in order to compare meaningfully across groups, a frequency should be converted into a
+proportion or a percentage.
+
+<br>
+
+`r fa("otter", fill = "#F39C12")`<practice> PRACTICE:</practice>
+
+```{r P05, echo=FALSE}
+  question("According to Table 03, are men or women more likely to say sex before marriage is 'wrong only sometimes'?",
+         answer("They are equally likely, about 19% of both men and women.", correct = TRUE),
+         answer("Men are more likely than women.",
+                message = "Did you guess based on gender stereotypes? Base your opinion on the table."),
+         answer("Women are more likely than men.",
+                message = "There are more women than men in the sample, so you must look at the % column."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+
+### Cumulative Distributions  
+  
+There's one more distribution to know about.
+
+::: my-def
+#### Cumulative Distribution
+A table showing the number or percentage of observations at or below a given category.
+:::
+  
+<br> 
+
+Sometimes researchers want to know the percentage of people in two or more categories.
+These descriptions are displayed as cumulative distributions. 
+
+Maybe we wanted to know the percentage of people who think premarital sex is always OR almost always wrong. We need to sum the percentages from each of the categories to get our answer.  
+
+In 2024, 23% of people reported premarital sex is 'always' or 'almost always' wrong.
+
+**Table 04. Attitudes about sex before marriage by gender**  
+
+```{r}
+#| label: table04
+#| echo: false
+
+gss24$premarsx <- as_factor(zap_missing(gss24$premarsx))
+gss24$sex <- as_factor(zap_missing(gss24$sex))
+
+gss24$premarsx <- droplevels(gss24$premarsx)
+gss24$sex <- droplevels(gss24$sex)
+
+# Create frequency & proportions table
+tab <- gss24 %>%
+  filter(!is.na(premarsx)) %>%
+  group_by(premarsx) %>%
+  summarise(n = n(), .groups = "drop") %>%
+  mutate(
+    percent = round(100 * n / sum(n), 0),
+    cum_percent = round(cumsum(percent), 0)
+  ) %>%
+  ungroup()
+
+# Add totals row
+tab_totals <- tab %>%
+  summarise(across(where(is.numeric), \(x) sum(x, na.rm = TRUE))) %>%
+  mutate(premarsx = "Total")
+
+# Combine with original table
+tab_with_totals <- bind_rows(tab, tab_totals)
+
+## Pretty table
+tab_with_totals %>%
+  flextable() %>%
+  style_flextable() %>%
+  set_header_labels(
+    n = "n", percent = "%",
+    cum_percent = "cumulative %"
+  ) %>%
+  color(color = "#18bc9c", i = 1, j = 3) %>%
+  color(color = "#fd7e14", i = 2, j = 3) %>%
+  color(color = "#e74c3c", i = 2, j = 4)
+```
+
+[Source: U.S. General Social Survey, 2024]{style="color: #grey80; font-size: 80%"}
+
+
+${\color{mathGreen} 17} + {\color{mathOrange} 6} = {\color{mathRed} 23\%}$
+
+
+
 
 
 Learning Check 02

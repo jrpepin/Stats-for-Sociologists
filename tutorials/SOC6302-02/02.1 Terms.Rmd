@@ -23,11 +23,15 @@ tutorial:
 ## Load packages, custom functions, and styles
 source("custom-setup-styles.R")
 
+# Load the data (will appear in your Global Environment pane)
+# data(gss_all)
+# gss24 <- gss_get_yr(2024)
+
 ## Load all gss
-data(gss_all)
+gss_all <- readRDS("data/gss_all.rds")
 
 # Get the data only for the 2024 survey respondents
-gss24 <- gss_get_yr(2024)
+gss24 <- readRDS("data/gss24.rds")
 
 knitr::opts_chunk$set(echo = TRUE)
 ```
@@ -399,7 +403,7 @@ gss24$premarsx <- as_factor(gss24$premarsx)
 gss24$premarsx <- droplevels(gss24$premarsx)
 
 freq_premarsx <- gss24 |>
-  select(id, sex, premarsx) |>
+  select(sex, premarsx) |>
   filter(!is.na(premarsx)) |>
   count(premarsx)
 
@@ -641,6 +645,48 @@ proportion or a percentage.
 ```
 
 
+#### Working Backwards
+
+You can also work backwards to **calculate a frequency** for a particular category if all you know is the percentage for the category and the total frequency.  
+  
+For example, if you know that 9% of women from a sample of 25,382 believe sex before marriage is 'almost always wrong,' you can calculate the number of women in this category. 
+
+$proportion * total freq = freq$
+
+Let's use R as a calculator to prove it to ourselves:
+
+
+**Replace the blank line with x to calculate the frequency from the proportion.** 
+Then, click the `Run Code` button below to confirm your results.
+
+```{r prop, exercise=TRUE}
+# Get the %
+x <- 2388/25382
+
+x # show x
+
+# Get the freq
+__ * 25382
+```
+
+```{r prop-solution}
+# Get the %
+x <- 2388/25382
+
+x # show x
+
+# Get the freq
+x * 25382
+```
+
+<div id="prop-hint">
+**HINT:** Did you replace __ with the letter 'x' (no quotes)?
+</div>
+
+<br />
+
+
+
 ### Cumulative Distributions  
   
 There's one more distribution to know about.
@@ -709,8 +755,142 @@ tab_with_totals %>%
 ${\color{mathGreen} 17} + {\color{mathOrange} 6} = {\color{mathRed} 23\%}$
 
 
+### Rates  
+  
+Sometimes it makes sense to report frequencies as rates, rather than as proportions or percentages. 
+Common rates sociologists might be interested in include the marriage rate, birth rate, or crime rate.
+
+::: my-def
+#### RATES
+
+$\frac{Actual\;occurrences}{possible\;occurrences}$
+:::    
+
+<br>
+  
+Rates are often expressed per 1,000 or 100,000. (Calculate basic rate and multiply it by 1,000 or 100,000.)  
+
+**Examples:**
+
+-   [Canada's divorce
+    rate](https://www150.statcan.gc.ca/n1/daily-quotidien/220309/dq220309a-eng.htm)
+    decreased from 12.7 per 1,000 in 1991 to 5.6 per 1,000 in 2020.\
+-   The [2021 suicide
+    rate](https://health-infobase.canada.ca/mental-health/suicide-self-harm/suicide-mortality.html)
+    of 14.8 per 100,000 population for middle aged Canadians (30-59
+    years old) was the highest of any age group.\
+-   [Canada's total fertility
+    rate](https://www150.statcan.gc.ca/n1/daily-quotidien/240925/dq240925c-eng.htm)
+    reached a new low in 2023 of 1.26 children per woman.
+
+<br>  
+  
+Rates can also be calculated for sub-groups.  
+  
+![](images/rates.png "Figure: Lifetime Risk of Being Killed by Police, per 100,000."){ width=90% }
+  
+  
+As this chart shows, nearly 100 in 100,000 Black men and boys will be killed by U.S. police over the life course. Notice the different ways rates can be conveyed:  
+  
+1. Latino men and boys have an estimated risk of being killed by police of about 53 per 100,000.  
+2. Asian/Pacific Islander men and boys face a lifetime risk of between 9 and 23 per 100,000.  
+3. White men and boys face a lifetime risk of about 39 per 100,000.  
+  
+<br />
+
+::: my-tip
+#### Heads up!
+The denominator must include all possible occurrences.  
+:::
+  
+<br>
+  
+Can the divorce rate be calculated as follows?
+
+$\frac{\text{Number couples divorcing in 2024}}{\text{Number couples marrying in 2024}}$
+
+No! The *denominator* should consist of all couples who could divorce—including *every couple that is married* at any point in 2024, even if they got married before 2024.
+
+<br>
+
+#### Summary:  
+
+**Nominal variables:**\
+can have [frequency distributions]{style="color: #18bc9c"}, cannot have
+[cumulative frequency distributions]{style="color: #e74c3c"}  
+  
+  
+**Ordinal:**\
+can have [frequency distributions]{style="color: #18bc9c"} and
+[cumulative frequency distributions]{style="color: #18bc9c"}
+  
+  
+**Interval-ratio:**\
+can have [frequency distributions]{style="color: #18bc9c"}, [cumulative
+frequency distributions]{style="color: #18bc9c"}, and
+[rates]{style="color: #18bc9c"}
 
 
+
+### Figures
+
+Sociologists want to understand data because it helps us understand the social world. Raw data,
+like the distributions we have reviewed, are often presented as statistical graphs.
+Graphing data helps people get the overall summary of a large amount of information quickly.  
+  
+Tables are especially good at conveying the details about the relationship between variables. 
+But, graphs help direct attention to the take-away of the relationship, helping people
+focus on the bigger picture rather than the details.
+
+Let's consider some examples. Each of the graphs below could be presented as a table. 
+But, the audience would have to work very hard to get the take-away point of the data from a table.
+
+<br>
+
+A [**bar graph**]{style="color: #18bc9c"} is used:\
+for **nominal** or **ordinal** variables,
+
+to show frequencies or percentages,
+
+using separated rectangles, with height proportional\
+to the frequency or percentage.
+
+
+![](https://raw.githubusercontent.com/jrpepin/Now-You-CanadaKnow/refs/heads/main/figs/transgender.png){width="100%"}
+
+<br>
+
+A [**histogram**]{style="color: #18bc9c"} is used:\
+for **interval-ratio** variables,
+
+to show frequencies or percentages,
+
+using separated rectangles, with height proportional\
+to the frequency or percentage.
+
+![](images/histogram.png){width="100%"}
+
+<br>
+
+A [**line graph**]{style="color: #18bc9c"} is used:\
+for **interval-ratio** variables,
+
+to show frequencies or percentages,
+
+joining by category the frequency or average with a line.
+
+![](https://raw.githubusercontent.com/jrpepin/Now-You-CanadaKnow/refs/heads/main/figs/gini.png){width="100%"}  
+
+<br>
+
+A [**statistical map**]{style="color: #18bc9c"} is used:\
+for **interval-ratio** variables,
+
+to show geographical variations, often in ratios,
+
+using variation in color or hue.  
+
+![](images/map.png){width="100%"}  
 
 Learning Check 02
 ------------------------------------------------------------------------
@@ -759,3 +939,104 @@ topics in this module.
            allow_retry = TRUE
   )
 ```
+
+
+Fifty Toronto couples were surveyed and asked to report the number of children under the age of 18 years in their household. The fifty families reported the following numbers of children: 
+
+    0, 0, 1, 6, 2, 1, 0, 0, 1, 2, 3, 0, 4, 1, 1, 2, 2, 2, 4, 0, 1, 1, 1, 0, 0, 2, 2, 10, 7, 2, 4, 4, 1, 2, 2, 2, 1, 5, 1, 6, 0, 0, 1, 1, 1, 2, 2, 9, 0, 2  
+  
+<br>
+  
+**Create a table that displays the number, percentage, and cumulative percentage of families with each number of children.** 
+You will need to create a table by hand or using a spreadsheet such as GoogleSheets or Excel. [Do NOT collapse any categories.]  
+  
+Then, answer the following questions:  
+
+```{r Q05, echo=FALSE}
+  question("Q05. How many families reported they have 2 children under age 18 in the household?",
+    answer("14", correct = TRUE),
+    answer("28", 
+           message = "This is the percentage of families with 2 children. 'How many' implies 'frequency'."),
+    answer("78", 
+           message = "This is the cumulative percentage of families with 2 children. 'How many' implies 'frequency'."),
+    answer("13", 
+           message ="Make sure you double check your counting."),
+    random_answer_order = TRUE,
+           allow_retry = TRUE
+  )
+```
+  
+    
+```{r Q06, echo=FALSE}
+  question("Q06. What percentage of families reported they have 4 children under age 18 in the household?",
+    answer("8%", correct = TRUE, message ="Well done!"),
+    answer("4%", message = "This is the frequency of families with 4 children. To calulate the percentage use the frequency divided by the total number of families."),
+    answer("2%", message = "Did you read the wrong line of your table?"),
+    answer("88%",  message ="This is the cumulative frequency, the number of families who have 4 or fewer children."),
+    random_answer_order = TRUE,
+           allow_retry = TRUE
+  )
+```
+  
+  
+```{r Q07, echo=FALSE}
+  question("Q07. What is the percentage of families that reported they have 5 children or fewer under age 18 in the household?",
+    answer("90%", correct = TRUE, message = "Bravo!"),
+    answer("1%", message = "This is the frequency of families with 5 children. What about the families with fewer than 5 children?"),
+    answer("2%", message = "This is the percentage of families with 5 children. What about the families with fewer than 5 children?"),
+    answer("88%", message ="Close. But, the question asked for 5 or fewer, so you have to include the families with 5 children."),
+    random_answer_order = TRUE,
+           allow_retry = TRUE
+  )
+```
+
+
+#### Using the table below, answer the following questions.
+  
+_Fill in the missing cells of the table (by hand or using a spreadsheet)._
+
+![](images/table-LC.png "Table: Agreement that men should work and women should stay home with children"){ width=100% }  
+[Source: U.S. General Social Survey, 2024]{style="color: #grey80; font-size: 80%"}
+  
+  
+```{r Q08, echo=FALSE}
+  question("Q08. How many survey respondents 'Agree' men should work and women should stay-at-home?",
+    answer("497", correct = TRUE,  
+           message = "Well done!"),
+    answer("23%", 
+           message = "This is the correct % but the question asked 'how many,' which means you need to calculate the frequency."),
+    answer("173",  
+           message = "This is the frequency for 'Strongly Agree.'"),
+    answer("670", 
+           message = "This is the frequency for 'Strongly Agree' and 'Agree'."),
+    random_answer_order = TRUE,
+           allow_retry = TRUE
+  )
+```  
+  
+```{r Q09, echo=FALSE}
+  question("Q09. How many survey respondents 'Strongly Disagree' men should work and women should stay-at-home?",
+    answer("605", correct = TRUE, 
+           message = "Splendid!"),
+    answer("500", 
+           message = "Did you take an educated guess? Make sure you know how to calculate this."),
+    answer("28%", 
+           message = "This is the correct % but not the frequency."),
+    answer("1513", 
+           message = "This is the frequency for both 'Disagree' and 'Strongly Disagree'."),
+    random_answer_order = TRUE,
+           allow_retry = TRUE
+  )
+```  
+  
+```{r Q10, echo=FALSE}
+  question("Q10. What percentage of people 'Strongly Agree' or 'Agree' men should work and women should stay-at-home?",
+    answer("31%", correct = TRUE, message = "Bravo!"),
+    answer("8", message = "This is the % who 'Strongly Agree,' but doesn't include those who also 'Agree.'"),
+    answer("23%", message = "This is the % who 'Agree,' but doesn't include those who also 'Strongly Agree.'"),
+    answer("42%", message = "This is the % who 'Disagree.'"),
+    random_answer_order = TRUE,
+           allow_retry = TRUE
+  )
+``` 
+  

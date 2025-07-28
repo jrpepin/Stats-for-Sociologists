@@ -3,7 +3,7 @@
 ## Install packages not yet installed & load them
 pacman::p_load(
   tidyverse,
-  gssr, # load U.S. gss data
+#  gssr, # load U.S. gss data
   haven, # work with labeled data
   labelled, # use labels as values
   kableExtra, # pretty tables

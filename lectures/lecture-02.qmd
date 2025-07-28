@@ -1,5 +1,5 @@
 ---
-title: "Lab 02"
+title: "Introduction to Data"
 format:
   revealjs:
     multiplex: false
@@ -38,9 +38,8 @@ source("custom-setup-styles.R")
 
 # Agenda {data-menu-title="Agenda" background-image="images/calendar.png" background-size="100px" background-repeat="repeat"}
 
--   Intro. to data
+-   Data Management I
 -   Frequency Distributions
--   Central Tendency & Variability
 
 # Learning objectives
 
@@ -48,13 +47,10 @@ By the end of the lab, you will be able to ...
 
 -   implement basic variable manipulation
 -   create useful frequency tables
--   produce measures of central tendency and variability
 
 # Code-along 02 {.theme-section}
 
 Download and open [code-along-02.qmd]()
-
-# Intro. to data
 
 ## Packages
 
@@ -106,6 +102,10 @@ gss24 <- gss_get_yr(2024)
 data(gss_dict)
 
 ```
+
+# Data Management I
+
+
 
 
 ## Operators in R
@@ -166,6 +166,20 @@ table(gss24$fefam)
 :::
 
 
+## Variable types
+
+classes (character, factor, numeric)
+
+DICHOTOMOUS (aka binary) A variable with only two categories.
+
+NOMINAL
+A variable made up of categories that cannot be ordered according to rank.
+
+ORDINAL A variable made up of ranked categories, but there is no systematic and measurable numeric difference between the categories.
+
+INTERVAL-RATIO A variable with categories that are rank-ordered and expressed in the same units.
+
+
 ## `dplyr` grammar
 
 What's the advantage of
@@ -184,8 +198,6 @@ gss24 |>
   tb() 
 
 ```
-
-## variable types
 
 ## pipes 
 
@@ -487,112 +499,5 @@ political views
 ctable(gss24$premarsx, gss24$pol3cat, prop = "c", format = "p", useNA = "no") 
 ```
 
-# Central Tendency & Variability {.theme-section}
 
-## Mode
-
-Remember, the **mode** is the category with the greatest frequency (or
-the largest percentage). Let's find it for the `premarsx` variable.
-
-<br>
-
-```{r}
-#| label: mode
-
-freq(gss24$premarsx, report.nas = FALSE) 
-
-```
-
-## Median
-
-We can use the same table we generated before to identify the
-**median**. This time, let's use [dplyr grammar]() to produce the same
-table
-
-Remember, use the cumulative percentage to locate the **50th
-percentile**.
-
-```{r}
-#| label: median
-#| code-line-numbers: "1|2|3"
-
-gss24 |> # <1>
-  freq(premarsx, report.nas = FALSE) |> # <2>
-  tb() # <3> 
-
-```
-
-1.  Use `dplyr` grammar, starting with the name of the df and a pipe
-2.  Use the `freq()` function as usual
-3.  Add the `tb()` function to turn the table into a `tibble`
-
-## Mean
-
-```{r}
-#| label: freq-numeric
-
-freq(gss24$hrs1, report.nas = FALSE, headings = FALSE) 
-
-```
-
-::: aside
-Question 1a. If working, full or part time: how many hours did you work
-last week, at all jobs?
-:::
-
-## Mean
-
-```{r}
-#| label: mean-median
-
-mean(gss24$hrs1, na.rm=TRUE) # <1>
-median(gss24$hrs1, na.rm=TRUE)
-
-```
-
-1.  `na.rm` is a logical evaluating to TRUE or FALSE indicating whether
-    NA values should be stripped before the computation proceeds.
-
-::: aside
-Question 1a. If working, full or part time: how many hours did you work
-last week, at all jobs?
-:::
-
-## `summary()`
-
-<br>
-
-```{r}
-#| label: summary
-
-summary(gss24$hrs1)
-
-```
-
-## Variability: `descr()`
-
-<br>
-
-```{r}
-#| label: desc01
-
-descr(gss24$hrs1)
-
-```
-
-## Variability: `descr()`
-
-```{r}
-#| label: descr02
-#| code-line-numbers: "1|2|3|4"
-
-gss24 |> 
-  descr(hrs1,
-        stats = "common") |> # <1>
-  tb() 
-
-```
-
-1.  Which stats to produce. Either “all” (default), “fivenum”, “common”
-    (see Details), or a selection. See ?descr
 

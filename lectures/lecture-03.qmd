@@ -1,0 +1,164 @@
+---
+title: "Summarizing Data"
+format:
+  revealjs:
+    multiplex: false
+    controls: true
+    theme: [default, custom.scss]
+    highlight-style: atom-one
+    include-in-header:
+    - file: mathjax-color.html
+    slide-number: c
+    math: mathjax
+    code-annotations: hover
+revealjs-plugins:
+  - quiz
+embed-resources: true
+filters:
+    - openlinksinnewpage
+editor: 
+  markdown: 
+    wrap: 72
+execute: 
+  echo: true
+---
+
+```{r echo=FALSE}
+
+#| label: setup
+#| message: false
+#| include: false
+
+## Load packages, custom functions, and styles
+source("custom-setup-styles.R")
+
+# Color in math equations
+# https://egallic.fr/Recherche/aide-memoire/quarto_equation_colors.html#colors-in-equations-with-revealjs
+```
+
+# Agenda {data-menu-title="Agenda" background-image="images/calendar.png" background-size="100px" background-repeat="repeat"}
+
+-   Data Management II
+-   Central Tendency & Measures of Variability
+
+# Learning objectives
+
+By the end of the lab, you will be able to ...
+
+-   produce measures of central tendency and variability
+
+# Code-along 03 {.theme-section}
+
+Download and open [code-along-03.qmd]()
+
+
+
+
+# Central Tendency & Variability {.theme-section}
+
+## Mode
+
+Remember, the **mode** is the category with the greatest frequency (or
+the largest percentage). Let's find it for the `premarsx` variable.
+
+<br>
+
+```{r}
+#| label: mode
+
+freq(gss24$premarsx, report.nas = FALSE) 
+
+```
+
+## Median
+
+We can use the same table we generated before to identify the
+**median**. This time, let's use [dplyr grammar]() to produce the same
+table
+
+Remember, use the cumulative percentage to locate the **50th
+percentile**.
+
+```{r}
+#| label: median
+#| code-line-numbers: "1|2|3"
+
+gss24 |> # <1>
+  freq(premarsx, report.nas = FALSE) |> # <2>
+  tb() # <3> 
+
+```
+
+1.  Use `dplyr` grammar, starting with the name of the df and a pipe
+2.  Use the `freq()` function as usual
+3.  Add the `tb()` function to turn the table into a `tibble`
+
+## Mean
+
+```{r}
+#| label: freq-numeric
+
+freq(gss24$hrs1, report.nas = FALSE, headings = FALSE) 
+
+```
+
+::: aside
+Question 1a. If working, full or part time: how many hours did you work
+last week, at all jobs?
+:::
+
+## Mean
+
+```{r}
+#| label: mean-median
+
+mean(gss24$hrs1, na.rm=TRUE) # <1>
+median(gss24$hrs1, na.rm=TRUE)
+
+```
+
+1.  `na.rm` is a logical evaluating to TRUE or FALSE indicating whether
+    NA values should be stripped before the computation proceeds.
+
+::: aside
+Question 1a. If working, full or part time: how many hours did you work
+last week, at all jobs?
+:::
+
+## `summary()`
+
+<br>
+
+```{r}
+#| label: summary
+
+summary(gss24$hrs1)
+
+```
+
+## Variability: `descr()`
+
+<br>
+
+```{r}
+#| label: desc01
+
+descr(gss24$hrs1)
+
+```
+
+## Variability: `descr()`
+
+```{r}
+#| label: descr02
+#| code-line-numbers: "1|2|3|4"
+
+gss24 |> 
+  descr(hrs1,
+        stats = "common") |> # <1>
+  tb() 
+
+```
+
+1.  Which stats to produce. Either “all” (default), “fivenum”, “common”
+    (see Details), or a selection. See ?descr

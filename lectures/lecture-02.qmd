@@ -103,9 +103,78 @@ data(gss_dict)
 
 ```
 
-# Data Management I
+# Data Management I {.theme-section}
 
+## where I left off:
 
+**dplyr**
+https://jaspertjaden.github.io/course-intro2r/week3.html
+https://statsandr.com/blog/introduction-to-data-manipulation-in-r-with-dplyr/
+
+**operators**
+https://www.geeksforgeeks.org/r-language/r-operators/
+https://www.datacamp.com/doc/r/operators
+https://www.codecademy.com/resources/docs/r/operators
+
+## Coding basics {.smaller}
+
+::::: columns
+
+::: {.column .fragment}
+You can use R to do basic math calculations:
+
+```{r}
+#| label: arithmetic 
+
+1 + 2
+2 * 5
+(1 + 2) / 2
+```
+:::
+
+::: {.column .fragment}
+
+You can create new objects with the assignment operator <-:
+```{r}
+#| label: assignment 
+
+x <- 3 * 4
+x
+```
+:::
+
+:::::
+
+::::: columns
+
+::: {.column .fragment}
+You can (and should) make comments in your code
+```{r}
+#| label: comments 
+
+# R will ignore any text after # for that line
+
+# create vector of primes
+primes <- c(2, 3, 5, 7, 11, 13)
+primes
+
+```
+:::
+
+::: {.column .fragment}
+Object names must start with a letter and can only contain letters, numbers, _, and .
+```{r}
+#| label: object-names 
+#| eval: false
+
+i_use_snake_case
+otherPeopleUseCamelCase
+some.people.use.periods
+And_aFew.People_RENOUNCEconvention
+```
+:::
+
+:::::
 
 
 ## Operators in R
@@ -123,6 +192,73 @@ To indicate "and", "or", and "not":
 Assigning values to various data objects:
 [**<- -> =**]{style="color: #3498DB"}
 
+
+
+## Logical operators {.smaller}
+
+| operator | definition                                |
+|:---------|:------------------------------------------|
+| `<`      | [is less than?]{.fragment}                |
+| `<=`     | [is less than or equal to?]{.fragment}    |
+| `>`      | [is greater than?]{.fragment}             |
+| `>=`     | [is greater than or equal to?]{.fragment} |
+| `==`     | [is exactly equal to?]{.fragment}         |
+| `!=`     | [is not equal to?]{.fragment}             |
+
+: {tbl-colwidths="\[25,75\]"}
+
+
+## Logical operators (cont.) {.smaller}
+
+Generally useful in a `filter()` but will come up in various other places as well...
+
+| operator      | definition                                                            |
+|:--------------|:----------------------------------------------------------------------|
+| `x & y`       | [is x AND y?]{.fragment}                                              |
+| `x \| y`      | [is x OR y?]{.fragment}                                               |
+| `is.na(x)`    | [is x NA?]{.fragment}                                                 |
+| `!is.na(x)`   | [is x not NA?]{.fragment}                                             |
+| `x %in% y`    | [is x in y?]{.fragment}                                               |
+| `!(x %in% y)` | [is x not in y?]{.fragment}                                           |
+| `!x`          | [is not x? (only makes sense if `x` is `TRUE` or `FALSE`)]{.fragment} |
+
+: {tbl-colwidths="\[25,75\]"}
+
+
+
+## Tidying Data
+
+::: {style="color: #18bc9c; font-size: 150%; font-family: 'Shadows Into Light'"}
+Most tasks related to data analysis are not glorious or fancy.  
+:::
+  
+A lot of your time is dedicated to whipping your dataset into the shape that you need to be able to analyze it.  
+
+<br>
+
+This task has different names “data cleaning,” “data management,” “data manipulation,” “data wrangling,” “data transformation.”
+
+::: aside
+Source: [Jasper Dag Tjaden](https://jaspertjaden.github.io/course-intro2r/week3.html)
+:::
+
+## `dplyr` package {.smaller}
+
+The `dplyr` package provides a complete set of functions that help you solve the most common data manipulation challenges such as:  
+
+-    filtering observations based on their values
+-    extracting observations based on their values or positions
+-    sampling observations based on a specific number or fraction of rows
+-    sorting observations based on one or several variables
+-    selecting variables based on their names or positions
+-    renaming variables
+-    adding new variables based on existing ones
+-    summarizing observations or variables to a single descriptive measure
+-    performing any operation by group
+
+::: aside
+Source: [Antoine Soetewey](https://statsandr.com/blog/introduction-to-data-manipulation-in-r-with-dplyr/)
+:::
 
 ## function(argument)
 
@@ -143,6 +279,129 @@ do_that(to_this, to_that, with_those)
 ::: aside
 Source: [Dr. Mine Çetinkaya-Rundel](https://sta199-f24.github.io/slides/01-meet-the-toolkit-slides.html#/functionargument)  
 :::
+
+## The pipe `|>` 
+
+<br>
+
+The pipe operator passes what comes before it into the function that comes after it as the first argument in that function.
+
+```{r}
+sum(1, 2)
+```
+
+<br>
+
+. . . 
+
+```{r}
+1 |> 
+  sum(2)
+```
+
+
+## `dplyr` style  
+
+In data transformation pipelines, always use a  
+
+-   space before `|>` 
+-   line break after `|>` 
+-   indent the next line of code 
+    
+::: {.smaller}
+We'll talk about data visualization pipes later...
+:::
+
+<br>
+    
+::: {.callout-tip icon="false"}
+## {{< fa hat-wizard >}} Heads Up!
+
+|> (native pipe operator) and %>% (magrittr package) behave identically for simple cases.
+:::
+
+
+## `dplyr` grammar
+
+What's the advantage of
+[`dplyr`](https://cran.r-project.org/web/packages/dplyr/readme/README.html)
+grammar? We can sequence data manipulation!
+
+<br>
+
+```{r}
+#| label: descr03
+#| code-line-numbers: "1|2|3|4-5|6"
+
+gss24 |> 
+  filter(!is.na(sex))  |>
+  group_by(sex) |>
+  descr(hrs1,
+        stats = "common") |> # <1>
+  tb() 
+
+```
+
+
+## `dplyr` basics {.smaller}
+
+`dplyr` verbs (functions) will allow you to solve the vast majority of your data manipulation challenges. They are organized into four groups based on what they operate on: rows, columns, groups, or tables.  
+
+<br>
+  
+**The verbs all have in common**:  
+
+1.   The first argument is always a data frame. 
+2.   The subsequent arguments typically describe which columns to operate on using the variable names (without quotes). 
+3.   The output is always a new data frame. 
+ 
+::: aside
+Source: [R for Data Science](https://r4ds.hadley.nz/data-transform.html#the-pipe)
+:::
+
+
+## Rows: `filter()`
+
+
+
+## The pipe, in action
+
+https://sta199-f24.github.io/slides/03-grammar-of-data-transformation-slides.html#/the-pipe-in-action
+
+
+
+
+## Example `tibble` {.smaller}
+
+Let's make a tiny data frame to use as an example:
+
+```{r}
+df <- tibble(x = c(1, 2, 3, 4, 5), y = c("a", "a", "b", "c", "c"))
+df
+```
+
+
+::: {.callout-tip icon="false"}
+## {{< fa hat-wizard >}} Heads Up!
+
+A [`tibble`](https://r4ds.had.co.nz/tibbles.html) is a modern data frame, often used in the tidyverse and ggplot2 packages.
+:::
+
+
+## Example `tibble` {.smaller}
+
+https://sta199-f24.github.io/slides/06-tidying-data-slides.html#/recap-assignment
+
+
+
+
+
+
+
+
+
+
+
 
 ## Variables
 
@@ -180,28 +439,7 @@ ORDINAL A variable made up of ranked categories, but there is no systematic and 
 INTERVAL-RATIO A variable with categories that are rank-ordered and expressed in the same units.
 
 
-## `dplyr` grammar
 
-What's the advantage of
-[`dplyr`](https://cran.r-project.org/web/packages/dplyr/readme/README.html)
-grammar? We can sequence data manipulation!
-
-```{r}
-#| label: descr03
-#| code-line-numbers: "1|2|3|4-5|6"
-
-gss24 |> 
-  filter(!is.na(sex))  |>
-  group_by(sex) |>
-  descr(hrs1,
-        stats = "common") |> # <1>
-  tb() 
-
-```
-
-## pipes 
-
-<https://sta199-f24.github.io/slides/03-grammar-of-data-transformation-slides.html#/the-pipe>
 
 
 # Frequency Distributions {.theme-section}

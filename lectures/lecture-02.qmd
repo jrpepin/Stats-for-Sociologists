@@ -121,7 +121,7 @@ https://www.codecademy.com/resources/docs/r/operators
 ::::: columns
 
 ::: {.column .fragment}
-You can use R to do basic math calculations:
+You can use R to do basic math calculations
 
 ```{r}
 #| label: arithmetic 
@@ -134,9 +134,9 @@ You can use R to do basic math calculations:
 
 ::: {.column .fragment}
 
-You can create new objects with the assignment operator <-:
+You can create new objects with the assignment operator <-
 ```{r}
-#| label: assignment 
+#| label: assign 
 
 x <- 3 * 4
 x
@@ -176,25 +176,69 @@ And_aFew.People_RENOUNCEconvention
 
 :::::
 
+::: aside
+Source: [R for Data Science](https://r4ds.hadley.nz/workflow-basics.html)
+:::
+
+## Coding basics (cont.)
+
+::::: columns
+
+::: {.column .fragment}
+
+```{r}
+#| label: basics
+
+a <- 7 
+b <- 3 
+addition <- a + b 
+subtraction <- a - b 
+multiplication <- a * b 
+division <- a / b 
+exponentiation <- a^2
+```
+
+:::
+
+::: {.column .fragment}
+
+
+```{r}
+#| label: basics-results
+
+a  
+b 
+addition 
+subtraction 
+multiplication 
+division 
+exponentiation 
+```
+
+:::
+
+::::
+
 
 ## Operators in R
 
 [Operators in R](https://www.geeksforgeeks.org/r-language/r-operators/) are 
 symbols directing R to perform various kinds mathematical, logical, and 
-decision operations. A few of the key ones to know before we get started:
+decision operations. A few of the key ones to know before we get started:  
 
-To test equality or inequality:  
-[**==, !=, >, >=, <, <=**]{style="color: #3498DB"}
+<br>
 
-To indicate "and", "or", and "not":  
-[**& | !**]{style="color: #3498DB"}
+**Assignment operators** assign values to variables:  
+[**<-,  ->,  =**]{style="color: #3498DB"}  
 
-Assigning values to various data objects:
-[**<- -> =**]{style="color: #3498DB"}
+**Comparison operators** test equality or inequality:  
+[**==, !=, >, >=, <, <=**]{style="color: #3498DB"}  
+  
+**Logical operators** indicate "and", "or", and "not":  
+[**&,  |,  !**]{style="color: #3498DB"}  
+  
 
-
-
-## Logical operators {.smaller}
+## Comparison operators 
 
 | operator | definition                                |
 |:---------|:------------------------------------------|
@@ -208,35 +252,314 @@ Assigning values to various data objects:
 : {tbl-colwidths="\[25,75\]"}
 
 
-## Logical operators (cont.) {.smaller}
+## Comparison operators (cont) {.smaller}
 
-Generally useful in a `filter()` but will come up in various other places as well...
+::::: columns
+
+::: {.column .fragment}
+```{r}
+#| label: compare
+
+x <- 5 
+y <- 3 
+equal <- x == y 
+not_equal <- x != y 
+less_than <- x < y 
+more_than <- x > y 
+less_than_or_equal_to <- x <= y 
+more_than_or_equal_to <- x >= y
+```
+:::
+
+::: {.column .fragment}
+```{r}
+#| label: compare-output
+
+x 
+y  
+equal 
+not_equal 
+less_than 
+more_than 
+less_than_or_equal_to 
+more_than_or_equal_to 
+```
+:::
+
+:::::
+
+::: aside
+Source: [IONOS editorial team](https://www.ionos.ca/digitalguide/websites/web-development/r-operators/)
+:::
+
+## Logical operators 
 
 | operator      | definition                                                            |
 |:--------------|:----------------------------------------------------------------------|
 | `x & y`       | [is x AND y?]{.fragment}                                              |
-| `x \| y`      | [is x OR y?]{.fragment}                                               |
+| `x | y`       | [is x OR y?]{.fragment}                                               |
 | `is.na(x)`    | [is x NA?]{.fragment}                                                 |
 | `!is.na(x)`   | [is x not NA?]{.fragment}                                             |
-| `x %in% y`    | [is x in y?]{.fragment}                                               |
-| `!(x %in% y)` | [is x not in y?]{.fragment}                                           |
-| `!x`          | [is not x? (only makes sense if `x` is `TRUE` or `FALSE`)]{.fragment} |
 
 : {tbl-colwidths="\[25,75\]"}
 
 
 
-## Tidying Data
+## Comparison operators (cont)
+
+::::: columns
+
+::: {.column .fragment}
+```{r}
+#| label: logical
+
+x <- TRUE 
+y <- FALSE 
+
+and_operator <- x & y 
+or_operator <- x | y 
+not_operator <- !x
+```
+:::
+
+::: {.column .fragment}
+```{r}
+#| label: logical-output
+
+and_operator 
+or_operator
+not_operator
+```
+:::
+
+:::::
+
+::: aside
+Source: [IONOS editorial team](https://www.ionos.ca/digitalguide/websites/web-development/r-operators/)
+:::
+
+
+
+
+
+
+
+## Assignment operators 
+
+Let's make a tiny data frame to use as an example:
+
+```{r}
+#| label: tibble
+
+df <- tibble(x = c(1, 2, 3, 4, 5), y = c("a", "a", "b", "c", "c"))
+df
+```
+
+<br>
+
+::: {.callout-tip icon="false"}
+## {{< fa hat-wizard >}} Heads Up!
+
+A [`tibble`](https://r4ds.had.co.nz/tibbles.html) is a modern data frame, often used in the tidyverse and ggplot2 packages.
+:::
+
+
+## Assignment operators (cont)
+
+Suppose you run the following and **then** you inspect `df`.
+
+::: {style="font-family: 'Shadows Into Light'"}
+Will the `x` variable have values [1, 2, 3, 4, 5]{style="color: #18bc9c"} or [2, 4, 6, 8, 10]{style="color: #F39C12"}?
+:::
+
+::: columns
+::: column
+```{r}
+#| label: no-assignment
+
+df |>
+  mutate(x = x * 2)
+```
+:::
+
+::: {.column .fragment}
+```{r}
+#| label: no-assignment-results
+df
+```
+:::
+:::
+
+. . .
+
+> **Do something and show me**
+
+
+## Assignment operators (cont)
+
+Suppose you run the following and **then** you inspect `df`.
+
+::: {style="font-family: 'Shadows Into Light'"}
+Will the `x` variable have values [1, 2, 3, 4, 5]{style="color: #18bc9c"} or [2, 4, 6, 8, 10]{style="color: #F39C12"}?
+:::
+
+::: columns
+::: column
+```{r}
+#| label: assignment
+
+df <- df |>
+  mutate(x = x * 2)
+```
+:::
+
+::: {.column .fragment}
+```{r}
+#| label: assignment-results
+#| code-line-numbers: "1"
+
+df
+```
+:::
+:::
+
+. . .
+
+> **Do something, save result, overwriting original**
+
+
+## Assignment: Overwriting {.smaller}
+
+::: columns
+::: {.column .fragment width="50%"}
+> **Do something, save result, overwriting original**
+
+```{r}
+#| label: overwrite
+#| code-line-numbers: "5-6|7"
+#| output-location: fragment
+
+df <- tibble(
+  x = c(1, 2, 3, 4, 5), 
+  y = c("a", "a", "b", "c", "c")
+)
+df <- df |>
+  mutate(x = x * 2)
+df
+```
+:::
+
+::: {.column .fragment width="50%"}
+> **Do something, save result, *not* overwriting original**
+
+```{r}
+#| label: no-overwrite
+#| code-line-numbers: "5-6|7"
+#| output-location: fragment
+
+df <- tibble(
+  x = c(1, 2, 3, 4, 5), 
+  y = c("a", "a", "b", "c", "c")
+)
+df_new <- df |>
+  mutate(x = x * 2)
+df_new
+```
+:::
+:::
+
+## Assignment: Overwriting (cont) {.smaller}
+
+::: columns
+::: {.column .fragment width="50%"}
+> **Do something, save result, overwriting original [when you shouldn't]{style="color: #E74C3C"}**
+
+```{r}
+#| code-line-numbers: "5-8"
+
+df <- tibble(
+  x = c(1, 2, 3, 4, 5), 
+  y = c("a", "a", "b", "c", "c")
+)
+df <- df |>
+  group_by(y) |>
+  summarize(mean_x = mean(x))
+df
+```
+:::
+
+::: {.column .fragment width="50%"}
+> **Do something, save result, [not]{style="color: #18BC9C"} overwriting original [when you shouldn't]{style="color: #18BC9C"}**
+
+```{r}
+#| code-line-numbers: "5-8"
+
+df <- tibble(
+  x = c(1, 2, 3, 4, 5), 
+  y = c("a", "a", "b", "c", "c")
+)
+df_summary <- df |>
+  group_by(y) |>
+  summarize(mean_x = mean(x))
+df_summary
+```
+:::
+:::
+
+
+## Assignment: Overwriting (cont) {.smaller}
+
+::: columns
+::: {.column .fragment width="50%"}
+> **Do something, save result, overwriting original**\
+> [***data frame***]{style="color: #18BC9C"}
+
+```{r}
+#| code-line-numbers: "5-6"
+
+df <- tibble(
+  x = c(1, 2, 3, 4, 5), 
+  y = c("a", "a", "b", "c", "c")
+)
+df <- df |>
+  mutate(z = x + 2)
+df
+```
+:::
+
+::: {.column .fragment width="50%"}
+> **Do something, save result, overwriting original**\
+> [***column***]{style="color: #E74C3C"}
+
+```{r}
+#| code-line-numbers: "5-6"
+
+df <- tibble(
+  x = c(1, 2, 3, 4, 5), 
+  y = c("a", "a", "b", "c", "c")
+)
+df <- df |>
+  mutate(x = x + 2)
+df
+```
+:::
+:::
+
+
+
+## Tidying Data {.smaller}
 
 ::: {style="color: #18bc9c; font-size: 150%; font-family: 'Shadows Into Light'"}
 Most tasks related to data analysis are not glorious or fancy.  
 :::
-  
-A lot of your time is dedicated to whipping your dataset into the shape that you need to be able to analyze it.  
 
 <br>
-
-This task has different names “data cleaning,” “data management,” “data manipulation,” “data wrangling,” “data transformation.”
+  
+A lot of time is dedicated to whipping a dataset into the shape needed to be able to analyze it.  
+ 
+<br>
+  
+This task has different names “data cleaning,” “data management,” “data manipulation,” “data wrangling,” “data transformation.”  
 
 ::: aside
 Source: [Jasper Dag Tjaden](https://jaspertjaden.github.io/course-intro2r/week3.html)
@@ -371,26 +694,6 @@ https://sta199-f24.github.io/slides/03-grammar-of-data-transformation-slides.htm
 
 
 
-## Example `tibble` {.smaller}
-
-Let's make a tiny data frame to use as an example:
-
-```{r}
-df <- tibble(x = c(1, 2, 3, 4, 5), y = c("a", "a", "b", "c", "c"))
-df
-```
-
-
-::: {.callout-tip icon="false"}
-## {{< fa hat-wizard >}} Heads Up!
-
-A [`tibble`](https://r4ds.had.co.nz/tibbles.html) is a modern data frame, often used in the tidyverse and ggplot2 packages.
-:::
-
-
-## Example `tibble` {.smaller}
-
-https://sta199-f24.github.io/slides/06-tidying-data-slides.html#/recap-assignment
 
 
 

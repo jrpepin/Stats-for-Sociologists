@@ -45,11 +45,476 @@ source("custom-setup-styles.R")
 
 By the end of the lab, you will be able to ...
 
+-   implement basic variable manipulation
 -   produce measures of central tendency and variability
 
 # Code-along 03 {.theme-section}
 
 Download and open [code-along-03.qmd]()
+
+
+# Data Management II {.theme-section}
+
+## where I left off:
+
+**dplyr**
+https://jaspertjaden.github.io/course-intro2r/week3.html
+https://statsandr.com/blog/introduction-to-data-manipulation-in-r-with-dplyr/
+
+
+
+## Tidying Data {.smaller}
+
+::: {style="color: #18bc9c; font-size: 150%; font-family: 'Shadows Into Light'"}
+Most tasks related to data analysis are not glorious or fancy.  
+:::
+
+<br>
+  
+A lot of time is dedicated to whipping a dataset into the shape needed to be able to analyze it.  
+ 
+<br>
+  
+This task has different names “data cleaning,” “data management,” “data manipulation,” “data wrangling,” “data transformation.”  
+
+::: aside
+Source: [Jasper Dag Tjaden](https://jaspertjaden.github.io/course-intro2r/week3.html)
+:::
+
+## `dplyr` package {.smaller}
+
+The `dplyr` package provides a complete set of functions that help you solve the most common data manipulation challenges such as:  
+
+-    filtering observations based on their values
+-    extracting observations based on their values or positions
+-    sampling observations based on a specific number or fraction of rows
+-    sorting observations based on one or several variables
+-    selecting variables based on their names or positions
+-    renaming variables
+-    adding new variables based on existing ones
+-    summarizing observations or variables to a single descriptive measure
+-    performing any operation by group
+
+::: aside
+Source: [Antoine Soetewey](https://statsandr.com/blog/introduction-to-data-manipulation-in-r-with-dplyr/)
+:::
+
+
+
+## The pipe `|>` 
+
+<br>
+
+The pipe operator passes what comes before it into the function that comes after it as the first argument in that function.
+
+```{r}
+sum(1, 2)
+```
+
+<br>
+
+. . . 
+
+```{r}
+1 |> 
+  sum(2)
+```
+
+
+## `dplyr` style  
+
+In data transformation pipelines, always use a  
+
+-   space before `|>` 
+-   line break after `|>` 
+-   indent the next line of code 
+    
+::: {.smaller}
+We'll talk about data visualization pipes later...
+:::
+
+<br>
+    
+::: {.callout-tip icon="false"}
+## {{< fa hat-wizard >}} Heads Up!
+
+|> (native pipe operator) and %>% (magrittr package) behave identically for simple cases. [More info.]((https://www.tidyverse.org/blog/2023/04/base-vs-magrittr-pipe/))
+:::
+
+
+
+## `dplyr` basics {.smaller}
+
+`dplyr` verbs (functions) will allow you to solve the vast majority of your data manipulation challenges. They are organized into four groups based on what they operate on: rows, columns, groups, or tables.  
+
+<br>
+  
+**The verbs all have in common**:  
+
+1.   The first argument is always a data frame. 
+2.   The subsequent arguments typically describe which columns to operate on using the variable names (without quotes). 
+3.   The output is always a new data frame. 
+ 
+::: aside
+Source: [R for Data Science](https://r4ds.hadley.nz/data-transform.html#the-pipe)
+:::
+
+## `function`(argument)
+
+Functions are (most often) verbs, followed by what they will be applied
+to in parentheses:
+
+<br>
+
+```{r}
+#| eval: false
+#| message: false
+#| label: function
+
+do_this(to_this)
+do_that(to_this, to_that, with_those)
+```
+
+::: aside
+Source: [Dr. Mine Çetinkaya-Rundel](https://sta199-f24.github.io/slides/01-meet-the-toolkit-slides.html#/functionargument)  
+:::
+
+## Rows: `filter()`
+
+## `dplyr` grammar
+
+What's the advantage of
+[`dplyr`](https://cran.r-project.org/web/packages/dplyr/readme/README.html)
+grammar? We can sequence data manipulation!
+
+<br>
+
+```{r}
+#| label: descr03
+#| code-line-numbers: "1|2|3|4-5|6"
+
+gss24 |> 
+  filter(!is.na(sex))  |>
+  group_by(sex) |>
+  descr(hrs1,
+        stats = "common") |> # <1>
+  tb() 
+
+```
+
+
+## The pipe, in action
+
+https://sta199-f24.github.io/slides/03-grammar-of-data-transformation-slides.html#/the-pipe-in-action
+
+
+## Manipulating Variables {.smaller}
+
+For `polviews`, let's combine categories to ease interpretation. This is
+easiest when the levels are numeric.
+
+Let's remind ourselves what the values correspond with each label.
+
+```{r}
+#| label: levels-polviews-01
+
+table(as_factor(gss24$polviews, levels = "both")) # both shows value and label
+```
+
+## Manipulating Variables {.smaller}
+
+```{r}
+#| label: levels-polviews-02
+#| code-line-numbers: "1|2|3-5|6|7-8|9"
+
+
+gss24 <- gss24 |> # <1>
+ mutate(pol3cat = case_when( # <2>
+   polviews >= 1 & polviews <= 3 ~ "Liberal", # <2>
+   polviews == 4 ~ "Moderate", # <2>
+   polviews >= 5 & polviews <= 7 ~ "Conservative", # <2>
+   TRUE ~ NA_character_), # <3>
+  pol3cat = factor(pol3cat, # <4>
+                 levels = c("Liberal", "Moderate", "Conservative")) # <4>
+  )
+
+```
+
+1.  Save over the dataset with an added variable.
+2.  Creates a new variable by assigning labels based on values of
+    `polviews`
+3.  Set everything else to "missing"
+4.  Convert the variable to factor with specified level order
+
+<br>
+
+## Frequency Table {.smaller}
+
+Always double check your work.
+
+<br>
+
+```{r}
+table(gss24$polviews, gss24$pol3cat)
+```
+
+
+
+## Assignment operators 
+
+Let's make a tiny data frame to use as an example:
+
+```{r}
+#| label: tibble
+
+df <- tibble(x = c(1, 2, 3, 4, 5), y = c("a", "a", "b", "c", "c"))
+df
+```
+
+<br>
+
+::: {.callout-tip icon="false"}
+## {{< fa hat-wizard >}} Heads Up!
+
+A [`tibble`](https://r4ds.had.co.nz/tibbles.html) is a modern data frame, often used in the tidyverse and ggplot2 packages.
+:::
+
+
+## Assignment operators (cont)
+
+Suppose you run the following and **then** you inspect `df`.
+
+::: {style="font-family: 'Shadows Into Light'"}
+Will the `x` variable have values [1, 2, 3, 4, 5]{style="color: #18bc9c"} or [2, 4, 6, 8, 10]{style="color: #F39C12"}?
+:::
+
+<br>
+
+::: columns
+::: column
+```{r}
+#| label: no-assignment
+
+df |>
+  mutate(x = x * 2)
+```
+:::
+
+::: {.column .fragment}
+```{r}
+#| label: no-assignment-results
+df
+```
+:::
+:::
+
+. . .
+
+> **Do something and show me**
+
+
+## Assignment operators (cont)
+
+Suppose you run the following and **then** you inspect `df`.
+
+::: {style="font-family: 'Shadows Into Light'"}
+Will the `x` variable have values [1, 2, 3, 4, 5]{style="color: #18bc9c"} or [2, 4, 6, 8, 10]{style="color: #F39C12"}?
+:::
+
+<br>
+
+::: columns
+::: column
+```{r}
+#| label: assignment
+
+df <- df |>
+  mutate(x = x * 2)
+```
+:::
+
+::: {.column .fragment}
+```{r}
+#| label: assignment-results
+#| code-line-numbers: "1"
+
+df
+```
+:::
+:::
+
+. . .
+
+> **Do something, save result, overwriting original**
+
+
+## Assignment: Overwriting {.smaller}
+
+::: columns
+::: {.column .fragment width="50%"}
+> **Do something, save result, overwriting original**
+
+```{r}
+#| label: overwrite
+#| code-line-numbers: "5-6|7"
+#| output-location: fragment
+
+df <- tibble(
+  x = c(1, 2, 3, 4, 5), 
+  y = c("a", "a", "b", "c", "c")
+)
+df <- df |>
+  mutate(x = x * 2)
+df
+```
+:::
+
+::: {.column .fragment width="50%"}
+> **Do something, save result, *not* overwriting original**
+
+```{r}
+#| label: no-overwrite
+#| code-line-numbers: "5-6|7"
+#| output-location: fragment
+
+df <- tibble(
+  x = c(1, 2, 3, 4, 5), 
+  y = c("a", "a", "b", "c", "c")
+)
+df_new <- df |>
+  mutate(x = x * 2)
+df_new
+```
+:::
+:::
+
+## Assignment: Overwriting (cont) {.smaller}
+
+::: columns
+::: {.column width="50%"}
+> **Do something, save result, overwriting original [when you shouldn't]{style="color: #E74C3C"}**
+
+```{r}
+#| code-line-numbers: "5-8"
+
+df <- tibble(
+  x = c(1, 2, 3, 4, 5), 
+  y = c("a", "a", "b", "c", "c")
+)
+df <- df |>
+  group_by(y) |>
+  summarize(mean_x = mean(x))
+df
+```
+:::
+
+::: {.column .fragment width="50%"}
+> **Do something, save result, [not]{style="color: #18BC9C"} overwriting original [when you shouldn't]{style="color: #18BC9C"}**
+
+```{r}
+#| code-line-numbers: "5-8"
+
+df <- tibble(
+  x = c(1, 2, 3, 4, 5), 
+  y = c("a", "a", "b", "c", "c")
+)
+df_summary <- df |>
+  group_by(y) |>
+  summarize(mean_x = mean(x))
+df_summary
+```
+:::
+:::
+
+
+## Assignment: Overwriting (cont) {.smaller}
+
+::: columns
+::: {.column .fragment width="50%"}
+> **Do something, save result, overwriting original**\
+> [***data frame***]{style="color: #18BC9C"}
+
+```{r}
+#| code-line-numbers: "5-6"
+
+df <- tibble(
+  x = c(1, 2, 3, 4, 5), 
+  y = c("a", "a", "b", "c", "c")
+)
+df <- df |>
+  mutate(z = x + 2)
+df
+```
+:::
+
+::: {.column .fragment width="50%"}
+> **Do something, save result, overwriting original**\
+> [***column***]{style="color: #E74C3C"}
+
+```{r}
+#| code-line-numbers: "5-6"
+
+df <- tibble(
+  x = c(1, 2, 3, 4, 5), 
+  y = c("a", "a", "b", "c", "c")
+)
+df <- df |>
+  mutate(x = x + 2)
+df
+```
+:::
+:::
+
+
+
+
+#  {data-menu-title="Think Like a Statistician" background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
+
+Political polarization is high in the U.S. today and attitudes about
+gender and family behavior have been heavily debated.
+
+Using the most recent survey, do more liberals than conservatives think
+sex before marriage is '*not wrong at all*'?
+
+<br>
+
+[{{< fa regular lightbulb >}} **How do we find
+out?**]{style="color: #F39C12; font-size: 175%; font-family: 'Shadows Into Light'"}
+
+## Variable Descriptions
+
+Let's familiarize ourselves with the `premarsx` and `polviews`
+variables.
+
+<br>
+
+In the console, type `?premarsx` and hit enter. The Help pane will show
+you the question text, response options and values.
+
+<br>
+
+Now, do the same for `polviews`.
+
+
+
+##  {.smaller data-menu-title="Your Data Take" background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
+
+::: {style="color: #f39c12; font-size: 250%; font-family: 'Shadows Into Light'"}
+{{< fa regular lightbulb >}} **What's your conclusion to our initial
+research question?**
+:::
+
+<br>
+
+\% who think sex relations before marriage is \_\_\_\_\_\_\_\_\_\_, by
+political views
+
+```{r}
+#| label: crosstab-02-output
+#| echo: false
+
+ctable(gss24$premarsx, gss24$sex, prop = "c", format = "p", useNA = "no") 
+```
 
 
 

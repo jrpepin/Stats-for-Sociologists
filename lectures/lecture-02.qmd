@@ -38,14 +38,16 @@ source("custom-setup-styles.R")
 
 # Agenda {data-menu-title="Agenda" background-image="images/calendar.png" background-size="100px" background-repeat="repeat"}
 
--   Data Management I
+-   Coding Basics
+-   Variable Types
 -   Frequency Distributions
 
 # Learning objectives
 
 By the end of the lab, you will be able to ...
 
--   implement basic variable manipulation
+-   use R to conduct basic calculations/comparisons
+-   identify and convert variable types
 -   create useful frequency tables
 
 # Code-along 02 {.theme-section}
@@ -74,17 +76,18 @@ package.
 
 ```{r}
 #| message: false
-#| label: install
+#| label: summarytools
 #| eval: false
 
 install.packages("summarytools")
+library(summarytools)
 ```
 
-<br>
 
 ```{r}
 #| message: false
-#| label: summarytools
+#| label: load-summary tools
+#| echo: false
 
 library(summarytools)
 ```
@@ -105,18 +108,11 @@ data(gss_dict)
 
 # Data Management I {.theme-section}
 
-## where I left off:
-
-**dplyr**
-https://jaspertjaden.github.io/course-intro2r/week3.html
-https://statsandr.com/blog/introduction-to-data-manipulation-in-r-with-dplyr/
-
-
 ## Coding basics {.smaller}
 
 ::::: columns
 
-::: {.column .fragment}
+::: {.column}
 You can use R to do basic math calculations
 
 ```{r}
@@ -219,7 +215,7 @@ exponentiation
 ## Operators in R
 
 [Operators in R](https://www.geeksforgeeks.org/r-language/r-operators/) are 
-symbols directing R to perform various kinds mathematical, logical, and 
+symbols directing R to perform various kinds of mathematical, logical, and 
 decision operations. A few of the key ones to know before we get started:  
 
 <br>
@@ -335,14 +331,9 @@ Source: [IONOS editorial team](https://www.ionos.ca/digitalguide/websites/web-de
 :::
 
 
-
-
-
-
-
 ## Assignment operators 
 
-Let's make a tiny data frame to use as an example:
+Make a tiny data frame and save it.
 
 ```{r}
 #| label: tibble
@@ -360,583 +351,337 @@ A [`tibble`](https://r4ds.had.co.nz/tibbles.html) is a modern data frame, often 
 :::
 
 
-## Assignment operators (cont)
+# Variable Types {.theme-section}
 
-Suppose you run the following and **then** you inspect `df`.
+## Data types in R
 
-::: {style="font-family: 'Shadows Into Light'"}
-Will the `x` variable have values [1, 2, 3, 4, 5]{style="color: #18bc9c"} or [2, 4, 6, 8, 10]{style="color: #F39C12"}?
-:::
+A property is assigned to objects that determines how generic functions operate with it.  
 
-::: columns
+Common 'types' or 'classes' of variables:  
+
+-   **logical**
+-   **character**
+-   **integer**
+-   **numeric**
+-   [and more, but we won't be focusing on those]{style="font-family: 'Shadows Into Light'"}
+
+
+## Data class + variable type
+
+
+![](images/02/var_type.png){width="100%"}
+
+## `class()` {.smaller}
+
+::::: columns
 ::: column
-```{r}
-#| label: no-assignment
-
-df |>
-  mutate(x = x * 2)
-```
-:::
-
-::: {.column .fragment}
-```{r}
-#| label: no-assignment-results
-df
-```
-:::
-:::
-
-. . .
-
-> **Do something and show me**
-
-
-## Assignment operators (cont)
-
-Suppose you run the following and **then** you inspect `df`.
-
-::: {style="font-family: 'Shadows Into Light'"}
-Will the `x` variable have values [1, 2, 3, 4, 5]{style="color: #18bc9c"} or [2, 4, 6, 8, 10]{style="color: #F39C12"}?
-:::
-
-::: columns
-::: column
-```{r}
-#| label: assignment
-
-df <- df |>
-  mutate(x = x * 2)
-```
-:::
-
-::: {.column .fragment}
-```{r}
-#| label: assignment-results
-#| code-line-numbers: "1"
-
-df
-```
-:::
-:::
-
-. . .
-
-> **Do something, save result, overwriting original**
-
-
-## Assignment: Overwriting {.smaller}
-
-::: columns
-::: {.column .fragment width="50%"}
-> **Do something, save result, overwriting original**
-
-```{r}
-#| label: overwrite
-#| code-line-numbers: "5-6|7"
-#| output-location: fragment
-
-df <- tibble(
-  x = c(1, 2, 3, 4, 5), 
-  y = c("a", "a", "b", "c", "c")
-)
-df <- df |>
-  mutate(x = x * 2)
-df
-```
-:::
-
-::: {.column .fragment width="50%"}
-> **Do something, save result, *not* overwriting original**
-
-```{r}
-#| label: no-overwrite
-#| code-line-numbers: "5-6|7"
-#| output-location: fragment
-
-df <- tibble(
-  x = c(1, 2, 3, 4, 5), 
-  y = c("a", "a", "b", "c", "c")
-)
-df_new <- df |>
-  mutate(x = x * 2)
-df_new
-```
-:::
-:::
-
-## Assignment: Overwriting (cont) {.smaller}
-
-::: columns
-::: {.column .fragment width="50%"}
-> **Do something, save result, overwriting original [when you shouldn't]{style="color: #E74C3C"}**
-
-```{r}
-#| code-line-numbers: "5-8"
-
-df <- tibble(
-  x = c(1, 2, 3, 4, 5), 
-  y = c("a", "a", "b", "c", "c")
-)
-df <- df |>
-  group_by(y) |>
-  summarize(mean_x = mean(x))
-df
-```
-:::
-
-::: {.column .fragment width="50%"}
-> **Do something, save result, [not]{style="color: #18BC9C"} overwriting original [when you shouldn't]{style="color: #18BC9C"}**
-
-```{r}
-#| code-line-numbers: "5-8"
-
-df <- tibble(
-  x = c(1, 2, 3, 4, 5), 
-  y = c("a", "a", "b", "c", "c")
-)
-df_summary <- df |>
-  group_by(y) |>
-  summarize(mean_x = mean(x))
-df_summary
-```
-:::
-:::
-
-
-## Assignment: Overwriting (cont) {.smaller}
-
-::: columns
-::: {.column .fragment width="50%"}
-> **Do something, save result, overwriting original**\
-> [***data frame***]{style="color: #18BC9C"}
-
-```{r}
-#| code-line-numbers: "5-6"
-
-df <- tibble(
-  x = c(1, 2, 3, 4, 5), 
-  y = c("a", "a", "b", "c", "c")
-)
-df <- df |>
-  mutate(z = x + 2)
-df
-```
-:::
-
-::: {.column .fragment width="50%"}
-> **Do something, save result, overwriting original**\
-> [***column***]{style="color: #E74C3C"}
-
-```{r}
-#| code-line-numbers: "5-6"
-
-df <- tibble(
-  x = c(1, 2, 3, 4, 5), 
-  y = c("a", "a", "b", "c", "c")
-)
-df <- df |>
-  mutate(x = x + 2)
-df
-```
-:::
-:::
-
-
-
-## Tidying Data {.smaller}
-
-::: {style="color: #18bc9c; font-size: 150%; font-family: 'Shadows Into Light'"}
-Most tasks related to data analysis are not glorious or fancy.  
-:::
+**logical** - Boolean values `TRUE` and `FALSE`
 
 <br>
-  
-A lot of time is dedicated to whipping a dataset into the shape needed to be able to analyze it.  
+
+```{r}
+class(TRUE)
+```
+:::
+
+::: {.column .fragment}
+**character** - character strings
+
+<br> <br>
+
+```{r}
+class("Sociology")
+```
+:::
+:::::
+
+
+::::: columns
+::: {.column .fragment}
+
+<br>
+
+**Integer** - numeric data without decimals  
+(indicated with an `L`).
+
+```{r}
+class(2L)
+```
+:::
+
+::: {.column .fragment}
+
+<br>
+
+**numeric** - default type if values are numbers or if the values contain decimals.
+```{r}
+class(2.5)
+```
+:::
+:::::
+
+
+## Factor {.smaller}
+
+**factors** consist of character data with a fixed and known set of possible values 
+
+```{r}
+#| label: factors01
+
+opinion <- factor(c("like", "dislike", "dislike", "hate", "dislike", "hate"))
+class(opinion)
+
+# By default, the levels are sorted alphabetically. 
+levels(opinion) 
+
+```
  
 <br>
-  
-This task has different names “data cleaning,” “data management,” “data manipulation,” “data wrangling,” “data transformation.”  
 
-::: aside
-Source: [Jasper Dag Tjaden](https://jaspertjaden.github.io/course-intro2r/week3.html)
-:::
-
-## `dplyr` package {.smaller}
-
-The `dplyr` package provides a complete set of functions that help you solve the most common data manipulation challenges such as:  
-
--    filtering observations based on their values
--    extracting observations based on their values or positions
--    sampling observations based on a specific number or fraction of rows
--    sorting observations based on one or several variables
--    selecting variables based on their names or positions
--    renaming variables
--    adding new variables based on existing ones
--    summarizing observations or variables to a single descriptive measure
--    performing any operation by group
-
-::: aside
-Source: [Antoine Soetewey](https://statsandr.com/blog/introduction-to-data-manipulation-in-r-with-dplyr/)
-:::
-
-## function(argument)
-
-Functions are (most often) verbs, followed by what they will be applied
-to in parentheses:
-
-<br>
+::: {.fragment}
 
 ```{r}
-#| eval: false
-#| message: false
-#| label: function
+#| label: factors02
 
-do_this(to_this)
-do_that(to_this, to_that, with_those)
+# Reorder the levels with the argument `levels` in the `factor()` function
+opinion <- factor(opinion, levels = c("hate", "dislike", "like")) 
+levels(opinion)
 ```
 
-::: aside
-Source: [Dr. Mine Çetinkaya-Rundel](https://sta199-f24.github.io/slides/01-meet-the-toolkit-slides.html#/functionargument)  
 :::
-
-## The pipe `|>` 
 
 <br>
 
-The pipe operator passes what comes before it into the function that comes after it as the first argument in that function.
+::: {.fragment}
 
 ```{r}
-sum(1, 2)
+#| label: factors03
+
+# If the order has meaning (like rankings), you can make it an ordered factor
+opinion <- factor(opinion, levels = c("hate", "dislike", "like"), ordered = TRUE) 
+levels(opinion)
+```
+
+:::
+
+## Converting between types {.smaller}
+
+Use a function: `as.logical()`, `as.numeric()`, `as.integer()`, or `as.character()`.
+
+<br>
+
+::::: columns
+::: column
+Create a numeric variable.
+```{r}
+#| label: convert_01
+
+x <- 1:3
+x
+class(x)
 ```
 
 <br>
 
-. . . 
-
-```{r}
-1 |> 
-  sum(2)
-```
-
-
-## `dplyr` style  
-
-In data transformation pipelines, always use a  
-
--   space before `|>` 
--   line break after `|>` 
--   indent the next line of code 
-    
-::: {.smaller}
-We'll talk about data visualization pipes later...
-:::
-
-<br>
-    
 ::: {.callout-tip icon="false"}
 ## {{< fa hat-wizard >}} Heads Up!
-
-|> (native pipe operator) and %>% (magrittr package) behave identically for simple cases.
+The : (colon) means 'through.' 
 :::
 
+:::
 
-## `dplyr` grammar
-
-What's the advantage of
-[`dplyr`](https://cran.r-project.org/web/packages/dplyr/readme/README.html)
-grammar? We can sequence data manipulation!
-
-<br>
-
+::: {.column .fragment}
+Change it to a character variable. 
 ```{r}
-#| label: descr03
-#| code-line-numbers: "1|2|3|4-5|6"
+#| label: convert_02
 
-gss24 |> 
-  filter(!is.na(sex))  |>
-  group_by(sex) |>
-  descr(hrs1,
-        stats = "common") |> # <1>
-  tb() 
-
+y <- as.character(x)
+y
+class(y)
 ```
 
-
-## `dplyr` basics {.smaller}
-
-`dplyr` verbs (functions) will allow you to solve the vast majority of your data manipulation challenges. They are organized into four groups based on what they operate on: rows, columns, groups, or tables.  
-
 <br>
-  
-**The verbs all have in common**:  
 
-1.   The first argument is always a data frame. 
-2.   The subsequent arguments typically describe which columns to operate on using the variable names (without quotes). 
-3.   The output is always a new data frame. 
- 
-::: aside
-Source: [R for Data Science](https://r4ds.hadley.nz/data-transform.html#the-pipe)
+::: {.callout-tip icon="false"}
+## {{< fa hat-wizard >}} Heads Up!
+Notice the quotation marks around the values.
 :::
 
-
-## Rows: `filter()`
-
-
-
-## The pipe, in action
-
-https://sta199-f24.github.io/slides/03-grammar-of-data-transformation-slides.html#/the-pipe-in-action
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-## Variables
-
-Remember, you can access the variables (i.e., columns) using the `$` operator, 
-as shown using the `table()` function.
-
-<br>
-
-The variable names are case sensitive. 
-In this dataset, all variables are lowercase.  
-
-  
-```{r}
-#| label: fefam-table
-
-table(gss24$fefam)
-```
-
-::: {style="color: #E74C3C; font-size: 90%; font-family: 'Shadows Into Light'"}
-195 respondents were coded as `2` on this variable. What does that mean? 
 :::
+:::::
 
+## Haven labelled
 
-## Variable types
-
-classes (character, factor, numeric)
-
-DICHOTOMOUS (aka binary) A variable with only two categories.
-
-NOMINAL
-A variable made up of categories that cannot be ordered according to rank.
-
-ORDINAL A variable made up of ranked categories, but there is no systematic and measurable numeric difference between the categories.
-
-INTERVAL-RATIO A variable with categories that are rank-ordered and expressed in the same units.
-
-
-
-
-
-# Frequency Distributions {.theme-section}
-
-##  {data-menu-title="Think Like a Statistician" background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
-
-Political polarization is high in the U.S. today and attitudes about
-gender and family behavior have been heavily debated.
-
-Using the most recent survey, do more liberals than conservatives think
-sex before marriage is '*not wrong at all*'?
+When you import data into R from software like SPSS, Stata, or SAS, 
+you might notice a special class called `haven_labelled`. 
 
 <br>
-
-[{{< fa regular lightbulb >}} **How do we find
-out?**]{style="color: #F39C12; font-size: 175%; font-family: 'Shadows Into Light'"}
-
-
-## Variable Descriptions
-
-Let's familiarize ourselves with the `premarsx` and `polviews`
-variables.
-
-<br>
-
-In the console, type `?premarsx` and hit enter. The Help pane will show
-you the question text, response options and values.
-
-<br>
-
-Now, do the same for `polviews`.
-
-## Table
-
-Run this code to see the frequency table for the `premarsx` variable.
-Then, add a line below to also see a table for the `polviews` variable.
 
 ```{r}
-#| label: table-premarsx
+#| label: labelled
+#| output-location: column-fragment
 
+class(gss24$premarsx)
 table(gss24$premarsx)
 ```
 
-. . .
+## Haven labelled cont.
 
-<br>
-
-```{r}
-#| label: table-polviews
-
-table(gss24$polviews)
-```
-
-## Cross-tabs
-
-The table command also let's you create a table with two variables.
+It makes data easier to understand without needing a separate codebook.
 
 ```{r}
-#| label: crosstab
-
-# 1st variable is the rows, 2nd variable is the columns.
-table(gss24$premarsx, gss24$polviews)
-
-```
-
-
-## Labels
-
-Use
-[`haven::as_factor`](https://haven.tidyverse.org/reference/as_factor.html)
-to see the value labels instead of the value numbers. Then, do the same
-for `polviews`.
-
-```{r}
-#| label: label.01-premarsx
-
-table(as_factor(gss24$premarsx))
-```
-
-## Labels {.scrollable}
-
-```{r}
-#| label: label.01-polviews
-
-table(as_factor(gss24$polviews))
-```
-
-## Better Labels {.smaller}
-
-Let's clean up the levels for `premarsx`.
-
-```{r}
-#| label: label.02-premarsx
-#| code-line-numbers: "1|2|3"
-#| output-location: fragment
-
-gss24$premarsx <- zap_missing(gss24$premarsx) # <1>
-gss24$premarsx <- as_factor(gss24$premarsx) # <2>
-table(gss24$premarsx) 
-```
-
-1.  Get rid of all the 'missing' levels (just missing)
-2.  Apply the labels instead of numeric values
-
-## Better Labels cont.
-
-Let's get rid of the empty levels in `premarsx`.
-
-```{r}
-#| label: label.03-premarsx
+#| label: value_labels
 #| code-line-numbers: "1|2"
-#| output-location: fragment
+
+var_label(gss24$premarsx) # <1>
+print_labels(gss24$premarsx) # <2>
+
+```
+
+1.   A description of the variable
+2.   View the label attached to each numeric value
+
+
+::: notes
+The column itself might have a variable label (a description like "Gender of respondent")
+
+The column contains values (numbers)
+
+Each value may have a label attached (like "Male" for 1, "Female" for 2)
+
+:::
+
+## Haven labelled cont.
+
+You can use
+[`as_factor`](https://haven.tidyverse.org/reference/as_factor.html)
+to see the value labels of the variable `premarsx`. 
+
+```{r}
+#| label: label02_premarsx
+table(as_factor(gss24$premarsx), useNA = "ifany")
+
+```
+
+
+## Convert labels to factors {.smaller}
+
+::::: columns
+
+::: {.column}
+
+1. Get rid of all the 'missing' (NA) levels
+
+```{r}
+#| label: label03_premarsx
+
+gss24$premarsx <- zap_missing(gss24$premarsx) 
+table(as_factor(gss24$premarsx), useNA = "ifany")
+```
+
+:::
+
+::: {.column .fragment}
+
+2. Apply the labels instead of numeric values
+```{r}
+#| label: label04_premarsx
+
+gss24$premarsx <- as_factor(gss24$premarsx) # replace the values with labels
+table(gss24$premarsx, useNA = "ifany") # notice we didn't need to wrap the variable in as_factor
+```
+:::
+
+:::::
+
+
+
+::::: columns
+
+::: {.column .fragment}
+3. Get rid of the empty levels in `premarsx`.
+
+```{r}
+#| label: label05_premarsx
 
 gss24$premarsx <- droplevels(gss24$premarsx)
 table(gss24$premarsx)
 ```
-
-## Manipulating Variables
-
-For `polviews`, let's combine categories to ease interpretation. This is
-easiest when the levels are numeric.
-
-Let's remind ourselves what the values correspond with each label.
-
-```{r}
-#| label: levels-polviews-01
-
-table(as_factor(gss24$polviews, levels = "both")) # both shows value and label
-```
-
-## Manipulating Variables {.smaller}
-
-```{r}
-#| label: levels-polviews-02
-#| code-line-numbers: "1|2|3-5|6|7-8|9"
-
-
-gss24 <- gss24 |> # <1>
- mutate(pol3cat = case_when( # <2>
-   polviews >= 1 & polviews <= 3 ~ "Liberal", # <2>
-   polviews == 4 ~ "Moderate", # <2>
-   polviews >= 5 & polviews <= 7 ~ "Conservative", # <2>
-   TRUE ~ NA_character_), # <3>
-  pol3cat = factor(pol3cat, # <4>
-                 levels = c("Liberal", "Moderate", "Conservative")) # <4>
-  )
-
-```
-
-1.  Save over the dataset with an added variable.
-2.  Creates a new variable by assigning labels based on values of
-    `polviews`
-3.  Set everything else to "missing"
-4.  Convert the variable to factor with specified level order
-
-<br>
-
-::: {.callout-tip icon="false"}
-## {{< fa pen-to-square >}} [Pipes](https://www.tidyverse.org/blog/2023/04/base-vs-magrittr-pipe/)
-
-can be written as `|>` or `%>%`
 :::
 
-## Frequency Table {.smaller}
+::: {.column .fragment}
+<br>
 
-Always double check your work.
+[**Now do the same for the `sex` variable.**]{style="color: #18BC9C; font-size: 150%; font-family: 'Shadows Into Light'"}
+
+:::
+
+:::::
+
+
+## Convert labels to factors cont. 
+
+```{r}
+#| label: labels_sex
+
+gss24$sex <- zap_missing(gss24$sex) # <1>
+gss24$sex <- as_factor(gss24$sex)   # <2>
+gss24$sex <- droplevels(gss24$sex)  # <3>
+
+table(gss24$sex)
+```
+
+
+1. Get rid of all the 'missing' (NA) levels.
+2. Replace the values with labels.
+3. Get rid of the empty levels (if any).
+
+
+# Look at variables {.theme-section}
+
+## Relative Frequency Table 
+
+Let’s try functions from the `summarytools` package to get univariate (1 variable) and bivariate (2 variables) descriptive statistics.
+
+<br>
+
+Make a frequency table of the variable `sex`. Then, do the same for `premarsx`.
+
+```{r}
+#| label: freq01
+#| eval: false
+
+freq(gss24$sex) 
+freq(gss24$premarsx) 
+
+```
+
+## Relative Frequency Table
+
+```{r}
+#| label: freq01a
+#| echo: false
+
+freq(gss24$sex) 
+
+```
 
 <br>
 
 ```{r}
-table(gss24$polviews, gss24$pol3cat)
-```
-
-## Relative Frequency Table {.smaller}
-
-Make a frequency table. One of `summarytools` main purposes is to help
-cleaning and preparing data for further analysis. Pay attention to the
-missing values. Then, do the same for `premarsx`.
-
-<br>
-
-```{r}
-#| label: freq.01-pol3cat
-
-freq(gss24$pol3cat) 
-
-```
-
-## Relative Frequency Table {.smaller}
-
-```{r}
-#| label: freq.01-premarsx
+#| label: freq01b
+#| echo: false
 
 freq(gss24$premarsx) 
 
 ```
 
-## Pretty Tables
+## Pretty Tables 
+
+One of `summarytools` main purposes is to help clean and prepare data for further analysis. 
+But sometimes we don't care about the missing values. 
+
+<br>
 
 Using `report.nas = FALSE` suppresses the missing data.\
 The `headings = FALSE` parameter suppresses the heading section. Do the
@@ -945,18 +690,83 @@ same for `premarsx`.
 <br>
 
 ```{r}
-#| label: freq.02-pol3cat
+#| label: freq02
+#| eval: false
 
-freq(gss24$pol3cat, report.nas = FALSE, headings = FALSE) 
+freq(gss24$sex, report.nas = FALSE, headings = FALSE) 
+freq(gss24$premarsx, report.nas = FALSE, headings = FALSE) 
 ```
 
-## Pretty Tables
+## Pretty Tables 
 
 ```{r}
-#| label: freq.02-premarsx
+#| label: freq02a
+#| echo: false
+
+freq(gss24$sex, report.nas = FALSE, headings = FALSE) 
+```
+
+<br>
+
+```{r}
+#| label: freq02b
+#| echo: false
 
 freq(gss24$premarsx, report.nas = FALSE, headings = FALSE) 
 ```
+
+
+## Cross-tabs
+
+We've been using the `table()` function with one variable at a time, but it also let's you create a frequency table (**crosstab**) with two variables.
+
+<br>
+
+```{r}
+#| label: crosstab01
+
+# 1st variable is the rows, 2nd variable is the columns.
+table(gss24$premarsx, gss24$sex)
+
+```
+
+<br>
+
+[But it's missing the **column** percentages...]{style="color: #F39C12; font-family: 'Shadows Into Light'"}
+
+## Relative frequency by group {.smaller}
+
+To run `freq()` by group, pair it with the `stby()` function. 
+
+```{r}
+#| label: crosstab02
+
+stby(gss24$premarsx, gss24$sex, freq)
+```
+
+<br> 
+
+[This is hard to read and we don't need the cumulative frequencies.]{style="color: #F39C12; font-family: 'Shadows Into Light'"}
+
+
+## Pretty Cross-tabs
+
+```{r}
+#| label: crosstab03
+#| code-line-numbers: "1|2|3|4"
+#| output-location: fragment
+
+ctable(gss24$premarsx, gss24$sex, # <1>
+       prop = "c", # <2>
+       format = "p", # <3>
+       useNA = "no")  # <4>
+```
+
+1.  Change from `table()` to `ctable()`.
+2.  The "c" gives column %; "r" would give row %.
+3.  This adds the % symbols to the table.
+4.  Exclude the missing levels from the table.
+
 
 ##  {.quiz-question data-menu-title="Knowledge Check" background-image="images/clipboard-question.png" background-size="100px" background-repeat="repeat"}
 
@@ -965,76 +775,18 @@ freq(gss24$premarsx, report.nas = FALSE, headings = FALSE)
 respondents believe sex before marriage is 'almost always wrong'?
 :::
 
--   [5.77]{.correct data-explanation="💯 Correct!"}
--   [16.88]{data-explanation="😲 This is the % who think premartial sex is 'always wrong'."}
--   [22.65]{data-explanation="😲 This is the % who think premarital sex is 'always' OR 'almost always wrong'."}
--   [12.20]{data-explanation="😲 This is % who think premarital sex is 'wrong only sometimes'."}
+-   [5.7]{.correct data-explanation="💯 Correct!"}
+-   [16.8]{data-explanation="😲 This is the % who think premartial sex is 'always wrong'."}
+-   [121]{data-explanation="😲 This is the **number** of respondents who think 'almost always wrong'."}
+-   [12.2]{data-explanation="😲 This is % who think premarital sex is 'wrong only sometimes'."}
 
 ##  {.quiz-question data-menu-title="Knowledge Check" background-image="images/clipboard-question.png" background-size="100px" background-repeat="repeat"}
 
 ::: {style="color: #F39C12"}
-{{< fa clipboard-question >}} Based on your table, what percentage of
-respondents believe sex before marriage is 'always' or 'almost always
-wrong'?
+{{< fa clipboard-question >}} Based on your table, do a greater percentage of men or women think sex before marriage is 'not wrong at all'?
 :::
 
--   [22.65]{.correct data-explanation="💯 Correct!"}
--   [16.88]{data-explanation="😲 This is the % who think premartial sex is 'always wrong'."}
--   [5.77]{data-explanation="😲 This is the % who think premarital sex is 'almost always wrong'."}
--   [12.20]{data-explanation="😲 This is % who think premarital sex is 'wrong only sometimes'."}
-
-## Cross-tab
-
-The `table()` function gives us the frequencies.
-
-<br>
-
-```{r}
-#| label: crosstab-01
-
-table(gss24$premarsx, gss24$pol3cat)
-```
-
-<br>
-
-We want to add the **column** percentages...
-
-## Relative Frequency Cross-tab
-
-```{r}
-#| label: crosstab-02
-#| code-line-numbers: "1|2|3|4"
-#| eval: false
-
-ctable(gss24$premarsx, gss24$pol3cat, # <1>
-       prop = "c", # <2>
-       format = "p", # <3>
-       useNA = "no") # <4>
-```
-
-1.  Change from `table()` to `ctable()`.
-2.  The "c" gives column %; "r" would give row %.
-3.  This adds the % symbols to the table.
-4.  Exclude the missing levels from the table.
-
-##  {.smaller data-menu-title="Your Data Take" background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
-
-::: {style="color: #f39c12; font-size: 250%; font-family: 'Shadows Into Light'"}
-{{< fa regular lightbulb >}} **What's your conclusion to our initial
-research question?**
-:::
-
-<br>
-
-\% who think sex relations before marriage is \_\_\_\_\_\_\_\_\_\_, by
-political views
-
-```{r}
-#| label: crosstab-02-output
-#| echo: false
-
-ctable(gss24$premarsx, gss24$pol3cat, prop = "c", format = "p", useNA = "no") 
-```
-
+-   [Men]{.correct data-explanation="💯 Correct!"}
+-   [Women]{data-explanation="😲 66% is greater than 64.6%"}
 
 

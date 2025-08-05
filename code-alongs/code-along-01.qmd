@@ -1,5 +1,9 @@
 ---
-title: "Code-Along 01"
+title: "Code-along 01"
+author: "Your Name Goes Here"
+editor: visual
+execute:
+  error: true
 format: pdf
 ---
 
@@ -16,38 +20,26 @@ We'll use the following packages:
 
 Let's first install the two packages that are available on CRAN.
 
-Copy and paste the following code into your Console pane. Then hit enter.
+Copy and paste the following code into your Console pane. Then hit
+enter.
 
-```{r}
-#| eval: false
-#| label: install-here
-
-install.packages("here")
-```
+`install.packages("here")`
 
 Then, do the same to install the tidyverse package.
 
-```{r}
-#| eval: false
-#| label: install-tidyverse
-#| 
-install.packages("tidyverse")
-```
+`install.packages("tidyverse")`
 
 ## Install `gssr()` and `gssrdoc()`
 
-```{r}
-#| eval: false
-#| label: install-gss
+Install `gssr` from `ropensci` universe. Copy and paste the following
+code into your Console pane. Then hit enter.
 
-# Install 'gssr' from 'ropensci' universe
-install.packages('gssr', repos =
-  c('https://kjhealy.r-universe.dev', 'https://cloud.r-project.org'))
+`install.packages('gssr', repos = c('https://kjhealy.r-universe.dev', 'https://cloud.r-project.org'))`
 
-# Also recommended: install 'gssrdoc' as well
-install.packages('gssrdoc', repos =
-  c('https://kjhealy.r-universe.dev', 'https://cloud.r-project.org'))
-```
+Also install `gssrdoc.`Copy and paste the following code into your
+Console pane. Then hit enter.
+
+`install.packages('gssrdoc', repos = c('https://kjhealy.r-universe.dev', 'https://cloud.r-project.org'))`
 
 ## Load the packages
 
@@ -84,7 +76,8 @@ here()
 
 ```
 
-Next, we'll create folders within our project using `here()` and `dir.create()`
+Next, we'll create folders within our project using `here()` and
+`dir.create()`
 
 ```{r}
 #| label: base-folders
@@ -108,7 +101,8 @@ dir.create(here("project", "outputs"), recursive = TRUE)
 
 ```
 
-Check your work by reporting a list of folders and or files in the R-project folders and sub-folder.
+Check your work by reporting a list of folders and or files in the
+R-project folders and sub-folder.
 
 ```{r}
 #| label: list-files
@@ -125,11 +119,14 @@ list.files(path = here("project"))
 
 Save this code-along in your newly created "code-along" sub-folder.
 
-There's no command in the R console to save scripts or Quarto files — you use the editor's [File]{style="color: #3498DB"} \> [Save As]{style="color: #3498DB"} or Ctrl+S.
+There's no command in the R console to save scripts or Quarto files —
+you use the editor's [File]{style="color: #3498DB"} \> [Save
+As]{style="color: #3498DB"} or Ctrl+S.
 
 ## Meet your data
 
-We're going to use data from the [U.S. General Social Survey (GSS)](https://gss.norc.org/us/en/gss/about-the-gss.html).
+We're going to use data from the [U.S. General Social Survey
+(GSS)](https://gss.norc.org/us/en/gss/about-the-gss.html).
 
 Let's load your data.
 
@@ -144,7 +141,12 @@ gss_all
 
 ```
 
-A “tibble” is another name for “tidy dataset,” meaning that the data is organized in structured, clear rows and columns. “(75,699 × 6,867)” means the dataset contains 75,699 rows and 6,867 columns. Commonly, in social sciences, rows are referred to as “observations” and columns as “variables.” In our case, there are 75,699 observations (e.g., respondents) and 6,867 variables.
+A “tibble” is another name for “tidy dataset,” meaning that the data is
+organized in structured, clear rows and columns. “(75,699 × 6,867)”
+means the dataset contains 75,699 rows and 6,867 columns. In social
+sciences, rows are commonly referred to as “observations” and columns as
+“variables.” In our case, there are 75,699 observations (e.g.,
+respondents) and 6,867 variables.
 
 You can also load the GSS data for a specific survey year.
 
@@ -159,15 +161,20 @@ head(gss24)
 
 ```
 
-With your mouse, go to the environment panel (upper-right) and click on the `gss24` object. It pops up and you can browse through it.
+With your mouse, go to the environment panel (upper-right) and click on
+the `gss24` object. It pops up and you can browse through it.
 
-This is often a good idea to get a first feel for the data, but only if your dataset is relatively small.
+This is often a good idea to get a first feel for the data, but only if
+your dataset is relatively small.
 
-The [GSS documentation](https://gss.norc.org/us/en/gss/get-documentation.html) is available online in .pdf form.
+The [GSS
+documentation](https://gss.norc.org/us/en/gss/get-documentation.html) is
+also available online in .pdf form.
 
 The .pdfs will be useful for general overviews.
 
-For specific variable information, it will be helpful to use the documentation you'll load into RStudio.
+For specific variable information, it will be helpful to use the
+documentation you'll load into RStudio.
 
 ```{r}
 #| label: gsscodebook
@@ -177,7 +184,8 @@ data(gss_dict)
 
 ```
 
-To see the variables available in the dataset, use the `names()` command. This command is best to use with smaller datasets.
+To see the variables available in the dataset, use the `names()`
+command. This command is best to use with smaller datasets.
 
 ```{r}
 #| label: names
@@ -188,7 +196,8 @@ names(gss_all)
 
 ## Variables
 
-For information about a specific GSS variable, type `?varname` at the console.
+For information about a specific GSS variable, type `?varname` at the
+console.
 
 In the output pane, the Help tab will show the variable documentation.
 
@@ -207,7 +216,8 @@ Variable name: meovrwrk\
 Variable label: Men hurt family when focus on work too much\
 1994 was the first year of the survey.\
 695 respondents agreed with the statement.\
-iap -- missing. Values: the numeric and response category key (1 = strongly agree)
+iap -- missing. Values: the numeric and response category key (1 =
+strongly agree)
 
 We often want to know which years a question was asked.
 
@@ -220,13 +230,16 @@ gss_which_years(gss_all, meovrwrk)
 
 ```
 
-If run in the console, to see all rows, wrap the code in the `print()` command:
+If run in the console, to see all rows, wrap the code in the `print()`
+command:
 
 `print(gss_which_years(gss_all, meovrwrk), n = 40)`
 
-You can access the variables (i.e., columns) using the `$` operator, as shown using the table() function
+You can access the variables (i.e., columns) using the `$` operator, as
+shown using the table() function
 
-(NOTE: The variable names are case sensitive. In this dataset, all variables are lowercase.)
+(NOTE: The variable names are case sensitive. In this dataset, all
+variables are lowercase.)
 
 ```{r}
 #| label: meovrwrk-table-gss_all
@@ -235,9 +248,12 @@ table(gss_all$meovrwrk)
 
 ```
 
-2436 respondents were coded as 1 on this variable. What does that mean? (Look at the help page.)
+2436 respondents were coded as 1 on this variable. What does that mean?
+(Look at the help page.)
 
-Let's look at only the 2024 respondents. Change the code to show just the `gss24` respondents. Then, add text to your code-along that interprets the results for the `2` value.
+Let's look at only the 2024 respondents. Change the code to show just
+the `gss24` respondents. Then, add text to your code-along that
+interprets the results for the `2` value.
 
 ```{r}
 #| label: meovrwrk-table-gss24

@@ -56,23 +56,9 @@ Download and open [code-along-02.qmd]()
 
 ## Packages
 
-Load the standard packages.
-
-```{r}
-#| message: false
-#| label: load
-
-library(here)
-library(tidyverse)
-library(gssr)
-library(gssrdoc)
-```
-
-<br>
-
-Install and load the
+Install the
 [`summarytools`](https://cran.r-project.org/web/packages/summarytools/vignettes/introduction.html)
-package.
+package, available on CRAN.
 
 ```{r}
 #| message: false
@@ -80,17 +66,25 @@ package.
 #| eval: false
 
 install.packages("summarytools")
-library(summarytools)
+
 ```
 
+<br>
+
+Load the standard packages and our new `summarytools()` package.
 
 ```{r}
 #| message: false
-#| label: load-summary tools
-#| echo: false
+#| label: load
 
+library(here)
+library(tidyverse) 
+library(haven) # not core tidyverse
+library(gssr)
+library(gssrdoc)
 library(summarytools)
 ```
+
 
 ## Load your data & codebook
 
@@ -106,7 +100,7 @@ data(gss_dict)
 
 ```
 
-# Data Management I {.theme-section}
+# Coding Basics {.theme-section}
 
 ## Coding basics {.smaller}
 
@@ -146,8 +140,7 @@ You can (and should) make comments in your code
 
 # R will ignore any text after # for that line
 
-# create vector of primes
-primes <- c(2, 3, 5, 7, 11, 13)
+primes <- c(2, 3, 5, 7, 11, 13) # create vector of prime numbers
 primes
 
 ```
@@ -155,15 +148,12 @@ primes
 
 ::: {.column .fragment}
 Object names must start with a letter and can only contain letters, numbers, _, and .
-```{r}
-#| label: object-names 
-#| eval: false
 
-i_use_snake_case
-otherPeopleUseCamelCase
-some.people.use.periods
-And_aFew.People_RENOUNCEconvention
-```
+    i_use_snake_case
+    otherPeopleUseCamelCase
+    some.people.use.periods
+    And_aFew.People_RENOUNCEconvention
+
 :::
 
 :::::
@@ -172,11 +162,11 @@ And_aFew.People_RENOUNCEconvention
 Source: [R for Data Science](https://r4ds.hadley.nz/workflow-basics.html)
 :::
 
-## Coding basics (cont.)
+## Coding basics: demo
 
 ::::: columns
 
-::: {.column .fragment}
+::: {.column}
 
 ```{r}
 #| label: basics
@@ -297,7 +287,7 @@ Source: [IONOS editorial team](https://www.ionos.ca/digitalguide/websites/web-de
 
 
 
-## Comparison operators (cont)
+## Logical operators (cont)
 
 ::::: columns
 
@@ -533,7 +523,7 @@ It makes data easier to understand without needing a separate codebook.
 #| label: value_labels
 #| code-line-numbers: "1|2"
 
-var_label(gss24$premarsx) # <1>
+attr(gss24$premarsx, "label") # <1>
 print_labels(gss24$premarsx) # <2>
 
 ```
@@ -639,7 +629,7 @@ table(gss24$sex)
 
 # Look at variables {.theme-section}
 
-## Relative Frequency Table 
+## Relative frequency table 
 
 Let’s try functions from the `summarytools` package to get univariate (1 variable) and bivariate (2 variables) descriptive statistics.
 
@@ -656,7 +646,7 @@ freq(gss24$premarsx)
 
 ```
 
-## Relative Frequency Table
+## Relative frequency table
 
 ```{r}
 #| label: freq01a
@@ -676,7 +666,7 @@ freq(gss24$premarsx)
 
 ```
 
-## Pretty Tables 
+## Pretty tables 
 
 One of `summarytools` main purposes is to help clean and prepare data for further analysis. 
 But sometimes we don't care about the missing values. 
@@ -697,7 +687,7 @@ freq(gss24$sex, report.nas = FALSE, headings = FALSE)
 freq(gss24$premarsx, report.nas = FALSE, headings = FALSE) 
 ```
 
-## Pretty Tables 
+## Pretty tables 
 
 ```{r}
 #| label: freq02a
@@ -749,7 +739,11 @@ stby(gss24$premarsx, gss24$sex, freq)
 [This is hard to read and we don't need the cumulative frequencies.]{style="color: #F39C12; font-family: 'Shadows Into Light'"}
 
 
-## Pretty Cross-tabs
+## Pretty cross-tabs
+
+Use `summarytools::ctable` instead!
+
+<br>
 
 ```{r}
 #| label: crosstab03

@@ -1,0 +1,267 @@
+---
+title: "Code-along 01"
+author: "Your Name Goes Here"
+editor: visual
+execute:
+  error: true
+format: pdf
+---
+
+## Packages
+
+We'll use the following packages:
+
+-   `here()` (relative file paths)
+-   `tidyverse()` (data wrangling)
+-   `gssr()` (U.S. General Social Survey data)
+-   `gssrdoc()` (GSS documentation)
+
+## Install `here()` and `tidyverse()`
+
+Let's first install the two packages that are available on CRAN.
+
+Copy and paste the following code into your Console pane. Then hit
+enter.
+
+`install.packages("here")`
+
+Then, do the same to install the tidyverse package.
+
+`install.packages("tidyverse")`
+
+## Install `gssr()` and `gssrdoc()`
+
+Install `gssr` from `ropensci` universe. Copy and paste the following
+code into your Console pane. Then hit enter.
+
+`install.packages('gssr', repos = c('https://kjhealy.r-universe.dev', 'https://cloud.r-project.org'))`
+
+Also install `gssrdoc.`Copy and paste the following code into your
+Console pane. Then hit enter.
+
+`install.packages('gssrdoc', repos = c('https://kjhealy.r-universe.dev', 'https://cloud.r-project.org'))`
+
+## Load the packages
+
+```{r}
+#| label: load
+
+library(here)
+library(tidyverse)
+library(gssr)
+library(gssrdoc)
+```
+
+## Environment
+
+```{r}
+#| label: enviro
+
+# software documentation
+sessionInfo()
+
+```
+
+## Project structure
+
+Let's set up your project structure using the `here()` package.
+
+First, let's establish our project directory.
+
+```{r}
+#| label: here
+
+# set the file path to the root of the project
+here()
+
+```
+
+Next, we'll create folders within our project using `here()` and
+`dir.create()`
+
+```{r}
+#| label: base-folders
+
+# Create base folders
+dir.create(here("data"), recursive = TRUE)
+dir.create(here("code-alongs"), recursive = TRUE)
+dir.create(here("milestones"), recursive = TRUE)
+dir.create(here("project"), recursive = TRUE)
+```
+
+Now, we'll create sub-folders using `here()` and `dir.create()`
+
+```{r}
+#| label: sub-folders
+
+# Create project sub-folders
+dir.create(here("project", "data"), recursive = TRUE)
+dir.create(here("project", "scripts"), recursive = TRUE)
+dir.create(here("project", "outputs"), recursive = TRUE)
+
+```
+
+Check your work by reporting a list of folders and or files in the
+R-project folders and sub-folder.
+
+```{r}
+#| label: list-files
+
+# Your SOC6302 class folder
+list.files(path = here())
+
+# Your "Project" sub-folder
+list.files(path = here("project"))
+
+```
+
+## Save code-along
+
+Save this code-along in your newly created "code-along" sub-folder.
+
+There's no command in the R console to save scripts or Quarto files —
+you use the editor's [File]{style="color: #3498DB"} \> [Save
+As]{style="color: #3498DB"} or Ctrl+S.
+
+## Meet your data
+
+We're going to use data from the [U.S. General Social Survey
+(GSS)](https://gss.norc.org/us/en/gss/about-the-gss.html).
+
+Let's load your data.
+
+```{r}
+#| label: gssdata
+
+# Load the data (will appear in your Global Environment pane)
+data(gss_all)
+
+# Preview the datatable which is automatically named gss_all
+gss_all
+
+```
+
+A “tibble” is another name for “tidy dataset,” meaning that the data is
+organized in structured, clear rows and columns. “(75,699 × 6,867)”
+means the dataset contains 75,699 rows and 6,867 columns. In social
+sciences, rows are commonly referred to as “observations” and columns as
+“variables.” In our case, there are 75,699 observations (e.g.,
+respondents) and 6,867 variables.
+
+You can also load the GSS data for a specific survey year.
+
+```{r}
+#| label: gss24
+
+# Get the data only for the 2024 survey respondents
+gss24 <- gss_get_yr(2024)
+
+# look at the first 6 rows of the dataframe
+head(gss24)
+
+```
+
+With your mouse, go to the environment panel (upper-right) and click on
+the `gss24` object. It pops up and you can browse through it.
+
+This is often a good idea to get a first feel for the data, but only if
+your dataset is relatively small.
+
+The [GSS
+documentation](https://gss.norc.org/us/en/gss/get-documentation.html) is
+also available online in .pdf form.
+
+The .pdfs will be useful for general overviews.
+
+For specific variable information, it will be helpful to use the
+documentation you'll load into RStudio.
+
+```{r}
+#| label: gsscodebook
+
+# Load the codebook
+data(gss_dict)
+
+```
+
+To see the variables available in the dataset, use the `names()`
+command. This command is best to use with smaller datasets.
+
+```{r}
+#| label: names
+#| eval: false # copy/paste this code in the Console; don't run in Quarto
+
+names(gss_all)
+```
+
+## Variables
+
+For information about a specific GSS variable, type `?varname` at the
+console.
+
+In the output pane, the Help tab will show the variable documentation.
+
+Example:
+
+```{r}
+#| label: meovrwrk-help
+#| eval: false # copy/paste this code in the Console; don't run in Quarto
+
+?meovrwrk
+```
+
+**Notes:**
+
+Variable name: meovrwrk\
+Variable label: Men hurt family when focus on work too much\
+1994 was the first year of the survey.\
+695 respondents agreed with the statement.\
+iap -- missing. Values: the numeric and response category key (1 =
+strongly agree)
+
+We often want to know which years a question was asked.
+
+We can find this out for one or more variables with `gss_which_years()`.
+
+```{r}
+#| label: which-years
+
+gss_which_years(gss_all, meovrwrk)
+
+```
+
+If run in the console, to see all rows, wrap the code in the `print()`
+command:
+
+`print(gss_which_years(gss_all, meovrwrk), n = 40)`
+
+You can access the variables (i.e., columns) using the `$` operator, as
+shown using the table() function
+
+(NOTE: The variable names are case sensitive. In this dataset, all
+variables are lowercase.)
+
+```{r}
+#| label: meovrwrk-table-gss_all
+
+table(gss_all$meovrwrk)
+
+```
+
+2436 respondents were coded as 1 on this variable. What does that mean?
+(Look at the help page.)
+
+Let's look at only the 2024 respondents. Change the code to show just
+the `gss24` respondents. Then, add text to your code-along that
+interprets the results for the `2` value.
+
+```{r}
+#| label: meovrwrk-table-gss24
+
+# Replace gss_all with gss24 and then run the code.
+table(gss_all$meovrwrk)
+```
+
+## Quarto: Render
+
+Finally, let's `render` your code-along-01 and view the results.

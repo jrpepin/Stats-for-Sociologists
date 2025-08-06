@@ -31,7 +31,18 @@ gss_all |>
   saveRDS(file = "tutorials/SOC6302-02/data/gss_all.rds")
 
 ## GSS24
-gss24_02 <- gss24 |>
+gss24 |>
   select(premarsx, sex, fefam) |>
   saveRDS(file = "tutorials/SOC6302-02/data/gss24.rds")
 
+# 03.1 Descriptives ------------------------------------------------------------
+
+## GSS_ALL
+gss_all |>
+  select(year, wkvsfam, agekdbrn, fairearn, socrel) |>
+  saveRDS(file = "tutorials/SOC6302-03/data/gss_all.rds")
+
+## GSS24
+gss24 |>
+  select(helpful, sex) |>
+  saveRDS(file = "tutorials/SOC6302-03/data/gss24.rds")

@@ -8,20 +8,26 @@ format: pdf
 
 Update the YAML with your first and last name.
 
-Load the packages from the code-along. (Install first if not already done so.)
+Load the packages from the code-along. (Install first if not already
+done so.)
 
 ```{r}
 #| label: load
+#| message: false
 
 library(here)
-library(tidyverse)
+library(tidyverse) 
+library(haven) 
 library(gssr)
 library(gssrdoc)
+library(summarytools)
 ```
 
 # Add Documentation
 
-Run the code and add **narrative** (outside code chunks) or **comments** (inside the code chunks) to the R chunks below.
+Run the code and add **narrative** (outside code chunks) or **comments**
+(inside the code chunks) describing what each of the the below R chunks
+do.
 
 ```{r}
 #| label: here
@@ -45,9 +51,10 @@ Sys.time()
 
 # Explore the GSS
 
-Load all years of the gss data. Then, use the `gss_get_yr()` command to load the data only for the 2024 survey respondents.
+Load all years of the gss data.
 
-*Hint*: Use the code from code-along-01.qmd
+Then, use the `gss_get_yr()` function to load the data only for the 2024
+survey respondents. (*Hint*: Use the code from code-along-01.qmd)
 
 ```{r}
 #| label: gss-datasets
@@ -59,34 +66,69 @@ data(gss_all)
 
 ```
 
-Use R to answer the questions below. Show your work (e.g., R code) when appropriate. Add narration and comments throughout.
+Use R to answer the questions below. Show your work (e.g., R code
+chunks) where appropriate. Add narration and comments throughout.
+Justify your answers.
 
 -   Report the survey question that corresponds to the `fefam` variable.
 
--   What type is the `fefam` variable? (nominal, ordinal, interval-ratio, dichotomous)? Justify your answer.
+-   Is `fefam` a dichotomous, nominal, ordinal, or interval-ratio
+    variable? Justify your answer.
 
 -   Which years of the survey did the `fefam` variable appear?
 
 -   What value corresponds with "agree" for this variable?
 
--   How many people "strongly agree" with the `fefam` statement in 2024?
+-   Convert the fefam variable to a factor variable. Make sure you
+    remove any 'missing' (NA) or empty (e.g., levels with no
+    observations) levels.
 
--   Look at the `happy` variable. Were most people "not too happy," "pretty happy," or "very happy" in 2024?
+-   Create a (pretty) relative frequency table to show for the `fefam`
+    variable using the 2024 data. How many respondents "strongly agree"
+    with the `fefam` statement in 2024? What % of respondents either
+    "strongly agree" or "agree"?
 
--   Create a crosstab of the `happy` and `sex` variables using only the 2024 survey data. How many women were `very happy`? How many men were `very happy`?
+-   Create a (pretty) relative frequency table for the `happy` variable
+    using the 2024 data. Make sure your values are labelled for easy
+    interpretation (without levels identifying missing data or empty
+    levels). Were most respondents "not too happy," "pretty happy," or
+    "very happy" in 2024?
+
+-   Create a (pretty) cross-tab of the `happy` and `sex` variables using
+    only the 2024 survey data. Make sure your values are labelled for
+    easy interpretation. How many women were `very happy`? How many men
+    were `very happy`?
+
+-   Were a greater percentage of women or men `very happy` in 2024?
 
 # Meet the IPUMS Data
 
-To keep your Research Brief progress on track, you'll complete short exercises that correspond with the new course material using your own dataset as part of your milestones.
+To keep your Research Brief progress on track, you'll complete short
+exercises that correspond with the new course material using your own
+dataset as part of your milestones.
 
-Consider a research topic you are interested in and explore the documentation for some of the available [IPUMS (microdata) datasets](https://www.ipums.org/overview) that could be relevant for the subject. Start broadly, such as looking at the [Topical Availability Summary](https://www.ipums.org/topics). Then, look at a couple of individual datasets more in depth. Explore the sidebar of available documentation for a couple of datasets: About, Data, Documentation (including User Guides and Questionnaires, FAQs).
+Consider a research topic you are interested in and explore the
+documentation for some of the available [IPUMS (microdata)
+datasets](https://www.ipums.org/overview) that could be relevant for the
+subject. Start broadly, such as looking at the [Topical Availability
+Summary](https://www.ipums.org/topics). Then, look at a couple of
+individual datasets more in depth. Explore the sidebar of available
+documentation for 2-3 datasets: About, Data, Documentation (including
+User Guides and Questionnaires, FAQs).
 
 -   Write 1-2 sentences about your research interests.
 
--   Then, write 2-3 sentences about which IPUMS dataset you are thinking of using, explaining the sample population and time frame of the dataset and why it is a good fit for your research interests.
+-   Then, write 2-3 sentences about which IPUMS dataset you are thinking
+    of using, explaining the sample population and time frame of the
+    dataset, and why it is a good fit for your research interests.
 
--   Describe 2-3 key variables available in the dataset that are a good fit for your research topic. Report the exact survey questions and response options for these variables.
+-   Describe 2-3 key variables available in the dataset that are a good
+    fit for your research topic. Report the exact survey questions and
+    response options for these variables.
 
--   Finally, create an IPUMS account for the dataset of interest. See this [help video](https://www.youtube.com/watch?v=Oo7RYMV7q4Y) for details.
+-   Finally, create an IPUMS account for the dataset of interest. See
+    this [help video](https://www.youtube.com/watch?v=Oo7RYMV7q4Y) for
+    details.
 
-**NOTE:** For your Research Briefs, you must choose an [IPUMS (microdata) dataset](https://www.ipums.org/overview) to use.
+**NOTE:** For your Research Brief, you must choose an [IPUMS (microdata)
+dataset](https://www.ipums.org/overview) to use.

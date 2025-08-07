@@ -44,5 +44,5 @@ gss_all |>
 
 ## GSS24
 gss24 |>
-  select(helpful, sex) |>
+  select(helpful, premarsx) |>
   saveRDS(file = "tutorials/SOC6302-03/data/gss24.rds")

@@ -52,16 +52,38 @@ By the end of the lab, you will be able to ...
 
 Download and open [code-along-03.qmd]()
 
+## Packages
+
+Load the standard packages.
+
+```{r}
+#| message: false
+#| label: load
+
+library(here)
+library(tidyverse) 
+library(haven) # not core tidyverse
+library(gssr)
+library(gssrdoc)
+library(summarytools)
+```
+
+## Load your data & codebook
+
+```{r}
+#| message: false
+#| label: gssdata
+
+# Get the data all survey years
+data(gss_all)
+
+# Load the codebook
+data(gss_dict)
+
+```
+
 
 # Data Management I {.theme-section}
-
-## where I left off:
-
-**dplyr**
-https://jaspertjaden.github.io/course-intro2r/week3.html
-https://statsandr.com/blog/introduction-to-data-manipulation-in-r-with-dplyr/
-
-
 
 ## Tidying Data {.smaller}
 
@@ -99,8 +121,6 @@ The `dplyr` package provides a complete set of functions that help you solve the
 Source: [Antoine Soetewey](https://statsandr.com/blog/introduction-to-data-manipulation-in-r-with-dplyr/)
 :::
 
-
-
 ## The pipe `|>` 
 
 <br>
@@ -121,7 +141,7 @@ sum(1, 2)
 ```
 
 
-## `dplyr` style  
+## `dplyr` style {.smaller}
 
 In data transformation pipelines, always use a  
 
@@ -141,25 +161,7 @@ We'll talk about data visualization pipes later...
 |> (native pipe operator) and %>% (magrittr package) behave identically for simple cases. [More info.]((https://www.tidyverse.org/blog/2023/04/base-vs-magrittr-pipe/))
 :::
 
-
-
-## `dplyr` basics {.smaller}
-
-`dplyr` verbs (functions) will allow you to solve the vast majority of your data manipulation challenges. They are organized into four groups based on what they operate on: rows, columns, groups, or tables.  
-
-<br>
-  
-**The verbs all have in common**:  
-
-1.   The first argument is always a data frame. 
-2.   The subsequent arguments typically describe which columns to operate on using the variable names (without quotes). 
-3.   The output is always a new data frame. 
- 
-::: aside
-Source: [R for Data Science](https://r4ds.hadley.nz/data-transform.html#the-pipe)
-:::
-
-## `function`(argument)
+## `function`(argument) 
 
 Functions are (most often) verbs, followed by what they will be applied
 to in parentheses:
@@ -175,11 +177,32 @@ do_this(to_this)
 do_that(to_this, to_that, with_those)
 ```
 
+<br>
+
+`dplyr` verbs (functions) will allow you to solve the vast majority of your data manipulation challenges.  
+
 ::: aside
 Source: [Dr. Mine Çetinkaya-Rundel](https://sta199-f24.github.io/slides/01-meet-the-toolkit-slides.html#/functionargument)  
 :::
 
-## Rows: `filter()`
+
+## `dplyr` basics 
+
+::: {.smaller}
+They are organized into four groups based on what they operate on: rows, columns, groups, or tables.  
+:::
+
+<br>
+  
+**The verbs all have in common**:  
+
+1.   The first argument is always a data frame. 
+2.   The subsequent arguments typically describe which columns to operate on using the variable names (without quotes). 
+3.   The output is always a new data frame. 
+ 
+::: aside
+Source: [R for Data Science](https://r4ds.hadley.nz/data-transform.html#the-pipe)
+:::
 
 ## `dplyr` grammar
 
@@ -189,78 +212,175 @@ grammar? We can sequence data manipulation!
 
 <br>
 
-```{r}
-#| label: descr03
-#| code-line-numbers: "1|2|3|4-5|6"
 
-gss24 |> 
-  filter(!is.na(sex))  |>
+```{r}
+#| label: pipe00
+#| output-location: column
+
+gss_all |> 
+  select(year, sex, agekdbrn) |>
+  filter(year == 2022) |>
+  drop_na(sex, agekdbrn) |>
   group_by(sex) |>
-  descr(hrs1,
-        stats = "common") |> # <1>
-  tb() 
+  summarise(avg = mean(agekdbrn))
 
 ```
 
+##  `select()`, `filter()`, and `drop_na()` 
 
-## The pipe, in action
-
-https://sta199-f24.github.io/slides/03-grammar-of-data-transformation-slides.html#/the-pipe-in-action
-
-
-## Manipulating Variables {.smaller}
-
-For `polviews`, let's combine categories to ease interpretation. This is
-easiest when the levels are numeric.
-
-Let's remind ourselves what the values correspond with each label.
-
-```{r}
-#| label: levels-polviews-01
-
-table(as_factor(gss24$polviews, levels = "both")) # both shows value and label
-```
-
-## Manipulating Variables {.smaller}
-
-```{r}
-#| label: levels-polviews-02
-#| code-line-numbers: "1|2|3-5|6|7-8|9"
-
-
-gss24 <- gss24 |> # <1>
- mutate(pol3cat = case_when( # <2>
-   polviews >= 1 & polviews <= 3 ~ "Liberal", # <2>
-   polviews == 4 ~ "Moderate", # <2>
-   polviews >= 5 & polviews <= 7 ~ "Conservative", # <2>
-   TRUE ~ NA_character_), # <3>
-  pol3cat = factor(pol3cat, # <4>
-                 levels = c("Liberal", "Moderate", "Conservative")) # <4>
-  )
-
-```
-
-1.  Save over the dataset with an added variable.
-2.  Creates a new variable by assigning labels based on values of
-    `polviews`
-3.  Set everything else to "missing"
-4.  Convert the variable to factor with specified level order
+Use `select()` to pick specific columns from your dataset.  
+Use `filter()` to keep rows that meet a condition.  
+Use `drop_na()` to remove rows with missing (NA) values.  
 
 <br>
 
-## Frequency Table {.smaller}
-
-Always double check your work.
-
-<br>
-
+. . .
+ 
 ```{r}
-table(gss24$polviews, gss24$pol3cat)
+#| label: pipe01
+#| code-line-numbers: "1|2|3|4"
+#| eval: false
+
+gss_all |>  # <1>
+  select(year, sex, agekdbrn) |> # <2>
+  filter(year == 2022) |> # <3>
+  drop_na(sex, agekdbrn) |> # <4>
+
 ```
 
+1.  Start with the `gss_all` data frame:
+2.  Keep only the variables in the dataset that we need.
+3.  Keep only the respondents from the 2022 survey
+4.  Remove any observations with missing data for our key variables
+
+
+##  `group_by()` and  `summarize()` 
+
+Use `group_by()` to organize your data into groups based on one or more variables.  
+Use `summarize()` to compute statistics like total, mean, or median for each group.  
+<br>
+
+. . .
+
+
+```{r}
+#| label: pipe02
+#| code-line-numbers: "5|6"
+#| output-location: column
+
+gss_all |>  # <1>
+  select(year, sex, agekdbrn) |> # <2>
+  filter(year == 2022) |> # <3>
+  drop_na(sex, agekdbrn) |> # <4>
+  group_by(sex) |> # <5>
+  summarise(freq = n()) # <6>
+
+```
+
+1.  Start with the `gss_all` data frame:
+2.  Keep only the variables in the dataset that we need.
+3.  Keep only the respondents from the 2022 survey
+4.  Remove any observations with missing data for our key variables
+5.  Do the next steps separately for each group in the variable
+6.  Creates a new data frame with one row for each combination of grouping variables
+
+
+## `dplyr()` in action
+
+::: task
+Compare the average and median age at first childbirth for U.S. men and women in 2022.
+:::
+
+. . .
+
+```{r}
+#| label: pipe03
+#| code-line-numbers: "6-7|8|9"
+#| output-location: column-fragment
+
+gss_all |>  
+  select(year, sex, agekdbrn) |> 
+  filter(year == 2022) |> 
+  drop_na(sex, agekdbrn) |> 
+  group_by(sex) |> # <5>
+  summarise(
+    freq = n(),
+    avg = mean(agekdbrn),
+    med = median(agekdbrn)
+    ) 
+
+```
+
+
+## `mutate()` in action 
+
+Use `mutate()` to add new columns or change existing ones.  
+
+. . .
+
+::: task
+What proportion of new parents were teenagers (e.g., under 18 years old)?
+:::
+
+
+```{r}
+#| label: mutate00
+#| code-line-numbers: "1-4|5|6"
+#| output-location: fragment
+
+gss_all |>  # <1>
+  select(year, agekdbrn) |> # <1>
+  filter(year == 2022) |> # <1>
+  drop_na(agekdbrn) |> # <1>
+  mutate(teen_parent = (agekdbrn < 18) * 1) |> # <2>
+  summarise(proportion = mean(teen_parent)) # <3>
+```
+
+1.  Manipulate the dataset to variables and observations of interest
+2.  Returns a logical vector (TRUE, FALSE, or NA) and * 1 converts it to numeric
+3.  Mean of the variable, which equals the proportion of `1s`
+
+
+## `mutate()` in action {.smaller}
+
+Use `case_when()` inside `mutate()` to create values based on conditions.  
+
+. . .
+
+::: task
+What proportion of new parents had their first child as teenagers, in their 20s, 30s, or after age 40?
+:::
+
+```{r}
+#| label: mutate01
+#| code-line-numbers: "1|5|6-9|10-11|13"
+#| output-location: column-fragment
+
+my_data <- gss_all |>  
+  select(year, agekdbrn) |> 
+  filter(year == 2022) |> 
+  drop_na(agekdbrn)  |>
+  mutate(age_groups = case_when(
+    agekdbrn < 18 ~ "<18",
+    agekdbrn >= 18 & agekdbrn <= 29 ~ "18–29",
+    agekdbrn >= 30 & agekdbrn <= 39 ~ "30–39",
+    agekdbrn >= 40 ~ "40+",
+    TRUE ~ NA_character_)
+    ) 
+
+freq(my_data$age_groups, report.nas = FALSE, headings = FALSE)
+```
 
 
 ## Assignment operators 
+
+::: {.callout-tip icon="false"}
+## {{< fa hat-wizard >}} Heads Up!
+
+Overwriting datasets and variables can be intentional or unintentional.
+:::
+
+<br>
 
 Let's make a tiny data frame to use as an example:
 
@@ -271,13 +391,7 @@ df <- tibble(x = c(1, 2, 3, 4, 5), y = c("a", "a", "b", "c", "c"))
 df
 ```
 
-<br>
 
-::: {.callout-tip icon="false"}
-## {{< fa hat-wizard >}} Heads Up!
-
-A [`tibble`](https://r4ds.had.co.nz/tibbles.html) is a modern data frame, often used in the tidyverse and ggplot2 packages.
-:::
 
 
 ## Assignment operators (cont)
@@ -351,7 +465,7 @@ df
 ## Assignment: Overwriting {.smaller}
 
 ::: columns
-::: {.column .fragment width="50%"}
+::: {.column width="50%"}
 > **Do something, save result, overwriting original**
 
 ```{r}
@@ -430,7 +544,7 @@ df_summary
 ## Assignment: Overwriting (cont) {.smaller}
 
 ::: columns
-::: {.column .fragment width="50%"}
+::: {.column width="50%"}
 > **Do something, save result, overwriting original**\
 > [***data frame***]{style="color: #18BC9C"}
 
@@ -465,10 +579,197 @@ df
 :::
 :::
 
+## Assignment: Overwriting (cont) {.smaller}
 
+::::: columns
+::: {.column width="50%"}
+> **Do something, save result, not overwriting original.**
 
+```{r}
+#| label: mutateA
+#| code-line-numbers: "1"
+#| eval: false
 
-#  {data-menu-title="Think Like a Statistician" background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
+my_data <- gss_all |>  
+  select(year, agekdbrn) |> 
+  filter(year == 2022) |> 
+  drop_na(agekdbrn)  |>
+  mutate(age_groups = case_when(
+    agekdbrn < 18 ~ "<18",
+    agekdbrn >= 18 & agekdbrn <= 29 ~ "18–29",
+    agekdbrn >= 30 & agekdbrn <= 39 ~ "30–39",
+    agekdbrn >= 40 ~ "40+",
+    TRUE ~ NA_character_)) 
+
+freq(my_data$age_groups, report.nas = FALSE, headings = FALSE)
+```
+:::
+
+::: {.column .fragment width="50%"}
+> **Do something and show me**
+
+```{r}
+#| label: mutateB
+#| code-line-numbers: "11-14"
+#| eval: false
+
+gss_all |>  
+  select(year, agekdbrn) |> 
+  filter(year == 2022) |> 
+  drop_na(agekdbrn)  |>
+  mutate(age_groups = case_when(
+    agekdbrn < 18 ~ "<18",
+    agekdbrn >= 18 & agekdbrn <= 29 ~ "18–29",
+    agekdbrn >= 30 & agekdbrn <= 39 ~ "30–39",
+    agekdbrn >= 40 ~ "40+",
+    TRUE ~ NA_character_)) |>
+  group_by(age_groups) |>  
+  summarise(
+    count = n(),
+    proportion = round(count / sum(count), 3)
+  )
+
+```
+:::
+:::::
+
+# Summary Statistics {.theme-section}
+
+## Mode
+
+Remember, the **mode** is the category with the greatest frequency (or
+the largest percentage). Let's find it for the `premarsx` variable.
+
+<br>
+
+```{r}
+#| eval: false ## temporary!!!
+#| label: mode
+
+freq(gss_all$premarsx, report.nas = FALSE) 
+
+```
+
+## Median
+
+We can use the same table we generated before to identify the
+**median**. This time, let's use [dplyr grammar]() to produce the same
+table
+
+Remember, use the cumulative percentage to locate the **50th
+percentile**.
+
+```{r}
+#| eval: false ## temporary!!!
+
+#| label: median
+#| code-line-numbers: "1|2|3"
+
+gss_all |> # <1>
+  freq(premarsx, report.nas = FALSE) |> # <2>
+  tb() # <3> 
+
+```
+
+1.  Use `dplyr` grammar, starting with the name of the df and a pipe
+2.  Use the `freq()` function as usual
+3.  Add the `tb()` function to turn the table into a `tibble`
+
+## Mean
+
+```{r}
+#| eval: false ## temporary!!!
+
+#| label: freq-numeric
+
+freq(gss_all$hrs1, report.nas = FALSE, headings = FALSE) 
+
+```
+
+::: aside
+Question 1a. If working, full or part time: how many hours did you work
+last week, at all jobs?
+:::
+
+## Mean
+
+```{r}
+#| eval: false ## temporary!!!
+
+#| label: mean-median
+
+mean(gss_all$hrs1, na.rm=TRUE) # <1>
+median(gss_all$hrs1, na.rm=TRUE)
+
+```
+
+1.  `na.rm` is a logical evaluating to TRUE or FALSE indicating whether
+    NA values should be stripped before the computation proceeds.
+
+::: aside
+Question 1a. If working, full or part time: how many hours did you work
+last week, at all jobs?
+:::
+
+## `summary()`
+
+<br>
+
+```{r}
+#| eval: false ## temporary!!!
+
+#| label: summary
+
+summary(gss_all$hrs1)
+
+```
+
+## Variability: `descr()`
+
+<br>
+
+```{r}
+#| eval: false ## temporary!!!
+
+#| label: descr01
+
+descr(gss_all$hrs1)
+
+```
+
+## Variability: `descr()`
+
+```{r}
+#| label: descr02
+#| code-line-numbers: "1|2|3|4"
+
+gss_all |> 
+  descr(hrs1,
+        stats = "common") |> # <1>
+  tb() 
+
+```
+
+## Variability `descr()`
+
+```{r}
+#| label: descr03
+#| code-line-numbers: "1|2|3|4-5|6"
+
+gss_all |> 
+  filter(!is.na(sex))  |>
+  group_by(sex) |>
+  descr(hrs1,
+        stats = "common") |> # <1>
+  tb() 
+
+```
+
+1.  Which stats to produce. Either “all” (default), “fivenum”, “common”
+    (see Details), or a selection. See ?descr
+    
+    
+# Think Like a Statistician {background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
 
 Political polarization is high in the U.S. today and attitudes about
 gender and family behavior have been heavily debated.
@@ -495,7 +796,29 @@ you the question text, response options and values.
 
 Now, do the same for `polviews`.
 
+## Change variables
 
+```{r}
+#| label: think01
+#| code-line-numbers: "1|2|3-5|6|7-8|9"
+
+gss_all <- gss_all |> # <1>
+ mutate(pol3cat = case_when( # <2>
+   polviews >= 1 & polviews <= 3 ~ "Liberal", # <2>
+   polviews == 4 ~ "Moderate", # <2>
+   polviews >= 5 & polviews <= 7 ~ "Conservative", # <2>
+   TRUE ~ NA_character_), # <3>
+  pol3cat = factor(pol3cat, # <4>
+                 levels = c("Liberal", "Moderate", "Conservative")) # <4>
+  )
+
+```
+
+1.  Save over the dataset with an added variable.
+2.  Creates a new variable by assigning labels based on values of
+    `polviews`
+3.  Set everything else to "missing"
+4.  Convert the variable to factor with specified level order
 
 ##  {.smaller data-menu-title="Your Data Take" background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
 
@@ -513,130 +836,7 @@ political views
 #| label: crosstab-02-output
 #| echo: false
 
-ctable(gss24$premarsx, gss24$sex, prop = "c", format = "p", useNA = "no") 
+ctable(gss_all$premarsx, gss_all$sex, prop = "c", format = "p", useNA = "no") 
 ```
-
-
-
-
-# Central Tendency & Variability {.theme-section}
-
-## Mode
-
-Remember, the **mode** is the category with the greatest frequency (or
-the largest percentage). Let's find it for the `premarsx` variable.
-
-<br>
-
-```{r}
-#| eval: false ## temporary!!!
-#| label: mode
-
-freq(gss24$premarsx, report.nas = FALSE) 
-
-```
-
-## Median
-
-We can use the same table we generated before to identify the
-**median**. This time, let's use [dplyr grammar]() to produce the same
-table
-
-Remember, use the cumulative percentage to locate the **50th
-percentile**.
-
-```{r}
-#| eval: false ## temporary!!!
-
-#| label: median
-#| code-line-numbers: "1|2|3"
-
-gss24 |> # <1>
-  freq(premarsx, report.nas = FALSE) |> # <2>
-  tb() # <3> 
-
-```
-
-1.  Use `dplyr` grammar, starting with the name of the df and a pipe
-2.  Use the `freq()` function as usual
-3.  Add the `tb()` function to turn the table into a `tibble`
-
-## Mean
-
-```{r}
-#| eval: false ## temporary!!!
-
-#| label: freq-numeric
-
-freq(gss24$hrs1, report.nas = FALSE, headings = FALSE) 
-
-```
-
-::: aside
-Question 1a. If working, full or part time: how many hours did you work
-last week, at all jobs?
-:::
-
-## Mean
-
-```{r}
-#| eval: false ## temporary!!!
-
-#| label: mean-median
-
-mean(gss24$hrs1, na.rm=TRUE) # <1>
-median(gss24$hrs1, na.rm=TRUE)
-
-```
-
-1.  `na.rm` is a logical evaluating to TRUE or FALSE indicating whether
-    NA values should be stripped before the computation proceeds.
-
-::: aside
-Question 1a. If working, full or part time: how many hours did you work
-last week, at all jobs?
-:::
-
-## `summary()`
-
-<br>
-
-```{r}
-#| eval: false ## temporary!!!
-
-#| label: summary
-
-summary(gss24$hrs1)
-
-```
-
-## Variability: `descr()`
-
-<br>
-
-```{r}
-#| eval: false ## temporary!!!
-
-#| label: descr01
-
-descr(gss24$hrs1)
-
-```
-
-## Variability: `descr()`
-
-```{r}
-#| eval: false ## temporary!!!
-
-#| label: descr02
-#| code-line-numbers: "1|2|3|4"
-
-gss24 |> 
-  descr(hrs1,
-        stats = "common") |> # <1>
-  tb() 
-
-```
-
-1.  Which stats to produce. Either “all” (default), “fivenum”, “common”
-    (see Details), or a selection. See ?descr
+    
+    

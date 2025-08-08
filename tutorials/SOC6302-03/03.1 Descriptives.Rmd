@@ -3,7 +3,7 @@ title: "Tutorial 03"
 output:
   learnr::tutorial:
     progressive: true
-    allow_skip: false 
+    allow_skip: true 
     theme: flatly
     mathjax: default
     includes:
@@ -195,8 +195,12 @@ Pretend the following values are annual incomes for 10 families:
 
 <br>
 
-Let's use `R` to calculate the average. Click the `Run Code` button
-below.
+`r fa("otter", fill = "#F39C12")`<practice> PRACTICE:</practice>
+
+Let's use `R` to calculate the average. 
+
+1.   Click the `Run Code` button below.  
+2.   Then, click **`Submit Answer.`**
 
 ```{r mean01, exercise=TRUE}
 # store the values in an object called my_data
@@ -220,6 +224,10 @@ mean(my_data)
 **Hint:** Just push the `Run Code` button to see the output.
 :::
 
+```{r mean01-check}
+grade_this_code()
+```
+
 <br />
 
 ::: {.column style="color: #E74C3C; font-size: 150%; font-family: 'Shadows Into Light'"}
@@ -234,11 +242,11 @@ whereas the rest of the sample earns significantly less than that.
 If we calculated the average without the unusual (outlier) family with the 
 $250,000 annual income, what would the mean? 
 
+`r fa("otter", fill = "#F39C12")`<practice> PRACTICE:</practice>
 
-Remove the `250000` income from our list and then click the `Run Code` button
-below to re-calculate the average.
-  
-When you're satisfied with your code, click **`Submit Answer.`**
+1.  Remove the `250000` income from our list.
+2.  Click the `Run Code` button below to re-calculate the average. 
+3.  When you're satisfied with your code, click **`Submit Answer.`**
 
 ```{r mean02, exercise=TRUE}
 # store the values in an object called my_data
@@ -273,7 +281,7 @@ grade_this_code()
 This average is more representative of the typical annual income for families in 
 the sample. About half of the families have an income below the mean, and half have an income above the mean.  
 
-To summarize: averages are easy to calculate but they can also be misleading.
+To summarize, averages are easy to calculate but they can also be misleading.
 
 <br>
 
@@ -315,50 +323,8 @@ $2, 0, 1, 2, 5, 1, 3, 1$
 1.  Put the list in order: $0, 1, 1, 1, 2, 2, 3, 5$\
 2.  Add the two center numbers & divide by 2: $\frac{1 + 2}{2} = 1.5$
 
-<br>
+The median is the value at the __50th percentile__ in a _cumulative_ frequency distribution. (This is typically an easier way to find the median than counting individual observations.)  
 
-Let's use `R` to calculate the median. Change the function `mean` to `median`.  
-Then, click the `Run Code` button below. When you're satisfied with your code, click **`Submit Answer.`**
-
-```{r median01, exercise=TRUE}
-# store the values in an object called my_data
-my_data <- c(48000, 52000, 45000, 50000, 53000, 
-             49000, 46000, 51000, 65000, 250000)
-
-# Use the mean function
-mean(my_data)
-```
-
-
-```{r median01-solution}
-# store the values in an object called my_data
-my_data <- c(48000, 52000, 45000, 50000, 53000, 
-             49000, 46000, 51000, 65000, 250000)
-
-# Use the mean function
-median(my_data)
-```
-
-::: {#median01-hint}
-**Hint:** Replace the text "mean" with the text "median".
-:::
-
-```{r median01-check}
-grade_this_code()
-```
-
-
-<br />
-
-
-
-
-
-
-***  
-
-The median is the value at the __50th percentile__ in a _cumulative_ frequency distribution. 
-(This is typically an easier way to find the median than counting individual observations.)  
 <br>
   
 ::: my-def
@@ -413,6 +379,41 @@ ggplot(sample_data, aes(x = xAxis, fill = as.factor(group))) +
   )
 ```
   
+<br>
+
+`r fa("otter", fill = "#F39C12")`<practice> PRACTICE:</practice>
+
+Let's use `R` to calculate the median.  
+
+1.   Replace the blank line with the function `median`.  
+2.   Click the `Run Code` button below. 
+3.   When you're satisfied with your code, click **`Submit Answer.`**
+
+```{r median01, exercise=TRUE}
+# store the values in an object called my_data
+my_data <- c(48000, 52000, 45000, 50000, 53000, 
+             49000, 46000, 51000, 65000, 250000)
+
+# Use the median function
+_____(my_data)
+```
+
+```{r median01-solution}
+# store the values in an object called my_data
+my_data <- c(48000, 52000, 45000, 50000, 53000, 
+             49000, 46000, 51000, 65000, 250000)
+
+# Use the median function
+median(my_data)
+```
+
+::: {#median01-hint}
+**Hint:** Did you delete the word "mean" and replace it with "median"?
+:::
+
+```{r median01-check}
+grade_this_code()
+```
 
 <br>
 
@@ -473,7 +474,6 @@ tab_with_totals %>%
 [**Survey question**: *How often do the demands of your job interfere with your family life?*]{style="font-size: 80%"}
 
 <br>
-<br>
 
 ***
 
@@ -484,11 +484,13 @@ Watch this [video](https://youtu.be/xTwDmnEEb9E) on how to find the median in a 
 <br>
 
 
+Could you find the median in this historgram? 
+
 ```{r}
 
 my_data <- gss_all |>
-  select(agekdbrn) |>
-  filter(!is.na(agekdbrn) & agekdbrn < 50)
+  select(agekdbrn, year) |>
+  filter(!is.na(agekdbrn) & agekdbrn < 50 & year >= 2018)
 
 sumstatz <- data.frame(whichstat = c("median"),
                        value     = c(median(my_data$agekdbrn)))
@@ -503,7 +505,6 @@ my_data |>
   theme_minimal() +
     theme(
     axis.title.y = element_blank(),
-    axis.text.y = element_blank()
     ) +
   xlab("age when 1st child born") +
    labs(
@@ -512,9 +513,11 @@ my_data |>
   ) 
 ```
 
-[*Source: U.S. General Social Survey 1994-2022*]{style="color: $gray-300; font-size: 80%"}  
+[*Source: U.S. General Social Survey 2018-2022*]{style="color: $gray-300; font-size: 80%"}  
   
 [**Survey question [agekdbrn]**: *How old were you when your first child was born?*]{style="font-size: 80%"}
+
+<br>
 
 
 ### Mode  
@@ -591,9 +594,13 @@ freq(gss24$helpful, report.nas = FALSE, headings = FALSE)
 
 ***
 
+Now, let's try it by creating a frequency table in R and then finding the mode.  
+
 `r fa("otter", fill = "#F39C12")`<practice> PRACTICE:</practice>
 
-Replace the blank line with `fairearn` and click the `Run Code` button to create a relative frequency table for this variable. When you're satisfied with your code, click **`Submit Answer.`**
+1.   Replace the blank line with `fairearn`.
+2.   Click the `Run Code` button to create a relative frequency table. 
+3.   When you're satisfied with your code, click **`Submit Answer.`**
 
 ```{r mode01, exercise=TRUE}
 #| message: false
@@ -620,7 +627,6 @@ grade_this_code()
 
 [**Survey question**: *How fair is what you earn on your job in comparison to others doing the same type of work you do?*]{style="font-size: 80%"}
 
-
 ```{r P02, echo=FALSE}
 question("What is the mode of this distribution?",
          answer("About as much as you deserve",     correct = TRUE, message = "Rock on!"),
@@ -633,6 +639,7 @@ question("What is the mode of this distribution?",
 )
 ```
 
+<br>
 
 #### Bimodal:
 
@@ -665,7 +672,6 @@ However, the graph makes it obvious that there were actually two peaks, occurrin
 These distributions are examples of a bi-modal distribution: there are essentially two peaks (for each country).
 
 <br>
-<br>
 
 ***
 
@@ -676,7 +682,6 @@ Using the figure below to answer the following practice question.
 These figure shows distributions of reviews for a variety of movies.  
   
 ![](images/bimodal_p.png "Figure: One of these films is not like the others."){ width=100% } 
-  
   
 ```{r P03, echo=FALSE}
 question("Which movie review distribution is bimodal?",
@@ -772,7 +777,7 @@ When a distribution is negatively skewed, the mean is less than the median.
 __What is the best measure of central tendency for each of the following?__  
 HINT: Identify the type of variable first. Then decide which measure is appropriate.
 
-```{r P05, echo=FALSE}
+```{r P04, echo=FALSE}
 question("Racial composition of students at UofT.",
          answer("Mode", correct = TRUE, 
                 message = "That's it!"),
@@ -788,7 +793,7 @@ question("Racial composition of students at UofT.",
 ```
   
   
-```{r P06, echo=FALSE}
+```{r P05, echo=FALSE}
 question("Distance traveled to work each day by Toronto residents.",
          answer("Mean and Median", correct = TRUE, 
                 message = "Well done!"),
@@ -804,7 +809,7 @@ question("Distance traveled to work each day by Toronto residents.",
 ```
   
   
-```{r P07, echo=FALSE}
+```{r P06, echo=FALSE}
 question("Number of crimes committed by current inmates in Ontario correctional facilities.",
          answer("Median", correct = TRUE, 
                 message = "I agree!"),
@@ -868,11 +873,14 @@ $26,  23,  28,  27,  24,  25,  32,  25,  28,  25,  25,  26,  27,  26,  27,  25$
 
 <br>
 
-<br>
 
 What about using `R` to do the calculations for us? We can use the `IQR()` function and try it out on our fake family income data.  
 
-Replace the blank line with `range` and click the `Run Code` button. When you're satisfied with your code, click **`Submit Answer`**.
+`r fa("otter", fill = "#F39C12")`<practice> PRACTICE:</practice>
+
+1.   Replace the blank line with `range`.
+2.   Click the `Run Code` button. 
+3.   When you're satisfied with your code, click **`Submit Answer`**.
 
 ```{r range01, exercise=TRUE}
 # store the values in an object called my_data
@@ -992,7 +1000,11 @@ To match our calculations:
   
 Try it out on our fake data and see if you can match our hand calculations.  
 
-Replace the blank line with `my_data` and click the `Run Code` button. When you're satisfied with your code, click **`Submit Answer.`**
+`r fa("otter", fill = "#F39C12")`<practice> PRACTICE:</practice>
+
+1.   Replace the blank line with the correct type number.
+2.   Click the `Run Code` button. 
+3.   When you're satisfied with your code, click **`Submit Answer.`**
 
 ```{r iqr01, exercise=TRUE}
 # store the values in an object called my_data
@@ -1054,6 +1066,8 @@ grade_this_code()
 
 ### Standard Deviation
 
+A key measure of spread in statistics is the standard deviation.  
+
 ::: my-def
 #### STANDARD DEVIATION
 
@@ -1062,8 +1076,6 @@ A measure of variation for interval-ratio variables.
 
 <br>
 
-A key measure of spread in statistics is the standard deviation.  
-  
 Along the way to calculating the standard deviation, you calculate the **variance** of a distribution. 
 The variance is also a measure of variation of a distribution, but it is difficult to interpret because the number doesn't reflect interpretable units.  
   
@@ -1198,7 +1210,11 @@ I expect the average [number of household family members] to differ by
 
 Wow, this is going to get tedious with any more cases. Let's make `R` do this for us instead. Use the `sd()` function and try it out on our fake family income data.  
 
-Use the `sd()` with `my_data` and click the `Run Code` button. When you're satisfied with your code, click **`Submit Answer.`**
+`r fa("otter", fill = "#F39C12")`<practice> PRACTICE:</practice>
+
+1.   Use the `sd()` with `my_data`.
+2.   Click the `Run Code` button. 
+3.   When you're satisfied with your code, click **`Submit Answer.`**
 
 ```{r sd01, exercise=TRUE}
 # store the values in an object called my_data

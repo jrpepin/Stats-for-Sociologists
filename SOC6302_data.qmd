@@ -1,5 +1,12 @@
+---
+title: "SOC6302 data"
+format: html
+editor: visual
+---
 
 ## Install packages not yet installed & load them
+
+```{r}
 pacman::p_load(
   tidyverse,
   gssr, # load U.S. gss data
@@ -8,37 +15,59 @@ pacman::p_load(
   summarytools, # easy descriptive statistics
   conflicted # declare primary packages
 )
+```
 
 ## Address important conflicts
+
+```{r}
 conflict_prefer("is.labelled", "haven")
 conflict_prefer("filter", "dplyr")
 conflict_scout() # Identify the conflicts
+```
 
-## Load all gss
+## Load the gss datasets
+
+```{r}
+# Load all gss
 data(gss_all)
 
 # Get the data only for the 2024 survey respondents
 gss24 <- gss_get_yr(2024)
+```
 
+# 01.1 Intro
 
-# 01.1 Intro -------------------------------------------------------------------
+# Lecture 01
 
-# Lecture 01 -------------------------------------------------------------------
+# 02.1 Terms
 
-# 02.1 Terms -------------------------------------------------------------------
+**frequency:** `premarsx`
 
-## GSS_ALL
+```{r}
+# GSS_ALL
 gss_all |>
   select(premarsx, sex) |>
   saveRDS(file = "tutorials/SOC6302-02/data/gss_all.rds")
 
-## GSS24
+# GSS24
 gss24 |>
   select(premarsx, sex, fefam) |>
   saveRDS(file = "tutorials/SOC6302-02/data/gss24.rds")
+```
 
-# 03.1 Descriptives ------------------------------------------------------------
+# Lecture 02
 
+**haven labelled:** `premarsx`; `sex`\
+**frequency:** `premarsx`;\
+**crosstab:** `premarsx`;
+
+# 03.1 Descriptives
+
+**median:** `wkvsfam`; `agekdbrn` (histogram);\
+**mode:** `helpful;` `fairern`;\
+**distribution shape:** `agekdbrn`;
+
+```{r}
 ## GSS_ALL
 gss_all |>
   select(year, wkvsfam, agekdbrn, fairearn, socrel) |>
@@ -48,3 +77,19 @@ gss_all |>
 gss24 |>
   select(helpful, premarsx) |>
   saveRDS(file = "tutorials/SOC6302-03/data/gss24.rds")
+```
+
+# Lecture 03
+
+**dplyr():** `agekdbrn`; `sex;`
+
+maybe use agekdbrn for mean median and mode? practice manipulating into
+categories, then back to numeric?
+
+**mode:**
+
+**median:**
+
+**mean:** `hrs1`;
+
+**Think Like a Statistician:** `premarsx`; `polviews`

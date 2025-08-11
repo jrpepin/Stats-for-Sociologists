@@ -39,7 +39,7 @@ source("custom-setup-styles.R")
 # Agenda {data-menu-title="Agenda" background-image="images/calendar.png" background-size="100px" background-repeat="repeat"}
 
 -   Data Management I
--   Central Tendency & Measures of Variability
+-   Summary Statistics
 
 # Learning objectives
 
@@ -331,14 +331,15 @@ What proportion of new parents were teenagers (e.g., under 18 years old)?
 gss_all |>  # <1>
   select(year, agekdbrn) |> # <1>
   filter(year == 2022) |> # <1>
-  drop_na(agekdbrn) |> # <1>
-  mutate(teen_parent = (agekdbrn < 18) * 1) |> # <2>
-  summarise(proportion = mean(teen_parent)) # <3>
+  drop_na(agekdbrn) |> # <2>
+  mutate(teen_parent = (agekdbrn < 18) * 1) |> # <3>
+  summarise(proportion = mean(teen_parent)) # <4>
 ```
 
 1.  Manipulate the dataset to variables and observations of interest
-2.  Returns a logical vector (TRUE, FALSE, or NA) and * 1 converts it to numeric
-3.  Mean of the variable, which equals the proportion of `1s`
+2.  Remove missing or `summarise()` will report NA
+3.  Returns a logical vector (TRUE, FALSE, or NA) and * 1 converts it to numeric
+4.  Mean of the variable, which equals the proportion of `1s`
 
 
 ## `mutate()` in action {.smaller}
@@ -356,19 +357,18 @@ What proportion of new parents had their first child as teenagers, in their 20s,
 #| code-line-numbers: "1|5|6-9|10-11|13"
 #| output-location: column-fragment
 
-my_data <- gss_all |>  
-  select(year, agekdbrn) |> 
-  filter(year == 2022) |> 
-  drop_na(agekdbrn)  |>
+gss_all <-  gss_all |>  
   mutate(age_groups = case_when(
     agekdbrn < 18 ~ "<18",
     agekdbrn >= 18 & agekdbrn <= 29 ~ "18–29",
     agekdbrn >= 30 & agekdbrn <= 39 ~ "30–39",
     agekdbrn >= 40 ~ "40+",
     TRUE ~ NA_character_)
-    ) 
+  ) 
 
-freq(my_data$age_groups, report.nas = FALSE, headings = FALSE)
+gss_all |>
+  filter(year == 2022) |>
+  freq(age_groups, report.nas = FALSE, headings = FALSE)
 ```
 
 
@@ -587,21 +587,21 @@ df
 
 ```{r}
 #| label: mutateA
-#| code-line-numbers: "1"
+#| code-line-numbers: "2|11"
 #| eval: false
 
-my_data <- gss_all |>  
-  select(year, agekdbrn) |> 
-  filter(year == 2022) |> 
-  drop_na(agekdbrn)  |>
+gss_all <-  gss_all |>  
   mutate(age_groups = case_when(
     agekdbrn < 18 ~ "<18",
     agekdbrn >= 18 & agekdbrn <= 29 ~ "18–29",
     agekdbrn >= 30 & agekdbrn <= 39 ~ "30–39",
     agekdbrn >= 40 ~ "40+",
-    TRUE ~ NA_character_)) 
+    TRUE ~ NA_character_)
+  ) 
 
-freq(my_data$age_groups, report.nas = FALSE, headings = FALSE)
+gss_all |>
+  filter(year == 2022) |>
+  freq(age_groups, report.nas = FALSE, headings = FALSE)
 ```
 :::
 
@@ -635,38 +635,22 @@ gss_all |>
 
 # Summary Statistics {.theme-section}
 
-## Mode
+## Median & Mode
 
-Remember, the **mode** is the category with the greatest frequency (or
-the largest percentage). Let's find it for the `premarsx` variable.
-
-<br>
+Let's use [dplyr grammar]() to find the median and mode for the `childs` variable.
 
 ```{r}
-#| eval: false ## temporary!!!
-#| label: mode
+#| label: median_mode
+#| code-line-numbers: "1-3|5-6|7|8"
+#| output-location: slide
 
-freq(gss_all$premarsx, report.nas = FALSE) 
-
-```
-
-## Median
-
-We can use the same table we generated before to identify the
-**median**. This time, let's use [dplyr grammar]() to produce the same
-table
-
-Remember, use the cumulative percentage to locate the **50th
-percentile**.
-
-```{r}
-#| eval: false ## temporary!!!
-
-#| label: median
-#| code-line-numbers: "1|2|3"
+gss_all$childs <- zap_missing(gss_all$childs) 
+gss_all$childs <- as_factor(gss_all$childs)   
+gss_all$childs <- droplevels(gss_all$childs)  
 
 gss_all |> # <1>
-  freq(premarsx, report.nas = FALSE) |> # <2>
+  filter(year == 2024) |> # <1>
+  freq(childs, report.nas = FALSE) |> # <2>
   tb() # <3> 
 
 ```
@@ -675,31 +659,24 @@ gss_all |> # <1>
 2.  Use the `freq()` function as usual
 3.  Add the `tb()` function to turn the table into a `tibble`
 
-## Mean
-
-```{r}
-#| eval: false ## temporary!!!
-
-#| label: freq-numeric
-
-freq(gss_all$hrs1, report.nas = FALSE, headings = FALSE) 
-
-```
-
 ::: aside
-Question 1a. If working, full or part time: how many hours did you work
-last week, at all jobs?
+How many children have you ever had? 
+Please count all that were born alive at any time (including any you had from a previous marriage).
 :::
 
-## Mean
+
+## Median & Mean
 
 ```{r}
-#| eval: false ## temporary!!!
-
 #| label: mean-median
+#| output-location: column
+#| code-line-numbers: "1-2|4"
 
-mean(gss_all$hrs1, na.rm=TRUE) # <1>
-median(gss_all$hrs1, na.rm=TRUE)
+median(gss_all$hrs1, na.rm=TRUE) # <1>
+mean(gss_all$hrs1, na.rm=TRUE)   # <1>
+
+# show me summary statistics
+summary(gss_all$hrs1)
 
 ```
 
@@ -711,62 +688,60 @@ Question 1a. If working, full or part time: how many hours did you work
 last week, at all jobs?
 :::
 
-## `summary()`
+## `descr()`
+
+Univariate statistics for numerical data
 
 <br>
 
 ```{r}
-#| eval: false ## temporary!!!
-
-#| label: summary
-
-summary(gss_all$hrs1)
-
-```
-
-## Variability: `descr()`
-
-<br>
-
-```{r}
-#| eval: false ## temporary!!!
-
 #| label: descr01
-
-descr(gss_all$hrs1)
-
-```
-
-## Variability: `descr()`
-
-```{r}
-#| label: descr02
-#| code-line-numbers: "1|2|3|4"
+#| code-line-numbers: "1-3|4-5|6"
 
 gss_all |> 
+  filter(year == 2024) |>
+  drop_na(hrs1)  |>
   descr(hrs1,
         stats = "common") |> # <1>
-  tb() 
-
-```
-
-## Variability `descr()`
-
-```{r}
-#| label: descr03
-#| code-line-numbers: "1|2|3|4-5|6"
-
-gss_all |> 
-  filter(!is.na(sex))  |>
-  group_by(sex) |>
-  descr(hrs1,
-        stats = "common") |> # <1>
-  tb() 
+  tb() # <2>
 
 ```
 
 1.  Which stats to produce. Either “all” (default), “fivenum”, “common”
     (see Details), or a selection. See ?descr
+2.  Don't forget to make a tidy dataset out of freq() or descr() outputs
+    
+::: {.callout-tip icon="false"}
+## {{< fa hat-wizard >}} Heads Up!
+
+`descr()` can't handle grouped data. :(
+:::
+    
+## `summarize()`
+
+<br>
+
+```{r}
+#| label: summarize
+#| code-line-numbers: "1-4|5|6-7|8|9-10"
+#| output-location: fragment
+
+gss_all |>  
+  select(year, hrs1, sex) |> 
+  filter(year == 2024) |> 
+  drop_na(hrs1, sex)  |>
+  group_by(as_factor(sex)) |>  
+  summarise(
+    count = n(),
+    mean = round(mean(hrs1), digits = 2), 
+    sd = sd(hrs1),
+    min = min(hrs1),
+    median = median(hrs1),
+    max = max(hrs1)
+    ) 
+
+```
+
     
     
 # Think Like a Statistician {background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}

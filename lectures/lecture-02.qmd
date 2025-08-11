@@ -24,7 +24,6 @@ execute:
 ---
 
 ```{r echo=FALSE}
-
 #| label: setup
 #| message: false
 #| include: false
@@ -69,7 +68,6 @@ package, available on CRAN.
 #| eval: false
 
 install.packages("summarytools")
-
 ```
 
 <br>
@@ -81,7 +79,7 @@ Load the standard packages and our new `summarytools()` package.
 #| label: load
 
 library(here)
-library(tidyverse) 
+library(tidyverse)
 library(haven) # not core tidyverse
 library(gssr)
 library(gssrdoc)
@@ -100,7 +98,6 @@ gss24 <- gss_get_yr(2024)
 
 # Load the codebook
 data(gss_dict)
-
 ```
 
 # Coding Basics {.theme-section}
@@ -113,7 +110,7 @@ data(gss_dict)
 You can use R to do basic math calculations
 
 ```{r}
-#| label: arithmetic 
+#| label: arithmetic
 
 1 + 2
 2 * 5
@@ -125,7 +122,7 @@ You can use R to do basic math calculations
 
 You can create new objects with the assignment operator <-
 ```{r}
-#| label: assign 
+#| label: assign
 
 x <- 3 * 4
 x
@@ -139,13 +136,12 @@ x
 ::: {.column .fragment}
 You can (and should) make comments in your code
 ```{r}
-#| label: comments 
+#| label: comments
 
 # R will ignore any text after # for that line
 
 primes <- c(2, 3, 5, 7, 11, 13) # create vector of prime numbers
 primes
-
 ```
 :::
 
@@ -174,12 +170,12 @@ Source: [R for Data Science](https://r4ds.hadley.nz/workflow-basics.html)
 ```{r}
 #| label: basics
 
-a <- 7 
-b <- 3 
-addition <- a + b 
-subtraction <- a - b 
-multiplication <- a * b 
-division <- a / b 
+a <- 7
+b <- 3
+addition <- a + b
+subtraction <- a - b
+multiplication <- a * b
+division <- a / b
 exponentiation <- a^2
 ```
 
@@ -191,13 +187,13 @@ exponentiation <- a^2
 ```{r}
 #| label: basics-results
 
-a  
-b 
-addition 
-subtraction 
-multiplication 
-division 
-exponentiation 
+a
+b
+addition
+subtraction
+multiplication
+division
+exponentiation
 ```
 
 :::
@@ -245,13 +241,13 @@ decision operations. A few of the key ones to know before we get started:
 ```{r}
 #| label: compare
 
-x <- 5 
-y <- 3 
-equal <- x == y 
-not_equal <- x != y 
-less_than <- x < y 
-more_than <- x > y 
-less_than_or_equal_to <- x <= y 
+x <- 5
+y <- 3
+equal <- x == y
+not_equal <- x != y
+less_than <- x < y
+more_than <- x > y
+less_than_or_equal_to <- x <= y
 more_than_or_equal_to <- x >= y
 ```
 :::
@@ -260,14 +256,14 @@ more_than_or_equal_to <- x >= y
 ```{r}
 #| label: compare-output
 
-x 
-y  
-equal 
-not_equal 
-less_than 
-more_than 
-less_than_or_equal_to 
-more_than_or_equal_to 
+x
+y
+equal
+not_equal
+less_than
+more_than
+less_than_or_equal_to
+more_than_or_equal_to
 ```
 :::
 
@@ -298,11 +294,11 @@ Source: [IONOS editorial team](https://www.ionos.ca/digitalguide/websites/web-de
 ```{r}
 #| label: logical
 
-x <- TRUE 
-y <- FALSE 
+x <- TRUE
+y <- FALSE
 
-and_operator <- x & y 
-or_operator <- x | y 
+and_operator <- x & y
+or_operator <- x | y
 not_operator <- !x
 ```
 :::
@@ -311,7 +307,7 @@ not_operator <- !x
 ```{r}
 #| label: logical-output
 
-and_operator 
+and_operator
 or_operator
 not_operator
 ```
@@ -424,9 +420,8 @@ class(2.5)
 opinion <- factor(c("like", "dislike", "dislike", "hate", "dislike", "hate"))
 class(opinion)
 
-# By default, the levels are sorted alphabetically. 
-levels(opinion) 
-
+# By default, the levels are sorted alphabetically.
+levels(opinion)
 ```
  
 <br>
@@ -437,7 +432,7 @@ levels(opinion)
 #| label: factors02
 
 # Reorder the levels with the argument `levels` in the `factor()` function
-opinion <- factor(opinion, levels = c("hate", "dislike", "like")) 
+opinion <- factor(opinion, levels = c("hate", "dislike", "like"))
 levels(opinion)
 ```
 
@@ -451,7 +446,7 @@ levels(opinion)
 #| label: factors03
 
 # If the order has meaning (like rankings), you can make it an ordered factor
-opinion <- factor(opinion, levels = c("hate", "dislike", "like"), ordered = TRUE) 
+opinion <- factor(opinion, levels = c("hate", "dislike", "like"), ordered = TRUE)
 levels(opinion)
 ```
 
@@ -528,7 +523,6 @@ It makes data easier to understand without needing a separate codebook.
 
 attr(gss24$premarsx, "label") # <1>
 print_labels(gss24$premarsx) # <2>
-
 ```
 
 1.   A description of the variable
@@ -553,7 +547,6 @@ to see the value labels of the variable `premarsx`.
 ```{r}
 #| label: label02_premarsx
 table(as_factor(gss24$premarsx), useNA = "ifany")
-
 ```
 
 
@@ -568,7 +561,7 @@ table(as_factor(gss24$premarsx), useNA = "ifany")
 ```{r}
 #| label: label03_premarsx
 
-gss24$premarsx <- zap_missing(gss24$premarsx) 
+gss24$premarsx <- zap_missing(gss24$premarsx)
 table(as_factor(gss24$premarsx), useNA = "ifany")
 ```
 
@@ -618,8 +611,8 @@ table(gss24$premarsx)
 #| label: labels_sex
 
 gss24$sex <- zap_missing(gss24$sex) # <1>
-gss24$sex <- as_factor(gss24$sex)   # <2>
-gss24$sex <- droplevels(gss24$sex)  # <3>
+gss24$sex <- as_factor(gss24$sex) # <2>
+gss24$sex <- droplevels(gss24$sex) # <3>
 
 table(gss24$sex)
 ```
@@ -644,9 +637,8 @@ Make a frequency table of the variable `sex`. Then, do the same for `premarsx`.
 #| label: freq01
 #| eval: false
 
-freq(gss24$sex) 
-freq(gss24$premarsx) 
-
+freq(gss24$sex)
+freq(gss24$premarsx)
 ```
 
 ## Relative frequency table
@@ -655,8 +647,7 @@ freq(gss24$premarsx)
 #| label: freq01a
 #| echo: false
 
-freq(gss24$sex) 
-
+freq(gss24$sex)
 ```
 
 <br>
@@ -665,8 +656,7 @@ freq(gss24$sex)
 #| label: freq01b
 #| echo: false
 
-freq(gss24$premarsx) 
-
+freq(gss24$premarsx)
 ```
 
 ## Pretty tables 
@@ -686,8 +676,8 @@ same for `premarsx`.
 #| label: freq02
 #| eval: false
 
-freq(gss24$sex, report.nas = FALSE, headings = FALSE) 
-freq(gss24$premarsx, report.nas = FALSE, headings = FALSE) 
+freq(gss24$sex, report.nas = FALSE, headings = FALSE)
+freq(gss24$premarsx, report.nas = FALSE, headings = FALSE)
 ```
 
 ## Pretty tables 
@@ -696,7 +686,7 @@ freq(gss24$premarsx, report.nas = FALSE, headings = FALSE)
 #| label: freq02a
 #| echo: false
 
-freq(gss24$sex, report.nas = FALSE, headings = FALSE) 
+freq(gss24$sex, report.nas = FALSE, headings = FALSE)
 ```
 
 <br>
@@ -705,7 +695,7 @@ freq(gss24$sex, report.nas = FALSE, headings = FALSE)
 #| label: freq02b
 #| echo: false
 
-freq(gss24$premarsx, report.nas = FALSE, headings = FALSE) 
+freq(gss24$premarsx, report.nas = FALSE, headings = FALSE)
 ```
 
 
@@ -720,7 +710,6 @@ We've been using the `table()` function with one variable at a time, but it also
 
 # 1st variable is the rows, 2nd variable is the columns.
 table(gss24$premarsx, gss24$sex)
-
 ```
 
 <br>
@@ -754,9 +743,10 @@ Use `summarytools::ctable` instead!
 #| output-location: fragment
 
 ctable(gss24$premarsx, gss24$sex, # <1>
-       prop = "c", # <2>
-       format = "p", # <3>
-       useNA = "no")  # <4>
+  prop = "c", # <2>
+  format = "p", # <3>
+  useNA = "no"
+) # <4>
 ```
 
 1.  Change from `table()` to `ctable()`.
@@ -785,5 +775,3 @@ respondents believe sex before marriage is 'almost always wrong'?
 
 -   [Men]{.correct data-explanation="💯 Correct!"}
 -   [Women]{data-explanation="😲 66% is greater than 64.6%"}
-
-

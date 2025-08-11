@@ -639,6 +639,8 @@ gss_all |>
 
 Let's use [dplyr grammar]() to find the median and mode for the `childs` variable.
 
+<br>
+
 ```{r}
 #| label: median_mode
 #| code-line-numbers: "1-3|5-6|7|8"
@@ -667,9 +669,12 @@ Please count all that were born alive at any time (including any you had from a 
 
 ## Median & Mean
 
+Let's use [dplyr grammar]() to find the median and mean for the `hrs1` variable.
+
+<br>
+
 ```{r}
 #| label: mean-median
-#| output-location: column
 #| code-line-numbers: "1-2|4"
 
 median(gss_all$hrs1, na.rm=TRUE) # <1>
@@ -711,10 +716,12 @@ gss_all |>
     (see Details), or a selection. See ?descr
 2.  Don't forget to make a tidy dataset out of freq() or descr() outputs
     
+<br> 
+
 ::: {.callout-tip icon="false"}
 ## {{< fa hat-wizard >}} Heads Up!
 
-`descr()` can't handle grouped data. :(
+`descr()` can't handle grouped data. 😟
 :::
     
 ## `summarize()`
@@ -723,7 +730,7 @@ gss_all |>
 
 ```{r}
 #| label: summarize
-#| code-line-numbers: "1-4|5|6-7|8|9-10"
+#| code-line-numbers: "1-4|5|6-7|8-10|11-12|13"
 #| output-location: fragment
 
 gss_all |>  
@@ -733,11 +740,11 @@ gss_all |>
   group_by(as_factor(sex)) |>  
   summarise(
     count = n(),
-    mean = round(mean(hrs1), digits = 2), 
-    sd = sd(hrs1),
     min = min(hrs1),
     median = median(hrs1),
-    max = max(hrs1)
+    max = max(hrs1),
+    mean = round(mean(hrs1), digits = 2), 
+    sd = sd(hrs1)
     ) 
 
 ```
@@ -746,72 +753,55 @@ gss_all |>
     
 # Think Like a Statistician {background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
 
-Political polarization is high in the U.S. today and attitudes about
-gender and family behavior have been heavily debated.
-
-Using the most recent survey, do more liberals than conservatives think
-sex before marriage is '*not wrong at all*'?
+On average, do parents with 4 or more kids work fewer hours for pay than other parents?
 
 <br>
 
 [{{< fa regular lightbulb >}} **How do we find
 out?**]{style="color: #F39C12; font-size: 175%; font-family: 'Shadows Into Light'"}
 
-## Variable Descriptions
-
-Let's familiarize ourselves with the `premarsx` and `polviews`
-variables.
+## Think Like a Statistician {background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
 
 <br>
 
-In the console, type `?premarsx` and hit enter. The Help pane will show
-you the question text, response options and values.
-
-<br>
-
-Now, do the same for `polviews`.
-
-## Change variables
-
-```{r}
-#| label: think01
-#| code-line-numbers: "1|2|3-5|6|7-8|9"
-
-gss_all <- gss_all |> # <1>
- mutate(pol3cat = case_when( # <2>
-   polviews >= 1 & polviews <= 3 ~ "Liberal", # <2>
-   polviews == 4 ~ "Moderate", # <2>
-   polviews >= 5 & polviews <= 7 ~ "Conservative", # <2>
-   TRUE ~ NA_character_), # <3>
-  pol3cat = factor(pol3cat, # <4>
-                 levels = c("Liberal", "Moderate", "Conservative")) # <4>
-  )
-
-```
-
-1.  Save over the dataset with an added variable.
-2.  Creates a new variable by assigning labels based on values of
-    `polviews`
-3.  Set everything else to "missing"
-4.  Convert the variable to factor with specified level order
-
-##  {.smaller data-menu-title="Your Data Take" background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
-
-::: {style="color: #f39c12; font-size: 250%; font-family: 'Shadows Into Light'"}
-{{< fa regular lightbulb >}} **What's your conclusion to our initial
-research question?**
+::: {style="color: #f39c12; font-size: 200%;  font-family: 'Shadows Into Light'"}
+{{< fa regular lightbulb >}} **Can you reproduce this table?**
 :::
-
-<br>
-
-\% who think sex relations before marriage is \_\_\_\_\_\_\_\_\_\_, by
-political views
 
 ```{r}
 #| label: crosstab-02-output
 #| echo: false
 
-ctable(gss_all$premarsx, gss_all$sex, prop = "c", format = "p", useNA = "no") 
+gss_all$childs <- as.numeric(gss_all$childs)
+
+gss_all |> 
+  filter(year == 2024) |>
+  select(year, childs, hrs1) |>
+  mutate(childs_group = case_when(
+    childs == 1 ~ "1 child",
+    childs == 2 ~ "2 children",
+    childs == 3 ~ "3 children",
+    childs >= 4 ~ "4 or more children",
+    TRUE ~ NA_character_)) |>
+  drop_na(childs_group, hrs1) |>
+  group_by(childs_group) |>  
+  summarise(
+    count = n(),
+    mean = round(mean(hrs1), digits = 2), 
+    median = round(median(hrs1)),
+    sd = round(sd(hrs1), digits = 2)
+    ) 
 ```
-    
+
+
+## Your Data Take {data-menu-title="Your Data Take" background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
+
+<br>
+
+::: {style="color: #f39c12; font-size: 200%; font-family: 'Shadows Into Light'"}
+{{< fa regular lightbulb >}} **What's your conclusion to our initial
+research question?**
+:::
+
+
     

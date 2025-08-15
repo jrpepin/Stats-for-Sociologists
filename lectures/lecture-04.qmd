@@ -1,0 +1,399 @@
+---
+title: "Data Management II"
+format:
+  revealjs:
+    multiplex: false
+    controls: true
+    theme: [default, custom.scss]
+    highlight-style: atom-one
+    include-in-header:
+    - file: mathjax-color.html
+    slide-number: c
+    math: mathjax
+    code-annotations: hover
+revealjs-plugins:
+  - quiz
+embed-resources: true
+filters:
+    - openlinksinnewpage
+editor: 
+  markdown: 
+    wrap: 72
+execute: 
+  echo: true
+---
+
+```{r echo=FALSE}
+
+#| label: setup
+#| message: false
+#| include: false
+
+## Load packages, custom functions, and styles
+source("custom-setup-styles.R")
+
+# Color in math equations
+# https://egallic.fr/Recherche/aide-memoire/quarto_equation_colors.html#colors-in-equations-with-revealjs
+```
+
+# Agenda {data-menu-title="Agenda" background-image="images/calendar.png" background-size="100px" background-repeat="repeat"}
+
+-   Manipulating Dataframes
+-   Joining Dataframes
+
+::: notes
+joining data
+missing data? & **outliers** - dates? - lists
+:::
+
+# Learning objectives
+
+By the end of the lab, you will be able to ...
+
+-   x
+-   y
+
+# Code-along 04 {data-menu-title="Code-along" background-image="images/terminal.png"}
+
+Download and open [code-along-04.qmd]()
+
+## Packages {.sparse-slide}
+
+Load the standard packages.
+
+```{r}
+#| message: false
+#| label: load
+
+library(here)
+library(tidyverse) 
+library(haven) # not core tidyverse
+library(gssr)
+library(gssrdoc)
+library(summarytools)
+```
+
+## GSS Panel Data: Download
+
+<https://gss.norc.org/get-the-data/stata>
+
+<br>
+
+![](images/04/gss-panel.png){width="100%"}
+
+::: {.callout-tip icon="false"}
+## {{< fa hat-wizard >}} Heads Up!
+
+Save and **unzip** this file in your class `data` folder.
+:::
+
+## GSS Panel Data: Load {.sparse-slide}
+
+```{r}
+#| message: false
+#| label: gsspanel-01
+
+# Use here() to construct the file path
+gss_panel.dta <- here("data", "GSS_2020_panel_stata_1a/gss2020panel_r1a.dta")
+
+#load the data using `haven::read_dta()`
+data <- read_dta(gss_panel.dta)
+
+# Or, do both at the same time!
+# data <- read_dta(here("data", "GSS_2020_panel_stata_1a/gss2020panel_r1a.dta"))
+
+```
+
+## GSS 2016-2020 Panel Dataset {.sparse-slide}
+
+Study of former 2016 and 2018 GSS respondents were interviewed again in
+2020
+
+-   Variables from 2016 (Wave 1a) have [**\_1a**]{style="color: #e74c3c"} appended
+-   Variables from 2018 (Wave 1b) have [**\_1b**]{style="color: #e74c3c"} appended
+-   Variables from 2020 (Wave 2) have [**\_2**]{style="color: #e74c3c"} appended
+
+## GSS 2016-2020 Panel Dataset {.sparse-slide}
+
+```{r}
+#| label: gsspanel-02
+#| echo: false
+
+set.seed(815)  # Ensures you get the same sample every time
+
+data |>
+  select(yearid, starts_with("year_"), starts_with("age_")) |>
+  slice_sample(n = 10) 
+```
+
+# Manipulating Dataframes {.theme-section}
+
+
+
+## Select variables that match a pattern {.smaller}
+
+These selection helpers match variables according to a given pattern.
+
+-    `starts_with()`: Starts with an exact prefix.
+-    `ends_with()`: Ends with an exact suffix.
+-    `contains()`: Contains a literal string.
+-    ...
+
+
+```{r}
+#| label: starts-with-01
+#| eval: false
+
+my_data <- data |>
+  select(yearid, wtssnr_2, 
+         starts_with("age_"), 
+         starts_with("family16_"),
+         starts_with("socfrend_"),
+         starts_with("childs_")) 
+
+```
+
+<br>
+
+```{r}
+#| label: starts-with-02
+#| code-line-numbers: "4|7"
+
+# You can supply multiple prefixes or suffixes.
+my_data <- data |>
+  select(yearid, wtssnr_2, 
+         starts_with(c("age_", "family16_", "socfrend", "childs"))
+         )
+
+my_data <- as_factor(my_data) # Apply labels to data
+
+```
+
+## `head()` & `tail()` {.smaller}
+
+Look at the first few column names and **first** few rows.
+
+```{r}
+#| label: head
+head(my_data)
+```
+
+<br>
+
+Look at the first few column names and **last** few rows.
+
+```{r}
+#| label: tail
+tail(my_data)
+```
+
+## Reminder: Tidy data
+
+![](images/04/tidy-data.png){width="100%"}
+
+##  {data-menu-title="Not tidy data" }
+
+![](images/04/not-tidy.png){width="100%"}
+
+::: {style="color: #3498db; font-family: 'Shadows Into Light'"}
+**This data is NOT tidy!**  
+Some column names include values of a variable (survey year). 
+:::
+
+
+##  {data-menu-title="Tidy data" }
+
+```{r}
+#| label: tidy
+#| echo: false
+
+my_data |>
+  pivot_longer(
+    cols = c(-yearid, -wtssnr_2),
+    names_to = c("variable"),
+    values_to = "value") |>
+    separate_wider_delim(variable, 
+                         delim = "_", 
+                         names = c("variable", "panel")) |>
+  pivot_wider(
+    names_from = variable,
+    values_from = value)
+
+```
+
+::: {style="color: #3498db; font-family: 'Shadows Into Light'"}
+**This data is tidy!**  
+Each variable is in its own column, and each observation is in its own row. 
+:::
+
+## {data-menu-title="Reshaping"}
+
+![](images/04/wide-long.png){width="100%"}
+
+## `pivot_longer()`
+
+```{r}
+#| label: pivot-longer
+#| code-line-numbers: "2|3|4|5"
+
+my_data_long <- my_data |>
+  pivot_longer(
+    cols = 3:14, # <1>
+    names_to = c("variable"), # <2>
+    values_to = "value") # <3>
+
+head(my_data_long)
+```
+
+1.  `cols =` specifies which columns you want to turn into one
+2.  `names_to =` defines the name of the new variable containing the current variable names
+3.  `values_to=` defines the name of the new variable that takes in the values of the variables
+
+
+::: {style="color: #3498db; font-family: 'Shadows Into Light'"}
+**This is also not tidy data!**  
+The `variable` column contains the names of the variable AND the panel.
+:::
+
+## `separate()`
+
+```{r}
+#| label: separate
+#| code-line-numbers: "6|7|8"
+
+my_data_long <- my_data |>
+  pivot_longer(
+    cols = c(-yearid, -wtssnr_2),
+    names_to = c("variable"),
+    values_to = "value") |>
+  separate_wider_delim(variable, # <1>
+                       delim = "_", # <2>
+                       names = c("variable", "panel")) # <3>
+
+head(my_data_long)
+
+```
+
+1.  Split the column `variable` into two using a delimiter
+2.  A string giving the delimiter between values
+3.  `names` specifies the two new column names
+
+::: {style="color: #3498db; font-family: 'Shadows Into Light'"}
+**This is still not tidy data!**  
+The `value` variable is a mix of different types of values
+:::
+
+## `pivot_wider()`
+
+```{r}
+#| label: wider
+#| code-line-numbers: "1|9|10|11"
+
+my_data <- my_data |> # overwriting my_data
+  pivot_longer(
+    cols = c(-yearid, -wtssnr_2),
+    names_to = c("variable"),
+    values_to = "value") |>
+    separate_wider_delim(variable, 
+                         delim = "_", 
+                         names = c("variable", "panel")) |>
+  pivot_wider( # <1>
+    names_from = variable, # <2>
+    values_from = value) # <3>
+
+head(my_data)
+
+```
+
+1.  Increasing the number of columns and decreasing the number of rows
+2.  Which column to get the name of the output columns
+3.  Which column to get the cell values from
+
+## Recode the reshaped variable
+
+```{r}
+#| label: recode-panel
+
+my_data <- my_data |>
+  mutate(panel = case_when(
+         panel == "1a" ~ 2016,
+         panel == "1b" ~ 2018,
+         panel == "2" ~ 2020,
+         TRUE ~ NA_integer_))
+
+head(my_data)
+```
+
+. . . 
+
+::: {.callout-tip icon="false"}
+## {{< fa hat-wizard >}} Heads Up!
+
+`family16` is a time-invariant variable.
+:::
+
+## `relocate()`
+
+:::: columns
+::: column
+```{r}
+#| label: relocate-01
+
+my_data <- my_data |> 
+  relocate(panel)
+
+names(my_data)
+```
+:::
+
+::: column
+```{r}
+#| label: relocate-02
+
+my_data <- my_data |> 
+  relocate(panel, .after = yearid)
+
+names(my_data)
+```
+:::
+::::
+
+<br>
+
+```{r}
+#| label: tibble
+#| echo: false
+
+tibble(my_data)
+```
+
+## `arrange()` {.smaller}
+
+```{r}
+#| label: arrange-01
+#| output-location: column
+
+
+my_data |> 
+  arrange(panel) |>
+  select(yearid, panel, age, family16)
+
+```
+
+<br> 
+
+. . .
+
+```{r}
+#| label: arrange-02
+#| output-location: column
+
+my_data |> 
+  arrange(desc(panel)) |>
+  select(yearid, panel, age, family16)
+
+```
+
+
+. . .
+

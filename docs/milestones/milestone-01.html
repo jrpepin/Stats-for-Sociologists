@@ -147,99 +147,82 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Update the YAML with your first and last name.</p>
 <p>Load the packages from the code-along. (Install first if not already done so.)</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>here() starts at C:/Users/Joanna/Documents/GitHub/Stats-for-Sociologists</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-✔ dplyr     1.1.4     ✔ readr     2.1.5
-✔ forcats   1.0.0     ✔ stringr   1.5.1
-✔ ggplot2   3.5.2     ✔ tibble    3.3.0
-✔ lubridate 1.9.4     ✔ tidyr     1.3.1
-✔ purrr     1.1.0     </code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-✖ dplyr::filter() masks stats::filter()
-✖ dplyr::lag()    masks stats::lag()
-ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gssr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Package loaded. To attach the GSS data, type data(gss_all) at the console.
-For the panel data and documentation, type e.g. data(gss_panel08_long) and data(gss_panel_doc).
-For help on a specific GSS variable, type ?varname at the console.</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gssrdoc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse) </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven) </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gssr)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gssrdoc)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(summarytools)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="add-documentation" class="level1">
 <h1>Add Documentation</h1>
-<p>Run the code and add <strong>narrative</strong> (outside code chunks) or <strong>comments</strong> (inside the code chunks) to the R chunks below.</p>
+<p>Run the code and add <strong>narrative</strong> (outside code chunks) or <strong>comments</strong> (inside the code chunks) describing what each of the the below R chunks do.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">here</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">here</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "C:/Users/Joanna/Documents/GitHub/Stats-for-Sociologists"</code></pre>
+<pre><code>[1] "C:/Users/Joanna/Documents/GitHub/Stats for Sociologists"</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">list.files</span>(<span class="at">path =</span> <span class="fu">here</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">list.files</span>(<span class="at">path =</span> <span class="fu">here</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] "_extensions"                  "_quarto-speaker.yml"         
  [3] "_quarto.yml"                  "code-alongs"                 
  [5] "data"                         "docs"                        
  [7] "lectures"                     "milestones"                  
  [9] "project"                      "site_libs"                   
-[11] "slides"                       "SOC6302_readings.qmd"        
-[13] "SOC6302_syllabus.qmd"         "Stats for Sociologists.Rproj"
-[15] "tutorials"                   </code></pre>
+[11] "slides"                       "SOC6302_data.qmd"            
+[13] "SOC6302_punch-list.qmd"       "SOC6302_readings.qmd"        
+[15] "SOC6302_syllabus.qmd"         "Stats for Sociologists.Rproj"
+[17] "tutorials"                   </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">list.files</span>(<span class="at">path =</span> <span class="fu">here</span>(<span class="st">"project"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">list.files</span>(<span class="at">path =</span> <span class="fu">here</span>(<span class="st">"project"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "data"    "outputs" "scripts"</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Sys.time</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Sys.time</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "2025-07-31 11:58:56 EDT"</code></pre>
+<pre><code>[1] "2025-08-17 12:32:24 EDT"</code></pre>
 </div>
 </div>
 </section>
 <section id="explore-the-gss" class="level1">
 <h1>Explore the GSS</h1>
-<p>Load all years of the gss data. Then, use the <code>gss_get_yr()</code> command to load the data only for the 2024 survey respondents.</p>
-<p><em>Hint</em>: Use the code from code-along-01.qmd</p>
+<p>Load all years of the gss data.</p>
+<p>Then, use the <code>gss_get_yr()</code> function to load the data only for the 2024 survey respondents. (<em>Hint</em>: Use the code from code-along-01.qmd)</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the data (will appear in your Global Environment pane)</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(gss_all)</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co"># load the gss 2024 data (add your code below)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the data (will appear in your Global Environment pane)</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(gss_all)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># load the gss 2024 data (add your code below)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Use R to answer the questions below. Show your work (e.g., R code) when appropriate. Add narration and comments throughout.</p>
+<p>Use R to answer the questions below. Show your work (e.g., R code chunks) where appropriate. Add narration and comments throughout. Justify your answers.</p>
 <ul>
 <li><p>Report the survey question that corresponds to the <code>fefam</code> variable.</p></li>
-<li><p>What type is the <code>fefam</code> variable? (nominal, ordinal, interval-ratio, dichotomous)? Justify your answer.</p></li>
+<li><p>Is <code>fefam</code> a dichotomous, nominal, ordinal, or interval-ratio variable? Justify your answer.</p></li>
 <li><p>Which years of the survey did the <code>fefam</code> variable appear?</p></li>
 <li><p>What value corresponds with “agree” for this variable?</p></li>
-<li><p>How many people “strongly agree” with the <code>fefam</code> statement in 2024?</p></li>
-<li><p>Look at the <code>happy</code> variable. Were most people “not too happy,” “pretty happy,” or “very happy” in 2024?</p></li>
-<li><p>Create a crosstab of the <code>happy</code> and <code>sex</code> variables using only the 2024 survey data. How many women were <code>very happy</code>? How many men were <code>very happy</code>?</p></li>
+<li><p>Convert the <code>fefam</code> variable to a factor variable. Make sure you remove any ‘missing’ (NA) or empty (e.g., levels with no observations) levels.</p></li>
+<li><p>Create a (pretty) relative frequency table to show for the <code>fefam</code> variable using the 2024 data. How many respondents “strongly agree” with the <code>fefam</code> statement in 2024? What % of respondents either “strongly agree” or “agree”?</p></li>
+<li><p>Create a (pretty) relative frequency table for the <code>happy</code> variable using the 2024 data. Make sure your values are labelled for easy interpretation (without levels identifying missing data or empty levels). Were most respondents “not too happy,” “pretty happy,” or “very happy” in 2024?</p></li>
+<li><p>Create a (pretty) cross-tab of the <code>happy</code> and <code>sex</code> variables using only the 2024 survey data. Make sure your values are labelled for easy interpretation. How many women were <code>very happy</code>? How many men were <code>very happy</code>?</p></li>
+<li><p>Were a greater percentage of women or men <code>very happy</code> in 2024?</p></li>
 </ul>
 </section>
 <section id="meet-the-ipums-data" class="level1">
 <h1>Meet the IPUMS Data</h1>
 <p>To keep your Research Brief progress on track, you’ll complete short exercises that correspond with the new course material using your own dataset as part of your milestones.</p>
-<p>Consider a research topic you are interested in and explore the documentation for some of the available <a href="https://www.ipums.org/overview">IPUMS (microdata) datasets</a> that could be relevant for the subject. Start broadly, such as looking at the <a href="https://www.ipums.org/topics">Topical Availability Summary</a>. Then, look at a couple of individual datasets more in depth. Explore the sidebar of available documentation for a couple of datasets: About, Data, Documentation (including User Guides and Questionnaires, FAQs).</p>
+<p>Consider a research topic you are interested in and explore the documentation for some of the available <a href="https://www.ipums.org/overview">IPUMS (microdata) datasets</a> that could be relevant for the subject. Start broadly, such as looking at the <a href="https://www.ipums.org/topics">Topical Availability Summary</a>. Then, look at a couple of individual datasets more in depth. Explore the sidebar of available documentation for 2-3 datasets: About, Data, Documentation (including User Guides and Questionnaires, FAQs).</p>
 <ul>
 <li><p>Write 1-2 sentences about your research interests.</p></li>
-<li><p>Then, write 2-3 sentences about which IPUMS dataset you are thinking of using, explaining the sample population and time frame of the dataset and why it is a good fit for your research interests.</p></li>
+<li><p>Then, write 2-3 sentences about which IPUMS dataset you are thinking of using, explaining the sample population and time frame of the dataset, and why it is a good fit for your research interests.</p></li>
 <li><p>Describe 2-3 key variables available in the dataset that are a good fit for your research topic. Report the exact survey questions and response options for these variables.</p></li>
 <li><p>Finally, create an IPUMS account for the dataset of interest. See this <a href="https://www.youtube.com/watch?v=Oo7RYMV7q4Y">help video</a> for details.</p></li>
 </ul>
-<p><strong>NOTE:</strong> For your Research Briefs, you must choose an <a href="https://www.ipums.org/overview">IPUMS (microdata) dataset</a> to use.</p>
+<p><strong>NOTE:</strong> For your Research Brief, you must choose an <a href="https://www.ipums.org/overview">IPUMS (microdata) dataset</a> to use.</p>
 
 
 </section>

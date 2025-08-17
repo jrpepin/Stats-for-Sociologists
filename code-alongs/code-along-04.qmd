@@ -1,0 +1,442 @@
+---
+title: "Code-along 04"
+author: "FirstName LastName"
+editor: visual
+execute:
+  error: true
+format: pdf # or replace 'pdf' with 'typst'
+---
+
+# Setup
+
+## Packages 
+
+Load the standard packages.
+
+```{r}
+#| message: false
+#| label: load
+
+library(here)
+library(tidyverse) 
+library(haven) # not core tidyverse
+library(gssr)
+library(gssrdoc)
+library(summarytools)
+```
+
+## GSS Panel Data: Download
+
+<https://gss.norc.org/get-the-data/stata>
+
+Download GSS 2016-2020 Panel (Release 1a, April 2022)
+
+Save the **unzipped** file in your class `data` folder.
+
+## GSS Panel Data: Load 
+
+```{r}
+#| message: false
+#| label: gsspanel-01
+
+# Use here() to construct the file path
+gss_panel.dta <- here("data", "GSS_2020_panel_stata_1a/gss2020panel_r1a.dta")
+
+#load the data using `haven::read_dta()`
+data <- read_dta(gss_panel.dta)
+
+# Or, do both at the same time!
+# data <- read_dta(here("data", "GSS_2020_panel_stata_1a/gss2020panel_r1a.dta"))
+
+```
+
+
+## GSS 2016-2020 Panel Dataset
+
+```{r}
+#| label: gsspanel-02
+
+set.seed(815)  # Ensures you get the same sample every time
+
+data |>
+  select(yearid, starts_with("year_"), starts_with("age_")) |>
+  slice_sample(n = 10) 
+```
+
+# Manipulating Dataframes 
+
+## Selection helpers 
+
+Match variables according to a given pattern.
+
+-    `starts_with()`: Starts with an exact prefix.
+-    `ends_with()`: Ends with an exact suffix.
+-    `contains()`: Contains a literal string.
+-    ...
+
+```{r}
+#| label: starts-with-01
+
+my_data <- data |>
+  select(yearid, wtssnr_2, 
+         starts_with("age_"), 
+         starts_with("family16_"),
+         starts_with("socfrend_"),
+         starts_with("childs_")) 
+
+```
+
+
+```{r}
+#| label: starts-with-02
+
+# You can supply multiple prefixes or suffixes.
+my_data <- data |>
+  select(yearid, wtssnr_2, 
+         starts_with(c("age_", "family16_", "socfrend", "childs"))
+         )
+
+my_data <- as_factor(my_data) # Apply labels to data
+
+```
+
+
+## `head()` & `tail()` {.smaller}
+
+Look at the first few column names and **first** few rows.
+
+```{r}
+#| label: head
+head(my_data, n = 5)
+```
+
+
+Look at the first few column names and **last** few rows.
+
+```{r}
+#| label: tail
+
+tail(my_data, n = 5)
+```
+
+
+##  Tidy data
+
+**This data is tidy!**  
+Each variable in its own column, and each observation in its own row. 
+
+```{r}
+#| label: tidy
+
+my_data |>
+  pivot_longer(
+    cols = c(-yearid, -wtssnr_2),
+    names_to = c("variable"),
+    values_to = "value") |>
+    separate_wider_delim(variable, 
+                         delim = "_", 
+                         names = c("variable", "panel")) |>
+  pivot_wider(
+    names_from = variable,
+    values_from = value)
+
+```
+
+
+## `pivot_longer()`
+
+```{r}
+#| label: pivot-longer
+
+my_data_long <- my_data |>
+  pivot_longer(
+    cols = 3:14, 
+    names_to = "variable", 
+    values_to = "value") 
+
+head(my_data_long, n = 5)
+```
+
+
+## `separate()`
+
+```{r}
+#| label: separate
+
+my_data_long <- my_data |>
+  pivot_longer(
+    cols = c(-yearid, -wtssnr_2),
+    names_to = "variable",
+    values_to = "value") |>
+  separate_wider_delim(variable, 
+                       delim = "_", 
+                       names = c("variable", "panel")) 
+
+head(my_data_long, n = 5)
+
+```
+
+
+## `pivot_wider()`
+
+```{r}
+#| label: wider
+
+my_data <- my_data |> # overwriting my_data
+  pivot_longer(
+    cols = c(-yearid, -wtssnr_2),
+    names_to = "variable",
+    values_to = "value") |>
+    separate_wider_delim(variable, 
+                         delim = "_", 
+                         names = c("variable", "panel")) |>
+  pivot_wider( 
+    names_from = variable, 
+    values_from = value) 
+
+head(my_data, n = 5)
+
+```
+
+
+## Recode the reshaped variable
+
+```{r}
+#| label: recode-panel
+
+my_data <- my_data |>
+  mutate(panel = case_when(
+         panel == "1a" ~ 2016,
+         panel == "1b" ~ 2018,
+         panel == "2" ~ 2020,
+         TRUE ~ NA_integer_))
+
+head(my_data, n = 3)
+```
+
+
+## `relocate()`
+
+```{r}
+#| label: relocate-01
+
+my_data <- my_data |> 
+  relocate(panel)
+
+head(my_data, n = 2)
+```
+
+
+```{r}
+#| label: relocate-02
+
+my_data <- my_data |> 
+  relocate(panel, .after = yearid)
+
+head(my_data, n = 2)
+```
+
+
+## `arrange()` 
+
+```{r}
+#| label: arrange-01
+#| output-location: column
+
+
+my_data |> 
+  arrange(panel) |>
+  select(yearid, panel, age, family16)
+
+```
+
+
+```{r}
+#| label: arrange-02
+#| output-location: column
+
+my_data |> 
+  arrange(desc(panel)) |>
+  select(yearid, panel, age, family16)
+
+```
+
+
+# Joining Dataframes 
+
+## Example datasets 
+
+**dataframe 1**
+
+```{r}
+#| label: df1
+#| echo: false
+
+# Create the example dataframes
+df_partner1 <- data.frame(
+  coupleid = c(2, 1, 3),
+  name = c("John", "Megan", "Bin"),
+  age = c(42, 36, 38)
+)
+
+df_partner1
+```
+
+**dataframe 2**
+
+```{r}
+#| label: df2
+#| echo: false
+
+df_partner2 <- data.frame(
+  coupleid = c(1, 3, 2),
+  name = c("Sue", "Ye-jin", "Chrissy"),
+  age = c(40, 39, 35)
+)
+df_partner2
+```
+
+**dataframe 3**
+
+```{r}
+#| label: df4
+#| echo: false
+
+df_family <- data.frame(
+  coupleid = c(3, 1, 2),
+  marstat = c(1, 0, 1),
+  numchild = c(1, 0, 4),
+  country = c("S.Korea", "US", "US")
+)
+df_family
+```
+
+
+## append data with `bind_rows()` 
+
+```{r}
+#| label: append
+
+df_all <- bind_rows(df_partner1, df_partner2)
+
+tibble(df_all)
+```
+
+
+## merge data with `left_join()` 
+
+```{r}
+#| label: join
+
+df_couples <- left_join(df_partner1, df_family, by = "coupleid")
+
+tibble(df_couples)
+```
+
+
+# Think Like a Statistician {background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
+
+Are married people above or below average in internet use or income? Does it vary by survey year?  
+  
+Answering this research question takes a few steps. But, the first step is to create a dataframe with all the necessary information.
+
+**Step 1. Create a new, reshaped dataframe**
+
+-    select the variables yearid, all marital variables, all wwwhr variables, and all realrinc variables
+-    pivot the marital, wwwhr, and realrinc variables longer (while keeping yearid)
+-    separate the new variable that contains the variable names and panel id into two variables
+-    pivot wider the data so marital, wwwhr, and realrinc are all their own variables (columns)
+-    recode your panel variable so 1a = 2016, 1b = 2018, and 2 = 2020
+  
+**Step 2. Create a summary dataframe**
+
+-    remove rows with missing `wwwhr` or `realrinc` values
+-    group the data by your `panel` variable
+-    create a summary dataframe that contains the averages for wwwhr and realrinc 
+
+**Step 3.  Put the two dataframes together**
+
+-    Use full_join to put your two new dataframes together
+
+```{r}
+#| label: think-output
+#| eval: false
+
+# TIP: It's often easier to play with your code in an R script first.
+# Then, copy and past your working R code into this code-chunk 
+# and delete the `eval` statement when your code is fully working
+
+# Reshape data
+think_data <- data |>
+    select() |>
+    pivot_longer() |>
+    separate_wider_delim() |>
+  pivot_wider()
+
+# recode variables
+think_data <- think_data |>
+  mutate()
+
+## summarize by panel
+think_summary <- think_data |>
+  drop_na()  |>
+  group_by() |>  
+  summarise()
+
+think_full <- full_join()
+
+think_full
+
+```
+
+
+## Your Data Take
+
+**What's your conclusion to our initial research question?**
+
+*NOTE: after you've created a `think_full` dataframe with the appropriate variables, delete the `echo` and `eval` statements in each of the code blocks below to produce the necessary tables.*
+
+```{r}
+#| label: think-answer
+#| echo: false
+#| eval: false
+
+# Filter for married individuals and create flags
+think_married <- think_full |>
+  filter(marital == "married") |>
+  group_by(panel) |>
+  mutate(
+    income_status = ifelse(realrinc > avg_inc, "Above Average", "Below Average"),
+    internet_status = ifelse(wwwhr > avg_www, "Above Average", "Below Average")
+  )
+```
+
+```{r}
+#| label: think-answer-01
+#| echo: false
+#| eval: false
+
+# Income status
+ctable(think_married$income_status, think_married$panel, 
+  prop = "c", 
+  format = "p", 
+  useNA = "no",
+  headings = FALSE
+)
+
+```
+
+
+```{r}
+#| label: think-answer-02
+#| echo: false
+#| eval: false
+
+# Internet status
+ctable(think_married$internet_status, think_married$panel, 
+  prop = "c", 
+  format = "p", 
+  useNA = "no",
+  headings = FALSE
+)
+```

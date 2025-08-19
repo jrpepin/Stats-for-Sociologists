@@ -1,7 +1,9 @@
 ---
 title: "Milestone 02"
 author: "FirstName LastName"
-format: pdf
+format: pdf # or replace 'pdf' with 'typst'
+execute:
+  error: true # change this to false when your assignment is complete.
 ---
 
 # Environment
@@ -47,12 +49,21 @@ You’ll be working with the following GSS variables:
 -   `polviews`: Political views (from extremely liberal to extremely
     conservative)
 
-# Do Stuff in R
+# Code, Output, Meaning
 
-For **tasks 1-5** use the 2024 GSS data. For **tasks 6-10**, use the
-panel data.
+*Use R to complete the checkpoints below. Show your work (e.g., R code
+chunks) where appropriate. Add narrative (text outside code chunks) or
+comments (text inside the code chunks) throughout.*
 
-## Task 01: Select relevant variables
+Reference specific statistics (where appropriate) from your output to
+justify your answers. Explain what the values tell you about the data;
+interpret their meaning in relation to the question.
+
+*Use the 2024 GSS data for checkpoints 01-05.*
+
+*Use the panel data for checkpoints 06-10.*
+
+## Checkpoint 01: Select relevant variables
 
 Use `select()` to create a new data frame with only the four variables
 listed above.
@@ -65,7 +76,7 @@ my_data <- gss24 |>
 
 ```
 
-## Task 02: Clean and create variables
+## Checkpoint 02: Clean and create variables
 
 A.  Use `zap_missing`, `as_factor`, and `droplevels` to make `sex` into
     a factor variable.
@@ -119,7 +130,7 @@ my_data <- my_data %>%
 
 ```
 
-## Task 03: Remove rows with missing data
+## Checkpoint 03: Remove rows with missing data
 
 Use `drop_na()` to keep only respondents who have non-missing values for
 all variables.
@@ -132,7 +143,7 @@ my_data <- my_data %>%
 
 ```
 
-## Task 04: Summarize work and tv hours by political identity
+## Checkpoint 04: Summarize work and tv hours by political identity
 
 A.  Use `group_by()` and `sumamrize()` to create a table showing the
     frequency, mean, median, and sd of **`hrs1`** for each of the three
@@ -151,6 +162,12 @@ my_data |>
     ) 
 ```
 
+***Which political group reported the most work hours in 2024? Was there
+a lot or a little variability in work hours?***
+
+***Is the median value for `tvhours` consistent with the mean? Speculate
+what might explain any differences.***
+
 B.  Use `group_by()` and `sumamrize()` to create a table showing the
     frequency, mean, median, and sd of **`tvhours`** for each of the
     three political identity groups.
@@ -168,7 +185,10 @@ my_data |>
     ) 
 ```
 
-## Task 05: Create a summary dataframe
+***Which political group watched the most television in 2024? Was there
+a lot of a little variability in television hours?***
+
+## Checkpoint 05: Create a summary dataframe
 
 Use `group_by()` and `summarise()` to create and save a dataframe
 showing the average work and tv hours for men and women in 2024.
@@ -186,7 +206,14 @@ gss24_summary <- my_data |>
 head(gss24_summary)
 ```
 
-## Task 06: Code for within-person change
+***Did men or women report more average work hours in 2024? What about
+TV hours?***
+
+***What percentage of men worked 40 hours or less than per week in 2024?
+(You can either add `R` code chunk to this document or calculate it with
+the formula. Show your work either way.)***
+
+## Checkpoint 06: Code for within-person change
 
 Run the following code to produce the average within-person change
 between 2018 and 2020.
@@ -216,7 +243,21 @@ gss_panel %>%
   )
 ```
 
-## Task 07: Reshape panel data so it is tidy
+***Did the number of work hours increase or decrease from 2018 to 2020
+for men? What about for women?***
+
+***Did the number of hours spent watching TV increase or decrease from
+2018 to 2020 for men? What about for women?***
+
+***Was there a gender difference in the average within-person change
+between 2018 and 2020 for work hours? What about for tv hours?***
+
+## Checkpoint 07: Reshape panel data so it is tidy
+
+Use `select()` and `pivot_longer()` to create tidy data.
+
+Include `relocate()` to put the variables in a logical order and
+`drop_na()` to remove rows with any missing data.
 
 ```{r}
 #| label: tidy-data
@@ -235,7 +276,7 @@ my_gss_panel <- gss_panel |>
 head(my_gss_panel)
 ```
 
-## Task 08: Recode panel variables
+## Checkpoint 08: Recode panel variables
 
 A.  Use `mutate()` and `case_when()` to re-code the `sex_2` variable so
     that "1" = man, "2" = woman.
@@ -267,7 +308,7 @@ my_gss_panel <- my_gss_panel |>
 head(my_gss_panel)
 ```
 
-## Task 09: Create a summary panel table
+## Checkpoint 09: Create a summary panel table
 
 Use `group_by()` and `summarise()` to look at a table showing the
 average work hours for men and women for each panel year.
@@ -286,7 +327,10 @@ panel_summary <- my_gss_panel |>
 panel_summary
 ```
 
-## Task 10: Join and calculate the average panel differences by sex
+***Do women differ in their average work and television hours from 2016,
+2018, and 2020? What about men?***
+
+## Checkpoint 10: Join and calculate the average panel differences by sex
 
 Calculate the difference in average work and tv hours between 2016,
 2018, 2020 and the 2024 average.
@@ -311,62 +355,9 @@ my_data_all <- my_data_all |>
 my_data_all
 ```
 
-# Evaluate Based on R Output
-
-Reference specific statistics from your output above to justify your
-answers. Explain what the values tell you about the data; interpret
-their meaning in relation to the question.
-
-## Question 01
-
-In 2024, which political group reported the most work hours? Was there a
-lot or a little variability in work hours?
-
-## Question 02
-
-In 2024, which political group watched the most television? Was there a
-lot of a little variability in television hours?
-
-## Question 03
-
-In 2024, is the median value for `tvhours` consistent with the mean?
-What might explain any differences?
-
-## Question 04
-
-In 2024, did men or women report more average work hours? TV hours?
-
-## Question 05
-
-In 2024, what percentage of men worked 40 hours or less than per week?
-(You can either add `R` code to this document or calculate this by hand.
-Show your work either way.)
-
-## Question 06
-
-Did the number of work hours increase or decrease from 2018 to 2020 for
-men? What about for women?
-
-## Question 07
-
-Did the number of hours spent watching TV increase or decrease from 2018
-to 2020 for men? What about for women?
-
-## Question 08
-
-Was there a gender difference in the average within-person change
-between 2018 and 2020 for work hours? What about for tv hours?
-
-## Question 09
-
-Do men and women differ in their average work and television hours from
-2016, 2018, and 2020?
-
-## Question 10
-
-Use the `work_change` and `tv_change` variables to speculate about
-whether there is evidence of a post-pandemic (2024) shift in work or tv
-time. Are the patterns the same or different for men and women?
+***Speculate about whether there is evidence of a post-pandemic (2024)
+shift in work or TV time. Are the patterns the same or different for men
+and women?***
 
 # IPUMS Data
 

@@ -1,7 +1,7 @@
 ---
 title: "Milestone 01"
 author: "FirstName LastName"
-format: pdf
+format: pdf # or replace 'pdf' with 'typst'
 execute:
   error: true # change this to false when your assignment is complete.
 ---
@@ -25,7 +25,7 @@ library(gssrdoc)
 library(summarytools)
 ```
 
-Load all years of the gss data.
+Load all years of the GSS data.
 
 Then, use the `gss_get_yr()` function to load the data only for the 2024
 survey respondents. (*Hint*: Use the code from code-along-01.qmd)
@@ -37,13 +37,13 @@ survey respondents. (*Hint*: Use the code from code-along-01.qmd)
 data(gss_all)
  
 # load the gss 2024 data (add your code below)
-
+gss24 <- gss_get_yr(2024)
 ```
 
 Load the GSS codebook
 
 ```{r}
-#| label: gss-datasets
+#| label: gss-codebook
 # Load the codebook
 data(gss_dict)
 ```
@@ -74,19 +74,27 @@ list.files(path = here("project"))
 Sys.time()
 ```
 
-*Use R to answer the questions below. Show your work (e.g., R code
-chunks) where appropriate. Add narrative (outside code chunks) or
-comments (inside the code chunks) throughout. Justify your answers.*
+*Use R to complete the checkpoints below. Show your work (e.g., R code
+chunks) where appropriate. Add narrative (text outside code chunks) or
+comments (text inside the code chunks) throughout.*
+
+Reference specific statistics (where appropriate) from your output to
+justify your answers. Explain what the values tell you about the data;
+interpret their meaning in relation to the question.
+
+*Use the `gss_all` dataset for checkpoints 01 - 07.*
+
+*Use the `gss24` dataset for checkpoints 08 - 10.*
 
 ## Checkpoint 01
 
-Report the survey question that corresponds to the `fefam` variable. How
-did you find out?
+***Report the survey question that corresponds to the `fefam` variable.
+How did you find out?***
 
 ## Checkpoint 02
 
-Is `fefam` a dichotomous, nominal, ordinal, or interval-ratio variable?
-Justify your answer.
+***Is `fefam` a dichotomous, nominal, ordinal, or interval-ratio
+variable? Justify your answer.***
 
 ## Checkpoint 03
 
@@ -100,7 +108,8 @@ gss_which_years(gss_all, fefam)
 
 ```
 
-Which years of the survey did the `fefam` variable appear in the GSS?
+***Which years of the survey did the `fefam` variable appear in the
+GSS?***
 
 ## Checkpoint 04
 
@@ -113,16 +122,16 @@ Use `print_labels()` to see a list of the values and labels for the
 print_labels(gss_all$fefam)
 ```
 
-If a respondent has a value of `4` for the `fefam` variable, what does
-that mean?
+***If a respondent has a value of `4` for the `fefam` variable, what
+does that mean?***
 
 ## Checkpoint 05
 
-Convert the `fefam` variable to a factor variable. 
+Convert the `fefam` variable to a factor variable.
 
-1. Use `zap_missing()` to get rid of all the 'missing' (NA) levels.
-2. Use `as_factor()` to replace the values with labels.
-3. Use `drop_levels()` to get rid of the empty levels (if any).
+1.  Use `zap_missing()` to get rid of all the 'missing' (NA) levels.
+2.  Use `as_factor()` to replace the values with labels.
+3.  Use `drop_levels()` to get rid of the empty levels (if any).
 
 ```{r}
 #| label: labels_fefam
@@ -130,15 +139,21 @@ Convert the `fefam` variable to a factor variable.
 gss_all$fefam <- zap_missing(gss_all$fefam) 
 gss_all$fefam <- as_factor(gss_all$fefam) 
 gss_all$fefam <- droplevels(gss_all$fefam) 
-
-table(gss_all$fefam)
 ```
-
 
 ## Checkpoint 06
 
-Use `freq()` to create a (pretty) relative frequency table to show for the `fefam`
-variable using the 2024 data. 
+Use `table()` to show the frequencies of the `fefam` variable.
+
+```{r}
+#| label: table_fefam
+table(gss_all$fefam)
+```
+
+## Checkpoint 07
+
+Use `freq()` to create a (pretty) relative frequency table to show for
+the `fefam` variable using the 2024 data.
 
 ```{r}
 #| label: freq-fefam
@@ -146,13 +161,13 @@ variable using the 2024 data.
 freq(gss_all$fefam, report.nas = FALSE, headings = FALSE)
 ```
 
-How many respondents "strongly agree" with the `fefam` statement in 2024? 
-What % of respondents either "strongly agree" or "agree"?
+***How many respondents "strongly agree" with the `fefam` statement in
+2024? What % of respondents either "strongly agree" or "agree"?***
 
-## Checkpoint 07
+## Checkpoint 08
 
 Create a (pretty) relative frequency table for the `happy` variable
-using the 2024 data. 
+using the 2024 data.
 
 ```{r}
 #| label: freq-happy
@@ -160,25 +175,32 @@ using the 2024 data.
 freq(gss24$happy, report.nas = FALSE, headings = FALSE)
 ```
 
-Were most respondents "not too happy," "pretty happy," or "very happy" in 2024?
+***Were most respondents "not too happy," "pretty happy," or "very
+happy" in 2024?***
 
-## Checkpoint 08
+## Checkpoint 09
 
 Create a (pretty) cross-tab of the `happy` and `sex` variables using
 only the 2024 survey data. Make sure your values are labelled for easy
-interpretation. 
+interpretation.
+
+Use `zap_missing()`, `as_factor()`, `droplevels()`, and `ctable()` as
+appropriate.
 
 ```{r}
 #| label: crosstab
 
+# Fix the sex variable
 gss24$sex <- zap_missing(gss24$sex) 
 gss24$sex <- as_factor(gss24$sex) 
 gss24$sex <- droplevels(gss24$sex) 
 
+# Fix the happy variable
 gss24$happy <- zap_missing(gss24$happy) 
 gss24$happy <- as_factor(gss24$happy) 
 gss24$happy <- droplevels(gss24$happy) 
 
+# Create a cross-tab
 ctable(gss24$happy, gss24$sex, 
   prop = "c", 
   format = "p", 
@@ -186,12 +208,12 @@ ctable(gss24$happy, gss24$sex,
 ) 
 ```
 
-What percentage of women were `very happy`? How percentage of men were
-`very happy`?
+***Were women or men more likely to report they were `very happy`?***
 
-## Checkpoint 09
+## Checkpoint 10
 
-Using the table above, were a greater percentage of women or men `not too happy` in 2024?
+***According to the table above, were a greater percentage of women or
+men `not too happy` in 2024?***
 
 # Meet the IPUMS Data
 

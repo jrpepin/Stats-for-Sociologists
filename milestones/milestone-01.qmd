@@ -2,6 +2,8 @@
 title: "Milestone 01"
 author: "FirstName LastName"
 format: pdf
+execute:
+  error: true # change this to false when your assignment is complete.
 ---
 
 # Environment
@@ -38,6 +40,14 @@ data(gss_all)
 
 ```
 
+Load the GSS codebook
+
+```{r}
+#| label: gss-datasets
+# Load the codebook
+data(gss_dict)
+```
+
 # Code, Output, Meaning
 
 *Run the code and add **narrative** (outside code chunks) or
@@ -65,56 +75,123 @@ Sys.time()
 ```
 
 *Use R to answer the questions below. Show your work (e.g., R code
-chunks) where appropriate. Add narration and comments throughout.
-Justify your answers.*
+chunks) where appropriate. Add narrative (outside code chunks) or
+comments (inside the code chunks) throughout. Justify your answers.*
 
-## Question 01
+## Checkpoint 01
 
-Report the survey question that corresponds to the `fefam` variable.
+Report the survey question that corresponds to the `fefam` variable. How
+did you find out?
 
-## Question 02
+## Checkpoint 02
 
 Is `fefam` a dichotomous, nominal, ordinal, or interval-ratio variable?
 Justify your answer.
 
-## Question 03
+## Checkpoint 03
 
-Which years of the survey did the `fefam` variable appear?
+Use `gss_which_years()` below to show the survey years with the variable
+`fefam`.
 
-## Question 04
+```{r}
+#| label: which-years
 
-What value corresponds with "agree" for this variable?
+gss_which_years(gss_all, fefam)
 
-## Question 05
+```
 
-Convert the `fefam` variable to a factor variable. Make sure you remove
-any 'missing' (NA) or empty (e.g., levels with no observations) levels.
+Which years of the survey did the `fefam` variable appear in the GSS?
 
-## Question 06
+## Checkpoint 04
 
-Create a (pretty) relative frequency table to show for the `fefam`
-variable using the 2024 data. How many respondents "strongly agree" with
-the `fefam` statement in 2024? What % of respondents either "strongly
-agree" or "agree"?
+Use `print_labels()` to see a list of the values and labels for the
+`fefam` variable.
 
-## Question 07
+```{r}
+#| label: value_labels
+
+print_labels(gss_all$fefam)
+```
+
+If a respondent has a value of `4` for the `fefam` variable, what does
+that mean?
+
+## Checkpoint 05
+
+Convert the `fefam` variable to a factor variable. 
+
+1. Use `zap_missing()` to get rid of all the 'missing' (NA) levels.
+2. Use `as_factor()` to replace the values with labels.
+3. Use `drop_levels()` to get rid of the empty levels (if any).
+
+```{r}
+#| label: labels_fefam
+
+gss_all$fefam <- zap_missing(gss_all$fefam) 
+gss_all$fefam <- as_factor(gss_all$fefam) 
+gss_all$fefam <- droplevels(gss_all$fefam) 
+
+table(gss_all$fefam)
+```
+
+
+## Checkpoint 06
+
+Use `freq()` to create a (pretty) relative frequency table to show for the `fefam`
+variable using the 2024 data. 
+
+```{r}
+#| label: freq-fefam
+
+freq(gss_all$fefam, report.nas = FALSE, headings = FALSE)
+```
+
+How many respondents "strongly agree" with the `fefam` statement in 2024? 
+What % of respondents either "strongly agree" or "agree"?
+
+## Checkpoint 07
 
 Create a (pretty) relative frequency table for the `happy` variable
-using the 2024 data. Make sure your values are labelled for easy
-interpretation (without levels identifying missing data or empty
-levels). Were most respondents "not too happy," "pretty happy," or "very
-happy" in 2024?
+using the 2024 data. 
 
-## Question 08
+```{r}
+#| label: freq-happy
+
+freq(gss24$happy, report.nas = FALSE, headings = FALSE)
+```
+
+Were most respondents "not too happy," "pretty happy," or "very happy" in 2024?
+
+## Checkpoint 08
 
 Create a (pretty) cross-tab of the `happy` and `sex` variables using
 only the 2024 survey data. Make sure your values are labelled for easy
-interpretation. How many women were `very happy`? How many men were
+interpretation. 
+
+```{r}
+#| label: crosstab
+
+gss24$sex <- zap_missing(gss24$sex) 
+gss24$sex <- as_factor(gss24$sex) 
+gss24$sex <- droplevels(gss24$sex) 
+
+gss24$happy <- zap_missing(gss24$happy) 
+gss24$happy <- as_factor(gss24$happy) 
+gss24$happy <- droplevels(gss24$happy) 
+
+ctable(gss24$happy, gss24$sex, 
+  prop = "c", 
+  format = "p", 
+  useNA = "no"
+) 
+```
+
+What percentage of women were `very happy`? How percentage of men were
 `very happy`?
 
-## Question 09
+## Checkpoint 09
 
-Were a greater percentage of women or men `very happy` in 2024?
+Using the table above, were a greater percentage of women or men `not too happy` in 2024?
 
 # Meet the IPUMS Data
 

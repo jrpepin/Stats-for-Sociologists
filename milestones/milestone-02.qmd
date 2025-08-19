@@ -1,5 +1,6 @@
 ---
 title: "Milestone 02"
+author: "FirstName LastName"
 format: pdf
 ---
 
@@ -7,10 +8,7 @@ format: pdf
 
 Update the YAML with your first and last name.
 
-Update the YAML with your first and last name.
-
-Load the packages from the code-along. (Install first if not already
-done so.)
+Load the packages.
 
 ```{r}
 #| label: load
@@ -24,10 +22,11 @@ library(gssrdoc)
 library(summarytools)
 ```
 
-Load the 2024 General Social Survey data
+Load the 2024 GSS 2024 data and the GSS panel data
 
 ```{r}
 #| label: gss-data
+#| message: false
 
 # load the gss 2024 data (add your code below)
 gss24 <- gss_get_yr(2024)
@@ -45,16 +44,18 @@ You’ll be working with the following GSS variables:
 -   `hrs1`: Hours worked per week
 -   `tvhours`: Hours spent watching TV per day
 -   `sex`: Respondent’s gender
--   `polviews`: Political views (from extremely liberal to extremely conservative)
-
+-   `polviews`: Political views (from extremely liberal to extremely
+    conservative)
 
 # Do Stuff in R
 
-For **tasks 1-6** use the 2024 GSS data. For **tasks 7-10**, use the panel data.
+For **tasks 1-5** use the 2024 GSS data. For **tasks 6-10**, use the
+panel data.
 
-## Task 01: Select Relevant Variables
+## Task 01: Select relevant variables
 
-Use `select()` to create a new data frame with only the four variables listed above.
+Use `select()` to create a new data frame with only the four variables
+listed above.
 
 ```{r}
 #| label: select
@@ -64,21 +65,21 @@ my_data <- gss24 |>
 
 ```
 
-## Task 02: Make clean categorical variables factors
+## Task 02: Clean and create variables
 
-Use `zap_missing`, `as_factor`, and `droplevels` to make `sex` into a factor variable.
+A.  Use `zap_missing`, `as_factor`, and `droplevels` to make `sex` into a
+factor variable.
 
 ```{r}
 #| label: sex-01
-#| 
+
 my_data$sex <- zap_missing(my_data$sex)
 my_data$sex <- as_factor(my_data$sex)
 my_data$sex <- droplevels(my_data$sex)
 ```
 
-## Task 03: Create New Variables
-
-Use `mutate()` and `case_when()` to create a new variable called `work_category` that groups respondents as follows:
+B.  Use `mutate()` and `case_when()` to create a new variable called
+    `work_category` that groups respondents as follows:
 
 -   "Not working" if hrs1 == 0
 -   "Part-time" if hrs1 is between 1 and 34
@@ -96,12 +97,14 @@ my_data <- my_data %>%
   ))
 ```
 
+C.  Use `mutate()` and `case_when()` to create a new variable called
+    `pol3cat` that groups respondents as follows:
 
-Use `mutate()` and `case_when()` to create a new variable called `pol3cat` that groups respondents as follows:
-
--   "Liberal" if polviews equals "extremely liberal", "liberal", or "slightly liberal"
+-   "Liberal" if polviews equals "extremely liberal", "liberal", or
+    "slightly liberal"
 -   "Moderate" if polviews equals "moderate, middle of the road"
--   "Conservative" if polviews equals "extremely conservative", "conservative", "slightly conservative"
+-   "Conservative" if polviews equals "extremely conservative",
+    "conservative", "slightly conservative"
 
 ```{r}
 #| label: pol3cat
@@ -116,10 +119,10 @@ my_data <- my_data %>%
 
 ```
 
+## Task 03: Remove rows with missing data
 
-## Task 04: Filter the Data
-
-Use `drop_na()` to keep only respondents who have non-missing values for all variables.
+Use `drop_na()` to keep only respondents who have non-missing values for
+all variables.
 
 ```{r}
 #| label: drop-na
@@ -128,10 +131,12 @@ my_data <- my_data %>%
   drop_na()
 
 ```
-  
-## Task 05: Summarize work and tv hours by political identity
 
-Use `group_by()` and `sumamrize()` to create a table showing the frequency, mean, median, and sd of `hrs1` for each of the three political identity groups.
+## Task 04: Summarize work and tv hours by political identity
+
+A.   Use `group_by()` and `sumamrize()` to create a table showing the
+frequency, mean, median, and sd of **`hrs1`** for each of the three
+political identity groups.
 
 ```{r}
 #| label: table-01
@@ -146,8 +151,9 @@ my_data |>
     ) 
 ```
 
-
-Use `group_by()` and `sumamrize()` to create a table showing the frequency, mean, median, and sd of `tvhours` for each of the three political identity groups.
+B.   Use `group_by()` and `sumamrize()` to create a table showing the
+frequency, mean, median, and sd of **`tvhours`** for each of the three
+political identity groups.
 
 ```{r}
 #| label: table-02
@@ -156,27 +162,58 @@ my_data |>
   group_by(pol3cat) |>  
   summarise(
     count = n(),
-    mean_tvhours = round(mean(tvhours), digits = 2), 
-    median_tvhours = round(median(tvhours)),
-    sd_tvhours = round(sd(tvhours), digits = 2)
+    mean_tv = round(mean(tvhours), digits = 2), 
+    median_tv = round(median(tvhours)),
+    sd_tv = round(sd(tvhours), digits = 2)
     ) 
 ```
-    
-    
-## Task 06: Create a summary dataframe
 
-Use `group_by()` and `summarise()` to create and save a dataframe showing the average work and tv hours for men and women in 2024.
+## Task 05: Create a summary dataframe
+
+Use `group_by()` and `summarise()` to create and save a dataframe
+showing the average work and tv hours for men and women in 2024.
 
 ```{r}
 #| label: summary
 
-my_data_summary <- my_data |>
+gss24_summary <- my_data |>
   group_by(sex) |>  
   summarise(
-    avg_hrs1 = round(mean(hrs1), digits = 2), 
-    avg_tvhours = round(mean(tvhours), digits = 2)
+    avg_work_24 = round(mean(hrs1), digits = 2), 
+    avg_tv_24 = round(mean(tvhours), digits = 2)
     )
+
+head(gss24_summary)
 ```
+
+## Task 06: Code for within-person change
+
+Run the following code to produce the average within-person change between 2018 and 2020.
+
+It shows the average change from 2018 to 2020 in work and TV hours for each gender.
+
+Positive values mean an increase from 2018 to 2020; negative values mean a decrease.
+
+```{r}
+#| label: within-change
+
+gss_panel %>%
+  select(sex_2, hrs1_2, hrs1_1b, tvhours_2, tvhours_1b) |>
+  drop_na(sex_2) |>
+  mutate(
+    work_change = hrs1_2 - hrs1_1b,
+    tv_change = tvhours_2 - tvhours_1b,
+  ) %>%
+  group_by(as_factor(sex_2)) %>%
+  summarise(
+    avg_work_change = round(mean(work_change, na.rm = TRUE), digits = 2),
+    sd_work_change = round(sd(work_change, na.rm = TRUE), digits = 2),
+    avg_tv_change = round(mean(tv_change, na.rm = TRUE), digits = 2),
+    sd_tv_change = round(sd(tv_change, na.rm = TRUE), digits = 2)
+  )
+```
+
+
 
 
 ## Task 07: Reshape panel data so it is tidy
@@ -185,166 +222,141 @@ my_data_summary <- my_data |>
 #| label: tidy-data
 
 my_gss_panel <- gss_panel |>
-    select(yearid, 
-         starts_with("sex_"), 
+  select(yearid, sex_2,
          starts_with("hrs1_"),
          starts_with("tvhours_")) |>
     pivot_longer(
-    cols = 2:10,
-    names_to = "variable", 
-    values_to = "value") |>
-    separate_wider_delim(variable, 
-                       delim = "_", 
-                       names = c("variable", "panel")) |>
-  pivot_wider( 
-    names_from = variable, 
-    values_from = value) |> 
+        cols = c( -yearid, -sex_2),
+        names_to = c(".value", "panel"),
+        names_sep = "_") |>
   relocate(panel, .after = yearid) |>
   drop_na()
+
+head(my_gss_panel)
 ```
 
 ## Task 08: Recode panel variables
 
-Use `zap_missing`, `as_factor`, and `droplevels` to make `sex` into a factor variable.
+A.   Use `mutate()` and `case_when()` to re-code the `sex_2` variable so that
+"1" = man, "2" = woman.
 
 ```{r}
-#| label: sex-02
+#| label: recode-sex
 
-my_gss_panel$sex <- zap_missing(my_gss_panel$sex)
-my_gss_panel$sex <- as_factor(my_gss_panel$sex)
-my_gss_panel$sex <- droplevels(my_gss_panel$sex)
+my_gss_panel <- my_gss_panel |>
+  mutate(sex = case_when(
+         sex_2 == 1 ~ "male",
+         sex_2 == 2 ~ "female",
+         TRUE ~ NA_character_))
+
 ```
 
-Use `mutate()` and `case_when()` to re-code the `panel` variable so that "1a" = 2016, "1b" = 2018, and "2" = 2020.
+B.   Use `mutate()` and `case_when()` to re-code the `panel` variable so that
+"1a" = 2016, "1b" = 2018, and "2" = 2020.
 
 ```{r}
-#| label: recode
+#| label: recode-panel
 
 my_gss_panel <- my_gss_panel |>
   mutate(panel = case_when(
          panel == "1a" ~ 2016,
          panel == "1b" ~ 2018,
          panel == "2" ~ 2020,
-         TRUE ~ NA_integer_),
-         sex = as_factor(sex))
+         TRUE ~ NA_integer_))
+
+head(my_gss_panel)
 ```
 
-## Task 09: Join panel data with 2024 summary data
+## Task 09: Create a summary panel table
 
-Use `full_join()` to merge the panel data with your created 2024 summary data.
-
-```{r}
-#| label: join
-
-my_data_all <- full_join(my_data_summary, my_gss_panel, by = "sex")
-```
-
-## Task 10: Create a summary tables
-
-Use `group_by()` and `summarise()` to look at a table showing the average work hours for men and women for each panel year.
+Use `group_by()` and `summarise()` to look at a table showing the
+average work hours for men and women for each panel year.
 
 ```{r}
-#| label: summary-panel-hrs1
+#| label: summary-panel
 
-my_data_all |>
+panel_summary <- my_gss_panel |>
   group_by(sex, panel) |>
     summarise(
     count = n(),
-    mean_hrs1 = round(mean(hrs1), digits = 2), 
-    median_hrs1 = round(median(hrs1)),
-    sd_hrs1 = round(sd(hrs1), digits = 2)
+    avg_work = round(mean(hrs1), digits = 2), 
+    avg_tv = round(mean(tvhours), digits = 2)
     ) 
 
+panel_summary
 ```
 
-Use `group_by()` and `summarise()` to look at a table showing the average tv hours for men and women for each panel year.
+## Task 10: Join and calculate the average panel differences by sex
+
+Calculate the difference in average work and tv hours between 2016,
+2018, 2020 and the 2024 average.
 
 ```{r}
-#| label: summary-panel-tvhours
+#| label: change
 
-my_data_all |>
-  group_by(sex, panel) |>
-    summarise(
-    count = n(),
-    mean_tv = round(mean(tvhours), digits = 2), 
-    median_tv = round(median(tvhours)),
-    sd_hrs1 = round(sd(tvhours), digits = 2)
-    ) 
+## join the data
+my_data_all <- full_join(gss24_summary, panel_summary, by = "sex")
 
-```
-
-Run the following code to add status variables to your dataset.
-
-```{r}
-#| label: status-vars
-
+## Create change variables
 my_data_all <- my_data_all |>
-  group_by(sex, panel) |>
   mutate(
-    work_status = ifelse(hrs1 > avg_hrs1, "Above 2024 average", "Below 2024 average"),
-    tv_status = ifelse(tvhours > avg_tvhours, "Above 2024 average", "Below 2024 average")
-  )
+    work_change = avg_work_24 - avg_work,
+    tv_change = avg_tv_24 - avg_tv
+    ) |>
+  select(sex, panel, count, 
+         avg_work_24, avg_work, work_change,
+         avg_tv_24, avg_tv, tv_change
+         )
+
+my_data_all
 ```
-
-
-
-
 
 # Evaluate Based on Output
 
+Reference specific statistics from your output above to justify your answers. Explain what the values tell you about the data; interpret their meaning in relation to the question. 
+
 ## Question 01
-In 2024, which political group watched the most television, on average?
+
+In 2024, which political group reported the most work hours? Was there a lot or a little variability in work hours?
 
 ## Question 02
-In 2024, which political group reported the most work hours, on average?
+
+In 2024, which political group watched the most television? Was there a lot of a little variability in television hours?
 
 ## Question 03
-In 2024, is the median value for `tvhours` consistent with the mean? What might explain any differences?
+
+In 2024, is the median value for `tvhours` consistent with the mean?
+What might explain any differences?
 
 ## Question 04
+
 In 2024, did men or women report more average work hours? TV hours?
 
 ## Question 05
-Has the average number of hours spent watching TV increased or decreased from 2016 to 2020?
+
+In 2024, what percentage of men worked 40 hours or less than per week?
+(You can either add `R` code to this document or calculate this by hand. Show your work either way.)
 
 ## Question 06
-Do men and women differ in their average TV viewing or work hours across these years?
+
+Did the number of work hours increase or decrease from 2018 to 2020 for men? What about for women?
 
 ## Question 07
-How do the 2024 averages compare to the trends observed in earlier years?
 
-
-
-....
-
-
-Run the following code to produce a table comparing work & tv hours in 2016, 2018, and 2020 with the 2024 averages. Then answer the following questions.
-
-```{r}
-#| label: table-compare
-
-my_data_all |>
-  group_by(sex, panel) |>
-  summarize(
-    prop_above_2024_work = round(mean(work_status == "Above 2024 average"), digits = 2),
-    prop_above_2024_tv = round(mean(tv_status == "Above 2024 average"), digits = 2)
-  )
-
-
-```
-
+Did the number of hours spent watching TV increase or decrease
+from 2018 to 2020 for men? What about for women?
 
 ## Question 08
-What proportion of men worked more hours in 2016 than the 2024 average? What about women?
 
-## Question 09 
-What proportion of men watched more television in 2020 than the 2024 average? What about women?
+Was there a gender difference in the average within-person change between 2018 and 2020 for work hours? What about for tv hours?
+
+## Question 09
+
+Do men and women differ in their average work and television hours from 2016, 2018, and 2020?
 
 ## Question 10
-Speculate about whether there is evidence of a post-pandemic shift in work or tv time. 
-Use any of the summary statistics and tables you've already produced to justify your answer (no need to make it more complicated).
 
-
+Use the `work_change` and `tv_change` variables to speculate about whether there is evidence of a post-pandemic (2024) shift in work or tv time. Are the patterns the same or different for men and women?
 
 # IPUMS Data
 

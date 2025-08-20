@@ -4,7 +4,7 @@ author: "FirstName LastName"
 editor: visual
 execute:
   error: true
-format: pdf
+format: pdf # or replace 'pdf' with 'typst'
 ---
 
 ## Packages
@@ -150,14 +150,14 @@ respondents) and 6,867 variables.
 
 You can also load the GSS data for a specific survey year.
 
-```{r}
+```{r, eval=FALSE}
 #| label: gss24
 
 # Get the data only for the 2024 survey respondents
 gss24 <- gss_get_yr(2024)
 
 # look at the first 6 rows of the dataframe
-head(gss24)
+head(_____) # FILL IN THE BLANK LINE WITH THE NAME OF THE DATASET
 
 ```
 
@@ -187,10 +187,10 @@ data(gss_dict)
 To see the variables available in the dataset, use the `names()`
 command. This command is best to use with smaller datasets.
 
-```{r}
+```{r, eval=FALSE}
 #| label: names
-#| eval: false # copy/paste this code in the Console; don't run in Quarto
 
+# copy/paste this code in the Console; don't run in Quarto
 names(gss_all)
 ```
 
@@ -203,10 +203,11 @@ In the output pane, the Help tab will show the variable documentation.
 
 Example:
 
-```{r}
+```{r, eval=FALSE}
 #| label: meovrwrk-help
-#| eval: false # copy/paste this code in the Console; don't run in Quarto
-
+#| eval: false 
+ 
+# copy/paste this code in the Console; don't run in Quarto
 ?meovrwrk
 ```
 
@@ -251,9 +252,12 @@ table(gss_all$meovrwrk)
 2436 respondents were coded as 1 on this variable. What does that mean?
 (Look at the help page.)
 
-Let's look at only the 2024 respondents. Change the code to show just
-the `gss24` respondents. Then, add text to your code-along that
-interprets the results for the `2` value.
+Let's look at only the 2024 respondents.
+
+**Change the code to show just the `gss24` respondents.**
+
+Then, add text to your code-along that interprets the results for the
+`2` value.
 
 ```{r}
 #| label: meovrwrk-table-gss24

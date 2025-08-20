@@ -123,14 +123,12 @@ women in 2022.
 
 ```{r}
 #| label: pipe03
-#| code-line-numbers: "6-7|8|9"
-#| output-location: column-fragment
 
 gss_all |>  
   select(year, sex, agekdbrn) |> 
   filter(year == 2022) |> 
   drop_na(sex, agekdbrn) |> 
-  group_by(sex) |> # <5>
+  group_by(sex) |> 
   summarise(
     freq = n(),
     avg = mean(agekdbrn),
@@ -148,22 +146,14 @@ old)?**
 
 ```{r}
 #| label: mutate00
-#| code-line-numbers: "1-4|5|6"
-#| output-location: fragment
 
 gss_all |>  # <1>
-  select(year, agekdbrn) |> # <1>
-  filter(year == 2022) |> # <1>
-  drop_na(agekdbrn) |> # <2>
-  mutate(teen_parent = (agekdbrn < 18) * 1) |> # <3>
-  summarise(proportion = mean(teen_parent)) # <4>
+  select(year, agekdbrn) |> 
+  filter(year == 2022) |> 
+  drop_na(agekdbrn) |> 
+  mutate(teen_parent = (agekdbrn < 18) * 1) |> 
+  summarise(proportion = mean(teen_parent)) 
 ```
-
-1.  Manipulate the dataset to variables and observations of interest
-2.  Remove missing or `summarise()` will report NA
-3.  Returns a logical vector (TRUE, FALSE, or NA) and \* 1 converts it
-    to numeric
-4.  Mean of the variable, which equals the proportion of `1s`
 
 Use `case_when()` inside `mutate()` to create values based on
 conditions.
@@ -173,8 +163,6 @@ their 20s, 30s, or after age 40?**
 
 ```{r}
 #| label: mutate01
-#| code-line-numbers: "1|5|6-9|10-11|13"
-#| output-location: column-fragment
 
 gss_all <-  gss_all |>  
   mutate(age_groups = case_when(
@@ -328,7 +316,6 @@ df
 
 ```{r}
 #| label: mutateA
-#| code-line-numbers: "2|11"
 #| eval: false
 
 gss_all <-  gss_all |>  
@@ -349,7 +336,6 @@ gss_all |>
 
 ```{r}
 #| label: mutateB
-#| code-line-numbers: "11-14"
 #| eval: false
 
 gss_all |>  
@@ -430,17 +416,15 @@ gss_all |>
 
 ```
 
-1.  Which stats to produce. Either “all” (default), “fivenum”, “common”
-    (see Details), or a selection. See ?descr
+1.  Which stats to produce: “all” (default), “fivenum”, “common” (see
+    Details), or a selection. See ?descr
 
-2.  Don't forget to make a tidy dataset out of freq() or descr() outputs
+2.  Makes a tidy dataset out of `freq()` or `descr()` outputs.
 
 ## `summarize()`
 
 ```{r}
 #| label: summarize
-#| code-line-numbers: "1-4|5|6-7|8-10|11-12|13"
-#| output-location: fragment
 
 gss_all |>  
   select(year, hrs1, sex) |> 
@@ -468,9 +452,9 @@ for pay than other parents?**
 -   Make `childs` a numeric variable
 -   `filter()` the data to only 2024 respondents
 -   `select()` only the variables you need: `year`, `childs`, `hrs`
--   use `mutate()` to create a character variable with 4 categories: 1
-    child, 2 children, 3 children, 4 or more children (and
-    `TRUE ~ NA_character_` for missing data)
+-   use `mutate()` and `case_when()` to create a character variable with
+    4 categories: 1 child, 2 children, 3 children, 4 or more children
+    (use `TRUE ~ NA_character_` for missing data)
 -   use `drop_by()` to remove missing data for your new variable and
     `hrs1`
 -   use `group_by()` to group the data by your new variable

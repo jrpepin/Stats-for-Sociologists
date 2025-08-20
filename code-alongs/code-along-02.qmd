@@ -295,9 +295,12 @@ You can use
 [`as_factor`](https://haven.tidyverse.org/reference/as_factor.html) to
 see the value labels of the variable `premarsx`.
 
-```{r}
+```{r, eval=FALSE}
 #| label: label02_premarsx
-table(as_factor(gss24$premarsx), useNA = "ifany")
+
+# REPLACE THE BLANK LINES WITH THE NAME OF THE VARIABLE
+
+table(as_factor(gss24$________), useNA = "ifany")
 
 ```
 
@@ -305,41 +308,47 @@ table(as_factor(gss24$premarsx), useNA = "ifany")
 
 1.  Get rid of all the 'missing' (NA) levels using `zap_missing`
 
-```{r}
+```{r, eval=FALSE}
 #| label: label03_premarsx
 
-gss24$premarsx <- zap_missing(gss24$premarsx) 
-table(as_factor(gss24$premarsx), useNA = "ifany")
+# REPLACE THE BLANK LINES WITH THE NAME OF THE VARIABLE
+
+gss24$premarsx <- zap_missing(gss24$________) 
+
+table(as_factor(gss24$________), useNA = "ifany")
 ```
 
 2.  Apply the labels instead of numeric values using `as_factor`
 
-```{r}
+```{r, eval=FALSE}
 #| label: label04_premarsx
 
-gss24$premarsx <- as_factor(gss24$premarsx) # replace the values with labels
-table(gss24$premarsx, useNA = "ifany") # notice we didn't need to wrap the variable in as_factor
+# REPLACE THE BLANK LINES WITH THE NAME OF THE VARIABLE
+
+gss24$________ <- as_factor(gss24$________) # replaces the values with labels
+table(gss24$________, useNA = "ifany") # no longer need to wrap the variable in as_factor
 ```
 
 3.  Get rid of the empty levels in `premarsx` using `droplevels`
 
-```{r}
+```{r, eval=FALSE}
 #| label: label05_premarsx
 
-gss24$premarsx <- droplevels(gss24$premarsx)
-table(gss24$premarsx)
+# REPLACE THE BLANK LINES WITH THE NAME OF THE VARIABLE
+
+gss24$________ <- droplevels(gss24$________)
+table(gss24$________)
 ```
 
-Now do the same for the `sex` variable.
+Now, use `zap_missing()`, `as_factor()`, and `droplevels()` to do the
+same for the `sex` variable.
+
+Then, use `table()` to see your results.
 
 ```{r}
 #| label: labels_sex
 
-gss24$sex <- zap_missing(gss24$sex) 
-gss24$sex <- as_factor(gss24$sex) 
-gss24$sex <- droplevels(gss24$sex)
-
-table(gss24$sex)
+# ADD YOUR CODE HERE
 ```
 
 # Look at variables
@@ -351,7 +360,8 @@ Make a frequency table of the variable `sex`. Then, do the same for
 #| label: freq01
 
 freq(gss24$sex) 
-freq(gss24$premarsx) 
+
+# ADD YOUR CODE HERE
 
 ```
 
@@ -363,7 +373,8 @@ same for `premarsx`.
 #| label: freq02
 
 freq(gss24$sex, report.nas = FALSE, headings = FALSE) 
-freq(gss24$premarsx, report.nas = FALSE, headings = FALSE) 
+
+# ADD YOUR CODE HERE
 ```
 
 ## Cross-tabs

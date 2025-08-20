@@ -9,7 +9,7 @@ format: pdf # or replace 'pdf' with 'typst'
 
 # Setup
 
-## Packages 
+## Packages
 
 Load the standard packages.
 
@@ -33,7 +33,7 @@ Download GSS 2016-2020 Panel (Release 1a, April 2022)
 
 Save the **unzipped** file in your class `data` folder.
 
-## GSS Panel Data: Load 
+## GSS Panel Data: Load
 
 ```{r}
 #| message: false
@@ -50,7 +50,6 @@ data <- read_dta(gss_panel.dta)
 
 ```
 
-
 ## GSS 2016-2020 Panel Dataset
 
 ```{r}
@@ -63,16 +62,16 @@ data |>
   slice_sample(n = 10) 
 ```
 
-# Manipulating Dataframes 
+# Manipulating Dataframes
 
-## Selection helpers 
+## Selection helpers
 
 Match variables according to a given pattern.
 
--    `starts_with()`: Starts with an exact prefix.
--    `ends_with()`: Ends with an exact suffix.
--    `contains()`: Contains a literal string.
--    ...
+-   `starts_with()`: Starts with an exact prefix.
+-   `ends_with()`: Ends with an exact suffix.
+-   `contains()`: Contains a literal string.
+-   ...
 
 ```{r}
 #| label: starts-with-01
@@ -85,7 +84,6 @@ my_data <- data |>
          starts_with("childs_")) 
 
 ```
-
 
 ```{r}
 #| label: starts-with-02
@@ -100,42 +98,24 @@ my_data <- as_factor(my_data) # Apply labels to data
 
 ```
 
-
 ## `head()` & `tail()` {.smaller}
 
-Look at the first few column names and **first** few rows.
+Look at the first few column names and **first** few rows with `head()`.
 
 ```{r}
 #| label: head
 head(my_data, n = 5)
 ```
 
-
-Look at the first few column names and **last** few rows.
+Look at the first few column names and **last** few rows with `tail()`.
 
 ```{r}
 #| label: tail
 
-tail(my_data, n = 5)
+# YOUR CODE HERE
 ```
 
-
-##  Tidy data
-
-**This data is tidy!**  
-Each variable in its own column, and each observation in its own row. 
-
-```{r}
-#| label: tidy
-
-my_data |>
-  pivot_longer(
-    cols = c(-yearid, -wtssnr_2),
-    names_to = c(".value", "panel"),
-    names_sep = "_") 
-
-```
-
+## Tidy data
 
 ## `pivot_longer()`
 
@@ -152,7 +132,6 @@ head(my_data, n = 5)
 
 ```
 
-
 ## `pivot_wider()`
 
 ```{r}
@@ -167,22 +146,22 @@ head(my_data, n = 5)
 
 ```
 
-
 ## Recode the reshaped variable
+
+Use `mutate()` and `case_when()` to recode the `panel` variable so 1a =
+2016, 1b = 2018, and 2 = 2020.
+
+Use `TRUE ~ NA_integer_` for missing values.
+
+Then, use `head()` to check your results.
 
 ```{r}
 #| label: recode-panel
 
-my_data <- my_data |>
-  mutate(panel = case_when(
-         panel == "1a" ~ 2016,
-         panel == "1b" ~ 2018,
-         panel == "2" ~ 2020,
-         TRUE ~ NA_integer_))
+# YOUR CODE GOES HERE
 
 head(my_data, n = 3)
 ```
-
 
 ## `relocate()`
 
@@ -195,7 +174,6 @@ my_data <- my_data |>
 head(my_data, n = 2)
 ```
 
-
 ```{r}
 #| label: relocate-02
 
@@ -205,20 +183,18 @@ my_data <- my_data |>
 head(my_data, n = 2)
 ```
 
-
-## `arrange()` 
+## `arrange()`
 
 ```{r}
 #| label: arrange-01
 #| output-location: column
 
-
 my_data |> 
   arrange(panel) |>
-  select(yearid, panel, age, family16)
+  select(yearid, panel, age) |>
+  head(n = 5)
 
 ```
-
 
 ```{r}
 #| label: arrange-02
@@ -226,14 +202,14 @@ my_data |>
 
 my_data |> 
   arrange(desc(panel)) |>
-  select(yearid, panel, age, family16)
+  select(yearid, panel, age) |>
+  head(n = 5)
 
 ```
 
+# Joining Dataframes
 
-# Joining Dataframes 
-
-## Example datasets 
+## Example datasets
 
 **dataframe 1**
 
@@ -280,8 +256,7 @@ df_family <- data.frame(
 df_family
 ```
 
-
-## append data with `bind_rows()` 
+## append data with `bind_rows()`
 
 ```{r}
 #| label: append
@@ -291,8 +266,7 @@ df_all <- bind_rows(df_partner1, df_partner2)
 tibble(df_all)
 ```
 
-
-## merge data with `left_join()` 
+## merge data with `left_join()`
 
 ```{r}
 #| label: join
@@ -302,30 +276,32 @@ df_couples <- left_join(df_partner1, df_family, by = "coupleid")
 tibble(df_couples)
 ```
 
+# Think Like a Statistician
 
-# Think Like a Statistician {background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
+Are married people above or below average in internet use or income?
+Does it vary by survey year?
 
-Are married people above or below average in internet use or income? Does it vary by survey year?  
-  
-Answering this research question takes a few steps. But, the first step is to create a dataframe with all the necessary information.
+Answering this research question takes a few steps. But, the first step
+is to create a dataframe with all the necessary information.
 
 **Step 1. Create a new, reshaped dataframe**
 
--    select the variables yearid, all marital variables, all wwwhr variables, and all realrinc variables
--    pivot the marital, wwwhr, and realrinc variables longer (while keeping yearid)
--    separate the new variable that contains the variable names and panel id into two variables
--    pivot wider the data so marital, wwwhr, and realrinc are all their own variables (columns)
--    recode your panel variable so 1a = 2016, 1b = 2018, and 2 = 2020
-  
+-   select the variables `yearid`, all `marital` variables, all `wwwhr`
+    variables, and all `realrinc` variables
+-   pivot the `marital`, `wwwhr`, and `realrinc` variables longer (while
+    keeping `yearid`)
+-   recode your `panel` variable so 1a = 2016, 1b = 2018, and 2 = 2020
+
 **Step 2. Create a summary dataframe**
 
--    remove rows with missing `wwwhr` or `realrinc` values
--    group the data by your `panel` variable
--    create a summary dataframe that contains the averages for wwwhr and realrinc 
+-   remove rows with missing `wwwhr` or `realrinc` values
+-   group the data by your `panel` variable
+-   create a summary dataframe that contains the averages for `wwwhr`
+    and `realrinc`
 
-**Step 3.  Put the two dataframes together**
+**Step 3. Put the two dataframes together**
 
--    Use full_join to put your two new dataframes together
+-   Use full_join to put your two new dataframes together
 
 ```{r}
 #| label: think-output
@@ -338,9 +314,7 @@ Answering this research question takes a few steps. But, the first step is to cr
 # Reshape data
 think_data <- data |>
     select() |>
-    pivot_longer() |>
-    separate_wider_delim() |>
-  pivot_wider()
+    pivot_longer() 
 
 # recode variables
 think_data <- think_data |>
@@ -358,12 +332,14 @@ think_full
 
 ```
 
-
 ## Your Data Take
 
 **What's your conclusion to our initial research question?**
 
-*NOTE: after you've created a `think_full` dataframe with the appropriate variables, delete the `echo` and `eval` statements in each of the code blocks below to produce the necessary tables.*
+*NOTE: after you've created a `think_full` dataframe with the
+appropriate variables, delete the `echo` and `eval` statements in each
+of the code blocks below to produce the necessary tables to answer the
+research question.*
 
 ```{r}
 #| label: think-answer
@@ -394,7 +370,6 @@ ctable(think_married$income_status, think_married$panel,
 )
 
 ```
-
 
 ```{r}
 #| label: think-answer-02

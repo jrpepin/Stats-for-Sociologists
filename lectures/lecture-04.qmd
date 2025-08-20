@@ -215,14 +215,8 @@ Some column names include values of a variable (survey year).
 my_data |>
   pivot_longer(
     cols = c(-yearid, -wtssnr_2),
-    names_to = c("variable"),
-    values_to = "value") |>
-    separate_wider_delim(variable, 
-                         delim = "_", 
-                         names = c("variable", "panel")) |>
-  pivot_wider(
-    names_from = variable,
-    values_from = value)
+    names_to = c(".value", "panel"),
+    names_sep = "_") 
 
 ```
 
@@ -243,73 +237,30 @@ Each variable in its own column, and each observation in its own row.
 #| label: pivot-longer
 #| code-line-numbers: "2|3|4|5"
 
-my_data_long <- my_data |>
+my_data <- my_data |>
   pivot_longer(
-    cols = 3:14, # <1>
-    names_to = "variable", # <2>
-    values_to = "value") # <3>
-
-head(my_data_long, n = 5)
+    cols = 3:14, # <1> 
+    names_to = c(".value", "panel"), # <2>
+    names_sep = "_") # <3>
+    
+head(my_data, n = 5)
 ```
 
-1.  `cols =` specifies which columns you want to turn into one
-2.  `names_to =` defines the name of the new variable containing the current variable names
-3.  `values_to=` defines the name of the new variable that takes in the values of the variables
+1.  `cols =` specifies which columns to pivot; 
+2.  `names_to =` creates multiple value columns from the name parts and a new column that stores the identifier.
+3.  `names_sep =` where to split the names into a variable (.value) and what to use as a key identifier
 
-. . . 
-
-::: {style="color: #e74c3c; font-family: 'Shadows Into Light'"}
-**This is also not tidy data!**  
-The `variable` column contains the variable names & the panel ID.
-:::
-
-## `separate()`
-
-```{r}
-#| label: separate
-#| code-line-numbers: "6|7|8"
-
-my_data_long <- my_data |>
-  pivot_longer(
-    cols = c(-yearid, -wtssnr_2),
-    names_to = "variable",
-    values_to = "value") |>
-  separate_wider_delim(variable, # <1>
-                       delim = "_", # <2>
-                       names = c("variable", "panel")) # <3>
-
-head(my_data_long, n = 5)
-
-```
-
-1.  Split the column `variable` into two using a delimiter
-2.  A string giving the delimiter between values
-3.  `names` specifies the two new column names
-
-. . .
-
-::: {style="color: #e74c3c; font-family: 'Shadows Into Light'"}
-**This is still not tidy data!**  
-The `value` variable is a mix of different types of values
-:::
 
 ## `pivot_wider()`
 
 ```{r}
 #| label: wider
-#| code-line-numbers: "1|9|10|11"
+#| code-line-numbers: "1|2|3|4"
 
-my_data <- my_data |> # overwriting my_data
-  pivot_longer(
-    cols = c(-yearid, -wtssnr_2),
-    names_to = "variable",
-    values_to = "value") |>
-    separate_wider_delim(variable, 
-                         delim = "_", 
-                         names = c("variable", "panel")) |>
+my_data |> # not overwriting my_data
   pivot_wider( # <1>
-    names_from = variable, # <2>
-    values_from = value) # <3>
+    names_from = panel, # <2>
+    values_from = c(-yearid, -wtssnr_2)) # <3>
 
 head(my_data, n = 5)
 
@@ -317,7 +268,7 @@ head(my_data, n = 5)
 
 1.  Increasing the number of columns and decreasing the number of rows
 2.  Which column to get the name of the output columns
-3.  Which column to get the cell values from
+3.  Which columns to exclude from the pivot
 
 ## Recode the reshaped variable
 

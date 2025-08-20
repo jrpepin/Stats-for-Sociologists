@@ -131,14 +131,8 @@ Each variable in its own column, and each observation in its own row.
 my_data |>
   pivot_longer(
     cols = c(-yearid, -wtssnr_2),
-    names_to = c("variable"),
-    values_to = "value") |>
-    separate_wider_delim(variable, 
-                         delim = "_", 
-                         names = c("variable", "panel")) |>
-  pivot_wider(
-    names_from = variable,
-    values_from = value)
+    names_to = c(".value", "panel"),
+    names_sep = "_") 
 
 ```
 
@@ -148,31 +142,13 @@ my_data |>
 ```{r}
 #| label: pivot-longer
 
-my_data_long <- my_data |>
+my_data <- my_data |>
   pivot_longer(
     cols = 3:14, 
-    names_to = "variable", 
-    values_to = "value") 
-
-head(my_data_long, n = 5)
-```
-
-
-## `separate()`
-
-```{r}
-#| label: separate
-
-my_data_long <- my_data |>
-  pivot_longer(
-    cols = c(-yearid, -wtssnr_2),
-    names_to = "variable",
-    values_to = "value") |>
-  separate_wider_delim(variable, 
-                       delim = "_", 
-                       names = c("variable", "panel")) 
-
-head(my_data_long, n = 5)
+    names_to = c(".value", "panel"), 
+    names_sep = "_") 
+    
+head(my_data, n = 5)
 
 ```
 
@@ -182,17 +158,10 @@ head(my_data_long, n = 5)
 ```{r}
 #| label: wider
 
-my_data <- my_data |> # overwriting my_data
-  pivot_longer(
-    cols = c(-yearid, -wtssnr_2),
-    names_to = "variable",
-    values_to = "value") |>
-    separate_wider_delim(variable, 
-                         delim = "_", 
-                         names = c("variable", "panel")) |>
-  pivot_wider( 
-    names_from = variable, 
-    values_from = value) 
+my_data |> # not overwriting my_data
+  pivot_wider( # <1>
+    names_from = panel, # <2>
+    values_from = c(-yearid, -wtssnr_2)) # <3>
 
 head(my_data, n = 5)
 

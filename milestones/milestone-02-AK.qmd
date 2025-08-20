@@ -31,6 +31,7 @@ Load the 2024 GSS 2024 data and the GSS panel data
 #| message: false
 
 # ADD YOUR CODE HERE TO LOAD THE GSS 2024 DATA 
+gss24 <- gss_get_yr(2024)
 
 # Use here() to construct the file path of the panel data
 gss_panel.dta <- here("data", "GSS_2020_panel_stata_1a/gss2020panel_r1a.dta")
@@ -67,11 +68,11 @@ interpret their meaning in relation to the question.
 Use `select()` to create a new data frame with only the four variables
 listed above.
 
-```{r, eval=FALSE}
+```{r}
 #| label: select
 
 my_data <- gss24 |>
-  # ADD TO THE CODE HERE
+  select(hrs1, tvhours, sex, polviews) 
 
 head(my_data)
 ```
@@ -84,12 +85,13 @@ A.  Use `zap_missing`, `as_factor`, and `droplevels` to make `sex` into
 ```{r}
 #| label: sex-01
 
-# ADD YOUR CODE HERE
-
+my_data$sex <- zap_missing(my_data$sex)
+my_data$sex <- as_factor(my_data$sex)
+my_data$sex <- droplevels(my_data$sex)
 ```
 
-B.  Use `mutate()` and `case_when()` to add a new variable to `my_data`
-    called `work_category` that groups respondents as follows:
+B.  Use `mutate()` and `case_when()` to create a new variable to
+    `my_data` called `work_category` that groups respondents as follows:
 
 -   "Not working" if hrs1 == 0
 -   "Part-time" if hrs1 is between 1 and 34
@@ -98,8 +100,13 @@ B.  Use `mutate()` and `case_when()` to add a new variable to `my_data`
 ```{r}
 #| label: work_category
 
-# ADD YOUR CODE HERE
-
+my_data <- my_data |>
+  mutate(
+    work_category = case_when(
+      hrs1 == 0 ~ "Not working",
+      hrs1 >= 1 & hrs1 <= 34 ~ "Part-time",
+      hrs1 >= 35 ~ "Full-time"
+  ))
 ```
 
 C.  Use `mutate()` and `case_when()` to add a new variable to `my_data`
@@ -114,7 +121,13 @@ C.  Use `mutate()` and `case_when()` to add a new variable to `my_data`
 ```{r}
 #| label: pol3cat
 
-# ADD YOUR CODE HERE
+my_data <- my_data |>
+  mutate(
+    pol3cat = case_when(
+      polviews >= 1 & polviews <= 3 ~ "Liberal",
+      polviews == 4 ~ "Moderate",
+      polviews >= 5 & polviews <= 7 ~ "Conservative"
+  )) 
 
 ```
 
@@ -126,7 +139,8 @@ all variables.
 ```{r}
 #| label: drop-na
 
-# ADD YOUR CODE HERE
+my_data <- my_data |>
+  drop_na()
 
 ```
 
@@ -140,8 +154,14 @@ A.  Use `group_by()` and `sumamrize()` to create a table showing the
 ```{r}
 #| label: table-01
 
-# ADD YOUR CODE HERE
-
+my_data |>
+  group_by(pol3cat) |>  
+  summarise(
+    count = n(),
+    mean_hrs1 = round(mean(hrs1), digits = 2), 
+    median_hrs1 = round(median(hrs1)),
+    sd_hrs1 = round(sd(hrs1), digits = 2)
+    ) 
 ```
 
 ***Which political group reported the most work hours in 2024? Was there
@@ -158,8 +178,14 @@ B.  Use `group_by()` and `sumamrize()` to create a table showing the
 ```{r}
 #| label: table-02
 
-# ADD YOUR CODE HERE
-
+my_data |>
+  group_by(pol3cat) |>  
+  summarise(
+    count = n(),
+    mean_tv = round(mean(tvhours), digits = 2), 
+    median_tv = round(median(tvhours)),
+    sd_tv = round(sd(tvhours), digits = 2)
+    ) 
 ```
 
 ***Which political group watched the most television in 2024? Was there
@@ -171,12 +197,16 @@ Use `group_by()` and `summarise()` to create and save a dataframe
 showing the average work (name it `avg_work_24` and tv hours (name it
 `avg_tv_24`) for men and women in 2024.
 
-```{r, eval=FALSE}
+```{r}
 #| label: summary
 
 gss24_summary <- my_data |>
-  # ADD TO THE CODE HERE
-  
+  group_by(sex) |>  
+  summarise(
+    avg_work_24 = round(mean(hrs1), digits = 2), 
+    avg_tv_24 = round(mean(tvhours), digits = 2)
+    )
+
 head(gss24_summary)
 ```
 
@@ -233,11 +263,19 @@ Use `select()` and `pivot_longer()` to create tidy data.
 Add `relocate()` to put the variables in a logical order and `drop_na()`
 to remove rows with any missing data.
 
-```{r, eval=FALSE}
+```{r}
 #| label: tidy-data
 
 my_gss_panel <- gss_panel |>
-  # ADD TO THE CODE HERE
+  select(yearid, sex_2,
+         starts_with("hrs1_"),
+         starts_with("tvhours_")) |>
+    pivot_longer(
+        cols = c( -yearid, -sex_2),
+        names_to = c(".value", "panel"),
+        names_sep = "_") |>
+  relocate(panel, .after = yearid) |>
+  drop_na()
 
 head(my_gss_panel)
 ```
@@ -251,7 +289,11 @@ A.  Use `mutate()` and `case_when()` to re-code the `sex_2` variable so
 ```{r}
 #| label: recode-sex
 
-# ADD YOUR CODE HERE
+my_gss_panel <- my_gss_panel |>
+  mutate(sex = case_when(
+         sex_2 == 1 ~ "male",
+         sex_2 == 2 ~ "female",
+         TRUE ~ NA_character_))
 
 ```
 
@@ -262,7 +304,12 @@ B.  Use `mutate()` and `case_when()` to re-code the `panel` variable so
 ```{r}
 #| label: recode-panel
 
-# ADD YOUR CODE HERE
+my_gss_panel <- my_gss_panel |>
+  mutate(panel = case_when(
+         panel == "1a" ~ 2016,
+         panel == "1b" ~ 2018,
+         panel == "2" ~ 2020,
+         TRUE ~ NA_integer_))
 
 head(my_gss_panel)
 ```
@@ -272,11 +319,16 @@ head(my_gss_panel)
 Use `group_by()` and `summarise()` to create a table showing the average
 work hours for men and women for each panel year.
 
-```{r, eval=FALSE}
+```{r}
 #| label: summary-panel
 
 panel_summary <- my_gss_panel |>
-  # ADD TO THE CODE HERE
+  group_by(sex, panel) |>
+    summarise(
+    count = n(),
+    avg_work = round(mean(hrs1), digits = 2), 
+    avg_tv = round(mean(tvhours), digits = 2)
+    ) 
 
 panel_summary
 ```
@@ -295,10 +347,10 @@ Calculate the difference in average work and tv hours between 2016,
 ```{r}
 #| label: change
 
-# ADD YOUR CODE HERE TO JOIN THE DATA
+## ADD YOUR CODE HERE TO JOIN THE DATA
+my_data_all <- full_join(gss24_summary, panel_summary, by = "sex")
 
-
-# Run this code to create change variables
+# Create change variables
 my_data_all <- my_data_all |>
   mutate(
     work_change = avg_work_24 - avg_work,

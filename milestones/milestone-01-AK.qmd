@@ -37,13 +37,14 @@ survey respondents. (*Hint*: Use the code from code-along-01.qmd)
 data(gss_all)
  
 # load the gss 2024 data (ADD YOUR CODE BELOW)
-
+gss24 <- gss_get_yr(2024)
 ```
 
 Load the GSS codebook
 
 ```{r}
 #| label: gss-codebook
+
 # Load the codebook
 data(gss_dict)
 ```
@@ -104,7 +105,7 @@ Use `gss_which_years()` below to show the survey years with the variable
 ```{r}
 #| label: which-years
 
-# ADD YOUR CODE HERE
+gss_which_years(gss_all, fefam)
 
 ```
 
@@ -119,8 +120,7 @@ Use `print_labels()` to see a list of the values and labels for the
 ```{r}
 #| label: value_labels
 
-# ADD YOUR CODE HERE
-
+print_labels(gss_all$fefam)
 ```
 
 ***If a respondent has a value of `4` for the `fefam` variable, what
@@ -137,8 +137,9 @@ Convert the `fefam` variable to a factor variable.
 ```{r}
 #| label: labels_fefam
 
-# ADD YOUR CODE HERE
-
+gss_all$fefam <- zap_missing(gss_all$fefam) 
+gss_all$fefam <- as_factor(gss_all$fefam) 
+gss_all$fefam <- droplevels(gss_all$fefam) 
 ```
 
 ## Checkpoint 06
@@ -147,9 +148,7 @@ Use `table()` to show the frequencies of the `fefam` variable.
 
 ```{r}
 #| label: table_fefam
-
-# ADD YOUR CODE HERE
-
+table(gss_all$fefam)
 ```
 
 ## Checkpoint 07
@@ -164,8 +163,7 @@ options:
 ```{r}
 #| label: freq-fefam
 
-# ADD YOUR CODE HERE
-
+freq(gss_all$fefam, report.nas = FALSE, headings = FALSE)
 ```
 
 ***How many respondents "strongly agree" with the `fefam` statement in
@@ -179,8 +177,7 @@ Use `freq()` to create a (pretty) relative frequency table for the
 ```{r}
 #| label: freq-happy
 
-# ADD YOUR CODE HERE
-
+freq(gss24$happy, report.nas = FALSE, headings = FALSE)
 ```
 
 ***Were most respondents "not too happy," "pretty happy," or "very
@@ -203,14 +200,21 @@ appropriate. Set the following function options for `ctable()`:
 #| label: crosstab
 
 # Fix the sex variable
-
+gss24$sex <- zap_missing(gss24$sex) 
+gss24$sex <- as_factor(gss24$sex) 
+gss24$sex <- droplevels(gss24$sex) 
 
 # Fix the happy variable
-
+gss24$happy <- zap_missing(gss24$happy) 
+gss24$happy <- as_factor(gss24$happy) 
+gss24$happy <- droplevels(gss24$happy) 
 
 # Create a cross-tab
-
-
+ctable(gss24$happy, gss24$sex, 
+  prop = "c", 
+  format = "p", 
+  useNA = "no"
+) 
 ```
 
 ***Were women or men more likely to report they were `very happy`?***

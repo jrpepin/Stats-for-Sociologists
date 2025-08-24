@@ -171,7 +171,7 @@ The sample standard deviation is our best estimate of the population standard de
 
 
   
-Confidence intervals
+Confidence Intervals
 ------------------------------------------------------------------------------------------
 
 We use the theoretical sampling distribution to estimate the probability that our sample mean will fall within a certain distance (either above or below) from the true population parameter. This range is constructed using a sample statistic and what we know about sampling distributions.
@@ -528,6 +528,306 @@ In the social sciences, the convention is to use at least a 95% confidence level
 If we want to reduce the risk that our confidence interval doesn't contain the true population parameter, we could use a 99% confidence level instead of a conventional 95% confidence level, where there is only a 1% risk that we are wrong and the specified interval does not contain the true population mean.  
   
 The trade-off between greater confidence in an estimate is the precision of that estimate. As our confidence increases  that the true population mean is within our confidence interval, the confidence interval becomes wider, and therefore our estimate becomes less precise. 
+
+
+Hypothesis Testing
+------------------------------------------------------------------------------------------
+
+::: my-def 
+#### Statistical Hypothesis Testing
+
+A procedure that allows us to evaluate hypotheses about population parameters based on sample statistics.
+:::
+  
+<br>  
+
+We will be testing the statistical significance of means and proportions.
+
+[**We can compare a subgroup to the population:**]{style="color: #18BC9C;"}
+
+-    E.g., Do left-handed people earn less than all adults?  
+
+  
+
+[**We can compare two subgroups based on samples:**]{style="color: #18BC9C;"}
+
+-    E.g., Do left-handed people earn less than right-handed people?
+  
+<br>
+
+[**We can also test for different relationships:**]{style="color: #18BC9C;"}
+
+-    Left-handed people’s earnings are different than the earnings of all adults
+-    Left-handed people’s earnings are less than the earnings of all adults
+-    Left-handed people’s earnings are greater than the earnings of all adults
+
+OR
+
+-    Left-handed people’s earnings are different than right-handed people’s earnings
+-    Left-handed people’s earnings are less than right-handed people’s earnings
+-    Left-handed people’s earnings are greater than right-handed people’s earnings
+  
+<br>
+
+When constructing confidence intervals, we were concerned with identifying the probability our statistic fell within the middle part of a distribution. 
+When testing hypotheses, we shift our focus to identifying the probability our statistic falls within the tails of a distribution.  
+  
+  
+![](images/confi-hypoth.png "Confidence Intervals v.s. Testing Hypotheses"){ width=80% }
+  
+To get an overview of hypothesis testing, first watch [this video](https://youtu.be/bf3egy7TQ2Q) [~12 minutes].
+  
+![](https://youtu.be/bf3egy7TQ2Q)
+  
+  
+### 
+
+### Steps in hypotheses testing
+
+We're going to follow 5 steps to test hypotheses: 
+  
+1. Check assumptions
+2. State the research and null hypotheses 
+3. Select alpha and specify the test statistic
+4. Compute the test statistic
+5. Interpret the results
+  
+<br>
+  
+#### [1. Check assumptions]{style="color: #18BC9C;"} 
+
+In order to proceed with testing hypotheses, assumptions first have to be established. 
+
+* The sample must have been random.
+* Each variable’s level of measurement (interval-ratio or nominal) must be appropriate for the test.
+* The sample size must be large enough so that a normal sampling distribution can be assumed. 
+* Either the population is normally distributed with respect to our variable of interest OR 
+  our sample size is sufficiently large (over 50) so that we know the sampling distribution of the mean is approximately normal.
+  
+<br>
+  
+#### [2. State the research and null hypotheses]{style="color: #18BC9C;"} 
+
+::: my-def 
+#### Research Hypothesis ($H_{1}$)
+
+A statement reflecting the substantive hypothesis.
+:::
+ 
+<br> 
+  
+::: my-def 
+#### Null Hypothesis ($H_{0}$)
+
+A statement of “no difference,” which contradicts the research hypothesis.  
+:::
+  
+Hypotheses can be written out in full sentences, or expressed as equations. 
+The notations in the equation are always expressed in terms of population parameters (i.e., use Greek letters).  
+
+
+::: {style="color: #E74C3C;"}
+**Hypothesis 1**
+  
+**$\mu_{1} > \mu_2$** 
+Left-handed people's earnings are greater than right-handed people's earnings  
+
+**$\mu_1 < \mu_2$**
+Left-handed people's earnings are less than right-handed people's earnings  
+
+**$\mu_1 \neq \mu_2$**
+Left-handed people's earnings are different than right-handed people's earnings  
+:::
+
+::: {style="color: #3498DB;"}
+
+**Hypothesis 2**
+
+**$\mu_1 = \mu_2$** 
+Left-handed people's earnings are equal to right-handed people's earnings  
+
+:::
+  
+<br>
+  
+Sometimes it is clearer to use subscripts meaningfully, instead of numbering the sample/population.
+
+::: {style="color: #E74C3C;"}
+**Hypothesis 1**
+  
+$\pi_{\text{left}} < \pi_{\text{right}}$
+:::
+  
+  
+::: {style="color: #3498DB;"}
+
+**Hypothesis 2**
+
+$\mu_{\text{Men}} = \mu_{\text{Women}}$
+:::
+
+<br>
+
+When we believe that some number or value is not equal to that of the population or another sample, this is called a **two-tailed test**. In a two-tailed test, the sample outcome is hypothesized to be at either tail of the sampling distribution.
+
+![](images/two-tailed.png "Normal distributuion with two-tails."){ width=40% }
+  
+<br>  
+
+When we have a belief about which side of the population value our sample will lie, we call this a **one-tailed test**.
+
+**Right-tailed test:** we suspect our sample is *greater than* the population value.  
+In a right-tailed test, the sample outcome is hypothesized to be at the right tail of the sampling distribution.  
+  
+![](images/right-tailed.png "Normal distributuion with a right-tail."){ width=40% }
+
+**Left-tailed test:** we suspect our sample is *less than* the population value.  
+In a left-tailed test, the sample outcome is hypothesized to be at the left tail of the sampling distribution.  
+  
+![](images/left-tailed.png "Normal distributuion with a left-tail."){ width=40% }
+
+***
+
+`r fa("otter", fill = "#F39C12")`<practice> PRACTICE:</practice>
+
+```{r P08, echo=FALSE}
+  question("If you hypothesize that the average American works more than the normative 40 hours/ week, it’s a ___________________",
+           answer("right-tailed test", correct = TRUE, message = "Bravo!"),
+           answer("left-tailed test", message = "Try again. We suspect the sample mean is greater than the population mean."),
+           answer("two-tailed test", message = "Try again. We have a suspicion about which side of the population mean our sample mean will be on."),
+           random_answer_order = TRUE,
+           allow_retry = TRUE)
+```
+  
+  
+```{r P09, echo=FALSE}
+  question("If you hypothesize that, on average, Americans do not work 40 hours/week, without specifying if they work less or more, it’s a ___________________",
+           answer("right-tailed test", message = "Try again. The sample outcome is hypothesized to be at either tail of the sampling distribution."),
+           answer("left-tailed test", message = "Try again. The sample outcome is hypothesized to be at either tail of the sampling distribution."),
+           answer("two-tailed test", correct = TRUE),
+           random_answer_order = TRUE,
+           allow_retry = TRUE)
+```
+  
+
+#### [3. Select alpha ($\alpha$) and specify the test statistic]{style="color: #18BC9C;"} 
+  
+::: my-def 
+#### $\alpha$
+
+The level of probability at which the null hypothesis is rejected. </card> 
+:::
+
+<br>
+
+Alpha ($\alpha$) is a pre-determined cut-off value for the probability that, if the null hypothesis is true, you could have obtained your sample statistic.  
+  
+If you calculate a probability of less than this value, you will reject the null hypothesis.  
+  
+An $\alpha$ of .01 means you will reject the null hypothesis if your sample statistic falls in the most extreme .01 of the distribution. 
+
+
+**The most common α in the social sciences is .05** (with .01 and .001 next most common). 
+In this course, assume that $\alpha$ is .05 unless told otherwise.  
+  
+It is best practice to pick an $\alpha$, the cut-off point at which we will say our results are significant and reject the null hypothesis, **before we calculate our test statistic**.
+  
+***
+   
+To know if we can reject the null hypothesis, we must convert a sample statistic into a Z or _t_ score, 
+a standardized score that we can look up in a table. Z statistics and _t_ statistics are test statistics,  converted sample statistics (e.g., a difference in two sample proportions).  
+  
+To compare two groups’ **proportions**, we’ll use the Z distribution (a.k.a. normal distribution), along with a Z statistic.  
+  
+To compare two groups’ **means**, we’ll use a *t* statistic.  
+  
+At this point, you're already familiar with Z distribution, which is simply the normal distribution. A *t* distribution is a family of symmetrical curves.  
+  
+
+#### [4. Compute the test statistic]{style="color: #18BC9C;"}
+  
+Watch this [video](https://youtu.be/-bhfcBvyWoc){target="_blank"} to learn about why we need to use both Z and _t_ statistics [5 minutes].  
+  
+![](https://youtu.be/-bhfcBvyWoc)
+  
+  
+We'll go over how to calculate Z and _t_ statistics in more detail in this tutorial. 
+  
+  
+#### [5. Interpret the results]{style="color: #18BC9C;"}
+  
+In order to interpret our results, we must convert our test statistic into a probability of how unusual or rare our obtained statistic is compared with what is stated in the null hypothesis.
+  
+::: my-def 
+#### p-value
+
+The probability associated with the obtained value of our test statistic.</card>  
+:::
+
+<br>
+
+The p-value is simply a measure of how extreme our test statistic is if the null hypothesis is true.  
+  
+P-values can range from 0 to 1, because they represent the *probability* of getting a value as or more extreme as the test statistic, and they correspond to an area under the curve (in one or both tails, depending on whether doing one- or two-tailed test).  
+  
+To interpret our results, we compare our p-value with our pre-determined $\alpha$. 
+If the p-value is less than the alpha value, you will reject the null hypothesis.  
+  
+  
+Here's a short [video](https://youtu.be/eyknGvncKLw) explaining the relationship between the $\alpha$ value and p-value [5 minutes].
+  
+![](https://youtu.be/eyknGvncKLw)
+  
+<br>
+  
+At the end of every hypothesis test, you will either 
+  
+a. reject the null hypothesis or 
+  
+b. fail to reject the null hypothesis (i.e., retain the null hypothesis)
+  
+  
+Hypothesis testing does not tell you the probability that your research hypothesis ($H_{1}$) is true. 
+You can't prove that your research hypothesis is true, **only that your null hypothesis is unlikely to be true.**  
+  
+  
+### Errors  
+  
+Because we are dealing with probabilities, not certainties, 
+it is possible for researchers to draw the wrong conclusion from their hypothesis tests.  
+  
+::: my-def 
+#### False positive
+
+When you reject $H_{0}$ even though it’s true.
+:::
+  
+False positives are also known as **type I** errors.  
+  
+The probability of a false positive (__type I__ error) is equal to the selected $\alpha$.
+We can reduce the risk of a false positive by making $\alpha$ smaller.  
+  
+-    If alpha is .10, there’s a 10% chance of Type I error.
+-    If alpha is .05, there’s a 5%  chance of Type I error.
+-    If alpha is .01, there’s a 1%  chance of Type I error.
+  
+  
+::: my-def 
+#### False negative
+
+Fail to reject $H_{0}$ even though you should.
+:::
+  
+False negatives are also known as **type II** errors. 
+  
+These occur when a researcher fails to reject a null hypothesis ($H_{0}$) which is really false.  
+
+If we reduce the risk of a Type I error, we increase the risk of a Type II error. **There’s a trade-off between the two types of errors.**
+  
+  
+Read this [__short blog post__](https://blog.datasciencedojo.com/type-i-and-type-ii-errors/) about how to remember the difference between these two errors. 
+  
+
 
 
 Learning Check #05 {data-progressive=TRUE}

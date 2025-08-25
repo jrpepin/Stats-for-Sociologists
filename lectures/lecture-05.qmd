@@ -165,7 +165,7 @@ gss22 |>
 . . .
 
 ::: task
-{{< fa lightbulb >}} Based on the 95% confidence interval for the average number of internet hours in 2022, what can we infer about the population mean? 
+{{< fa lightbulb >}} What can we infer about the population mean based on this confidence interval? 
 :::
 
 ## `summarise()` + `CI()` {.sparse-slide}
@@ -181,10 +181,10 @@ wwwhr_ci <- gss22 |>
   filter(!is.na(wwwhr))  |>
   summarise(
     n = n(),
-    mean = mean(wwwhr),
-    sd = sd(wwwhr),
-    lowCI = CI(wwwhr)['lower'],
-    hiCI  = CI(wwwhr)['upper']
+    mean_wwwhr = mean(wwwhr),
+    sd_wwwhr = sd(wwwhr),
+    lowCI_wwwhr = CI(wwwhr)['lower'],
+    hiCI_wwwhr  = CI(wwwhr)['upper']
     )
 
 wwwhr_ci
@@ -212,10 +212,10 @@ wwwhr_ci99 <- gss22 |>
   filter(!is.na(wwwhr))  |>
   summarise(
     n = n(),
-    mean = mean(wwwhr),
-    sd = sd(wwwhr),
-    lowCI = CI(wwwhr, ci = 0.99)['lower'],
-    hiCI  = CI(wwwhr, ci = 0.99)['upper']
+    mean_wwwhr = mean(wwwhr),
+    sd_wwwhr = sd(wwwhr),
+    lowCI_wwwhr = CI(wwwhr, ci = 0.99)['lower'],
+    hiCI_wwwhr  = CI(wwwhr, ci = 0.99)['upper']
     )
 
 wwwhr_ci99
@@ -225,7 +225,7 @@ wwwhr_ci99
 The default confidence level of the CI() function is 95%. Let’s change our code to see what the confidence interval looks like if we wanted to be 99% confident that the true population average number of hours on the internet was within our confidence interval.
 :::
 
-## Compare confidence intervals {.sparse-slide}
+## Compare confidence intervals {.smaller}
 
 :::: columns
 ::: column
@@ -249,4 +249,24 @@ wwwhr_ci99
 :::
 ::::
 
+. . .
+
+::: task
+{{< fa lightbulb >}} How does a 95% confidence interval differ from a 99% confidence interval in terms of width and certainty?
+:::
+
+## CIs with proportions
+
+add from powerpoint: postlife
+
 # Hypothesis Testing {.theme-section}
+
+## `t.test()`
+
+```{r}
+#| message: false
+#| label: ttest
+
+t.test(gss22$wwwhr, conf.level = 0.99)
+
+```

@@ -1230,7 +1230,7 @@ display:block!important;
 </div>
 <div class="fragment">
 <div class="task">
-<p><i class="fa-solid fa-lightbulb" aria-label="lightbulb"></i> Based on the 95% confidence interval for the average number of internet hours in 2022, what can we infer about the population mean?</p>
+<p><i class="fa-solid fa-lightbulb" aria-label="lightbulb"></i> What can we infer about the population mean based on this confidence interval?</p>
 </div>
 </div>
 </section>
@@ -1241,10 +1241,10 @@ display:block!important;
 <span id="cb8-2"><a href></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(wwwhr))  <span class="sc">|&gt;</span></span>
 <span id="cb8-3"><a href></a>  <span class="fu">summarise</span>(</span>
 <span id="cb8-4"><a href></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
-<span id="cb8-5"><a href></a>    <span class="at">mean =</span> <span class="fu">mean</span>(wwwhr),</span>
-<span id="cb8-6"><a href></a>    <span class="at">sd =</span> <span class="fu">sd</span>(wwwhr),</span>
-<span id="cb8-7"><a href></a>    <span class="at">lowCI =</span> <span class="fu">CI</span>(wwwhr)[<span class="st">&#39;lower&#39;</span>],</span>
-<span id="cb8-8"><a href></a>    <span class="at">hiCI  =</span> <span class="fu">CI</span>(wwwhr)[<span class="st">&#39;upper&#39;</span>]</span>
+<span id="cb8-5"><a href></a>    <span class="at">mean_wwwhr =</span> <span class="fu">mean</span>(wwwhr),</span>
+<span id="cb8-6"><a href></a>    <span class="at">sd_wwwhr =</span> <span class="fu">sd</span>(wwwhr),</span>
+<span id="cb8-7"><a href></a>    <span class="at">lowCI_wwwhr =</span> <span class="fu">CI</span>(wwwhr)[<span class="st">&#39;lower&#39;</span>],</span>
+<span id="cb8-8"><a href></a>    <span class="at">hiCI_wwwhr  =</span> <span class="fu">CI</span>(wwwhr)[<span class="st">&#39;upper&#39;</span>]</span>
 <span id="cb8-9"><a href></a>    )</span>
 <span id="cb8-10"><a href></a></span>
 <span id="cb8-11"><a href></a>wwwhr_ci</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1252,9 +1252,9 @@ display:block!important;
 <div class="cell fragment">
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 5
-      n  mean    sd lowCI  hiCI
-  &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-1  2616  14.9  18.9  14.2  15.6</code></pre>
+      n mean_wwwhr sd_wwwhr lowCI_wwwhr hiCI_wwwhr
+  &lt;int&gt;      &lt;dbl&gt;    &lt;dbl&gt;       &lt;dbl&gt;      &lt;dbl&gt;
+1  2616       14.9     18.9        14.2       15.6</code></pre>
 </div>
 </div>
 <div class="fragment">
@@ -1283,10 +1283,10 @@ display:block!important;
 <span id="cb10-2"><a href></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(wwwhr))  <span class="sc">|&gt;</span></span>
 <span id="cb10-3"><a href></a>  <span class="fu">summarise</span>(</span>
 <span id="cb10-4"><a href></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
-<span id="cb10-5"><a href></a>    <span class="at">mean =</span> <span class="fu">mean</span>(wwwhr),</span>
-<span id="cb10-6"><a href></a>    <span class="at">sd =</span> <span class="fu">sd</span>(wwwhr),</span>
-<span id="cb10-7"><a href></a>    <span class="at">lowCI =</span> <span class="fu">CI</span>(wwwhr, <span class="at">ci =</span> <span class="fl">0.99</span>)[<span class="st">&#39;lower&#39;</span>],</span>
-<span id="cb10-8"><a href></a>    <span class="at">hiCI  =</span> <span class="fu">CI</span>(wwwhr, <span class="at">ci =</span> <span class="fl">0.99</span>)[<span class="st">&#39;upper&#39;</span>]</span>
+<span id="cb10-5"><a href></a>    <span class="at">mean_wwwhr =</span> <span class="fu">mean</span>(wwwhr),</span>
+<span id="cb10-6"><a href></a>    <span class="at">sd_wwwhr =</span> <span class="fu">sd</span>(wwwhr),</span>
+<span id="cb10-7"><a href></a>    <span class="at">lowCI_wwwhr =</span> <span class="fu">CI</span>(wwwhr, <span class="at">ci =</span> <span class="fl">0.99</span>)[<span class="st">&#39;lower&#39;</span>],</span>
+<span id="cb10-8"><a href></a>    <span class="at">hiCI_wwwhr  =</span> <span class="fu">CI</span>(wwwhr, <span class="at">ci =</span> <span class="fl">0.99</span>)[<span class="st">&#39;upper&#39;</span>]</span>
 <span id="cb10-9"><a href></a>    )</span>
 <span id="cb10-10"><a href></a></span>
 <span id="cb10-11"><a href></a>wwwhr_ci99</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1294,9 +1294,9 @@ display:block!important;
 <div class="cell fragment">
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 5
-      n  mean    sd lowCI  hiCI
-  &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-1  2616  14.9  18.9  13.9  15.9</code></pre>
+      n mean_wwwhr sd_wwwhr lowCI_wwwhr hiCI_wwwhr
+  &lt;int&gt;      &lt;dbl&gt;    &lt;dbl&gt;       &lt;dbl&gt;      &lt;dbl&gt;
+1  2616       14.9     18.9        13.9       15.9</code></pre>
 </div>
 </div>
 <aside class="notes">
@@ -1313,7 +1313,7 @@ overflow: hidden!important;
 display:block!important;
 }</style></aside>
 </section>
-<section id="compare-confidence-intervals" class="slide level2 sparse-slide">
+<section id="compare-confidence-intervals" class="slide level2 smaller">
 <h2>Compare confidence intervals</h2>
 <div class="columns">
 <div class="column">
@@ -1322,9 +1322,9 @@ display:block!important;
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href></a>wwwhr_ci</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 5
-      n  mean    sd lowCI  hiCI
-  &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-1  2616  14.9  18.9  14.2  15.6</code></pre>
+      n mean_wwwhr sd_wwwhr lowCI_wwwhr hiCI_wwwhr
+  &lt;int&gt;      &lt;dbl&gt;    &lt;dbl&gt;       &lt;dbl&gt;      &lt;dbl&gt;
+1  2616       14.9     18.9        14.2       15.6</code></pre>
 </div>
 </div>
 </div><div class="column">
@@ -1333,18 +1333,48 @@ display:block!important;
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href></a>wwwhr_ci99</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 5
-      n  mean    sd lowCI  hiCI
-  &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-1  2616  14.9  18.9  13.9  15.9</code></pre>
+      n mean_wwwhr sd_wwwhr lowCI_wwwhr hiCI_wwwhr
+  &lt;int&gt;      &lt;dbl&gt;    &lt;dbl&gt;       &lt;dbl&gt;      &lt;dbl&gt;
+1  2616       14.9     18.9        13.9       15.9</code></pre>
 </div>
 </div>
 </div></div>
+<div class="fragment">
+<div class="task">
+<p><i class="fa-solid fa-lightbulb" aria-label="lightbulb"></i> How does a 95% confidence interval differ from a 99% confidence interval in terms of width and certainty?</p>
+</div>
+</div>
+</section>
+<section id="cis-with-proportions" class="slide level2">
+<h2>CIs with proportions</h2>
+<p>add from powerpoint: postlife</p>
 </section></section>
-<section id="y" class="title-slide slide level1 theme-section center">
-<h1>Y</h1>
-
+<section>
+<section id="hypothesis-testing" class="title-slide slide level1 theme-section center">
+<h1>Hypothesis Testing</h1>
 
 </section>
+<section id="t.test" class="slide level2">
+<h2><code>t.test()</code></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href></a><span class="fu">t.test</span>(gss22<span class="sc">$</span>wwwhr, <span class="at">conf.level =</span> <span class="fl">0.99</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    One Sample t-test
+
+data:  gss22$wwwhr
+t = 40.289, df = 2615, p-value &lt; 2.2e-16
+alternative hypothesis: true mean is not equal to 0
+99 percent confidence interval:
+ 13.94548 15.85192
+sample estimates:
+mean of x 
+  14.8987 </code></pre>
+</div>
+</div>
+
+
+</section></section>
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
 <div class="footer footer-default">

@@ -321,7 +321,7 @@ Once we know the Z score and standard error, we can return to our formula and ca
 ### Example
 
 Let's walk through an example. 
-A researcher sampled 501 U.S. residents and calculated the average number of hours spent per day watching television was 3.06 hours, 
+A researcher sampled 501 Canadian residents and calculated the average number of hours spent per day watching television was 3.06 hours, 
 with a standard deviation of 2.39 hours. 
 We want to report the average number of hours people spend watching television a day, with 95% confidence.  
   
@@ -594,7 +594,7 @@ We're going to follow 5 steps to test hypotheses:
   
 <br>
   
-#### [1. Check assumptions]{style="color: #18BC9C;"} 
+#### 1. Check assumptions
 
 In order to proceed with testing hypotheses, assumptions first have to be established. 
 
@@ -606,7 +606,7 @@ In order to proceed with testing hypotheses, assumptions first have to be establ
   
 <br>
   
-#### [2. State the research and null hypotheses]{style="color: #18BC9C;"} 
+#### 2. State the research and null hypotheses 
 
 ::: my-def 
 #### Research Hypothesis ($H_{1}$)
@@ -710,12 +710,12 @@ In a left-tailed test, the sample outcome is hypothesized to be at the left tail
 ```
   
 
-#### [3. Select alpha ($\alpha$) and specify the test statistic]{style="color: #18BC9C;"} 
+#### 3. Select alpha ($\alpha$) and specify the test statistic
   
 ::: my-def 
 #### $\alpha$
 
-The level of probability at which the null hypothesis is rejected. </card> 
+The level of probability at which the null hypothesis is rejected.
 :::
 
 <br>
@@ -734,8 +734,8 @@ It is best practice to pick an $\alpha$, the cut-off point at which we will say 
   
 ***
    
-To know if we can reject the null hypothesis, we must convert a sample statistic into a Z or _t_ score, 
-a standardized score that we can look up in a table. Z statistics and _t_ statistics are test statistics,  converted sample statistics (e.g., a difference in two sample proportions).  
+To know if we can reject the null hypothesis, we must convert a sample statistic into a Z or *t* score, 
+a standardized score that we can look up in a table. Z statistics and *t* statistics are test statistics,  converted sample statistics (e.g., a difference in two sample proportions).  
   
 To compare two groups’ **proportions**, we’ll use the Z distribution (a.k.a. normal distribution), along with a Z statistic.  
   
@@ -743,25 +743,27 @@ To compare two groups’ **means**, we’ll use a *t* statistic.
   
 At this point, you're already familiar with Z distribution, which is simply the normal distribution. A *t* distribution is a family of symmetrical curves.  
   
+<br>
 
-#### [4. Compute the test statistic]{style="color: #18BC9C;"}
+#### 4. Compute the test statistic
   
-Watch this [video](https://youtu.be/-bhfcBvyWoc){target="_blank"} to learn about why we need to use both Z and _t_ statistics [5 minutes].  
+Watch this [video](https://youtu.be/-bhfcBvyWoc){target="_blank"} to learn about why we need to use both Z and *t* statistics [5 minutes].  
   
 ![](https://youtu.be/-bhfcBvyWoc)
   
   
-We'll go over how to calculate Z and _t_ statistics in more detail in this tutorial. 
+We'll go over how to calculate Z and *t* statistics in more detail in this tutorial. 
   
+<br>
   
-#### [5. Interpret the results]{style="color: #18BC9C;"}
+#### 5. Interpret the results
   
 In order to interpret our results, we must convert our test statistic into a probability of how unusual or rare our obtained statistic is compared with what is stated in the null hypothesis.
   
 ::: my-def 
 #### p-value
 
-The probability associated with the obtained value of our test statistic.</card>  
+The probability associated with the obtained value of our test statistic.  
 :::
 
 <br>
@@ -804,7 +806,7 @@ When you reject $H_{0}$ even though it’s true.
   
 False positives are also known as **type I** errors.  
   
-The probability of a false positive (__type I__ error) is equal to the selected $\alpha$.
+The probability of a false positive (__type I** error) is equal to the selected $\alpha$.
 We can reduce the risk of a false positive by making $\alpha$ smaller.  
   
 -    If alpha is .10, there’s a 10% chance of Type I error.
@@ -827,6 +829,560 @@ If we reduce the risk of a Type I error, we increase the risk of a Type II error
   
 Read this [__short blog post__](https://blog.datasciencedojo.com/type-i-and-type-ii-errors/) about how to remember the difference between these two errors. 
   
+  
+### Comparing One Sample Mean
+
+We're going to work through an example of hypothesis testing together. 
+
+We want to know if left-handed people in Canada earn less income than the general population, on average. The average income for people in the United States is $40,000. 
+We took a random sample of 100 left-handed people and found they have an average income of $35,000 and an estimated standard error of 
+$25,000 (a.k.a. standard deviation of the sample).  
+  
+The difference in income between left-handed people and the general population is $5,000 per year. But is that a statistically significant difference? Or, could the difference be due to chance (i.e., sample variation)?
+  
+Let's test our hypothesis.  
+  
+<br>
+  
+#### 1. Check assumptions
+
+In order to test our hypothesis, we need to first confirm that the necessary assumptions have been met. 
+
+-   The sample must have been random. 
+-   Each variable’s level of measurement (interval-ratio or nominal) must be appropriate for test. 
+-   The sample size must be large enough so that a normal sampling distribution can be assumed. 
+-   Either the population is normally distributed with respect to our variable of interest OR 
+  our sample size is sufficiently large (over 50) so that we know the sampling distribution of the mean is approximately normal.
+  
+  
+I told you we **randomly** sampled **100** left-handed people. 
+We also confirm that the variable we are measuring, annual income, is an **interval-ratio** variable.
+
+Therefore, our study meets the conditions to proceed.
+  
+<br>
+  
+#### 2. State the research and null hypotheses  
+  
+We start by stating our **research hypothesis**, a statement reflecting the substantive hypothesis.   
+    
+::: {style="color: #3498DB; font-family: 'Shadows Into Light'"}
+Left-handed people make less money than the general population.  
+:::  
+  
+![](images/H1_example.png "H1: µ < $40,000"){ width=80% }
+  
+  
+This research hypothesis is an example of a left-tailed test, 
+because we suspect the average earnings of left-handed people are _less than_ the average earnings of the population. 
+  
+  
+Then, we state our **null hypothesis**, a statement of “no difference,” which contradicts the research hypothesis.  
+  
+Our null hypothesis is that left-handed people's earnings are equal to the earnings of the population ($40,000).  
+This means that we expect our sample mean to equal $40,000, just like the population mean.  
+  
+::: {style="color: #3498DB; font-family: 'Shadows Into Light'"}
+There is no difference in earnings between left-handed people and the population.
+:::  
+  
+![](images/H0_example.png "H0: µ = $40,000"){ width=70% }
+  
+  
+Hypothesis testing works by figuring out whether or not to reject the null hypothesis. 
+If you can’t reject, you “fail to reject” (or “retain”) $H_{0}$.
+
+::: {style="color: #3498DB; font-family: 'Shadows Into Light'"}
+If the weight of my evidence suggests that it is statistically probable that left-handed people differ from the general population, then we can reject the null hypothesis in favor of the research hypothesis.
+  
+If not, then we cannot reject the null hypothesis.  
+:::  
+  
+If we get a sample mean of $35,000, how likely is it that the difference between our sample mean and 
+$40,000 is just due to sample variation?  
+  
+  
+![](images/example.png "Normal Distribution with a mean equal to $40,000."){ width=70% }
+  
+  
+If it is significantly improbable that a random sample of left-handed people would make $35,000 a year 
+when the true population of all left-handed people is $40,000 a year, then we can reject the null hypothesis. 
+We would say that a sampling distribution with a mean of $40,000 is improbable, given our sample data.
+  
+<br>
+  
+#### 3. Select alpha and specify the test statistic 
+  
+We need to identify our $\alpha$ (alpha) level and our test statistic. 
+We'll choose the standard α level for the social sciences, which is .05. 
+This means we are willing to accept a 5% chance of making the wrong conclusion. 
+  
+And, we need to identify the appropriate test statistic. 
+Our choices are a Z statistic, used for proportions, or a *t* statistic, used for means.  
+  
+Because our variable of interest is average annual income, we know we are comparing means. 
+So, we choose a *t* statistic.  
+  
+To reiterate, 
+in order to know whether it is statistically improbable that our sample mean is different from our hypothesized mean, we use a *t* statistic.  
+  
+<br>
+  
+#### 4. Compute the test statistic
+  
+  
+::: my-def 
+#### *t* Statistic  
+
+Represents the number of standard error units that our sample mean is from the hypothesized value.
+:::
+
+To find the *t* statistic, we combine the formula for the Z score with the formula for the standard error. 
+The Z score is used to identify the place of a raw score on the distribution of responses. 
+The standard error represents how much variability there is in the mean from sample to sample. 
+  
+  
+![](images/ZandSy.png "Z score and Sy formula."){ width=70% }
+  
+  
+We can combine these two formulas, to create the *t* statistic formula: 
+  
+![](images/t-statistic.png "T statistic formula."){ width=70% }
+  
+To illustrate this, let's go back to our example. Our random sample of 100 left-handed people has a mean of $35,000 
+and a standard error of $25,000. 
+The population mean is $40,000.
+
+![](images/t-example1.png "(35,000 - 40,000) / (25000/sqrt 100)."){ width=70% }
+
+
+![](images/t-example2.png "-5000/2500 = -2.00"){ width=70% }
+  
+  
+But what does a *t* statistic mean? The *t* statistic works much like our Z score.  
+  
+Watch this [video](https://youtu.be/32CuxWdOlow) for an explanation of the difference between a Z distribution and *t* distribution [3 minutes].
+  
+![](https://youtu.be/32CuxWdOlow)
+  
+<br>
+  
+#### 5. Interpret the results
+  
+To interpret our results, we need to compare how unusual or rare our obtained statistic is with the stated null hypothesis (there’s no difference in the means).
+  
+We can use a *t* distribution to find the probability of observing a sample with a mean of $35,000
+if the true population mean is equal to $40,000.  
+  
+  
+![](images/our-t-statistic.png "Normal distribution with t-statistic markers"){ width=60% }
+  
+  
+We want to know the probability of observing a sample with a mean of $35,000 
+if the true population mean is equal to $40,000. So, we will convert our *t* statistic to a probability.
+  
+The *t* distribution increasingly resembles the Z (normal) distribution as sample sizes increase. 
+The two are almost identical when a sample size is larger than 120 and even when samples are about 50, the two are very close.   
+   
+Because of the near identical distributions with sufficient sample sizes, 
+in this course, we're going to stick with the Z distribution table when looking up the probability of our *t* statistic. 
+This means, we're deviating from convention and you will find different explanations if you go looking for additional videos on how to convert a *t* statistic to a probability. 
+But, the truth of the matter is, most statistical programs report the findings from a Z distribution. 
+So, I'd rather save your time and energy learning to use a new table, and instead have you focus on understanding the theoretical concepts.  
+  
+To be clear, you still need to **calculate** a *t* statistic when appropriate, but when we **convert** the *t* statistic into a probability, 
+you can use the Z distribution instead of the *t* distribution.  
+  
+  
+We will convert our *t* statistic to a probability of how unusual or rare our obtained statistic is compared with what was stated in our null hypothesis. 
+To find this probability, referred to as a **p-value**, we return to our trusted [Standard Normal Distribution Table](https://www.mathsisfun.com/data/standard-normal-distribution-table.html). 
+  
+We need to find the area in the tail associated with our *t* value. 
+The values under the curve have been given to us in percentages. 
+To convert these to a proportion, for a **p-value**, simply move the decimal over 2 places.  
+  
+![](images/t-statistic-p.png "Transfrom % into a proportion."){ width=60% }
+  
+Great! Now we know our p-value is .0228. 
+To interpret our findings, we compare our p-value (.0228 or .023 rounded) with our $\alpha$ value (.05).  
+  
+  
+Our p-value (.023) is less than our alpha (.05). Therefore, we can reject the null hypothesis in favor of the research hypothesis. 
+It is **statistically improbable** that we could have obtained a random sample of left-handed people whose income was $35,000 
+if the true population of left-handed people earned an average of $40,000.  
+
+To interpret our findings in plain language, we could say:
+
+-   “There is a statistically significant difference between the annual earnings of left-handed people and the annual earnings of the population.”
+  
+-   “There is a statistically significant difference between the annual earnings of left-handed people and the annual earnings of the population, with left-handing people earning significantly less income annually than the population.”
+  
+-   “The annual earnings of left-handed people were statistically significantly lower than the annual earnings of the population.”
+
+-   “Left-handed people’s annual earnings are statistically significantly lower than the earnings of all adults.”  
+  
+<br>  
+  
+Dear left-handed students: This data was all made up. Don't fret. :)  
+  
+  
+  
+### Comparing Two Sample Means
+
+In our previous example, we compared a sample to the total population. 
+But, often times, we want to compare two sample means. 
+This is called a **difference between means test**. 
+Or, a ***t*-test**, which is short for *t*-test for independent means. 
+*Independent* means that the two groups we’re comparing are assumed not to overlap (e.g., we assume that no one is a Democrat and a Republican at the same time).  
+
+
+Let's walk through an example. A fellow researcher used a random sample of 630 men and provided you with the following table:
+
+
+![](images/sample-means-table.png "Table: Years of Education for White and Black Men"){ width=60% }
+  
+  
+The table shows us that the average years of education for White men is 13.47 whereas the average years of education for Black men is 12.51. 
+The table note also tells us that the estimated standard error is .3816. 
+  
+  
+We want to know if the difference between White men's and Black men's years of education are statistically different from each other. 
+In fact, it looks like White men's years of education are greater than Black men's years of education. 
+Are the average years of education statistically different, or are the differences likely due to sampling error?  
+  
+So, we begin our hypothesis testing.
+  
+<br> 
+
+#### 1. Check assumptions
+
+We begin by confirming that the necessary assumptions have been met. 
+
+* The sample must have been random. 
+* Each variable’s level of measurement (interval-ratio or nominal) must be appropriate for test. 
+* The sample size must be large enough so that a normal sampling distribution can be assumed. 
+* Either the population is normally distributed with respect to our variable of interest OR 
+  our sample size is sufficiently large (over 50) so that we know the sampling distribution of the mean is approximately normal.
+  
+  
+Your fellow researcher confirmed the **630** men were **randomly** sampled. 
+We also confirm that the variable of interest, years of education, is an **interval-ratio** variable.  
+  
+Therefore, our study meets the conditions to proceed.
+  
+<br>  
+ 
+#### 2. State the research and null hypotheses
+
+First, we report our research hypothesis, a statement reflecting the substantive hypothesis.
+
+::: {style="color: #3498DB; font-family: 'Shadows Into Light'"}
+White men have more years of education, on average, than Black men.
+:::    
+
+![](images/H1samp_example.png "H1: µ1 > µ2"){ width=60% }
+
+This research hypothesis is an example of a right-tailed test, because we suspect the average years of education for White men is greater than Black men's average years of education.  
+  
+  
+Then, we state our null hypothesis, a statement of “no difference,” which contradicts the research hypothesis.
+
+Our null hypothesis is that White men's average years of education are equal to Black men's average years of education.  
+  
+This means that we believe the years of education are actually equal, and that our sample statistics (means) are different simply because of sample variation.  
+
+::: {style="color: #3498DB; font-family: 'Shadows Into Light'"}
+There is no difference in years of education between White men and Black men.
+:::  
+  
+![](images/H0samp_example.png "H0: µ1 = µ2"){ width=60% }
+  
+<br>  
+  
+#### 3. Select alpha and specify the test statistic
+
+Next, we'll choose our $\alpha$ level and our test statistic. Let's choose a more conservative $\alpha$ level this time. Instead of the standard .05 $\alpha$ level, let's say we only want to draw a wrong conclusion 1% of the time. So, this time, our $\alpha$ level will be .01.  
+  
+Because we're still comparing means, not proportions, our test statistic will remain a *t* statistic.  
+  
+<br>  
+  
+#### 4. Compute the test statistic 
+  
+  
+Our formula for calculating a *t* statistic changes slightly when we are comparing two sample means, instead of a sample mean with a population mean. 
+  
+  
+![](images/sample-equation.png "Sample to a population is different than a sample to a sample."){ width=70% }
+
+We already have all of the values we need to plug into our new formula. 
+The table reported the two sample means, and the note at the bottom of the table stated the estimated standard error was .3816. 
+Let's go ahead and do that now. 
+
+
+![](images/t-example-s2.png "t = (13.47 - 12.51) / .3816"){ width=60% }
+  
+  
+Okay, we now know our *t* statistic is 2.52!
+  
+<br>
+  
+#### 5. Interpret the results 
+  
+We will convert our *t* statistic to a probability to find out how unusual or rare our obtained statistic is compared with what was stated in our null hypothesis. 
+To find this probability, referred to as a p-value, we refer to the [Standard Normal Distribution Table](https://www.mathsisfun.com/data/standard-normal-distribution-table.html){target="_blank"}.
+
+We need to find the area in the tail associated with our t value. The values under the curve have been given to us in percentages. To convert these to a proportion, for a p-value, simply move the decimal over 2 places.  
+
+![](images/t-example-s3.png "p = .59%"){ width=60% }
+
+***
+
+`r fa("otter", fill = "#F39C12")`<practice> PRACTICE:</practice>
+
+
+```{r P10, echo=FALSE}
+  question("What is the p-value associated with our *t* statistic 2.52?",
+    answer(".0059",  correct = TRUE, message = "Bravo!  And, we can round it to .006!"),
+    answer(".00059", message = "Watch those decimal places."),
+    answer(".59",    message = "Watch those decimal places. Move it two places to the left."),
+    answer(".0252",  message = "You moved the decimal places of the *t* statistic. Make sure you move the decimal place of the % under the curve."),
+           random_answer_order = TRUE,
+           allow_retry = TRUE)
+```
+  
+  
+To interpret our findings, we compare our p-value to our $\alpha$ level. Remember, for this example, we selected an $\alpha$ level of .01. 
+
+```{r P11, echo=FALSE}
+  question("Because p is ________ than an $\\alpha$ level of .01, we ________________ the null hypothesis.",
+    answer("less than (<); reject",  correct = TRUE, message = "When p-value is _small_, the null hypothesis will _fall_!"),
+    answer("greater than (>); reject",               message = "This sign means 'greater than.'"),
+    answer("less than (<); fail to reject",          message = "When the p-value is _grand_, the null hypothesis will _stand_!"),
+    answer("greater than (>); fail to reject",       message = "This sign means 'greater than.'"),
+           random_answer_order = TRUE,
+           allow_retry = TRUE)
+```
+  
+  
+```{r P12, echo=FALSE}
+  question("Which of the following statements accurately reflects our findings?",
+    answer("The mean years of education of White men is statistically significantly greater than the mean years of education of Black men.",  correct = TRUE, "Nicely done!"),
+    answer("The variance from the sample of White men is significantly larger than the variance of Black men."),
+    answer("The mean years of education of White men is not statistically significantly different than the mean years of education of Black men."),
+    answer("Our evidence proves that our research hypothesis was true.", message = "We can only show that the null hypothesis is unlikely to be true."),
+           random_answer_order = TRUE,
+           allow_retry = TRUE)
+```
+
+
+### Comparing Proportions
+
+So far, we have been comparing sample *means*. But, often times we want to compare sample *proportions*.
+
+To know whether it is statistically improbable that one sample proportion is statistically different from another sample proportion, 
+we use a familiar Z statistic instead of a *t* statistic.
+  
+  
+Let's go through a practice example.  
+  
+  
+In the 2008 U.S. General Social Survey, the proportion of Republicans (N = 141) with a “great deal” of confidence in the executive branch of government was .21. 
+The proportion of Democrats (N = 267) was .06. 
+The standard error (SE) of the difference, $𝑆_(𝑝_1−𝑝_2 )$, is .03726.  
+  
+  
+Is the difference in proportions statistically significant?  
+
+<br>
+
+#### 1. Check assumptions 
+
+We know that the General Social Survey selects participants at random and that our sample size is large enough that a normal sampling distribution can be assumed and that the sampling distribution of the mean will be approximately normal. Our variable, a proportion, is appropriate for a test.  
+
+<br>  
+  
+#### 2. State the research and null hypotheses
+  
+We begin by establishing our research hypothesis: 
+
+::: {style="color: #3498DB; font-family: 'Shadows Into Light'"}
+The proportion of Republicans who have a great deal of confidence in the executive branch is statistically different than the proportion of Democrats.  
+:::  
+ 
+***
+
+`r fa("otter", fill = "#F39C12")`<practice> PRACTICE:</practice>
+
+  
+```{r P13, echo=FALSE}
+  question("Which of these equations represents our research hypothesis?",
+    answer("$H_{1}: \\pi_{Rep} \\neq \\pi_{Dem}$", correct = TRUE, message = "Bravo!"),
+    answer("$H_{1}: \\pi_{Rep} = \\pi_{Dem}$"),
+    answer("$H_{1}: \\pi_{Rep} > \\pi_{Dem}$"),
+    answer("$H_{1}: \\pi_{Rep} < \\pi_{Dem}$"),
+           random_answer_order = TRUE,
+           allow_retry = TRUE)
+```
+  
+  
+```{r P14, echo=FALSE}
+  question("This hypotheis is considered to be a ________________ test.",
+           answer("right-tailed", message = "Try again. The sample outcome is hypothesized to be at either tail of the sampling distribution."),
+           answer("left-tailed", message = "Try again. The sample outcome is hypothesized to be at either tail of the sampling distribution."),
+           answer("two-tailed", correct = TRUE),
+           random_answer_order = TRUE,
+           allow_retry = TRUE)
+```
+  
+  
+We also must state our null hypothesis:
+
+::: {style="color: #3498DB; font-family: 'Shadows Into Light'"}
+There is no difference between the proportion of Republicans and the proportion of Democrats who have a great deal of confidence in the executive branch.
+:::  
+  
+***
+
+`r fa("otter", fill = "#F39C12")`<practice> PRACTICE:</practice>
+
+  
+```{r P15, echo=FALSE}
+  question("Which of these equations represents our null hypothesis?",
+    answer("$H_{0}: \\pi_{Rep} \\neq \\pi_{Dem}$"),
+    answer("$H_{0}: \\pi_{Rep} = \\pi_{Dem}$", correct = TRUE, message = "Bravo!"),
+    answer("$H_{0}: \\pi_{Rep} > \\pi_{Dem}$"),
+    answer("$H_{0}: \\pi_{Rep} < \\pi_{Dem}$"),
+           random_answer_order = TRUE,
+           allow_retry = TRUE)
+```
+  
+<br>  
+  
+#### 3. Select alpha and specify the test statistic
+  
+Now, we need to identify our alpha level and our test statistic. Let's choose the standard $\alpha$ level for the social sciences and identify the appropriate test statistic for comparing proportions. 
+  
+***
+
+`r fa("otter", fill = "#F39C12")`<practice> PRACTICE:</practice>
+ 
+    
+```{r P16, echo=FALSE}
+  question("Our standard $\\alpha$ level is ______ and our appropriate test statistic is a __________.",
+    answer(".05 ; Z statistic", correct = TRUE, message = "Bravo!"),
+    answer(".01 ; Z statistic"),
+    answer(".05 ; *t* statistic"),
+    answer(".01 ; *t* statistic"),
+           random_answer_order = TRUE,
+           allow_retry = TRUE)
+```
+  
+<br>
+  
+#### 4. Compute the test statistic
+  
+Calculating the Z statistic is fairly simple, so long as you don't have to calculate the standard error by hand. 
+In this course, you will not have to calculate the standard error (the denominator) yourself. (You're welcome!)
+  
+![](images/z-test.png){ width=60% }
+  
+  
+Let's try it with our example. Plug the values into the formula.  
+
+![](images/z-example1.png){ width=60% }
+  
+  
+::: my-tip
+#### Heads up!  
+
+Make sure you're using your calculator properly to get the correct order of operations.  
+:::  
+  
+Make sure you get ($p_{1} - p_{2}$) / $S_{p1- p1}$. You do NOT want $p_{1}$ - ($p_{2}$ / $S_{p1- p1}$)
+
+***
+
+`r fa("otter", fill = "#F39C12")`<practice> PRACTICE:</practice>
+  
+  
+```{r P17, echo=FALSE}
+  question("What does your test statistic equal?",
+    answer("Z = 4.05", correct = TRUE, message = "Bravo! (.21 - .06) / .037  =  4.05"),
+    answer("Z = 2.88",  message = "(.21 - .06) / .037  =  "),
+    answer("Z = .1295",  message = "Watch the order of operations! (.21 - .06) / .037  =  "),
+    answer("Z = 7.29",   message = "(.21 - .06) / .037  =  "),
+           random_answer_order = TRUE,
+           allow_retry = TRUE)
+```
+  
+<br>  
+  
+#### 5. Interpret the results
+
+In order to interpret our results, we need to compare our p-value, a measure of how unusual or rare our obtained statistic is, with what is stated in the null hypothesis (there's no difference in the proportions). 
+  
+To find our p-value, we return to the [__Standard Normal Distribution Table__](https://www.mathsisfun.com/data/standard-normal-distribution-table.html) (SNDT). 
+We need to find the area in the two tails associated with our Z score. Go find it now.    
+  
+  
+  
+Hmmm... That's strange, our Z score is too big for the table (or the slider)! 
+  
+If your test statistic is beyond what’s available in the table, 
+you can use the most extreme test statistic that’s available. 
+According to our online SNDT, a Z score is associated with a p-value of .02% (or .0002, written as a proportion!). 
+  
+At this point, we've got enough information to interpret our results (our p-value associated with our Z score must be less than .0001). 
+But what if you wanted to know the exact proportion associated with our Z score?  
+  
+You could use an online calculator such as this [__Z test calculator__](https://www.socscistatistics.com/pvalues/normaldistribution.aspx) 
+You simply type in your Z score, and select your significance level (a.k.a. $\alpha$). 
+Then, we tell the calculator if we are calculating a one- or two-tailed test.  
+  
+If we were calculating a one-tailed test, our p-value would be equivalent to .000026. 
+As in, .000026 is above our Z score. 
+But, we're calculating a two-tailed test so we need to double our p-value (.000026 * 2) so that it equals __.000051__.  
+  
+  
+![](images/reminder.png "Double your p-value for two-tailed tests."){ width=70% }
+  
+  
+You also could have selected two-tailed test using the online calculator, but make sure you understand why the p-value is multiplied by two for a two-tailed test.  
+  
+Finally, is the difference in proportions statistically significant? To answer the question, we compare the p-value to our $\alpha$ level.  
+  
+In this case, we __reject our null hypothesis__ that there is no statistical difference between the proportion of Republicans and proportion of Democrats who have a great deal of confidence in the executive branch.  
+  
+***
+
+`r fa("otter", fill = "#F39C12")`<practice> PRACTICE:</practice>
+
+  
+```{r P18, echo=FALSE}
+  question("Why can we reject our null hypothesis?",
+    answer("p < $\\alpha$", correct = TRUE),
+    answer("p > $\\alpha$",     message = ".000051 < .05"),
+    answer("p = $\\alpha$",     message = ".000051 < .05"),
+    answer("p $\\neq \\alpha$", message = ".000051 < .05"),
+           random_answer_order = TRUE,
+           allow_retry = TRUE)
+```
+  
+  
+  
+Let's repeat our findings in words. Here are three possible examples of reporting our findings.
+
+-   “There is a statistically significant difference between the proportion of Republicans and the proportion of Democrats who had a “great deal” of confidence in the executive branch of government in 2008.”  
+  
+-   “There is a statistically significant difference between the proportion of Republicans and the proportion of Democrats who had a “great deal” of confidence in the executive branch of government in 2008, with a higher proportion of Republicans reporting a great deal of confidence.”  
+  
+-   “The proportion of Republicans who had a “great deal” of confidence in the executive branch of government in 2008 was statistically significantly greater than the proportion of Democrats.”  
+  
+  
+Before moving on in this tutorial, review how all of the terms fit together in this [video](https://youtu.be/XHPIEp-3yC0) [~6 minutes].  
+  
+![](https://youtu.be/XHPIEp-3yC0)
 
 
 
@@ -835,30 +1391,9 @@ Learning Check #05 {data-progressive=TRUE}
 
 Please answer the following questions to verify you understand the topics in this tutorial. 
 
+
 ```{r Q01, echo=FALSE}
-  question("A process whereby we select a random sample from a population and use a sample statistic to estimate a population parameter is referred to as ",
-    answer("estimation",  correct = TRUE),
-    answer("central tendency"),
-    answer("descriptive statistics"),
-    answer("confidence"),
-    random_answer_order    = TRUE
-  )
-```
-  
-
-```{r Q02, echo=FALSE}
-  question("Typically, since population parameters are unknown, we use the _____ to estimate the value of the standard error.",
-    answer("sample standard deviation",  correct = TRUE),
-    answer("population standard deviation"),
-    answer("sample size"),
-    answer("population size"),
-    random_answer_order    = TRUE
-  )
-```
-  
-
-```{r Q03, echo=FALSE}
-  question("Widening the confidence interval (e.g., from 95% to 99%) increases the _____ of the estimate, but decreases its _____.",
+  question("Q01. Widening the confidence interval (e.g., from 95% to 99%) increases the _____ of the estimate, but decreases its _____.",
     answer("confidence; precision",  correct = TRUE),
     answer("precision; reliability"),
     answer("precision; confidence"),
@@ -868,19 +1403,14 @@ Please answer the following questions to verify you understand the topics in thi
 ```
   
 
-The most common confidence levels and Z scores are reported in the table below. 
-Use this table to compute the confidence intervals below.  
-![](images/table_CI.png "Confidence interval table"){ width=70% }
-
-  
 The table below summarizes the average occupational prestige of men and women with a high school diploma and with a bachelor’s degree. 
 Occupation prestige is a scaled measure of the status of occupations and is well correlated with average income.  
   
 ![](images/table_LC.png "Occupational Prestige Sample Statistics"){ width=70% }
   
   
-```{r Q04, echo=FALSE}
-  question("Construct a 95% confidence interval for occupational prestige for respondents with a high school diploma.",
+```{r Q02, echo=FALSE}
+  question("Q02. Construct a 95% confidence interval for occupational prestige for respondents with a high school diploma.",
     answer("39.79 to 40.99",  correct = TRUE),
     answer("52.02 to 54.36"),
     answer("40.09	to 40.69"),
@@ -890,8 +1420,8 @@ Occupation prestige is a scaled measure of the status of occupations and is well
 ```
   
   
-```{r Q05, echo=FALSE}
-  question("Construct a 95% confidence interval for occupational prestige for respondents with a bachelor’s degree.",
+```{r Q03, echo=FALSE}
+  question("Q03. Construct a 95% confidence interval for occupational prestige for respondents with a bachelor’s degree.",
     answer("52.02 to 54.36",  correct = TRUE),
     answer("39.79 to 40.99"),
     answer("40.71 to 65.67"),
@@ -908,8 +1438,8 @@ Now, show that you know how to interpret your findings. Click "Continue" below.
 ### Interpret
   
   
-```{r Q06, echo=FALSE}
-  question("Which of the following statements is NOT an accurate statement of the findings?",
+```{r Q04, echo=FALSE}
+  question("Q04. Which of the following statements is NOT an accurate statement of the findings?",
            answer("Because the mean is within our confidence interval, there is a .95 probability that the occupational prestige of people with a bachelor's degree is 53.19.", correct = TRUE),
            answer("There is a .95 probability that the occupational prestige of people with a bachelor's degree is between 52.02 and 54.36."),
            answer("There is a .05 probability that the occupational prestige of people with a bachelor's degree is NOT between 52.02 and 54.36."),
@@ -920,8 +1450,8 @@ Now, show that you know how to interpret your findings. Click "Continue" below.
   
 In the 2018 General Social Survey, 73% of respondents reported believing in some form of life after death (N = 2,348).  Based on this information, please answer the following.
 
-```{r Q07, echo=FALSE}
-  question("What is the estimated standard error (of the sampling distribution of proportions)?",
+```{r Q05, echo=FALSE}
+  question("Q05. What is the estimated standard error (of the sampling distribution of proportions)?",
     answer(".009",  correct = TRUE),
     answer(".1971", message = "sqrt ((.73 × .27)/2348) = sqrt (.1971/2348) = .009"),
     answer("8.39", message = "sqrt ((.73 × .27)/2348) = sqrt (.1971/2348) = .009"),
@@ -931,8 +1461,8 @@ In the 2018 General Social Survey, 73% of respondents reported believing in some
 ```
 
 
-```{r Q08, echo=FALSE}
-  question("Construct a __90%__ confidence interval for the true proportion.",
+```{r Q06, echo=FALSE}
+  question("Q06. Construct a __90%__ confidence interval for the true proportion.",
     answer(".71 - .75", correct = TRUE),
     answer(".72 - .76", message = "Hmmm.. Is your rounding off?"),
     answer(".58 - .88", message = "Watch those decimal places."),
@@ -940,3 +1470,53 @@ In the 2018 General Social Survey, 73% of respondents reported believing in some
     random_answer_order    = TRUE
   )
 ```
+
+
+A researcher is studying whether Americans __differ__ from Canadians in terms of how often they cook dinner from scratch each week. 
+The researcher randomly surveys 125 Americans and 64 Canadians, and finds that the Americans cook an average of 3.4 dinners from scratch each week, 
+whereas Canadians cook an average of 4.2 dinners from scratch each week. 
+Using statistical software, the researcher learns that the standard error for the difference between means is .231. 
+
+```{r Q07, echo=FALSE}
+  question("Q07. What type of test should you conduct?",
+    answer("right-tailed"),
+    answer("left-tailed"),
+    answer("two-tailed",  correct = TRUE),
+    answer("binomial"),
+    random_answer_order    = TRUE
+  )
+```
+  
+  
+```{r Q08, echo=FALSE}
+  question("Q08. Compute and then identify the appropriate test statistic.",
+    answer("_t_ = -3.46",  correct = TRUE),
+    answer("Z = -3.46", message = "Remember, _t_ is used for comparisons. Z statistics are used for proportions."),
+    answer("_t_ = 32.9", message = "Subtract the means, don't add them."),
+    answer("_t_ = -0.003", message = "Pay attention to those decimal places."),
+    random_answer_order    = TRUE
+  )
+```
+  
+  
+```{r Q09, echo=FALSE}
+  question("Q09. Assuming an $\\alpha$ level of .05, should the researcher reject the null hypothesis? Why or why not?",
+    answer("Yes, because the p-value (.0006) is less than the $\\alpha$ level of .05.", correct = TRUE),
+    answer("Yes, because the p-value (.0003) is less than the $\\alpha$ level of .05.", message = "This was a two-tailed test. So, you have to double the p-value."),
+    answer("Yes, because the p-value (.03%) is less than the $\\alpha$ level of .05.", message = "Remember to move the decimal place over two. Also, this was a two-tailed test, so you also have to double the p-value."),
+    answer("No, because the $\\alpha$ level of .05 is greater than the p-value.", message = "When the p-value is small, the null hypothesis will fall!"),
+    random_answer_order    = TRUE
+  )
+```
+  
+  
+```{r Q10, echo=FALSE}
+  question("Q10. Which of these statements best summarizes the researcher’s conclusion?",
+    answer("The average number of meals Americans cook from scratch each week is statistically significantly different from the average number of meals Canadians cook from scratch each week.",  correct = TRUE),
+    answer("The variance from the sample of Americans is significantly larger than the variance of Canadians."),
+    answer("There is no statistically significant difference between Americans and Canadians in how many dinners they cook from scratch each week."),
+    answer("Our evidence proves that Americans cook fewer meals from scratch each week than Canadians do.", message = "We can only show that the null hypothesis is unlikely to be true."),
+    random_answer_order    = TRUE
+  )
+```
+  

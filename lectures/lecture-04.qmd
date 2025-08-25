@@ -42,7 +42,6 @@ source("custom-setup-styles.R")
 -   Joining Dataframes
 
 ::: notes
-joining data
 missing data? & **outliers** - dates? - lists
 :::
 
@@ -227,9 +226,13 @@ my_data |>
 Each variable in its own column, and each observation in its own row. 
 :::
 
-## {data-menu-title="Reshaping"}
+## {data-menu-title="Wide vs Long"}
 
 ![](images/04/wide-long.png){width="100%"}
+
+## Reshaping data
+
+![](images/04/tidyr-pivoting.gif)
 
 ## `pivot_longer()`
 
@@ -412,14 +415,14 @@ df_partner2
 **dataframe 3**
 
 ```{r}
-#| label: df4
+#| label: df3
 #| echo: false
 
 df_family <- data.frame(
-  coupleid = c(3, 1, 2),
+  coupleid = c(3, 1, 4),
   marstat = c(1, 0, 1),
-  numchild = c(1, 0, 4),
-  country = c("S.Korea", "US", "US")
+  numchild = c(1, 0, 2),
+  country = c("S.Korea", "US", "Canada")
 )
 df_family
 ```
@@ -444,16 +447,78 @@ add columns from `df1` to `df2`, matching observations based on the keys
 -    `full_join()` keeps all observations in `df1` and `df2`.
 -    `inner_join()` only keeps observations from `df1` that have a matching key in `df2`
 
-## merge data with `left_join()` {.sparse-slide}
+## `left_join()` {.smaller}
 
+::: columns
+::: {.column width="35%"}
+![](images/04/left-join.gif)
+:::
+
+::: {.column width="65%"}
 ```{r}
-#| label: join
+#| label: left-join
 
 df_couples <- left_join(df_partner1, df_family, by = "coupleid")
 
 tibble(df_couples)
 ```
+:::
+:::
 
+
+## `right_join()`  {.smaller}
+
+::: columns
+::: {.column width="35%"}
+![](images/04/right-join.gif)
+:::
+
+::: {.column width="65%"}
+```{r}
+#| label: right-join
+
+df_couples <- right_join(df_partner1, df_family, by = "coupleid")
+
+tibble(df_couples)
+```
+:::
+:::
+
+## `full_join()`  {.smaller}
+
+::: columns
+::: {.column width="35%"}
+![](images/04/full-join.gif)
+:::
+
+::: {.column width="65%"}
+```{r}
+#| label: full-join
+
+df_couples <- full_join(df_partner1, df_family, by = "coupleid")
+
+tibble(df_couples)
+```
+:::
+:::
+
+## `inner_join()`  {.smaller}
+
+::: columns
+::: {.column width="35%"}
+![](images/04/inner-join.gif)
+:::
+
+::: {.column width="65%"}
+```{r}
+#| label: inner-join
+
+df_couples <- inner_join(df_partner1, df_family, by = "coupleid")
+
+tibble(df_couples)
+```
+:::
+:::
 
 # Think Like a Statistician {background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
 

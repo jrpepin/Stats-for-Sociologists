@@ -15,6 +15,7 @@ pacman::p_load(
 ## Address important conflicts
 conflict_prefer("is.labelled", "haven")
 conflict_prefer("filter", "dplyr")
+conflict_prefer("summarise", "dplyr")
 conflict_scout() # Identify the conflicts
 
 

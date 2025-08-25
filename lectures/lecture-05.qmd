@@ -11,6 +11,10 @@ format:
     slide-number: c
     math: mathjax
     code-annotations: hover
+    title-slide-attributes:
+      data-background-image: "images/05/detective.png"
+      data-background-size: 300px
+      data-background-position: bottom center
 revealjs-plugins:
   - quiz
 embed-resources: true
@@ -31,6 +35,9 @@ execute:
 
 ## Load packages, custom functions, and styles
 source("custom-setup-styles.R")
+
+knitr::opts_knit$set(digits = 2)
+
 
 # Color in math equations
 # https://egallic.fr/Recherche/aide-memoire/quarto_equation_colors.html#colors-in-equations-with-revealjs
@@ -53,7 +60,7 @@ source("custom-setup-styles.R")
 
 By the end of the lecture, you will be able to ...
 
--   X 
+-   Use R to calculate confidence intervals for means and proportions 
 -   Y
 -   Z
 
@@ -77,6 +84,23 @@ library(gssrdoc)
 library(summarytools)
 ```
 
+
+## NEW Package {.sparse-slide}
+
+We're going to use 
+
+```{r}
+#| message: false
+#| label: rmisc
+
+# Only need to install once per machine. 
+# install.packages("Rmisc")
+
+# load the new package
+library(Rmisc)
+```
+
+
 ## Load your data & codebook
 
 ```{r}
@@ -84,12 +108,145 @@ library(summarytools)
 #| label: gssdata
 
 # Get the data all survey years
-data(gss_all)
+gss22 <- gss_get_yr(2022)
 
 # Load the codebook
 data(gss_dict)
 
 ```
 
-# X {.theme-section}
-# Y {.theme-section}
+# Confidence Intervals{.theme-section}
+
+## `summarise()` {.sparse-slide}
+
+```{r}
+#| message: false
+#| label: summarise01
+#| output-location: fragment
+
+gss22 |>
+  filter(!is.na(wwwhr))  |>
+  summarise(
+    n = n(),
+    mean = mean(wwwhr),
+    sd = sd(wwwhr)
+    )
+
+
+```
+
+## {data-menu-title="CIs equation" } 
+
+![](images/05/ci_equation.png "Confidence interval equation"){ width=70% }
+
+
+## `summarise()` with equation
+
+```{r}
+#| message: false
+#| label: summarise02
+#| code-line-numbers: "7|8|9"
+#| output-location: fragment
+
+gss22 |>
+  filter(!is.na(wwwhr))  |>
+  summarise(
+    n = n(),
+    mean_wwwhr = mean(wwwhr),
+    sd_wwwhr = sd(wwwhr),
+    se_wwwhr = sd_wwwhr / sqrt(n),
+    lower = mean_wwwhr - (1.96 * se_wwwhr),
+    upper = mean_wwwhr + (1.96 * se_wwwhr)
+    )
+
+
+```
+
+. . .
+
+::: task
+{{< fa lightbulb >}} Based on the 95% confidence interval for the average number of internet hours in 2022, what can we infer about the population mean? 
+:::
+
+## `summarise()` + `CI()` {.sparse-slide}
+
+```{r}
+#| message: false
+#| label: summarise-ci95
+#| code-line-numbers: "7-8"
+#| output-location: fragment
+
+
+wwwhr_ci <- gss22 |>
+  filter(!is.na(wwwhr))  |>
+  summarise(
+    n = n(),
+    mean = mean(wwwhr),
+    sd = sd(wwwhr),
+    lowCI = CI(wwwhr)['lower'],
+    hiCI  = CI(wwwhr)['upper']
+    )
+
+wwwhr_ci
+```
+
+. . .
+
+::: {style="color: #e74c3c; font-family: 'Shadows Into Light'"}
+**Neat! But how confident are we?**
+:::
+
+::: notes
+That’s really interesting, but don’t we need to know our confidence level? Otherwise, how do we interpret the interval? What is the probability that the average number of hours people spend on the internet per week is between 14.17 hours and 15.62 hours?
+:::
+
+## `summarise()` + `CI()` {.sparse-slide}
+
+```{r}
+#| message: false
+#| label: summarise-ci99
+#| code-line-numbers: "7-8"
+#| output-location: fragment
+
+wwwhr_ci99 <- gss22 |>
+  filter(!is.na(wwwhr))  |>
+  summarise(
+    n = n(),
+    mean = mean(wwwhr),
+    sd = sd(wwwhr),
+    lowCI = CI(wwwhr, ci = 0.99)['lower'],
+    hiCI  = CI(wwwhr, ci = 0.99)['upper']
+    )
+
+wwwhr_ci99
+```
+
+::: notes
+The default confidence level of the CI() function is 95%. Let’s change our code to see what the confidence interval looks like if we wanted to be 99% confident that the true population average number of hours on the internet was within our confidence interval.
+:::
+
+## Compare confidence intervals {.sparse-slide}
+
+:::: columns
+::: column
+**95% confidence intervals**
+```{r}
+#| message: false
+#| label: table-ci95
+
+wwwhr_ci
+```
+:::
+
+::: column
+**99% confidence intervals**
+```{r}
+#| message: false
+#| label: table-ci99
+
+wwwhr_ci99
+```
+:::
+::::
+
+# Hypothesis Testing {.theme-section}

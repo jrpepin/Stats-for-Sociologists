@@ -11,13 +11,13 @@ format:
     slide-number: c
     math: mathjax
     code-annotations: hover
+    chalkboard: true
     title-slide-attributes:
       data-background-image: "images/05/detective.png"
-      data-background-size: 300px
+      data-background-size: 250px
       data-background-position: bottom center
 revealjs-plugins:
   - quiz
-embed-resources: true
 filters:
     - openlinksinnewpage
 editor: 
@@ -37,6 +37,12 @@ execute:
 source("custom-setup-styles.R")
 
 knitr::opts_knit$set(digits = 2)
+
+# Set global theme with base font size 20
+theme_set(theme_minimal(base_size = 20))
+
+# Override default discrete color and fill scales
+scale_colour_discrete <- function(...) scale_color_manual(values = my_palette)
 
 
 # Color in math equations
@@ -87,7 +93,7 @@ library(summarytools)
 
 ## NEW Package {.sparse-slide}
 
-We're going to use 
+We're going to use `Rmisc` package to calculate confidence intervals with `summarize()`.
 
 ```{r}
 #| message: false
@@ -107,7 +113,7 @@ library(Rmisc)
 #| message: false
 #| label: gssdata
 
-# Get the data all survey years
+# Get the data from the 2022 survey
 gss22 <- gss_get_yr(2022)
 
 # Load the codebook
@@ -115,9 +121,21 @@ data(gss_dict)
 
 ```
 
+## Variables
+
+`wwwhr` Not counting e-mail, about how many minutes or hours per week do you use the Web?  
+
+<br>
+
+`postlife` Do you believe there is a life after death?  
+
+<br>
+
+`childs` How many children have you ever had?
+
 # Confidence Intervals{.theme-section}
 
-## `summarise()` {.sparse-slide}
+## Review: `summarise()` {.sparse-slide}
 
 ```{r}
 #| message: false
@@ -137,7 +155,16 @@ gss22 |>
 
 ## {data-menu-title="CIs equation" } 
 
-![](images/05/ci_equation.png "Confidence interval equation"){ width=70% }
+:::: panel-tabset
+
+### CI
+
+![](images/05/ci_equation.png "Confidence interval equation"){ width=100% }
+
+### SE
+
+![](images/05/estimate_se.png "Standard error equation")
+::::
 
 
 ## `summarise()` with equation
@@ -155,8 +182,8 @@ gss22 |>
     mean_wwwhr = mean(wwwhr),
     sd_wwwhr = sd(wwwhr),
     se_wwwhr = sd_wwwhr / sqrt(n),
-    lower = mean_wwwhr - (1.96 * se_wwwhr),
-    upper = mean_wwwhr + (1.96 * se_wwwhr)
+    ci_lower = mean_wwwhr - (1.96 * se_wwwhr),
+    ci_upper = mean_wwwhr + (1.96 * se_wwwhr)
     )
 
 
@@ -183,8 +210,8 @@ wwwhr_ci <- gss22 |>
     n = n(),
     mean_wwwhr = mean(wwwhr),
     sd_wwwhr = sd(wwwhr),
-    lowCI_wwwhr = CI(wwwhr)['lower'],
-    hiCI_wwwhr  = CI(wwwhr)['upper']
+    lowCI_wwwhr = Rmisc::CI(wwwhr)['lower'],
+    hiCI_wwwhr  = Rmisc::CI(wwwhr)['upper']
     )
 
 wwwhr_ci
@@ -225,7 +252,7 @@ wwwhr_ci99
 The default confidence level of the CI() function is 95%. Let’s change our code to see what the confidence interval looks like if we wanted to be 99% confident that the true population average number of hours on the internet was within our confidence interval.
 :::
 
-## Compare confidence intervals {.smaller}
+## CIs & percision {.smaller}
 
 :::: columns
 ::: column
@@ -249,24 +276,351 @@ wwwhr_ci99
 :::
 ::::
 
+<br>
+
 . . .
 
 ::: task
-{{< fa lightbulb >}} How does a 95% confidence interval differ from a 99% confidence interval in terms of width and certainty?
+{{< fa lightbulb >}} **How does a 95% confidence interval differ from a 99% confidence interval in terms of width and certainty?**
 :::
 
-## CIs with proportions
+## CIs (wrong) with proportions
 
-add from powerpoint: postlife
+```{r}
+#| message: false
+#| label: proportions01
+#| output-location: fragment
+
+gss22 |>
+  filter(!is.na(postlife))  |>
+  summarise(
+    n = n(),
+    mean_ghosts = mean(postlife),
+    sd_ghosts = sd(postlife),
+    lowCI_ghosts = CI(postlife, ci = 0.99)['lower'],
+    hiCI_ghosts  = CI(postlife, ci = 0.99)['upper']
+    )
+
+```
+
+. . .
+
+::: {style="color: #e74c3c; font-family: 'Shadows Into Light'"}
+**This doesn't work because the values aren't coded 0 and 1.**
+:::
+
+## CIs (correct) with proportions
+
+
+```{r}
+#| message: false
+#| label: proportions02
+#| code-line-numbers: "1-2|4-12"
+#| output-location: fragment
+
+# Use logic to recode (yes: 1 = 1; no: 2 = 0)
+gss22$ghosts <- ifelse(gss22$postlife == 1, 1, 0)
+  
+gss22 |>
+  filter(!is.na(ghosts))  |>
+  summarise(
+    n = n(),
+    mean_ghosts = mean(ghosts),
+    sd_ghosts = sd(ghosts),
+    lowCI_ghosts = CI(ghosts, ci = 0.99)['lower'],
+    hiCI_ghosts  = CI(ghosts, ci = 0.99)['upper']
+    )
+
+```
+
+## Comparing CIs
+
+:::: panel-tabset
+
+### Code
+
+```{r}
+#| message: false
+#| label: proportions03
+#| code-line-numbers: "1-3|5|6-7|8-14"
+
+
+gss22$sex <- zap_missing(gss22$sex) 
+gss22$sex <- as_factor(gss22$sex)   
+gss22$sex <- droplevels(gss22$sex)  
+
+df_ghosts <- gss22 |>
+  group_by(sex) |>
+  drop_na(sex, ghosts) |>
+  summarise(
+    n = n(),
+    mean = mean(ghosts),
+    sd = sd(ghosts),
+    lower = CI(ghosts, ci = 0.95)['lower'],
+    upper  = CI(ghosts, ci = 0.95)['upper']
+    )
+
+```
+
+### Table
+
+```{r}
+#| message: false
+#| label: proportions04
+
+df_ghosts
+
+```
+
+### Plot
+
+```{r}
+#| echo: false
+#| message: false
+#| label: proportions05
+
+df_ghosts |>
+  ggplot(aes(x = mean, y = sex, color = sex)) +
+  geom_point(size = 3) +
+  geom_errorbar(aes(xmin = lower, xmax = upper), width = 0.2, size = 1.2) +
+  theme(legend.position = "none") +
+  labs(title = "Proportion believe in ghosts, with 95% CI",
+       y = " ",
+       x = " ") 
+```
+
+::::
+
 
 # Hypothesis Testing {.theme-section}
 
 ## `t.test()`
 
+Performs one and two sample t-tests. 
+To use this function, we’ll need to specify a few things:
+
+-   variable of interest
+-   mu (H0): a number indicating the true value of the mean
+-   alternative hypothesis (H1): “two.sided”, “greater”, or “less”
+
+## `t.test()` in action
+
+In your family sociology course you learned that fertility rates have been dropping.
+
+You used to think that people had 2 children, on average. But, now you suspect that people are having fewer than 2 children.
+
+<br>
+
+. . .
+
+::: task
+{{< fa lightbulb >}} How do you test your hypothesis? 
+:::
+
+##  {.quiz-question data-menu-title="Knowledge Check" background-image="images/clipboard-question.png" background-size="100px" background-repeat="repeat"}
+
+::: {style="color: #F39C12"}
+{{< fa clipboard-question >}} Which of these equations represents your **research** hypothesis?
+:::
+
+-   [H1: µ ≠ 2]{data-explanation="😲 But you have a direction in mind."}
+-   [H1: µ = 2]{data-explanation="You think the average is 2 kids exactly?"}
+-   [H1: µ < 2]{.correct data-explanation="💯 Correct!"}
+-   [H1: µ > 2]{data-explanation="You think the average is greater than 2 kids?"}
+
+##  {.quiz-question data-menu-title="Knowledge Check" background-image="images/clipboard-question.png" background-size="100px" background-repeat="repeat"}
+
+::: {style="color: #F39C12"}
+{{< fa clipboard-question >}} Which of these equations represents your **null** hypothesis?
+:::
+
+-   [H0: µ ≠ 2]{data-explanation="The null hypothesis is always '='"}
+-   [H0: µ = 2]{.correct data-explanation="💯 Correct!"}
+-   [H0: µ < 2]{data-explanation="😲 This was your research hypothesis."}
+-   [H0: µ > 2]{data-explanation="The null hypothesis is always '='"}
+
+## Review: Summary Statistics
+
 ```{r}
 #| message: false
-#| label: ttest
+#| label: childs-summarise
+#| code-line-numbers: "1-2|3-7"
+#| output-location: fragment
 
-t.test(gss22$wwwhr, conf.level = 0.99)
+gss22 |>
+  filter(!is.na(childs))  |>
+  summarise(
+    n = n(),
+    mean = mean(childs),
+    median = median(childs),
+    sd = sd(childs))
 
 ```
+
+. . .
+
+::: {style="color: #e74c3c; font-family: 'Shadows Into Light'"}
+Is the difference between our sample mean and 2 statistically significant or could we have gotten this mean simply by chance (sample variation)?
+:::
+
+## Review: CIs
+
+```{r}
+#| message: false
+#| label: childs-CI
+#| code-line-numbers: "8-12"
+#| output-location: fragment
+
+gss22 |>
+  filter(!is.na(childs))  |>
+  summarise(
+    n = n(),
+    mean = mean(childs),
+    median = median(childs),
+    sd = sd(childs),
+    se = sd / sqrt(n),
+    lower = CI(childs, ci = 0.99)['lower'],
+    upper  = CI(childs, ci = 0.99)['upper']
+    )
+
+```
+
+
+. . .
+
+::: {style="color: #e74c3c; font-family: 'Shadows Into Light'"}
+Does the confidence interval overlap with 2? What does that tell you?
+:::
+
+## One sample `t.test()` for means
+
+```{r}
+#| message: false
+#| label: ttest01
+#| output-location: fragment
+
+t.test(gss22$childs)
+
+```
+
+. . .
+
+> **H0 = 0 by default**
+
+## One sample `t.test()` for means
+
+```{r}
+#| message: false
+#| label: ttest02
+
+t.test(gss22$childs, mu=2, alternative="less") # Ho: mu=2
+
+```
+
+. . .
+
+> **H0 = 2; one-tail test**
+
+##  {.quiz-question data-menu-title="Knowledge Check" background-image="images/clipboard-question.png" background-size="100px" background-repeat="repeat"}
+
+::: {style="color: #F39C12"}
+{{< fa clipboard-question >}} Assuming an α level of .05, should you reject the null hypothesis? 
+:::
+
+-   [No, because the 𝛼 level of .01 is greater than the p-value (< .000).]{data-explanation="😲 The p-value is less than 𝛼."}
+-   [No, because the p-value (< .000) is less than the 𝛼 level of .01.]{data-explanation="Y😲 The p-value is less than 𝛼."}
+-   [Yes, because the p-value (< .000) is less than the 𝛼 level of .01.]{.correct data-explanation="💯 Correct!"}
+
+
+##  {.quiz-question data-menu-title="Knowledge Check" background-image="images/clipboard-question.png" background-size="100px" background-repeat="repeat"}
+
+::: {style="color: #F39C12"}
+{{< fa clipboard-question >}} Which of these statements best summarizes your conclusion?
+:::
+
+-   [Our evidence proves that people have fewer than two children, on average.
+]{data-explanation="😲 We can't prove our research hypothesis."}
+-   [People, on average, have two children.
+]{data-explanation="😲 Is that what the mean showed?"}
+-   [On average, the number of children people have is statistically significantly lower than two.
+]{.correct data-explanation="💯 Correct!"}
+
+
+## two sample `t.test()` in action
+
+::: task
+{{< fa lightbulb >}} Are the proportions of men and women who believe in ghosts statistically significantly different? 
+:::
+
+. . .
+
+```{r}
+#| message: false
+#| label: ttest03
+#| output-location: fragment
+
+t.test(gss22$ghosts ~ gss22$sex, alternative = "two.sided")
+
+```
+
+##  {.quiz-question data-menu-title="Knowledge Check" background-image="images/clipboard-question.png" background-size="100px" background-repeat="repeat"}
+
+::: {style="color: #F39C12"}
+{{< fa clipboard-question >}} Assuming an α level of .05, what do you conclude? 
+:::
+
+-   [There is no statistically significant difference between men and women in belief in ghosts.]{data-explanation="😲 The p-value is less than 𝛼."}
+-   [Men are significantly more likely than women to believe in ghosts (p < .05). ]{data-explanation="Y😲 Look at the sample means again."}
+-   [Women are significantly more likely than men to believe in ghosts (p < .05).]{.correct data-explanation="💯 Correct!"}
+
+## Aside: paired `t.test()` {.sparse-slide}
+
+**Independent group t-test**  
+[Do two subsamples have the same mean?]{style="color: #F39C12; font-family: 'Shadows Into Light'"}  
+
+```{r}
+#| message: false
+#| label: ttest-samples
+#| eval: false
+
+t.test(gss22$ghosts ~ gss22$sex, alternative = "two.sided")
+
+```
+
+
+<br>
+
+. . .
+
+**Paired t-test**  
+[Do two variables have the same mean?]{style="color: #F39C12; font-family: 'Shadows Into Light'"}  
+
+```{r}
+#| message: false
+#| label: ttest-paired
+#| eval: false
+
+t.test(Pair(hrs1_2018, hrs1_2020) ~ 1, data = gss_panel)
+
+```
+
+
+
+# Think Like a Statistician {background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
+
+[{{< fa regular lightbulb >}} **Do women have more years of education (`educ`) than men, on average?**]{style="color: #F39C12; font-size: 100%; font-family: 'Shadows Into Light'"}
+
+<br>
+
+. . .
+
+[{{< fa regular lightbulb >}} **Are the proportions of men & women who support abortion for any reason (`abany`) statistically different?**]{style="color: #F39C12; font-size: 100%; font-family: 'Shadows Into Light'"}
+
+<br>
+
+. . .
+
+[{{< fa regular lightbulb >}} **Do fewer men than women support gun laws (`gunlaw`)?**]{style="color: #F39C12; font-size: 100%; font-family: 'Shadows Into Light'"}
+
+
+

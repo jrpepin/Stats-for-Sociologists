@@ -35,7 +35,10 @@ source("custom-setup-styles.R")
 #gss_all <- readRDS("data/gss_all.rds")
 
 # Get the data only for the 2024 survey respondents
-#gss24 <- readRDS("data/gss24.rds")
+gss24 <- readRDS("data/gss24.rds")
+
+# Override default discrete color and fill scales
+scale_colour_discrete <- function(...) scale_color_manual(values = my_palette)
 
 ## Options
 tutorial_options(exercise.checker = gradethis::grade_learnr)
@@ -527,8 +530,120 @@ In the social sciences, the convention is to use at least a 95% confidence level
   
 If we want to reduce the risk that our confidence interval doesn't contain the true population parameter, we could use a 99% confidence level instead of a conventional 95% confidence level, where there is only a 1% risk that we are wrong and the specified interval does not contain the true population mean.  
   
-The trade-off between greater confidence in an estimate is the precision of that estimate. As our confidence increases  that the true population mean is within our confidence interval, the confidence interval becomes wider, and therefore our estimate becomes less precise. 
+The trade-off between greater confidence in an estimate is the precision of that estimate. As our confidence increases  that the true population mean is within our confidence interval, the confidence interval becomes wider, and therefore our estimate becomes less precise.  
+  
+  
+### Comparing confidence intervals
 
+Social scientists are typically interested in comparing outcomes between groups. 
+
+This time, we'll compare confidence intervals instead of the only the mean and median. 
+We can use add variables based on our equations using `summarize()`. 
+
+Let's compare of television hours for men and women.  
+
+1. Use the `group_by()` command to look at differences by `sex`.
+2. Click "Run Code" to see your results.  
+3. When you are satisfied with your answer, click "Submit Answer."  
+
+```{r ci-setup}
+#| echo: false
+#| results: hide
+ 
+gss24$sex <- zap_missing(gss24$sex) 
+gss24$sex <- as_factor(gss24$sex)   
+gss24$sex <- droplevels(gss24$sex)  
+```
+
+```{r ci, exercise=TRUE, error=TRUE}
+tvhrs <- gss24 |>
+  filter(!is.na(tvhours)) |>
+  drop_na(tvhours, sex) |>
+  group_by(___) |>
+  summarise(
+    n = n(),
+    mean_tv = mean(tvhours),
+    median_tv = median(tvhours),
+    sd_tv = sd(tvhours),
+    se_tv = sd_tv / sqrt(n),
+    lowCI = mean_tv - (1.96 * se_tv),
+    hiCI = mean_tv + (1.96 * se_tv)
+    )
+
+tvhrs
+```
+  
+```{r ci-solution}
+tvhrs <- gss24 |>
+  filter(!is.na(tvhours)) |>
+  drop_na(tvhours, sex) |>
+  group_by(sex) |>
+  summarise(
+    n = n(),
+    mean_tv = mean(tvhours),
+    median_tv = median(tvhours),
+    sd_tv = sd(tvhours),
+    se_tv = sd_tv / sqrt(n),
+    lowCI = mean_tv - (1.96 * se_tv),
+    hiCI = mean_tv + (1.96 * se_tv)
+    )
+
+tvhrs
+```
+
+<div id="ci-hint">
+**Hint:** Did you replace the blank line with the variable `sex`?
+</div>
+
+```{r ci-check}
+grade_code()
+```
+
+Looking only at the mean and median, we might conclude that on average, men spend more hours watching tv than women because the mean and median for men was greater than the mean and median hours for women. Is this still the case if we compare the confidence intervals?
+
+There is a .95 probability that men's average tv hours per day is between 3.00 and 3.42.
+There is a .95 probability that women's average tv hours per day is between 3.19 and 3.57.
+
+We’re 95% confident that women watch tv between 3.19 and 3.57 hours per day. But we have no idea if the true average is closer to 3.19, or 3.57, or somewhere near the middle of our range.
+
+The confidence interval shows much overlap, so we can’t know for sure if there is a difference between the average time men and women spend watching tv per day.
+
+```{r}
+#| echo: false
+
+gss24$sex <- zap_missing(gss24$sex) 
+gss24$sex <- as_factor(gss24$sex)   
+gss24$sex <- droplevels(gss24$sex)  
+
+tvhrs <- gss24 |>
+  filter(!is.na(tvhours)) |>
+  drop_na(tvhours, sex) |>
+  group_by(sex) |>
+  summarise(
+    n = n(),
+    mean_tv = mean(tvhours),
+    median_tv = median(tvhours),
+    sd_tv = sd(tvhours),
+    se_tv = sd_tv / sqrt(n),
+    lowCI = mean_tv - (1.96 * se_tv),
+    hiCI = mean_tv + (1.96 * se_tv)
+    )
+
+tvhrs |>
+  ggplot(aes(x = mean_tv, y = sex, color = sex)) +
+  geom_point(size = 3) +
+  geom_errorbar(aes(xmin = lowCI, xmax = hiCI), width = 0.2, size = 1.2) +
+  theme(legend.position = "none") +
+  xlim(0, 4) +
+  labs(title = "Average hours of tv use per day",
+       subtitle = "with 95% confidence intervals",
+       y = " ",
+       x = " ",
+       caption = "US General Social Survey 2024") 
+```
+  
+The mean for men is greater than for women, you protest. This is true, and our best guess of a population parameter is a sample statistic. But, we use confidence intervals to convey our uncertainty. If we drew another random sample of men and women, the means would be slightly different. The confidence intervals convey this uncertainty, whereas the sample statistic makes it appear as if the sample mean is exactly equivalent to what the true population mean must be.  
+  
 
 Hypothesis Testing
 ------------------------------------------------------------------------------------------

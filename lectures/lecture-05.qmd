@@ -75,11 +75,16 @@ Download and open [code-along-05.qmd]()
 
 ## Packages {.sparse-slide}
 
-Load the standard packages.
-
+Load the standard packages & 1 new package: `Rmisc()`  
+  
+We'll use `Rmisc()` to calculate confidence intervals with `summarize()`.  
+  
 ```{r}
 #| message: false
 #| label: load
+
+# Only need to install once per machine. 
+# install.packages("Rmisc")
 
 library(here)
 library(tidyverse) 
@@ -87,22 +92,7 @@ library(haven) # not core tidyverse
 library(gssr)
 library(gssrdoc)
 library(summarytools)
-```
-
-
-## NEW Package {.sparse-slide}
-
-We're going to use `Rmisc` package to calculate confidence intervals with `summarize()`.
-
-```{r}
-#| message: false
-#| label: rmisc
-
-# Only need to install once per machine. 
-# install.packages("Rmisc")
-
-# load the new package
-library(Rmisc)
+library(Rmisc) # load the new package
 ```
 
 
@@ -378,12 +368,73 @@ df_ghosts |>
   geom_point(size = 3) +
   geom_errorbar(aes(xmin = lower, xmax = upper), width = 0.2, size = 1.2) +
   theme(legend.position = "none") +
-  labs(title = "Proportion believe in ghosts, with 95% CI",
+  xlim(.5, 1) +
+  labs(title = "Proportion believe in ghosts",
+       subtitle = "with 95% confidence intervals",
        y = " ",
-       x = " ") 
+       x = " ",
+       caption = "US General Social Survey 2022") 
 ```
 
 ::::
+
+
+## Comparing CIs
+
+:::: panel-tabset
+
+### Code
+
+```{r}
+#| message: false
+#| label: wwwhr01
+#| code-line-numbers: "1-3|4-10"
+
+df_wwwhr <- gss22 |>
+  group_by(sex) |>
+  drop_na(sex, wwwhr) |>
+  summarise(
+    n = n(),
+    mean = mean(wwwhr),
+    sd = sd(wwwhr),
+    lower = CI(wwwhr, ci = 0.95)['lower'],
+    upper  = CI(wwwhr, ci = 0.95)['upper']
+    )
+
+```
+
+### Table
+
+```{r}
+#| message: false
+#| label: wwwhr02
+
+df_wwwhr
+
+```
+
+### Plot
+
+```{r}
+#| echo: false
+#| message: false
+#| label: wwwhr03
+
+df_wwwhr |>
+  ggplot(aes(x = mean, y = sex, color = sex)) +
+  geom_point(size = 3) +
+  geom_errorbar(aes(xmin = lower, xmax = upper), width = 0.2, size = 1.2) +
+  theme(legend.position = "none") +
+  xlim(0, 20) +
+  labs(title = "Average hours of internet use",
+       subtitle = "with 95% confidence intervals",
+       y = " ",
+       x = " ",
+       caption = "US General Social Survey 2022") 
+```
+
+::::
+
 
 
 # Hypothesis Testing {.theme-section}
@@ -617,4 +668,132 @@ t.test(Pair(hrs1_2018, hrs1_2020) ~ 1, data = gss_panel)
 [{{< fa regular lightbulb >}} **Do fewer men than women support gun laws (`gunlaw`)?**]{style="color: #F39C12; font-size: 100%; font-family: 'Shadows Into Light'"}
 
 
+## Think Like a Statistician {background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
 
+:::: panel-tabset
+
+### `educ`
+
+```{r}
+#| message: false
+#| label: educ01
+#| echo: false
+#| results: hide
+
+## See what the DV looks like
+freq(gss22$educ)
+
+## Run some basic stats
+gss22 |>  
+  select(year, educ, sex) |> 
+  drop_na(educ, sex)  |>
+  group_by(sex) |>  
+  summarise(
+    count = n(),
+    min = min(educ),
+    median = median(educ),
+    max = max(educ),
+    mean = round(mean(educ), digits = 2), 
+    sd = sd(educ),
+    lower = CI(educ, ci = 0.95)['lower'],
+    upper = CI(educ, ci = 0.95)['upper']
+    ) 
+
+```
+
+```{r}
+#| message: false
+#| label: educ02
+#| echo: false
+
+t.test(gss22$educ ~ gss22$sex, alternative = "less")
+
+```
+
+
+### `abany`
+
+```{r}
+#| message: false
+#| label: abany01
+#| echo: false
+#| results: hide
+
+## See what the DV looks like
+freq(gss22$abany)
+
+# Use logic to recode (yes: 1 = 1; no: 2 = 0)
+gss22$abany <- ifelse(gss22$abany == 1, 1, 0)
+
+## Run some basic stats
+gss22 |>  
+  select(year, abany, sex) |> 
+  drop_na(abany, sex)  |>
+  group_by(sex) |>  
+  summarise(
+    count = n(),
+    min = min(abany),
+    max = max(abany),
+    mean = round(mean(abany), digits = 2), 
+    sd = sd(abany),
+    lower = CI(abany, ci = 0.95)['lower'],
+    upper = CI(abany, ci = 0.95)['upper']
+    ) 
+
+t.test(gss22$abany ~ gss22$sex, alternative = "two.sided")
+
+```
+
+```{r}
+#| message: false
+#| label: abany02
+#| echo: false
+
+t.test(gss22$abany ~ gss22$sex, alternative = "two.sided")
+
+```
+
+
+### `gunlaw`
+
+```{r}
+#| message: false
+#| label: gunlaw01
+#| echo: false
+#| results: hide
+
+## See what the DV looks like
+freq(gss22$gunlaw)
+
+# Use logic to recode (yes: 1 = 1; no: 2 = 0)
+gss22$gunlaw <- ifelse(gss22$gunlaw == 1, 1, 0)
+
+## Run some basic stats
+gss22 |>  
+  select(year, gunlaw, sex) |> 
+  drop_na(gunlaw, sex)  |>
+  group_by(sex) |>  
+  summarise(
+    count = n(),
+    min = min(gunlaw),
+    max = max(gunlaw),
+    mean = round(mean(gunlaw), digits = 2), 
+    sd = sd(gunlaw),
+    lower = CI(gunlaw, ci = 0.95)['lower'],
+    upper = CI(gunlaw, ci = 0.95)['upper']
+    ) 
+
+t.test(gss22$gunlaw ~ gss22$sex, alternative = "two.sided")
+
+```
+
+```{r}
+#| message: false
+#| label: gunlaw02
+#| echo: false
+
+t.test(gss22$gunlaw ~ gss22$sex, alternative = "two.sided")
+
+```
+
+::::

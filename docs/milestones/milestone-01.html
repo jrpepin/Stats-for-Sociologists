@@ -154,18 +154,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gssrdoc)</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(summarytools)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>Load all years of the GSS data.</p>
+<p>Then, use the <code>gss_get_yr()</code> function to load the data only for the 2024 survey respondents. (<em>Hint</em>: Use the code from code-along-01.qmd)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the data (will appear in your Global Environment pane)</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(gss_all)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># load the gss 2024 data (ADD YOUR CODE BELOW)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Load the GSS codebook</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the codebook</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(gss_dict)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
-<section id="add-documentation" class="level1">
-<h1>Add Documentation</h1>
-<p>Run the code and add <strong>narrative</strong> (outside code chunks) or <strong>comments</strong> (inside the code chunks) describing what each of the the below R chunks do.</p>
+<section id="code-output-meaning" class="level1">
+<h1>Code, Output, Meaning</h1>
+<p><em>Run the code and add <strong>narrative</strong> (outside code chunks) or <strong>comments</strong> (inside the code chunks) describing what each of the the below R chunks do.</em></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">here</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">here</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "C:/Users/Joanna/Documents/GitHub/Stats-for-Sociologists"</code></pre>
+<pre><code>[1] "C:/Users/Joanna/Documents/GitHub/Stats for Sociologists"</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">list.files</span>(<span class="at">path =</span> <span class="fu">here</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">list.files</span>(<span class="at">path =</span> <span class="fu">here</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] "_extensions"                  "_quarto-speaker.yml"         
  [3] "_quarto.yml"                  "code-alongs"                 
@@ -173,44 +186,113 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  [7] "lectures"                     "memos"                       
  [9] "milestones"                   "project"                     
 [11] "site_libs"                    "slides"                      
-[13] "SOC6302_data.qmd"             "SOC6302_punch-list.qmd"      
-[15] "SOC6302_readings.qmd"         "SOC6302_syllabus.qmd"        
-[17] "Stats for Sociologists.Rproj" "tutorials"                   </code></pre>
+[13] "smiling-distributions.png"    "SOC6302_data.qmd"            
+[15] "SOC6302_punch-list.qmd"       "SOC6302_readings.qmd"        
+[17] "SOC6302_syllabus.qmd"         "Stats for Sociologists.Rproj"
+[19] "tutorials"                   </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">list.files</span>(<span class="at">path =</span> <span class="fu">here</span>(<span class="st">"project"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">list.files</span>(<span class="at">path =</span> <span class="fu">here</span>(<span class="st">"project"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "data"    "outputs" "scripts"</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Sys.time</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Sys.time</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "2025-08-19 11:13:47 EDT"</code></pre>
+<pre><code>[1] "2025-08-27 11:52:04 EDT"</code></pre>
 </div>
+</div>
+<p><em>Use R to complete the checkpoints below. Show your work (e.g., R code chunks) where appropriate. Add narrative (text outside code chunks) or comments (text inside the code chunks) throughout.</em></p>
+<p>Reference specific statistics (where appropriate) from your output to justify your answers. Explain what the values tell you about the data; interpret their meaning in relation to the question.</p>
+<p><em>Use the <code>gss_all</code> dataset for checkpoints 01 - 07.</em></p>
+<p><em>Use the <code>gss24</code> dataset for checkpoints 08 - 10.</em></p>
+<section id="checkpoint-01" class="level2">
+<h2 class="anchored" data-anchor-id="checkpoint-01">Checkpoint 01</h2>
+<p><strong><em>Report the survey question that corresponds to the <code>fefam</code> variable. How did you find out?</em></strong></p>
+</section>
+<section id="checkpoint-02" class="level2">
+<h2 class="anchored" data-anchor-id="checkpoint-02">Checkpoint 02</h2>
+<p><strong><em>Is <code>fefam</code> a dichotomous, nominal, ordinal, or interval-ratio variable? Justify your answer.</em></strong></p>
+</section>
+<section id="checkpoint-03" class="level2">
+<h2 class="anchored" data-anchor-id="checkpoint-03">Checkpoint 03</h2>
+<p>Use <code>gss_which_years()</code> below to show the survey years with the variable <code>fefam</code> in the <code>gss_all</code> dataset.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ADD YOUR CODE HERE</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong><em>Which years of the survey did the <code>fefam</code> variable appear in the GSS?</em></strong></p>
+</section>
+<section id="checkpoint-04" class="level2">
+<h2 class="anchored" data-anchor-id="checkpoint-04">Checkpoint 04</h2>
+<p>Use <code>print_labels()</code> to see a list of the values and labels for the <code>fefam</code> variable.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ADD YOUR CODE HERE</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong><em>If a respondent has a value of <code>4</code> for the <code>fefam</code> variable, what does that mean?</em></strong></p>
+</section>
+<section id="checkpoint-05" class="level2">
+<h2 class="anchored" data-anchor-id="checkpoint-05">Checkpoint 05</h2>
+<p>Convert the <code>fefam</code> variable to a factor variable.</p>
+<ol type="1">
+<li>Use <code>zap_missing()</code> to get rid of all the ‘missing’ (NA) levels.</li>
+<li>Use <code>as_factor()</code> to replace the values with labels.</li>
+<li>Use <code>drop_levels()</code> to get rid of the empty levels (if any).</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ADD YOUR CODE HERE</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="explore-the-gss" class="level1">
-<h1>Explore the GSS</h1>
-<p>Load all years of the gss data.</p>
-<p>Then, use the <code>gss_get_yr()</code> function to load the data only for the 2024 survey respondents. (<em>Hint</em>: Use the code from code-along-01.qmd)</p>
+<section id="checkpoint-06" class="level2">
+<h2 class="anchored" data-anchor-id="checkpoint-06">Checkpoint 06</h2>
+<p>Use <code>table()</code> to show the frequencies of the <code>fefam</code> variable.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the data (will appear in your Global Environment pane)</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(gss_all)</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># load the gss 2024 data (add your code below)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ADD YOUR CODE HERE</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Use R to answer the questions below. Show your work (e.g., R code chunks) where appropriate. Add narration and comments throughout. Justify your answers.</p>
+</section>
+<section id="checkpoint-07" class="level2">
+<h2 class="anchored" data-anchor-id="checkpoint-07">Checkpoint 07</h2>
+<p>Use <code>freq()</code> to create a (pretty) relative frequency table to show for the <code>fefam</code> variable using the 2024 data. Set the following function options:</p>
 <ul>
-<li><p>Report the survey question that corresponds to the <code>fefam</code> variable.</p></li>
-<li><p>Is <code>fefam</code> a dichotomous, nominal, ordinal, or interval-ratio variable? Justify your answer.</p></li>
-<li><p>Which years of the survey did the <code>fefam</code> variable appear?</p></li>
-<li><p>What value corresponds with “agree” for this variable?</p></li>
-<li><p>Convert the <code>fefam</code> variable to a factor variable. Make sure you remove any ‘missing’ (NA) or empty (e.g., levels with no observations) levels.</p></li>
-<li><p>Create a (pretty) relative frequency table to show for the <code>fefam</code> variable using the 2024 data. How many respondents “strongly agree” with the <code>fefam</code> statement in 2024? What % of respondents either “strongly agree” or “agree”?</p></li>
-<li><p>Create a (pretty) relative frequency table for the <code>happy</code> variable using the 2024 data. Make sure your values are labelled for easy interpretation (without levels identifying missing data or empty levels). Were most respondents “not too happy,” “pretty happy,” or “very happy” in 2024?</p></li>
-<li><p>Create a (pretty) cross-tab of the <code>happy</code> and <code>sex</code> variables using only the 2024 survey data. Make sure your values are labelled for easy interpretation. How many women were <code>very happy</code>? How many men were <code>very happy</code>?</p></li>
-<li><p>Were a greater percentage of women or men <code>very happy</code> in 2024?</p></li>
+<li><code>report.nas = FALSE</code></li>
+<li><code>headings = FALSE</code></li>
 </ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ADD YOUR CODE HERE</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong><em>How many respondents “strongly agree” with the <code>fefam</code> statement in 2024? What % of respondents either “strongly agree” or “agree”?</em></strong></p>
+</section>
+<section id="checkpoint-08" class="level2">
+<h2 class="anchored" data-anchor-id="checkpoint-08">Checkpoint 08</h2>
+<p>Use <code>freq()</code> to create a (pretty) relative frequency table for the <code>happy</code> variable using the 2024 data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ADD YOUR CODE HERE</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong><em>Were most respondents “not too happy,” “pretty happy,” or “very happy” in 2024?</em></strong></p>
+</section>
+<section id="checkpoint-09" class="level2">
+<h2 class="anchored" data-anchor-id="checkpoint-09">Checkpoint 09</h2>
+<p>Create a (pretty) cross-tab of the <code>happy</code> and <code>sex</code> variables using only the 2024 survey data. Make sure your values are labelled for easy interpretation.</p>
+<p>Use <code>zap_missing()</code>, <code>as_factor()</code>, <code>droplevels()</code>, and <code>ctable()</code> as appropriate. Set the following function options for <code>ctable()</code>:</p>
+<ul>
+<li><code>prop = "c"</code></li>
+<li><code>format = "p"</code></li>
+<li><code>useNA = "no"</code></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fix the sex variable</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Fix the happy variable</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a cross-tab</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong><em>Were women or men more likely to report they were <code>very happy</code>?</em></strong></p>
+</section>
+<section id="checkpoint-10" class="level2">
+<h2 class="anchored" data-anchor-id="checkpoint-10">Checkpoint 10</h2>
+<p><strong><em>According to the table above, were a greater percentage of women or men <code>not too happy</code> in 2024?</em></strong></p>
+</section>
 </section>
 <section id="meet-the-ipums-data" class="level1">
 <h1>Meet the IPUMS Data</h1>

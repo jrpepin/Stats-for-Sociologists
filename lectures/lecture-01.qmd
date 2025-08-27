@@ -2,7 +2,6 @@
 project:
   render:
     - "!/code-alongs" 
-    
 title: "R workflow"
 format:
   revealjs:
@@ -14,9 +13,13 @@ format:
     slide-number: c
     math: mathjax
     code-annotations: hover
+    chalkboard: true
+    title-slide-attributes:
+      data-background-image: "images/01/hello.png"
+      data-background-size: 250px
+      data-background-position: bottom center
 revealjs-plugins:
   - quiz
-embed-resources: true
 filters:
     - openlinksinnewpage
 editor: 
@@ -34,6 +37,14 @@ execute:
 
 ## Load packages, custom functions, and styles
 source("custom-setup-styles.R")
+
+knitr::opts_knit$set(digits = 2)
+
+# Set global theme with base font size 20
+theme_set(theme_minimal(base_size = 20))
+
+# Override default discrete color and fill scales
+scale_colour_discrete <- function(...) scale_color_manual(values = my_palette)
 
 # Color in math equations
 # https://egallic.fr/Recherche/aide-memoire/quarto_equation_colors.html#colors-in-equations-with-revealjs

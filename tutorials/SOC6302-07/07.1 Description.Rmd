@@ -1,0 +1,278 @@
+---
+title: "Tutorial 07"
+output:
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true 
+    theme: flatly
+    mathjax: default
+    includes:
+      in_header: mathjax-color.html
+    css: css/mystyle.css
+    df_print: "paged"
+runtime: shiny_prerendered
+tutorial:
+  id: "07.1"
+---
+
+```{r}
+#| label: setup
+#| message: false
+#| include: false
+
+# GLOBAL ENVIRONMENT PANE
+## source("tutorials/SOC6302-03/custom-setup-styles.R")
+## library(gssr)
+## library(gssrdoc)
+## data(gss_all)
+## gss24 <- gss_get_yr(2024)
+## data(gss_dict)
+
+## Load packages, custom functions, and styles
+source("custom-setup-styles.R")
+
+## Load all gss
+#gss_all <- readRDS("data/gss_all.rds")
+
+# Get the data only for the 2024 survey respondents
+#gss24 <- readRDS("data/gss24.rds")
+
+# Override default discrete color and fill scales
+scale_colour_discrete <- function(...) scale_color_manual(values = my_palette)
+
+## Options
+tutorial_options(exercise.checker = gradethis::grade_learnr)
+options(dplyr.summarise.inform=F)   # Avoid grouping warning
+options(digits=4)                   # Round numbers
+theme_set(theme_minimal())          # set ggplot theme
+# st_options(freq.report.nas = FALSE) # remove extra columns in freq()
+ # any reason need to see this?!?! CHECK FOR SP22
+  
+knitr::opts_chunk$set(echo = FALSE,
+                      warning = FALSE, 
+                      messages = FALSE)
+```
+
+<link href="https://fonts.googleapis.com/css2?family=Shadows+Into+Light&display=swap" rel="stylesheet">
+
+```{=html}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll("a[href^='http']").forEach(function(link) {
+      link.setAttribute("target", "_blank");
+      link.setAttribute("rel", "noopener noreferrer");
+    });
+  });
+</script>
+```
+
+## Description
+
+![](images/snail08.png "alt text here"){width="75%"}
+
+`r fa("fas fa-lightbulb", fill = "#18BC9C")` [**LEARNING
+OBJECTIVES**]{style="color: #18BC9C;"}
+
+1.  X
+2.  Y
+3.  Z
+
+<br>
+
+`r fa("fas fa-book", fill = "#18BC9C")`
+[**READINGS**]{style="color: #18BC9C;"}
+
+Readings are available on Quercus.
+
+1. XX  
+2. YY
+
+
+<br>
+
+`r fa("fas fa-language", fill = "#18BC9C")`
+[**TERMS**]{style="color: #18BC9C;"}
+
+-   DIRECT RELATIONSHIP  
+-   ELABORATION  
+-   CONTROL VARIABLE  
+-   SPURIOUS RELATIONSHIP  
+-   CONDITIONAL RELATIONSHIP 
+
+Elaboration
+--------------------------------------------------------------------------------
+
+The goal of analyzing two variables simultaneously is to try and establish how they are related to one another. These relationships can take many forms.  
+  
+#### Direct relationship
+  
+When a relationship between two variables cannot be accounted for by other theoretically relevant variables, we refer to it as a **direct** relationship. 
+  
+Once we have established a direct relationship between two variables, 
+social scientists often want to establish the order of the relationship. 
+Did **A** lead to **B** or did **B** lead to **A**?  
+  
+Direct causality (A → B):
+
+::: {style="color: #3498DB; font-family: 'Shadows Into Light'"}
+“Higher levels of education lead to better health.”
+:::
+
+Reverse causality (B → A):
+
+::: {style="color: #3498DB; font-family: 'Shadows Into Light'"}
+“Better health leads to higher levels of education.”
+:::
+
+In real life, the arrows often point in both directions. 
+The scientific debate is often about which causal direction is stronger.  
+  
+<br> 
+
+Another point of debate, beyond the direction of the relationship between the two variables, 
+is whether there is a true causal link between the two variables. 
+The relationship between **A** and **B** might be “explained away” by **C**, a third variable.  
+
+
+::: my-def 
+#### Elaboration
+
+Further exploring a bivariate relationship by introducing another variable.
+:::
+  
+Often we have a reason to suspect that a third variable will have some effect on the bivariate relationship between our independent and dependent variables.  
+  
+This is better explained with an example. 
+The table below presents the number of driving accidents per year for men and women. 
+Compare the percentage of men who have had two or more accidents (62%) 
+with the percentage of women who have had two or more accidents (41%). 
+
+![](images/elab1.png "Table 1: Number of accidents per year by sex"){ width=60% }
+  
+  
+It appears that men get in more driving accidents than women and the relationship between gender and number of accidents is fairly strong. Knowing someone's gender would help use guess whether they have had 0-1 accidents or 2 or more accidents per year.  
+   
+But, what if we suspect that men drive more often than women and that's the real explanation for why men have more accidents than women? 
+Men may have more accidents simply because they are more likely to be behind the wheel than women, not because men are worse drivers than women. 
+Let's look at the data again, but this time, we'll make two cross-tabs. 
+Each new table is called a **“partial table.”**  
+  
+  
+In the first cross-tab, we'll compare men's and women's frequency of accidents among people who say they "drive rarely."
+  
+  
+![](images/elab2.png "Table 2: Number of accidents per year by sex, among rare drivers"){ width=60% }
+  
+  
+Now, we can see that among people who drive rarely, 
+the proportion of men and women who have two or more accidents is remarkably similar. 
+What do we see when we compare men's and women's accidents among those who drive frequently?
+  
+  
+![](images/elab3.png "Table 3: Number of accidents per year by sex, among frequent drivers"){ width=60% }
+  
+  
+Among frequent drivers, we see much higher rates of accidents for both men and women. How would we interpret these three cross-tabs when we analyze them collectively?  
+  
+Men have more automobile accidents, on average, than women. 
+However, after *controlling for* frequency of driving, the relationship between gender and accidents per year disappears.	 
+  
+  
+It's not that gender was the *cause* of more frequent accidents, 
+but that gender was associated with frequency of driving, which is associated with more frequent accidents. 
+Gender is related to frequency of driving, which directly influences the number of accidents per year. 
+Therefore, the relationship between gender and number of accidents is not a *direct* relationship.  
+  
+::: my-def 
+#### Control variable
+
+An additional variable that we take into account to understand the relationship between our main variables of interest.
+:::
+  
+When we add a third variable that theoretically may influence the relationship between our independent and dependent variables, we refer to this new variable as a **control variable**.
+  
+In a cross-tabulation, we end up producing one cross-tab per category of the control variable.  
+  
+#### Spurious relationship
+
+When the control variable is added, if the relationship between the IV and DV disappears, the relationship is considered to be **spurious**.  
+  
+![](images/spurious.png "Model of a spurious relationship."){ width=60% }
+  
+  
+[**Example:**]{style="color: #F39C12;"}  
+
+::: {style="color: #3498DB; font-family: 'Shadows Into Light'"}
+When people eat more ice cream, more crimes are committed.  
+:::
+
+In the summer, more people eat ice cream and more people commit crimes. 
+Eating ice cream doesn't lead to crime. 
+Both things happen to occur in the summer. 
+  
+  
+![](images/spurious_ex.png "Example: Model of a spurious relationship."){ width=60% }
+
+  
+### Conditional relationship  
+  
+When the control variable is added, if the relationship between the IV and DV is dependent upon the category of the control, the relationship is considered to be **conditional**.  
+  
+The relationship between the IV and DV will change depending on the value of the control variable. 
+Put differently, **C** is a moderator when it changes the relationship between **A** and **B**. 
+To moderate a relationship means to affect its strength and/or direction. 
+If the control variable splits our analysis into two cross-tabs, one table may show no relationship and the other may show a strong, negative relationship.  
+  
+![](images/conditional.png "Model of a conditional relationship."){ width=60% }
+
+
+[**Example:**]{style="color: #F39C12;"}  
+
+::: {style="color: #3498DB; font-family: 'Shadows Into Light'"}
+Young people tend to be religious if their parents are also religious.  
+:::
+
+Young people who are close to their parents tend to be similar to them in terms of religiosity. 
+For teens who are not close to their parents, there is no relationship.  
+  
+  
+![](images/conditional_ex.png "Example: model of a conditional relationship."){ width=60% }
+  
+  
+***
+
+`r fa("otter", fill = "#F39C12")`<practice> PRACTICE:</practice>
+
+*If divorce increases risk of depression more for men than for women, we’d say that “gender moderates the association between divorce and depression.”*
+  
+```{r P01, echo=FALSE}
+question("Which model best describes the relationship between these variables?",
+    answer("conditional", correct = TRUE, message = "The relationship between divorce and depression is conditional on one's gender."),
+    answer("spurious"),
+    answer("direct"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+  
+  
+*Research shows that the longer people wear masks during the day, the more likely they are to get infected with COVID-19. When the researchers control for whether people were considered to be an essential worker, the relationship disappears.*
+  
+```{r P02, echo=FALSE}
+question("Which model best describes the relationship between these variables?",
+    answer("conditional"),
+    answer("spurious", correct = TRUE, message = "Whether or not someone is an essential worker is corrrelated both with the need to wear a mask for long hours and greater exposure to the population who might be infected."),
+    answer("direct"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+  
+  
+To summarize: 
+
+-   Elaboration allows us to test for spuriousness. 
+-   Elaboration clarifies the causal sequence of bivariate relationships by introducing variables hypothesized to intervene between the IV and DV.
+-   Elaboration specifies the different conditions under which the original bivariate relationship might hold.
+  
+

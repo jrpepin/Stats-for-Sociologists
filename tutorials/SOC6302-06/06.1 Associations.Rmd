@@ -34,8 +34,8 @@ source("custom-setup-styles.R")
 ## Load all gss
 #gss_all <- readRDS("data/gss_all.rds")
 
-# Get the data only for the 2024 survey respondents
-#gss24 <- readRDS("data/gss24.rds")
+# Get the data only for the 2022 survey respondents
+gss22 <- readRDS("data/gss22.rds")
 
 # Override default discrete color and fill scales
 scale_colour_discrete <- function(...) scale_color_manual(values = my_palette)
@@ -77,6 +77,7 @@ OBJECTIVES**]{style="color: #18BC9C;"}
 2.  Identify independent and dependent variables and examine their relationship using bivariate tables.
 3.  Calculate and interpret the significance of a chi-square test statistic and Pearson’s Correlation Coefficient (R).
 
+
 <br>
 
 `r fa("fas fa-book", fill = "#18BC9C")`
@@ -110,7 +111,7 @@ Readings are available on Quercus.
 -   OBSERVED FREQUENCIES
 -   EXPECTED FREQUENCIES
 -   DEGREES OF FREEDOM
-
+-   PEARSON'S CORRELATION COEFFICIENT (R)
 
 Bivariate Analysis
 --------------------------------------------------------------------------------
@@ -498,4 +499,731 @@ These efforts to manipulate the data in a way that favors rejecting the null hyp
 
 ![](images/manipulation.jpg "If you torture the data long enough, it will confess."){width="60%"}
 
+Chi-square Test
+--------------------------------------------------------------------------------
 
+::: my-def 
+#### Chi-square test
+
+An inferential statistics technique designed to test for significant relationships between two categorical (nominal or ordinal) variables organized in a bivariate table.
+:::
+
+The chi-square (pronounced kai-square and written as χ2) test tells us whether the difference between the distribution of the dependent variable for each category of the independent variable is different enough that it could not have happened by chance.
+
+We calculate a p-value for our chi-square statistic and compare it to an alpha.
+We will follow the same steps as we have been in testing hypotheses:
+
+1.  Check assumptions
+2.  State the research and null hypotheses
+3.  Select alpha and specify the test statistic
+4.  Compute the test statistic
+5.  Interpret the results
+
+<br>
+
+#### 1. Check assumptions
+
+The chi-square test requires no assumptions about the shape of the population distribution from which the sample was drawn.
+
+Like all inferential techniques, it does assume random sampling.
+
+It can be applied to variables measured at a nominal and/or an ordinal level of measurement.
+
+<br>
+
+#### 2. State the research and null hypotheses
+
+For chi-square tests, there is no need to express $H_{1}$ and $H_{0}$ with Greek letters; you can use full sentences.
+
+When conducting a chi-square test, $H_{1}$ is **always a one-tailed test**.
+So, you never need to double p-values, or distinguish one-tailed from two-tailed table columns.
+
+The research hypothesis ($H_{1}$) proposes that the two variables are related in the population.
+
+> Gender and fear of walking alone at night are statistically dependent.  
+
+The null hypothesis ($H_{0}$) states that no association exists between the two cross-tabulated variables in the population, and therefore the variables are statistically independent.
+
+> Gender and fear of walking alone at night are statistically independent.  
+
+[**Example:**]{style="color: #F39C12;"}
+
+Let's assume we surveyed a random sample of 2,105 adults and collected information about their gender and whether they were afraid to walk alone at night.
+We then report our findings, the observed frequencies of fear of walking alone by gender.
+
+::: my-def 
+#### Observed frequencies $F_{o}$ 
+
+The cell frequencies actually observed in a bivariate table.
+:::
+  
+  
+The easiest way to present our findings is to create a cross-tab table, like the one below. This table represents our **observed frequencies**. The percentages in the table reflect the data that was actually collected, our empirical data.
+
+![](images/example2.png "Table 1: Fear of walking alone at night by gender N=2,105"){width="70%"}
+
+To test our hypothesis, we need to compare our actual data to theoretical data that shows what we would expect to find if there was NO relationship between gender and fear of walking alone at night (the null hypothesis).
+
+::: my-def 
+#### Expected frequencies $F_{e}$ 
+
+The cell frequencies that would be expected in a bivariate table if the two variables were statistically independent.
+:::
+
+We can create this theoretical "expected" frequency table.
+If $H_{0}$ were true, the column percentages within each category of the independent variable would match the column marginals.
+This table represents our **expected frequencies**, if no relationship between gender and fear of walking alone existed.
+
+![](images/example2B.png "Table 1: Fear of walking alone at night by gender N=2,105"){width="70%"}
+  
+###
+  
+### [3. Select alpha ($\alpha$) and specify the test statistic]{style="color: #18BC9C;"}
+
+We'll use the typical alpha of .05 and we will use a chi-square statistic.
+
+The reason we use a chi-square test is that it is based on the difference between expected and observed frequencies.
+This is the perfect test for comparing variables displayed in a bivariate table.
+
+The minimum possible value of chi-square is zero (meaning, chi-square can never be negative), with no upper limit to its maximum value.
+
+The sampling distribution of chi-square tells the probability of getting values of chi-square, assuming no relationship exists in the population.
+
+The χ2 (chi-square) sampling distribution is not one distribution, but a family of distributions.
+
+Each chi-square distribution is distinguished by degrees of freedom (df).
+[Degrees of freedom](https://blog.minitab.com/blog/statistics-and-quality-data-analysis/what-are-degrees-of-freedom-in-statistics) are, in essence, an estimate of the number of independent pieces of information that went into calculating a statistic.
+
+The shape of each chi-square distribution is determined by the number of degrees of freedom.
+As the number of degrees of freedom increases, the chi-square distribution becomes more symmetrical.
+The distributions are all positively skewed, but they begin to resemble the normal curve when degrees of freedom are greater than 30.
+
+![](images/distributions.png "Chi-square distributions for 1, 5, and 9 degress of freedom"){width="80%"}
+
+
+### [4. Compute the test statistic]{style="color: #18BC9C;"}
+
+The formula for calculating the chi-square test statistic is as follows:
+
+![](images/chisquare.png "Chi-square formula"){width="50%"}
+
+The symbol Σ (sigma) means you should sum everything.
+The $F_{o}$ denotes the actual (observed) frequencies reported in the table.
+The $F_{e}$ denotes the expected frequencies if there was no relationship between the two variables.
+This takes some math to calculate.
+
+In our example, we have four values which represent $F_{o}$, for each of the four cells in our table (925, 570, 231, & 379).
+
+![](images/fe0.png "Table 1: Observed frequencies"){width="70%"}
+
+Now, we'll need to find four values that represent $F_{e}$, theoretical cell values if there was no relationship between gender and fear of walking alone at night.
+
+To obtain the expected frequencies for each cell in any cross-tab, we multiply the row and column totals for the cell and divide the product by the total number of cases in the table.
+
+![](images/fe.png "Formula for expected frequencies"){width="60%"}
+
+For example, to find the $F_{e}$ value for the number of men who are not afraid to walk alone at night, if there was no relationship between these variables, we would multiple the column marginal for men (1,156) by the row marginal for not being afraid (1,495) and divide it by the total number of cases (2,105).
+
+![](images/fe1.png "C1: Formula for expected frequencies"){width="70%"}
+
+Our calculation of 821.01 means that if there was no relationship between gender and fear of walking alone at night, we would expect 821.01 men in our sample to report they are not afraid to walk alone at night.
+
+We also have to calculate the frequencies for the remaining three cells.
+Give it a try.  
+
+***
+
+`r fa("otter", fill = "#F39C12")`<practice> PRACTICE:</practice>
+
+```{r P08, echo=FALSE}
+question("What is the $F_{e}$ for women who are not afraid to walk alone at night?",
+    answer("673.99", correct = TRUE, message = "(949 * 1,495)/2,105"),
+    answer("334.99", message = "Hint: (949 * 1,495)/2,105"),
+    answer("275.01", message = "Hint: (949 * 1,495)/2,105"),
+    answer("821.01", message = "Hint: (949 * 1,495)/2,105"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+```{r P09, echo=FALSE}
+question("What is the $F_{e}$ for men who are afraid to walk alone at night?",
+    answer("334.99", correct = TRUE, message = "(1,156 * 610)/2,105"),
+    answer("673.99", message = "Hint: (1,156 * 610)/2,105"),
+    answer("275.01", message = "Hint: (1,156 * 610)/2,105"),
+    answer("821.01", message = "Hint: (1,156 * 610)/2,105"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+```{r P10, echo=FALSE}
+question("What is the $F_{e}$ for women who are afraid to walk alone at night?",
+    answer("275.01", correct = TRUE, message = "(949 * 610)/2,105"),
+    answer("673.99", message = "Hint: (949 * 610)/2,105"),
+    answer("334.99", message = "Hint: (949 * 610)/2,105"),
+    answer("821.01", message = "Hint: (949 * 610)/2,105"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+  
+  
+### Calculating the chi-square
+
+We now combine our tables showing the observed and expected frequencies.
+
+![](images/fe2.png "Table of observed and expected frequencies"){width="60%"}
+
+Now we have enough information to return to our formula to calculate the chi-square statistic.
+We'll need to calculate four values (for each of our four cells) and then sum them.
+
+Let's start with the men who are not afraid.
+We'll take our expected value (821.01) and subtract our observed value (925) from it.
+Then, we'll square it.
+(Don't forget this step!) Because we square the difference, chi-square statistics are always **positive**.
+
+Then, divide it by our expected value for unafraid men.
+
+$$
+\frac{(821.01 - 925)^2}{821.01} = 13.17
+$$
+
+Then, we will do the same thing for the remaining three cells.
+
+![](images/fe3a.png "Table of observed and expected frequencies"){width="60%"}
+
+Let's take this step by step for men who are afraid:
+
+$$
+\frac{(334.99 - 231)^2}{334.99} = 32.28
+$$
+
+
+The table below shows you the results for each step of the four calculations.
+
+![](images/fe3.png "Table showing the steps in the chi-square formula"){width="80%"}
+
+
+::: my-tip
+#### Heads up!
+
+It does not matter whether you put “($F_{e}$ – $F_{o}$)” or “($F_{o}$ – $F_{e}$)” in the numerator. Once you do the squaring, they are identical.
+:::
+
+
+Can you fill in the remaining two cell values?
+
+***
+
+`r fa("otter", fill = "#F39C12")`<practice> PRACTICE:</practice>
+
+```{r P11, echo=FALSE}
+question("What is the empty cell value for women who are not afraid?",
+    answer("16.04", correct = TRUE),
+    answer("39.32", message = "Hint: 10,813.92 / 673.99"),
+    answer("13.17", message = "Hint: 10,813.92 / 673.99"),
+    answer("32.28", message = "Hint: 10,813.92 / 673.99"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+```{r P12, echo=FALSE}
+question("What is the empty cell value for women who are afraid?",
+    answer("39.32", correct = TRUE),
+    answer("16.04", message = "Hint: 10,813.92 / 275.01"),
+    answer("13.17", message = "Hint: 10,813.92 / 275.01"),
+    answer("32.28", message = "Hint: 10,813.92 / 275.01"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+Nice!
+Now we add the four values together to get a chi-square result of 100.81!
+
+### [5. Interpret the results]{style="color: #18BC9C;"}
+
+In order to interpret our results, we must convert our chi-square statistic into a p-value.
+
+Because the sampling distribution of chi-square is a *family* of distributions, rather than just one distribution, we have to know the degrees of freedom to identify our p-value.
+
+The formula for calculating degrees of freedom (df) is fairly simple:
+
+```         
+df = (r – 1)(c – 1)
+r = the number of rows
+c = the number of columns
+```
+
+If we had a table with 3 rows and 2 columns, our degrees of freedom would be 2:
+
+        
+$$
+(3-1)(2-1) = 2 df
+$$
+
+Let's look again at our table.
+We have two rows (No and Yes) and two columns (Men and Women).
+Notice that we don't count the row and column marginals.
+
+![](images/fe0.png "Table 1: Observed frequencies"){width="60%"}
+
+***
+
+`r fa("otter", fill = "#F39C12")`<practice> PRACTICE:</practice>
+
+```{r P13, echo=FALSE}
+question("How many degrees of freedom do we have?",
+    answer("1", correct = TRUE, message = "(2-1)(2-1) = 1"),
+    answer("2", message = "Hint: df = (r – 1)(c – 1) = (2-1)(2-1) = 1"),
+    answer("3", message = "Hint: df = (r – 1)(c – 1) = (2-1)(2-1) = 1"),
+    answer("4", message = "Hint: df = (r – 1)(c – 1) = (2-1)(2-1) = 1"),
+         allow_retry = TRUE
+)
+```
+  
+  
+  
+What is the probability of getting a chi-square of 100.81, assuming no relationship exists in the population between gender and fear of walking alone at night?
+
+We simply look up the answer in a table or use an [online table or calculator](https://www.mathsisfun.com/data/chi-square-calculator.html).
+
+Or, we could ask R to tell us! Here's the formula:  
+
+> `pchisq(chi_square_value, df, lower.tail = FALSE)`
+
+We're interested only in the upper tail of the chi-square distribution —i.e., the probability of getting a value greater than or equal to your test statistic, so we set the lower.tail to false.  
+
+1. Use the `pchisq()` function with the option `lower.tail = FALSE`.
+2. Put in our chi-square value of `100.81` and df of `1`.  
+3. When you are satisfied with your answer, click "Submit Answer."  
+
+
+```{r chi, exercise=TRUE, error=TRUE}
+
+# add your code here
+
+```
+  
+```{r chi-solution}
+pchisq(100.81, 1, lower.tail = FALSE)
+```
+
+```{r chi-hint-1}
+pchisq()
+```
+
+```{r chi-hint-2}
+pchisq(100.81, __, lower.tail = _____)
+```
+
+```{r chi-hint-3}
+pchisq(100.81, 1, lower.tail = _____)
+```
+
+
+```{r chi-check}
+grade_code()
+```
+
+
+
+The calculator (or table if you used that) shows that the p value is 0.
+In other words, the p-value is so small it is less than .001.
+
+The probability that there is no relationship in the population between gender and fear of walking alone at night is less than 0.001.
+
+Our p-value (\<0.001) is less than our alpha (0.05).
+Therefore, we can reject the null hypothesis.
+
+To interpret our findings in plain language, we could say:
+
+-   “We reject the null hypothesis that gender and fear of walking alone at night are independent.”
+
+-   “There is a statistically significant association between gender and fear of walking alone at night, with women substantially more fearful than men.”
+
+-   “Fear of walking alone at night is statistically significantly less for men than women in the population.”
+
+-   “Women's fear of walking alone at night is statistically significantly greater than men's fear of walking alone at night.”
+
+
+#### Limitations
+
+There are a few limitations of the chi-square test that you should know about.
+
+The chi-square test does not give us information about the strength of the relationship or its substantive importance in the population.
+
+The chi-square test is sensitive to sample size.
+The size of the calculated chi-square is directly proportional to the size of the sample, independent of the strength of the relationship between the variables.
+
+#### Extra example
+
+Need another example?
+Watch this [video](https://youtu.be/VskmMgXmkMQ) for another demonstration [5 minutes].
+
+![](https://youtu.be/VskmMgXmkMQ)
+
+
+Pearson’s Correlation Coefficient (R)
+------------------------------------------------------------------------------------------
+
+::: my-def 
+#### Pearson’s Correlation Coefficient
+
+A measure of association between two interval-ratio level variables.
+:::
+
+One way we can test two interval-ratio variables is to calculate a **Pearson’s Correlation Coefficient**. It does not require specifying an independent and dependent variable.  
+  
+<br>
+  
+::: my-tip
+#### Heads up!  
+
+Pearson’s Correlation Coefficient is denoted with the capital letter **R**, not to be confused with the statistical software `r fa("r-project", fill = "#3498DB")`.
+:::
+
+<br>
+
+#### 1. Check assumptions
+
+-    Both variables should be measured on an interval or ratio scale—not ordinal or nominal.  
+-    The relationship between the two variables should be linear. A scatterplot of the two variables should show points *roughly* forming a straight line.  
+
+There shouldn't be curves, peaks and turns in the data. For example, graphing COVID-19 test rates by the date wouldn't work because there are multiple peaks (waves) in the relationship.  
+
+<br>
+
+#### 2. State the research and null hypotheses 
+
+The research and null hypothesis work just like in hypothesis testing.
+
+[**Example:**]{style="color: #F39C12;"}
+
+$H_{0}$ [There is no linear correlation between parental time spent with children and children's emotional well-being scores.]{style="color: #3498DB; font-family: 'Shadows Into Light'"}
+
+$H_{1}$ [More time spent with children is associated with higher emotional well-being.]{style="color: #3498DB; font-family: 'Shadows Into Light'"} 
+
+This research hypothesis would be a one-tailed test, because we are specifying a direction. In practice, we usually run a two-tailed test anyway because it's a more conservative threshold.  
+  
+<br>
+
+#### 3. Select alpha ($\alpha$) and specify the test statistic
+
+We need to identify our $\alpha$ (alpha) level. We can choose any level, but it's conventional to use the α level for the social sciences, which is .05. This means we are willing to accept a 5% chance of making the wrong conclusion. 
+
+<br>
+
+###
+
+### [4. Compute the test statistic]{style="color: #18BC9C;"}
+
+In this course, I will not ask you to calculate R by hand, but I do want you to see how it works. And, you will need to know when it applies and how to interpret it. 
+
+<br>
+
+$$
+r = \frac{n(\sum xy) - (\sum x)(\sum y)}{\sqrt{[n \sum x^2 - (\sum x)^2][n \sum y^2 - (\sum y)^2]}}
+$$
+
+
+This looks much more complicated that it actually is, but it's easier to see with an example.  
+
+[**Example:**]{style="color: #F39C12;"}
+
+Let's use this fake data table to see how it works.  
+
+![](images/r-table01.png "Table with 3 variables: id, var1, var2."){ width=50% }
+
+<br>
+
+The first thing we want to do is add three columns.
+
+1.  `xy` = multiple the values of `x` by the values of `y`
+2.  `$x^2$` = square `x`
+3.  `$y^2$` = square `y`
+
+![](images/r-table02.png "Table with 6 variables: id, var1, var2, xy x2, y2"){ width=70% }
+  
+  
+Then, add a summary row for each of the columns.  
+
+Now, we have all the data we need. From the table:
+
+-    $Σx   = 320$
+-    $Σy   = 121$
+-    $Σxy = 7638$
+-    $Σ𝑥^2 = 22026$
+-    $Σ𝑦^2 = 2961$
+-    $n     = 5$ 
+
+Then, we just plug in the numbers into the formula:
+
+$$
+r = \frac{5(7638) - (320)(121)}{\sqrt{[5(22026) - (320)^2][5(2961) - (121)^2]}}
+$$
+
+<br>
+
+**This results in $r = -.5$**
+
+Unlike the chi-square test that we use for nominal and ordinal variables, R can be positive or negative. The values of R range from -1 to +1. The closer R is to zero, the weaker the relationship between two variables. 
+
+The positive or negative sign denotes the direction between the two interval-ratio variables. If increases in one variable corresponds with increases in the other variable, the sign for R will be positive (**positive slope**). If increases in one variable corresponds with decreases in the other variable, the sign for R will be negative (**negative slope**).  
+
+**r ranges from -1 to +1**  
+
+-     -1 	= 	perfect negative correlation
+-     0 	= 	no relationship
+-     1 	= 	perfect positive correlation
+
+<br>
+
+![](images/corr_examples.png "Scatterplots showing a positive, negative, and no correlation."){ width=70% }
+  
+<br>
+  
+We can approximate the relationship between two interval-ratio variables by drawing a straight line through the center of the observations on the scatterplot. 
+The relationship between two variables is usually imperfect, so we must fit the best available line to the data we have.   
+  
+  
+The closer R is to -1 or +1 indicates how closely an observation line fits the data of the scatterplot. 
+When the line doesn't fit the data well, the R value will be closer to zero. 
+Unlike our subjective assessment of the strength of relationship between two categorical variables, 
+R has established cut-off points describing the strength of the relationship between two interval-ratio variables. 
+  
+<br>
+  
+**Strength of relationship**
+
+      Strong:     Over 0.6
+      Moderate:   0.3 to 0.5
+      Weak:       0.1 to 0.2
+      Very weak:  Below 0.1
+  
+   
+<br>
+    
+When reporting R, it is best to describe both the direction and the strength of the relationship. When R is close to -1, we could say there is a strong negative relationship between the two variables. 
+If R is close to 1, we could say there is a strong positive relationship between the two variables. 
+  
+![](images/corr_examples_2.png "Scatterplots showing direction and strength."){ width=90% }
+  
+***
+
+`r fa("otter", fill = "#F39C12")`<practice> PRACTICE:</practice>
+
+![](images/corr_practice.png "Scatterplots showing direction and strength."){ width=50% }
+  
+  
+```{r P14, echo=FALSE}
+question("What correlation coefficient would you expect for scatterplot a?",
+    answer("nearly +1", correct = TRUE),
+    answer("–0.50"),
+    answer("+0.85"),
+    answer("+0.15"),
+      random_answer_order = TRUE,
+      allow_retry = TRUE
+)
+```
+  
+  
+```{r P15, echo=FALSE}
+question("What correlation coefficient would you expect for scatterplot b?",
+    answer("nearly +1"),
+    answer("–0.50", correct = TRUE),
+    answer("+0.85"),
+    answer("+0.15"),
+      random_answer_order = TRUE,
+      allow_retry = TRUE
+)
+```
+  
+  
+  
+### [5. Interpret the results]{style="color: #18BC9C;"}
+
+R can also be converted into a test statistic, **Student's T-test**, and then we can compare it with a p-value, the probability that the null hypothesis is true. 
+
+$$
+t = \frac{r * \sqrt{n - 2}}{\sqrt{1 - r^2}}
+$$
+  
+*$n$ is the sample size.  
+$r$ is the sample correlation coefficient
+  
+Then, we'd compare our $t$ value to a p-value, just as we did in hypothesis testing. The p-value corresponding with R reports the probability that the correlation between x and y in the sample data occurred by chance. To figure out the p-value, we could either look the p-value up using a t-table or [use software](https://www.danielsoper.com/statcalc/calculator.aspx?id=44). 
+We'll stick with software for this course.  
+
+
+To interpret R, we report the R value and the p-value. We could report something like this:
+
+*   There is no evidence of an association between v1 and v2 (r = ##, p = .###).  
+*   The correlation between v1 and v2 was found to be statistically significant (r = ##, p < .05).  
+*   There is a [weak/moderate/strong] [positive/negative] relationship between v1 and v2. Increases in v1 was correlated with [increases/decreases] in v2 (r = ##, p < .05).  
+*   Results indicated an inverse relationship between v1 and v2 (r = ##, p < .05), suggesting that v2 decreases as v1 increases.  
+  
+<br>
+  
+[**Example:**]{style="color: #F39C12;"}
+ 
+To calculate the Pearson correlation between 2 interval-ratio variables, we'll use the command `cor()`. 
+The syntax will look like this:  
+  
+>    `cor(data$v1, data$v2)`  
+    
+Because Pearson's R doesn't require specifying an independent and dependent variable, the order of the variables does not matter.  
+  
+See how it works by trying it out now.  
+  
+1. Replace the blank lines in the code below, specifying `weight` as the first variable and `height` as the second variable. 
+2. **Run the code** to see your results. 
+3. When you are satisfied with your answer, click "**Submit Answer**."  
+  
+  
+```{r cor01, exercise=TRUE, error= TRUE, warning=FALSE}
+cor(gss22$______, gss22$______)
+```
+  
+```{r cor01-solution}
+cor(gss22$weight, gss22$height)
+```
+  
+```{r cor01-hint-1, error=TRUE}
+cor(gss22$weight, gss22$______)
+```
+  
+```{r cor01-check}
+grade_code("Your first correlation!")
+```
+  
+***
+
+`r fa("otter", fill = "#F39C12")`<practice> PRACTICE:</practice>
+
+```{r P16, echo=FALSE}
+question("Given this R value, the association between height and weight could be best described as a:",
+    answer("moderately positive relationship", correct = TRUE),
+    answer("moderately negative relationship"),
+    answer("weakly positive relationship"),
+    answer("strongly positive relationship"),
+      random_answer_order = TRUE,
+      allow_retry = TRUE
+)
+```
+
+
+
+Learning Check #06 {data-progressive=TRUE}
+------------------------------------------------------------------------------------------
+
+Please answer the following questions to verify you understand the topics in this tutorial. 
+
+```{r Q01, echo=FALSE}
+  question("Q01. If two variables are unrelated in the population, this is referred to as",
+    answer("statistical independence",  correct = TRUE),
+    answer("statistical dependence"),
+    answer("statistical significance"),
+    answer("statistical inference"),
+    random_answer_order    = TRUE
+  )
+```
+
+```{r Q02, echo=FALSE}
+  question("Q02. The particular shape of a chi-square distribution depends on",
+    answer("the number of degrees of freedom",  correct = TRUE),
+    answer("the number of variables being analyzed"),
+    answer("an assumption that the population is normally distributed"),
+    answer("your confidence level (alpha)"),
+    random_answer_order    = TRUE
+  )
+```
+
+```{r Q03, echo=FALSE}
+  question("Q03. Chi-square is a useful test for determining _____ significance but not for determining _____ significance.",
+    answer("statistical; substantive",  correct = TRUE),
+    answer("substantive; statistical"),
+    answer("observed; expected"),
+    answer("expected; observed"),
+    random_answer_order    = TRUE
+  )
+```
+
+```{r Q04, echo=FALSE}
+  question("Q04. Chi-square values are always _____.",
+    answer("positive",  correct = TRUE),
+    answer("zero"),
+    answer("negative"),
+    answer("positive or negative"),
+    random_answer_order    = TRUE
+  )
+```
+
+
+The table below shows the relationship between political party identity (Republican/Democrat) and attitudes about the death penalty (favor/oppose).
+
+![](images/table1.png "Table 1: Observed frequencies"){width="70%"}
+
+```{r Q05, echo=FALSE}
+  question("Q05. In the table above, ____________ is the dependent variable and ____________ is the independent variable.",
+    answer("attitudes about the death penalty; political party",  correct = TRUE),
+    answer("political party; attitudes about the death penalty"),
+    answer("attitudes about the death penalty; Republicans"),
+    answer("political party; attitudes"),
+    random_answer_order    = TRUE
+  )
+```
+
+Calculate the expected frequencies ($F_{e}$) for each cell, either by hand or by using the online [chi-square calculator](https://www.mathsisfun.com/data/chi-square-calculator.html).
+
+```{r Q06, echo=FALSE}
+  question("Q06. What is the expected frequency for Republicans who oppose the death penalty (if there was no relationship between the variables)?",
+    answer("244.25",  correct = TRUE),
+    answer("359.75"),
+    answer("537.25"),
+    answer("364.75"),
+    random_answer_order    = TRUE
+  )
+```
+
+```{r Q07, echo=FALSE}
+  question("Q07. Assuming an $\\alpha$ level of .05, should the researcher reject the null hypothesis? Why or why not?",
+    answer("Yes, because the p-value (.000) is less than the $\\alpha$ level of .05.", correct = TRUE),
+    answer("Yes, because the p-value (.000) is greater than the $\\alpha$ level of .05."),
+    answer("No, because the $\\alpha$ level of .05 is greater than the p-value.", message = "When the p-value is small, the null hypothesis will fall!"),
+    random_answer_order    = TRUE
+  )
+```
+
+```{r Q08, echo=FALSE}
+  question("Q08. Which of these statements best summarizes the researcher’s conclusion?",
+    answer("There is a statistically significant difference in the population between political party identity and support for the death penalty, with Republicans significantly more in favor of the death penalty than Democrats.", 
+           correct = TRUE),
+    answer("There is a statistically significant difference in the population between political party identity and support for the death penalty, with Democrats significantly more in favor of the death penalty than Republicans."),
+    answer("There is no statistically significant difference in the population between Republicans and Democrats in favoring or opposing the death penalty."),
+    answer("Our evidence shows the difference between the percentage of Republicans and Democrats who support the death penalty is substantial and important."),
+    random_answer_order    = TRUE
+  )
+```
+
+```{r Q09, echo=FALSE}
+  question("Q09. The correlation (R) between women’s ideal age of marriage and men’s ideal age of marriage is 0.36. Thus, the association between these two variables could best be described as a:",
+    answer("moderate positive relationship",  correct = TRUE),
+    answer("moderate negative relationship"),
+    answer("weak positive relationship"),
+    answer("highly positive relationship"),
+      random_answer_order    = TRUE
+  )
+```
+
+```{r Q10, echo=FALSE}
+question("Q10. A researcher finds a Pearson’s correlation coefficient of r = 0.62 between the number of hours parents spend with their children and the children's emotional well-being scores. This result suggests a?",
+    answer("moderate positive relationship"),
+    answer("moderate negative relationship"),
+    answer("weak positive relationship"),
+    answer("strongly positive relationship",  correct = TRUE),
+      random_answer_order    = TRUE
+  )
+```

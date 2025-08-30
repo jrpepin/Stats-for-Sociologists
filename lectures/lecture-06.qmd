@@ -1,0 +1,260 @@
+---
+title: "Statistical Tests II"
+format:
+  revealjs:
+    multiplex: false
+    controls: true
+    theme: [default, custom.scss]
+    highlight-style: atom-one
+    include-in-header:
+    - file: mathjax-color.html
+    slide-number: c
+    math: mathjax
+    code-annotations: hover
+    chalkboard: true
+    title-slide-attributes:
+      data-background-image: "images/06/test-hat.png"
+      data-background-size: 250px
+      data-background-position: bottom center
+revealjs-plugins:
+  - quiz
+filters:
+    - openlinksinnewpage
+editor: 
+  markdown: 
+    wrap: 72
+execute: 
+  echo: true
+---
+
+```{r echo=FALSE}
+
+#| label: setup
+#| message: false
+#| include: false
+
+## Load packages, custom functions, and styles
+source("custom-setup-styles.R")
+
+knitr::opts_knit$set(digits = 2)
+
+# Set global theme with base font size 20
+theme_set(theme_minimal(base_size = 20))
+
+# Override default discrete color and fill scales
+scale_colour_discrete <- function(...) scale_color_manual(values = my_palette)
+
+# Color in math equations
+# https://egallic.fr/Recherche/aide-memoire/quarto_equation_colors.html#colors-in-equations-with-revealjs
+```
+
+# Agenda {data-menu-title="Agenda" background-image="images/calendar.png" background-size="100px" background-repeat="repeat"}
+
+-   $chi^2$ Test
+-   Pearson’s Correlation Coefficient (R)
+
+::: notes
+-  forcats (reorder factor levels)
+-  missing data? 
+-  **outliers**  -- data viz & tables
+-  dates? 
+-  lists
+
+:::
+
+# Learning objectives
+
+By the end of the lecture, you will be able to ...
+
+-   Use R to calculate chi-square tests 
+-   Use R to calculate Pearson's Correlation Coefficient (R)
+
+# Code-along 06 {data-menu-title="Code-along" background-image="images/terminal.png"}
+
+Download and open [code-along-06.qmd]()
+
+## Packages {.sparse-slide}
+
+Load the standard packages & 1 new package: `gtsummary()`  
+  
+We'll use `gtsummary()` to make pretty tables that include our statistical tests.  
+  
+```{r}
+#| message: false
+#| label: load
+
+# Only need to install once per machine. 
+# install.packages("gtsummary")
+
+library(here)
+library(tidyverse) 
+library(haven) # not core tidyverse
+library(gssr)
+library(gssrdoc)
+library(summarytools)
+library(gtsummary) # load the new package
+```
+
+
+## Load your data & codebook {.sparse-slide}
+
+```{r}
+#| message: false
+#| label: gssdata
+
+# Get the data from the 2024 survey
+gss24 <- gss_get_yr(2024)
+
+# Load the codebook
+data(gss_dict)
+
+```
+
+## Variables
+
+-    `premarsx` Sex before marriage
+-    `helpful` People helpful or looking out for selves
+-    `meovrwrk` Men hurt family when focus on work too much
+-    `postlife` Belief in life after death  
+-    `sex` Respondent's sex
+-    `polviews` Think of self as liberal or conservative
+
+## Variable Management {.sparse-slide}
+
+Let's make a df with only the (pretty) categorical variables we'll analyze.
+
+```{r}
+#| message: false
+#| label: my-data
+#| code-line-numbers: "1-2|3|4|5"
+
+my_data <- gss24 |>
+  select(premarsx, helpful, meovrwrk, postlife, sex, polviews) |>
+  zap_missing() |>
+  as_factor() |>
+  droplevels()
+```
+
+
+# $chi^2$ Test {.theme-section}
+
+## [$chi^2$]{style="color: #18BC9C"} test {.sparse-slide}
+
+[**$chi^2$**]{style="color: #18BC9C"} determines if categorical variables are related  
+  
+Test if the rows and columns in a two-way table are independent
+
+
+## [$chi^2$]{style="color: #18BC9C"} in action {.sparse-slide}
+
+The news has been reporting a large gender difference in attitudes about gender roles.  
+
+<br>
+
+You wonder if men and women have different beliefs about sex before marriage.
+
+<br>
+
+. . .
+
+::: task
+{{< fa lightbulb >}} How do you test your hypothesis? 
+:::
+
+##  {.quiz-question data-menu-title="Knowledge Check" background-image="images/clipboard-question.png" background-size="100px" background-repeat="repeat"}
+
+::: {style="color: #F39C12"}
+{{< fa clipboard-question >}} Which of these equations represents your **research** hypothesis?
+:::
+
+-   [There is no association between gender and attitudes about sex before marriage (statistically independent).]{data-explanation="😲 But you think there is a relationship."}
+-   [Gender and attitudes about sex before marriage are related in the population (statistically independent).]{data-explanation="😲 They are INdependent?"}
+-   [Gender and attitudes about sex before marriage are related in the population (statistically dependent).]{.correct data-explanation="💯 Correct!"}
+
+
+##  {.quiz-question data-menu-title="Knowledge Check" background-image="images/clipboard-question.png" background-size="100px" background-repeat="repeat"}
+
+::: {style="color: #F39C12"}
+{{< fa clipboard-question >}} Which of these equations represents your **null** hypothesis?
+:::
+
+-   [There is no association between gender and attitudes about sex before marriage (statistically independent).]{.correct data-explanation="💯 Correct!"}
+-   [Gender and attitudes about sex before marriage are related in the population (statistically independent).]{data-explanation="😲 The null hypothesis is always no relationship."}
+-   [There is no association between gender and attitudes about the death penalty (statistically dependent).]{data-explanation="😲 They are dependent?"}
+
+
+## Review: Pretty cross-tab
+
+Use `summarytools::ctable`
+
+```{r}
+#| label: ctable
+#| output-location: fragment
+
+ctable(my_data$premarsx, my_data$sex, # <1>
+  prop = "c", # <2>
+  format = "p", # <3>
+  useNA = "no"
+) # <4>
+```
+
+1.  Change from `table()` to `ctable()`.
+2.  The "c" gives column %; "r" would give row %.
+3.  This adds the % symbols to the table.
+4.  Exclude the missing levels from the table.
+
+
+## Pretty cross-tab (new) 
+
+Now that we know how to use the `dplyr |>`!
+
+```{r}
+#| message: false
+#| label: tbl-cross
+#| code-line-numbers: "1-2|3-4|5-6"
+#| output-location: fragment
+
+my_data |>
+  tbl_cross(
+    row = premarsx,
+    col = sex,
+    percent = "column",
+    missing = "no")
+```
+
+## Pretty cross-tab with `p-value`
+
+```{r}
+#| message: false
+#| label: tbl-cross-p
+#| code-line-numbers: "1-5|6-7"
+#| output-location: fragment
+
+my_data |>
+  tbl_cross(
+    row = premarsx,
+    col = sex,
+    percent = "column",
+    missing = "no") |>
+  add_p(source_note = TRUE)
+```
+
+
+##  {.quiz-question data-menu-title="Knowledge Check" background-image="images/clipboard-question.png" background-size="100px" background-repeat="repeat"}
+
+::: {style="color: #F39C12"}
+{{< fa clipboard-question >}} Which of these statements best summarizes your conclusion?
+:::
+
+-   [Our findings prove that gender has no effect on attitudes about premarital sex]{data-explanation="😲 We can't PROVE anything."}
+-   [Since the p-value is above 0.05, we can conclude that gender strongly influences attitudes about premarital sex.]{data-explanation="😲 A high p-value indicates weak evidence against the null hypothesis"}
+-   [We find no statistically significant relationship between gender and attitudes about premarital sex.]{.correct data-explanation="💯 Correct!"}
+
+
+
+# Pearson’s Correlation Coefficient (R) {.theme-section}
+
+# Think Like a Statistician {background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
+
+[{{< fa regular lightbulb >}} **????**]{style="color: #F39C12; font-size: 100%; font-family: 'Shadows Into Light'"}
+

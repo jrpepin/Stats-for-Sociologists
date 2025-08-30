@@ -1040,6 +1040,24 @@ SOC6302.Rproj
 <p><br></p>
 <p>This is often a good idea to get a first feel for the data, but only if your dataset is relatively small.</p>
 </section>
+<section id="names" class="slide level2">
+<h2>Names</h2>
+<p>To see the variables available in the dataset, use the <code>names()</code> command.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href=""></a><span class="fu">names</span>(gss_all)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><br></p>
+<div class="callout callout-tip no-icon callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<p><strong><i class="fa-solid fa-hat-wizard" aria-label="hat-wizard"></i> Heads Up!</strong></p>
+</div>
+<div class="callout-content">
+<p>This command is best to use with smaller datasets.</p>
+</div>
+</div>
+</div>
+</section>
 <section id="section" class="slide level2" data-menu-title="Why use codebooks">
 <h2></h2>
 
@@ -1058,38 +1076,10 @@ SOC6302.Rproj
           display:block!important;
       }</style></aside>
 </section>
-<section id="codebook" class="slide level2">
-<h2>Codebook</h2>
-<p>The <a href="https://gss.norc.org/us/en/gss/get-documentation.html" target="_blank">GSS documentation</a> is available online in .pdf form.</p>
-<p>The .pdfs will be useful for general overviews.</p>
-<p><br></p>
-<p>For specific variable information, it will be helpful to use the documentation you’ll load into RStudio.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href=""></a><span class="co"># Load the codebook</span></span>
-<span id="cb17-2"><a href=""></a><span class="fu">data</span>(gss_dict)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="names" class="slide level2">
-<h2>Names</h2>
-<p>To see the variables available in the dataset, use the <code>names()</code> command.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href=""></a><span class="fu">names</span>(gss_all)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p><br></p>
-<div class="callout callout-tip no-icon callout-titled callout-style-default">
-<div class="callout-body">
-<div class="callout-title">
-<p><strong><i class="fa-solid fa-hat-wizard" aria-label="hat-wizard"></i> Heads Up!</strong></p>
-</div>
-<div class="callout-content">
-<p>This command is best to use with smaller datasets.</p>
-</div>
-</div>
-</div>
-</section>
 <section id="variable-documentation" class="slide level2">
 <h2>Variable documentation</h2>
-<p>For information about a specific GSS variable,<br>
+<p>The <a href="https://gss.norc.org/us/en/gss/get-documentation.html" target="_blank">GSS documentation</a> is available online in .pdf form.</p>
+<p>Because we loaded the <code>gssrdoc</code> package, for information about a specific GSS variable:<br>
 type <code>?varname</code> at the console.</p>
 <p><br></p>
 <p>In the output pane, the Help tab will show the variable documentation.</p>
@@ -1224,7 +1214,7 @@ iap – missing. Values: the numeric and response category key (1 = strongly agr
 <h2></h2>
 <p>We can find which years one or more variables were asked with the <code>gss_which_years()</code> function.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href=""></a><span class="fu">gss_which_years</span>(gss_all, meovrwrk)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href=""></a><span class="fu">gss_which_years</span>(gss_all, meovrwrk)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 35 × 2
    year      meovrwrk
@@ -1259,7 +1249,7 @@ iap – missing. Values: the numeric and response category key (1 = strongly agr
 <p>The variable names are case sensitive. In this dataset, all variables are lowercase.</p>
 <p><br></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href=""></a><span class="fu">table</span>(gss_all<span class="sc">$</span>meovrwrk)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href=""></a><span class="fu">table</span>(gss_all<span class="sc">$</span>meovrwrk)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     1     2     3     4     5 
@@ -1277,8 +1267,8 @@ iap – missing. Values: the numeric and response category key (1 = strongly agr
 <p>Then, add text to your code-along that interprets the results for the <code>2</code> value.</p>
 <p><br></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href=""></a><span class="co"># Replaced gss_all with gss24</span></span>
-<span id="cb24-2"><a href=""></a><span class="fu">table</span>(gss24<span class="sc">$</span>meovrwrk)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href=""></a><span class="co"># Replaced gss_all with gss24</span></span>
+<span id="cb23-2"><a href=""></a><span class="fu">table</span>(gss24<span class="sc">$</span>meovrwrk)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
   1   2   3   4   5 

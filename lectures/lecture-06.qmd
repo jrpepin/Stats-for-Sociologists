@@ -90,32 +90,35 @@ library(here)
 library(tidyverse) 
 library(haven) # not core tidyverse
 library(gssr)
-library(gssrdoc)
+library(gssrdoc) # load the GSS codebook
 library(summarytools)
 library(gtsummary) # load the new package
 ```
 
 
-## Load your data & codebook {.sparse-slide}
+## Load your data {.sparse-slide}
 
 ```{r}
 #| message: false
 #| label: gssdata
 
+# Get the data from the 2022 survey
+gss22 <- gss_get_yr(2022)
+
 # Get the data from the 2024 survey
 gss24 <- gss_get_yr(2024)
 
-# Load the codebook
-data(gss_dict)
+# Combine the two dataframes
+my_gss <- bind_rows(gss22, gss24)
 
 ```
 
 ## Variables
 
 -    `premarsx` Sex before marriage
+-    `postlife` Belief in life after death  
 -    `helpful` People helpful or looking out for selves
 -    `meovrwrk` Men hurt family when focus on work too much
--    `postlife` Belief in life after death  
 -    `sex` Respondent's sex
 -    `polviews` Think of self as liberal or conservative
 
@@ -128,7 +131,7 @@ Let's make a df with only the (pretty) categorical variables we'll analyze.
 #| label: my-data
 #| code-line-numbers: "1-2|3|4|5"
 
-my_data <- gss24 |>
+my_data <- my_gss |>
   select(premarsx, helpful, meovrwrk, postlife, sex, polviews) |>
   zap_missing() |>
   as_factor() |>
@@ -151,7 +154,7 @@ The news has been reporting a large gender difference in attitudes about gender 
 
 <br>
 
-You wonder if men and women have different beliefs about sex before marriage.
+You think men and women might have different beliefs about sex before marriage.
 
 <br>
 
@@ -251,10 +254,94 @@ my_data |>
 -   [We find no statistically significant relationship between gender and attitudes about premarital sex.]{.correct data-explanation="💯 Correct!"}
 
 
+## Review: `t.test()` with proportions
+```{r}
+#| message: false
+#| label: t.test
+
+# Use logic to recode factor as mean (yes = 1; no: 2 = 0)
+my_data$ghosts <- ifelse(my_data$postlife == "yes", 1, 0)
+
+# t.test
+t.test(my_data$ghosts ~ my_data$sex, alternative = "two.sided")
+
+```
+
+## `t.test()` & [$chi^2$]{style="color: #18BC9C"} 
+
+```{r}
+#| message: false
+#| label: postlife
+
+my_data |>
+  tbl_cross(
+    row = postlife,
+    col = sex,
+    percent = "column",
+    missing = "no") |>
+  add_p(source_note = TRUE)
+
+```
+
 
 # Pearson’s Correlation Coefficient (R) {.theme-section}
 
 # Think Like a Statistician {background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
 
 [{{< fa regular lightbulb >}} **????**]{style="color: #F39C12; font-size: 100%; font-family: 'Shadows Into Light'"}
+
+## Think Like a Statistician {background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
+
+:::: panel-tabset
+
+### `polviews`
+
+```{r}
+#| message: false
+#| echo: false
+#| label: tbl-cross-polviews
+
+my_data |>
+  tbl_cross(
+    row = polviews,
+    col = sex,
+    percent = "column",
+    missing = "no") |>
+  add_p(source_note = TRUE)
+```
+
+
+### `helpful`
+
+```{r}
+#| message: false
+#| echo: false
+#| label: tbl-cross-helpful
+
+my_data |>
+  tbl_cross(
+    row = helpful,
+    col = polviews,
+    percent = "column",
+    missing = "no") |>
+  add_p(source_note = TRUE)
+```
+
+### `meovrwrk`
+
+```{r}
+#| message: false
+#| echo: false
+#| label: tbl-cross-meovrwrk
+
+my_data |>
+  tbl_cross(
+    row = meovrwrk,
+    col = sex,
+    percent = "column",
+    missing = "no") |>
+  add_p(source_note = TRUE)
+```
+
+::::
 

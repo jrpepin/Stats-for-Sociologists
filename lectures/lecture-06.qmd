@@ -107,13 +107,14 @@ gss22 <- gss_get_yr(2022)
 
 ```
 
-## Variables
+## Variables {.smaller}
 
 -   `fefam` Better for man to work, woman tend home
 -   `postlife` Belief in life after death  
 -   `lifenow` R's rating of life overall now from 0-10
 -   `premarsx` Sex before marriage
 -   `meovrwrk` Men hurt family when focus on work too much
+-   `agekdbrn` R's age when 1st child born
 -   `sex` Respondents sex
 -   `age` Age of respondent
 -   `polviews` Think of self as liberal or conservative
@@ -136,10 +137,12 @@ my_cat <- gss22 |>
 
 # Continuous Variables
 my_con <- gss22 |>
-  select(id, age, lifenow) |>
+  select(id, age, educ, lifenow, agekdbrn) |>
   mutate(
     age = as.numeric(age),
-    lifenow = as.numeric(lifenow))
+    educ = as.numeric(educ),
+    lifenow = as.numeric(lifenow),
+    agekdbrn = as.numeric(agekdbrn))
 
 # Combine the two dataframes
 my_data <- left_join(my_cat, my_con, by = "id")
@@ -318,13 +321,170 @@ my_data |>
 
 # Pearson’s Correlation Coefficient (R) {.theme-section}
 
-## Pearson’s Correlation Coefficient (R)
+## `cor.test()` {.sparse-slide}
 
 R is the correlation between two interval-ratio variables.
 
+```{r}
+#| message: false
+#| eval: false
+#| label: cor.test
+
+cor.test(
+  ~ v1 + v2,
+  data = your_dataframe,
+  method = "pearson",
+  na.action = na.omit
+  ) 
+```
+
+<br>
+    
+::: {.callout-tip icon="false"}
+## {{< fa hat-wizard >}} Heads Up!
+    
+Because Pearson's R doesn't require specifying an independent and dependent variable, the order of the variables does not matter.  
+:::
+
+
+## Scatterplot
+
+```{r}
+#| message: false
+#| echo: false
+#| label: scatterplot-educ
+
+my_data %>%
+  drop_na(educ, agekdbrn) |>
+  filter(agekdbrn < 50) |>
+ggplot(aes(x = educ, y = agekdbrn)) +
+  geom_jitter(alpha = 0.5, color = "#18BC9C") +
+  geom_smooth(method = "lm", se = FALSE, color = "black") +
+  labs( title    = "Years of education\nby age when 1st child born",
+        caption  = "US General Social Survey (2022)")
+```
+
+## `cor.test()` in action 
+
+```{r}
+#| message: false
+#| label: cor-educ01
+#| output-location: fragment
+
+cor.test(
+  ~ educ + agekdbrn,
+  data = my_data,
+  method = "pearson",
+  na.action = na.omit
+)
+
+```
+## Tidy `cor.test()`
+
+:::: columns
+::: {.column width="45%"}
+```{r}
+#| message: false
+#| label: cor-educ02
+
+# Save results
+my_test <- cor.test(
+  ~ educ + agekdbrn,
+  data = my_data,
+  method = "pearson",
+  na.action = na.omit
+)
+```
+:::
+
+::: {.column width="55%" .fragment}
+```{r}
+#| message: false
+#| label: cor-educ03
+
+# Create a tibble with key stats
+cor_summary <- tibble(
+  correlation = my_test$estimate,
+  p_value     = my_test$p.value,
+  conf_low    = my_test$conf.int[1],
+  conf_high   = my_test$conf.int[2]
+)
+```
+:::
+::::
+
+<br>
+
+. . .
+
+```{r}
+#| message: false
+#| label: cor-educ04
+
+cor_summary
+```
+
+## `cor.test()` & `t.test()` {.smaller}
+
+:::: panel-tabset
+
+### Equivalence
+
+::: {.callout-tip icon="false"}
+## {{< fa hat-wizard >}} Heads Up!
+
+Correlating a dichotomous variable and a continuous variable is equivalent to doing a t-test on that continuous variable by the dichotomous variable.
+:::
+
+<br>
+
+When x is coded as 0/1, these formulas yield equivalent p-values, even if the t-statistics look slightly different due to rounding or variance assumptions.
+
+### `cor.test()`
+
+```{r}
+#| label: sex01
+
+# Create numeric version of sex
+my_data <- my_data %>%
+  mutate(female = if_else(sex == "female", 1, 0))
+
+cor.test(
+  ~ female + lifenow,
+  data = my_data,
+  method = "pearson",
+  na.action = na.omit
+)
+```
+
+### `t.test()`
+
+```{r}
+#| label: sex02
+
+t.test(my_data$lifenow ~ my_data$sex, alternative = "two.sided")
+
+```
+:::
+
+
 # Think Like a Statistician {background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
 
-[{{< fa regular lightbulb >}} **????**]{style="color: #F39C12; font-size: 100%; font-family: 'Shadows Into Light'"}
+## Think Like a Statistician {background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
+
+[{{< fa regular lightbulb >}} **Are beliefs about premarital sex (`premarsx`) dependent on political identity (`polviews`)?**]{style="color: #F39C12; font-size: 100%; font-family: 'Shadows Into Light'"}
+
+<br>
+
+. . .
+
+[{{< fa regular lightbulb >}} **Is there a gender difference (`sex`) in political identity (`polviews`)?**]{style="color: #F39C12; font-size: 100%; font-family: 'Shadows Into Light'"}
+
+<br>
+
+. . .
+
+[{{< fa regular lightbulb >}} **Describe the relationship between age and life satisfaction.**]{style="color: #F39C12; font-size: 100%; font-family: 'Shadows Into Light'"}
 
 ## Think Like a Statistician {background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
 
@@ -346,21 +506,6 @@ my_data |>
   add_p(source_note = TRUE)
 ```
 
-### `meovrwrk`
-
-```{r}
-#| message: false
-#| echo: false
-#| label: tbl-cross-meovrwrk
-
-my_data |>
-  tbl_cross(
-    row = meovrwrk,
-    col = sex,
-    percent = "column",
-    missing = "no") |>
-  add_p(source_note = TRUE)
-```
 
 ### `polviews`
 
@@ -376,6 +521,21 @@ my_data |>
     percent = "column",
     missing = "no") |>
   add_p(source_note = TRUE)
+```
+
+### `lifenow`
+
+```{r}
+#| message: false
+#| echo: false
+#| label: cor-lifenow
+
+cor.test(
+  ~ lifenow + age,
+  data = my_data,
+  method = "pearson",
+  na.action = na.omit
+)
 ```
 
 ::::

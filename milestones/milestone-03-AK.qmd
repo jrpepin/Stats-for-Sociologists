@@ -31,7 +31,7 @@ Load the 2024 GSS data and the GSS panel data
 #| message: false
 
 # ADD YOUR CODE HERE TO LOAD THE GSS 2024 DATA 
-gss24 <- gss_get_yr(2024)
+gss22 <- gss_get_yr(2022)
 
 
 ```
@@ -42,3 +42,19 @@ You’ll be working with the following GSS variables:
 -   `hrs`: 
 -   `sex`: Respondent’s gender
 
+
+Is there a gender difference (`sex`) in agreement that men hurt the family when they focus on work too much?
+
+```{r}
+#| message: false
+#| eval: false # change this!
+#| label: tbl-cross-meovrwrk
+
+my_data |>
+  tbl_cross(
+    row = meovrwrk,
+    col = sex,
+    percent = "column",
+    missing = "no") |>
+  add_p(source_note = TRUE)
+```

@@ -105,37 +105,44 @@ library(gtsummary) # load the new package
 # Get the data from the 2022 survey
 gss22 <- gss_get_yr(2022)
 
-# Get the data from the 2024 survey
-gss24 <- gss_get_yr(2024)
-
-# Combine the two dataframes
-my_gss <- bind_rows(gss22, gss24)
-
 ```
 
 ## Variables
 
--    `premarsx` Sex before marriage
--    `postlife` Belief in life after death  
--    `helpful` People helpful or looking out for selves
--    `meovrwrk` Men hurt family when focus on work too much
--    `sex` Respondent's sex
--    `polviews` Think of self as liberal or conservative
+-   `fefam` Better for man to work, woman tend home
+-   `postlife` Belief in life after death  
+-   `lifenow` R's rating of life overall now from 0-10
+-   `premarsx` Sex before marriage
+-   `meovrwrk` Men hurt family when focus on work too much
+-   `sex` Respondents sex
+-   `age` Age of respondent
+-   `polviews` Think of self as liberal or conservative
 
-## Variable Management {.sparse-slide}
+## Variable Management
 
-Let's make a df with only the (pretty) categorical variables we'll analyze.
+Let's make a df with only the (pretty) categorical and continuous variables we'll analyze.
 
 ```{r}
 #| message: false
 #| label: my-data
-#| code-line-numbers: "1-2|3|4|5"
+#| code-line-numbers: "2-3|4|5|6|9-10|11-13|16"
 
-my_data <- my_gss |>
-  select(premarsx, helpful, meovrwrk, postlife, sex, polviews) |>
+# Categorical Variables
+my_cat <- gss22 |>
+  select(id, premarsx, fefam, meovrwrk, postlife, sex, polviews) |>
   zap_missing() |>
   as_factor() |>
   droplevels()
+
+# Continuous Variables
+my_con <- gss22 |>
+  select(id, age, lifenow) |>
+  mutate(
+    age = as.numeric(age),
+    lifenow = as.numeric(lifenow))
+
+# Combine the two dataframes
+my_data <- left_join(my_cat, my_con, by = "id")
 ```
 
 
@@ -148,13 +155,13 @@ my_data <- my_gss |>
 Test if the rows and columns in a two-way table are independent
 
 
-## [$chi^2$]{style="color: #18BC9C"} in action {.sparse-slide}
+## [$chi^2$]{style="color: #18BC9C"} in action 
 
 The news has been reporting a large gender difference in attitudes about gender roles.  
 
-<br>
-
-You think men and women might have different beliefs about sex before marriage.
+You evaluate this narrative using the variable `fefam`:  
+  
+> It is much better for everyone involved if the man is the achiever outside the home and the woman takes care of the home and family.
 
 <br>
 
@@ -170,9 +177,9 @@ You think men and women might have different beliefs about sex before marriage.
 {{< fa clipboard-question >}} Which of these equations represents your **research** hypothesis?
 :::
 
--   [There is no association between gender and attitudes about sex before marriage (statistically independent).]{data-explanation="😲 But you think there is a relationship."}
--   [Gender and attitudes about sex before marriage are related in the population (statistically independent).]{data-explanation="😲 They are INdependent?"}
--   [Gender and attitudes about sex before marriage are related in the population (statistically dependent).]{.correct data-explanation="💯 Correct!"}
+-   [There is no association between gender identity and attitudes about gender roles (statistically independent).]{data-explanation="😲 But you think there is a relationship."}
+-   [Gender identity and attitudes about gender roles are related in the population (statistically independent).]{data-explanation="😲 They are INdependent?"}
+-   [Gender identity and attitudes about gender roles are related in the population (statistically dependent).]{.correct data-explanation="💯 Correct!"}
 
 
 ##  {.quiz-question data-menu-title="Knowledge Check" background-image="images/clipboard-question.png" background-size="100px" background-repeat="repeat"}
@@ -181,9 +188,9 @@ You think men and women might have different beliefs about sex before marriage.
 {{< fa clipboard-question >}} Which of these equations represents your **null** hypothesis?
 :::
 
--   [There is no association between gender and attitudes about sex before marriage (statistically independent).]{.correct data-explanation="💯 Correct!"}
--   [Gender and attitudes about sex before marriage are related in the population (statistically independent).]{data-explanation="😲 The null hypothesis is always no relationship."}
--   [There is no association between gender and attitudes about the death penalty (statistically dependent).]{data-explanation="😲 They are dependent?"}
+-   [There is no association between gender identity and attitudes about gender roles (statistically independent).]{.correct data-explanation="💯 Correct!"}
+-   [Gender identity and attitudes about gender roles are related in the population (statistically independent).]{data-explanation="😲 The null hypothesis is always no relationship."}
+-   [There is no association between gender identity and attitudes about gender roles (statistically dependent).]{data-explanation="😲 They are dependent?"}
 
 
 ## Review: Pretty cross-tab
@@ -194,7 +201,7 @@ Use `summarytools::ctable`
 #| label: ctable
 #| output-location: fragment
 
-ctable(my_data$premarsx, my_data$sex, # <1>
+ctable(my_data$fefam, my_data$sex, # <1>
   prop = "c", # <2>
   format = "p", # <3>
   useNA = "no"
@@ -219,7 +226,7 @@ Now that we know how to use the `dplyr |>`!
 
 my_data |>
   tbl_cross(
-    row = premarsx,
+    row = fefam,
     col = sex,
     percent = "column",
     missing = "no")
@@ -230,12 +237,12 @@ my_data |>
 ```{r}
 #| message: false
 #| label: tbl-cross-p
-#| code-line-numbers: "1-5|6-7"
+#| code-line-numbers: "1-6|7"
 #| output-location: fragment
 
 my_data |>
   tbl_cross(
-    row = premarsx,
+    row = fefam,
     col = sex,
     percent = "column",
     missing = "no") |>
@@ -249,10 +256,35 @@ my_data |>
 {{< fa clipboard-question >}} Which of these statements best summarizes your conclusion?
 :::
 
--   [Our findings prove that gender has no effect on attitudes about premarital sex]{data-explanation="😲 We can't PROVE anything."}
--   [Since the p-value is above 0.05, we can conclude that gender strongly influences attitudes about premarital sex.]{data-explanation="😲 A high p-value indicates weak evidence against the null hypothesis"}
--   [We find no statistically significant relationship between gender and attitudes about premarital sex.]{.correct data-explanation="💯 Correct!"}
+-   [Our findings prove that gender identity has no effect on attitudes about gender roles]{data-explanation="😲 We can't PROVE anything."}
+-   [Since the p-value is above 0.05, we can conclude that gender identity strongly influences attitudes about gender roles.]{data-explanation="😲 A high p-value indicates weak evidence against the null hypothesis"}
+-   [We find no statistically significant relationship between gender identity and attitudes about gender roles.]{.correct data-explanation="💯 Correct!"}
 
+## Caution: size matters
+
+```{r}
+#| message: false
+#| label: sample-size
+#| code-line-numbers: "1-2"
+#| output-location: fragment
+
+my_data |>
+  filter(age < 21) |>
+  tbl_cross(
+    row = fefam,
+    col = sex,
+    percent = "column",
+    missing = "no") |>
+  add_p(source_note = TRUE)
+```
+
+::: notes
+Our sample size is relatively small once we filtered out people older than 25. We have 88 people between the ages of 18-20 in our new sample, which is greater than the 50 observations necessary to assume the sampling distribution of the means is normal.  
+  
+Yet, the frequency in each individual cell is quite small. Typically, each cell should have no fewer than 30 people to make meaningful statistical calculations.  
+  
+In other words, large standard errors should be interpreted as an imprecise estimate, not as an indication that the null hypothesis is valid.  
+:::
 
 ## Review: `t.test()` with proportions
 ```{r}
@@ -286,6 +318,10 @@ my_data |>
 
 # Pearson’s Correlation Coefficient (R) {.theme-section}
 
+## Pearson’s Correlation Coefficient (R)
+
+R is the correlation between two interval-ratio variables.
+
 # Think Like a Statistician {background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
 
 [{{< fa regular lightbulb >}} **????**]{style="color: #F39C12; font-size: 100%; font-family: 'Shadows Into Light'"}
@@ -294,33 +330,16 @@ my_data |>
 
 :::: panel-tabset
 
-### `polviews`
+### `premarsx`
 
 ```{r}
 #| message: false
 #| echo: false
-#| label: tbl-cross-polviews
+#| label: tbl-cross-premarsx
 
 my_data |>
   tbl_cross(
-    row = polviews,
-    col = sex,
-    percent = "column",
-    missing = "no") |>
-  add_p(source_note = TRUE)
-```
-
-
-### `helpful`
-
-```{r}
-#| message: false
-#| echo: false
-#| label: tbl-cross-helpful
-
-my_data |>
-  tbl_cross(
-    row = helpful,
+    row = premarsx,
     col = polviews,
     percent = "column",
     missing = "no") |>
@@ -337,6 +356,22 @@ my_data |>
 my_data |>
   tbl_cross(
     row = meovrwrk,
+    col = sex,
+    percent = "column",
+    missing = "no") |>
+  add_p(source_note = TRUE)
+```
+
+### `polviews`
+
+```{r}
+#| message: false
+#| echo: false
+#| label: tbl-cross-polviews
+
+my_data |>
+  tbl_cross(
+    row = polviews,
     col = sex,
     percent = "column",
     missing = "no") |>

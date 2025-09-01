@@ -113,7 +113,6 @@ gss22 <- gss_get_yr(2022)
 -   `postlife` Belief in life after death  
 -   `lifenow` R's rating of life overall now from 0-10
 -   `premarsx` Sex before marriage
--   `meovrwrk` Men hurt family when focus on work too much
 -   `agekdbrn` R's age when 1st child born
 -   `sex` Respondents sex
 -   `age` Age of respondent
@@ -130,7 +129,7 @@ Let's make a df with only the (pretty) categorical and continuous variables we'l
 
 # Categorical Variables
 my_cat <- gss22 |>
-  select(id, premarsx, fefam, meovrwrk, postlife, sex, polviews) |>
+  select(id, premarsx, fefam, postlife, sex, polviews) |>
   zap_missing() |>
   as_factor() |>
   droplevels()

@@ -22,9 +22,11 @@ library(haven)
 library(gssr)
 library(gssrdoc)
 library(summarytools)
+library(Rmisc) # load the new package
+library(gtsummary) # load the new package
 ```
 
-Load the 2024 GSS data and the GSS panel data
+Load the 2022 GSS data
 
 ```{r}
 #| label: gss-data
@@ -33,17 +35,82 @@ Load the 2024 GSS data and the GSS panel data
 # ADD YOUR CODE HERE TO LOAD THE GSS 2024 DATA 
 gss22 <- gss_get_yr(2022)
 
-
 ```
 
 You’ll be working with the following GSS variables:
 
--   `tvhours`: Hours spent watching TV per day
--   `hrs`: 
+-   `id`: Respondent id
+-   `meovrwrk`: Men hurt family when focus on work too much
 -   `sex`: Respondent’s gender
+-   `lifenow` R's rating of life overall now from 0-10
+-   `year`: GSS year for this respondent
+
+# Code, Output, Meaning
+
+*Use R to complete the checkpoints below. Show your work (e.g., R code
+chunks) where appropriate. Add narrative (text outside code chunks) or
+comments (text inside the code chunks) throughout.*
+
+Reference specific statistics (where appropriate) from your output to
+justify your answers. Explain what the values tell you about the data;
+interpret their meaning in relation to the question.
+
+## Checkpoint 01: Select relevant variables
+
+A.  Create a df with `id` and only the categorical variables listed above. Then, use `zap_missing()`, `as_factor()`, and `droplevels()` to make them into clean factor variables.
+
+```{r}
+#| label: my-cat
+
+# Categorical Variables
+my_cat <- gss22 |>
+  select(id, meovrwrk, sex, marital) |>
+  zap_missing() |>
+  as_factor() |>
+  droplevels()
+
+```
+
+B.  Create a df with `id` and only the continuous variables. Then, use `mutate()` and `as.numeric()` to make them numerical variables.
+
+```{r}
+#| label: my-con
+
+# Continuous Variables
+my_con <- gss22 |>
+  select(id, lifenow, educ) |>
+  mutate(
+    lifenow = as.numeric(lifenow))
+```
+
+C.  Combine the two dataframes and name it `my_data`.
+
+```{r}
+#| label: my-data
+
+# Combine the two dataframes
+my_data <- left_join(my_cat, my_con, by = "id")
+```
+
+## Checkpoint 02: Remove rows with missing data
+
+Use `drop_na()` to keep only respondents who have non-missing values for
+all variables.
+
+```{r}
+#| label: drop-na
+
+my_data <- my_data |>
+  drop_na()
+
+```
+
+## Checkpoint 03: Create cross-tabs with chi-square tests
+
+Use `tbl_cross()` and `add_p()` to create a cross-tab with a chi-square test
 
 
-Is there a gender difference (`sex`) in agreement that men hurt the family when they focus on work too much?
+Is there a gender difference (`sex`) in agreement that men hurt the family when they focus on work too much (`meovrwk`)?
 
 ```{r}
 #| message: false
@@ -54,7 +121,6 @@ my_data |>
   tbl_cross(
     row = meovrwrk,
     col = sex,
-    percent = "column",
-    missing = "no") |>
+    percent = "column") |>
   add_p(source_note = TRUE)
 ```

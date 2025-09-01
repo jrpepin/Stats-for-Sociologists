@@ -54,19 +54,18 @@ scale_colour_discrete <- function(...) scale_color_manual(values = my_palette)
 -   Pearson’s Correlation Coefficient (R)
 
 ::: notes
--  forcats (reorder factor levels)
--  missing data? 
--  **outliers**  -- data viz & tables
--  dates? 
--  lists
-
+-   forcats (reorder factor levels)
+-   missing data?
+-   **outliers** -- data viz & tables
+-   dates?
+-   lists
 :::
 
 # Learning objectives
 
 By the end of the lecture, you will be able to ...
 
--   Use R to calculate chi-square tests 
+-   Use R to calculate chi-square tests
 -   Use R to calculate Pearson's Correlation Coefficient (R)
 
 # Code-along 06 {data-menu-title="Code-along" background-image="images/terminal.png"}
@@ -75,10 +74,11 @@ Download and open [code-along-06.qmd]()
 
 ## Packages {.sparse-slide}
 
-Load the standard packages & 1 new package: `gtsummary()`  
-  
-We'll use `gtsummary()` to make pretty tables that include our statistical tests.  
-  
+Load the standard packages & 1 new package: `gtsummary()`
+
+We'll use `gtsummary()` to make pretty tables that include our
+statistical tests.
+
 ```{r}
 #| message: false
 #| label: load
@@ -95,7 +95,6 @@ library(summarytools)
 library(gtsummary) # load the new package
 ```
 
-
 ## Load your data {.sparse-slide}
 
 ```{r}
@@ -110,7 +109,7 @@ gss22 <- gss_get_yr(2022)
 ## Variables {.smaller}
 
 -   `fefam` Better for man to work, woman tend home
--   `postlife` Belief in life after death  
+-   `postlife` Belief in life after death\
 -   `lifenow` R's rating of life overall now from 0-10
 -   `premarsx` Sex before marriage
 -   `agekdbrn` R's age when 1st child born
@@ -120,7 +119,8 @@ gss22 <- gss_get_yr(2022)
 
 ## Variable Management
 
-Let's make a df with only the (pretty) categorical and continuous variables we'll analyze.
+Let's make a df with only the (pretty) categorical and continuous
+variables we'll analyze.
 
 ```{r}
 #| message: false
@@ -147,53 +147,66 @@ my_con <- gss22 |>
 my_data <- left_join(my_cat, my_con, by = "id")
 ```
 
-
 # $chi^2$ Test {.theme-section}
 
 ## [$chi^2$]{style="color: #18BC9C"} test {.sparse-slide}
 
-[**$chi^2$**]{style="color: #18BC9C"} determines if categorical variables are related  
-  
+[$chi^2$]{style="color: #18BC9C"} determines if categorical variables
+are related
+
 Test if the rows and columns in a two-way table are independent
 
+## [$chi^2$]{style="color: #18BC9C"} in action
 
-## [$chi^2$]{style="color: #18BC9C"} in action 
+The news has been reporting a large gender difference in attitudes about
+gender roles.
 
-The news has been reporting a large gender difference in attitudes about gender roles.  
+You evaluate this narrative using the variable `fefam`:
 
-You evaluate this narrative using the variable `fefam`:  
-  
-> It is much better for everyone involved if the man is the achiever outside the home and the woman takes care of the home and family.
+> It is much better for everyone involved if the man is the achiever
+> outside the home and the woman takes care of the home and family.
 
 <br>
 
 . . .
 
 ::: task
-{{< fa lightbulb >}} How do you test your hypothesis? 
+{{< fa lightbulb >}} How do you test your hypothesis?
 :::
 
 ##  {.quiz-question data-menu-title="Knowledge Check" background-image="images/clipboard-question.png" background-size="100px" background-repeat="repeat"}
 
 ::: {style="color: #F39C12"}
-{{< fa clipboard-question >}} Which of these equations represents your **research** hypothesis?
+{{< fa clipboard-question >}} Which of these equations represents your
+**research** hypothesis?
 :::
 
--   [There is no association between gender identity and attitudes about gender roles (statistically independent).]{data-explanation="😲 But you think there is a relationship."}
--   [Gender identity and attitudes about gender roles are related in the population (statistically independent).]{data-explanation="😲 They are INdependent?"}
--   [Gender identity and attitudes about gender roles are related in the population (statistically dependent).]{.correct data-explanation="💯 Correct!"}
-
+-   [There is no association between gender identity and attitudes about
+    gender roles (statistically
+    independent).]{data-explanation="😲 But you think there is a relationship."}
+-   [Gender identity and attitudes about gender roles are related in the
+    population (statistically
+    independent).]{data-explanation="😲 They are INdependent?"}
+-   [Gender identity and attitudes about gender roles are related in the
+    population (statistically dependent).]{.correct
+    data-explanation="💯 Correct!"}
 
 ##  {.quiz-question data-menu-title="Knowledge Check" background-image="images/clipboard-question.png" background-size="100px" background-repeat="repeat"}
 
 ::: {style="color: #F39C12"}
-{{< fa clipboard-question >}} Which of these equations represents your **null** hypothesis?
+{{< fa clipboard-question >}} Which of these equations represents your
+**null** hypothesis?
 :::
 
--   [There is no association between gender identity and attitudes about gender roles (statistically independent).]{.correct data-explanation="💯 Correct!"}
--   [Gender identity and attitudes about gender roles are related in the population (statistically independent).]{data-explanation="😲 The null hypothesis is always no relationship."}
--   [There is no association between gender identity and attitudes about gender roles (statistically dependent).]{data-explanation="😲 They are dependent?"}
-
+-   [There is no association between gender identity and attitudes about
+    gender roles (statistically independent).]{.correct
+    data-explanation="💯 Correct!"}
+-   [Gender identity and attitudes about gender roles are related in the
+    population (statistically
+    independent).]{data-explanation="😲 The null hypothesis is always no relationship."}
+-   [There is no association between gender identity and attitudes about
+    gender roles (statistically
+    dependent).]{data-explanation="😲 They are dependent?"}
 
 ## Review: Pretty cross-tab
 
@@ -215,8 +228,7 @@ ctable(my_data$fefam, my_data$sex, # <1>
 3.  This adds the % symbols to the table.
 4.  Exclude the missing levels from the table.
 
-
-## Pretty cross-tab (new) 
+## Pretty cross-tab (new)
 
 Now that we know how to use the `dplyr |>`!
 
@@ -251,16 +263,21 @@ my_data |>
   add_p(source_note = TRUE)
 ```
 
-
 ##  {.quiz-question data-menu-title="Knowledge Check" background-image="images/clipboard-question.png" background-size="100px" background-repeat="repeat"}
 
 ::: {style="color: #F39C12"}
-{{< fa clipboard-question >}} Which of these statements best summarizes your conclusion?
+{{< fa clipboard-question >}} Which of these statements best summarizes
+your conclusion?
 :::
 
--   [Our findings prove that gender identity has no effect on attitudes about gender roles]{data-explanation="😲 We can't PROVE anything."}
--   [Since the p-value is above 0.05, we can conclude that gender identity strongly influences attitudes about gender roles.]{data-explanation="😲 A high p-value indicates weak evidence against the null hypothesis"}
--   [We find no statistically significant relationship between gender identity and attitudes about gender roles.]{.correct data-explanation="💯 Correct!"}
+-   [Our findings prove that gender identity has no effect on attitudes
+    about gender roles]{data-explanation="😲 We can't PROVE anything."}
+-   [Since the p-value is above 0.05, we can conclude that gender
+    identity strongly influences attitudes about gender
+    roles.]{data-explanation="😲 A high p-value indicates weak evidence against the null hypothesis"}
+-   [We find no statistically significant relationship between gender
+    identity and attitudes about gender roles.]{.correct
+    data-explanation="💯 Correct!"}
 
 ## Caution: size matters
 
@@ -281,14 +298,22 @@ my_data |>
 ```
 
 ::: notes
-Our sample size is relatively small once we filtered out people older than 25. We have 88 people between the ages of 18-20 in our new sample, which is greater than the 50 observations necessary to assume the sampling distribution of the means is normal.  
-  
-Yet, the frequency in each individual cell is quite small. Typically, each cell should have no fewer than 30 people to make meaningful statistical calculations.  
-  
-In other words, large standard errors should be interpreted as an imprecise estimate, not as an indication that the null hypothesis is valid.  
+Our sample size is relatively small once we filtered out people older
+than 25. We have 88 people between the ages of 18-20 in our new sample,
+which is greater than the 50 observations necessary to assume the
+sampling distribution of the means is normal.
+
+Yet, the frequency in each individual cell is quite small. Typically,
+each cell should have no fewer than 30 people to make meaningful
+statistical calculations.
+
+In other words, large standard errors should be interpreted as an
+imprecise estimate, not as an indication that the null hypothesis is
+valid.
 :::
 
 ## Review: `t.test()` with proportions
+
 ```{r}
 #| message: false
 #| label: t.test
@@ -301,7 +326,7 @@ t.test(my_data$ghosts ~ my_data$sex, alternative = "two.sided")
 
 ```
 
-## `t.test()` & [$chi^2$]{style="color: #18BC9C"} 
+## `t.test()` & [$chi^2$]{style="color: #18BC9C"}
 
 ```{r}
 #| message: false
@@ -316,7 +341,6 @@ my_data |>
   add_p(source_note = TRUE)
 
 ```
-
 
 # Pearson’s Correlation Coefficient (R) {.theme-section}
 
@@ -338,13 +362,13 @@ cor.test(
 ```
 
 <br>
-    
+
 ::: {.callout-tip icon="false"}
 ## {{< fa hat-wizard >}} Heads Up!
-    
-Because Pearson's R doesn't require specifying an independent and dependent variable, the order of the variables does not matter.  
-:::
 
+Because Pearson's R doesn't require specifying an independent and
+dependent variable, the order of the variables does not matter.
+:::
 
 ## Scatterplot
 
@@ -363,7 +387,7 @@ ggplot(aes(x = educ, y = agekdbrn)) +
         caption  = "US General Social Survey (2022)")
 ```
 
-## `cor.test()` in action 
+## `cor.test()` in action
 
 ```{r}
 #| message: false
@@ -378,9 +402,10 @@ cor.test(
 )
 
 ```
+
 ## Tidy `cor.test()`
 
-:::: columns
+::::: columns
 ::: {.column width="45%"}
 ```{r}
 #| message: false
@@ -396,7 +421,7 @@ my_test <- cor.test(
 ```
 :::
 
-::: {.column width="55%" .fragment}
+::: {.column .fragment width="55%"}
 ```{r}
 #| message: false
 #| label: cor-educ03
@@ -410,7 +435,7 @@ cor_summary <- tibble(
 )
 ```
 :::
-::::
+:::::
 
 <br>
 
@@ -426,18 +451,21 @@ cor_summary
 ## `cor.test()` & `t.test()` {.smaller}
 
 :::: panel-tabset
-
 ### Equivalence
 
 ::: {.callout-tip icon="false"}
 ## {{< fa hat-wizard >}} Heads Up!
 
-Correlating a dichotomous variable and a continuous variable is equivalent to doing a t-test on that continuous variable by the dichotomous variable.
+Correlating a dichotomous variable and a continuous variable is
+equivalent to doing a t-test on that continuous variable by the
+dichotomous variable.
 :::
 
 <br>
 
-When x is coded as 0/1, these formulas yield equivalent p-values, even if the t-statistics look slightly different due to rounding or variance assumptions.
+When x is coded as 0/1, these formulas yield equivalent p-values, even
+if the t-statistics look slightly different due to rounding or variance
+assumptions.
 
 ### `cor.test()`
 
@@ -464,31 +492,45 @@ cor.test(
 t.test(my_data$lifenow ~ my_data$sex, alternative = "two.sided")
 
 ```
-:::
+::::
 
+# Summary {.smaller}
+
+| Feature | t-test | Chi-square test | Pearson’s Correlation (R) |
+|----------------|------------------|--------------------|-------------------|
+| Purpose | Compare means between groups | Test association between categories | Measure linear relationship strength |
+| Data Type | Continuous (numeric) | Categorical (nominal or ordinal) | Continuous (numeric) |
+| Variables Required | 1 dependent, 1 independent | 2 categorical variables | 2 continuous variables |
+| Directionality | One-tailed or two-tailed | Non-directional | Indicates direction (+/-) and strength |
+| Example Question | Do men and women differ in time spent on housework ? | Is marital status associated with political party identity? | Is there a correlation between number of children and parental stress levels? |
 
 # Think Like a Statistician {background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
 
 ## Think Like a Statistician {background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
 
-[{{< fa regular lightbulb >}} **Are beliefs about premarital sex (`premarsx`) dependent on political identity (`polviews`)?**]{style="color: #F39C12; font-size: 100%; font-family: 'Shadows Into Light'"}
+[{{< fa regular lightbulb >}} **Are beliefs about premarital sex
+(`premarsx`) dependent on political identity
+(`polviews`)?**]{style="color: #F39C12; font-size: 100%; font-family: 'Shadows Into Light'"}
 
 <br>
 
 . . .
 
-[{{< fa regular lightbulb >}} **Is there a gender difference (`sex`) in political identity (`polviews`)?**]{style="color: #F39C12; font-size: 100%; font-family: 'Shadows Into Light'"}
+[{{< fa regular lightbulb >}} **Is there a gender difference (`sex`) in
+political identity
+(`polviews`)?**]{style="color: #F39C12; font-size: 100%; font-family: 'Shadows Into Light'"}
 
 <br>
 
 . . .
 
-[{{< fa regular lightbulb >}} **Describe the relationship between age and life satisfaction.**]{style="color: #F39C12; font-size: 100%; font-family: 'Shadows Into Light'"}
+[{{< fa regular lightbulb >}} **Describe the relationship between age
+and life
+satisfaction.**]{style="color: #F39C12; font-size: 100%; font-family: 'Shadows Into Light'"}
 
 ## Think Like a Statistician {background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
 
-:::: panel-tabset
-
+::: panel-tabset
 ### `premarsx`
 
 ```{r}
@@ -504,7 +546,6 @@ my_data |>
     missing = "no") |>
   add_p(source_note = TRUE)
 ```
-
 
 ### `polviews`
 
@@ -536,6 +577,4 @@ cor.test(
   na.action = na.omit
 )
 ```
-
-::::
-
+:::

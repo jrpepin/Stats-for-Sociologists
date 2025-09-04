@@ -62,9 +62,9 @@ missing data? & **outliers** - dates? - lists
 
 By the end of the lecture, you will be able to ...
 
+-   Setup relative file paths for reproducible projects
 -   Reshape data between wide and long formats 
 -   Reorder columns and rows
--   Combine and expand dataframes
 
 # Code-along 04 {data-menu-title="Code-along" background-image="images/terminal.png"}
 
@@ -72,7 +72,21 @@ Download and open [code-along-04.qmd](https://app.filen.io/#/d/3de917ac-ea8c-48a
 
 ## Packages {.sparse-slide}
 
-Load the standard packages.
+Install the
+[`here()`](https://cran.r-project.org/web/packages/summarytools/vignettes/introduction.html)
+package, available on CRAN.
+
+```{r}
+#| message: false
+#| label: summarytools
+#| eval: false
+
+install.packages("here")
+```
+
+<br>
+
+Load the standard packages and our new `here()` package.
 
 ```{r}
 #| message: false
@@ -138,6 +152,329 @@ data |>
   select(yearid, starts_with("year_"), starts_with("age_")) |>
   slice_sample(n = 10) 
 ```
+
+# Reproducible workflow
+
+## Replication
+
+[**The guiding principle for workflow.**]{style="color: #18BC9C"}
+
+A workflow of data analysis is a process for managing all aspects of
+data analysis.
+
+<br>
+
+Planning, documenting, and organizing your work; cleaning the data;
+creating, renaming, and verifying variables; performing and presenting
+statistical analyses; producing replicable results; and archiving what
+you have done are all integral parts of your workflow.
+
+::: aside
+Source: (Long 2008)
+:::
+
+## Steps in a workflow
+
+|  |  |
+|-------------------------------|-----------------------------------------|
+| **Set up** | Systematic organization of the project and project files. |
+| **Familiarize self with data** | Skipping takes more time in the long run. |
+| **Process data** | Takes the [**MOST**]{style="color: #e74c3c;"} time. |
+| **Running analyses** | What people **THINK** takes the most time. |
+| **Presenting results** | What people (wrongly) think does not take time. |
+
+
+## Filepaths {.smaller}
+
+A project-based workflow + `here()` avoids changing file paths.
+
+<br>
+
+::::: columns
+::: {.column width="60%"}
+**ABSOLUTE FILE PATHS**
+
+Department of Sociology\
+Unit 17100, 17th Floor, Ontario Power Building\
+700 University Ave., Toronto, ON M5G 1Z5
+
+`C:\Users\Pepin\GitHub\SOC6302\scripts`
+:::
+
+::: {.column width="40%"}
+**RELATIVE FILE PATHS**
+
+Take the left side elevators to the 17th floor.\
+Go through the double doors and a take a right.\
+First door on your left.
+
+`here`([scripts]{style="color: #18BC9C"})
+:::
+:::::
+
+## File names
+
+should be:
+
+-   machine-readable
+-   human-readable
+-   play well with default-ordering
+
+## Project structure
+
+Let's set up your project structure using the `here()` package.
+
+![](https://raw.githubusercontent.com/allisonhorst/stats-illustrations/master/rstats-artwork/here.png)
+
+## `here()` {.sparse-slide}
+
+First, let's establish our project directory
+
+```{r}
+#| eval: false
+#| message: false
+#| label: here
+
+# shows the file path to the root of the project
+here()
+
+```
+
+<br>
+
+Next, we'll create folders within our project.
+
+## Example folder structure {.smaller}
+
+::::::::::::::::::::: columns
+
+:::::::: {.column width="40%"}
+**SOC6302**
+
+::::::: file-tree
+<details open>
+
+<summary>SOC6302/</summary>
+
+<details>
+
+<summary>data/</summary>
+
+<div>
+
+gss7924-raw.rda
+
+</div>
+
+<div>
+
+gss7924-processed.Rdata/
+
+</div>
+
+</details>
+
+<details>
+
+<summary>code-alongs/</summary>
+
+</details>
+
+<details>
+
+<summary>milestones/</summary>
+
+</details>
+
+<details>
+
+<summary>project/</summary>
+
+<details>
+
+<summary>data/</summary>
+
+</details>
+
+<details>
+
+<summary>scripts/</summary>
+
+</details>
+
+<details>
+
+<summary>outputs/</summary>
+
+</details>
+
+</details>
+
+<div>
+
+readme.qmd
+
+</div>
+
+<div>
+
+SOC6302.Rproj
+
+</div>
+
+</details>
+:::::::
+::::::::
+
+:::::::::::::: {.column width="60%"}
+**Research Projects**
+
+::::::::::::: file-tree
+<details open>
+
+<summary>project/</summary>
+
+<details>
+
+<summary>data/</summary>
+
+<div>
+
+gss7924-raw.rda
+
+</div>
+
+<div>
+
+gss7924-processed.Rdata/
+
+</div>
+
+</details>
+
+<details>
+
+<summary>scripts/</summary>
+
+<div>
+
+clean_data.R
+
+</div>
+
+<div>
+
+analyze_data.R
+
+</div>
+
+<div>
+
+draft.qmd
+
+</div>
+
+</details>
+
+<details>
+
+<summary>outputs/</summary>
+
+<div>
+
+draft.html
+
+</div>
+
+<details>
+
+<summary>figures/</summary>
+
+<div>
+
+plot1.png
+
+</div>
+
+<div>
+
+plot2.png
+
+</div>
+
+</details>
+
+</details>
+
+<div>
+
+readme.qmd
+
+</div>
+
+<div>
+
+project.Rproj
+
+</div>
+
+</details>
+:::::::::::::
+::::::::::::::
+
+
+:::::::::::::::::::::
+
+## Create a folder structure
+
+using `here()` and `dir.create()`
+
+```{r}
+#| eval: false
+#| message: false
+#| label: base-folders
+
+# Create base folders
+dir.create(here("data"), recursive = TRUE)
+dir.create(here("code-alongs"), recursive = TRUE)
+dir.create(here("milestones"), recursive = TRUE)
+dir.create(here("project"), recursive = TRUE)
+```
+
+## Create sub-folders
+
+using `here()` and `dir.create()`
+
+```{r}
+#| eval: false
+#| message: false
+#| label: sub-folders
+
+# Create project sub-folders
+dir.create(here("project", "data"), recursive = TRUE)
+dir.create(here("project", "scripts"), recursive = TRUE)
+dir.create(here("project", "outputs"), recursive = TRUE)
+
+```
+
+## Check your work
+
+report a list of folders and or files in the R-project folders and
+sub-folder.
+
+```{r}
+#| eval: false
+#| message: false
+#| label: list-files
+
+# Your SOC6302 class folder
+list.files(path = here())
+
+# Your "Project" sub-folder
+list.files(path = here("project"))
+
+```
+
 
 # Manipulating Dataframes {.theme-section}
 
@@ -363,175 +700,6 @@ my_data |>
 ```
 
 
-# Joining Dataframes {.theme-section}
-
-## appending v.s. merging {.sparse-slide}
-
-::: {.callout-note icon="false"}
-## {{< fa pen-to-square >}} APPEND
-add new observations (rows) to existing variables
-:::
-
-<br>
-
-::: {.callout-note icon="false"}
-## {{< fa pen-to-square >}} MERGE
-add new variables (columns) to existing observations
-(many merge types)
-:::
-
-## appending v.s. merging {.sparse-slide}
-
-![](images/04/append-merge.png){width="100%"}
-
-## Example datasets {.sparse-slide}
-
-:::: columns
-
-::: column
-**dataframe 1**
-
-```{r}
-#| label: df1
-#| echo: false
-
-# Create the example dataframes
-df_partner1 <- data.frame(
-  coupleid = c(2, 1, 3),
-  name = c("John", "Megan", "Bin"),
-  age = c(42, 36, 38)
-)
-
-df_partner1
-```
-:::
-
-::: column
-**dataframe 2**
-
-```{r}
-#| label: df2
-#| echo: false
-
-df_partner2 <- data.frame(
-  coupleid = c(1, 3, 2),
-  name = c("Sue", "Ye-jin", "Chrissy"),
-  age = c(40, 39, 35)
-)
-df_partner2
-```
-:::
-::::
-
-<br>
-
-**dataframe 3**
-
-```{r}
-#| label: df3
-#| echo: false
-
-df_family <- data.frame(
-  coupleid = c(3, 1, 4),
-  marstat = c(1, 0, 1),
-  numchild = c(1, 0, 2),
-  country = c("S.Korea", "US", "Canada")
-)
-df_family
-```
-
-
-## append data with `bind_rows()` {.sparse-slide}
-
-```{r}
-#| label: append
-
-df_all <- bind_rows(df_partner1, df_partner2)
-
-tibble(df_all)
-```
-
-## merge data with joins {.sparse-slide}
-
-add columns from `df1` to `df2`, matching observations based on the keys
-
--    `left_join()` keeps all observations in `df1`.
--    `right_join()` keeps all observations in `df2`.
--    `full_join()` keeps all observations in `df1` and `df2`.
--    `inner_join()` only keeps observations from `df1` that have a matching key in `df2`
-
-## `left_join()` {.smaller}
-
-::: columns
-::: {.column width="35%"}
-![](images/04/left-join.gif)
-:::
-
-::: {.column width="65%"}
-```{r}
-#| label: left-join
-
-df_couples <- left_join(df_partner1, df_family, by = "coupleid")
-
-tibble(df_couples)
-```
-:::
-:::
-
-
-## `right_join()`  {.smaller}
-
-::: columns
-::: {.column width="35%"}
-![](images/04/right-join.gif)
-:::
-
-::: {.column width="65%"}
-```{r}
-#| label: right-join
-
-df_couples <- right_join(df_partner1, df_family, by = "coupleid")
-
-tibble(df_couples)
-```
-:::
-:::
-
-## `full_join()`  {.smaller}
-
-::: columns
-::: {.column width="35%"}
-![](images/04/full-join.gif)
-:::
-
-::: {.column width="65%"}
-```{r}
-#| label: full-join
-
-df_couples <- full_join(df_partner1, df_family, by = "coupleid")
-
-tibble(df_couples)
-```
-:::
-:::
-
-## `inner_join()`  {.smaller}
-
-::: columns
-::: {.column width="35%"}
-![](images/04/inner-join.gif)
-:::
-
-::: {.column width="65%"}
-```{r}
-#| label: inner-join
-
-df_couples <- inner_join(df_partner1, df_family, by = "coupleid")
-
-tibble(df_couples)
-```
-:::
-:::
 
 # Think Like a Statistician {background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
 

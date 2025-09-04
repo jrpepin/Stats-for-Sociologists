@@ -73,7 +73,6 @@ Load the standard packages.
 #| message: false
 #| label: load
 
-library(here)
 library(tidyverse) 
 library(haven) # not core tidyverse
 library(gssr)
@@ -91,6 +90,25 @@ library(summarytools)
 data(gss_all)
 
 ```
+
+##  {data-menu-title="`gss_which_years()`"}
+
+We can find which years one or more variables were asked with the
+`gss_which_years()` function.
+
+```{r}
+#| label: which-years
+
+gss_which_years(gss_all, meovrwrk)
+
+```
+
+::: {.callout-tip icon="false"}
+## {{< fa hat-wizard >}} Heads Up!
+
+If run in the console, to see all rows, wrap the code in the `print()`
+command: `print(gss_which_years(gss_all, meovrwrk), n = 40)`
+:::
 
 
 # `dplyr` {.theme-section}

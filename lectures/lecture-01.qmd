@@ -454,7 +454,7 @@ install.packages("tidyverse")
 ```
 
 
-## Mini-task {data-menu-title="Install `tinytex()`"}
+## Mini-tasks {data-menu-title="Install `tinytex()`"}
 
 ::: task
 {{< fa check-double >}} Install the `tinytex()` package, available on CRAN.
@@ -468,12 +468,22 @@ Then hit "Enter".
 ```{r}
 #| eval: false
 #| message: false
-#| label: install-tinytex
+#| label: install-tinytex01
 
 install.packages('tinytex')
-tinytex::install_tinytex()
 ```
 
+<br>
+
+. . .
+
+```{r}
+#| eval: false
+#| message: false
+#| label: install-tinytex02
+
+tinytex::install_tinytex()
+```
 
 ## Mini-tasks {data-menu-title="Install `gssr()` and `gssrdoc()`"}
 
@@ -569,6 +579,7 @@ Who know what the GSS is?
 
 ```{r}
 #| label: gss24
+#| output-location: fragment
 
 # Load the data (will appear in your Global Environment pane)
 gss24 <- gss_get_yr(2024)
@@ -639,7 +650,7 @@ type `?varname` at the console.
 
 <br>
 
-In the output pane, the Help tab will show the variable documentation.
+In the output pane, the `Help` tab will show the variable documentation.
 
 <br>
 
@@ -669,13 +680,10 @@ strongly agree)
 :::
 
 
-## Variables
+## Variables 
 
 You can access the variables (i.e., columns) using the `$` operator, as
-shown using the `table()` function.
-
-The variable names are case sensitive. In this dataset, all variables
-are lowercase.
+shown using the `table()` function. The variable names are case sensitive. 
 
 <br>
 
@@ -685,19 +693,17 @@ are lowercase.
 table(gss24$meovrwrk)
 ```
 
-::: {style="color: #E74C3C; font-size: 90%; font-family: 'Shadows Into Light'"}
-2,436 respondents were coded as `1` on this variable. What does that
+::: task
+{{< fa lightbulb >}} 195 respondents were coded as `1` on this variable. What does that
 mean?
 :::
 
-## Variables: Practice
 
-Let's look at another variable.
+## Mini-tasks {data-menu-title="Variables: Practice"}
 
-Change the code to show the variable `fefam`.
-
-Then, add text to your code-along that interprets the results for the
-`2` value.
+::: task
+{{< fa check-double >}} Change the code to show the variable `fefam`.
+:::
 
 <br>
 
@@ -707,6 +713,15 @@ Then, add text to your code-along that interprets the results for the
 # Replace meovrwrk with fefam
 table(gss24$meovrwrk)
 ```
+
+<br>
+
+. . .
+
+::: task
+{{< fa check-double >}} add text to your code-along that interprets the results for the
+`2` value for `fefam`.
+:::
 
 ## Quarto: Render {.smaller}
 

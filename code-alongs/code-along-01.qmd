@@ -7,15 +7,77 @@ execute:
 format: pdf # or replace 'pdf' with 'typst'
 ---
 
-## Packages
+# Packages
+
+## Install Packages
+
+**Click the green arrow icon to run the following code chunks.**
+
+These chunks will not run (on purpose!) when rendered because
+`eval: false`.
+
+**Install the `tidyverse()` pacakge.**
+
+```{r}
+#| eval: false
+#| message: false
+#| label: install-tidyverse
+
+install.packages("tidyverse")
+```
+
+**Install the `tinytex()` pacakge.** This package is needed to Render
+Quarto documents as .pdf.
+
+```{r}
+#| eval: false
+#| message: false
+#| label: install-tinytex01
+
+install.packages('tinytex')
+```
+
+**Then, use `tinytex` package to install a part of the package.**
+
+```{r}
+#| eval: false
+#| message: false
+#| label: install-tinytex02
+
+tinytex::install_tinytex()
+```
+
+**Install the `gssr()` package, NOT on CRAN.**
+
+```{r}
+#| eval: false
+#| message: false
+#| label: install-gssr
+
+# Install 'gssr' from 'ropensci' universe
+install.packages('gssr', repos =
+  c('https://kjhealy.r-universe.dev', 'https://cloud.r-project.org'))
+```
+
+**Install the `gssrdoc()` package, NOT on CRAN.**
+
+```{r}
+#| eval: false
+#| message: false
+#| label: install-gssrdoc
+
+# Install 'gssrdoc' from 'ropensci' universe
+install.packages('gssrdoc', repos =
+  c('https://kjhealy.r-universe.dev', 'https://cloud.r-project.org'))
+```
+
+## Load the packages
 
 We'll use the following packages:
 
 -   `tidyverse()` (data wrangling)
 -   `gssr()` (U.S. General Social Survey data)
 -   `gssrdoc()` (GSS documentation)
-
-## Load the packages
 
 ```{r}
 #| label: load
@@ -42,7 +104,7 @@ We're going to use data from the [U.S. General Social Survey
 
 Let's load your data.
 
-```{r, eval=FALSE}
+```{r}
 #| label: gss24
 
 # Get the data only for the 2024 survey respondents
@@ -54,13 +116,11 @@ gss24
 ```
 
 A “tibble” is another name for “tidy dataset,” meaning that the data is
-organized in structured, clear rows and columns. “(75,699 × 6,867)”
-means the dataset contains 75,699 rows and 6,867 columns. In social
-sciences, rows are commonly referred to as “observations” and columns as
-“variables.” In our case, there are 75,699 observations (e.g.,
-respondents) and 6,867 variables.
-
-You can also load the GSS data for a specific survey year.
+organized in structured, clear rows and columns. “(3,309 × 639)” means
+the dataset contains 3,309 rows and 639 columns. In social sciences,
+rows are commonly referred to as “observations” and columns as
+“variables.” In our case, there are 3,309 observations (e.g.,
+respondents) and 639 variables.
 
 With your mouse, go to the environment panel (upper-right) and click on
 the `gss24` object. It pops up and you can browse through it.
@@ -100,19 +160,19 @@ Let's look at a frequency table of this variable.
 variables are lowercase.)
 
 ```{r}
-#| label: meovrwrk-table-gss_all
+#| label: meovrwrk-table-gss24
 
-table(gss_all$meovrwrk)
+table(gss24$meovrwrk)
 
 ```
 
-2436 respondents were coded as 1 on this variable. What does that mean?
+195 respondents were coded as 1 on this variable. What does that mean?
 (Look at the help page.)
 
 **Change the code to show the variable `fefam`.**
 
-Then, add text to your code-along that interprets the results for the
-`2` value.
+*Add text here that interprets the results for the `2` value for this
+variable.*
 
 ```{r}
 #| label: fefam-table-gss24
@@ -123,4 +183,4 @@ table(gss24$meovrwrk)
 
 ## Quarto: Render
 
-Finally, let's `render` your code-along-01 and view the results.
+Finally, `Render` your code-along-01 and view the results.

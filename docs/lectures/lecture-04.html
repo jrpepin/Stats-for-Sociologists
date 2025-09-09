@@ -116,7 +116,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         
     <div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="lecture-04.html"><i class="bi bi-file-slides"></i>RevealJS</a></li></ul></div></div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content page-columns page-full" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
@@ -158,9 +158,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>Learning objectives</h1>
 <p>By the end of the lecture, you will be able to …</p>
 <ul>
+<li>Setup relative file paths for reproducible projects</li>
 <li>Reshape data between wide and long formats</li>
 <li>Reorder columns and rows</li>
-<li>Combine and expand dataframes</li>
 </ul>
 </section>
 <section id="code-along-04" class="level1" data-menu-title="Code-along" data-background-image="images/terminal.png">
@@ -168,14 +168,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Download and open <a href="https://app.filen.io/#/d/3de917ac-ea8c-48a5-9f04-99b8cf7f31b8%23CbYcjNXevz13eP5DiLVBVYRIXBus67Au" target="_blank">code-along-04.qmd</a></p>
 <section id="packages" class="level2 sparse-slide">
 <h2 class="sparse-slide anchored" data-anchor-id="packages">Packages</h2>
-<p>Load the standard packages.</p>
+<p>Install the <a href="https://cran.r-project.org/web/packages/summarytools/vignettes/introduction.html" target="_blank"><code>here()</code></a> package, available on CRAN.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse) </span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven) <span class="co"># not core tidyverse</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gssr)</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gssrdoc)</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(summarytools)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"here"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><br></p>
+<p>Load the standard packages and our new <code>here()</code> package.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse) </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven) <span class="co"># not core tidyverse</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gssr)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gssrdoc)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(summarytools)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="gss-panel-data-download" class="level2">
@@ -200,14 +205,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="gss-panel-data-load" class="level2 sparse-slide">
 <h2 class="sparse-slide anchored" data-anchor-id="gss-panel-data-load">GSS Panel Data: Load</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use here() to construct the file path</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>gss_panel.dta <span class="ot">&lt;-</span> <span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"GSS_2020_panel_stata_1a/gss2020panel_r1a.dta"</span>)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">#load the data using `haven::read_dta()`</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(gss_panel.dta)</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Or, do both at the same time!</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co"># data &lt;- read_dta(here("data", "GSS_2020_panel_stata_1a/gss2020panel_r1a.dta"))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use here() to construct the file path</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>gss_panel.dta <span class="ot">&lt;-</span> <span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"GSS_2020_panel_stata_1a/gss2020panel_r1a.dta"</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">#load the data using `haven::read_dta()`</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(gss_panel.dta)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Or, do both at the same time!</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co"># data &lt;- read_dta(here("data", "GSS_2020_panel_stata_1a/gss2020panel_r1a.dta"))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="gss-2016-2020-panel-dataset" class="level2 sparse-slide">
@@ -240,6 +245,247 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </section>
 </section>
+<section id="reproducible-workflow" class="level1 page-columns page-full">
+<h1>Reproducible workflow</h1>
+<section id="replication" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="replication">Replication</h2>
+<p><span style="color: #18BC9C"><strong>The guiding principle for workflow.</strong></span></p>
+<p>A workflow of data analysis is a process for managing all aspects of data analysis.</p>
+<p><br></p>
+<p>Planning, documenting, and organizing your work; cleaning the data; creating, renaming, and verifying variables; performing and presenting statistical analyses; producing replicable results; and archiving what you have done are all integral parts of your workflow.</p>
+
+<div class="no-row-height column-margin column-container"><div class="margin-aside">
+<p>Source: (Long 2008)</p>
+</div></div></section>
+<section id="steps-in-a-workflow" class="level2">
+<h2 class="anchored" data-anchor-id="steps-in-a-workflow">Steps in a workflow</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 43%">
+<col style="width: 56%">
+</colgroup>
+<tbody>
+<tr class="odd">
+<td><strong>Set up</strong></td>
+<td>Systematic organization of the project and project files.</td>
+</tr>
+<tr class="even">
+<td><strong>Familiarize self with data</strong></td>
+<td>Skipping takes more time in the long run.</td>
+</tr>
+<tr class="odd">
+<td><strong>Process data</strong></td>
+<td>Takes the <span style="color: #e74c3c;"><strong>MOST</strong></span> time.</td>
+</tr>
+<tr class="even">
+<td><strong>Running analyses</strong></td>
+<td>What people <strong>THINK</strong> takes the most time.</td>
+</tr>
+<tr class="odd">
+<td><strong>Presenting results</strong></td>
+<td>What people (wrongly) think does not take time.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="filepaths" class="level2 smaller">
+<h2 class="smaller anchored" data-anchor-id="filepaths">Filepaths</h2>
+<p>A project-based workflow + <code>here()</code> avoids changing file paths.</p>
+<p><br></p>
+<div class="columns">
+<div class="column" style="width:60%;">
+<p><strong>ABSOLUTE FILE PATHS</strong></p>
+<p>Department of Sociology<br>
+Unit 17100, 17th Floor, Ontario Power Building<br>
+700 University Ave., Toronto, ON M5G 1Z5</p>
+<p><code>C:\Users\Pepin\GitHub\SOC6302\scripts</code></p>
+</div><div class="column" style="width:40%;">
+<p><strong>RELATIVE FILE PATHS</strong></p>
+<p>Take the left side elevators to the 17th floor.<br>
+Go through the double doors and a take a right.<br>
+First door on your left.</p>
+<p><code>here</code>(<span style="color: #18BC9C">scripts</span>)</p>
+</div>
+</div>
+</section>
+<section id="file-names" class="level2">
+<h2 class="anchored" data-anchor-id="file-names">File names</h2>
+<p>should be:</p>
+<ul>
+<li>machine-readable</li>
+<li>human-readable</li>
+<li>play well with default-ordering</li>
+</ul>
+</section>
+<section id="project-structure" class="level2">
+<h2 class="anchored" data-anchor-id="project-structure">Project structure</h2>
+<p>Let’s set up your project structure using the <code>here()</code> package.</p>
+<p><img src="https://raw.githubusercontent.com/allisonhorst/stats-illustrations/master/rstats-artwork/here.png" class="img-fluid"></p>
+</section>
+<section id="here" class="level2 sparse-slide">
+<h2 class="sparse-slide anchored" data-anchor-id="here"><code>here()</code></h2>
+<p>First, let’s establish our project directory</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># shows the file path to the root of the project</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">here</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><br></p>
+<p>Next, we’ll create folders within our project.</p>
+</section>
+<section id="example-folder-structure" class="level2 smaller">
+<h2 class="smaller anchored" data-anchor-id="example-folder-structure">Example folder structure</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<p><strong>SOC6302</strong></p>
+<div class="file-tree">
+<details open="">
+<summary>
+SOC6302/
+</summary>
+<details>
+<summary>
+data/
+</summary>
+<div>
+<p>gss7924-raw.rda</p>
+</div>
+<div>
+<p>gss7924-processed.Rdata/</p>
+</div>
+</details>
+<details>
+<summary>
+code-alongs/
+</summary>
+</details>
+<details>
+<summary>
+milestones/
+</summary>
+</details>
+<details>
+<summary>
+project/
+</summary>
+<details>
+<summary>
+data/
+</summary>
+</details>
+<details>
+<summary>
+scripts/
+</summary>
+</details>
+<details>
+<summary>
+outputs/
+</summary>
+</details>
+</details>
+<div>
+<p>readme.qmd</p>
+</div>
+<div>
+<p>SOC6302.Rproj</p>
+</div>
+</details>
+</div>
+</div><div class="column" style="width:60%;">
+<p><strong>Research Projects</strong></p>
+<div class="file-tree">
+<details open="">
+<summary>
+project/
+</summary>
+<details>
+<summary>
+data/
+</summary>
+<div>
+<p>gss7924-raw.rda</p>
+</div>
+<div>
+<p>gss7924-processed.Rdata/</p>
+</div>
+</details>
+<details>
+<summary>
+scripts/
+</summary>
+<div>
+<p>clean_data.R</p>
+</div>
+<div>
+<p>analyze_data.R</p>
+</div>
+<div>
+<p>draft.qmd</p>
+</div>
+</details>
+<details>
+<summary>
+outputs/
+</summary>
+<div>
+<p>draft.html</p>
+</div>
+<details>
+<summary>
+figures/
+</summary>
+<div>
+<p>plot1.png</p>
+</div>
+<div>
+<p>plot2.png</p>
+</div>
+</details>
+</details>
+<div>
+<p>readme.qmd</p>
+</div>
+<div>
+<p>project.Rproj</p>
+</div>
+</details>
+</div>
+</div>
+</div>
+</section>
+<section id="create-a-folder-structure" class="level2">
+<h2 class="anchored" data-anchor-id="create-a-folder-structure">Create a folder structure</h2>
+<p>using <code>here()</code> and <code>dir.create()</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create base folders</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="fu">here</span>(<span class="st">"data"</span>), <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="fu">here</span>(<span class="st">"code-alongs"</span>), <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="fu">here</span>(<span class="st">"milestones"</span>), <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="fu">here</span>(<span class="st">"project"</span>), <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="create-sub-folders" class="level2">
+<h2 class="anchored" data-anchor-id="create-sub-folders">Create sub-folders</h2>
+<p>using <code>here()</code> and <code>dir.create()</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create project sub-folders</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="fu">here</span>(<span class="st">"project"</span>, <span class="st">"data"</span>), <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="fu">here</span>(<span class="st">"project"</span>, <span class="st">"scripts"</span>), <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="fu">here</span>(<span class="st">"project"</span>, <span class="st">"outputs"</span>), <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="check-your-work" class="level2">
+<h2 class="anchored" data-anchor-id="check-your-work">Check your work</h2>
+<p>report a list of folders and or files in the R-project folders and sub-folder.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Your SOC6302 class folder</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">list.files</span>(<span class="at">path =</span> <span class="fu">here</span>())</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Your "Project" sub-folder</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="fu">list.files</span>(<span class="at">path =</span> <span class="fu">here</span>(<span class="st">"project"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
 <section id="manipulating-dataframes" class="level1 theme-section">
 <h1 class="theme-section">Manipulating Dataframes</h1>
 <section id="selection-helpers" class="level2 smaller">
@@ -252,30 +498,30 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>…</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>my_data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(yearid, wtssnr_2, </span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>         <span class="fu">starts_with</span>(<span class="st">"age_"</span>), </span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>         <span class="fu">starts_with</span>(<span class="st">"family16_"</span>),</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>         <span class="fu">starts_with</span>(<span class="st">"socfrend_"</span>),</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>         <span class="fu">starts_with</span>(<span class="st">"childs_"</span>)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>my_data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(yearid, wtssnr_2, </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>         <span class="fu">starts_with</span>(<span class="st">"age_"</span>), </span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>         <span class="fu">starts_with</span>(<span class="st">"family16_"</span>),</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>         <span class="fu">starts_with</span>(<span class="st">"socfrend_"</span>),</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>         <span class="fu">starts_with</span>(<span class="st">"childs_"</span>)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><br></p>
 <p>. . .</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># You can supply multiple prefixes or suffixes.</span></span>
-<span id="cb6-2"><a href="#cb6-2"></a>my_data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span></span>
-<span id="cb6-3"><a href="#cb6-3"></a>  <span class="fu">select</span>(yearid, wtssnr_2, </span>
-<span id="cb6-4"><a href="#cb6-4"></a>         <span class="fu">starts_with</span>(<span class="fu">c</span>(<span class="st">"age_"</span>, <span class="st">"family16_"</span>, <span class="st">"socfrend"</span>, <span class="st">"childs"</span>))</span>
-<span id="cb6-5"><a href="#cb6-5"></a>         )</span>
-<span id="cb6-6"><a href="#cb6-6"></a></span>
-<span id="cb6-7"><a href="#cb6-7"></a>my_data <span class="ot">&lt;-</span> <span class="fu">as_factor</span>(my_data) <span class="co"># Apply labels to data</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="co"># You can supply multiple prefixes or suffixes.</span></span>
+<span id="cb11-2"><a href="#cb11-2"></a>my_data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span></span>
+<span id="cb11-3"><a href="#cb11-3"></a>  <span class="fu">select</span>(yearid, wtssnr_2, </span>
+<span id="cb11-4"><a href="#cb11-4"></a>         <span class="fu">starts_with</span>(<span class="fu">c</span>(<span class="st">"age_"</span>, <span class="st">"family16_"</span>, <span class="st">"socfrend"</span>, <span class="st">"childs"</span>))</span>
+<span id="cb11-5"><a href="#cb11-5"></a>         )</span>
+<span id="cb11-6"><a href="#cb11-6"></a></span>
+<span id="cb11-7"><a href="#cb11-7"></a>my_data <span class="ot">&lt;-</span> <span class="fu">as_factor</span>(my_data) <span class="co"># Apply labels to data</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="head-tail" class="level2 smaller">
 <h2 class="smaller anchored" data-anchor-id="head-tail"><code>head()</code> &amp; <code>tail()</code></h2>
 <p>Look at the first few column names and <strong>first</strong> few rows.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(my_data, <span class="at">n =</span> <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(my_data, <span class="at">n =</span> <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 5 × 14
     yearid wtssnr_2 age_1a age_1b age_2 family16_1a       family16_1b family16_2
@@ -293,7 +539,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>. . .</p>
 <p>Look at the first few column names and <strong>last</strong> few rows.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(my_data, <span class="at">n =</span> <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(my_data, <span class="at">n =</span> <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 5 × 14
     yearid wtssnr_2 age_1a age_1b age_2 family16_1a family16_1b       family16_2
@@ -358,26 +604,26 @@ Each variable in its own column, and each observation in its own row.</p>
 <section id="pivot_longer" class="level2">
 <h2 class="anchored" data-anchor-id="pivot_longer"><code>pivot_longer()</code></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="annotated-cell-7"><pre class="sourceCode numberSource r code-annotation-code number-lines code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-7-1"><a href="#annotated-cell-7-1"></a>my_data <span class="ot">&lt;-</span> my_data <span class="sc">|&gt;</span></span>
-<span id="annotated-cell-7-2"><a href="#annotated-cell-7-2"></a>  <span class="fu">pivot_longer</span>(</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-7-3" class="code-annotation-target"><a href="#annotated-cell-7-3"></a>    <span class="at">cols =</span> <span class="dv">3</span><span class="sc">:</span><span class="dv">14</span>,</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-7-4" class="code-annotation-target"><a href="#annotated-cell-7-4"></a>    <span class="at">names_to =</span> <span class="fu">c</span>(<span class="st">".value"</span>, <span class="st">"panel"</span>),</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="3" onclick="event.preventDefault();">3</a><span id="annotated-cell-7-5" class="code-annotation-target"><a href="#annotated-cell-7-5"></a>    <span class="at">names_sep =</span> <span class="st">"_"</span>)</span>
-<span id="annotated-cell-7-6"><a href="#annotated-cell-7-6"></a>    </span>
-<span id="annotated-cell-7-7"><a href="#annotated-cell-7-7"></a><span class="fu">head</span>(my_data, <span class="at">n =</span> <span class="dv">5</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="annotated-cell-12"><pre class="sourceCode numberSource r code-annotation-code number-lines code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-12-1"><a href="#annotated-cell-12-1"></a>my_data <span class="ot">&lt;-</span> my_data <span class="sc">|&gt;</span></span>
+<span id="annotated-cell-12-2"><a href="#annotated-cell-12-2"></a>  <span class="fu">pivot_longer</span>(</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-12" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-12-3" class="code-annotation-target"><a href="#annotated-cell-12-3"></a>    <span class="at">cols =</span> <span class="dv">3</span><span class="sc">:</span><span class="dv">14</span>,</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-12" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-12-4" class="code-annotation-target"><a href="#annotated-cell-12-4"></a>    <span class="at">names_to =</span> <span class="fu">c</span>(<span class="st">".value"</span>, <span class="st">"panel"</span>),</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-12" data-target-annotation="3" onclick="event.preventDefault();">3</a><span id="annotated-cell-12-5" class="code-annotation-target"><a href="#annotated-cell-12-5"></a>    <span class="at">names_sep =</span> <span class="st">"_"</span>)</span>
+<span id="annotated-cell-12-6"><a href="#annotated-cell-12-6"></a>    </span>
+<span id="annotated-cell-12-7"><a href="#annotated-cell-12-7"></a><span class="fu">head</span>(my_data, <span class="at">n =</span> <span class="dv">5</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-annotation">
 <dl class="code-annotation-container-grid">
-<dt data-target-cell="annotated-cell-7" data-target-annotation="1">1</dt>
+<dt data-target-cell="annotated-cell-12" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-7" data-code-lines="3" data-code-annotation="1"><code>cols =</code> specifies which columns to pivot;</span>
+<span data-code-cell="annotated-cell-12" data-code-lines="3" data-code-annotation="1"><code>cols =</code> specifies which columns to pivot;</span>
 </dd>
-<dt data-target-cell="annotated-cell-7" data-target-annotation="2">2</dt>
+<dt data-target-cell="annotated-cell-12" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-7" data-code-lines="4" data-code-annotation="2"><code>names_to =</code> creates multiple value columns from the name parts and a new column that stores the identifier.</span>
+<span data-code-cell="annotated-cell-12" data-code-lines="4" data-code-annotation="2"><code>names_to =</code> creates multiple value columns from the name parts and a new column that stores the identifier.</span>
 </dd>
-<dt data-target-cell="annotated-cell-7" data-target-annotation="3">3</dt>
+<dt data-target-cell="annotated-cell-12" data-target-annotation="3">3</dt>
 <dd>
-<span data-code-cell="annotated-cell-7" data-code-lines="5" data-code-annotation="3"><code>names_sep =</code> where to split the names into a variable (.value) and what to use as a key identifier</span>
+<span data-code-cell="annotated-cell-12" data-code-lines="5" data-code-annotation="3"><code>names_sep =</code> where to split the names into a variable (.value) and what to use as a key identifier</span>
 </dd>
 </dl>
 </div>
@@ -396,25 +642,25 @@ Each variable in its own column, and each observation in its own row.</p>
 <section id="pivot_wider" class="level2">
 <h2 class="anchored" data-anchor-id="pivot_wider"><code>pivot_wider()</code></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="annotated-cell-8"><pre class="sourceCode numberSource r code-annotation-code number-lines code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-8-1"><a href="#annotated-cell-8-1"></a>my_data <span class="sc">|&gt;</span> <span class="co"># not overwriting my_data</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-8-2" class="code-annotation-target"><a href="#annotated-cell-8-2"></a>  <span class="fu">pivot_wider</span>(</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-8-3" class="code-annotation-target"><a href="#annotated-cell-8-3"></a>    <span class="at">names_from =</span> panel,</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="3" onclick="event.preventDefault();">3</a><span id="annotated-cell-8-4" class="code-annotation-target"><a href="#annotated-cell-8-4"></a>    <span class="at">values_from =</span> <span class="fu">c</span>(<span class="sc">-</span>yearid, <span class="sc">-</span>wtssnr_2))</span>
-<span id="annotated-cell-8-5"><a href="#annotated-cell-8-5"></a></span>
-<span id="annotated-cell-8-6"><a href="#annotated-cell-8-6"></a><span class="fu">head</span>(my_data, <span class="at">n =</span> <span class="dv">5</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="annotated-cell-13"><pre class="sourceCode numberSource r code-annotation-code number-lines code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-13-1"><a href="#annotated-cell-13-1"></a>my_data <span class="sc">|&gt;</span> <span class="co"># not overwriting my_data</span></span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-13" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-13-2" class="code-annotation-target"><a href="#annotated-cell-13-2"></a>  <span class="fu">pivot_wider</span>(</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-13" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-13-3" class="code-annotation-target"><a href="#annotated-cell-13-3"></a>    <span class="at">names_from =</span> panel,</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-13" data-target-annotation="3" onclick="event.preventDefault();">3</a><span id="annotated-cell-13-4" class="code-annotation-target"><a href="#annotated-cell-13-4"></a>    <span class="at">values_from =</span> <span class="fu">c</span>(<span class="sc">-</span>yearid, <span class="sc">-</span>wtssnr_2))</span>
+<span id="annotated-cell-13-5"><a href="#annotated-cell-13-5"></a></span>
+<span id="annotated-cell-13-6"><a href="#annotated-cell-13-6"></a><span class="fu">head</span>(my_data, <span class="at">n =</span> <span class="dv">5</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-annotation">
 <dl class="code-annotation-container-grid">
-<dt data-target-cell="annotated-cell-8" data-target-annotation="1">1</dt>
+<dt data-target-cell="annotated-cell-13" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-8" data-code-lines="2" data-code-annotation="1">Increasing the number of columns and decreasing the number of rows</span>
+<span data-code-cell="annotated-cell-13" data-code-lines="2" data-code-annotation="1">Increasing the number of columns and decreasing the number of rows</span>
 </dd>
-<dt data-target-cell="annotated-cell-8" data-target-annotation="2">2</dt>
+<dt data-target-cell="annotated-cell-13" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-8" data-code-lines="3" data-code-annotation="2">Which column to get the name of the output columns</span>
+<span data-code-cell="annotated-cell-13" data-code-lines="3" data-code-annotation="2">Which column to get the name of the output columns</span>
 </dd>
-<dt data-target-cell="annotated-cell-8" data-target-annotation="3">3</dt>
+<dt data-target-cell="annotated-cell-13" data-target-annotation="3">3</dt>
 <dd>
-<span data-code-cell="annotated-cell-8" data-code-lines="4" data-code-annotation="3">Which columns to exclude from the pivot</span>
+<span data-code-cell="annotated-cell-13" data-code-lines="4" data-code-annotation="3">Which columns to exclude from the pivot</span>
 </dd>
 </dl>
 </div>
@@ -450,14 +696,14 @@ Each variable in its own column, and each observation in its own row.</p>
 <section id="recode-the-reshaped-variable" class="level2">
 <h2 class="anchored" data-anchor-id="recode-the-reshaped-variable">Recode the reshaped variable</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>my_data <span class="ot">&lt;-</span> my_data <span class="sc">|&gt;</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">panel =</span> <span class="fu">case_when</span>(</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>         panel <span class="sc">==</span> <span class="st">"1a"</span> <span class="sc">~</span> <span class="dv">2016</span>,</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>         panel <span class="sc">==</span> <span class="st">"1b"</span> <span class="sc">~</span> <span class="dv">2018</span>,</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>         panel <span class="sc">==</span> <span class="st">"2"</span> <span class="sc">~</span> <span class="dv">2020</span>,</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>         <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA_integer_</span>))</span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(my_data, <span class="at">n =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>my_data <span class="ot">&lt;-</span> my_data <span class="sc">|&gt;</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">panel =</span> <span class="fu">case_when</span>(</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>         panel <span class="sc">==</span> <span class="st">"1a"</span> <span class="sc">~</span> <span class="dv">2016</span>,</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>         panel <span class="sc">==</span> <span class="st">"1b"</span> <span class="sc">~</span> <span class="dv">2018</span>,</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>         panel <span class="sc">==</span> <span class="st">"2"</span> <span class="sc">~</span> <span class="dv">2020</span>,</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>         <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA_integer_</span>))</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(my_data, <span class="at">n =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 7
     yearid wtssnr_2 panel age   family16                    socfrend      childs
@@ -485,10 +731,10 @@ Each variable in its own column, and each observation in its own row.</p>
 <section id="relocate" class="level2 smaller">
 <h2 class="smaller anchored" data-anchor-id="relocate"><code>relocate()</code></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>my_data <span class="ot">&lt;-</span> my_data <span class="sc">|&gt;</span> </span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(panel)</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(my_data, <span class="at">n =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>my_data <span class="ot">&lt;-</span> my_data <span class="sc">|&gt;</span> </span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(panel)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(my_data, <span class="at">n =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 7
   panel   yearid wtssnr_2 age   family16                   socfrend       childs
@@ -500,10 +746,10 @@ Each variable in its own column, and each observation in its own row.</p>
 <p><br></p>
 <p>. . .</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>my_data <span class="ot">&lt;-</span> my_data <span class="sc">|&gt;</span> </span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(panel, <span class="at">.after =</span> yearid)</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(my_data, <span class="at">n =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>my_data <span class="ot">&lt;-</span> my_data <span class="sc">|&gt;</span> </span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(panel, <span class="at">.after =</span> yearid)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(my_data, <span class="at">n =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 7
     yearid panel wtssnr_2 age   family16                   socfrend       childs
@@ -516,10 +762,10 @@ Each variable in its own column, and each observation in its own row.</p>
 <section id="arrange" class="level2 smaller">
 <h2 class="smaller anchored" data-anchor-id="arrange"><code>arrange()</code></h2>
 <div class="cell" data-output-location="column">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>my_data <span class="sc">|&gt;</span> </span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(panel) <span class="sc">|&gt;</span></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(yearid, panel, age) <span class="sc">|&gt;</span></span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="at">n =</span> <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>my_data <span class="sc">|&gt;</span> </span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(panel) <span class="sc">|&gt;</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(yearid, panel, age) <span class="sc">|&gt;</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="at">n =</span> <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 5 × 3
     yearid panel age  
@@ -534,10 +780,10 @@ Each variable in its own column, and each observation in its own row.</p>
 <p><br></p>
 <p>. . .</p>
 <div class="cell" data-output-location="column">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>my_data <span class="sc">|&gt;</span> </span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(panel)) <span class="sc">|&gt;</span></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(yearid, panel, age) <span class="sc">|&gt;</span></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="at">n =</span> <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>my_data <span class="sc">|&gt;</span> </span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(panel)) <span class="sc">|&gt;</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(yearid, panel, age) <span class="sc">|&gt;</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="at">n =</span> <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 5 × 3
     yearid panel age  
@@ -547,196 +793,6 @@ Each variable in its own column, and each observation in its own row.</p>
 3 20160003  2020 &lt;NA&gt; 
 4 20160004  2020 47   
 5 20160005  2020 &lt;NA&gt; </code></pre>
-</div>
-</div>
-</section>
-</section>
-<section id="joining-dataframes" class="level1 theme-section">
-<h1 class="theme-section">Joining Dataframes</h1>
-<section id="appending-v.s.-merging" class="level2 sparse-slide">
-<h2 class="sparse-slide anchored" data-anchor-id="appending-v.s.-merging">appending v.s. merging</h2>
-<div class="callout callout-style-default callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<i class="fa-solid fa-pen-to-square" aria-label="pen-to-square"></i> APPEND
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>add new observations (rows) to existing variables</p>
-</div>
-</div>
-<p><br></p>
-<div class="callout callout-style-default callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<i class="fa-solid fa-pen-to-square" aria-label="pen-to-square"></i> MERGE
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>add new variables (columns) to existing observations (many merge types)</p>
-</div>
-</div>
-</section>
-<section id="appending-v.s.-merging-1" class="level2 sparse-slide">
-<h2 class="sparse-slide anchored" data-anchor-id="appending-v.s.-merging-1">appending v.s. merging</h2>
-<p><img src="images/04/append-merge.png" class="img-fluid" style="width:100.0%"></p>
-</section>
-<section id="example-datasets" class="level2 sparse-slide">
-<h2 class="sparse-slide anchored" data-anchor-id="example-datasets">Example datasets</h2>
-<div class="columns">
-<div class="column">
-<p><strong>dataframe 1</strong></p>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>  coupleid  name age
-1        2  John  42
-2        1 Megan  36
-3        3   Bin  38</code></pre>
-</div>
-</div>
-</div><div class="column">
-<p><strong>dataframe 2</strong></p>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>  coupleid    name age
-1        1     Sue  40
-2        3  Ye-jin  39
-3        2 Chrissy  35</code></pre>
-</div>
-</div>
-</div>
-</div>
-<p><br></p>
-<p><strong>dataframe 3</strong></p>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>  coupleid marstat numchild country
-1        3       1        1 S.Korea
-2        1       0        0      US
-3        4       1        2  Canada</code></pre>
-</div>
-</div>
-</section>
-<section id="append-data-with-bind_rows" class="level2 sparse-slide">
-<h2 class="sparse-slide anchored" data-anchor-id="append-data-with-bind_rows">append data with <code>bind_rows()</code></h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>df_all <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(df_partner1, df_partner2)</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(df_all)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 3
-  coupleid name      age
-     &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt;
-1        2 John       42
-2        1 Megan      36
-3        3 Bin        38
-4        1 Sue        40
-5        3 Ye-jin     39
-6        2 Chrissy    35</code></pre>
-</div>
-</div>
-</section>
-<section id="merge-data-with-joins" class="level2 sparse-slide">
-<h2 class="sparse-slide anchored" data-anchor-id="merge-data-with-joins">merge data with joins</h2>
-<p>add columns from <code>df1</code> to <code>df2</code>, matching observations based on the keys</p>
-<ul>
-<li><code>left_join()</code> keeps all observations in <code>df1</code>.</li>
-<li><code>right_join()</code> keeps all observations in <code>df2</code>.</li>
-<li><code>full_join()</code> keeps all observations in <code>df1</code> and <code>df2</code>.</li>
-<li><code>inner_join()</code> only keeps observations from <code>df1</code> that have a matching key in <code>df2</code></li>
-</ul>
-</section>
-<section id="left_join" class="level2 smaller">
-<h2 class="smaller anchored" data-anchor-id="left_join"><code>left_join()</code></h2>
-<div class="columns">
-<div class="column" style="width:35%;">
-<p><img src="images/04/left-join.gif" class="img-fluid"></p>
-</div><div class="column" style="width:65%;">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>df_couples <span class="ot">&lt;-</span> <span class="fu">left_join</span>(df_partner1, df_family, <span class="at">by =</span> <span class="st">"coupleid"</span>)</span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(df_couples)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 3 × 6
-  coupleid name    age marstat numchild country
-     &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;  
-1        2 John     42      NA       NA &lt;NA&gt;   
-2        1 Megan    36       0        0 US     
-3        3 Bin      38       1        1 S.Korea</code></pre>
-</div>
-</div>
-</div>
-</div>
-</section>
-<section id="right_join" class="level2 smaller">
-<h2 class="smaller anchored" data-anchor-id="right_join"><code>right_join()</code></h2>
-<div class="columns">
-<div class="column" style="width:35%;">
-<p><img src="images/04/right-join.gif" class="img-fluid"></p>
-</div><div class="column" style="width:65%;">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>df_couples <span class="ot">&lt;-</span> <span class="fu">right_join</span>(df_partner1, df_family, <span class="at">by =</span> <span class="st">"coupleid"</span>)</span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(df_couples)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 3 × 6
-  coupleid name    age marstat numchild country
-     &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;  
-1        1 Megan    36       0        0 US     
-2        3 Bin      38       1        1 S.Korea
-3        4 &lt;NA&gt;     NA       1        2 Canada </code></pre>
-</div>
-</div>
-</div>
-</div>
-</section>
-<section id="full_join" class="level2 smaller">
-<h2 class="smaller anchored" data-anchor-id="full_join"><code>full_join()</code></h2>
-<div class="columns">
-<div class="column" style="width:35%;">
-<p><img src="images/04/full-join.gif" class="img-fluid"></p>
-</div><div class="column" style="width:65%;">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>df_couples <span class="ot">&lt;-</span> <span class="fu">full_join</span>(df_partner1, df_family, <span class="at">by =</span> <span class="st">"coupleid"</span>)</span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(df_couples)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 4 × 6
-  coupleid name    age marstat numchild country
-     &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;  
-1        2 John     42      NA       NA &lt;NA&gt;   
-2        1 Megan    36       0        0 US     
-3        3 Bin      38       1        1 S.Korea
-4        4 &lt;NA&gt;     NA       1        2 Canada </code></pre>
-</div>
-</div>
-</div>
-</div>
-</section>
-<section id="inner_join" class="level2 smaller">
-<h2 class="smaller anchored" data-anchor-id="inner_join"><code>inner_join()</code></h2>
-<div class="columns">
-<div class="column" style="width:35%;">
-<p><img src="images/04/inner-join.gif" class="img-fluid"></p>
-</div><div class="column" style="width:65%;">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>df_couples <span class="ot">&lt;-</span> <span class="fu">inner_join</span>(df_partner1, df_family, <span class="at">by =</span> <span class="st">"coupleid"</span>)</span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(df_couples)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 2 × 6
-  coupleid name    age marstat numchild country
-     &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;  
-1        1 Megan    36       0        0 US     
-2        3 Bin      38       1        1 S.Korea</code></pre>
-</div>
-</div>
 </div>
 </div>
 </section>
@@ -771,13 +827,13 @@ Each variable in its own column, and each observation in its own row.</p>
 <p><i class="fa-regular fa-lightbulb" aria-label="lightbulb"></i> <strong>What’s your conclusion to our research question?</strong></p>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Income status</span></span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ctable</span>(think_married<span class="sc">$</span>income_status, think_married<span class="sc">$</span>panel, </span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">prop =</span> <span class="st">"c"</span>, </span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">format =</span> <span class="st">"p"</span>, </span>
-<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">useNA =</span> <span class="st">"no"</span>,</span>
-<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">headings =</span> <span class="cn">FALSE</span></span>
-<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Income status</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ctable</span>(think_married<span class="sc">$</span>income_status, think_married<span class="sc">$</span>panel, </span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">prop =</span> <span class="st">"c"</span>, </span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">format =</span> <span class="st">"p"</span>, </span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">useNA =</span> <span class="st">"no"</span>,</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">headings =</span> <span class="cn">FALSE</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 --------------- ------- -------------- -------------- -------------- ---------------
@@ -790,13 +846,13 @@ Each variable in its own column, and each observation in its own row.</p>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Internet status</span></span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ctable</span>(think_married<span class="sc">$</span>internet_status, think_married<span class="sc">$</span>panel, </span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">prop =</span> <span class="st">"c"</span>, </span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">format =</span> <span class="st">"p"</span>, </span>
-<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">useNA =</span> <span class="st">"no"</span>,</span>
-<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">headings =</span> <span class="cn">FALSE</span></span>
-<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Internet status</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ctable</span>(think_married<span class="sc">$</span>internet_status, think_married<span class="sc">$</span>panel, </span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">prop =</span> <span class="st">"c"</span>, </span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">format =</span> <span class="st">"p"</span>, </span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">useNA =</span> <span class="st">"no"</span>,</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">headings =</span> <span class="cn">FALSE</span></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 ----------------- ------- -------------- -------------- -------------- ---------------

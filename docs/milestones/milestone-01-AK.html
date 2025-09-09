@@ -147,12 +147,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Update the YAML with your first and last name.</p>
 <p>Load the packages from the code-along. (Install first if not already done so.)</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse) </span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven) </span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gssr)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gssrdoc)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(summarytools)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse) </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gssr)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gssrdoc)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven) </span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(summarytools)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Load all years of the GSS data.</p>
 <p>Then, use the <code>gss_get_yr()</code> function to load the data only for the 2024 survey respondents. (<em>Hint</em>: Use the code from code-along-01.qmd)</p>
@@ -166,46 +165,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>Fetching: https://gss.norc.org/documents/stata/2024_stata.zip</code></pre>
 </div>
 </div>
-<p>Load the GSS codebook</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the codebook</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(gss_dict)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
 </section>
 <section id="code-output-meaning" class="level1">
 <h1>Code, Output, Meaning</h1>
-<p><em>Run the code and add <strong>narrative</strong> (outside code chunks) or <strong>comments</strong> (inside the code chunks) describing what each of the the below R chunks do.</em></p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">here</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "C:/Users/Joanna/Documents/GitHub/Stats for Sociologists"</code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">list.files</span>(<span class="at">path =</span> <span class="fu">here</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code> [1] "_extensions"                  "_quarto-speaker.yml"         
- [3] "_quarto.yml"                  "code-alongs"                 
- [5] "data"                         "docs"                        
- [7] "lectures"                     "memos"                       
- [9] "milestones"                   "project"                     
-[11] "site_libs"                    "slides"                      
-[13] "smiling-distributions.png"    "SOC6302_data.qmd"            
-[15] "SOC6302_punch-list.qmd"       "SOC6302_readings.qmd"        
-[17] "SOC6302_syllabus.qmd"         "Stats for Sociologists.Rproj"
-[19] "tutorials"                   </code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">list.files</span>(<span class="at">path =</span> <span class="fu">here</span>(<span class="st">"project"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "data"    "outputs" "scripts"</code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Sys.time</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "2025-08-27 11:51:53 EDT"</code></pre>
-</div>
-</div>
 <p><em>Use R to complete the checkpoints below. Show your work (e.g., R code chunks) where appropriate. Add narrative (text outside code chunks) or comments (text inside the code chunks) throughout.</em></p>
 <p>Reference specific statistics (where appropriate) from your output to justify your answers. Explain what the values tell you about the data; interpret their meaning in relation to the question.</p>
 <p><em>Use the <code>gss_all</code> dataset for checkpoints 01 - 07.</em></p>
@@ -222,7 +184,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="checkpoint-03">Checkpoint 03</h2>
 <p>Use <code>gss_which_years()</code> below to show the survey years with the variable <code>fefam</code> in the <code>gss_all</code> dataset.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gss_which_years</span>(gss_all, fefam)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gss_which_years</span>(gss_all, fefam)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 35 × 2
    year      fefam
@@ -246,7 +208,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="checkpoint-04">Checkpoint 04</h2>
 <p>Use <code>print_labels()</code> to see a list of the values and labels for the <code>fefam</code> variable.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print_labels</span>(gss_all<span class="sc">$</span>fefam)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print_labels</span>(gss_all<span class="sc">$</span>fefam)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Labels:
@@ -280,16 +242,16 @@ Labels:
 <li>Use <code>drop_levels()</code> to get rid of the empty levels (if any).</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>gss_all<span class="sc">$</span>fefam <span class="ot">&lt;-</span> <span class="fu">zap_missing</span>(gss_all<span class="sc">$</span>fefam) </span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>gss_all<span class="sc">$</span>fefam <span class="ot">&lt;-</span> <span class="fu">as_factor</span>(gss_all<span class="sc">$</span>fefam) </span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>gss_all<span class="sc">$</span>fefam <span class="ot">&lt;-</span> <span class="fu">droplevels</span>(gss_all<span class="sc">$</span>fefam) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>gss_all<span class="sc">$</span>fefam <span class="ot">&lt;-</span> <span class="fu">zap_missing</span>(gss_all<span class="sc">$</span>fefam) </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>gss_all<span class="sc">$</span>fefam <span class="ot">&lt;-</span> <span class="fu">as_factor</span>(gss_all<span class="sc">$</span>fefam) </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>gss_all<span class="sc">$</span>fefam <span class="ot">&lt;-</span> <span class="fu">droplevels</span>(gss_all<span class="sc">$</span>fefam) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="checkpoint-06" class="level2">
 <h2 class="anchored" data-anchor-id="checkpoint-06">Checkpoint 06</h2>
 <p>Use <code>table()</code> to show the frequencies of the <code>fefam</code> variable.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(gss_all<span class="sc">$</span>fefam)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(gss_all<span class="sc">$</span>fefam)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
    strongly agree             agree          disagree strongly disagree 
@@ -305,7 +267,7 @@ Labels:
 <li><code>headings = FALSE</code></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">freq</span>(gss_all<span class="sc">$</span>fefam, <span class="at">report.nas =</span> <span class="cn">FALSE</span>, <span class="at">headings =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">freq</span>(gss_all<span class="sc">$</span>fefam, <span class="at">report.nas =</span> <span class="cn">FALSE</span>, <span class="at">headings =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
                            Freq        %   % Cum.
@@ -323,7 +285,7 @@ Labels:
 <h2 class="anchored" data-anchor-id="checkpoint-08">Checkpoint 08</h2>
 <p>Use <code>freq()</code> to create a (pretty) relative frequency table for the <code>happy</code> variable using the 2024 data.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">freq</span>(gss24<span class="sc">$</span>happy, <span class="at">report.nas =</span> <span class="cn">FALSE</span>, <span class="at">headings =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">freq</span>(gss24<span class="sc">$</span>happy, <span class="at">report.nas =</span> <span class="cn">FALSE</span>, <span class="at">headings =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Tagged NA values were detected and will be reported as regular NA; use haven::as_factor() to treat them as valid values</code></pre>
 </div>
@@ -349,22 +311,22 @@ Labels:
 <li><code>useNA = "no"</code></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fix the sex variable</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>gss24<span class="sc">$</span>sex <span class="ot">&lt;-</span> <span class="fu">zap_missing</span>(gss24<span class="sc">$</span>sex) </span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>gss24<span class="sc">$</span>sex <span class="ot">&lt;-</span> <span class="fu">as_factor</span>(gss24<span class="sc">$</span>sex) </span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>gss24<span class="sc">$</span>sex <span class="ot">&lt;-</span> <span class="fu">droplevels</span>(gss24<span class="sc">$</span>sex) </span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Fix the happy variable</span></span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>gss24<span class="sc">$</span>happy <span class="ot">&lt;-</span> <span class="fu">zap_missing</span>(gss24<span class="sc">$</span>happy) </span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>gss24<span class="sc">$</span>happy <span class="ot">&lt;-</span> <span class="fu">as_factor</span>(gss24<span class="sc">$</span>happy) </span>
-<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>gss24<span class="sc">$</span>happy <span class="ot">&lt;-</span> <span class="fu">droplevels</span>(gss24<span class="sc">$</span>happy) </span>
-<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a cross-tab</span></span>
-<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a><span class="fu">ctable</span>(gss24<span class="sc">$</span>happy, gss24<span class="sc">$</span>sex, </span>
-<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">prop =</span> <span class="st">"c"</span>, </span>
-<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">format =</span> <span class="st">"p"</span>, </span>
-<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">useNA =</span> <span class="st">"no"</span></span>
-<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fix the sex variable</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>gss24<span class="sc">$</span>sex <span class="ot">&lt;-</span> <span class="fu">zap_missing</span>(gss24<span class="sc">$</span>sex) </span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>gss24<span class="sc">$</span>sex <span class="ot">&lt;-</span> <span class="fu">as_factor</span>(gss24<span class="sc">$</span>sex) </span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>gss24<span class="sc">$</span>sex <span class="ot">&lt;-</span> <span class="fu">droplevels</span>(gss24<span class="sc">$</span>sex) </span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Fix the happy variable</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>gss24<span class="sc">$</span>happy <span class="ot">&lt;-</span> <span class="fu">zap_missing</span>(gss24<span class="sc">$</span>happy) </span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>gss24<span class="sc">$</span>happy <span class="ot">&lt;-</span> <span class="fu">as_factor</span>(gss24<span class="sc">$</span>happy) </span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>gss24<span class="sc">$</span>happy <span class="ot">&lt;-</span> <span class="fu">droplevels</span>(gss24<span class="sc">$</span>happy) </span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a cross-tab</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="fu">ctable</span>(gss24<span class="sc">$</span>happy, gss24<span class="sc">$</span>sex, </span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">prop =</span> <span class="st">"c"</span>, </span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">format =</span> <span class="st">"p"</span>, </span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">useNA =</span> <span class="st">"no"</span></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Cross-Tabulation, Column Proportions  
 happy * sex  

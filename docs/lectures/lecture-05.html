@@ -183,19 +183,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse) </span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven) <span class="co"># not core tidyverse</span></span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gssr)</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gssrdoc)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gssrdoc) <span class="co"># load the GSS codebook</span></span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(summarytools)</span>
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Rmisc) <span class="co"># load the new package</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="load-your-data-codebook" class="level2">
-<h2 class="anchored" data-anchor-id="load-your-data-codebook">Load your data &amp; codebook</h2>
+<section id="load-your-data" class="level2">
+<h2 class="anchored" data-anchor-id="load-your-data">Load your data</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the data from the 2022 survey</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>gss22 <span class="ot">&lt;-</span> <span class="fu">gss_get_yr</span>(<span class="dv">2022</span>)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the codebook</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(gss_dict)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>gss22 <span class="ot">&lt;-</span> <span class="fu">gss_get_yr</span>(<span class="dv">2022</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="variables" class="level2">
@@ -715,6 +712,8 @@ sample estimates:
 </section>
 <section id="think-like-a-statistician" class="level1" data-background-image="images/lightbulb-solid.png" data-background-size="80px" data-background-repeat="repeat">
 <h1 data-background-image="images/lightbulb-solid.png" data-background-size="80px" data-background-repeat="repeat">Think Like a Statistician</h1>
+<section id="think-like-a-statistician-1" class="level2" data-background-image="images/lightbulb-solid.png" data-background-size="80px" data-background-repeat="repeat">
+<h2 data-background-image="images/lightbulb-solid.png" data-background-size="80px" data-background-repeat="repeat" class="anchored" data-anchor-id="think-like-a-statistician-1">Think Like a Statistician</h2>
 <p><span style="color: #F39C12; font-size: 100%; font-family: 'Shadows Into Light'"><i class="fa-regular fa-lightbulb" aria-label="lightbulb"></i> <strong>Do women have more years of education (<code>educ</code>) than men, on average?</strong></span></p>
 <p><br></p>
 <p>. . .</p>
@@ -722,8 +721,9 @@ sample estimates:
 <p><br></p>
 <p>. . .</p>
 <p><span style="color: #F39C12; font-size: 100%; font-family: 'Shadows Into Light'"><i class="fa-regular fa-lightbulb" aria-label="lightbulb"></i> <strong>Do fewer men than women support gun laws (<code>gunlaw</code>)?</strong></span></p>
-<section id="think-like-a-statistician-1" class="level2" data-background-image="images/lightbulb-solid.png" data-background-size="80px" data-background-repeat="repeat">
-<h2 data-background-image="images/lightbulb-solid.png" data-background-size="80px" data-background-repeat="repeat" class="anchored" data-anchor-id="think-like-a-statistician-1">Think Like a Statistician</h2>
+</section>
+<section id="think-like-a-statistician-2" class="level2" data-background-image="images/lightbulb-solid.png" data-background-size="80px" data-background-repeat="repeat">
+<h2 data-background-image="images/lightbulb-solid.png" data-background-size="80px" data-background-repeat="repeat" class="anchored" data-anchor-id="think-like-a-statistician-2">Think Like a Statistician</h2>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" role="tab" aria-controls="tabset-4-1" aria-selected="true"><code>educ</code></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" role="tab" aria-controls="tabset-4-2" aria-selected="false"><code>abany</code></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-3" role="tab" aria-controls="tabset-4-3" aria-selected="false"><code>gunlaw</code></a></li></ul>
 <div class="tab-content">

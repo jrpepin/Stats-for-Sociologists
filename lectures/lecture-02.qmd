@@ -68,23 +68,40 @@ By the end of the lecture, you will be able to ...
 [{{< fa download >}} Download code-along-02.qmd](https://app.filen.io/#/d/089a3ae7-09c9-4670-9273-576f5e92a36f%23VxfUaIySSUn6fmFW2oBPbWEd9A8k7ehH)
 
 
-## Packages
 
-Install the
-[`summarytools()`](https://cran.r-project.org/web/packages/summarytools/vignettes/introduction.html)
-package, available on CRAN.
+
+## Mini-task {data-menu-title="Install `summarytools()`"}
+
+::: task
+{{< fa check-double >}} Install the [`summarytools()`](https://cran.r-project.org/web/packages/summarytools/vignettes/introduction.html) package, available on CRAN.
+:::
+
+<br>
+
+::: {style="font-size: 80%"}
+[**Run the code chunk in your code-along.**]{style="color: #18BC9C; font-family: 'Shadows Into Light'"} 
+  
+*OR:* Copy and paste the code into your [Console pane]{style="color: #F39C12;"}. 
+Then hit "Enter".
+:::
+
+<br>
 
 ```{r}
 #| message: false
-#| label: summarytools
 #| eval: false
+#| label: install-summarytools
 
 install.packages("summarytools")
 ```
 
-<br>
+## Mini-task {data-menu-title="Load the packages"}
 
-Load the standard packages and our new `summarytools()` package.
+::: task
+{{< fa check-double >}} Load the standard packages and our new `summarytools()` package.
+:::
+
+<br>
 
 ```{r}
 #| message: false
@@ -97,8 +114,18 @@ library(gssrdoc) # load the GSS codebook
 library(summarytools)
 ```
 
+::: notes
+`haven()` was installed with tidyverse; but it doesn't load automatically
+:::
 
-## Load your data
+
+## Mini-task {data-menu-title="Load your data"}
+
+::: task
+{{< fa check-double >}} Load the 2024 GSS data.
+:::
+
+<br>
 
 ```{r}
 #| message: false
@@ -108,6 +135,11 @@ library(summarytools)
 gss24 <- gss_get_yr(2024)
 
 ```
+
+::: notes
+[Why did we need to use `library()` before we loaded the gss data?]{style="color: #6f42c1"}
+:::
+
 
 # Coding Basics {.theme-section}
 
@@ -129,7 +161,7 @@ You can use R to do basic math calculations
 
 ::: {.column .fragment}
 
-You can create new objects with the assignment operator <-
+You can create new objects with the assignment operator `<-`
 ```{r}
 #| label: assign
 
@@ -329,24 +361,24 @@ Source: [IONOS editorial team](https://www.ionos.ca/digitalguide/websites/web-de
 :::
 
 
-## Assignment operators 
+## Mini-task {data-menu-title="Assignment operators"}
 
-Make a tiny data frame and save it.
-
-```{r}
-#| label: tibble
-
-df <- tibble(x = c(1, 2, 3, 4, 5), y = c("a", "a", "b", "c", "c"))
-df
-```
+::: task
+{{< fa check-double >}} Make a tiny data frame and save it.
+:::
 
 <br>
 
-::: {.callout-tip icon="false"}
-## {{< fa hat-wizard >}} Heads Up!
 
-A [`tibble`](https://r4ds.had.co.nz/tibbles.html) is a modern data frame, often used in the tidyverse and ggplot2 packages.
-:::
+```{r}
+#| label: tibble
+#| output-location: fragment
+
+df <- tibble(x = c(1, 2, 3, 4, 5), y = c("a", "a", "b", "c", "c"))
+
+df # look at df
+```
+
 
 
 # Variable Types {.theme-section}
@@ -419,9 +451,11 @@ class(2.5)
 :::::
 
 
-## Factor {.smaller}
+## Factor {.sparse-slide}
 
 **factors** consist of character data with a fixed and known set of possible values 
+
+<br>
 
 ```{r}
 #| label: factors01
@@ -429,37 +463,42 @@ class(2.5)
 opinion <- factor(c("like", "dislike", "dislike", "hate", "dislike", "hate"))
 class(opinion)
 
-# By default, the levels are sorted alphabetically.
-levels(opinion)
 ```
  
-<br>
+. . .
 
-::: {.fragment}
+<br>
 
 ```{r}
 #| label: factors02
+
+# By default, the levels are sorted alphabetically.
+levels(opinion)
+```
+
+## Factor order {.sparse-slide}
+
+```{r}
+#| label: factors03
 
 # Reorder the levels with the argument `levels` in the `factor()` function
 opinion <- factor(opinion, levels = c("hate", "dislike", "like"))
 levels(opinion)
 ```
 
-:::
+. . . 
 
 <br>
 
-::: {.fragment}
 
 ```{r}
-#| label: factors03
+#| label: factors04
 
 # If the order has meaning (like rankings), you can make it an ordered factor
 opinion <- factor(opinion, levels = c("hate", "dislike", "like"), ordered = TRUE)
 levels(opinion)
 ```
 
-:::
 
 ## Converting between types {.smaller}
 
@@ -507,20 +546,36 @@ Notice the quotation marks around the values.
 :::
 :::::
 
-## Haven labelled
+## Haven labelled {.sparse-slide}
 
 When you import data into R from software like SPSS, Stata, or SAS, 
 you might notice a special class called `haven_labelled`. 
 
 <br>
 
+::::: columns
+
+::: {.column}
+
 ```{r}
-#| label: labelled
-#| output-location: column-fragment
+#| label: labelled01
+#| output-location: fragment
 
 class(gss24$premarsx)
+```
+:::
+
+::: {.column}
+
+```{r}
+#| label: labelled02
+#| output-location: fragment
+
 table(gss24$premarsx)
 ```
+:::
+
+:::::
 
 ## Haven labelled cont.
 
@@ -529,6 +584,7 @@ It makes data easier to understand without needing a separate codebook.
 ```{r}
 #| label: value_labels
 #| code-line-numbers: "1|2"
+#| output-location: fragment
 
 attr(gss24$premarsx, "label") # <1>
 print_labels(gss24$premarsx) # <2>
@@ -547,74 +603,118 @@ Each value may have a label attached (like "Male" for 1, "Female" for 2)
 
 :::
 
-## Haven labelled cont.
+##  {data-menu-title="Haven labelled cont."}
 
 You can use
 [`as_factor`](https://haven.tidyverse.org/reference/as_factor.html)
 to see the value labels of the variable `premarsx`. 
+
+::: {.panel-tabset}
+
+## Mini-task
+
+::: task
+{{< fa check-double >}} Use `as_factor()` inside the `table()` function for the variable `premarsx`
+:::
+
+
+## with `as_factor()`
 
 ```{r}
 #| label: label02_premarsx
 table(as_factor(gss24$premarsx), useNA = "ifany")
 ```
 
-
-## Convert labels to factors {.smaller}
-
-::::: columns
-
-::: {.column}
-
-1. Get rid of all the 'missing' (NA) levels
+## without `as_factor()`
 
 ```{r}
 #| label: label03_premarsx
-
-gss24$premarsx <- zap_missing(gss24$premarsx)
-table(as_factor(gss24$premarsx), useNA = "ifany")
+table(gss24$premarsx, useNA = "ifany")
 ```
 
 :::
 
-::: {.column .fragment}
+::: notes
+[In the code-along, REPLACE THE BLANK LINE WITH THE NAME OF THE VARIABLE]{style="color: #f39c12"}  
+  
+[What would happen if we didn't include `as_factor()` within `table()`?]{style="color: #6f42c1"}
+:::
 
-2. Apply the labels instead of numeric values
+
+## Convert labels to factors {.smaller}
+
+:::: {.panel-tabset}
+
+## `zap_missing()`
+
+::: task
+{{< fa check-double >}} 1. Use `zap_missing()` to get rid of all the 'missing' (NA) levels
+:::
+
+<br>
+
+::: {.fragment}
 ```{r}
 #| label: label04_premarsx
+
+gss24$premarsx <- zap_missing(gss24$premarsx)
+table(as_factor(gss24$premarsx), useNA = "ifany") # see the results
+```
+:::
+
+## `as_factor()`
+
+::: task
+{{< fa check-double >}} 2. Use `as_factor()` to apply the labels instead of numeric values
+:::
+
+<br>
+
+::: {.fragment}
+```{r}
+#| label: label05_premarsx
 
 gss24$premarsx <- as_factor(gss24$premarsx) # replace the values with labels
 table(gss24$premarsx, useNA = "ifany") # notice we didn't need to wrap the variable in as_factor
 ```
 :::
 
-:::::
+## `droplevels()`
+
+::: task 
+{{< fa check-double >}} 3. Use `droplevels()` to get rid of the empty levels in `premarsx`.
+:::
 
 
+<br>
 
-::::: columns
-
-::: {.column .fragment}
-3. Get rid of the empty levels in `premarsx`.
-
+::: {.fragment}
 ```{r}
-#| label: label05_premarsx
+#| label: label06_premarsx
 
 gss24$premarsx <- droplevels(gss24$premarsx)
 table(gss24$premarsx)
 ```
 :::
 
-::: {.column .fragment}
-<br>
+::::
 
-[**Now do the same for the `sex` variable.**]{style="color: #18BC9C; font-size: 150%; font-family: 'Shadows Into Light'"}
-
+::: notes
+1.  [REPLACE THE BLANK LINES WITH THE NAME OF THE VARIABLE]{style="color: #f39c12"}  
+2.  [REPLACE THE BLANK LINE WITH THE FUNCTION `as_factor()`]{style="color: #f39c12"}  
+3.  [REPLACE THE BLANK LINES WITH THE `droplevels()` function & the NAME OF THE VARIABLE]{style="color: #f39c12"} 
 :::
 
-:::::
+## Mini-task {data-menu-title="Convert labels to factors cont."}
 
+::: task
+{{< fa check-double >}} Use `zap_missing()`, `as_factor()`, & `droplevels()` on the variable `sex`.
+:::
 
-## Convert labels to factors cont. 
+<br>
+
+. . .
+
 
 ```{r}
 #| label: labels_sex
@@ -632,43 +732,54 @@ table(gss24$sex)
 3. Get rid of the empty levels (if any).
 
 
-# Look at variables {.theme-section}
+::: notes
+[use zap_missing(), as_factor(), and droplevels() to do the same for the sex variable.]{style="color: #f39c12"} 
+:::
+
+# Frequency Distributions {.theme-section}
+
+::: notes
+
+:::
 
 ## Relative frequency table 
 
-Let’s try functions from the `summarytools` package to get univariate (1 variable) and bivariate (2 variables) descriptive statistics.
+Let’s try functions from the `summarytools()` package to get univariate (1 variable) and bivariate (2 variables) descriptive statistics.
 
 <br>
 
-Make a frequency table of the variable `sex`. Then, do the same for `premarsx`.
+`freq()` creates table of the counts for a variable. 
 
 ```{r}
 #| label: freq01
-#| eval: false
-
-freq(gss24$sex)
-freq(gss24$premarsx)
-```
-
-## Relative frequency table
-
-```{r}
-#| label: freq01a
-#| echo: false
+#| output-location: fragment
 
 freq(gss24$sex)
 ```
+
+::: notes
+[To use the `freq()` function, what did we need to do first?]{style="color: #6f42c1"}
+AK: Load the `summarytools()` package.
+:::
+
+
+## Mini-task {data-menu-title="Relative frequency table cont"}
+
+::: task
+{{< fa check-double >}} Use `freq()` on the variable `premarsx`
+:::
 
 <br>
 
+. . .
+
 ```{r}
-#| label: freq01b
-#| echo: false
+#| label: freq02
 
 freq(gss24$premarsx)
 ```
 
-## Pretty tables 
+## Pretty tables {.smaller}
 
 One of `summarytools` main purposes is to help clean and prepare data for further analysis. 
 But sometimes we don't care about the missing values. 
@@ -676,39 +787,36 @@ But sometimes we don't care about the missing values.
 <br>
 
 Using `report.nas = FALSE` suppresses the missing data.\
-The `headings = FALSE` parameter suppresses the heading section. Do the
-same for `premarsx`.
+The `headings = FALSE` parameter suppresses the heading section. 
 
 <br>
 
 ```{r}
-#| label: freq02
-#| eval: false
-
-freq(gss24$sex, report.nas = FALSE, headings = FALSE)
-freq(gss24$premarsx, report.nas = FALSE, headings = FALSE)
-```
-
-## Pretty tables 
-
-```{r}
-#| label: freq02a
-#| echo: false
+#| label: freq03
+#| output-location: fragment
 
 freq(gss24$sex, report.nas = FALSE, headings = FALSE)
 ```
+
+
+## Mini-task {data-menu-title="Pretty tables cont"}
+
+::: task
+{{< fa check-double >}} Make a pretty frequency table for the variable `premarsx`.
+:::
 
 <br>
 
+. . .
+
 ```{r}
-#| label: freq02b
-#| echo: false
+#| label: freq04
 
 freq(gss24$premarsx, report.nas = FALSE, headings = FALSE)
 ```
 
 
-## Cross-tabs
+## Cross-tabs {.smaller}
 
 We've been using the `table()` function with one variable at a time, but it also let's you create a frequency table (**crosstab**) with two variables.
 
@@ -716,12 +824,15 @@ We've been using the `table()` function with one variable at a time, but it also
 
 ```{r}
 #| label: crosstab01
+#| output-location: fragment
 
 # 1st variable is the rows, 2nd variable is the columns.
 table(gss24$premarsx, gss24$sex)
 ```
 
 <br>
+
+. . .
 
 [But it's missing the **column** percentages...]{style="color: #F39C12; font-family: 'Shadows Into Light'"}
 
@@ -731,16 +842,22 @@ To run `freq()` by group, pair it with the `stby()` function.
 
 ```{r}
 #| label: crosstab02
+#| output-location: fragment
 
 stby(gss24$premarsx, gss24$sex, freq)
 ```
 
 <br> 
 
+. . .
+
 [This is hard to read and we don't need the cumulative frequencies.]{style="color: #F39C12; font-family: 'Shadows Into Light'"}
 
+::: notes
+`stby()` lets us obtain grouped statistics with summarytools functions
+:::
 
-## Pretty cross-tabs
+## Pretty cross-tabs with `ctable()`
 
 Use `summarytools::ctable` instead!
 
@@ -763,6 +880,11 @@ ctable(gss24$premarsx, gss24$sex, # <1>
 3.  This adds the % symbols to the table.
 4.  Exclude the missing levels from the table.
 
+::: notes
+Add to your code-along: 
+1. [*X* percentage of respondents believe sex before marriage is 'almost always wrong'?]{style="color: #6f42c1"}  
+2. [A greater percentage of *X* think sex before marriage is 'not wrong at all'.]{style="color: #6f42c1"}
+:::
 
 ##  {.quiz-question data-menu-title="Knowledge Check" background-image="images/clipboard-question.png" background-size="100px" background-repeat="repeat"}
 

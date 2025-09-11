@@ -270,29 +270,71 @@
 <p><br></p>
 <p><a href="https://app.filen.io/#/d/089a3ae7-09c9-4670-9273-576f5e92a36f%23VxfUaIySSUn6fmFW2oBPbWEd9A8k7ehH" target="_blank"><i class="fa-solid fa-download" aria-label="download"></i> Download code-along-02.qmd</a></p>
 </section>
-<section id="packages" class="slide level2">
-<h2>Packages</h2>
-<p>Install the <a href="https://cran.r-project.org/web/packages/summarytools/vignettes/introduction.html" target="_blank"><code>summarytools</code></a> package, available on CRAN.</p>
+<section id="mini-task" class="slide level2" data-menu-title="Install `summarytools()`">
+<h2>Mini-task</h2>
+<div class="task">
+<p><i class="fa-solid fa-check-double" aria-label="check-double"></i> Install the <a href="https://cran.r-project.org/web/packages/summarytools/vignettes/introduction.html" target="_blank"><code>summarytools()</code></a> package, available on CRAN.</p>
+</div>
+<p><br></p>
+<div style="font-size: 80%">
+<p><span style="color: #18BC9C; font-family: 'Shadows Into Light'"><strong>Run the code chunk in your code-along.</strong></span></p>
+<p><em>OR:</em> Copy and paste the code into your <span style="color: #F39C12;">Console pane</span>. Then hit “Enter”.</p>
+</div>
+<p><br></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a><span class="fu">install.packages</span>(<span class="st">"summarytools"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><br></p>
-<p>Load the standard packages and our new <code>summarytools()</code> package.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href=""></a><span class="fu">library</span>(here)</span>
-<span id="cb2-2"><a href=""></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb2-3"><a href=""></a><span class="fu">library</span>(haven) <span class="co"># not core tidyverse</span></span>
-<span id="cb2-4"><a href=""></a><span class="fu">library</span>(gssr)</span>
-<span id="cb2-5"><a href=""></a><span class="fu">library</span>(gssrdoc) <span class="co"># load the GSS codebook</span></span>
-<span id="cb2-6"><a href=""></a><span class="fu">library</span>(summarytools)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
 </section>
-<section id="load-your-data" class="slide level2">
-<h2>Load your data</h2>
+<section id="mini-task-1" class="slide level2" data-menu-title="Load the packages">
+<h2>Mini-task</h2>
+<div class="task">
+<p><i class="fa-solid fa-check-double" aria-label="check-double"></i> Load the standard packages and our new <code>summarytools()</code> package.</p>
+</div>
+<p><br></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href=""></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb2-2"><a href=""></a><span class="fu">library</span>(haven) <span class="co"># not core tidyverse</span></span>
+<span id="cb2-3"><a href=""></a><span class="fu">library</span>(gssr)</span>
+<span id="cb2-4"><a href=""></a><span class="fu">library</span>(gssrdoc) <span class="co"># load the GSS codebook</span></span>
+<span id="cb2-5"><a href=""></a><span class="fu">library</span>(summarytools)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<aside class="notes">
+<p><code>haven()</code> was installed with tidyverse; but it doesn’t load automatically</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="mini-task-2" class="slide level2" data-menu-title="Load your data">
+<h2>Mini-task</h2>
+<div class="task">
+<p><i class="fa-solid fa-check-double" aria-label="check-double"></i> Load the 2024 GSS data.</p>
+</div>
+<p><br></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a><span class="co"># Get the data only for the 2024 survey respondents</span></span>
 <span id="cb3-2"><a href=""></a>gss24 <span class="ot">&lt;-</span> <span class="fu">gss_get_yr</span>(<span class="dv">2024</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<aside class="notes">
+<p><span style="color: #6f42c1">Why did we need to use <code>library()</code> before we loaded the gss data?</span></p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section></section>
 <section>
 <section id="coding-basics" class="title-slide slide level1 theme-section center">
@@ -319,7 +361,7 @@
 </div>
 </div>
 </div><div class="column fragment">
-<p>You can create new objects with the assignment operator &lt;-</p>
+<p>You can create new objects with the assignment operator <code>&lt;-</code></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href=""></a>x <span class="ot">&lt;-</span> <span class="dv">3</span> <span class="sc">*</span> <span class="dv">4</span></span>
 <span id="cb10-2"><a href=""></a>x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -568,12 +610,18 @@ And_aFew.People_RENOUNCEconvention</code></pre>
 <aside><div>
 <p>Source: <a href="https://www.ionos.ca/digitalguide/websites/web-development/r-operators/" target="_blank">IONOS editorial team</a></p>
 </div></aside></section>
-<section id="assignment-operators" class="slide level2">
-<h2>Assignment operators</h2>
-<p>Make a tiny data frame and save it.</p>
+<section id="mini-task-3" class="slide level2" data-menu-title="Assignment operators">
+<h2>Mini-task</h2>
+<div class="task">
+<p><i class="fa-solid fa-check-double" aria-label="check-double"></i> Make a tiny data frame and save it.</p>
+</div>
+<p><br></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href=""></a>df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>), <span class="at">y =</span> <span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>, <span class="st">"c"</span>))</span>
-<span id="cb54-2"><a href=""></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb54-2"><a href=""></a></span>
+<span id="cb54-3"><a href=""></a>df <span class="co"># look at df</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell fragment">
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 5 × 2
       x y    
@@ -583,17 +631,6 @@ And_aFew.People_RENOUNCEconvention</code></pre>
 3     3 b    
 4     4 c    
 5     5 c    </code></pre>
-</div>
-</div>
-<p><br></p>
-<div class="callout callout-tip no-icon callout-titled callout-style-default">
-<div class="callout-body">
-<div class="callout-title">
-<p><strong><i class="fa-solid fa-hat-wizard" aria-label="hat-wizard"></i> Heads Up!</strong></p>
-</div>
-<div class="callout-content">
-<p>A <a href="https://r4ds.had.co.nz/tibbles.html" target="_blank"><code>tibble</code></a> is a modern data frame, often used in the tidyverse and ggplot2 packages.</p>
-</div>
 </div>
 </div>
 </section></section>
@@ -662,23 +699,30 @@ And_aFew.People_RENOUNCEconvention</code></pre>
 </div>
 </div></div>
 </section>
-<section id="factor" class="slide level2 smaller">
+<section id="factor" class="slide level2 sparse-slide">
 <h2>Factor</h2>
 <p><strong>factors</strong> consist of character data with a fixed and known set of possible values</p>
+<p><br></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb64"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href=""></a>opinion <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">c</span>(<span class="st">"like"</span>, <span class="st">"dislike"</span>, <span class="st">"dislike"</span>, <span class="st">"hate"</span>, <span class="st">"dislike"</span>, <span class="st">"hate"</span>))</span>
 <span id="cb64-2"><a href=""></a><span class="fu">class</span>(opinion)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "factor"</code></pre>
 </div>
+</div>
+<div class="fragment">
+<p><br></p>
+<div class="cell">
 <div class="sourceCode cell-code" id="cb66"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href=""></a><span class="co"># By default, the levels are sorted alphabetically.</span></span>
 <span id="cb66-2"><a href=""></a><span class="fu">levels</span>(opinion)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "dislike" "hate"    "like"   </code></pre>
 </div>
 </div>
-<p><br></p>
-<div class="fragment">
+</div>
+</section>
+<section id="factor-order" class="slide level2 sparse-slide">
+<h2>Factor order</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb68"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href=""></a><span class="co"># Reorder the levels with the argument `levels` in the `factor()` function</span></span>
 <span id="cb68-2"><a href=""></a>opinion <span class="ot">&lt;-</span> <span class="fu">factor</span>(opinion, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"hate"</span>, <span class="st">"dislike"</span>, <span class="st">"like"</span>))</span>
@@ -687,9 +731,8 @@ And_aFew.People_RENOUNCEconvention</code></pre>
 <pre><code>[1] "hate"    "dislike" "like"   </code></pre>
 </div>
 </div>
-</div>
-<p><br></p>
 <div class="fragment">
+<p><br></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb70"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href=""></a><span class="co"># If the order has meaning (like rankings), you can make it an ordered factor</span></span>
 <span id="cb70-2"><a href=""></a>opinion <span class="ot">&lt;-</span> <span class="fu">factor</span>(opinion, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"hate"</span>, <span class="st">"dislike"</span>, <span class="st">"like"</span>), <span class="at">ordered =</span> <span class="cn">TRUE</span>)</span>
@@ -755,22 +798,30 @@ And_aFew.People_RENOUNCEconvention</code></pre>
 </div>
 </div></div>
 </section>
-<section id="haven-labelled" class="slide level2">
+<section id="haven-labelled" class="slide level2 sparse-slide">
 <h2>Haven labelled</h2>
 <p>When you import data into R from software like SPSS, Stata, or SAS, you might notice a special class called <code>haven_labelled</code>.</p>
 <p><br></p>
-<div class="cell columns column-output-location">
+<div class="columns">
 <div class="column">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb80"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href=""></a><span class="fu">class</span>(gss24<span class="sc">$</span>premarsx)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div><div class="column fragment">
+</div>
+<div class="cell fragment">
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "haven_labelled" "vctrs_vctr"     "double"        </code></pre>
 </div>
+</div>
+</div><div class="column">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb82"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href=""></a><span class="fu">table</span>(gss24<span class="sc">$</span>premarsx)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell fragment">
 <div class="cell-output cell-output-stdout">
 <pre><code>
    1    2    3    4 
  357  122  258 1378 </code></pre>
+</div>
 </div>
 </div></div>
 </section>
@@ -792,6 +843,8 @@ And_aFew.People_RENOUNCEconvention</code></pre>
 </dd>
 </dl>
 </div>
+</div>
+<div class="cell fragment">
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "Sex before marriage"
 
@@ -832,9 +885,18 @@ Labels:
           display:block!important;
       }</style></aside>
 </section>
-<section id="haven-labelled-cont.-1" class="slide level2">
-<h2>Haven labelled cont.</h2>
+<section id="section" class="slide level2" data-menu-title="Haven labelled cont.">
+<h2></h2>
 <p>You can use <a href="https://haven.tidyverse.org/reference/as_factor.html" target="_blank"><code>as_factor</code></a> to see the value labels of the variable <code>premarsx</code>.</p>
+<div class="panel-tabset">
+<ul id="tabset-1" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-1-1">Mini-task</a></li><li><a href="#tabset-1-2">with <code>as_factor()</code></a></li><li><a href="#tabset-1-3">without <code>as_factor()</code></a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1">
+<div class="task">
+<p><i class="fa-solid fa-check-double" aria-label="check-double"></i> Use <code>as_factor()</code> inside the <code>table()</code> function for the variable <code>premarsx</code></p>
+</div>
+</div>
+<div id="tabset-1-2">
 <div class="cell">
 <div class="sourceCode cell-code" id="cb85"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href=""></a><span class="fu">table</span>(<span class="fu">as_factor</span>(gss24<span class="sc">$</span>premarsx), <span class="at">useNA =</span> <span class="st">"ifany"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -859,17 +921,48 @@ not available in this release    not available in this year
                             0 </code></pre>
 </div>
 </div>
+</div>
+<div id="tabset-1-3">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href=""></a><span class="fu">table</span>(gss24<span class="sc">$</span>premarsx, <span class="at">useNA =</span> <span class="st">"ifany"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+   1    2    3    4 &lt;NA&gt; 
+ 357  122  258 1378 1194 </code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<aside class="notes">
+<p><span style="color: #f39c12">In the code-along, REPLACE THE BLANK LINE WITH THE NAME OF THE VARIABLE</span></p>
+<p><span style="color: #6f42c1">What would happen if we didn’t include <code>as_factor()</code> within <code>table()</code>?</span></p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
 <section id="convert-labels-to-factors" class="slide level2 smaller">
 <h2>Convert labels to factors</h2>
-<div class="columns">
-<div class="column">
-<ol type="1">
-<li>Get rid of all the ‘missing’ (NA) levels</li>
-</ol>
+<div class="panel-tabset">
+<ul id="tabset-2" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-2-1"><code>zap_missing()</code></a></li><li><a href="#tabset-2-2"><code>as_factor()</code></a></li><li><a href="#tabset-2-3"><code>droplevels()</code></a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1">
+<div class="task">
+<p><i class="fa-solid fa-check-double" aria-label="check-double"></i> 1. Use <code>zap_missing()</code> to get rid of all the ‘missing’ (NA) levels</p>
+</div>
+<p><br></p>
+<div class="fragment">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href=""></a>gss24<span class="sc">$</span>premarsx <span class="ot">&lt;-</span> <span class="fu">zap_missing</span>(gss24<span class="sc">$</span>premarsx)</span>
-<span id="cb87-2"><a href=""></a><span class="fu">table</span>(<span class="fu">as_factor</span>(gss24<span class="sc">$</span>premarsx), <span class="at">useNA =</span> <span class="st">"ifany"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb89"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href=""></a>gss24<span class="sc">$</span>premarsx <span class="ot">&lt;-</span> <span class="fu">zap_missing</span>(gss24<span class="sc">$</span>premarsx)</span>
+<span id="cb89-2"><a href=""></a><span class="fu">table</span>(<span class="fu">as_factor</span>(gss24<span class="sc">$</span>premarsx), <span class="at">useNA =</span> <span class="st">"ifany"</span>) <span class="co"># see the results</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
         always wrong  almost always wrong wrong only sometimes 
@@ -878,13 +971,17 @@ not available in this release    not available in this year
                 1378                    0                 1194 </code></pre>
 </div>
 </div>
-</div><div class="column fragment">
-<ol start="2" type="1">
-<li>Apply the labels instead of numeric values</li>
-</ol>
+</div>
+</div>
+<div id="tabset-2-2">
+<div class="task">
+<p><i class="fa-solid fa-check-double" aria-label="check-double"></i> 2. Use <code>as_factor()</code> to apply the labels instead of numeric values</p>
+</div>
+<p><br></p>
+<div class="fragment">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb89"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href=""></a>gss24<span class="sc">$</span>premarsx <span class="ot">&lt;-</span> <span class="fu">as_factor</span>(gss24<span class="sc">$</span>premarsx) <span class="co"># replace the values with labels</span></span>
-<span id="cb89-2"><a href=""></a><span class="fu">table</span>(gss24<span class="sc">$</span>premarsx, <span class="at">useNA =</span> <span class="st">"ifany"</span>) <span class="co"># notice we didn't need to wrap the variable in as_factor</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb91"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb91-1"><a href=""></a>gss24<span class="sc">$</span>premarsx <span class="ot">&lt;-</span> <span class="fu">as_factor</span>(gss24<span class="sc">$</span>premarsx) <span class="co"># replace the values with labels</span></span>
+<span id="cb91-2"><a href=""></a><span class="fu">table</span>(gss24<span class="sc">$</span>premarsx, <span class="at">useNA =</span> <span class="st">"ifany"</span>) <span class="co"># notice we didn't need to wrap the variable in as_factor</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
         always wrong  almost always wrong wrong only sometimes 
@@ -893,15 +990,17 @@ not available in this release    not available in this year
                 1378                    0                 1194 </code></pre>
 </div>
 </div>
-</div></div>
-<div class="columns">
-<div class="column fragment">
-<ol start="3" type="1">
-<li>Get rid of the empty levels in <code>premarsx</code>.</li>
-</ol>
+</div>
+</div>
+<div id="tabset-2-3">
+<div class="task">
+<p><i class="fa-solid fa-check-double" aria-label="check-double"></i> 3. Use <code>droplevels()</code> to get rid of the empty levels in <code>premarsx</code>.</p>
+</div>
+<p><br></p>
+<div class="fragment">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb91"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb91-1"><a href=""></a>gss24<span class="sc">$</span>premarsx <span class="ot">&lt;-</span> <span class="fu">droplevels</span>(gss24<span class="sc">$</span>premarsx)</span>
-<span id="cb91-2"><a href=""></a><span class="fu">table</span>(gss24<span class="sc">$</span>premarsx)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb93"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb93-1"><a href=""></a>gss24<span class="sc">$</span>premarsx <span class="ot">&lt;-</span> <span class="fu">droplevels</span>(gss24<span class="sc">$</span>premarsx)</span>
+<span id="cb93-2"><a href=""></a><span class="fu">table</span>(gss24<span class="sc">$</span>premarsx)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
         always wrong  almost always wrong wrong only sometimes 
@@ -910,32 +1009,56 @@ not available in this release    not available in this year
                 1378 </code></pre>
 </div>
 </div>
-</div><div class="column fragment">
-<p><br></p>
-<p><span style="color: #18BC9C; font-size: 150%; font-family: 'Shadows Into Light'"><strong>Now do the same for the <code>sex</code> variable.</strong></span></p>
-</div></div>
+</div>
+</div>
+</div>
+</div>
+<aside class="notes">
+<ol type="1">
+<li><span style="color: #f39c12">REPLACE THE BLANK LINES WITH THE NAME OF THE VARIABLE</span><br>
+</li>
+<li><span style="color: #f39c12">REPLACE THE BLANK LINE WITH THE FUNCTION <code>as_factor()</code></span><br>
+</li>
+<li><span style="color: #f39c12">REPLACE THE BLANK LINES WITH THE <code>droplevels()</code> function &amp; the NAME OF THE VARIABLE</span></li>
+</ol>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
-<section id="convert-labels-to-factors-cont." class="slide level2">
-<h2>Convert labels to factors cont.</h2>
+<section id="mini-task-5" class="slide level2" data-menu-title="Convert labels to factors cont.">
+<h2>Mini-task</h2>
+<div class="task">
+<p><i class="fa-solid fa-check-double" aria-label="check-double"></i> Use <code>zap_missing()</code>, <code>as_factor()</code>, &amp; <code>droplevels()</code> on the variable <code>sex</code>.</p>
+</div>
+<p><br></p>
+<div class="fragment">
 <div class="cell">
-<div class="sourceCode cell-code" id="annotated-cell-11"><pre class="sourceCode numberSource r code-annotation-code number-lines code-with-copy code-annotated"><code class="sourceCode r"><button class="code-annotation-anchor" data-target-cell="annotated-cell-11" data-target-annotation="1">1</button><span id="annotated-cell-11-1" class="code-annotation-target"><a href="#annotated-cell-11-1"></a>gss24<span class="sc">$</span>sex <span class="ot">&lt;-</span> <span class="fu">zap_missing</span>(gss24<span class="sc">$</span>sex)</span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-11" data-target-annotation="2">2</button><span id="annotated-cell-11-2" class="code-annotation-target"><a href="#annotated-cell-11-2"></a>gss24<span class="sc">$</span>sex <span class="ot">&lt;-</span> <span class="fu">as_factor</span>(gss24<span class="sc">$</span>sex)</span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-11" data-target-annotation="3">3</button><span id="annotated-cell-11-3" class="code-annotation-target"><a href="#annotated-cell-11-3"></a>gss24<span class="sc">$</span>sex <span class="ot">&lt;-</span> <span class="fu">droplevels</span>(gss24<span class="sc">$</span>sex)</span>
-<span id="annotated-cell-11-4"><a href="#annotated-cell-11-4"></a></span>
-<span id="annotated-cell-11-5"><a href="#annotated-cell-11-5"></a><span class="fu">table</span>(gss24<span class="sc">$</span>sex)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="annotated-cell-10"><pre class="sourceCode numberSource r code-annotation-code number-lines code-with-copy code-annotated"><code class="sourceCode r"><button class="code-annotation-anchor" data-target-cell="annotated-cell-10" data-target-annotation="1">1</button><span id="annotated-cell-10-1" class="code-annotation-target"><a href="#annotated-cell-10-1"></a>gss24<span class="sc">$</span>sex <span class="ot">&lt;-</span> <span class="fu">zap_missing</span>(gss24<span class="sc">$</span>sex)</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-10" data-target-annotation="2">2</button><span id="annotated-cell-10-2" class="code-annotation-target"><a href="#annotated-cell-10-2"></a>gss24<span class="sc">$</span>sex <span class="ot">&lt;-</span> <span class="fu">as_factor</span>(gss24<span class="sc">$</span>sex)</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-10" data-target-annotation="3">3</button><span id="annotated-cell-10-3" class="code-annotation-target"><a href="#annotated-cell-10-3"></a>gss24<span class="sc">$</span>sex <span class="ot">&lt;-</span> <span class="fu">droplevels</span>(gss24<span class="sc">$</span>sex)</span>
+<span id="annotated-cell-10-4"><a href="#annotated-cell-10-4"></a></span>
+<span id="annotated-cell-10-5"><a href="#annotated-cell-10-5"></a><span class="fu">table</span>(gss24<span class="sc">$</span>sex)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-annotation">
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
-<dt data-target-cell="annotated-cell-11" data-target-annotation="1">1</dt>
+<dt data-target-cell="annotated-cell-10" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-11" data-code-lines="1" data-code-annotation="1">Get rid of all the ‘missing’ (NA) levels.</span>
+<span data-code-cell="annotated-cell-10" data-code-lines="1" data-code-annotation="1">Get rid of all the ‘missing’ (NA) levels.</span>
 </dd>
-<dt data-target-cell="annotated-cell-11" data-target-annotation="2">2</dt>
+<dt data-target-cell="annotated-cell-10" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-11" data-code-lines="2" data-code-annotation="2">Replace the values with labels.</span>
+<span data-code-cell="annotated-cell-10" data-code-lines="2" data-code-annotation="2">Replace the values with labels.</span>
 </dd>
-<dt data-target-cell="annotated-cell-11" data-target-annotation="3">3</dt>
+<dt data-target-cell="annotated-cell-10" data-target-annotation="3">3</dt>
 <dd>
-<span data-code-cell="annotated-cell-11" data-code-lines="3" data-code-annotation="3">Get rid of the empty levels (if any).</span>
+<span data-code-cell="annotated-cell-10" data-code-lines="3" data-code-annotation="3">Get rid of the empty levels (if any).</span>
 </dd>
 </dl>
 </div>
@@ -945,25 +1068,47 @@ not available in this release    not available in this year
   1467   1823 </code></pre>
 </div>
 </div>
+<aside class="notes">
+<p><span style="color: #f39c12">use zap_missing(), as_factor(), and droplevels() to do the same for the sex variable.</span></p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</div>
 </section></section>
 <section>
-<section id="look-at-variables" class="title-slide slide level1 theme-section center">
-<h1>Look at variables</h1>
+<section id="frequency-distributions" class="title-slide slide level1 theme-section center">
+<h1>Frequency Distributions</h1>
+<aside class="notes">
 
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
 <section id="relative-frequency-table" class="slide level2">
 <h2>Relative frequency table</h2>
-<p>Let’s try functions from the <code>summarytools</code> package to get univariate (1 variable) and bivariate (2 variables) descriptive statistics.</p>
+<p>Let’s try functions from the <code>summarytools()</code> package to get univariate (1 variable) and bivariate (2 variables) descriptive statistics.</p>
 <p><br></p>
-<p>Make a frequency table of the variable <code>sex</code>. Then, do the same for <code>premarsx</code>.</p>
+<p><code>freq()</code> creates table of the counts for a variable.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb94"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb94-1"><a href=""></a><span class="fu">freq</span>(gss24<span class="sc">$</span>sex)</span>
-<span id="cb94-2"><a href=""></a><span class="fu">freq</span>(gss24<span class="sc">$</span>premarsx)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb96"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href=""></a><span class="fu">freq</span>(gss24<span class="sc">$</span>sex)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section>
-<section id="relative-frequency-table-1" class="slide level2">
-<h2>Relative frequency table</h2>
-<div class="cell">
+<div class="cell fragment">
 <div class="cell-output cell-output-stdout">
 <pre><code>Frequencies  
 gss24$sex  
@@ -977,8 +1122,29 @@ Type: Factor
        Total   3309    100.00         100.00    100.00         100.00</code></pre>
 </div>
 </div>
+<aside class="notes">
+<p><span style="color: #6f42c1">To use the <code>freq()</code> function, what did we need to do first?</span> AK: Load the <code>summarytools()</code> package.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="mini-task-6" class="slide level2" data-menu-title="Relative frequency table cont">
+<h2>Mini-task</h2>
+<div class="task">
+<p><i class="fa-solid fa-check-double" aria-label="check-double"></i> Use <code>freq()</code> on the variable <code>premarsx</code></p>
+</div>
 <p><br></p>
+<div class="fragment">
 <div class="cell">
+<div class="sourceCode cell-code" id="cb98"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb98-1"><a href=""></a><span class="fu">freq</span>(gss24<span class="sc">$</span>premarsx)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Frequencies  
 gss24$premarsx  
@@ -994,22 +1160,17 @@ Type: Factor
                      Total   3309    100.00         100.00    100.00         100.00</code></pre>
 </div>
 </div>
+</div>
 </section>
-<section id="pretty-tables" class="slide level2">
+<section id="pretty-tables" class="slide level2 smaller">
 <h2>Pretty tables</h2>
 <p>One of <code>summarytools</code> main purposes is to help clean and prepare data for further analysis. But sometimes we don’t care about the missing values.</p>
 <p><br></p>
 <p>Using <code>report.nas = FALSE</code> suppresses the missing data.<br>
-The <code>headings = FALSE</code> parameter suppresses the heading section. Do the same for <code>premarsx</code>.</p>
+The <code>headings = FALSE</code> parameter suppresses the heading section.</p>
 <p><br></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb97"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb97-1"><a href=""></a><span class="fu">freq</span>(gss24<span class="sc">$</span>sex, <span class="at">report.nas =</span> <span class="cn">FALSE</span>, <span class="at">headings =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb97-2"><a href=""></a><span class="fu">freq</span>(gss24<span class="sc">$</span>premarsx, <span class="at">report.nas =</span> <span class="cn">FALSE</span>, <span class="at">headings =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="pretty-tables-1" class="slide level2">
-<h2>Pretty tables</h2>
-<div class="cell">
+<div class="sourceCode cell-code" id="cb100"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb100-1"><a href=""></a><span class="fu">freq</span>(gss24<span class="sc">$</span>sex, <span class="at">report.nas =</span> <span class="cn">FALSE</span>, <span class="at">headings =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
                Freq        %   % Cum.
@@ -1019,8 +1180,16 @@ The <code>headings = FALSE</code> parameter suppresses the heading section. Do t
        Total   3290   100.00   100.00</code></pre>
 </div>
 </div>
+</section>
+<section id="mini-task-7" class="slide level2" data-menu-title="Pretty tables cont">
+<h2>Mini-task</h2>
+<div class="task">
+<p><i class="fa-solid fa-check-double" aria-label="check-double"></i> Use these options with the freq() function for the variable premarsx.</p>
+</div>
 <p><br></p>
+<div class="fragment">
 <div class="cell">
+<div class="sourceCode cell-code" id="cb102"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb102-1"><a href=""></a><span class="fu">freq</span>(gss24<span class="sc">$</span>premarsx, <span class="at">report.nas =</span> <span class="cn">FALSE</span>, <span class="at">headings =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
                              Freq        %   % Cum.
@@ -1032,14 +1201,17 @@ The <code>headings = FALSE</code> parameter suppresses the heading section. Do t
                      Total   2115   100.00   100.00</code></pre>
 </div>
 </div>
+</div>
 </section>
-<section id="cross-tabs" class="slide level2">
+<section id="cross-tabs" class="slide level2 smaller">
 <h2>Cross-tabs</h2>
 <p>We’ve been using the <code>table()</code> function with one variable at a time, but it also let’s you create a frequency table (<strong>crosstab</strong>) with two variables.</p>
 <p><br></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb100"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb100-1"><a href=""></a><span class="co"># 1st variable is the rows, 2nd variable is the columns.</span></span>
-<span id="cb100-2"><a href=""></a><span class="fu">table</span>(gss24<span class="sc">$</span>premarsx, gss24<span class="sc">$</span>sex)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb104"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb104-1"><a href=""></a><span class="co"># 1st variable is the rows, 2nd variable is the columns.</span></span>
+<span id="cb104-2"><a href=""></a><span class="fu">table</span>(gss24<span class="sc">$</span>premarsx, gss24<span class="sc">$</span>sex)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell fragment">
 <div class="cell-output cell-output-stdout">
 <pre><code>                      
                        male female
@@ -1050,13 +1222,17 @@ The <code>headings = FALSE</code> parameter suppresses the heading section. Do t
 </div>
 </div>
 <p><br></p>
+<div class="fragment">
 <p><span style="color: #F39C12; font-family: 'Shadows Into Light'">But it’s missing the <strong>column</strong> percentages…</span></p>
+</div>
 </section>
 <section id="relative-frequency-by-group" class="slide level2 smaller">
 <h2>Relative frequency by group</h2>
 <p>To run <code>freq()</code> by group, pair it with the <code>stby()</code> function.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb102"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb102-1"><a href=""></a><span class="fu">stby</span>(gss24<span class="sc">$</span>premarsx, gss24<span class="sc">$</span>sex, freq)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb106"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb106-1"><a href=""></a><span class="fu">stby</span>(gss24<span class="sc">$</span>premarsx, gss24<span class="sc">$</span>sex, freq)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell fragment">
 <div class="cell-output cell-output-stdout">
 <pre><code>Frequencies  
 gss24$premarsx  
@@ -1085,35 +1261,50 @@ Group: sex = female
 </div>
 </div>
 <p><br></p>
+<div class="fragment">
 <p><span style="color: #F39C12; font-family: 'Shadows Into Light'">This is hard to read and we don’t need the cumulative frequencies.</span></p>
+<aside class="notes">
+<p><code>stby()</code> lets us obtain grouped statistics with summarytools functions</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</div>
 </section>
-<section id="pretty-cross-tabs" class="slide level2">
-<h2>Pretty cross-tabs</h2>
+<section id="pretty-cross-tabs-with-ctable" class="slide level2">
+<h2>Pretty cross-tabs with <code>ctable()</code></h2>
 <p>Use <code>summarytools::ctable</code> instead!</p>
 <p><br></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="annotated-cell-16" data-code-line-numbers="1|2|3|4"><pre class="sourceCode numberSource r code-annotation-code number-lines code-with-copy code-annotated"><code class="sourceCode r"><button class="code-annotation-anchor" data-target-cell="annotated-cell-16" data-target-annotation="1">1</button><span id="annotated-cell-16-1" class="code-annotation-target"><a href="#annotated-cell-16-1"></a><span class="fu">ctable</span>(gss24<span class="sc">$</span>premarsx, gss24<span class="sc">$</span>sex,</span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-16" data-target-annotation="2">2</button><span id="annotated-cell-16-2" class="code-annotation-target"><a href="#annotated-cell-16-2"></a>  <span class="at">prop =</span> <span class="st">"c"</span>,</span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-16" data-target-annotation="3">3</button><span id="annotated-cell-16-3" class="code-annotation-target"><a href="#annotated-cell-16-3"></a>  <span class="at">format =</span> <span class="st">"p"</span>,</span>
-<span id="annotated-cell-16-4"><a href="#annotated-cell-16-4"></a>  <span class="at">useNA =</span> <span class="st">"no"</span></span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-16" data-target-annotation="4">4</button><span id="annotated-cell-16-5" class="code-annotation-target"><a href="#annotated-cell-16-5"></a>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="annotated-cell-17" data-code-line-numbers="1|2|3|4"><pre class="sourceCode numberSource r code-annotation-code number-lines code-with-copy code-annotated"><code class="sourceCode r"><button class="code-annotation-anchor" data-target-cell="annotated-cell-17" data-target-annotation="1">1</button><span id="annotated-cell-17-1" class="code-annotation-target"><a href="#annotated-cell-17-1"></a><span class="fu">ctable</span>(gss24<span class="sc">$</span>premarsx, gss24<span class="sc">$</span>sex,</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-17" data-target-annotation="2">2</button><span id="annotated-cell-17-2" class="code-annotation-target"><a href="#annotated-cell-17-2"></a>  <span class="at">prop =</span> <span class="st">"c"</span>,</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-17" data-target-annotation="3">3</button><span id="annotated-cell-17-3" class="code-annotation-target"><a href="#annotated-cell-17-3"></a>  <span class="at">format =</span> <span class="st">"p"</span>,</span>
+<span id="annotated-cell-17-4"><a href="#annotated-cell-17-4"></a>  <span class="at">useNA =</span> <span class="st">"no"</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-17" data-target-annotation="4">4</button><span id="annotated-cell-17-5" class="code-annotation-target"><a href="#annotated-cell-17-5"></a>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-annotation">
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
-<dt data-target-cell="annotated-cell-16" data-target-annotation="1">1</dt>
+<dt data-target-cell="annotated-cell-17" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-16" data-code-lines="1" data-code-annotation="1">Change from <code>table()</code> to <code>ctable()</code>.</span>
+<span data-code-cell="annotated-cell-17" data-code-lines="1" data-code-annotation="1">Change from <code>table()</code> to <code>ctable()</code>.</span>
 </dd>
-<dt data-target-cell="annotated-cell-16" data-target-annotation="2">2</dt>
+<dt data-target-cell="annotated-cell-17" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-16" data-code-lines="2" data-code-annotation="2">The “c” gives column %; “r” would give row %.</span>
+<span data-code-cell="annotated-cell-17" data-code-lines="2" data-code-annotation="2">The “c” gives column %; “r” would give row %.</span>
 </dd>
-<dt data-target-cell="annotated-cell-16" data-target-annotation="3">3</dt>
+<dt data-target-cell="annotated-cell-17" data-target-annotation="3">3</dt>
 <dd>
-<span data-code-cell="annotated-cell-16" data-code-lines="3" data-code-annotation="3">This adds the % symbols to the table.</span>
+<span data-code-cell="annotated-cell-17" data-code-lines="3" data-code-annotation="3">This adds the % symbols to the table.</span>
 </dd>
-<dt data-target-cell="annotated-cell-16" data-target-annotation="4">4</dt>
+<dt data-target-cell="annotated-cell-17" data-target-annotation="4">4</dt>
 <dd>
-<span data-code-cell="annotated-cell-16" data-code-lines="5" data-code-annotation="4">Exclude the missing levels from the table.</span>
+<span data-code-cell="annotated-cell-17" data-code-lines="5" data-code-annotation="4">Exclude the missing levels from the table.</span>
 </dd>
 </dl>
 </div>
@@ -1135,8 +1326,22 @@ Data Frame: gss24
 ---------------------- ----- -------------- --------------- ---------------</code></pre>
 </div>
 </div>
+<aside class="notes">
+<p>Add to your code-along: 1. <span style="color: #6f42c1"><em>X</em> percentage of respondents believe sex before marriage is ‘almost always wrong’?</span><br>
+2. <span style="color: #6f42c1">A greater percentage of <em>X</em> think sex before marriage is ‘not wrong at all’.</span></p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
-<section id="section" class="slide level2 quiz-question" data-menu-title="Knowledge Check" data-background-image="images/clipboard-question.png" data-background-size="100px" data-background-repeat="repeat">
+<section id="section-1" class="slide level2 quiz-question" data-menu-title="Knowledge Check" data-background-image="images/clipboard-question.png" data-background-size="100px" data-background-repeat="repeat">
 <h2></h2>
 <div style="color: #F39C12">
 <p><i class="fa-solid fa-clipboard-question" aria-label="clipboard-question"></i> Based on your table, what percentage of respondents believe sex before marriage is ‘almost always wrong’?</p>
@@ -1148,7 +1353,7 @@ Data Frame: gss24
 <li><span data-explanation="😲 This is % who think premarital sex is 'wrong only sometimes'.">12.2</span></li>
 </ul>
 </section>
-<section id="section-1" class="slide level2 quiz-question" data-menu-title="Knowledge Check" data-background-image="images/clipboard-question.png" data-background-size="100px" data-background-repeat="repeat">
+<section id="section-2" class="slide level2 quiz-question" data-menu-title="Knowledge Check" data-background-image="images/clipboard-question.png" data-background-size="100px" data-background-repeat="repeat">
 <h2></h2>
 <div style="color: #F39C12">
 <p><i class="fa-solid fa-clipboard-question" aria-label="clipboard-question"></i> Based on your table, do a greater percentage of men or women think sex before marriage is ‘not wrong at all’?</p>

@@ -600,5 +600,222 @@
     "title": "Data Management I",
     "section": "Your Data Take",
     "text": "Your Data Take\n\n\n What’s your conclusion to our research question?"
+  },
+  {
+    "objectID": "lecture-02.html#mini-task",
+    "href": "lecture-02.html#mini-task",
+    "title": "Introduction to Data",
+    "section": "Mini-task",
+    "text": "Mini-task\n\n Install the summarytools() package, available on CRAN.\n\n\n\nRun the code chunk in your code-along.\nOR: Copy and paste the code into your Console pane. Then hit “Enter”.\n\n\n\ninstall.packages(\"summarytools\")"
+  },
+  {
+    "objectID": "lecture-02.html#mini-task-1",
+    "href": "lecture-02.html#mini-task-1",
+    "title": "Introduction to Data",
+    "section": "Mini-task",
+    "text": "Mini-task\n\n Load the standard packages and our new summarytools() package.\n\n\n\nlibrary(tidyverse)\nlibrary(haven) # not core tidyverse\nlibrary(gssr)\nlibrary(gssrdoc) # load the GSS codebook\nlibrary(summarytools)\n\n\nhaven() was installed with tidyverse; but it doesn’t load automatically"
+  },
+  {
+    "objectID": "lecture-02.html#mini-task-2",
+    "href": "lecture-02.html#mini-task-2",
+    "title": "Introduction to Data",
+    "section": "Mini-task",
+    "text": "Mini-task\n\n Load the 2024 GSS data.\n\n\n\n# Get the data only for the 2024 survey respondents\ngss24 &lt;- gss_get_yr(2024)\n\n\nWhy did we need to use library() before we loaded the GSS data?"
+  },
+  {
+    "objectID": "lecture-02.html#coding-basics-1",
+    "href": "lecture-02.html#coding-basics-1",
+    "title": "Introduction to Data",
+    "section": "Coding basics",
+    "text": "Coding basics\n\n\nYou can use R to do basic math calculations\n\n1 + 2\n\n[1] 3\n\n2 * 5\n\n[1] 10\n\n(1 + 2) / 2\n\n[1] 1.5\n\n\n\nYou can create new objects with the assignment operator &lt;-\n\nx &lt;- 3 * 4\nx\n\n[1] 12\n\n\n\n\n\nYou can (and should) make comments in your code\n\n# R will ignore any text after # for that line\n\nprimes &lt;- c(2, 3, 5, 7, 11, 13) # create vector of prime numbers\nprimes\n\n[1]  2  3  5  7 11 13\n\n\n\nObject names must start with a letter and can only contain letters, numbers, _, and .\ni_use_snake_case\notherPeopleUseCamelCase\nsome.people.use.periods\nAnd_aFew.People_RENOUNCEconvention\n\n\n\nSource: R for Data Science"
+  },
+  {
+    "objectID": "lecture-02.html#coding-basics-demo",
+    "href": "lecture-02.html#coding-basics-demo",
+    "title": "Introduction to Data",
+    "section": "Coding basics: demo",
+    "text": "Coding basics: demo\n\n\n\na &lt;- 7\nb &lt;- 3\naddition &lt;- a + b\nsubtraction &lt;- a - b\nmultiplication &lt;- a * b\ndivision &lt;- a / b\nexponentiation &lt;- a^2\n\n\n\na\n\n[1] 7\n\nb\n\n[1] 3\n\naddition\n\n[1] 10\n\nsubtraction\n\n[1] 4\n\nmultiplication\n\n[1] 21\n\ndivision\n\n[1] 2.333333\n\nexponentiation\n\n[1] 49"
+  },
+  {
+    "objectID": "lecture-02.html#operators-in-r",
+    "href": "lecture-02.html#operators-in-r",
+    "title": "Introduction to Data",
+    "section": "Operators in R",
+    "text": "Operators in R\nOperators in R are symbols directing R to perform various kinds of mathematical, logical, and decision operations. A few of the key ones to know before we get started:\n\nAssignment operators assign values to variables:\n&lt;-, -&gt;, =\nComparison operators test equality or inequality:\n==, !=, &gt;, &gt;=, &lt;, &lt;=\nLogical operators indicate “and”, “or”, and “not”:\n&, |, !"
+  },
+  {
+    "objectID": "lecture-02.html#comparison-operators",
+    "href": "lecture-02.html#comparison-operators",
+    "title": "Introduction to Data",
+    "section": "Comparison operators",
+    "text": "Comparison operators\n\n\n\n\n\n\n\noperator\ndefinition\n\n\n\n\n&lt;\nis less than?\n\n\n&lt;=\nis less than or equal to?\n\n\n&gt;\nis greater than?\n\n\n&gt;=\nis greater than or equal to?\n\n\n==\nis exactly equal to?\n\n\n!=\nis not equal to?"
+  },
+  {
+    "objectID": "lecture-02.html#comparison-operators-cont",
+    "href": "lecture-02.html#comparison-operators-cont",
+    "title": "Introduction to Data",
+    "section": "Comparison operators (cont)",
+    "text": "Comparison operators (cont)\n\n\n\nx &lt;- 5\ny &lt;- 3\nequal &lt;- x == y\nnot_equal &lt;- x != y\nless_than &lt;- x &lt; y\nmore_than &lt;- x &gt; y\nless_than_or_equal_to &lt;- x &lt;= y\nmore_than_or_equal_to &lt;- x &gt;= y\n\n\n\nx\n\n[1] 5\n\ny\n\n[1] 3\n\nequal\n\n[1] FALSE\n\nnot_equal\n\n[1] TRUE\n\nless_than\n\n[1] FALSE\n\nmore_than\n\n[1] TRUE\n\nless_than_or_equal_to\n\n[1] FALSE\n\nmore_than_or_equal_to\n\n[1] TRUE\n\n\n\n\n\nSource: IONOS editorial team"
+  },
+  {
+    "objectID": "lecture-02.html#logical-operators",
+    "href": "lecture-02.html#logical-operators",
+    "title": "Introduction to Data",
+    "section": "Logical operators",
+    "text": "Logical operators\n\n\n\n\n\n\n\noperator\ndefinition\n\n\n\n\nx & y\nis x AND y?\n\n\nx | y\nis x OR y?\n\n\nis.na(x)\nis x NA?\n\n\n!is.na(x)\nis x not NA?"
+  },
+  {
+    "objectID": "lecture-02.html#logical-operators-cont",
+    "href": "lecture-02.html#logical-operators-cont",
+    "title": "Introduction to Data",
+    "section": "Logical operators (cont)",
+    "text": "Logical operators (cont)\n\n\n\nx &lt;- TRUE\ny &lt;- FALSE\n\nand_operator &lt;- x & y\nor_operator &lt;- x | y\nnot_operator &lt;- !x\n\n\n\nand_operator\n\n[1] FALSE\n\nor_operator\n\n[1] TRUE\n\nnot_operator\n\n[1] FALSE\n\n\n\n\n\nSource: IONOS editorial team"
+  },
+  {
+    "objectID": "lecture-02.html#mini-task-3",
+    "href": "lecture-02.html#mini-task-3",
+    "title": "Introduction to Data",
+    "section": "Mini-task",
+    "text": "Mini-task\n\n Make a tiny data frame and save it.\n\n\n\ndf &lt;- tibble(x = c(1, 2, 3, 4, 5), y = c(\"a\", \"a\", \"b\", \"c\", \"c\"))\n\ndf # look at df\n\n\n\n# A tibble: 5 × 2\n      x y    \n  &lt;dbl&gt; &lt;chr&gt;\n1     1 a    \n2     2 a    \n3     3 b    \n4     4 c    \n5     5 c"
+  },
+  {
+    "objectID": "lecture-02.html#data-types-in-r",
+    "href": "lecture-02.html#data-types-in-r",
+    "title": "Introduction to Data",
+    "section": "Data types in R",
+    "text": "Data types in R\nA property is assigned to objects that determines how generic functions operate with it.\nCommon ‘types’ or ‘classes’ of variables:\n\nlogical\ncharacter\ninteger\nnumeric\nand more, but we won’t be focusing on those"
+  },
+  {
+    "objectID": "lecture-02.html#data-class-variable-type",
+    "href": "lecture-02.html#data-class-variable-type",
+    "title": "Introduction to Data",
+    "section": "Data class + variable type",
+    "text": "Data class + variable type"
+  },
+  {
+    "objectID": "lecture-02.html#class",
+    "href": "lecture-02.html#class",
+    "title": "Introduction to Data",
+    "section": "class()",
+    "text": "class()\n\n\nlogical - Boolean values TRUE and FALSE\n\n\nclass(TRUE)\n\n[1] \"logical\"\n\n\n\ncharacter - character strings\n \n\nclass(\"Sociology\")\n\n[1] \"character\"\n\n\n\n\n\n\nInteger - numeric data without decimals\n(indicated with an L).\n\nclass(2L)\n\n[1] \"integer\"\n\n\n\n\nnumeric - default type if values are numbers or if the values contain decimals.\n\nclass(2.5)\n\n[1] \"numeric\""
+  },
+  {
+    "objectID": "lecture-02.html#factor",
+    "href": "lecture-02.html#factor",
+    "title": "Introduction to Data",
+    "section": "Factor",
+    "text": "Factor\nfactors consist of character data with a fixed and known set of possible values\n\n\nopinion &lt;- factor(c(\"like\", \"dislike\", \"dislike\", \"hate\", \"dislike\", \"hate\"))\nclass(opinion)\n\n[1] \"factor\"\n\n\n\n\n\n# By default, the levels are sorted alphabetically.\nlevels(opinion)\n\n[1] \"dislike\" \"hate\"    \"like\""
+  },
+  {
+    "objectID": "lecture-02.html#factor-order",
+    "href": "lecture-02.html#factor-order",
+    "title": "Introduction to Data",
+    "section": "Factor order",
+    "text": "Factor order\n\n# Reorder the levels with the argument `levels` in the `factor()` function\nopinion &lt;- factor(opinion, levels = c(\"hate\", \"dislike\", \"like\"))\nlevels(opinion)\n\n[1] \"hate\"    \"dislike\" \"like\"   \n\n\n\n\n\n# If the order has meaning (like rankings), you can make it an ordered factor\nopinion &lt;- factor(opinion, levels = c(\"hate\", \"dislike\", \"like\"), ordered = TRUE)\nlevels(opinion)\n\n[1] \"hate\"    \"dislike\" \"like\""
+  },
+  {
+    "objectID": "lecture-02.html#converting-between-types",
+    "href": "lecture-02.html#converting-between-types",
+    "title": "Introduction to Data",
+    "section": "Converting between types",
+    "text": "Converting between types\nUse a function: as.logical(), as.numeric(), as.integer(), or as.character().\n\n\n\nCreate a numeric variable.\n\nx &lt;- 1:3\nx\n\n[1] 1 2 3\n\nclass(x)\n\n[1] \"integer\"\n\n\n\n\n\n\n Heads Up!\n\n\nThe : (colon) means ‘through.’\n\n\n\n\nChange it to a character variable.\n\ny &lt;- as.character(x)\ny\n\n[1] \"1\" \"2\" \"3\"\n\nclass(y)\n\n[1] \"character\"\n\n\n\n\n\n\n Heads Up!\n\n\nNotice the quotation marks around the values."
+  },
+  {
+    "objectID": "lecture-02.html#haven-labelled",
+    "href": "lecture-02.html#haven-labelled",
+    "title": "Introduction to Data",
+    "section": "Haven labelled",
+    "text": "Haven labelled\nWhen you import data into R from software like SPSS, Stata, or SAS, you might notice a special class called haven_labelled.\n\n\n\n\nclass(gss24$premarsx)\n\n\n\n[1] \"haven_labelled\" \"vctrs_vctr\"     \"double\"        \n\n\n\n\ntable(gss24$premarsx)\n\n\n\n\n   1    2    3    4 \n 357  122  258 1378"
+  },
+  {
+    "objectID": "lecture-02.html#haven-labelled-cont.",
+    "href": "lecture-02.html#haven-labelled-cont.",
+    "title": "Introduction to Data",
+    "section": "Haven labelled cont.",
+    "text": "Haven labelled cont.\nIt makes data easier to understand without needing a separate codebook.\n\n1attr(gss24$premarsx, \"label\")\n2print_labels(gss24$premarsx)\n\n\n1\n\nA description of the variable\n\n2\n\nView the label attached to each numeric value\n\n\n\n\n\n\n[1] \"Sex before marriage\"\n\nLabels:\n value                         label\n     1                  always wrong\n     2           almost always wrong\n     3          wrong only sometimes\n     4              not wrong at all\n     5                         other\n NA(d)                    don't know\n NA(i)                           iap\n NA(j)            I don't have a job\n NA(m)                   dk, na, iap\n NA(n)                     no answer\n NA(p)                 not imputable\n NA(r)                       refused\n NA(s)                skipped on web\n NA(u)                    uncodeable\n NA(x) not available in this release\n NA(y)    not available in this year\n NA(z)                  see codebook\n\n\n\nThe column itself might have a variable label (a description like “Gender of respondent”)\nThe column contains values (numbers)\nEach value may have a label attached (like “Male” for 1, “Female” for 2)"
+  },
+  {
+    "objectID": "lecture-02.html#section",
+    "href": "lecture-02.html#section",
+    "title": "Introduction to Data",
+    "section": "",
+    "text": "You can use as_factor to see the value labels of the variable premarsx.\n\nMini-taskwith as_factor()without as_factor()\n\n\n\n Use as_factor() inside the table() function for the variable premarsx\n\n\n\n\ntable(as_factor(gss24$premarsx), useNA = \"ifany\")\n\n\n                 always wrong           almost always wrong \n                          357                           122 \n         wrong only sometimes              not wrong at all \n                          258                          1378 \n                        other                           iap \n                            0                          1126 \n                   don't know            I don't have a job \n                           50                             0 \n                  dk, na, iap                     no answer \n                            0                             6 \n                not imputable                       refused \n                            0                             0 \n               skipped on web                    uncodeable \n                           12                             0 \nnot available in this release    not available in this year \n                            0                             0 \n                 see codebook \n                            0 \n\n\n\n\n\ntable(gss24$premarsx, useNA = \"ifany\")\n\n\n   1    2    3    4 &lt;NA&gt; \n 357  122  258 1378 1194 \n\n\n\n\n\n\nIn the code-along, REPLACE THE BLANK LINE WITH THE NAME OF THE VARIABLE\nWhat would happen if we didn’t include as_factor() within table()?"
+  },
+  {
+    "objectID": "lecture-02.html#convert-labels-to-factors",
+    "href": "lecture-02.html#convert-labels-to-factors",
+    "title": "Introduction to Data",
+    "section": "Convert labels to factors",
+    "text": "Convert labels to factors\n\nzap_missing()as_factor()droplevels()\n\n\n\n 1. Use zap_missing() to get rid of all the ‘missing’ (NA) levels\n\n\n\n\ngss24$premarsx &lt;- zap_missing(gss24$premarsx)\ntable(as_factor(gss24$premarsx), useNA = \"ifany\") # see the results\n\n\n        always wrong  almost always wrong wrong only sometimes \n                 357                  122                  258 \n    not wrong at all                other                 &lt;NA&gt; \n                1378                    0                 1194 \n\n\n\n\n\n\n 2. Use as_factor() to apply the labels instead of numeric values\n\n\n\n\ngss24$premarsx &lt;- as_factor(gss24$premarsx) # replace the values with labels\ntable(gss24$premarsx, useNA = \"ifany\") # notice we didn't need to wrap the variable in as_factor\n\n\n        always wrong  almost always wrong wrong only sometimes \n                 357                  122                  258 \n    not wrong at all                other                 &lt;NA&gt; \n                1378                    0                 1194 \n\n\n\n\n\n\n 3. Use droplevels() to get rid of the empty levels in premarsx.\n\n\n\n\ngss24$premarsx &lt;- droplevels(gss24$premarsx)\ntable(gss24$premarsx)\n\n\n        always wrong  almost always wrong wrong only sometimes \n                 357                  122                  258 \n    not wrong at all \n                1378 \n\n\n\n\n\n\n\n\nREPLACE THE BLANK LINES WITH THE NAME OF THE VARIABLE\n\nREPLACE THE BLANK LINE WITH THE FUNCTION as_factor()\n\nREPLACE THE BLANK LINES WITH THE droplevels() function & the NAME OF THE VARIABLE"
+  },
+  {
+    "objectID": "lecture-02.html#mini-task-5",
+    "href": "lecture-02.html#mini-task-5",
+    "title": "Introduction to Data",
+    "section": "Mini-task",
+    "text": "Mini-task\n\n Use zap_missing(), as_factor(), & droplevels() on the variable sex.\n\n\n\n\n1gss24$sex &lt;- zap_missing(gss24$sex)\n2gss24$sex &lt;- as_factor(gss24$sex)\n3gss24$sex &lt;- droplevels(gss24$sex)\n\ntable(gss24$sex)\n\n\n1\n\nGet rid of all the ‘missing’ (NA) levels.\n\n2\n\nReplace the values with labels.\n\n3\n\nGet rid of the empty levels (if any).\n\n\n\n\n\n  male female \n  1467   1823 \n\n\n\nuse zap_missing(), as_factor(), and droplevels() to do the same for the sex variable."
+  },
+  {
+    "objectID": "lecture-02.html#relative-frequency-table",
+    "href": "lecture-02.html#relative-frequency-table",
+    "title": "Introduction to Data",
+    "section": "Relative frequency table",
+    "text": "Relative frequency table\nLet’s try functions from the summarytools() package to get univariate (1 variable) and bivariate (2 variables) descriptive statistics.\n\nfreq() creates table of the counts for a variable.\n\nfreq(gss24$sex)\n\n\n\nFrequencies  \ngss24$sex  \nType: Factor  \n\n               Freq   % Valid   % Valid Cum.   % Total   % Total Cum.\n------------ ------ --------- -------------- --------- --------------\n        male   1467     44.59          44.59     44.33          44.33\n      female   1823     55.41         100.00     55.09          99.43\n        &lt;NA&gt;     19                               0.57         100.00\n       Total   3309    100.00         100.00    100.00         100.00\n\n\n\nTo use the freq() function, what did we need to do first? AK: Load the summarytools() package."
+  },
+  {
+    "objectID": "lecture-02.html#mini-task-6",
+    "href": "lecture-02.html#mini-task-6",
+    "title": "Introduction to Data",
+    "section": "Mini-task",
+    "text": "Mini-task\n\n Use freq() on the variable premarsx\n\n\n\n\nfreq(gss24$premarsx)\n\nFrequencies  \ngss24$premarsx  \nType: Factor  \n\n                             Freq   % Valid   % Valid Cum.   % Total   % Total Cum.\n-------------------------- ------ --------- -------------- --------- --------------\n              always wrong    357     16.88          16.88     10.79          10.79\n       almost always wrong    122      5.77          22.65      3.69          14.48\n      wrong only sometimes    258     12.20          34.85      7.80          22.27\n          not wrong at all   1378     65.15         100.00     41.64          63.92\n                      &lt;NA&gt;   1194                              36.08         100.00\n                     Total   3309    100.00         100.00    100.00         100.00"
+  },
+  {
+    "objectID": "lecture-02.html#pretty-tables",
+    "href": "lecture-02.html#pretty-tables",
+    "title": "Introduction to Data",
+    "section": "Pretty tables",
+    "text": "Pretty tables\nOne of summarytools main purposes is to help clean and prepare data for further analysis. But sometimes we don’t care about the missing values.\n\nUsing report.nas = FALSE suppresses the missing data.\nThe headings = FALSE parameter suppresses the heading section.\n\n\nfreq(gss24$sex, report.nas = FALSE, headings = FALSE)\n\n\n\n\n               Freq        %   % Cum.\n------------ ------ -------- --------\n        male   1467    44.59    44.59\n      female   1823    55.41   100.00\n       Total   3290   100.00   100.00"
+  },
+  {
+    "objectID": "lecture-02.html#mini-task-7",
+    "href": "lecture-02.html#mini-task-7",
+    "title": "Introduction to Data",
+    "section": "Mini-task",
+    "text": "Mini-task\n\n Make a pretty frequency table for the variable premarsx.\n\n\n\n\nfreq(gss24$premarsx, report.nas = FALSE, headings = FALSE)\n\n\n                             Freq        %   % Cum.\n-------------------------- ------ -------- --------\n              always wrong    357    16.88    16.88\n       almost always wrong    122     5.77    22.65\n      wrong only sometimes    258    12.20    34.85\n          not wrong at all   1378    65.15   100.00\n                     Total   2115   100.00   100.00"
+  },
+  {
+    "objectID": "lecture-02.html#cross-tabs",
+    "href": "lecture-02.html#cross-tabs",
+    "title": "Introduction to Data",
+    "section": "Cross-tabs",
+    "text": "Cross-tabs\nWe’ve been using the table() function with one variable at a time, but it also let’s you create a frequency table (crosstab) with two variables.\n\n\n# 1st variable is the rows, 2nd variable is the columns.\ntable(gss24$premarsx, gss24$sex)\n\n\n\n                      \n                       male female\n  always wrong          146    209\n  almost always wrong    44     77\n  wrong only sometimes  127    130\n  not wrong at all      616    758\n\n\n\n\nBut it’s missing the column percentages…"
+  },
+  {
+    "objectID": "lecture-02.html#relative-frequency-by-group",
+    "href": "lecture-02.html#relative-frequency-by-group",
+    "title": "Introduction to Data",
+    "section": "Relative frequency by group",
+    "text": "Relative frequency by group\nTo run freq() by group, pair it with the stby() function.\n\nstby(gss24$premarsx, gss24$sex, freq)\n\n\n\nFrequencies  \ngss24$premarsx  \nType: Factor  \nGroup: sex = male  \n\n                             Freq   % Valid   % Valid Cum.   % Total   % Total Cum.\n-------------------------- ------ --------- -------------- --------- --------------\n              always wrong    146     15.65          15.65      9.95           9.95\n       almost always wrong     44      4.72          20.36      3.00          12.95\n      wrong only sometimes    127     13.61          33.98      8.66          21.61\n          not wrong at all    616     66.02         100.00     41.99          63.60\n                      &lt;NA&gt;    534                              36.40         100.00\n                     Total   1467    100.00         100.00    100.00         100.00\n\nGroup: sex = female  \n\n                             Freq   % Valid   % Valid Cum.   % Total   % Total Cum.\n-------------------------- ------ --------- -------------- --------- --------------\n              always wrong    209     17.80          17.80     11.46          11.46\n       almost always wrong     77      6.56          24.36      4.22          15.69\n      wrong only sometimes    130     11.07          35.43      7.13          22.82\n          not wrong at all    758     64.57         100.00     41.58          64.40\n                      &lt;NA&gt;    649                              35.60         100.00\n                     Total   1823    100.00         100.00    100.00         100.00\n\n\n\n\nThis is hard to read and we don’t need the cumulative frequencies.\n\nstby() lets us obtain grouped statistics with summarytools functions"
+  },
+  {
+    "objectID": "lecture-02.html#pretty-cross-tabs-with-ctable",
+    "href": "lecture-02.html#pretty-cross-tabs-with-ctable",
+    "title": "Introduction to Data",
+    "section": "Pretty cross-tabs with ctable()",
+    "text": "Pretty cross-tabs with ctable()\nUse summarytools::ctable instead!\n\n\n1ctable(gss24$premarsx, gss24$sex,\n2  prop = \"c\",\n3  format = \"p\",\n  useNA = \"no\"\n4)\n\n\n1\n\nChange from table() to ctable().\n\n2\n\nThe “c” gives column %; “r” would give row %.\n\n3\n\nThis adds the % symbols to the table.\n\n4\n\nExclude the missing levels from the table.\n\n\n\n\n\n\nCross-Tabulation, Column Proportions  \npremarsx * sex  \nData Frame: gss24  \n\n---------------------- ----- -------------- --------------- ---------------\n                         sex           male          female           Total\n              premarsx                                                     \n          always wrong         146 ( 15.6%)    209 ( 17.8%)    355 ( 16.8%)\n   almost always wrong          44 (  4.7%)     77 (  6.6%)    121 (  5.7%)\n  wrong only sometimes         127 ( 13.6%)    130 ( 11.1%)    257 ( 12.2%)\n      not wrong at all         616 ( 66.0%)    758 ( 64.6%)   1374 ( 65.2%)\n                 Total         933 (100.0%)   1174 (100.0%)   2107 (100.0%)\n---------------------- ----- -------------- --------------- ---------------\n\n\n\nAdd to your code-along: 1. X percentage of respondents believe sex before marriage is ‘almost always wrong’?\n2. A greater percentage of X think sex before marriage is ‘not wrong at all’."
+  },
+  {
+    "objectID": "lecture-02.html#section-1",
+    "href": "lecture-02.html#section-1",
+    "title": "Introduction to Data",
+    "section": "",
+    "text": "Based on your table, what percentage of respondents believe sex before marriage is ‘almost always wrong’?\n\n\n5.7\n16.8\n121\n12.2"
+  },
+  {
+    "objectID": "lecture-02.html#section-2",
+    "href": "lecture-02.html#section-2",
+    "title": "Introduction to Data",
+    "section": "",
+    "text": "Based on your table, do a greater percentage of men or women think sex before marriage is ‘not wrong at all’?\n\n\nMen\nWomen"
   }
 ]

@@ -397,5 +397,208 @@
     "title": "R workflow",
     "section": "Mini-tasks",
     "text": "Mini-tasks\n\n Change the code to show the variable fefam.\n\n\n\n# Replace meovrwrk with fefam\ntable(gss24$meovrwrk)\n\n\n  1   2   3   4   5 \n195 787 611 481  89 \n\n\n\n\n add text to your code-along that interprets the results for the 2 value for fefam."
+  },
+  {
+    "objectID": "lecture-03.html#packages",
+    "href": "lecture-03.html#packages",
+    "title": "Data Management I",
+    "section": "Packages",
+    "text": "Packages\nLoad the standard packages.\n\nlibrary(tidyverse) \nlibrary(haven) # not core tidyverse\nlibrary(gssr)\nlibrary(gssrdoc) # load the GSS codebook\nlibrary(summarytools)"
+  },
+  {
+    "objectID": "lecture-03.html#load-your-data",
+    "href": "lecture-03.html#load-your-data",
+    "title": "Data Management I",
+    "section": "Load your data",
+    "text": "Load your data\n\n# Get the data all survey years\ndata(gss_all)"
+  },
+  {
+    "objectID": "lecture-03.html#section",
+    "href": "lecture-03.html#section",
+    "title": "Data Management I",
+    "section": "",
+    "text": "We can find which years one or more variables were asked with the gss_which_years() function.\n\ngss_which_years(gss_all, meovrwrk)\n\n# A tibble: 35 × 2\n   year      meovrwrk\n   &lt;dbl+lbl&gt; &lt;lgl&gt;   \n 1 1972      FALSE   \n 2 1973      FALSE   \n 3 1974      FALSE   \n 4 1975      FALSE   \n 5 1976      FALSE   \n 6 1977      FALSE   \n 7 1978      FALSE   \n 8 1980      FALSE   \n 9 1982      FALSE   \n10 1983      FALSE   \n# ℹ 25 more rows\n\n\n\n\n\n Heads Up!\n\n\nIf run in the console, to see all rows, wrap the code in the print() command: print(gss_which_years(gss_all, meovrwrk), n = 40)"
+  },
+  {
+    "objectID": "lecture-03.html#tidying-data",
+    "href": "lecture-03.html#tidying-data",
+    "title": "Data Management I",
+    "section": "Tidying Data",
+    "text": "Tidying Data\n\nMost tasks related to data analysis are not glorious or fancy.\n\n\nA lot of time is dedicated to whipping a dataset into the shape needed to be able to analyze it.\n\nThis task has different names “data cleaning,” “data management,” “data manipulation,” “data wrangling,” “data transformation.”\n\n\nSource: Jasper Dag Tjaden"
+  },
+  {
+    "objectID": "lecture-03.html#dplyr-package",
+    "href": "lecture-03.html#dplyr-package",
+    "title": "Data Management I",
+    "section": "dplyr package",
+    "text": "dplyr package\nThe dplyr package provides a complete set of functions that help you solve the most common data manipulation challenges such as:\n\nfiltering observations based on their values\nextracting observations based on their values or positions\nsampling observations based on a specific number or fraction of rows\nsorting observations based on one or several variables\nselecting variables based on their names or positions\nrenaming variables\nadding new variables based on existing ones\nsummarizing observations or variables to a single descriptive measure\nperforming any operation by group\n\n\n\nSource: Antoine Soetewey"
+  },
+  {
+    "objectID": "lecture-03.html#the-pipe",
+    "href": "lecture-03.html#the-pipe",
+    "title": "Data Management I",
+    "section": "The pipe |>",
+    "text": "The pipe |&gt;\n\nThe pipe operator passes what comes before it into the function that comes after it as the first argument in that function.\n\nsum(1, 2)\n\n[1] 3\n\n\n\n\n\n1 |&gt; \n  sum(2)\n\n[1] 3"
+  },
+  {
+    "objectID": "lecture-03.html#dplyr-style",
+    "href": "lecture-03.html#dplyr-style",
+    "title": "Data Management I",
+    "section": "dplyr style",
+    "text": "dplyr style\nIn data transformation pipelines, always use a\n\nspace before |&gt;\nline break after |&gt;\nindent the next line of code\n\n\nWe’ll talk about data visualization pipes later…\n\n\n\n\n\n Heads Up!\n\n\n|&gt; (native pipe operator) and %&gt;% (magrittr package) behave identically for simple cases. More info."
+  },
+  {
+    "objectID": "lecture-03.html#functionargument",
+    "href": "lecture-03.html#functionargument",
+    "title": "Data Management I",
+    "section": "function(argument)",
+    "text": "function(argument)\nFunctions are (most often) verbs, followed by what they will be applied to in parentheses:\n\n\ndo_this(to_this)\ndo_that(to_this, to_that, with_those)\n\n\ndplyr verbs (functions) will allow you to solve the vast majority of your data manipulation challenges.\n\n\nSource: Dr. Mine Çetinkaya-Rundel"
+  },
+  {
+    "objectID": "lecture-03.html#dplyr-basics",
+    "href": "lecture-03.html#dplyr-basics",
+    "title": "Data Management I",
+    "section": "dplyr basics",
+    "text": "dplyr basics\n\nThey are organized into four groups based on what they operate on: rows, columns, groups, or tables.\n\n\nThe verbs all have in common:\n\nThe first argument is always a data frame.\nThe subsequent arguments typically describe which columns to operate on using the variable names (without quotes).\nThe output is always a new data frame.\n\n\n\nSource: R for Data Science"
+  },
+  {
+    "objectID": "lecture-03.html#dplyr-grammar",
+    "href": "lecture-03.html#dplyr-grammar",
+    "title": "Data Management I",
+    "section": "dplyr grammar",
+    "text": "dplyr grammar\nWhat’s the advantage of dplyr grammar? We can sequence data manipulation!\n\n\n\ngss_all |&gt; \n  select(year, sex, agekdbrn) |&gt;\n  filter(year == 2022) |&gt;\n  drop_na(sex, agekdbrn) |&gt;\n  group_by(sex) |&gt;\n  summarise(avg = mean(agekdbrn))\n\n\n# A tibble: 2 × 2\n  sex          avg\n  &lt;dbl+lbl&gt;  &lt;dbl&gt;\n1 1 [male]    26.3\n2 2 [female]  23.7"
+  },
+  {
+    "objectID": "lecture-03.html#select-filter-and-drop_na",
+    "href": "lecture-03.html#select-filter-and-drop_na",
+    "title": "Data Management I",
+    "section": "select(), filter(), and drop_na()",
+    "text": "select(), filter(), and drop_na()\nUse select() to pick specific columns from your dataset.\nUse filter() to keep rows that meet a condition.\nUse drop_na() to remove rows with missing (NA) values.\n\n\n\n1gss_all |&gt;\n2  select(year, sex, agekdbrn) |&gt;\n3  filter(year == 2022) |&gt;\n4  drop_na(sex, agekdbrn) |&gt;\n\n\n1\n\nStart with the gss_all data frame:\n\n2\n\nKeep only the variables in the dataset that we need.\n\n3\n\nKeep only the respondents from the 2022 survey\n\n4\n\nRemove any observations with missing data for our key variables"
+  },
+  {
+    "objectID": "lecture-03.html#group_by-and-summarize",
+    "href": "lecture-03.html#group_by-and-summarize",
+    "title": "Data Management I",
+    "section": "group_by() and summarize()",
+    "text": "group_by() and summarize()\nUse group_by() to organize your data into groups based on one or more variables.\nUse summarize() to compute statistics like total, mean, or median for each group.\n\n\n\n\n1gss_all |&gt;\n2  select(year, sex, agekdbrn) |&gt;\n3  filter(year == 2022) |&gt;\n4  drop_na(sex, agekdbrn) |&gt;\n5  group_by(sex) |&gt;\n6  summarise(freq = n())\n\n\n\n1\n\nStart with the gss_all data frame:\n\n2\n\nKeep only the variables in the dataset that we need.\n\n3\n\nKeep only the respondents from the 2022 survey\n\n4\n\nRemove any observations with missing data for our key variables\n\n5\n\nDo the next steps separately for each group in the variable\n\n6\n\nCreates a new data frame with one row for each combination of grouping variables\n\n\n\n\n# A tibble: 2 × 2\n  sex         freq\n  &lt;dbl+lbl&gt;  &lt;int&gt;\n1 1 [male]    1031\n2 2 [female]  1363"
+  },
+  {
+    "objectID": "lecture-03.html#dplyr-in-action",
+    "href": "lecture-03.html#dplyr-in-action",
+    "title": "Data Management I",
+    "section": "dplyr() in action",
+    "text": "dplyr() in action\n\n Compare the average and median age at first childbirth for U.S. men and women in 2022.\n\n\n\n\ngss_all |&gt;  \n  select(year, sex, agekdbrn) |&gt; \n  filter(year == 2022) |&gt; \n  drop_na(sex, agekdbrn) |&gt; \n  group_by(sex) |&gt;\n  summarise(\n    freq = n(),\n    avg = mean(agekdbrn),\n    med = median(agekdbrn)\n    ) \n\n\n# A tibble: 2 × 4\n  sex         freq   avg   med\n  &lt;dbl+lbl&gt;  &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;\n1 1 [male]    1031  26.3    25\n2 2 [female]  1363  23.7    23"
+  },
+  {
+    "objectID": "lecture-03.html#mutate-in-action",
+    "href": "lecture-03.html#mutate-in-action",
+    "title": "Data Management I",
+    "section": "mutate() in action",
+    "text": "mutate() in action\nUse mutate() to add new columns or change existing ones.\n\n\n What proportion of new parents were teenagers (e.g., under 18 years old)?\n\n\n1gss_all |&gt;\n  select(year, agekdbrn) |&gt;\n  filter(year == 2022) |&gt;\n2  drop_na(agekdbrn) |&gt;\n3  mutate(teen_parent = (agekdbrn &lt; 18) * 1) |&gt;\n4  summarise(proportion = mean(teen_parent))\n\n\n1\n\nManipulate the dataset to variables and observations of interest\n\n2\n\nRemove missing or summarise() will report NA\n\n3\n\nReturns a logical vector (TRUE, FALSE, or NA) and * 1 converts it to numeric\n\n4\n\nMean of the variable, which equals the proportion of 1s\n\n\n\n\n\n\n# A tibble: 1 × 1\n  proportion\n       &lt;dbl&gt;\n1     0.0773"
+  },
+  {
+    "objectID": "lecture-03.html#mutate-with-case_when",
+    "href": "lecture-03.html#mutate-with-case_when",
+    "title": "Data Management I",
+    "section": "mutate() with case_when()",
+    "text": "mutate() with case_when()\nUse case_when() inside mutate() to create values based on conditions.\n\n\n What proportion of new parents had their first child as teenagers, in their 20s, 30s, or after age 40?\n\n\n\ngss_all &lt;-  gss_all |&gt;  \n  mutate(age_groups = case_when(\n    agekdbrn &lt; 18 ~ \"&lt;18\",\n    agekdbrn &gt;= 18 & agekdbrn &lt;= 29 ~ \"18–29\",\n    agekdbrn &gt;= 30 & agekdbrn &lt;= 39 ~ \"30–39\",\n    agekdbrn &gt;= 40 ~ \"40+\",\n    TRUE ~ NA_character_)\n  ) \n\ngss_all |&gt;\n  filter(year == 2022) |&gt;\n  freq(age_groups, report.nas = FALSE, headings = FALSE)\n\n\n\n              Freq        %   % Cum.\n----------- ------ -------- --------\n        &lt;18    186     7.73     7.73\n      18–29   1704    70.82    78.55\n      30–39    463    19.24    97.80\n        40+     53     2.20   100.00\n      Total   2406   100.00   100.00"
+  },
+  {
+    "objectID": "lecture-03.html#overwriting-data",
+    "href": "lecture-03.html#overwriting-data",
+    "title": "Data Management I",
+    "section": "Overwriting data",
+    "text": "Overwriting data\n\n\n\n Heads Up!\n\n\nOverwriting datasets and variables can be intentional or unintentional.\n\n\n\n\nLet’s make a tiny data frame to use as an example:\n\ndf &lt;- tibble(x = c(1, 2, 3, 4, 5), y = c(\"a\", \"a\", \"b\", \"c\", \"c\"))\ndf\n\n# A tibble: 5 × 2\n      x y    \n  &lt;dbl&gt; &lt;chr&gt;\n1     1 a    \n2     2 a    \n3     3 b    \n4     4 c    \n5     5 c"
+  },
+  {
+    "objectID": "lecture-03.html#assignment-operators-cont",
+    "href": "lecture-03.html#assignment-operators-cont",
+    "title": "Data Management I",
+    "section": "Assignment operators (cont)",
+    "text": "Assignment operators (cont)\nSuppose you run the following and then you inspect df.\n\nWill the x variable have values 1, 2, 3, 4, 5 or 2, 4, 6, 8, 10?\n\n\n\n\n\ndf |&gt;\n  mutate(x = x * 2)\n\n# A tibble: 5 × 2\n      x y    \n  &lt;dbl&gt; &lt;chr&gt;\n1     2 a    \n2     4 a    \n3     6 b    \n4     8 c    \n5    10 c    \n\n\n\n\ndf\n\n# A tibble: 5 × 2\n      x y    \n  &lt;dbl&gt; &lt;chr&gt;\n1     1 a    \n2     2 a    \n3     3 b    \n4     4 c    \n5     5 c    \n\n\n\n\n\nDo something and show me"
+  },
+  {
+    "objectID": "lecture-03.html#assignment-operators-cont-1",
+    "href": "lecture-03.html#assignment-operators-cont-1",
+    "title": "Data Management I",
+    "section": "Assignment operators (cont)",
+    "text": "Assignment operators (cont)\nSuppose you run the following and then you inspect df.\n\nWill the x variable have values 1, 2, 3, 4, 5 or 2, 4, 6, 8, 10?\n\n\n\n\n\ndf &lt;- df |&gt;\n  mutate(x = x * 2)\n\n\n\ndf\n\n# A tibble: 5 × 2\n      x y    \n  &lt;dbl&gt; &lt;chr&gt;\n1     2 a    \n2     4 a    \n3     6 b    \n4     8 c    \n5    10 c    \n\n\n\n\n\nDo something, save result, overwriting original"
+  },
+  {
+    "objectID": "lecture-03.html#assignment-overwriting",
+    "href": "lecture-03.html#assignment-overwriting",
+    "title": "Data Management I",
+    "section": "Assignment: Overwriting",
+    "text": "Assignment: Overwriting\n\n\n\nDo something, save result, overwriting original\n\n\ndf &lt;- tibble(\n  x = c(1, 2, 3, 4, 5), \n  y = c(\"a\", \"a\", \"b\", \"c\", \"c\")\n)\ndf &lt;- df |&gt;\n  mutate(x = x * 2)\ndf\n\n\n\n# A tibble: 5 × 2\n      x y    \n  &lt;dbl&gt; &lt;chr&gt;\n1     2 a    \n2     4 a    \n3     6 b    \n4     8 c    \n5    10 c    \n\n\n\n\nDo something, save result, not overwriting original\n\n\ndf &lt;- tibble(\n  x = c(1, 2, 3, 4, 5), \n  y = c(\"a\", \"a\", \"b\", \"c\", \"c\")\n)\ndf_new &lt;- df |&gt;\n  mutate(x = x * 2)\ndf_new\n\n\n\n# A tibble: 5 × 2\n      x y    \n  &lt;dbl&gt; &lt;chr&gt;\n1     2 a    \n2     4 a    \n3     6 b    \n4     8 c    \n5    10 c"
+  },
+  {
+    "objectID": "lecture-03.html#assignment-overwriting-cont",
+    "href": "lecture-03.html#assignment-overwriting-cont",
+    "title": "Data Management I",
+    "section": "Assignment: Overwriting (cont)",
+    "text": "Assignment: Overwriting (cont)\n\n\n\nDo something, save result, overwriting original when you shouldn’t\n\n\ndf &lt;- tibble(\n  x = c(1, 2, 3, 4, 5), \n  y = c(\"a\", \"a\", \"b\", \"c\", \"c\")\n)\ndf &lt;- df |&gt;\n  group_by(y) |&gt;\n  summarize(mean_x = mean(x))\ndf\n\n# A tibble: 3 × 2\n  y     mean_x\n  &lt;chr&gt;  &lt;dbl&gt;\n1 a        1.5\n2 b        3  \n3 c        4.5\n\n\n\n\nDo something, save result, not overwriting original when you shouldn’t\n\n\ndf &lt;- tibble(\n  x = c(1, 2, 3, 4, 5), \n  y = c(\"a\", \"a\", \"b\", \"c\", \"c\")\n)\ndf_summary &lt;- df |&gt;\n  group_by(y) |&gt;\n  summarize(mean_x = mean(x))\ndf_summary\n\n# A tibble: 3 × 2\n  y     mean_x\n  &lt;chr&gt;  &lt;dbl&gt;\n1 a        1.5\n2 b        3  \n3 c        4.5"
+  },
+  {
+    "objectID": "lecture-03.html#assignment-overwriting-cont-1",
+    "href": "lecture-03.html#assignment-overwriting-cont-1",
+    "title": "Data Management I",
+    "section": "Assignment: Overwriting (cont)",
+    "text": "Assignment: Overwriting (cont)\n\n\n\nDo something, save result, overwriting original\ndata frame\n\n\ndf &lt;- tibble(\n  x = c(1, 2, 3, 4, 5), \n  y = c(\"a\", \"a\", \"b\", \"c\", \"c\")\n)\ndf &lt;- df |&gt;\n  mutate(z = x + 2)\ndf\n\n# A tibble: 5 × 3\n      x y         z\n  &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt;\n1     1 a         3\n2     2 a         4\n3     3 b         5\n4     4 c         6\n5     5 c         7\n\n\n\n\nDo something, save result, overwriting original\ncolumn\n\n\ndf &lt;- tibble(\n  x = c(1, 2, 3, 4, 5), \n  y = c(\"a\", \"a\", \"b\", \"c\", \"c\")\n)\ndf &lt;- df |&gt;\n  mutate(x = x + 2)\ndf\n\n# A tibble: 5 × 2\n      x y    \n  &lt;dbl&gt; &lt;chr&gt;\n1     3 a    \n2     4 a    \n3     5 b    \n4     6 c    \n5     7 c"
+  },
+  {
+    "objectID": "lecture-03.html#assignment-overwriting-cont-2",
+    "href": "lecture-03.html#assignment-overwriting-cont-2",
+    "title": "Data Management I",
+    "section": "Assignment: Overwriting (cont)",
+    "text": "Assignment: Overwriting (cont)\n\n\n\nDo something, save result, not overwriting original.\n\n\ngss_all &lt;-  gss_all |&gt;  \n  mutate(age_groups = case_when(\n    agekdbrn &lt; 18 ~ \"&lt;18\",\n    agekdbrn &gt;= 18 & agekdbrn &lt;= 29 ~ \"18–29\",\n    agekdbrn &gt;= 30 & agekdbrn &lt;= 39 ~ \"30–39\",\n    agekdbrn &gt;= 40 ~ \"40+\",\n    TRUE ~ NA_character_)\n  ) \n\ngss_all |&gt;\n  filter(year == 2022) |&gt;\n  freq(age_groups, report.nas = FALSE, headings = FALSE)\n\n\n\nDo something and show me\n\n\ngss_all |&gt;  \n  select(year, agekdbrn) |&gt; \n  filter(year == 2022) |&gt; \n  drop_na(agekdbrn)  |&gt;\n  mutate(age_groups = case_when(\n    agekdbrn &lt; 18 ~ \"&lt;18\",\n    agekdbrn &gt;= 18 & agekdbrn &lt;= 29 ~ \"18–29\",\n    agekdbrn &gt;= 30 & agekdbrn &lt;= 39 ~ \"30–39\",\n    agekdbrn &gt;= 40 ~ \"40+\",\n    TRUE ~ NA_character_)) |&gt;\n  group_by(age_groups) |&gt;  \n  summarise(\n    count = n(),\n    proportion = round(count / sum(count), 3)\n  )"
+  },
+  {
+    "objectID": "lecture-03.html#median-mode",
+    "href": "lecture-03.html#median-mode",
+    "title": "Data Management I",
+    "section": "Median & Mode",
+    "text": "Median & Mode\nLet’s use dplyr grammar to find the median and mode for the childs variable.\n\n\ngss_all$childs &lt;- zap_missing(gss_all$childs) \ngss_all$childs &lt;- as_factor(gss_all$childs)   \ngss_all$childs &lt;- droplevels(gss_all$childs)  \n\n1gss_all |&gt;\n  filter(year == 2024) |&gt;\n2  freq(childs, report.nas = FALSE) |&gt;\n3  tb()\n\n\n1\n\nUse dplyr grammar, starting with the name of the df and a pipe\n\n2\n\nUse the freq() function as usual\n\n3\n\nAdd the tb() function to turn the table into a tibble\n\n\n\n\n\n\n\nHow many children have you ever had? Please count all that were born alive at any time (including any you had from a previous marriage)."
+  },
+  {
+    "objectID": "lecture-03.html#median-mode-output",
+    "href": "lecture-03.html#median-mode-output",
+    "title": "Data Management I",
+    "section": "Median & Mode",
+    "text": "Median & Mode\n\n# A tibble: 9 × 4\n  childs     freq    pct pct_cum\n  &lt;fct&gt;     &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;\n1 0          1029 31.4      31.4\n2 1           484 14.8      46.2\n3 2           851 26.0      72.1\n4 3           475 14.5      86.6\n5 4           243  7.41     94.0\n6 5            96  2.93     96.9\n7 6            53  1.62     98.6\n8 7            16  0.488    99.1\n9 8 or more    31  0.946   100"
+  },
+  {
+    "objectID": "lecture-03.html#median-mean",
+    "href": "lecture-03.html#median-mean",
+    "title": "Data Management I",
+    "section": "Median & Mean",
+    "text": "Median & Mean\nLet’s use dplyr grammar to find the median and mean for the hrs1 variable.\n\n\n1median(gss_all$hrs1, na.rm=TRUE)\nmean(gss_all$hrs1, na.rm=TRUE)\n\n# show me summary statistics\nsummary(gss_all$hrs1)\n\n\n1\n\nna.rm is a logical evaluating to TRUE or FALSE indicating whether NA values should be stripped before the computation proceeds.\n\n\n\n\n[1] 40\n[1] 41.11279\n   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's \n   0.00   37.00   40.00   41.11   48.00   89.00   32371 \n\n\n\n\nQuestion 1a. If working, full or part time: how many hours did you work last week, at all jobs?"
+  },
+  {
+    "objectID": "lecture-03.html#descr",
+    "href": "lecture-03.html#descr",
+    "title": "Data Management I",
+    "section": "descr()",
+    "text": "descr()\nUnivariate statistics for numerical data\n\n\ngss_all |&gt; \n  filter(year == 2024) |&gt;\n  drop_na(hrs1)  |&gt;\n  descr(hrs1,\n1        stats = \"common\") |&gt;\n2  tb()\n\n\n1\n\nWhich stats to produce. Either “all” (default), “fivenum”, “common” (see Details), or a selection. See ?descr\n\n2\n\nDon’t forget to make a tidy dataset out of freq() or descr() outputs\n\n\n\n\n# A tibble: 1 × 9\n  variable  mean    sd   min   med   max n.valid     n pct.valid\n  &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;\n1 year      39.4  13.9     0    40    89    1768  1768       100\n\n\n\n\n\n\n Heads Up!\n\n\ndescr() can’t handle grouped data. 😟"
+  },
+  {
+    "objectID": "lecture-03.html#summarize",
+    "href": "lecture-03.html#summarize",
+    "title": "Data Management I",
+    "section": "summarize()",
+    "text": "summarize()\n\n\ngss_all |&gt;  \n  select(year, hrs1, sex) |&gt; \n  filter(year == 2024) |&gt; \n  drop_na(hrs1, sex)  |&gt;\n  group_by(as_factor(sex)) |&gt;  \n  summarise(\n    count = n(),\n    min = min(hrs1),\n    median = median(hrs1),\n    max = max(hrs1),\n    mean = round(mean(hrs1), digits = 2), \n    sd = sd(hrs1)\n    ) \n\n\n\n# A tibble: 2 × 7\n  `as_factor(sex)` count min       median max             mean    sd\n  &lt;fct&gt;            &lt;int&gt; &lt;dbl+lbl&gt;  &lt;dbl&gt; &lt;dbl+lbl&gt;      &lt;dbl&gt; &lt;dbl&gt;\n1 male               869 0             40 89 [89+ hours]  41.7  13.7\n2 female             891 0             40 89 [89+ hours]  37.3  13.7"
+  },
+  {
+    "objectID": "lecture-03.html#think-like-a-statistician-1",
+    "href": "lecture-03.html#think-like-a-statistician-1",
+    "title": "Data Management I",
+    "section": "Think Like a Statistician",
+    "text": "Think Like a Statistician\n\n\n Can you reproduce this table?\n\n\n\n# A tibble: 4 × 5\n  childs_group       count  mean median    sd\n  &lt;chr&gt;              &lt;int&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;\n1 1 child              642  39.2     40  13.2\n2 2 children           279  40.1     40  12.8\n3 3 children           437  39.4     40  14.1\n4 4 or more children   396  39.6     40  15.3"
+  },
+  {
+    "objectID": "lecture-03.html#your-data-take",
+    "href": "lecture-03.html#your-data-take",
+    "title": "Data Management I",
+    "section": "Your Data Take",
+    "text": "Your Data Take\n\n\n What’s your conclusion to our research question?"
   }
 ]

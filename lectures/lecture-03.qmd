@@ -50,20 +50,20 @@ scale_colour_discrete <- function(...) scale_color_manual(values = my_palette)
 
 # Agenda {data-menu-title="Agenda" background-image="images/calendar.png" background-size="100px" background-repeat="repeat"}
 
--   `dplyr`
--   Assignment operators
+-   `dplyr` I
 -   Summary Statistics
 
-# Learning objectives 
+# Learning objectives
 
 By the end of the lecture, you will be able to ...
 
--   implement basic variable manipulation
+-   implement some basic variable manipulation
 -   produce measures of central tendency and variability
 
 # Code-along 03 {data-menu-title="Code-along" background-image="images/terminal.png"}
 
-Download and open [code-along-03.qmd](https://app.filen.io/#/d/6a48af14-24e7-4b4f-9590-9621ebe66a1c%23gpEqta93355mnpNJF3Tu630dxHehnQzr)
+Download and open
+[code-along-03.qmd](https://app.filen.io/#/d/6a48af14-24e7-4b4f-9590-9621ebe66a1c%23gpEqta93355mnpNJF3Tu630dxHehnQzr)
 
 ## Packages
 
@@ -91,10 +91,11 @@ data(gss_all)
 
 ```
 
-##  {data-menu-title="`gss_which_years()`"}
+##  {.smaller data-menu-title="`gss_which_years()`"}
 
-We can find which years one or more variables were asked with the
-`gss_which_years()` function.
+Use the `gss_which_years()` function to identify the survey years a variable appeared.  
+
+<br> 
 
 ```{r}
 #| label: which-years
@@ -103,6 +104,8 @@ gss_which_years(gss_all, meovrwrk)
 
 ```
 
+<br>
+
 ::: {.callout-tip icon="false"}
 ## {{< fa hat-wizard >}} Heads Up!
 
@@ -110,86 +113,71 @@ If run in the console, to see all rows, wrap the code in the `print()`
 command: `print(gss_which_years(gss_all, meovrwrk), n = 40)`
 :::
 
+## Mini-task {.sparse-slide}
 
-# `dplyr` {.theme-section}
+::: task
+{{< fa check-double >}} Which survey years did the variable `childs`
+appear?
+:::
 
-## Tidying Data {.smaller}
+<br>  
+
+. . .
+
+```{r}
+#| label: which-years-mini-task
+
+gss_which_years(gss_all, childs)
+
+```
+
+
+# dplyr I {.theme-section}
+
+## Tidying Data {.sparse-slide .smaller}
 
 ::: {style="color: #18bc9c; font-size: 150%; font-family: 'Shadows Into Light'"}
-Most tasks related to data analysis are not glorious or fancy.  
+Most tasks related to data analysis are not glorious or fancy.
 :::
 
 <br>
-  
-A lot of time is dedicated to whipping a dataset into the shape needed to be able to analyze it.  
- 
+
+A lot of time is dedicated to whipping a dataset into the shape needed
+to be able to analyze it.
+
 <br>
-  
-This task has different names “data cleaning,” “data management,” “data manipulation,” “data wrangling,” “data transformation.”  
+
+This task has different names “*data cleaning*,” “*data management*,”
+“*data manipulation*,” “*data wrangling*,” “*data transformation*.”
 
 ::: aside
-Source: [Jasper Dag Tjaden](https://jaspertjaden.github.io/course-intro2r/week3.html)
+Source: [Jasper Dag
+Tjaden](https://jaspertjaden.github.io/course-intro2r/week3.html)
 :::
 
 ## `dplyr` package {.smaller}
 
-The `dplyr` package provides a complete set of functions that help you solve the most common data manipulation challenges such as:  
+The `dplyr` package provides a complete set of functions that help you
+solve the most common data manipulation challenges:
 
--    filtering observations based on their values
--    extracting observations based on their values or positions
--    sampling observations based on a specific number or fraction of rows
--    sorting observations based on one or several variables
--    selecting variables based on their names or positions
--    renaming variables
--    adding new variables based on existing ones
--    summarizing observations or variables to a single descriptive measure
--    performing any operation by group
+-   **filtering** observations based on their values
+-   **extracting** observations based on their values or positions
+-   **sampling** observations based on a specific number or fraction of
+    rows
+-   **sorting** observations based on one or several variables
+-   **selecting** variables based on their names or positions
+-   **renaming** variables
+-   **adding** new variables based on existing ones
+-   **summarizing** observations or variables to a single descriptive
+    measure
+-   performing any operation by **grouping**
 
 ::: aside
-Source: [Antoine Soetewey](https://statsandr.com/blog/introduction-to-data-manipulation-in-r-with-dplyr/)
+Source: [Antoine
+Soetewey](https://statsandr.com/blog/introduction-to-data-manipulation-in-r-with-dplyr/)
 :::
 
-## The pipe `|>` 
-
-<br>
-
-The pipe operator passes what comes before it into the function that comes after it as the first argument in that function.
-
-```{r}
-sum(1, 2)
-```
-
-<br>
-
-. . . 
-
-```{r}
-1 |> 
-  sum(2)
-```
-
-
-## `dplyr` style {.smaller}
-
-In data transformation pipelines, always use a  
-
--   space before `|>` 
--   line break after `|>` 
--   indent the next line of code 
-    
-::: {.smaller}
-We'll talk about data visualization pipes later...
-:::
-
-<br>
-    
-::: {.callout-tip icon="false"}
-## {{< fa hat-wizard >}} Heads Up!
-
-|> (native pipe operator) and %>% (magrittr package) behave identically for simple cases. [More info.]((https://www.tidyverse.org/blog/2023/04/base-vs-magrittr-pipe/))
-:::
-
-## `function`(argument) 
+## `function`(argument) {.sparse-slide}
 
 Functions are (most often) verbs, followed by what they will be applied
 to in parentheses:
@@ -207,39 +195,135 @@ do_that(to_this, to_that, with_those)
 
 <br>
 
-`dplyr` verbs (functions) will allow you to solve the vast majority of your data manipulation challenges.  
+`dplyr` verbs (functions) will allow you to solve the vast majority of
+your data manipulation challenges.
 
 ::: aside
-Source: [Dr. Mine Çetinkaya-Rundel](https://sta199-f24.github.io/slides/01-meet-the-toolkit-slides.html#/functionargument)  
+Source: [Dr. Mine
+Çetinkaya-Rundel](https://sta199-f24.github.io/slides/01-meet-the-toolkit-slides.html#/functionargument)
 :::
 
+## `dplyr` basics {.sparse-slide}
 
-## `dplyr` basics 
-
-::: {.smaller}
-They are organized into four groups based on what they operate on: rows, columns, groups, or tables.  
-:::
+They are organized into four groups based on what they operate on: rows,
+columns, groups, or tables.
 
 <br>
-  
-**The verbs all have in common**:  
 
-1.   The first argument is always a data frame. 
-2.   The subsequent arguments typically describe which columns to operate on using the variable names (without quotes). 
-3.   The output is always a new data frame. 
- 
-::: aside
-Source: [R for Data Science](https://r4ds.hadley.nz/data-transform.html#the-pipe)
+**The verbs all have in common**:
+
+::: {style="font-size: 80%"}
+1.  The first argument is always a data frame.
+2.  The subsequent arguments typically describe which columns to operate
+    on using the variable names (without quotes).
+3.  The output is always a new data frame.
 :::
 
-## `dplyr` grammar
+::: aside
+Source: [R for Data
+Science](https://r4ds.hadley.nz/data-transform.html#the-pipe)
+:::
+
+## The pipe `|>` {.sparse-slide}
+
+The pipe operator passes what comes before it into the function that
+comes after it as the first argument.
+
+<br>
+
+```{r}
+sum(1, 2)
+```
+
+<br>
+
+. . .
+
+```{r}
+1 |> 
+  sum(2)
+```
+
+## `dplyr()` in action
+
+Create a frequency table for `childs` variable.
+
+```{r}
+#| label: median_mode
+#| code-line-numbers: "1-3|5-6|7"
+#| output-location: slide
+
+gss_all$childs <- zap_missing(gss_all$childs) 
+gss_all$childs <- as_factor(gss_all$childs)   
+gss_all$childs <- droplevels(gss_all$childs)  
+
+gss_all |> # <1>
+  freq(childs, report.nas = FALSE) |> # <2>
+  tb() # <3> 
+
+```
+
+1.  Use `dplyr` grammar, starting with the name of the df and a pipe
+2.  Use the `freq()` function as usual
+3.  Add the `tb()` function to turn the table into a `tibble`
+
+::: aside
+How many children have you ever had? Please count all that were born
+alive at any time (including any you had from a previous marriage).
+:::
+
+::: notes
+[What's the mode?]{style="color: #6f42c1"}\
+[What's the mode of parents (childs !=0)]{style="color: #6f42c1"}
+:::
+
+## Mini-task {.sparse-slide}
+
+::: task
+{{< fa check-double >}} Use a `|>` & `gss_which_years()` to find out
+which survey years the variable `agekdbrn` appears.
+:::
+
+. . .
+
+```{r}
+#| label: which-years-pipe
+#| code-line-numbers: "1|2"
+#| output-location: column-fragment
+
+gss_all |>
+  gss_which_years(agekdbrn)
+```
+
+## `dplyr` style {.sparse-slide}
+
+In data transformation pipelines, always use a
+
+-   space before `|>`
+-   line break after `|>`
+-   indent the next line of code
+
+:::: {style="font-size: 80%"}
+We'll talk about data visualization pipes later...
+
+<br>
+
+::: {.callout-tip icon="false"}
+## {{< fa hat-wizard >}} Heads Up!
+
+\|\> (native pipe operator) and %\>% (magrittr package) behave
+identically for simple cases. [More
+info.]((https://www.tidyverse.org/blog/2023/04/base-vs-magrittr-pipe/))
+:::
+::::
+
+## `dplyr` grammar {.sparse-slide}
 
 What's the advantage of
 [`dplyr`](https://cran.r-project.org/web/packages/dplyr/readme/README.html)
 grammar? We can sequence data manipulation!
 
 <br>
-
 
 ```{r}
 #| label: pipe00
@@ -254,16 +338,16 @@ gss_all |>
 
 ```
 
-##  `select()`, `filter()`, and `drop_na()` 
+## `select()`, `filter()`, & `drop_na()` {.sparse-slide}
 
-Use `select()` to pick specific columns from your dataset.  
-Use `filter()` to keep rows that meet a condition.  
-Use `drop_na()` to remove rows with missing (NA) values.  
+Use `select()` to pick specific columns from your dataset.\
+Use `filter()` to keep rows that meet a condition.\
+Use `drop_na()` to remove rows with missing (NA) values.
 
 <br>
 
 . . .
- 
+
 ```{r}
 #| label: pipe01
 #| code-line-numbers: "1|2|3|4"
@@ -272,7 +356,7 @@ Use `drop_na()` to remove rows with missing (NA) values.
 gss_all |>  # <1>
   select(year, sex, agekdbrn) |> # <2>
   filter(year == 2022) |> # <3>
-  drop_na(sex, agekdbrn) |> # <4>
+  drop_na(sex, agekdbrn) # <4>
 
 ```
 
@@ -281,556 +365,289 @@ gss_all |>  # <1>
 3.  Keep only the respondents from the 2022 survey
 4.  Remove any observations with missing data for our key variables
 
+::: notes
+1.  Always start with df.\
+2.  Tell me what this is doing.\
+3.  This row?\
+4.  This row? What's different about this row? (no pipe at end!)\
+:::
 
-##  `group_by()` and  `summarize()` 
-
-Use `group_by()` to organize your data into groups based on one or more variables.  
-Use `summarize()` to compute statistics like total, mean, or median for each group.  
-<br>
-
-. . .
-
-
-```{r}
-#| label: pipe02
-#| code-line-numbers: "5|6"
-#| output-location: column
-
-gss_all |>  # <1>
-  select(year, sex, agekdbrn) |> # <2>
-  filter(year == 2022) |> # <3>
-  drop_na(sex, agekdbrn) |> # <4>
-  group_by(sex) |> # <5>
-  summarise(freq = n()) # <6>
-
-```
-
-1.  Start with the `gss_all` data frame:
-2.  Keep only the variables in the dataset that we need.
-3.  Keep only the respondents from the 2022 survey
-4.  Remove any observations with missing data for our key variables
-5.  Do the next steps separately for each group in the variable
-6.  Creates a new data frame with one row for each combination of grouping variables
-
-
-## `dplyr()` in action
+## Mini-task {.sparse-slide}
 
 ::: task
-{{< fa lightbulb >}} Compare the average and median age at first childbirth for U.S. men and women in 2022.
+{{< fa check-double >}} Create a dataframe with the variables `year`,
+`hrs1`, and `childs` for only the 2024 respondents without missing data
+for `hrs1` and `childs`.
 :::
 
 . . .
 
 ```{r}
-#| label: pipe03
-#| code-line-numbers: "6-7|8|9"
+#| label: pipe01-mini-task
+#| code-line-numbers: "1|2|3|4"
 #| output-location: column-fragment
 
-gss_all |>  
-  select(year, sex, agekdbrn) |> 
-  filter(year == 2022) |> 
-  drop_na(sex, agekdbrn) |> 
-  group_by(sex) |> # <5>
-  summarise(
-    freq = n(),
-    avg = mean(agekdbrn),
-    med = median(agekdbrn)
-    ) 
-
-```
-
-
-## `mutate()` in action 
-
-Use `mutate()` to add new columns or change existing ones.  
-
-. . .
-
-::: task
-{{< fa lightbulb >}} What proportion of new parents were teenagers (e.g., under 18 years old)?
-:::
-
-
-```{r}
-#| label: mutate00
-#| code-line-numbers: "1-4|5|6"
-#| output-location: fragment
-
 gss_all |>  # <1>
-  select(year, agekdbrn) |> # <1>
-  filter(year == 2022) |> # <1>
-  drop_na(agekdbrn) |> # <2>
-  mutate(teen_parent = (agekdbrn < 18) * 1) |> # <3>
-  summarise(proportion = mean(teen_parent)) # <4>
-```
-
-1.  Manipulate the dataset to variables and observations of interest
-2.  Remove missing or `summarise()` will report NA
-3.  Returns a logical vector (TRUE, FALSE, or NA) and * 1 converts it to numeric
-4.  Mean of the variable, which equals the proportion of `1s`
-
-
-## `mutate()` with `case_when()`  {.smaller}
-
-Use `case_when()` inside `mutate()` to create values based on conditions.  
-
-. . .
-
-::: task
-{{< fa lightbulb >}} What proportion of new parents had their first child as teenagers, in their 20s, 30s, or after age 40?
-:::
-
-```{r}
-#| label: mutate01
-#| code-line-numbers: "1|5|6-9|10-11|13"
-#| output-location: column-fragment
-
-gss_all <-  gss_all |>  
-  mutate(age_groups = case_when(
-    agekdbrn < 18 ~ "<18",
-    agekdbrn >= 18 & agekdbrn <= 29 ~ "18–29",
-    agekdbrn >= 30 & agekdbrn <= 39 ~ "30–39",
-    agekdbrn >= 40 ~ "40+",
-    TRUE ~ NA_character_)
-  ) 
-
-gss_all |>
-  filter(year == 2022) |>
-  freq(age_groups, report.nas = FALSE, headings = FALSE)
-```
-
-
-# Assignment operators {.theme-section}
-
-## Overwriting data
-
-::: {.callout-tip icon="false"}
-## {{< fa hat-wizard >}} Heads Up!
-
-Overwriting datasets and variables can be intentional or unintentional.
-:::
-
-<br>
-
-Let's make a tiny data frame to use as an example:
-
-```{r}
-#| label: tibble
-
-df <- tibble(x = c(1, 2, 3, 4, 5), y = c("a", "a", "b", "c", "c"))
-df
-```
-
-
-
-
-## Assignment operators (cont)
-
-Suppose you run the following and **then** you inspect `df`.
-
-::: {style="font-family: 'Shadows Into Light'"}
-Will the `x` variable have values [1, 2, 3, 4, 5]{style="color: #18bc9c"} or [2, 4, 6, 8, 10]{style="color: #F39C12"}?
-:::
-
-<br>
-
-::: columns
-::: column
-```{r}
-#| label: no-assignment
-
-df |>
-  mutate(x = x * 2)
-```
-:::
-
-::: {.column .fragment}
-```{r}
-#| label: no-assignment-results
-df
-```
-:::
-:::
-
-. . .
-
-> **Do something and show me**
-
-
-## Assignment operators (cont)
-
-Suppose you run the following and **then** you inspect `df`.
-
-::: {style="font-family: 'Shadows Into Light'"}
-Will the `x` variable have values [1, 2, 3, 4, 5]{style="color: #18bc9c"} or [2, 4, 6, 8, 10]{style="color: #F39C12"}?
-:::
-
-<br>
-
-::: columns
-::: {.column .fragment}
-```{r}
-#| label: assignment
-
-df <- df |>
-  mutate(x = x * 2)
-```
-:::
-
-::: {.column .fragment}
-```{r}
-#| label: assignment-results
-#| code-line-numbers: "1"
-
-df
-```
-:::
-:::
-
-. . .
-
-> **Do something, save result, overwriting original**
-
-
-## Assignment: Overwriting {.smaller}
-
-::: columns
-::: {.column width="50%"}
-> **Do something, save result, overwriting original**
-
-```{r}
-#| label: overwrite
-#| code-line-numbers: "5-6|7"
-#| output-location: fragment
-
-df <- tibble(
-  x = c(1, 2, 3, 4, 5), 
-  y = c("a", "a", "b", "c", "c")
-)
-df <- df |>
-  mutate(x = x * 2)
-df
-```
-:::
-
-::: {.column .fragment width="50%"}
-> **Do something, save result, *not* overwriting original**
-
-```{r}
-#| label: no-overwrite
-#| code-line-numbers: "5-6|7"
-#| output-location: fragment
-
-df <- tibble(
-  x = c(1, 2, 3, 4, 5), 
-  y = c("a", "a", "b", "c", "c")
-)
-df_new <- df |>
-  mutate(x = x * 2)
-df_new
-```
-:::
-:::
-
-## Assignment: Overwriting (cont) {.smaller}
-
-::: columns
-::: {.column width="50%"}
-> **Do something, save result, overwriting original [when you shouldn't]{style="color: #E74C3C"}**
-
-```{r}
-#| code-line-numbers: "5-8"
-
-df <- tibble(
-  x = c(1, 2, 3, 4, 5), 
-  y = c("a", "a", "b", "c", "c")
-)
-df <- df |>
-  group_by(y) |>
-  summarize(mean_x = mean(x))
-df
-```
-:::
-
-::: {.column .fragment width="50%"}
-> **Do something, save result, [not]{style="color: #18BC9C"} overwriting original [when you shouldn't]{style="color: #18BC9C"}**
-
-```{r}
-#| code-line-numbers: "5-8"
-
-df <- tibble(
-  x = c(1, 2, 3, 4, 5), 
-  y = c("a", "a", "b", "c", "c")
-)
-df_summary <- df |>
-  group_by(y) |>
-  summarize(mean_x = mean(x))
-df_summary
-```
-:::
-:::
-
-
-## Assignment: Overwriting (cont) {.smaller}
-
-::: columns
-::: {.column width="50%"}
-> **Do something, save result, overwriting original**\
-> [***data frame***]{style="color: #18BC9C"}
-
-```{r}
-#| code-line-numbers: "5-6"
-
-df <- tibble(
-  x = c(1, 2, 3, 4, 5), 
-  y = c("a", "a", "b", "c", "c")
-)
-df <- df |>
-  mutate(z = x + 2)
-df
-```
-:::
-
-::: {.column .fragment width="50%"}
-> **Do something, save result, overwriting original**\
-> [***column***]{style="color: #f39c12"}
-
-```{r}
-#| code-line-numbers: "5-6"
-
-df <- tibble(
-  x = c(1, 2, 3, 4, 5), 
-  y = c("a", "a", "b", "c", "c")
-)
-df <- df |>
-  mutate(x = x + 2)
-df
-```
-:::
-:::
-
-## Assignment: Overwriting (cont) {.smaller}
-
-::::: columns
-::: {.column width="50%"}
-> **Do something, save result, not overwriting original.**
-
-```{r}
-#| label: mutateA
-#| code-line-numbers: "2|11"
-#| eval: false
-
-gss_all <-  gss_all |>  
-  mutate(age_groups = case_when(
-    agekdbrn < 18 ~ "<18",
-    agekdbrn >= 18 & agekdbrn <= 29 ~ "18–29",
-    agekdbrn >= 30 & agekdbrn <= 39 ~ "30–39",
-    agekdbrn >= 40 ~ "40+",
-    TRUE ~ NA_character_)
-  ) 
-
-gss_all |>
-  filter(year == 2022) |>
-  freq(age_groups, report.nas = FALSE, headings = FALSE)
-```
-:::
-
-::: {.column .fragment width="50%"}
-> **Do something and show me**
-
-```{r}
-#| label: mutateB
-#| code-line-numbers: "11-14"
-#| eval: false
-
-gss_all |>  
-  select(year, agekdbrn) |> 
-  filter(year == 2022) |> 
-  drop_na(agekdbrn)  |>
-  mutate(age_groups = case_when(
-    agekdbrn < 18 ~ "<18",
-    agekdbrn >= 18 & agekdbrn <= 29 ~ "18–29",
-    agekdbrn >= 30 & agekdbrn <= 39 ~ "30–39",
-    agekdbrn >= 40 ~ "40+",
-    TRUE ~ NA_character_)) |>
-  group_by(age_groups) |>  
-  summarise(
-    count = n(),
-    proportion = round(count / sum(count), 3)
-  )
+  select(year, hrs1, childs) |> 
+  filter(year == 2024) |> 
+  drop_na(hrs1, childs) 
 
 ```
-:::
-:::::
 
 # Summary Statistics {.theme-section}
 
-## Median & Mode
-
-Let's use [dplyr grammar]() to find the median and mode for the `childs` variable.
-
-<br>
+## Median & Mean w base R
 
 ```{r}
-#| label: median_mode
-#| code-line-numbers: "1-3|5-6|7|8"
-#| output-location: slide
+#| label: median
+#| output-location: column-fragment
 
-gss_all$childs <- zap_missing(gss_all$childs) 
-gss_all$childs <- as_factor(gss_all$childs)   
-gss_all$childs <- droplevels(gss_all$childs)  
-
-gss_all |> # <1>
-  filter(year == 2024) |> # <1>
-  freq(childs, report.nas = FALSE) |> # <2>
-  tb() # <3> 
-
-```
-
-1.  Use `dplyr` grammar, starting with the name of the df and a pipe
-2.  Use the `freq()` function as usual
-3.  Add the `tb()` function to turn the table into a `tibble`
-
-::: aside
-How many children have you ever had? 
-Please count all that were born alive at any time (including any you had from a previous marriage).
-:::
-
-
-## Median & Mean
-
-Let's use [dplyr grammar]() to find the median and mean for the `hrs1` variable.
-
-<br>
-
-```{r}
-#| label: mean-median
-#| code-line-numbers: "1-2|4"
-
-median(gss_all$hrs1, na.rm=TRUE) # <1>
-mean(gss_all$hrs1, na.rm=TRUE)   # <1>
-
-# show me summary statistics
-summary(gss_all$hrs1)
-
+# Using base R
+median(gss_all$agekdbrn, na.rm=TRUE) # <1>
 ```
 
 1.  `na.rm` is a logical evaluating to TRUE or FALSE indicating whether
     NA values should be stripped before the computation proceeds.
+
+<br>
+
+```{r}
+#| label: mean
+#| output-location: column-fragment
+
+mean(gss_all$agekdbrn, na.rm=TRUE)
+```
+
+<br>
+
+```{r}
+#| label: summary
+#| output-location: fragment
+
+# show me summary statistics
+summary(gss_all$agekdbrn)
+```
 
 ::: aside
 Question 1a. If working, full or part time: how many hours did you work
 last week, at all jobs?
 :::
 
-## `descr()`
+## Mini-task {.sparse-slide}
 
-Univariate statistics for numerical data
+::: task
+{{< fa check-double >}} Find the mean and median for the variable:
+`hrs1`.
+:::
+
+. . .
+
+```{r}
+#| label: summary-mini-task
+#| code-line-numbers: "2-3|6"
+#| output-location: fragment
+
+# separately
+median(gss_all$hrs1, na.rm=TRUE) # <1>
+mean(gss_all$hrs1, na.rm=TRUE)
+
+# together
+summary(gss_all$hrs1)
+```
+
+## `summarise()` {.sparse-slide}
+
+Use functions inside `summarise()` to create summary variables.
 
 <br>
 
 ```{r}
-#| label: descr01
-#| code-line-numbers: "1-3|4-5|6"
+#| label: pipe02
+#| code-line-numbers: "1-2|3|4|5"
+#| output-location: column-fragment
 
-gss_all |> 
-  filter(year == 2024) |>
-  drop_na(hrs1)  |>
-  descr(hrs1,
-        stats = "common") |> # <1>
-  tb() # <2>
+gss_all |>  
+  drop_na(agekdbrn) |>
+   summarise(
+    avg = mean(agekdbrn)
+    ) 
+```
+
+## Median & Mean with `dplyr` {.sparse-slide}
+
+Use [dplyr grammar]() to find the frequency, mean, and median.  
+
+<br>
+
+Add lots of summary variables using functions inside `summarise()`.  
+
+. . .
+
+```{r}
+#| label: pipe03-b
+#| code-line-numbers: "1-2|3|4|5|6-7"
+#| output-location: column-fragment
+
+gss_all |>  
+  drop_na(agekdbrn) |> 
+  summarise(
+    freq = n(), # <1>
+    avg = mean(hrs1), # <2>
+    med = median(hrs1) # <3>
+    ) 
 
 ```
 
-1.  Which stats to produce. Either “all” (default), “fivenum”, “common”
-    (see Details), or a selection. See ?descr
-2.  Don't forget to make a tidy dataset out of freq() or descr() outputs
-    
-<br> 
+1.  Use `n()` function to create a count variable (no variable in parentheses)
+2.  Use `mean()` function on a variable
+3.  Use `median()` function on a variable
 
-::: {.callout-tip icon="false"}
-## {{< fa hat-wizard >}} Heads Up!
-
-`descr()` can't handle grouped data. 😟
+::: notes
+A common pipeline is `group_by()` and then `summarize()` to calculate
+summary statistics for each group:
 :::
-    
-## `summarize()`
+
+
+
+## Mini-task {.sparse-slide}
+
+::: task
+{{< fa check-double >}} Use `dplyr` grammar to find the frequency, mean,
+and median for the variable: `hrs1`.
+:::
+
+. . .
+
+```{r}
+#| label: pipe02-mini-task
+#| code-line-numbers: "1|2|3|4-7"
+#| output-location: column-fragment
+
+gss_all |>  
+  drop_na(hrs1) |>
+   summarise(
+    freq = n(),
+    avg = mean(hrs1),
+    med = median(hrs1)
+    ) 
+```
+
+## `group_by()` and `summarize()` {.sparse-slide}
+
+Use `group_by()` to organize your data into groups based on one or more
+variables.\
+Use `summarize()` to compute statistics like total, mean, or median for
+each group.\
+<br>
+
+. . .
+
+```{r}
+#| label: pipe03-a
+#| code-line-numbers: "1-2|3|4"
+#| output-location: column-fragment
+
+gss_all |>  # <1>
+  drop_na(sex, agekdbrn) |> # <2>
+  group_by(sex) |> # <3>
+  summarise(avg = mean(agekdbrn)) # <4>
+
+```
+
+1.  Start with the `gss_all` data frame:
+2.  Remove any observations with missing data for our key variables
+3.  Do the next steps separately for each group in the variable
+4.  Creates a new data frame with one row for each combination of
+    grouping variables
+
+::: notes
+A common pipeline is `group_by()` and then `summarize()` to calculate
+summary statistics for each group:
+:::
+
+## Mini-task {.sparse-slide}
+
+::: task
+{{< fa lightbulb >}} Compare the average and median work hours (`hrs`)
+for U.S. men and women.
+:::
+
+. . .
+
+```{r}
+#| label: pipe03-mini-task
+#| code-line-numbers: "1-3|4|5-7"
+#| output-location: column-fragment
+
+gss_all |>  
+  drop_na(sex, hrs1) |> 
+  group_by(sex) |> 
+  summarise(
+    avg = mean(hrs1),
+    med = median(hrs1)
+    ) 
+
+```
+
+
+## `summarize()` + variability measures
 
 <br>
 
 ```{r}
 #| label: summarize
-#| code-line-numbers: "1-4|5|6-7|8-10|11-12|13"
+#| code-line-numbers: "1-4|5|6|7|8|9|10-11"
 #| output-location: fragment
 
 gss_all |>  
-  select(year, hrs1, sex) |> 
-  filter(year == 2024) |> 
-  drop_na(hrs1, sex)  |>
+  drop_na(agekdbrn, sex)  |>
   group_by(as_factor(sex)) |>  
   summarise(
-    count = n(),
-    min = min(hrs1),
-    median = median(hrs1),
-    max = max(hrs1),
-    mean = round(mean(hrs1), digits = 2), 
-    sd = sd(hrs1)
+    freq = n(),
+    min = min(agekdbrn),
+    median = median(agekdbrn),
+    max = max(agekdbrn),
+    mean = round(mean(agekdbrn), digits = 2), 
+    sd = sd(agekdbrn)
     ) 
 
 ```
 
-    
-    
-# Think Like a Statistician {background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
+# Think Like a Statistician {.sparse-slide background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
 
-On average, in 2024, did parents with 4 or more kids work fewer hours for pay than other parents?
+How did the mean and standard deviation of weekly work hours differ between men and women in 2024, and what do these differences suggest about gender-based variability in labor patterns?
 
 <br>
 
 [{{< fa regular lightbulb >}} **How do we find
 out?**]{style="color: #F39C12; font-size: 175%; font-family: 'Shadows Into Light'"}
 
-## Think Like a Statistician {background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
-
-<br>
+## Think Like a Statistician {.sparse-slide background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
 
 ::: {style="color: #f39c12; font-size: 200%;  font-family: 'Shadows Into Light'"}
-{{< fa regular lightbulb >}} **Can you reproduce this table?**
+{{< fa regular lightbulb >}} **Can you produce this table?**
 :::
 
 ```{r}
 #| label: think-output
 #| echo: false
 
-gss_all$childs <- as.numeric(gss_all$childs)
-
-gss_all |> 
+gss_all |>  
   filter(year == 2024) |>
-  select(year, childs, hrs1) |>
-  mutate(childs_group = case_when(
-    childs == 1 ~ "1 child",
-    childs == 2 ~ "2 children",
-    childs == 3 ~ "3 children",
-    childs >= 4 ~ "4 or more children",
-    TRUE ~ NA_character_)) |>
-  drop_na(childs_group, hrs1) |>
-  group_by(childs_group) |>  
+  drop_na(hrs1, sex)  |>
+  group_by(as_factor(sex)) |>  
   summarise(
-    count = n(),
     mean = round(mean(hrs1), digits = 2), 
-    median = round(median(hrs1)),
     sd = round(sd(hrs1), digits = 2)
     ) 
-```
 
+```
 
 ## Your Data Take {data-menu-title="Your Data Take" background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
 
 <br>
 
 ::: {style="color: #f39c12; font-size: 175%; font-family: 'Shadows Into Light'"}
-{{< fa regular lightbulb >}} **What's your conclusion to our research question?**
+{{< fa regular lightbulb >}} **What's your conclusion to our research
+question?**
 :::
-
-
-    

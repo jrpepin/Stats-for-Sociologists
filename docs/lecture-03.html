@@ -561,7 +561,7 @@
 <span id="cb15-2"><a href=""></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2022</span>) <span class="sc">|&gt;</span></span>
 <span id="cb15-3"><a href=""></a>  <span class="fu">drop_na</span>(sex, agekdbrn) <span class="sc">|&gt;</span></span>
 <span id="cb15-4"><a href=""></a>  <span class="fu">group_by</span>(sex) <span class="sc">|&gt;</span></span>
-<span id="cb15-5"><a href=""></a>  <span class="fu">summarise</span>(<span class="at">avg =</span> <span class="fu">mean</span>(agekdbrn))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb15-5"><a href=""></a>  <span class="fu">summarize</span>(<span class="at">avg =</span> <span class="fu">mean</span>(agekdbrn))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div><div class="column">
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 2
@@ -730,15 +730,15 @@ Use <code>drop_na()</code> to remove rows with missing (NA) values.</p>
 </div>
 </div>
 </section>
-<section id="summarise" class="slide level2 sparse-slide">
-<h2><code>summarise()</code></h2>
-<p>Use functions inside <code>summarise()</code> to create summary variables.</p>
+<section id="summarize" class="slide level2 sparse-slide">
+<h2><code>summarize()</code></h2>
+<p>Use functions inside <code>summarize()</code> to create summary variables.</p>
 <p><br></p>
 <div class="cell columns column-output-location">
 <div class="column">
 <div class="sourceCode cell-code" id="cb26" data-code-line-numbers="1-2|3|4|5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href=""></a>gss_all <span class="sc">|&gt;</span>  </span>
 <span id="cb26-2"><a href=""></a>  <span class="fu">drop_na</span>(agekdbrn) <span class="sc">|&gt;</span></span>
-<span id="cb26-3"><a href=""></a>   <span class="fu">summarise</span>(</span>
+<span id="cb26-3"><a href=""></a>   <span class="fu">summarize</span>(</span>
 <span id="cb26-4"><a href=""></a>    <span class="at">avg =</span> <span class="fu">mean</span>(agekdbrn)</span>
 <span id="cb26-5"><a href=""></a>    ) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div><div class="column fragment">
@@ -754,13 +754,13 @@ Use <code>drop_na()</code> to remove rows with missing (NA) values.</p>
 <h2>Median &amp; Mean with <code>dplyr</code></h2>
 <p>Use <a href="" target="_blank">dplyr grammar</a> to find the frequency, mean, and median.</p>
 <p><br></p>
-<p>Add lots of summary variables using functions inside <code>summarise()</code>.</p>
+<p>Add lots of summary variables using functions inside <code>summarize()</code>.</p>
 <div class="fragment">
 <div class="cell columns column-output-location">
 <div class="column">
 <div class="sourceCode cell-code" id="annotated-cell-18" data-code-line-numbers="1-2|3|4|5|6-7"><pre class="sourceCode numberSource r code-annotation-code number-lines code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-18-1"><a href="#annotated-cell-18-1"></a>gss_all <span class="sc">|&gt;</span>  </span>
 <span id="annotated-cell-18-2"><a href="#annotated-cell-18-2"></a>  <span class="fu">drop_na</span>(agekdbrn) <span class="sc">|&gt;</span> </span>
-<span id="annotated-cell-18-3"><a href="#annotated-cell-18-3"></a>  <span class="fu">summarise</span>(</span>
+<span id="annotated-cell-18-3"><a href="#annotated-cell-18-3"></a>  <span class="fu">summarize</span>(</span>
 <button class="code-annotation-anchor" data-target-cell="annotated-cell-18" data-target-annotation="1">1</button><span id="annotated-cell-18-4" class="code-annotation-target"><a href="#annotated-cell-18-4"></a>    <span class="at">freq =</span> <span class="fu">n</span>(),</span>
 <button class="code-annotation-anchor" data-target-cell="annotated-cell-18" data-target-annotation="2">2</button><span id="annotated-cell-18-5" class="code-annotation-target"><a href="#annotated-cell-18-5"></a>    <span class="at">med =</span> <span class="fu">median</span>(agekdbrn),</span>
 <button class="code-annotation-anchor" data-target-cell="annotated-cell-18" data-target-annotation="3">3</button><span id="annotated-cell-18-6" class="code-annotation-target"><a href="#annotated-cell-18-6"></a>    <span class="at">avg =</span> <span class="fu">mean</span>(agekdbrn)</span>
@@ -801,7 +801,7 @@ Use <code>drop_na()</code> to remove rows with missing (NA) values.</p>
 <div class="column">
 <div class="sourceCode cell-code" id="cb29" data-code-line-numbers="1|2|3|4-7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href=""></a>gss_all <span class="sc">|&gt;</span>  </span>
 <span id="cb29-2"><a href=""></a>  <span class="fu">drop_na</span>(hrs1) <span class="sc">|&gt;</span></span>
-<span id="cb29-3"><a href=""></a>   <span class="fu">summarise</span>(</span>
+<span id="cb29-3"><a href=""></a>   <span class="fu">summarize</span>(</span>
 <span id="cb29-4"><a href=""></a>    <span class="at">freq =</span> <span class="fu">n</span>(),</span>
 <span id="cb29-5"><a href=""></a>    <span class="at">med =</span> <span class="fu">median</span>(hrs1),</span>
 <span id="cb29-6"><a href=""></a>    <span class="at">avg =</span> <span class="fu">mean</span>(hrs1)</span>
@@ -827,7 +827,7 @@ Use <code>summarize()</code> to compute statistics like total, mean, or median f
 <div class="sourceCode cell-code" id="annotated-cell-20" data-code-line-numbers="1-2|3|4"><pre class="sourceCode numberSource r code-annotation-code number-lines code-with-copy code-annotated"><code class="sourceCode r"><button class="code-annotation-anchor" data-target-cell="annotated-cell-20" data-target-annotation="1">1</button><span id="annotated-cell-20-1" class="code-annotation-target"><a href="#annotated-cell-20-1"></a>gss_all <span class="sc">|&gt;</span></span>
 <button class="code-annotation-anchor" data-target-cell="annotated-cell-20" data-target-annotation="2">2</button><span id="annotated-cell-20-2" class="code-annotation-target"><a href="#annotated-cell-20-2"></a>  <span class="fu">drop_na</span>(sex, agekdbrn) <span class="sc">|&gt;</span></span>
 <button class="code-annotation-anchor" data-target-cell="annotated-cell-20" data-target-annotation="3">3</button><span id="annotated-cell-20-3" class="code-annotation-target"><a href="#annotated-cell-20-3"></a>  <span class="fu">group_by</span>(sex) <span class="sc">|&gt;</span></span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-20" data-target-annotation="4">4</button><span id="annotated-cell-20-4" class="code-annotation-target"><a href="#annotated-cell-20-4"></a>  <span class="fu">summarise</span>(<span class="at">avg =</span> <span class="fu">mean</span>(agekdbrn))</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-20" data-target-annotation="4">4</button><span id="annotated-cell-20-4" class="code-annotation-target"><a href="#annotated-cell-20-4"></a>  <span class="fu">summarize</span>(<span class="at">avg =</span> <span class="fu">mean</span>(agekdbrn))</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div><div class="column fragment">
 <div class="cell-annotation">
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
@@ -883,7 +883,7 @@ Use <code>summarize()</code> to compute statistics like total, mean, or median f
 <div class="sourceCode cell-code" id="cb32" data-code-line-numbers="1-3|4|5-7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href=""></a>gss_all <span class="sc">|&gt;</span>  </span>
 <span id="cb32-2"><a href=""></a>  <span class="fu">drop_na</span>(sex, hrs1) <span class="sc">|&gt;</span> </span>
 <span id="cb32-3"><a href=""></a>  <span class="fu">group_by</span>(sex) <span class="sc">|&gt;</span> </span>
-<span id="cb32-4"><a href=""></a>  <span class="fu">summarise</span>(</span>
+<span id="cb32-4"><a href=""></a>  <span class="fu">summarize</span>(</span>
 <span id="cb32-5"><a href=""></a>    <span class="at">avg =</span> <span class="fu">mean</span>(hrs1),</span>
 <span id="cb32-6"><a href=""></a>    <span class="at">med =</span> <span class="fu">median</span>(hrs1)</span>
 <span id="cb32-7"><a href=""></a>    ) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -904,7 +904,7 @@ Use <code>summarize()</code> to compute statistics like total, mean, or median f
 <div class="sourceCode cell-code" id="cb34" data-code-line-numbers="1-4|5|6|7|8|9|10-11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href=""></a>gss_all <span class="sc">|&gt;</span>  </span>
 <span id="cb34-2"><a href=""></a>  <span class="fu">drop_na</span>(agekdbrn, sex)  <span class="sc">|&gt;</span></span>
 <span id="cb34-3"><a href=""></a>  <span class="fu">group_by</span>(<span class="fu">as_factor</span>(sex)) <span class="sc">|&gt;</span>  </span>
-<span id="cb34-4"><a href=""></a>  <span class="fu">summarise</span>(</span>
+<span id="cb34-4"><a href=""></a>  <span class="fu">summarize</span>(</span>
 <span id="cb34-5"><a href=""></a>    <span class="at">freq =</span> <span class="fu">n</span>(),</span>
 <span id="cb34-6"><a href=""></a>    <span class="at">min =</span> <span class="fu">min</span>(agekdbrn),</span>
 <span id="cb34-7"><a href=""></a>    <span class="at">median =</span> <span class="fu">median</span>(agekdbrn),</span>

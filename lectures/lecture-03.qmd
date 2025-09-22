@@ -249,7 +249,7 @@ sum(1, 2)
 Create a frequency table for `childs` variable.
 
 ```{r}
-#| label: median_mode
+#| label: freq-tb
 #| code-line-numbers: "1-3|5-6|7"
 #| output-location: slide
 
@@ -330,7 +330,6 @@ grammar? We can sequence data manipulation!
 #| output-location: column
 
 gss_all |> 
-  select(year, sex, agekdbrn) |>
   filter(year == 2022) |>
   drop_na(sex, agekdbrn) |>
   group_by(sex) |>
@@ -338,9 +337,8 @@ gss_all |>
 
 ```
 
-## `select()`, `filter()`, & `drop_na()` {.sparse-slide}
+## `filter()` & `drop_na()` {.sparse-slide}
 
-Use `select()` to pick specific columns from your dataset.\
 Use `filter()` to keep rows that meet a condition.\
 Use `drop_na()` to remove rows with missing (NA) values.
 
@@ -351,19 +349,18 @@ Use `drop_na()` to remove rows with missing (NA) values.
 ```{r}
 #| label: pipe01
 #| code-line-numbers: "1|2|3|4"
-#| eval: false
 
 gss_all |>  # <1>
-  select(year, sex, agekdbrn) |> # <2>
-  filter(year == 2022) |> # <3>
-  drop_na(sex, agekdbrn) # <4>
+  filter(year == 2022) |> # <2>
+  drop_na(sex, agekdbrn)|> # <3>
+  count(sex) # <4>
 
 ```
 
 1.  Start with the `gss_all` data frame:
-2.  Keep only the variables in the dataset that we need.
-3.  Keep only the respondents from the 2022 survey
-4.  Remove any observations with missing data for our key variables
+2.  Keep only the respondents from the 2022 survey
+3.  Remove any observations with missing data for our key variables
+4.  Tally how many complete entries remain for each gender
 
 ::: notes
 1.  Always start with df.\
@@ -375,9 +372,9 @@ gss_all |>  # <1>
 ## Mini-task {.sparse-slide}
 
 ::: task
-{{< fa check-double >}} Create a dataframe with the variables `year`,
+{{< fa check-double >}} Create a dataframe with the variables `year`, `sex`,
 `hrs1`, and `childs` for only the 2024 respondents without missing data
-for `hrs1` and `childs`.
+for `sex`, `hrs1`, and `childs`.
 :::
 
 . . .
@@ -387,10 +384,10 @@ for `hrs1` and `childs`.
 #| code-line-numbers: "1|2|3|4"
 #| output-location: column-fragment
 
-gss_all |>  # <1>
-  select(year, hrs1, childs) |> 
+gss_all |> 
   filter(year == 2024) |> 
-  drop_na(hrs1, childs) 
+  drop_na(sex, hrs1, childs) |>
+  count(sex)
 
 ```
 
@@ -406,8 +403,8 @@ gss_all |>  # <1>
 median(gss_all$agekdbrn, na.rm=TRUE) # <1>
 ```
 
-1.  `na.rm` is a logical evaluating to TRUE or FALSE indicating whether
-    NA values should be stripped before the computation proceeds.
+1.  `na.rm` is a logical evaluating to `TRUE` or `FALSE` indicating whether
+    `NA` values should be stripped before the computation proceeds.
 
 <br>
 
@@ -462,7 +459,7 @@ Use functions inside `summarise()` to create summary variables.
 <br>
 
 ```{r}
-#| label: pipe02
+#| label: pipe02-a
 #| code-line-numbers: "1-2|3|4|5"
 #| output-location: column-fragment
 
@@ -484,7 +481,7 @@ Add lots of summary variables using functions inside `summarise()`.
 . . .
 
 ```{r}
-#| label: pipe03-b
+#| label: pipe02-b
 #| code-line-numbers: "1-2|3|4|5|6-7"
 #| output-location: column-fragment
 
@@ -492,20 +489,15 @@ gss_all |>
   drop_na(agekdbrn) |> 
   summarise(
     freq = n(), # <1>
-    avg = mean(hrs1), # <2>
-    med = median(hrs1) # <3>
+    med = median(agekdbrn), # <2>
+    avg = mean(agekdbrn) # <3>
     ) 
 
 ```
 
 1.  Use `n()` function to create a count variable (no variable in parentheses)
-2.  Use `mean()` function on a variable
-3.  Use `median()` function on a variable
-
-::: notes
-A common pipeline is `group_by()` and then `summarize()` to calculate
-summary statistics for each group:
-:::
+2.  Use `median()` function on a variable
+3.  Use `mean()` function on a variable
 
 
 
@@ -527,8 +519,8 @@ gss_all |>
   drop_na(hrs1) |>
    summarise(
     freq = n(),
-    avg = mean(hrs1),
-    med = median(hrs1)
+    med = median(hrs1),
+    avg = mean(hrs1)
     ) 
 ```
 
@@ -543,7 +535,7 @@ each group.\
 . . .
 
 ```{r}
-#| label: pipe03-a
+#| label: pipe03
 #| code-line-numbers: "1-2|3|4"
 #| output-location: column-fragment
 
@@ -590,9 +582,7 @@ gss_all |>
 ```
 
 
-## `summarize()` + variability measures
-
-<br>
+## `summarize()` + variability measures {.sparse-slide}
 
 ```{r}
 #| label: summarize

@@ -25,6 +25,225 @@ library(gssrdoc)
 library(summarytools)
 ```
 
+## `mutate()` in action
+
+Use `mutate()` to add new columns or change existing ones.
+
+**What proportion of new parents were teenagers (e.g., under 18 years
+old)?**
+
+```{r}
+#| label: mutate00
+
+gss_all |>  # <1>
+  select(year, agekdbrn) |> 
+  filter(year == 2022) |> 
+  drop_na(agekdbrn) |> 
+  mutate(teen_parent = (agekdbrn < 18) * 1) |> 
+  summarise(proportion = mean(teen_parent)) 
+```
+
+Use `case_when()` inside `mutate()` to create values based on
+conditions.
+
+**What proportion of new parents had their first child as teenagers, in
+their 20s, 30s, or after age 40?**
+
+```{r}
+#| label: mutate01
+
+gss_all <-  gss_all |>  
+  mutate(age_groups = case_when(
+    agekdbrn < 18 ~ "<18",
+    agekdbrn >= 18 & agekdbrn <= 29 ~ "18–29",
+    agekdbrn >= 30 & agekdbrn <= 39 ~ "30–39",
+    agekdbrn >= 40 ~ "40+",
+    TRUE ~ NA_character_)
+  ) 
+
+gss_all |>
+  filter(year == 2022) |>
+  freq(age_groups, report.nas = FALSE, headings = FALSE)
+```
+
+## Assignment operators
+
+Let's make a tiny data frame to use as an example:
+
+```{r}
+#| label: tibble
+
+df <- tibble(x = c(1, 2, 3, 4, 5), y = c("a", "a", "b", "c", "c"))
+df
+```
+
+```{r}
+#| label: no-assignment
+
+df |>
+  mutate(x = x * 2)
+```
+
+```{r}
+#| label: no-assignment-results
+df
+```
+
+```{r}
+ #| label: assignment
+
+df <- df |>
+   mutate(x = x * 2)
+```
+
+```{r}
+#| label: assignment-results
+
+df
+```
+
+**Do something, save result, overwriting original**
+
+```{r}
+#| label: overwrite
+
+df <- tibble(
+  x = c(1, 2, 3, 4, 5), 
+  y = c("a", "a", "b", "c", "c")
+)
+
+df <- df |>
+  mutate(x = x * 2)
+
+df
+```
+
+**Do something, save result, *not* overwriting original**
+
+```{r}
+#| label: no-overwrite
+
+df <- tibble(
+  x = c(1, 2, 3, 4, 5), 
+  y = c("a", "a", "b", "c", "c")
+)
+
+df_new <- df |>
+  mutate(x = x * 2)
+
+df_new
+```
+
+**Do something, save result, overwriting original [when you
+shouldn't]{style="color: #E74C3C"}**
+
+```{r}
+#| label: overwrite-bad
+
+df <- tibble(
+  x = c(1, 2, 3, 4, 5), 
+  y = c("a", "a", "b", "c", "c")
+)
+
+df <- df |>
+  group_by(y) |>
+  summarize(mean_x = mean(x))
+
+df
+```
+
+**Do something, save result, [not]{style="color: #18BC9C"} overwriting
+original [when you shouldn't]{style="color: #18BC9C"}**
+
+```{r}
+#| label: no-overwrite-good
+
+df <- tibble(
+  x = c(1, 2, 3, 4, 5), 
+  y = c("a", "a", "b", "c", "c")
+)
+
+df_summary <- df |>
+  group_by(y) |>
+  summarize(mean_x = mean(x))
+
+df_summary
+```
+
+**Do something, save result, overwriting original [data
+frame]{style="color: #18BC9C"}**
+
+```{r}
+#| label: overwrite-good
+
+df <- tibble(
+  x = c(1, 2, 3, 4, 5), 
+  y = c("a", "a", "b", "c", "c")
+)
+df <- df |>
+  mutate(z = x + 2)
+df
+```
+
+**Do something, save result, overwriting original
+[column]{style="color: #f39c12"}**
+
+```{r}
+#| label: overwrite-okay
+
+df <- tibble(
+  x = c(1, 2, 3, 4, 5), 
+  y = c("a", "a", "b", "c", "c")
+)
+df <- df |>
+  mutate(x = x + 2)
+df
+```
+
+**Do something, save result, not overwriting original.**
+
+```{r}
+#| label: mutateA
+#| eval: false
+
+gss_all <-  gss_all |>  
+  mutate(age_groups = case_when(
+    agekdbrn < 18 ~ "<18",
+    agekdbrn >= 18 & agekdbrn <= 29 ~ "18–29",
+    agekdbrn >= 30 & agekdbrn <= 39 ~ "30–39",
+    agekdbrn >= 40 ~ "40+",
+    TRUE ~ NA_character_)
+  ) 
+
+gss_all |>
+  filter(year == 2022) |>
+  freq(age_groups, report.nas = FALSE, headings = FALSE)
+```
+
+**Do something and show me**
+
+```{r}
+#| label: mutateB
+#| eval: false
+
+gss_all |>  
+  select(year, agekdbrn) |> 
+  filter(year == 2022) |> 
+  drop_na(agekdbrn)  |>
+  mutate(age_groups = case_when(
+    agekdbrn < 18 ~ "<18",
+    agekdbrn >= 18 & agekdbrn <= 29 ~ "18–29",
+    agekdbrn >= 30 & agekdbrn <= 39 ~ "30–39",
+    agekdbrn >= 40 ~ "40+",
+    TRUE ~ NA_character_)) |>
+  group_by(age_groups) |>  
+  summarise(
+    count = n(),
+    proportion = round(count / sum(count), 3)
+  )
+
+```
+
 ## GSS Panel Data: Download
 
 <https://gss.norc.org/get-the-data/stata>

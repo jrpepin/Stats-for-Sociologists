@@ -51,8 +51,8 @@ scale_colour_discrete <- function(...) scale_color_manual(values = my_palette)
 
 # Agenda {data-menu-title="Agenda" background-image="images/calendar.png" background-size="100px" background-repeat="repeat"}
 
--   Manipulating Dataframes
--   Joining Dataframes
+-   `dplyr` II
+-   Assignment operators
 
 ::: notes
 missing data? & **outliers** - dates? - lists
@@ -62,9 +62,8 @@ missing data? & **outliers** - dates? - lists
 
 By the end of the lecture, you will be able to ...
 
--   Setup relative file paths for reproducible projects
--   Reshape data between wide and long formats 
--   Reorder columns and rows
+-   implement more basic variable manipulation
+-   YY
 
 # Code-along 04 {data-menu-title="Code-along" background-image="images/terminal.png"}
 
@@ -72,27 +71,12 @@ Download and open [code-along-04.qmd](https://app.filen.io/#/d/3de917ac-ea8c-48a
 
 ## Packages {.sparse-slide}
 
-Install the
-[`here()`](https://cran.r-project.org/web/packages/summarytools/vignettes/introduction.html)
-package, available on CRAN.
-
-```{r}
-#| message: false
-#| label: summarytools
-#| eval: false
-
-install.packages("here")
-```
-
-<br>
-
-Load the standard packages and our new `here()` package.
+Load the standard packages.
 
 ```{r}
 #| message: false
 #| label: load
 
-library(here)
 library(tidyverse) 
 library(haven) # not core tidyverse
 library(gssr)
@@ -100,709 +84,385 @@ library(gssrdoc)
 library(summarytools)
 ```
 
-## GSS Panel Data: Download
+# dplyr II {.theme-section}
 
-<https://gss.norc.org/get-the-data/stata>
 
-<br>
+## `mutate()` 
 
-![](images/04/gss-panel.png){width="100%"}
+Use `mutate()` to add new columns or change existing ones.  
+
+. . .
+
+::: task
+{{< fa lightbulb >}} What proportion of new parents were teenagers (e.g., under 18 years old)?
+:::
+
+
+```{r}
+#| label: mutate00
+#| code-line-numbers: "1-4|5|6"
+#| output-location: fragment
+
+gss_all |>  # <1>
+  select(year, agekdbrn) |> # <1>
+  filter(year == 2022) |> # <1>
+  drop_na(agekdbrn) |> # <2>
+  mutate(teen_parent = (agekdbrn < 18) * 1) |> # <3>
+  summarise(proportion = mean(teen_parent)) # <4>
+```
+
+1.  Manipulate the dataset to variables and observations of interest
+2.  Remove missing or `summarise()` will report NA
+3.  Returns a logical vector (TRUE, FALSE, or NA) and * 1 converts it to numeric
+4.  Mean of the variable, which equals the proportion of `1s`
+
+
+## `mutate()` with `case_when()`  {.smaller}
+
+Use `case_when()` inside `mutate()` to create values based on conditions.  
+
+. . .
+
+::: task
+{{< fa lightbulb >}} What proportion of new parents had their first child as teenagers, in their 20s, 30s, or after age 40?
+:::
+
+```{r}
+#| label: mutate01
+#| code-line-numbers: "1|5|6-9|10-11|13"
+#| output-location: column-fragment
+
+gss_all <-  gss_all |>  
+  mutate(age_groups = case_when(
+    agekdbrn < 18 ~ "<18",
+    agekdbrn >= 18 & agekdbrn <= 29 ~ "18–29",
+    agekdbrn >= 30 & agekdbrn <= 39 ~ "30–39",
+    agekdbrn >= 40 ~ "40+",
+    TRUE ~ NA_character_)
+  ) 
+
+gss_all |>
+  filter(year == 2022) |>
+  freq(age_groups, report.nas = FALSE, headings = FALSE)
+```
+
+
+## `select()` 
+
+
+# Assignment operators {.theme-section}
+
+## Overwriting data
 
 ::: {.callout-tip icon="false"}
 ## {{< fa hat-wizard >}} Heads Up!
 
-Save the **unzipped** file in your class `data` folder.
+Overwriting datasets and variables can be intentional or unintentional.
 :::
-
-## GSS Panel Data: Load {.sparse-slide}
-
-```{r}
-#| message: false
-#| label: gsspanel-01
-
-# Use here() to construct the file path
-gss_panel.dta <- here("data", "GSS_2020_panel_stata_1a/gss2020panel_r1a.dta")
-
-#load the data using `haven::read_dta()`
-data <- read_dta(gss_panel.dta)
-
-# Or, do both at the same time!
-# data <- read_dta(here("data", "GSS_2020_panel_stata_1a/gss2020panel_r1a.dta"))
-
-```
-
-## GSS 2016-2020 Panel Dataset {.sparse-slide}
-
-Study of former 2016 and 2018 GSS respondents were interviewed again in
-2020
-
--   Variables from 2016 (Wave 1a) have [**\_1a**]{style="color: #e74c3c"} appended
--   Variables from 2018 (Wave 1b) have [**\_1b**]{style="color: #e74c3c"} appended
--   Variables from 2020 (Wave 2) have [**\_2**]{style="color: #e74c3c"} appended
-
-## GSS 2016-2020 Panel Dataset {.sparse-slide}
-
-```{r}
-#| label: gsspanel-02
-#| echo: false
-
-set.seed(815)  # Ensures you get the same sample every time
-
-data |>
-  select(yearid, starts_with("year_"), starts_with("age_")) |>
-  slice_sample(n = 10) 
-```
-
-# Reproducible workflow
-
-## Replication
-
-[**The guiding principle for workflow.**]{style="color: #18BC9C"}
-
-A workflow of data analysis is a process for managing all aspects of
-data analysis.
 
 <br>
 
-Planning, documenting, and organizing your work; cleaning the data;
-creating, renaming, and verifying variables; performing and presenting
-statistical analyses; producing replicable results; and archiving what
-you have done are all integral parts of your workflow.
+Let's make a tiny data frame to use as an example:
 
-::: aside
-Source: (Long 2008)
+```{r}
+#| label: tibble
+
+df <- tibble(x = c(1, 2, 3, 4, 5), y = c("a", "a", "b", "c", "c"))
+df
+```
+
+## `head()`
+
+
+## Assignment operators (cont)
+
+Suppose you run the following and **then** you inspect `df`.
+
+::: {style="font-family: 'Shadows Into Light'"}
+Will the `x` variable have values [1, 2, 3, 4, 5]{style="color: #18bc9c"} or [2, 4, 6, 8, 10]{style="color: #F39C12"}?
 :::
 
-## Steps in a workflow
+<br>
 
-|  |  |
-|-------------------------------|-----------------------------------------|
-| **Set up** | Systematic organization of the project and project files. |
-| **Familiarize self with data** | Skipping takes more time in the long run. |
-| **Process data** | Takes the [**MOST**]{style="color: #e74c3c;"} time. |
-| **Running analyses** | What people **THINK** takes the most time. |
-| **Presenting results** | What people (wrongly) think does not take time. |
+::: columns
+::: column
+```{r}
+#| label: no-assignment
+
+df |>
+  mutate(x = x * 2)
+```
+:::
+
+::: {.column .fragment}
+```{r}
+#| label: no-assignment-results
+df
+```
+:::
+:::
+
+. . .
+
+> **Do something and show me**
 
 
-## Filepaths {.smaller}
+## Assignment operators (cont)
 
-A project-based workflow + `here()` avoids changing file paths.
+Suppose you run the following and **then** you inspect `df`.
+
+::: {style="font-family: 'Shadows Into Light'"}
+Will the `x` variable have values [1, 2, 3, 4, 5]{style="color: #18bc9c"} or [2, 4, 6, 8, 10]{style="color: #F39C12"}?
+:::
 
 <br>
+
+::: columns
+::: {.column .fragment}
+```{r}
+#| label: assignment
+
+df <- df |>
+  mutate(x = x * 2)
+```
+:::
+
+::: {.column .fragment}
+```{r}
+#| label: assignment-results
+#| code-line-numbers: "1"
+
+df
+```
+:::
+:::
+
+. . .
+
+> **Do something, save result, overwriting original**
+
+
+## Assignment: Overwriting {.smaller}
+
+::: columns
+::: {.column width="50%"}
+> **Do something, save result, overwriting original**
+
+```{r}
+#| label: overwrite
+#| code-line-numbers: "5-6|7"
+#| output-location: fragment
+
+df <- tibble(
+  x = c(1, 2, 3, 4, 5), 
+  y = c("a", "a", "b", "c", "c")
+)
+df <- df |>
+  mutate(x = x * 2)
+df
+```
+:::
+
+::: {.column .fragment width="50%"}
+> **Do something, save result, *not* overwriting original**
+
+```{r}
+#| label: no-overwrite
+#| code-line-numbers: "5-6|7"
+#| output-location: fragment
+
+df <- tibble(
+  x = c(1, 2, 3, 4, 5), 
+  y = c("a", "a", "b", "c", "c")
+)
+df_new <- df |>
+  mutate(x = x * 2)
+df_new
+```
+:::
+:::
+
+## Assignment: Overwriting (cont) {.smaller}
+
+::: columns
+::: {.column width="50%"}
+> **Do something, save result, overwriting original [when you shouldn't]{style="color: #E74C3C"}**
+
+```{r}
+#| code-line-numbers: "5-8"
+
+df <- tibble(
+  x = c(1, 2, 3, 4, 5), 
+  y = c("a", "a", "b", "c", "c")
+)
+df <- df |>
+  group_by(y) |>
+  summarize(mean_x = mean(x))
+df
+```
+:::
+
+::: {.column .fragment width="50%"}
+> **Do something, save result, [not]{style="color: #18BC9C"} overwriting original [when you shouldn't]{style="color: #18BC9C"}**
+
+```{r}
+#| code-line-numbers: "5-8"
+
+df <- tibble(
+  x = c(1, 2, 3, 4, 5), 
+  y = c("a", "a", "b", "c", "c")
+)
+df_summary <- df |>
+  group_by(y) |>
+  summarize(mean_x = mean(x))
+df_summary
+```
+:::
+:::
+
+
+## Assignment: Overwriting (cont) {.smaller}
+
+::: columns
+::: {.column width="50%"}
+> **Do something, save result, overwriting original**\
+> [***data frame***]{style="color: #18BC9C"}
+
+```{r}
+#| code-line-numbers: "5-6"
+
+df <- tibble(
+  x = c(1, 2, 3, 4, 5), 
+  y = c("a", "a", "b", "c", "c")
+)
+df <- df |>
+  mutate(z = x + 2)
+df
+```
+:::
+
+::: {.column .fragment width="50%"}
+> **Do something, save result, overwriting original**\
+> [***column***]{style="color: #f39c12"}
+
+```{r}
+#| code-line-numbers: "5-6"
+
+df <- tibble(
+  x = c(1, 2, 3, 4, 5), 
+  y = c("a", "a", "b", "c", "c")
+)
+df <- df |>
+  mutate(x = x + 2)
+df
+```
+:::
+:::
+
+## Assignment: Overwriting (cont) {.smaller}
 
 ::::: columns
-::: {.column width="60%"}
-**ABSOLUTE FILE PATHS**
+::: {.column width="50%"}
+> **Do something, save result, not overwriting original.**
 
-Department of Sociology\
-Unit 17100, 17th Floor, Ontario Power Building\
-700 University Ave., Toronto, ON M5G 1Z5
+```{r}
+#| label: mutateA
+#| code-line-numbers: "2|11"
+#| eval: false
 
-`C:\Users\Pepin\GitHub\SOC6302\scripts`
+gss_all <-  gss_all |>  
+  mutate(age_groups = case_when(
+    agekdbrn < 18 ~ "<18",
+    agekdbrn >= 18 & agekdbrn <= 29 ~ "18–29",
+    agekdbrn >= 30 & agekdbrn <= 39 ~ "30–39",
+    agekdbrn >= 40 ~ "40+",
+    TRUE ~ NA_character_)
+  ) 
+
+gss_all |>
+  filter(year == 2022) |>
+  freq(age_groups, report.nas = FALSE, headings = FALSE)
+```
 :::
 
-::: {.column width="40%"}
-**RELATIVE FILE PATHS**
+::: {.column .fragment width="50%"}
+> **Do something and show me**
 
-Take the left side elevators to the 17th floor.\
-Go through the double doors and a take a right.\
-First door on your left.
+```{r}
+#| label: mutateB
+#| code-line-numbers: "11-14"
+#| eval: false
 
-`here`([scripts]{style="color: #18BC9C"})
+gss_all |>  
+  select(year, agekdbrn) |> 
+  filter(year == 2022) |> 
+  drop_na(agekdbrn)  |>
+  mutate(age_groups = case_when(
+    agekdbrn < 18 ~ "<18",
+    agekdbrn >= 18 & agekdbrn <= 29 ~ "18–29",
+    agekdbrn >= 30 & agekdbrn <= 39 ~ "30–39",
+    agekdbrn >= 40 ~ "40+",
+    TRUE ~ NA_character_)) |>
+  group_by(age_groups) |>  
+  summarise(
+    count = n(),
+    proportion = round(count / sum(count), 3)
+  )
+
+```
 :::
 :::::
-
-## File names
-
-should be:
-
--   machine-readable
--   human-readable
--   play well with default-ordering
-
-## Project structure
-
-Let's set up your project structure using the `here()` package.
-
-![](https://raw.githubusercontent.com/allisonhorst/stats-illustrations/master/rstats-artwork/here.png)
-
-## `here()` {.sparse-slide}
-
-First, let's establish our project directory
-
-```{r}
-#| eval: false
-#| message: false
-#| label: here
-
-# shows the file path to the root of the project
-here()
-
-```
-
-<br>
-
-Next, we'll create folders within our project.
-
-## Example folder structure {.smaller}
-
-::::::::::::::::::::: columns
-
-:::::::: {.column width="40%"}
-**SOC6302**
-
-::::::: file-tree
-<details open>
-
-<summary>SOC6302/</summary>
-
-<details>
-
-<summary>data/</summary>
-
-<div>
-
-gss7924-raw.rda
-
-</div>
-
-<div>
-
-gss7924-processed.Rdata/
-
-</div>
-
-</details>
-
-<details>
-
-<summary>code-alongs/</summary>
-
-</details>
-
-<details>
-
-<summary>milestones/</summary>
-
-</details>
-
-<details>
-
-<summary>project/</summary>
-
-<details>
-
-<summary>data/</summary>
-
-</details>
-
-<details>
-
-<summary>scripts/</summary>
-
-</details>
-
-<details>
-
-<summary>outputs/</summary>
-
-</details>
-
-</details>
-
-<div>
-
-readme.qmd
-
-</div>
-
-<div>
-
-SOC6302.Rproj
-
-</div>
-
-</details>
-:::::::
-::::::::
-
-:::::::::::::: {.column width="60%"}
-**Research Projects**
-
-::::::::::::: file-tree
-<details open>
-
-<summary>project/</summary>
-
-<details>
-
-<summary>data/</summary>
-
-<div>
-
-gss7924-raw.rda
-
-</div>
-
-<div>
-
-gss7924-processed.Rdata/
-
-</div>
-
-</details>
-
-<details>
-
-<summary>scripts/</summary>
-
-<div>
-
-clean_data.R
-
-</div>
-
-<div>
-
-analyze_data.R
-
-</div>
-
-<div>
-
-draft.qmd
-
-</div>
-
-</details>
-
-<details>
-
-<summary>outputs/</summary>
-
-<div>
-
-draft.html
-
-</div>
-
-<details>
-
-<summary>figures/</summary>
-
-<div>
-
-plot1.png
-
-</div>
-
-<div>
-
-plot2.png
-
-</div>
-
-</details>
-
-</details>
-
-<div>
-
-readme.qmd
-
-</div>
-
-<div>
-
-project.Rproj
-
-</div>
-
-</details>
-:::::::::::::
-::::::::::::::
-
-
-:::::::::::::::::::::
-
-## Create a folder structure
-
-using `here()` and `dir.create()`
-
-```{r}
-#| eval: false
-#| message: false
-#| label: base-folders
-
-# Create base folders
-dir.create(here("data"), recursive = TRUE)
-dir.create(here("code-alongs"), recursive = TRUE)
-dir.create(here("milestones"), recursive = TRUE)
-dir.create(here("project"), recursive = TRUE)
-```
-
-## Create sub-folders
-
-using `here()` and `dir.create()`
-
-```{r}
-#| eval: false
-#| message: false
-#| label: sub-folders
-
-# Create project sub-folders
-dir.create(here("project", "data"), recursive = TRUE)
-dir.create(here("project", "scripts"), recursive = TRUE)
-dir.create(here("project", "outputs"), recursive = TRUE)
-
-```
-
-## Check your work
-
-report a list of folders and or files in the R-project folders and
-sub-folder.
-
-```{r}
-#| eval: false
-#| message: false
-#| label: list-files
-
-# Your SOC6302 class folder
-list.files(path = here())
-
-# Your "Project" sub-folder
-list.files(path = here("project"))
-
-```
-
-
-# Manipulating Dataframes {.theme-section}
-
-## Selection helpers {.smaller}
-
-Match variables according to a given pattern.
-
--    `starts_with()`: Starts with an exact prefix.
--    `ends_with()`: Ends with an exact suffix.
--    `contains()`: Contains a literal string.
--    ...
-
-```{r}
-#| label: starts-with-01
-#| eval: false
-
-my_data <- data |>
-  select(yearid, wtssnr_2, 
-         starts_with("age_"), 
-         starts_with("family16_"),
-         starts_with("socfrend_"),
-         starts_with("childs_")) 
-
-```
-
-<br>
-
-. . . 
-
-```{r}
-#| label: starts-with-02
-#| code-line-numbers: "4|7"
-
-# You can supply multiple prefixes or suffixes.
-my_data <- data |>
-  select(yearid, wtssnr_2, 
-         starts_with(c("age_", "family16_", "socfrend", "childs"))
-         )
-
-my_data <- as_factor(my_data) # Apply labels to data
-
-```
-
-
-## `head()` & `tail()` {.smaller}
-
-Look at the first few column names and **first** few rows.
-
-```{r}
-#| label: head
-head(my_data, n = 5)
-```
-
-<br>
-
-. . .
-
-Look at the first few column names and **last** few rows.
-
-```{r}
-#| label: tail
-tail(my_data, n = 5)
-```
-
-## Reminder: Tidy data
-
-![](images/04/tidy-data.png){width="100%"}
-
-##  {data-menu-title="Not tidy data" }
-
-![](images/04/not-tidy.png){width="100%"}
-
-. . .
-
-::: {style="color: #e74c3c; font-family: 'Shadows Into Light'"}
-**This data is NOT tidy!**  
-Some column names include values of a variable (survey year). 
-:::
-
-
-##  {data-menu-title="Tidy data" }
-
-```{r}
-#| label: tidy
-#| echo: false
-
-my_data |>
-  pivot_longer(
-    cols = c(-yearid, -wtssnr_2),
-    names_to = c(".value", "panel"),
-    names_sep = "_") 
-
-```
-
-<br> 
-
-::: {style="color: #18bc9c; font-family: 'Shadows Into Light'"}
-**This data is tidy!**  
-Each variable in its own column, and each observation in its own row. 
-:::
-
-## {data-menu-title="Wide vs Long"}
-
-![](images/04/wide-long.png){width="100%"}
-
-## Reshaping data
-
-![](images/04/tidyr-pivoting.gif)
-
-## `pivot_longer()`
-
-```{r}
-#| label: pivot-longer
-#| code-line-numbers: "2|3|4|5"
-
-my_data <- my_data |>
-  pivot_longer(
-    cols = 3:14, # <1> 
-    names_to = c(".value", "panel"), # <2>
-    names_sep = "_") # <3>
-    
-head(my_data, n = 5)
-```
-
-1.  `cols =` specifies which columns to pivot; 
-2.  `names_to =` creates multiple value columns from the name parts and a new column that stores the identifier.
-3.  `names_sep =` where to split the names into a variable (.value) and what to use as a key identifier
-
-
-## `pivot_wider()`
-
-```{r}
-#| label: wider
-#| code-line-numbers: "1|2|3|4"
-
-my_data |> # not overwriting my_data
-  pivot_wider( # <1>
-    names_from = panel, # <2>
-    values_from = c(-yearid, -wtssnr_2)) # <3>
-
-head(my_data, n = 5)
-
-```
-
-1.  Increasing the number of columns and decreasing the number of rows
-2.  Which column to get the name of the output columns
-3.  Which columns to exclude from the pivot
-
-## Recode the reshaped variable
-
-```{r}
-#| label: recode-panel
-
-my_data <- my_data |>
-  mutate(panel = case_when(
-         panel == "1a" ~ 2016,
-         panel == "1b" ~ 2018,
-         panel == "2" ~ 2020,
-         TRUE ~ NA_integer_))
-
-head(my_data, n = 3)
-```
-
-. . . 
-
-::: {.callout-tip icon="false"}
-## {{< fa hat-wizard >}} Heads Up!
-
-`family16` is a time-invariant variable.
-:::
-
-## `relocate()` {.smaller}
-
-```{r}
-#| label: relocate-01
-
-my_data <- my_data |> 
-  relocate(panel)
-
-head(my_data, n = 2)
-```
-
-<br>
-
-. . . 
-
-```{r}
-#| label: relocate-02
-
-my_data <- my_data |> 
-  relocate(panel, .after = yearid)
-
-head(my_data, n = 2)
-```
-
-## `arrange()` {.smaller}
-
-```{r}
-#| label: arrange-01
-#| output-location: column
-
-
-my_data |> 
-  arrange(panel) |>
-  select(yearid, panel, age) |>
-  head(n = 5)
-
-```
-
-<br> 
-
-. . .
-
-```{r}
-#| label: arrange-02
-#| output-location: column
-
-my_data |> 
-  arrange(desc(panel)) |>
-  select(yearid, panel, age) |>
-  head(n = 5)
-
-```
-
 
 
 # Think Like a Statistician {background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
 
-Are married people above or below average in internet use or income? Does it vary by survey year?
+On average, in 2024, did parents with 4 or more kids work fewer hours for pay than other parents?
 
 <br>
 
 [{{< fa regular lightbulb >}} **How do we find
 out?**]{style="color: #F39C12; font-size: 175%; font-family: 'Shadows Into Light'"}
 
-
-
-## {data-menu-title="Think Like a Statistician" background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
-
-Answering this research question takes a few steps. But, the first step is to create a dataframe with all the necessary information.
-
-[{{< fa regular lightbulb >}} **Can you reproduce this table?**]{style="color: #F39C12; font-size: 150%; font-family: 'Shadows Into Light'"}
+## Think Like a Statistician {background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
 
 <br>
+
+::: {style="color: #f39c12; font-size: 200%;  font-family: 'Shadows Into Light'"}
+{{< fa regular lightbulb >}} **Can you reproduce this table?**
+:::
 
 ```{r}
 #| label: think-output
 #| echo: false
 
-# Reshape data
-think_data <- data |>
-    select(yearid, 
-         starts_with("marital_"), 
-         starts_with("wwwhr_"),
-         starts_with("realrinc_")) |>
-    pivot_longer(
-      cols = 2:10,
-      names_to = c(".value", "panel"), 
-      names_sep = "_") |>
-    relocate(panel, .after = yearid)
+gss_all$childs <- as.numeric(gss_all$childs)
 
-# recode variables
-think_data <- think_data |>
-  mutate(panel = case_when(
-         panel == "1a" ~ 2016,
-         panel == "1b" ~ 2018,
-         panel == "2" ~ 2020,
-         TRUE ~ NA_integer_),
-         marital = as_factor(marital))
-
-## summarize by panel
-think_summary <- think_data |>
-  drop_na(wwwhr, realrinc)  |>
-  group_by(panel) |>  
+gss_all |> 
+  filter(year == 2024) |>
+  select(year, childs, hrs1) |>
+  mutate(childs_group = case_when(
+    childs == 1 ~ "1 child",
+    childs == 2 ~ "2 children",
+    childs == 3 ~ "3 children",
+    childs >= 4 ~ "4 or more children",
+    TRUE ~ NA_character_)) |>
+  drop_na(childs_group, hrs1) |>
+  group_by(childs_group) |>  
   summarise(
-    avg_www = round(mean(wwwhr), digits = 2), 
-    avg_inc = round(mean(realrinc), digits = 2)
-    )
-
-think_full <- full_join(think_data, think_summary, by = "panel")
-
-head(think_full, n = 6)
-
+    count = n(),
+    mean = round(mean(hrs1), digits = 2), 
+    median = round(median(hrs1)),
+    sd = round(sd(hrs1), digits = 2)
+    ) 
 ```
 
 
-## {.smaller data-menu-title="Your Data Take" background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
+## Your Data Take {data-menu-title="Your Data Take" background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
+
+<br>
 
 ::: {style="color: #f39c12; font-size: 175%; font-family: 'Shadows Into Light'"}
 {{< fa regular lightbulb >}} **What's your conclusion to our research question?**
 :::
 
-```{r}
-#| label: think-answer
-#| echo: false
 
-# Filter for married individuals and create flags
-think_married <- think_full |>
-  filter(marital == "married") |>
-  group_by(panel) |>
-  mutate(
-    income_status = ifelse(realrinc > avg_inc, "Above Average", "Below Average"),
-    internet_status = ifelse(wwwhr > avg_www, "Above Average", "Below Average")
-  )
-```
-
-```{r}
-#| label: think-answer-01
-
-# Income status
-ctable(think_married$income_status, think_married$panel, 
-  prop = "c", 
-  format = "p", 
-  useNA = "no",
-  headings = FALSE
-)
-
-```
-
-
-```{r}
-#| label: think-answer-02
-
-# Internet status
-ctable(think_married$internet_status, think_married$panel, 
-  prop = "c", 
-  format = "p", 
-  useNA = "no",
-  headings = FALSE
-)
-```

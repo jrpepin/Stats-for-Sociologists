@@ -17,11 +17,10 @@ Load the standard packages.
 #| message: false
 #| label: load
 
-library(here)
 library(tidyverse) 
 library(haven) # not core tidyverse
 library(gssr)
-library(gssrdoc)
+library(gssrdoc) # load the GSS codebook
 library(summarytools)
 ```
 
@@ -34,8 +33,26 @@ library(summarytools)
 # Get the data all survey years
 data(gss_all)
 
-# Load the codebook
-data(gss_dict)
+```
+
+Use the `gss_which_years()` function to identify the survey years a
+variable appeared.
+
+```{r}
+#| label: which-years
+
+gss_which_years(gss_all, meovrwrk)
+
+```
+
+**Which survey years did the variable `childs` appear?**
+
+```{r, eval=FALSE}
+#| label: which-years-mini-task
+
+# REPLACE THE BLANK LINE WITH THE NAME OF THE VARIABLE
+
+gss_which_years(gss_all, ________)
 
 ```
 
@@ -55,417 +72,229 @@ sum(1, 2)
   sum(2)
 ```
 
-## `dplyr` grammar
-
-What's the advantage of
-[`dplyr`](https://cran.r-project.org/web/packages/dplyr/readme/README.html)
-grammar? We can sequence data manipulation!
-
-```{r}
-#| label: pipe00
-
-gss_all |> 
-  select(year, sex, agekdbrn) |>
-  filter(year == 2022) |>
-  drop_na(sex, agekdbrn) |>
-  group_by(sex) |>
-  summarise(avg = mean(agekdbrn))
-
-```
-
-## `select()`, `filter()`, and `drop_na()`
-
-Use `select()` to pick specific columns from your dataset.\
-Use `filter()` to keep rows that meet a condition.\
-Use `drop_na()` to remove rows with missing (NA) values.
-
-```{r}
-#| label: pipe01
-
-gss_all |>
-  select(year, sex, agekdbrn) |>
-  filter(year == 2022) |> 
-  drop_na(sex, agekdbrn) |> 
-
-```
-
-## `group_by()` and `summarize()`
-
-Use `group_by()` to organize your data into groups based on one or more
-variables.\
-Use `summarize()` to compute statistics like total, mean, or median for
-each group.
-
-```{r}
-#| label: pipe02
-
-gss_all |>  # <1>
-  select(year, sex, agekdbrn) |> # <2>
-  filter(year == 2022) |> # <3>
-  drop_na(sex, agekdbrn) |> # <4>
-  group_by(sex) |> # <5>
-  summarise(freq = n()) # <6>
-
-```
-
-1.  Start with the `gss_all` data frame:
-2.  Keep only the variables in the dataset that we need.
-3.  Keep only the respondents from the 2022 survey
-4.  Remove any observations with missing data for our key variables
-5.  Do the next steps separately for each group in the variable
-6.  Creates a new data frame with one row for each combination of
-    grouping variables
-
 ## `dplyr()` in action
 
-Compare the average and median age at first childbirth for U.S. men and
-women in 2022.
+Create a frequency table for `childs` variable.
 
 ```{r}
-#| label: pipe03
-
-gss_all |>  
-  select(year, sex, agekdbrn) |> 
-  filter(year == 2022) |> 
-  drop_na(sex, agekdbrn) |> 
-  group_by(sex) |> 
-  summarise(
-    freq = n(),
-    avg = mean(agekdbrn),
-    med = median(agekdbrn)
-    ) 
-
-```
-
-## `mutate()` in action
-
-Use `mutate()` to add new columns or change existing ones.
-
-**What proportion of new parents were teenagers (e.g., under 18 years
-old)?**
-
-```{r}
-#| label: mutate00
-
-gss_all |>  # <1>
-  select(year, agekdbrn) |> 
-  filter(year == 2022) |> 
-  drop_na(agekdbrn) |> 
-  mutate(teen_parent = (agekdbrn < 18) * 1) |> 
-  summarise(proportion = mean(teen_parent)) 
-```
-
-Use `case_when()` inside `mutate()` to create values based on
-conditions.
-
-**What proportion of new parents had their first child as teenagers, in
-their 20s, 30s, or after age 40?**
-
-```{r}
-#| label: mutate01
-
-gss_all <-  gss_all |>  
-  mutate(age_groups = case_when(
-    agekdbrn < 18 ~ "<18",
-    agekdbrn >= 18 & agekdbrn <= 29 ~ "18–29",
-    agekdbrn >= 30 & agekdbrn <= 39 ~ "30–39",
-    agekdbrn >= 40 ~ "40+",
-    TRUE ~ NA_character_)
-  ) 
-
-gss_all |>
-  filter(year == 2022) |>
-  freq(age_groups, report.nas = FALSE, headings = FALSE)
-```
-
-## Assignment operators
-
-Let's make a tiny data frame to use as an example:
-
-```{r}
-#| label: tibble
-
-df <- tibble(x = c(1, 2, 3, 4, 5), y = c("a", "a", "b", "c", "c"))
-df
-```
-
-```{r}
-#| label: no-assignment
-
-df |>
-  mutate(x = x * 2)
-```
-
-```{r}
-#| label: no-assignment-results
-df
-```
-
-```{r}
- #| label: assignment
-
-df <- df |>
-   mutate(x = x * 2)
-```
-
-```{r}
-#| label: assignment-results
-
-df
-```
-
-**Do something, save result, overwriting original**
-
-```{r}
-#| label: overwrite
-
-df <- tibble(
-  x = c(1, 2, 3, 4, 5), 
-  y = c("a", "a", "b", "c", "c")
-)
-
-df <- df |>
-  mutate(x = x * 2)
-
-df
-```
-
-**Do something, save result, *not* overwriting original**
-
-```{r}
-#| label: no-overwrite
-
-df <- tibble(
-  x = c(1, 2, 3, 4, 5), 
-  y = c("a", "a", "b", "c", "c")
-)
-
-df_new <- df |>
-  mutate(x = x * 2)
-
-df_new
-```
-
-**Do something, save result, overwriting original [when you
-shouldn't]{style="color: #E74C3C"}**
-
-```{r}
-#| label: overwrite-bad
-
-df <- tibble(
-  x = c(1, 2, 3, 4, 5), 
-  y = c("a", "a", "b", "c", "c")
-)
-
-df <- df |>
-  group_by(y) |>
-  summarize(mean_x = mean(x))
-
-df
-```
-
-**Do something, save result, [not]{style="color: #18BC9C"} overwriting
-original [when you shouldn't]{style="color: #18BC9C"}**
-
-```{r}
-#| label: no-overwrite-good
-
-df <- tibble(
-  x = c(1, 2, 3, 4, 5), 
-  y = c("a", "a", "b", "c", "c")
-)
-
-df_summary <- df |>
-  group_by(y) |>
-  summarize(mean_x = mean(x))
-
-df_summary
-```
-
-**Do something, save result, overwriting original [data
-frame]{style="color: #18BC9C"}**
-
-```{r}
-#| label: overwrite-good
-
-df <- tibble(
-  x = c(1, 2, 3, 4, 5), 
-  y = c("a", "a", "b", "c", "c")
-)
-df <- df |>
-  mutate(z = x + 2)
-df
-```
-
-**Do something, save result, overwriting original
-[column]{style="color: #f39c12"}**
-
-```{r}
-#| label: overwrite-okay
-
-df <- tibble(
-  x = c(1, 2, 3, 4, 5), 
-  y = c("a", "a", "b", "c", "c")
-)
-df <- df |>
-  mutate(x = x + 2)
-df
-```
-
-**Do something, save result, not overwriting original.**
-
-```{r}
-#| label: mutateA
-#| eval: false
-
-gss_all <-  gss_all |>  
-  mutate(age_groups = case_when(
-    agekdbrn < 18 ~ "<18",
-    agekdbrn >= 18 & agekdbrn <= 29 ~ "18–29",
-    agekdbrn >= 30 & agekdbrn <= 39 ~ "30–39",
-    agekdbrn >= 40 ~ "40+",
-    TRUE ~ NA_character_)
-  ) 
-
-gss_all |>
-  filter(year == 2022) |>
-  freq(age_groups, report.nas = FALSE, headings = FALSE)
-```
-
-**Do something and show me**
-
-```{r}
-#| label: mutateB
-#| eval: false
-
-gss_all |>  
-  select(year, agekdbrn) |> 
-  filter(year == 2022) |> 
-  drop_na(agekdbrn)  |>
-  mutate(age_groups = case_when(
-    agekdbrn < 18 ~ "<18",
-    agekdbrn >= 18 & agekdbrn <= 29 ~ "18–29",
-    agekdbrn >= 30 & agekdbrn <= 39 ~ "30–39",
-    agekdbrn >= 40 ~ "40+",
-    TRUE ~ NA_character_)) |>
-  group_by(age_groups) |>  
-  summarise(
-    count = n(),
-    proportion = round(count / sum(count), 3)
-  )
-
-```
-
-# Summary Statistics
-
-## Median & Mode
-
-Let's use [dplyr grammar]() to find the median and mode for the `childs`
-variable.
-
-```{r}
-#| label: median_mode
+#| label: freq-tb
 
 gss_all$childs <- zap_missing(gss_all$childs) 
 gss_all$childs <- as_factor(gss_all$childs)   
 gss_all$childs <- droplevels(gss_all$childs)  
 
-gss_all |> # <1>
-  filter(year == 2024) |> # <1>
-  freq(childs, report.nas = FALSE) |> # <2>
-  tb() # <3> 
+gss_all |> 
+  freq(childs, report.nas = FALSE) |> 
+  tb() 
 
 ```
 
-1.  Use `dplyr` grammar, starting with the name of the df and a pipe
-2.  Use the `freq()` function as usual
-3.  Add the `tb()` function to turn the table into a `tibble`
+**Use a `|>` & `gss_which_years()` to find out which survey years the
+variable `agekdbrn` appears.**
 
-## Median & Mean
+```{r, eval=FALSE}
+#| label: which-years-pipe
 
-Let's use [dplyr grammar]() to find the median and mean for the `hrs1`
-variable.
+# ADD YOUR CODE HERE
+
+```
+
+## `filter()` & `drop_na()` {.sparse-slide}
+
+Use `filter()` to keep rows that meet a condition.\
+Use `drop_na()` to remove rows with missing (NA) values.
+
 
 ```{r}
-#| label: mean-median
+#| label: pipe01
 
-median(gss_all$hrs1, na.rm=TRUE) # <1>
-mean(gss_all$hrs1, na.rm=TRUE)   # <1>
+gss_all |>
+  filter(year == 2022) |>
+  drop_na(sex, agekdbrn) |>
+  count(sex)
+
+```
+
+**Create a dataframe with the variables `year`, `sex`, `hrs1`, and `childs` for
+only the 2024 respondents without missing data for `hrs1` and
+`childs`.**
+
+```{r, eval=FALSE}
+#| label: pipe01-mini-task
+
+gss_all |>
+  filter(year == 2022)  # CHANGE THE YEAR TO 2024 & ADD A PIPE OPERATOR 
+  drop_na() |> # ADD THE VARIABLES INSIDE drop_na()
+  count(sex)
+
+```
+
+# Summary Statistics
+
+## Median & Mean w base R
+
+```{r}
+#| label: median
+
+# Using base R
+median(gss_all$agekdbrn, na.rm=TRUE) 
+```
+
+Note: `na.rm` is a logical evaluating to `TRUE` or `FALSE` indicating
+whether `NA` values should be stripped before the computation proceeds.
+
+```{r}
+#| label: mean
+
+mean(gss_all$agekdbrn, na.rm=TRUE)
+```
+
+```{r}
+#| label: summary
 
 # show me summary statistics
-summary(gss_all$hrs1)
+summary(gss_all$agekdbrn)
+```
+
+**Find the mean and median for the variable: `hrs1`.**
+
+```{r, eval=FALSE}
+#| label: summary-mini-task
+
+# REPLACE THE BLANK LINES WITH THE DATA FRAME NAME & VARIABLE NAME
+median(______________, na.rm=TRUE)
+mean(______________, na.rm=TRUE)
+
+# USE summary() TO SHOW SUMMARY STATISTICS
+
 
 ```
 
-1.  `na.rm` is a logical evaluating to TRUE or FALSE indicating whether
-    NA values should be stripped before the computation proceeds.
+## `summarise()` {.sparse-slide}
 
-## `descr()`
-
-Univariate statistics for numerical data
+Use functions inside `summarise()` to create summary variables.
 
 ```{r}
-#| label: descr01
+#| label: pipe02-a
 
-gss_all |> 
-  filter(year == 2024) |>
-  drop_na(hrs1)  |>
-  descr(hrs1,
-        stats = "common") |> # <1>
-  tb() # <2>
+gss_all |>  
+  drop_na(agekdbrn) |>
+   summarise(
+    avg = mean(agekdbrn)
+    ) 
+    
+```
+
+## Median & Mean with `dplyr` {.sparse-slide}
+
+Use [dplyr grammar]() to find the frequency, mean, and median.
+
+Add lots of summary variables using functions inside `summarise()`.
+
+1.  Use `n()` function to create a count variable (no variable in
+    parentheses)
+2.  Use `mean()` function on a variable
+3.  Use `median()` function on a variable
+
+```{r}
+#| label: pipe02-b
+
+gss_all |>  
+  drop_na(agekdbrn) |> 
+  summarise(
+    freq = n(), 
+    med = median(agekdbrn),
+    avg = mean(agekdbrn)
+    ) 
 
 ```
 
-1.  Which stats to produce: “all” (default), “fivenum”, “common” (see
-    Details), or a selection. See ?descr
+**Use `dplyr` grammar to find the frequency, mean, and median for the
+variable: `hrs1`.**
 
-2.  Makes a tidy dataset out of `freq()` or `descr()` outputs.
+```{r, eval=FALSE}
+#| label: pipe02-mini-task
 
-## `summarize()`
+gss_all |>  
+  drop_na(hrs1) |>
+  summarise(
+   # ADD TO THE PIPE HERE WITH YOUR CODE HERE
+)
+```
+
+## `group_by()` and `summarize()` {.sparse-slide}
+
+A common pipeline is `group_by()` and then `summarize()` to calculate
+summary statistics for each group:
+
+Use `group_by()` to organize your data into groups based on one or more
+variables.\
+Use `summarize()` to compute statistics like total, mean, or median for
+each group.\
+<br>
+
+1.  Start with the `gss_all` data frame:
+2.  Remove any observations with missing data for our key variables
+3.  Do the next steps separately for each group in the variable
+4.  Creates a new data frame with one row for each combination of
+    grouping variables
+
+```{r}
+#| label: pipe03
+
+gss_all |>  
+  drop_na(sex, agekdbrn) |> 
+  group_by(sex) |> 
+  summarise(avg = mean(agekdbrn)) 
+
+```
+
+**Compare the average and median work hours (`hrs`) for U.S. men and
+women.**
+
+```{r, eval=FALSE}
+#| label: pipe03-mini-task
+#| code-line-numbers: "1-3|4|5-7"
+#| output-location: column-fragment
+
+gss_all |>  
+  drop_na(sex, hrs1) |> 
+   # ADD TO THE PIPE HERE WITH YOUR CODE HERE
+
+```
+
+## `summarize()` + variability measures {.sparse-slide}
 
 ```{r}
 #| label: summarize
 
 gss_all |>  
-  select(year, hrs1, sex) |> 
-  filter(year == 2024) |> 
-  drop_na(hrs1, sex)  |>
+  drop_na(agekdbrn, sex)  |>
   group_by(as_factor(sex)) |>  
   summarise(
-    count = n(),
-    min = min(hrs1),
-    median = median(hrs1),
-    max = max(hrs1),
-    mean = round(mean(hrs1), digits = 2), 
-    sd = sd(hrs1)
+    freq = n(),
+    min = min(agekdbrn),
+    median = median(agekdbrn),
+    max = max(agekdbrn),
+    mean = round(mean(agekdbrn), digits = 2), 
+    sd = sd(agekdbrn)
     ) 
 
 ```
 
 # Think Like a Statistician
 
-**On average, in 2024, did parents with 4 or more kids work fewer hours
-for pay than other parents?**
+**How did the mean and standard deviation of weekly work hours differ
+between men and women in 2024, and what do these differences suggest
+about gender-based variability in labor patterns.**
 
-***How do we find out?***
-
--   Make `childs` a numeric variable
--   `filter()` the data to only 2024 respondents
--   `select()` only the variables you need: `year`, `childs`, `hrs`
--   use `mutate()` and `case_when()` to create a character variable with
-    4 categories: 1 child, 2 children, 3 children, 4 or more children
-    (use `TRUE ~ NA_character_` for missing data)
--   use `drop_by()` to remove missing data for your new variable and
-    `hrs1`
--   use `group_by()` to group the data by your new variable
--   use `summarise()` to create count, mean, median, and sd summary
-    statistics
+*How do we find out?*
 
 ```{r}
 #| label: think-output
 
-# TIP: It's often easier to play with your code in an R script first.
-# Then, copy and past your working R code into this code-chunk.
+# ADD YOUR CODE HERE
+
 ```
 
 ## Your Data Take

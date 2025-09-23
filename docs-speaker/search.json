@@ -417,7 +417,7 @@
     "href": "lecture-03.html#section",
     "title": "Data Management I",
     "section": "",
-    "text": "We can find which years one or more variables were asked with the gss_which_years() function.\n\ngss_which_years(gss_all, meovrwrk)\n\n# A tibble: 35 × 2\n   year      meovrwrk\n   &lt;dbl+lbl&gt; &lt;lgl&gt;   \n 1 1972      FALSE   \n 2 1973      FALSE   \n 3 1974      FALSE   \n 4 1975      FALSE   \n 5 1976      FALSE   \n 6 1977      FALSE   \n 7 1978      FALSE   \n 8 1980      FALSE   \n 9 1982      FALSE   \n10 1983      FALSE   \n# ℹ 25 more rows\n\n\n\n\n\n Heads Up!\n\n\nIf run in the console, to see all rows, wrap the code in the print() command: print(gss_which_years(gss_all, meovrwrk), n = 40)"
+    "text": "Use the gss_which_years() function to identify the survey years a variable appeared.\n\n\ngss_which_years(gss_all, meovrwrk)\n\n# A tibble: 35 × 2\n   year      meovrwrk\n   &lt;dbl+lbl&gt; &lt;lgl&gt;   \n 1 1972      FALSE   \n 2 1973      FALSE   \n 3 1974      FALSE   \n 4 1975      FALSE   \n 5 1976      FALSE   \n 6 1977      FALSE   \n 7 1978      FALSE   \n 8 1980      FALSE   \n 9 1982      FALSE   \n10 1983      FALSE   \n# ℹ 25 more rows\n\n\n\n\n\n\n Heads Up!\n\n\nIf run in the console, to see all rows, wrap the code in the print() command: print(gss_which_years(gss_all, meovrwrk), n = 40)"
   },
   {
     "objectID": "lecture-03.html#tidying-data",
@@ -431,21 +431,21 @@
     "href": "lecture-03.html#dplyr-package",
     "title": "Data Management I",
     "section": "dplyr package",
-    "text": "dplyr package\nThe dplyr package provides a complete set of functions that help you solve the most common data manipulation challenges such as:\n\nfiltering observations based on their values\nextracting observations based on their values or positions\nsampling observations based on a specific number or fraction of rows\nsorting observations based on one or several variables\nselecting variables based on their names or positions\nrenaming variables\nadding new variables based on existing ones\nsummarizing observations or variables to a single descriptive measure\nperforming any operation by group\n\n\n\nSource: Antoine Soetewey"
+    "text": "dplyr package\nThe dplyr package provides a complete set of functions that help you solve the most common data manipulation challenges:\n\nfiltering observations based on their values\nextracting observations based on their values or positions\nsampling observations based on a specific number or fraction of rows\nsorting observations based on one or several variables\nselecting variables based on their names or positions\nrenaming variables\nadding new variables based on existing ones\nsummarizing observations or variables to a single descriptive measure\nperforming any operation by grouping\n\n\n\nSource: Antoine Soetewey"
   },
   {
     "objectID": "lecture-03.html#the-pipe",
     "href": "lecture-03.html#the-pipe",
     "title": "Data Management I",
     "section": "The pipe |>",
-    "text": "The pipe |&gt;\n\nThe pipe operator passes what comes before it into the function that comes after it as the first argument in that function.\n\nsum(1, 2)\n\n[1] 3\n\n\n\n\n\n1 |&gt; \n  sum(2)\n\n[1] 3"
+    "text": "The pipe |&gt;\nThe pipe operator passes what comes before it into the function that comes after it as the first argument.\n\n\nsum(1, 2)\n\n[1] 3\n\n\n\n\n\n1 |&gt; \n  sum(2)\n\n[1] 3"
   },
   {
     "objectID": "lecture-03.html#dplyr-style",
     "href": "lecture-03.html#dplyr-style",
     "title": "Data Management I",
     "section": "dplyr style",
-    "text": "dplyr style\nIn data transformation pipelines, always use a\n\nspace before |&gt;\nline break after |&gt;\nindent the next line of code\n\n\nWe’ll talk about data visualization pipes later…\n\n\n\n\n\n Heads Up!\n\n\n|&gt; (native pipe operator) and %&gt;% (magrittr package) behave identically for simple cases. More info."
+    "text": "dplyr style\nIn data transformation pipelines, always use a\n\nspace before |&gt;\nline break after |&gt;\nindent the next line of code\n\n\nWe’ll talk about data visualization pipes later…\n\n\n\n\n Heads Up!\n\n\n|&gt; (native pipe operator) and %&gt;% (magrittr package) behave identically for simple cases. More info."
   },
   {
     "objectID": "lecture-03.html#functionargument",
@@ -459,14 +459,14 @@
     "href": "lecture-03.html#dplyr-basics",
     "title": "Data Management I",
     "section": "dplyr basics",
-    "text": "dplyr basics\n\nThey are organized into four groups based on what they operate on: rows, columns, groups, or tables.\n\n\nThe verbs all have in common:\n\nThe first argument is always a data frame.\nThe subsequent arguments typically describe which columns to operate on using the variable names (without quotes).\nThe output is always a new data frame.\n\n\n\nSource: R for Data Science"
+    "text": "dplyr basics\nThey are organized into four groups based on what they operate on: rows, columns, groups, or tables.\n\nThe verbs all have in common:\n\n\nThe first argument is always a data frame.\nThe subsequent arguments typically describe which columns to operate on using the variable names (without quotes).\nThe output is always a new data frame.\n\n\n\n\nSource: R for Data Science"
   },
   {
     "objectID": "lecture-03.html#dplyr-grammar",
     "href": "lecture-03.html#dplyr-grammar",
     "title": "Data Management I",
     "section": "dplyr grammar",
-    "text": "dplyr grammar\nWhat’s the advantage of dplyr grammar? We can sequence data manipulation!\n\n\n\ngss_all |&gt; \n  select(year, sex, agekdbrn) |&gt;\n  filter(year == 2022) |&gt;\n  drop_na(sex, agekdbrn) |&gt;\n  group_by(sex) |&gt;\n  summarise(avg = mean(agekdbrn))\n\n\n# A tibble: 2 × 2\n  sex          avg\n  &lt;dbl+lbl&gt;  &lt;dbl&gt;\n1 1 [male]    26.3\n2 2 [female]  23.7"
+    "text": "dplyr grammar\nWhat’s the advantage of dplyr grammar? We can sequence data manipulation!\n\n\n\ngss_all |&gt; \n  filter(year == 2022) |&gt;\n  drop_na(sex, agekdbrn) |&gt;\n  group_by(sex) |&gt;\n  summarize(avg = mean(agekdbrn))\n\n\n# A tibble: 2 × 2\n  sex          avg\n  &lt;dbl+lbl&gt;  &lt;dbl&gt;\n1 1 [male]    26.3\n2 2 [female]  23.7"
   },
   {
     "objectID": "lecture-03.html#select-filter-and-drop_na",
@@ -480,14 +480,14 @@
     "href": "lecture-03.html#group_by-and-summarize",
     "title": "Data Management I",
     "section": "group_by() and summarize()",
-    "text": "group_by() and summarize()\nUse group_by() to organize your data into groups based on one or more variables.\nUse summarize() to compute statistics like total, mean, or median for each group.\n\n\n\n\n1gss_all |&gt;\n2  select(year, sex, agekdbrn) |&gt;\n3  filter(year == 2022) |&gt;\n4  drop_na(sex, agekdbrn) |&gt;\n5  group_by(sex) |&gt;\n6  summarise(freq = n())\n\n\n\n1\n\nStart with the gss_all data frame:\n\n2\n\nKeep only the variables in the dataset that we need.\n\n3\n\nKeep only the respondents from the 2022 survey\n\n4\n\nRemove any observations with missing data for our key variables\n\n5\n\nDo the next steps separately for each group in the variable\n\n6\n\nCreates a new data frame with one row for each combination of grouping variables\n\n\n\n\n# A tibble: 2 × 2\n  sex         freq\n  &lt;dbl+lbl&gt;  &lt;int&gt;\n1 1 [male]    1031\n2 2 [female]  1363"
+    "text": "group_by() and summarize()\nUse group_by() to organize your data into groups based on one or more variables.\nUse summarize() to compute statistics like total, mean, or median for each group.\n\n\n\n\n1gss_all |&gt;\n2  drop_na(sex, agekdbrn) |&gt;\n3  group_by(sex) |&gt;\n4  summarize(avg = mean(agekdbrn))\n\n\n\n1\n\nStart with the gss_all data frame:\n\n2\n\nRemove any observations with missing data for our key variables\n\n3\n\nDo the next steps separately for each group in the variable\n\n4\n\nCreates a new data frame with one row for each combination of grouping variables\n\n\n\n\n# A tibble: 2 × 2\n  sex          avg\n  &lt;dbl+lbl&gt;  &lt;dbl&gt;\n1 1 [male]    25.7\n2 2 [female]  23.0\n\n\n\nA common pipeline is group_by() and then summarize() to calculate summary statistics for each group:"
   },
   {
     "objectID": "lecture-03.html#dplyr-in-action",
     "href": "lecture-03.html#dplyr-in-action",
     "title": "Data Management I",
     "section": "dplyr() in action",
-    "text": "dplyr() in action\n\n Compare the average and median age at first childbirth for U.S. men and women in 2022.\n\n\n\n\ngss_all |&gt;  \n  select(year, sex, agekdbrn) |&gt; \n  filter(year == 2022) |&gt; \n  drop_na(sex, agekdbrn) |&gt; \n  group_by(sex) |&gt;\n  summarise(\n    freq = n(),\n    avg = mean(agekdbrn),\n    med = median(agekdbrn)\n    ) \n\n\n# A tibble: 2 × 4\n  sex         freq   avg   med\n  &lt;dbl+lbl&gt;  &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;\n1 1 [male]    1031  26.3    25\n2 2 [female]  1363  23.7    23"
+    "text": "dplyr() in action\nCreate a frequency table for childs variable.\n\ngss_all$childs &lt;- zap_missing(gss_all$childs) \ngss_all$childs &lt;- as_factor(gss_all$childs)   \ngss_all$childs &lt;- droplevels(gss_all$childs)  \n\n1gss_all |&gt;\n2  freq(childs, report.nas = FALSE) |&gt;\n3  tb()\n\n\n1\n\nUse dplyr grammar, starting with the name of the df and a pipe\n\n2\n\nUse the freq() function as usual\n\n3\n\nAdd the tb() function to turn the table into a tibble\n\n\n\n\n\n\n\nWhat’s the mode?\nWhat’s the mode of parents (childs !=0)\n\n\nHow many children have you ever had? Please count all that were born alive at any time (including any you had from a previous marriage)."
   },
   {
     "objectID": "lecture-03.html#mutate-in-action",
@@ -585,14 +585,14 @@
     "href": "lecture-03.html#summarize",
     "title": "Data Management I",
     "section": "summarize()",
-    "text": "summarize()\n\n\ngss_all |&gt;  \n  select(year, hrs1, sex) |&gt; \n  filter(year == 2024) |&gt; \n  drop_na(hrs1, sex)  |&gt;\n  group_by(as_factor(sex)) |&gt;  \n  summarise(\n    count = n(),\n    min = min(hrs1),\n    median = median(hrs1),\n    max = max(hrs1),\n    mean = round(mean(hrs1), digits = 2), \n    sd = sd(hrs1)\n    ) \n\n\n\n# A tibble: 2 × 7\n  `as_factor(sex)` count min       median max             mean    sd\n  &lt;fct&gt;            &lt;int&gt; &lt;dbl+lbl&gt;  &lt;dbl&gt; &lt;dbl+lbl&gt;      &lt;dbl&gt; &lt;dbl&gt;\n1 male               869 0             40 89 [89+ hours]  41.7  13.7\n2 female             891 0             40 89 [89+ hours]  37.3  13.7"
+    "text": "summarize()\nUse functions inside summarize() to create summary variables.\n\n\n\ngss_all |&gt;  \n  drop_na(agekdbrn) |&gt;\n   summarize(\n    avg = mean(agekdbrn)\n    ) \n\n\n# A tibble: 1 × 1\n    avg\n  &lt;dbl&gt;\n1  24.1"
   },
   {
     "objectID": "lecture-03.html#think-like-a-statistician-1",
     "href": "lecture-03.html#think-like-a-statistician-1",
     "title": "Data Management I",
     "section": "Think Like a Statistician",
-    "text": "Think Like a Statistician\n\n\n Can you reproduce this table?\n\n\n\n# A tibble: 4 × 5\n  childs_group       count  mean median    sd\n  &lt;chr&gt;              &lt;int&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;\n1 1 child              642  39.2     40  13.2\n2 2 children           279  40.1     40  12.8\n3 3 children           437  39.4     40  14.1\n4 4 or more children   396  39.6     40  15.3"
+    "text": "Think Like a Statistician\n\n Can you produce this table?\n\n\n\n# A tibble: 2 × 3\n  `as_factor(sex)`  mean    sd\n  &lt;fct&gt;            &lt;dbl&gt; &lt;dbl&gt;\n1 male              41.7  13.7\n2 female            37.3  13.7"
   },
   {
     "objectID": "lecture-03.html#your-data-take",
@@ -817,5 +817,82 @@
     "title": "Introduction to Data",
     "section": "",
     "text": "Based on your table, do a greater percentage of men or women think sex before marriage is ‘not wrong at all’?\n\n\nMen\nWomen"
+  },
+  {
+    "objectID": "lecture-03.html#mini-task",
+    "href": "lecture-03.html#mini-task",
+    "title": "Data Management I",
+    "section": "Mini-task",
+    "text": "Mini-task\n\n Which survey years did the variable childs appear?\n\n\n\n\ngss_which_years(gss_all, childs)\n\n# A tibble: 35 × 2\n   year      childs\n   &lt;dbl+lbl&gt; &lt;lgl&gt; \n 1 1972      TRUE  \n 2 1973      TRUE  \n 3 1974      TRUE  \n 4 1975      TRUE  \n 5 1976      TRUE  \n 6 1977      TRUE  \n 7 1978      TRUE  \n 8 1980      TRUE  \n 9 1982      TRUE  \n10 1983      TRUE  \n# ℹ 25 more rows"
+  },
+  {
+    "objectID": "lecture-03.html#dplyr-in-action-output",
+    "href": "lecture-03.html#dplyr-in-action-output",
+    "title": "Data Management I",
+    "section": "dplyr() in action",
+    "text": "dplyr() in action\n\n# A tibble: 9 × 4\n  childs     freq    pct pct_cum\n  &lt;fct&gt;     &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;\n1 0         20956 27.8      27.8\n2 1         11979 15.9      43.7\n3 2         18989 25.2      68.9\n4 3         11671 15.5      84.3\n5 4          5996  7.95     92.3\n6 5          2669  3.54     95.8\n7 6          1381  1.83     97.7\n8 7           734  0.973    98.6\n9 8 or more  1032  1.37    100"
+  },
+  {
+    "objectID": "lecture-03.html#mini-task-1",
+    "href": "lecture-03.html#mini-task-1",
+    "title": "Data Management I",
+    "section": "Mini-task",
+    "text": "Mini-task\n\n Use a |&gt; & gss_which_years() to find out which survey years the variable agekdbrn appears.\n\n\n\n\ngss_all |&gt;\n  gss_which_years(agekdbrn)\n\n\n# A tibble: 35 × 2\n   year      agekdbrn\n   &lt;dbl+lbl&gt; &lt;lgl&gt;   \n 1 1972      FALSE   \n 2 1973      FALSE   \n 3 1974      FALSE   \n 4 1975      FALSE   \n 5 1976      FALSE   \n 6 1977      FALSE   \n 7 1978      FALSE   \n 8 1980      FALSE   \n 9 1982      FALSE   \n10 1983      FALSE   \n# ℹ 25 more rows\n\n\n\nDemo in console:\ngss_all |&gt; gss_which_years(agekdbrn) |&gt; print(n = 40)"
+  },
+  {
+    "objectID": "lecture-03.html#filter-drop_na",
+    "href": "lecture-03.html#filter-drop_na",
+    "title": "Data Management I",
+    "section": "filter() & drop_na()",
+    "text": "filter() & drop_na()\nUse filter() to keep rows that meet a condition.\nUse drop_na() to remove rows with missing (NA) values.\n\n\n\n1gss_all |&gt;\n2  filter(year == 2022) |&gt;\n3  drop_na(sex, agekdbrn)|&gt;\n4  count(sex)\n\n\n1\n\nStart with the gss_all data frame:\n\n2\n\nKeep only the respondents from the 2022 survey\n\n3\n\nRemove any observations with missing data for our key variables\n\n4\n\nTally how many complete entries remain for each gender\n\n\n\n\n# A tibble: 2 × 2\n  sex            n\n  &lt;dbl+lbl&gt;  &lt;int&gt;\n1 1 [male]    1031\n2 2 [female]  1363\n\n\n\n\nAlways start with df.\n\nTell me what this is doing.\n\nThis row?\n\nThis row? What’s different about this row? (no pipe at end!)"
+  },
+  {
+    "objectID": "lecture-03.html#mini-task-2",
+    "href": "lecture-03.html#mini-task-2",
+    "title": "Data Management I",
+    "section": "Mini-task",
+    "text": "Mini-task\n\n Limit the dataframe to only the 2024 respondents without missing data for sex, hrs1, and childs. How many men and women are left?\n\n\n\n\ngss_all |&gt; \n  filter(year == 2024) |&gt; \n  drop_na(sex, hrs1, childs) |&gt;\n  count(sex)\n\n\n# A tibble: 2 × 2\n  sex            n\n  &lt;dbl+lbl&gt;  &lt;int&gt;\n1 1 [male]     859\n2 2 [female]   888\n\n\n\nASK: Why are the numbers different than the table before?"
+  },
+  {
+    "objectID": "lecture-03.html#median-mean-w-base-r",
+    "href": "lecture-03.html#median-mean-w-base-r",
+    "title": "Data Management I",
+    "section": "Median & Mean w base R",
+    "text": "Median & Mean w base R\n\n\n# Using base R\n1median(gss_all$agekdbrn, na.rm=TRUE)\n\n\n\n1\n\nna.rm is a logical evaluating to TRUE or FALSE indicating whether NA values should be stripped before the computation proceeds.\n\n\n\n\n[1] 23\n\n\n\n\n\nmean(gss_all$agekdbrn, na.rm=TRUE)\n\n\n[1] 24.14491\n\n\n\n\n# show me summary statistics\nsummary(gss_all$agekdbrn)\n\n\n\n   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's \n   9.00   20.00   23.00   24.14   28.00   97.00   46832 \n\n\n\n\nQuestion 1a. If working, full or part time: how many hours did you work last week, at all jobs?"
+  },
+  {
+    "objectID": "lecture-03.html#mini-task-3",
+    "href": "lecture-03.html#mini-task-3",
+    "title": "Data Management I",
+    "section": "Mini-task",
+    "text": "Mini-task\n\n Find the mean and median for the variable: hrs1.\n\n\n\n# separately\nmedian(gss_all$hrs1, na.rm=TRUE)\nmean(gss_all$hrs1, na.rm=TRUE)\n\n# together\nsummary(gss_all$hrs1)\n\n\n\n[1] 40\n[1] 41.11279\n   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's \n   0.00   37.00   40.00   41.11   48.00   89.00   32371"
+  },
+  {
+    "objectID": "lecture-03.html#median-mean-with-dplyr",
+    "href": "lecture-03.html#median-mean-with-dplyr",
+    "title": "Data Management I",
+    "section": "Median & Mean with dplyr",
+    "text": "Median & Mean with dplyr\nUse dplyr grammar to find the frequency, mean, and median.\n\nAdd lots of summary variables using functions inside summarize().\n\n\n\ngss_all |&gt;  \n  drop_na(agekdbrn) |&gt; \n  summarize(\n1    freq = n(),\n2    med = median(agekdbrn),\n3    avg = mean(agekdbrn)\n    ) \n\n\n\n1\n\nUse n() function to create a count variable (no variable in parentheses)\n\n2\n\nUse median() function on a variable\n\n3\n\nUse mean() function on a variable\n\n\n\n\n# A tibble: 1 × 3\n   freq   med   avg\n  &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;\n1 28867    23  24.1"
+  },
+  {
+    "objectID": "lecture-03.html#mini-task-4",
+    "href": "lecture-03.html#mini-task-4",
+    "title": "Data Management I",
+    "section": "Mini-task",
+    "text": "Mini-task\n\n Use dplyr grammar to find the frequency, mean, and median for the variable: hrs1.\n\n\n\n\ngss_all |&gt;  \n  drop_na(hrs1) |&gt;\n   summarize(\n    freq = n(),\n    med = median(hrs1),\n    avg = mean(hrs1)\n    ) \n\n\n# A tibble: 1 × 3\n   freq   med   avg\n  &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;\n1 43328    40  41.1"
+  },
+  {
+    "objectID": "lecture-03.html#mini-task-5",
+    "href": "lecture-03.html#mini-task-5",
+    "title": "Data Management I",
+    "section": "Mini-task",
+    "text": "Mini-task\n\n Compare the average and median work hours (hrs) for U.S. men and women.\n\n\n\n\ngss_all |&gt;  \n  drop_na(sex, hrs1) |&gt; \n  group_by(sex) |&gt; \n  summarize(\n    avg = mean(hrs1),\n    med = median(hrs1)\n    ) \n\n\n# A tibble: 2 × 3\n  sex          avg   med\n  &lt;dbl+lbl&gt;  &lt;dbl&gt; &lt;dbl&gt;\n1 1 [male]    44.3    40\n2 2 [female]  37.8    40"
+  },
+  {
+    "objectID": "lecture-03.html#summarize-variability-measures",
+    "href": "lecture-03.html#summarize-variability-measures",
+    "title": "Data Management I",
+    "section": "summarize() + variability measures",
+    "text": "summarize() + variability measures\n\ngss_all |&gt;  \n  drop_na(agekdbrn, sex)  |&gt;\n  group_by(as_factor(sex)) |&gt;  \n  summarize(\n    freq = n(),\n    min = min(agekdbrn),\n    median = median(agekdbrn),\n    max = max(agekdbrn),\n    mean = round(mean(agekdbrn), digits = 2), \n    sd = sd(agekdbrn)\n    ) \n\n\n\n# A tibble: 2 × 7\n  `as_factor(sex)`  freq min       median max        mean    sd\n  &lt;fct&gt;            &lt;int&gt; &lt;dbl+lbl&gt;  &lt;dbl&gt; &lt;dbl+lbl&gt; &lt;dbl&gt; &lt;dbl&gt;\n1 male             11790 9             25 65         25.7  5.85\n2 female           17009 9             22 57         23.0  5.30"
   }
 ]

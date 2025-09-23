@@ -886,7 +886,7 @@
     "href": "lecture-03.html#mini-task-5",
     "title": "Data Management I",
     "section": "Mini-task",
-    "text": "Mini-task\n\n Compare the average and median work hours (hrs) for U.S. men and women.\n\n\n\n\ngss_all |&gt;  \n  drop_na(sex, hrs1) |&gt; \n  group_by(sex) |&gt; \n  summarize(\n    avg = mean(hrs1),\n    med = median(hrs1)\n    ) \n\n\n# A tibble: 2 × 3\n  sex          avg   med\n  &lt;dbl+lbl&gt;  &lt;dbl&gt; &lt;dbl&gt;\n1 1 [male]    44.3    40\n2 2 [female]  37.8    40"
+    "text": "Mini-task\n\n Compare the median and average work hours (hrs) for U.S. men and women.\n\n\n\n\ngss_all |&gt;  \n  drop_na(sex, hrs1) |&gt; \n  group_by(sex) |&gt; \n  summarize(\n    med = median(hrs1),\n    avg = mean(hrs1)\n    ) \n\n\n# A tibble: 2 × 3\n  sex          med   avg\n  &lt;dbl+lbl&gt;  &lt;dbl&gt; &lt;dbl&gt;\n1 1 [male]      40  44.3\n2 2 [female]    40  37.8"
   },
   {
     "objectID": "lecture-03.html#summarize-variability-measures",

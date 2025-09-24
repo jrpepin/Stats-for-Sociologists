@@ -6,10 +6,10 @@
 <script src="lecture-04_files/libs/quarto-html/tippy.umd.min.js"></script>
 <link href="lecture-04_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="lecture-04_files/libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="lecture-04_files/libs/quarto-html/quarto-syntax-highlighting-2fa0555fe88427c29efa1b60aaf9e62d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="lecture-04_files/libs/quarto-html/quarto-syntax-highlighting-c1f63da3e08f13bc72dc17e92cfd001d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <link href="lecture-04_files/libs/quarto-contrib/fontawesome6-1.2.0/all.min.css" rel="stylesheet">
 <link href="lecture-04_files/libs/quarto-contrib/fontawesome6-1.2.0/latex-fontsize.css" rel="stylesheet"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.6.42">
+  <meta name="generator" content="quarto-1.7.32">
 
   <title>Data Management II</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -30,8 +30,9 @@
       vertical-align: middle;
     }
     /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
     pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
     pre > code.sourceCode > span:empty { height: 1.2em; }
     .sourceCode { overflow: visible; }
     code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -42,7 +43,7 @@
     }
     @media print {
     pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
     }
     pre.numberSource code
       { counter-reset: source-line 0; }
@@ -95,7 +96,7 @@
     code span.vs { color: #da4453; } /* VerbatimString */
     code span.wa { color: #da4453; } /* Warning */
   </style>
-  <link rel="stylesheet" href="lecture-04_files/libs/revealjs/dist/theme/quarto-efb2edbbea613432c72d342d8f387282.css">
+  <link rel="stylesheet" href="lecture-04_files/libs/revealjs/dist/theme/quarto-a526d4595ac465cbbd124601ea9a87fb.css">
   <link href="lecture-04_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="lecture-04_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="lecture-04_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -248,8 +249,8 @@
 <section id="agenda" class="title-slide slide level1 center" data-menu-title="Agenda" data-background-image="images/calendar.png" data-background-size="100px" data-background-repeat="repeat">
 <h1>Agenda</h1>
 <ul>
-<li>Manipulating Dataframes</li>
-<li>Joining Dataframes</li>
+<li><code>dplyr</code> II</li>
+<li>Assignment operators</li>
 </ul>
 <aside class="notes">
 <p>missing data? &amp; <strong>outliers</strong> - dates? - lists</p>
@@ -270,656 +271,577 @@
 <h1>Learning objectives</h1>
 <p>By the end of the lecture, you will be able to …</p>
 <ul>
-<li>Reshape data between wide and long formats</li>
-<li>Reorder columns and rows</li>
-<li>Combine and expand dataframes</li>
+<li>implement more basic variable manipulation</li>
+<li>understand overwriting principles</li>
 </ul>
 </section>
 
 <section>
 <section id="code-along-04" class="title-slide slide level1 center" data-menu-title="Code-along" data-background-image="images/terminal.png">
 <h1>Code-along 04</h1>
-<p>Download and open <a href="https://app.filen.io/#/d/3de917ac-ea8c-48a5-9f04-99b8cf7f31b8%23CbYcjNXevz13eP5DiLVBVYRIXBus67Au" target="_blank">code-along-04.qmd</a></p>
+<p>Download and open <a href="" target="_blank">code-along-04.qmd</a></p>
 </section>
 <section id="packages" class="slide level2 sparse-slide">
 <h2>Packages</h2>
 <p>Load the standard packages.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a><span class="fu">library</span>(here)</span>
-<span id="cb1-2"><a href=""></a><span class="fu">library</span>(tidyverse) </span>
-<span id="cb1-3"><a href=""></a><span class="fu">library</span>(haven) <span class="co"># not core tidyverse</span></span>
-<span id="cb1-4"><a href=""></a><span class="fu">library</span>(gssr)</span>
-<span id="cb1-5"><a href=""></a><span class="fu">library</span>(gssrdoc)</span>
-<span id="cb1-6"><a href=""></a><span class="fu">library</span>(summarytools)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a><span class="fu">library</span>(tidyverse) </span>
+<span id="cb1-2"><a href=""></a><span class="fu">library</span>(haven) <span class="co"># not core tidyverse</span></span>
+<span id="cb1-3"><a href=""></a><span class="fu">library</span>(gssr)</span>
+<span id="cb1-4"><a href=""></a><span class="fu">library</span>(gssrdoc) <span class="co"># load the GSS codebook</span></span>
+<span id="cb1-5"><a href=""></a><span class="fu">library</span>(summarytools)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="gss-panel-data-download" class="slide level2">
-<h2>GSS Panel Data: Download</h2>
-<p><a href="https://gss.norc.org/get-the-data/stata" class="uri" target="_blank">https://gss.norc.org/get-the-data/stata</a></p>
-<p><br></p>
-
-<img data-src="images/04/gss-panel.png" style="width:100.0%" class="r-stretch"><div class="callout callout-tip no-icon callout-titled callout-style-default">
-<div class="callout-body">
-<div class="callout-title">
-<p><strong><i class="fa-solid fa-hat-wizard" aria-label="hat-wizard"></i> Heads Up!</strong></p>
-</div>
-<div class="callout-content">
-<p>Save the <strong>unzipped</strong> file in your class <code>data</code> folder.</p>
-</div>
-</div>
-</div>
-</section>
-<section id="gss-panel-data-load" class="slide level2 sparse-slide">
-<h2>GSS Panel Data: Load</h2>
+<section id="load-your-data" class="slide level2">
+<h2>Load your data</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href=""></a><span class="co"># Use here() to construct the file path</span></span>
-<span id="cb2-2"><a href=""></a>gss_panel.dta <span class="ot">&lt;-</span> <span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"GSS_2020_panel_stata_1a/gss2020panel_r1a.dta"</span>)</span>
-<span id="cb2-3"><a href=""></a></span>
-<span id="cb2-4"><a href=""></a><span class="co">#load the data using `haven::read_dta()`</span></span>
-<span id="cb2-5"><a href=""></a>data <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(gss_panel.dta)</span>
-<span id="cb2-6"><a href=""></a></span>
-<span id="cb2-7"><a href=""></a><span class="co"># Or, do both at the same time!</span></span>
-<span id="cb2-8"><a href=""></a><span class="co"># data &lt;- read_dta(here("data", "GSS_2020_panel_stata_1a/gss2020panel_r1a.dta"))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="gss-2016-2020-panel-dataset" class="slide level2 sparse-slide">
-<h2>GSS 2016-2020 Panel Dataset</h2>
-<p>Study of former 2016 and 2018 GSS respondents were interviewed again in 2020</p>
-<ul>
-<li>Variables from 2016 (Wave 1a) have <span style="color: #e74c3c"><strong>_1a</strong></span> appended</li>
-<li>Variables from 2018 (Wave 1b) have <span style="color: #e74c3c"><strong>_1b</strong></span> appended</li>
-<li>Variables from 2020 (Wave 2) have <span style="color: #e74c3c"><strong>_2</strong></span> appended</li>
-</ul>
-</section>
-<section id="gss-2016-2020-panel-dataset-1" class="slide level2 sparse-slide">
-<h2>GSS 2016-2020 Panel Dataset</h2>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 10 × 7
-     yearid year_1a year_1b year_2 age_1a    age_1b    age_2    
-      &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl+lbl&gt; &lt;dbl+lbl&gt; &lt;dbl+lbl&gt;
- 1 20182183      NA    2018     NA NA(i)        52     NA(i)    
- 2 20180711      NA    2018     NA NA(i)        19     NA(i)    
- 3 20182189      NA    2018   2020 NA(i)        37        39    
- 4 20160354    2016      NA     NA    56     NA(i)     NA(i)    
- 5 20180452      NA    2018   2020 NA(i)        29        31    
- 6 20181503      NA    2018   2020 NA(i)        58        60    
- 7 20162744    2016      NA   2020    71     NA(i)        75    
- 8 20160315    2016      NA   2020    69     NA(i)        73    
- 9 20160170    2016      NA     NA    75     NA(i)     NA(i)    
-10 20161888    2016      NA     NA    71     NA(i)     NA(i)    </code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href=""></a><span class="co"># Get the data all survey years</span></span>
+<span id="cb2-2"><a href=""></a><span class="fu">data</span>(gss_all)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section></section>
 <section>
-<section id="manipulating-dataframes" class="title-slide slide level1 theme-section center">
-<h1>Manipulating Dataframes</h1>
+<section id="dplyr-ii" class="title-slide slide level1 theme-section center">
+<h1>dplyr II</h1>
 
 </section>
-<section id="selection-helpers" class="slide level2 smaller">
-<h2>Selection helpers</h2>
-<p>Match variables according to a given pattern.</p>
-<ul>
-<li><code>starts_with()</code>: Starts with an exact prefix.</li>
-<li><code>ends_with()</code>: Ends with an exact suffix.</li>
-<li><code>contains()</code>: Contains a literal string.</li>
-<li>…</li>
-</ul>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href=""></a>my_data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span></span>
-<span id="cb4-2"><a href=""></a>  <span class="fu">select</span>(yearid, wtssnr_2, </span>
-<span id="cb4-3"><a href=""></a>         <span class="fu">starts_with</span>(<span class="st">"age_"</span>), </span>
-<span id="cb4-4"><a href=""></a>         <span class="fu">starts_with</span>(<span class="st">"family16_"</span>),</span>
-<span id="cb4-5"><a href=""></a>         <span class="fu">starts_with</span>(<span class="st">"socfrend_"</span>),</span>
-<span id="cb4-6"><a href=""></a>         <span class="fu">starts_with</span>(<span class="st">"childs_"</span>)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
+<section id="select" class="slide level2 sparse-slide">
+<h2><code>select()</code></h2>
+<p>Use <code>select()</code> to choose columns in a dataframe.<br>
+</p>
 <p><br></p>
 <div class="fragment">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5" data-code-line-numbers="4|7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a><span class="co"># You can supply multiple prefixes or suffixes.</span></span>
-<span id="cb5-2"><a href=""></a>my_data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span></span>
-<span id="cb5-3"><a href=""></a>  <span class="fu">select</span>(yearid, wtssnr_2, </span>
-<span id="cb5-4"><a href=""></a>         <span class="fu">starts_with</span>(<span class="fu">c</span>(<span class="st">"age_"</span>, <span class="st">"family16_"</span>, <span class="st">"socfrend"</span>, <span class="st">"childs"</span>))</span>
-<span id="cb5-5"><a href=""></a>         )</span>
-<span id="cb5-6"><a href=""></a></span>
-<span id="cb5-7"><a href=""></a>my_data <span class="ot">&lt;-</span> <span class="fu">as_factor</span>(my_data) <span class="co"># Apply labels to data</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div>
-</section>
-<section id="head-tail" class="slide level2 smaller">
-<h2><code>head()</code> &amp; <code>tail()</code></h2>
-<p>Look at the first few column names and <strong>first</strong> few rows.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href=""></a><span class="fu">head</span>(my_data, <span class="at">n =</span> <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 5 × 14
-    yearid wtssnr_2 age_1a age_1b age_2 family16_1a       family16_1b family16_2
-     &lt;dbl&gt;    &lt;dbl&gt; &lt;fct&gt;  &lt;fct&gt;  &lt;fct&gt; &lt;fct&gt;             &lt;fct&gt;       &lt;fct&gt;     
-1 20160001    1.44  47     &lt;NA&gt;   51    both own mother … &lt;NA&gt;        not avail…
-2 20160002    0.722 61     &lt;NA&gt;   65    both own mother … &lt;NA&gt;        not avail…
-3 20160003   NA     72     &lt;NA&gt;   &lt;NA&gt;  both own mother … &lt;NA&gt;        iap       
-4 20160004    2.89  43     &lt;NA&gt;   47    mother only       &lt;NA&gt;        not avail…
-5 20160005   NA     55     &lt;NA&gt;   &lt;NA&gt;  both own mother … &lt;NA&gt;        iap       
-# ℹ 6 more variables: socfrend_1a &lt;fct&gt;, socfrend_1b &lt;fct&gt;, socfrend_2 &lt;fct&gt;,
-#   childs_1a &lt;fct&gt;, childs_1b &lt;fct&gt;, childs_2 &lt;fct&gt;</code></pre>
-</div>
-</div>
-<p><br></p>
-<div class="fragment">
-<p>Look at the first few column names and <strong>last</strong> few rows.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href=""></a><span class="fu">tail</span>(my_data, <span class="at">n =</span> <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 5 × 14
-    yearid wtssnr_2 age_1a age_1b age_2 family16_1a family16_1b       family16_2
-     &lt;dbl&gt;    &lt;dbl&gt; &lt;fct&gt;  &lt;fct&gt;  &lt;fct&gt; &lt;fct&gt;       &lt;fct&gt;             &lt;fct&gt;     
-1 20182344   NA     &lt;NA&gt;   37     &lt;NA&gt;  &lt;NA&gt;        mother and stepf… iap       
-2 20182345    0.995 &lt;NA&gt;   75     77    &lt;NA&gt;        both own mother … not avail…
-3 20182346    0.995 &lt;NA&gt;   67     70    &lt;NA&gt;        both own mother … not avail…
-4 20182347   NA     &lt;NA&gt;   72     &lt;NA&gt;  &lt;NA&gt;        both own mother … iap       
-5 20182348   NA     &lt;NA&gt;   79     &lt;NA&gt;  &lt;NA&gt;        both own mother … iap       
-# ℹ 6 more variables: socfrend_1a &lt;fct&gt;, socfrend_1b &lt;fct&gt;, socfrend_2 &lt;fct&gt;,
-#   childs_1a &lt;fct&gt;, childs_1b &lt;fct&gt;, childs_2 &lt;fct&gt;</code></pre>
-</div>
-</div>
-</div>
-</section>
-<section id="reminder-tidy-data" class="slide level2">
-<h2>Reminder: Tidy data</h2>
-
-<img data-src="images/04/tidy-data.png" style="width:100.0%" class="r-stretch"></section>
-<section id="section" class="slide level2" data-menu-title="Not tidy data">
-<h2></h2>
-
-<img data-src="images/04/not-tidy.png" style="width:100.0%" class="r-stretch"><div class="fragment">
-<div style="color: #e74c3c; font-family: 'Shadows Into Light'">
-<p><strong>This data is NOT tidy!</strong><br>
-Some column names include values of a variable (survey year).</p>
-</div>
-</div>
-</section>
-<section id="section-1" class="slide level2" data-menu-title="Tidy data">
-<h2></h2>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 15,645 × 7
-     yearid wtssnr_2 panel age   family16                    socfrend     childs
-      &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt; &lt;fct&gt; &lt;fct&gt;                       &lt;fct&gt;        &lt;fct&gt; 
- 1 20160001    1.44  1a    47    both own mother and father  several tim… 3     
- 2 20160001    1.44  1b    &lt;NA&gt;  &lt;NA&gt;                        &lt;NA&gt;         &lt;NA&gt;  
- 3 20160001    1.44  2     51    not available for this year several tim… 3     
- 4 20160002    0.722 1a    61    both own mother and father  several tim… 0     
- 5 20160002    0.722 1b    &lt;NA&gt;  &lt;NA&gt;                        &lt;NA&gt;         &lt;NA&gt;  
- 6 20160002    0.722 2     65    not available for this year about once … 0     
- 7 20160003   NA     1a    72    both own mother and father  &lt;NA&gt;         2     
- 8 20160003   NA     1b    &lt;NA&gt;  &lt;NA&gt;                        &lt;NA&gt;         &lt;NA&gt;  
- 9 20160003   NA     2     &lt;NA&gt;  iap                         &lt;NA&gt;         &lt;NA&gt;  
-10 20160004    2.89  1a    43    mother only                 once or twi… 4     
-# ℹ 15,635 more rows</code></pre>
-</div>
-</div>
-<p><br></p>
-<div style="color: #18bc9c; font-family: 'Shadows Into Light'">
-<p><strong>This data is tidy!</strong><br>
-Each variable in its own column, and each observation in its own row.</p>
-</div>
-</section>
-<section id="section-2" class="slide level2" data-menu-title="Wide vs Long">
-<h2></h2>
-
-<img data-src="images/04/wide-long.png" style="width:100.0%" class="r-stretch"></section>
-<section id="reshaping-data" class="slide level2">
-<h2>Reshaping data</h2>
-
-<img data-src="images/04/tidyr-pivoting.gif" class="r-stretch"></section>
-<section id="pivot_longer" class="slide level2">
-<h2><code>pivot_longer()</code></h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="annotated-cell-7" data-code-line-numbers="2|3|4|5"><pre class="sourceCode numberSource r code-annotation-code number-lines code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-7-1"><a href="#annotated-cell-7-1"></a>my_data <span class="ot">&lt;-</span> my_data <span class="sc">|&gt;</span></span>
-<span id="annotated-cell-7-2"><a href="#annotated-cell-7-2"></a>  <span class="fu">pivot_longer</span>(</span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="1">1</button><span id="annotated-cell-7-3" class="code-annotation-target"><a href="#annotated-cell-7-3"></a>    <span class="at">cols =</span> <span class="dv">3</span><span class="sc">:</span><span class="dv">14</span>,</span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="2">2</button><span id="annotated-cell-7-4" class="code-annotation-target"><a href="#annotated-cell-7-4"></a>    <span class="at">names_to =</span> <span class="fu">c</span>(<span class="st">".value"</span>, <span class="st">"panel"</span>),</span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="3">3</button><span id="annotated-cell-7-5" class="code-annotation-target"><a href="#annotated-cell-7-5"></a>    <span class="at">names_sep =</span> <span class="st">"_"</span>)</span>
-<span id="annotated-cell-7-6"><a href="#annotated-cell-7-6"></a>    </span>
-<span id="annotated-cell-7-7"><a href="#annotated-cell-7-7"></a><span class="fu">head</span>(my_data, <span class="at">n =</span> <span class="dv">5</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="annotated-cell-3" data-code-line-numbers="1|2"><pre class="sourceCode numberSource r code-annotation-code number-lines code-with-copy code-annotated"><code class="sourceCode r"><button class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="1">1</button><span id="annotated-cell-3-1" class="code-annotation-target"><a href="#annotated-cell-3-1"></a>my_data <span class="ot">&lt;-</span> gss_all <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="2">2</button><span id="annotated-cell-3-2" class="code-annotation-target"><a href="#annotated-cell-3-2"></a>  <span class="fu">select</span>(year, agekdbrn, childs, hrs1, marital)</span>
+<span id="annotated-cell-3-3"><a href="#annotated-cell-3-3"></a></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="3">3</button><span id="annotated-cell-3-4" class="code-annotation-target"><a href="#annotated-cell-3-4"></a><span class="fu">head</span>(my_data)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-annotation">
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
-<dt data-target-cell="annotated-cell-7" data-target-annotation="1">1</dt>
+<dt data-target-cell="annotated-cell-3" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-7" data-code-lines="3" data-code-annotation="1"><code>cols =</code> specifies which columns to pivot;</span>
+<span data-code-cell="annotated-cell-3" data-code-lines="1" data-code-annotation="1">Save a new data frame</span>
 </dd>
-<dt data-target-cell="annotated-cell-7" data-target-annotation="2">2</dt>
+<dt data-target-cell="annotated-cell-3" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-7" data-code-lines="4" data-code-annotation="2"><code>names_to =</code> creates multiple value columns from the name parts and a new column that stores the identifier.</span>
+<span data-code-cell="annotated-cell-3" data-code-lines="2" data-code-annotation="2">Keep only the listed variables</span>
 </dd>
-<dt data-target-cell="annotated-cell-7" data-target-annotation="3">3</dt>
+<dt data-target-cell="annotated-cell-3" data-target-annotation="3">3</dt>
 <dd>
-<span data-code-cell="annotated-cell-7" data-code-lines="5" data-code-annotation="3"><code>names_sep =</code> where to split the names into a variable (.value) and what to use as a key identifier</span>
+<span data-code-cell="annotated-cell-3" data-code-lines="4" data-code-annotation="3">Returns the first part of the object</span>
 </dd>
 </dl>
 </div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 5 × 7
-    yearid wtssnr_2 panel age   family16                    socfrend      childs
-     &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt; &lt;fct&gt; &lt;fct&gt;                       &lt;fct&gt;         &lt;fct&gt; 
-1 20160001    1.44  1a    47    both own mother and father  several time… 3     
-2 20160001    1.44  1b    &lt;NA&gt;  &lt;NA&gt;                        &lt;NA&gt;          &lt;NA&gt;  
-3 20160001    1.44  2     51    not available for this year several time… 3     
-4 20160002    0.722 1a    61    both own mother and father  several time… 0     
-5 20160002    0.722 1b    &lt;NA&gt;  &lt;NA&gt;                        &lt;NA&gt;          &lt;NA&gt;  </code></pre>
 </div>
+<div class="cell fragment">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 5
+  year      agekdbrn    childs    hrs1        marital          
+  &lt;dbl+lbl&gt; &lt;dbl+lbl&gt;   &lt;dbl+lbl&gt; &lt;dbl+lbl&gt;   &lt;dbl+lbl&gt;        
+1 1972      NA(i) [iap] 0         NA(i) [iap] 5 [never married]
+2 1972      NA(i) [iap] 5         NA(i) [iap] 1 [married]      
+3 1972      NA(i) [iap] 4         NA(i) [iap] 1 [married]      
+4 1972      NA(i) [iap] 0         NA(i) [iap] 1 [married]      
+5 1972      NA(i) [iap] 2         NA(i) [iap] 1 [married]      
+6 1972      NA(i) [iap] 0         NA(i) [iap] 5 [never married]</code></pre>
+</div>
+</div>
+<aside class="notes">
+
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </div>
 </section>
-<section id="pivot_wider" class="slide level2">
-<h2><code>pivot_wider()</code></h2>
+<section id="mini-task" class="slide level2 sparse-slide">
+<h2>Mini-task</h2>
+<div class="task">
+<p><i class="fa-solid fa-check-double" aria-label="check-double"></i> Create a dataframe with the variables year, agekdbrn, childs, hrs1, and marital, including only respondents from the year 2022 who have no missing values in any of these variables.</p>
+</div>
+<div class="fragment">
 <div class="cell">
-<div class="sourceCode cell-code" id="annotated-cell-8" data-code-line-numbers="1|2|3|4"><pre class="sourceCode numberSource r code-annotation-code number-lines code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-8-1"><a href="#annotated-cell-8-1"></a>my_data <span class="sc">|&gt;</span> <span class="co"># not overwriting my_data</span></span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="1">1</button><span id="annotated-cell-8-2" class="code-annotation-target"><a href="#annotated-cell-8-2"></a>  <span class="fu">pivot_wider</span>(</span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="2">2</button><span id="annotated-cell-8-3" class="code-annotation-target"><a href="#annotated-cell-8-3"></a>    <span class="at">names_from =</span> panel,</span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="3">3</button><span id="annotated-cell-8-4" class="code-annotation-target"><a href="#annotated-cell-8-4"></a>    <span class="at">values_from =</span> <span class="fu">c</span>(<span class="sc">-</span>yearid, <span class="sc">-</span>wtssnr_2))</span>
-<span id="annotated-cell-8-5"><a href="#annotated-cell-8-5"></a></span>
-<span id="annotated-cell-8-6"><a href="#annotated-cell-8-6"></a><span class="fu">head</span>(my_data, <span class="at">n =</span> <span class="dv">5</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="annotated-cell-4" data-code-line-numbers="1|2|3|4"><pre class="sourceCode numberSource r code-annotation-code number-lines code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-4-1"><a href="#annotated-cell-4-1"></a>my_data <span class="ot">&lt;-</span> gss_all <span class="sc">|&gt;</span> </span>
+<span id="annotated-cell-4-2"><a href="#annotated-cell-4-2"></a>  <span class="fu">select</span>(year, agekdbrn, childs, hrs1, marital) <span class="sc">|&gt;</span></span>
+<span id="annotated-cell-4-3"><a href="#annotated-cell-4-3"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2022</span>) <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="1">1</button><span id="annotated-cell-4-4" class="code-annotation-target"><a href="#annotated-cell-4-4"></a>  <span class="fu">drop_na</span>()</span>
+<span id="annotated-cell-4-5"><a href="#annotated-cell-4-5"></a></span>
+<span id="annotated-cell-4-6"><a href="#annotated-cell-4-6"></a><span class="fu">head</span>(my_data)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-annotation">
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
-<dt data-target-cell="annotated-cell-8" data-target-annotation="1">1</dt>
+<dt data-target-cell="annotated-cell-4" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-8" data-code-lines="2" data-code-annotation="1">Increasing the number of columns and decreasing the number of rows</span>
-</dd>
-<dt data-target-cell="annotated-cell-8" data-target-annotation="2">2</dt>
-<dd>
-<span data-code-cell="annotated-cell-8" data-code-lines="3" data-code-annotation="2">Which column to get the name of the output columns</span>
-</dd>
-<dt data-target-cell="annotated-cell-8" data-target-annotation="3">3</dt>
-<dd>
-<span data-code-cell="annotated-cell-8" data-code-lines="4" data-code-annotation="3">Which columns to exclude from the pivot</span>
+<span data-code-cell="annotated-cell-4" data-code-lines="4" data-code-annotation="1">No need to list all variables inside drop_na()</span>
 </dd>
 </dl>
 </div>
+</div>
+
+<aside class="notes">
+<p><span style="color: #6f42c1">ASK:</span><br>
+</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</div>
+</section>
+<section id="mini-task-output" class="slide level2 sparse-slide output-location-slide"><h2>Mini-task</h2><div class="cell output-location-slide">
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 5,215 × 17
-     yearid wtssnr_2 panel_1a panel_1b panel_2 age_1a age_1b age_2 family16_1a  
-      &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt;   &lt;fct&gt;  &lt;fct&gt;  &lt;fct&gt; &lt;fct&gt;        
- 1 20160001    1.44  1a       1b       2       47     &lt;NA&gt;   51    both own mot…
- 2 20160002    0.722 1a       1b       2       61     &lt;NA&gt;   65    both own mot…
- 3 20160003   NA     1a       1b       2       72     &lt;NA&gt;   &lt;NA&gt;  both own mot…
- 4 20160004    2.89  1a       1b       2       43     &lt;NA&gt;   47    mother only  
- 5 20160005   NA     1a       1b       2       55     &lt;NA&gt;   &lt;NA&gt;  both own mot…
- 6 20160006   NA     1a       1b       2       53     &lt;NA&gt;   &lt;NA&gt;  other        
- 7 20160007   NA     1a       1b       2       50     &lt;NA&gt;   &lt;NA&gt;  both own mot…
- 8 20160008    1.44  1a       1b       2       23     &lt;NA&gt;   27    both own mot…
- 9 20160009    1.44  1a       1b       2       45     &lt;NA&gt;   49    both own mot…
-10 20160010   NA     1a       1b       2       71     &lt;NA&gt;   &lt;NA&gt;  both own mot…
-# ℹ 5,205 more rows
-# ℹ 8 more variables: family16_1b &lt;fct&gt;, family16_2 &lt;fct&gt;, socfrend_1a &lt;fct&gt;,
-#   socfrend_1b &lt;fct&gt;, socfrend_2 &lt;fct&gt;, childs_1a &lt;fct&gt;, childs_1b &lt;fct&gt;,
-#   childs_2 &lt;fct&gt;
-# A tibble: 5 × 7
-    yearid wtssnr_2 panel age   family16                    socfrend      childs
-     &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt; &lt;fct&gt; &lt;fct&gt;                       &lt;fct&gt;         &lt;fct&gt; 
-1 20160001    1.44  1a    47    both own mother and father  several time… 3     
-2 20160001    1.44  1b    &lt;NA&gt;  &lt;NA&gt;                        &lt;NA&gt;          &lt;NA&gt;  
-3 20160001    1.44  2     51    not available for this year several time… 3     
-4 20160002    0.722 1a    61    both own mother and father  several time… 0     
-5 20160002    0.722 1b    &lt;NA&gt;  &lt;NA&gt;                        &lt;NA&gt;          &lt;NA&gt;  </code></pre>
+<pre><code># A tibble: 6 × 5
+  year      agekdbrn  childs    hrs1      marital          
+  &lt;dbl+lbl&gt; &lt;dbl+lbl&gt; &lt;dbl+lbl&gt; &lt;dbl+lbl&gt; &lt;dbl+lbl&gt;        
+1 2022      27        1         40        3 [divorced]     
+2 2022      27        1         52        3 [divorced]     
+3 2022      28        1         31        5 [never married]
+4 2022      24        2         40        1 [married]      
+5 2022      21        2         10        5 [never married]
+6 2022      25        7         20        1 [married]      </code></pre>
+</div>
+</div></section><section id="mutate" class="slide level2">
+<h2><code>mutate()</code></h2>
+<p>Use <code>mutate()</code> to add new columns or change existing ones.</p>
+</section>
+<section id="use-mutate-to-create-z-scores" class="slide level2">
+<h2>Use mutate to create Z scores</h2>
+<p>use dplyr to create and interpret sd and z scores</p>
+</section>
+<section id="mini-task-1" class="slide level2">
+<h2>Mini-task</h2>
+<div class="task">
+<p><i class="fa-solid fa-lightbulb" aria-label="lightbulb"></i> What proportion of new parents were teenagers (e.g., under 18 years old)?</p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="annotated-cell-5" data-code-line-numbers="1-4|5|6"><pre class="sourceCode numberSource r code-annotation-code number-lines code-with-copy code-annotated"><code class="sourceCode r"><button class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="1">1</button><span id="annotated-cell-5-1" class="code-annotation-target"><a href="#annotated-cell-5-1"></a>gss_all <span class="sc">|&gt;</span></span>
+<span id="annotated-cell-5-2"><a href="#annotated-cell-5-2"></a>  <span class="fu">select</span>(year, agekdbrn) <span class="sc">|&gt;</span></span>
+<span id="annotated-cell-5-3"><a href="#annotated-cell-5-3"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2022</span>) <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="2">2</button><span id="annotated-cell-5-4" class="code-annotation-target"><a href="#annotated-cell-5-4"></a>  <span class="fu">drop_na</span>(agekdbrn) <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="3">3</button><span id="annotated-cell-5-5" class="code-annotation-target"><a href="#annotated-cell-5-5"></a>  <span class="fu">mutate</span>(<span class="at">teen_parent =</span> (agekdbrn <span class="sc">&lt;</span> <span class="dv">18</span>) <span class="sc">*</span> <span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="4">4</button><span id="annotated-cell-5-6" class="code-annotation-target"><a href="#annotated-cell-5-6"></a>  <span class="fu">summarise</span>(<span class="at">proportion =</span> <span class="fu">mean</span>(teen_parent))</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-annotation">
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-5" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-5" data-code-lines="1,2,3" data-code-annotation="1">Manipulate the dataset to variables and observations of interest</span>
+</dd>
+<dt data-target-cell="annotated-cell-5" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-5" data-code-lines="4" data-code-annotation="2">Remove missing or <code>summarise()</code> will report NA</span>
+</dd>
+<dt data-target-cell="annotated-cell-5" data-target-annotation="3">3</dt>
+<dd>
+<span data-code-cell="annotated-cell-5" data-code-lines="5" data-code-annotation="3">Returns a logical vector (TRUE, FALSE, or NA) and * 1 converts it to numeric</span>
+</dd>
+<dt data-target-cell="annotated-cell-5" data-target-annotation="4">4</dt>
+<dd>
+<span data-code-cell="annotated-cell-5" data-code-lines="6" data-code-annotation="4">Mean of the variable, which equals the proportion of <code>1s</code></span>
+</dd>
+</dl>
+</div>
+</div>
+<div class="cell fragment">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 1
+  proportion
+       &lt;dbl&gt;
+1     0.0773</code></pre>
 </div>
 </div>
 </section>
-<section id="recode-the-reshaped-variable" class="slide level2">
-<h2>Recode the reshaped variable</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href=""></a>my_data <span class="ot">&lt;-</span> my_data <span class="sc">|&gt;</span></span>
-<span id="cb13-2"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">panel =</span> <span class="fu">case_when</span>(</span>
-<span id="cb13-3"><a href=""></a>         panel <span class="sc">==</span> <span class="st">"1a"</span> <span class="sc">~</span> <span class="dv">2016</span>,</span>
-<span id="cb13-4"><a href=""></a>         panel <span class="sc">==</span> <span class="st">"1b"</span> <span class="sc">~</span> <span class="dv">2018</span>,</span>
-<span id="cb13-5"><a href=""></a>         panel <span class="sc">==</span> <span class="st">"2"</span> <span class="sc">~</span> <span class="dv">2020</span>,</span>
-<span id="cb13-6"><a href=""></a>         <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA_integer_</span>))</span>
-<span id="cb13-7"><a href=""></a></span>
-<span id="cb13-8"><a href=""></a><span class="fu">head</span>(my_data, <span class="at">n =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 3 × 7
-    yearid wtssnr_2 panel age   family16                    socfrend      childs
-     &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt; &lt;fct&gt;                       &lt;fct&gt;         &lt;fct&gt; 
-1 20160001     1.44  2016 47    both own mother and father  several time… 3     
-2 20160001     1.44  2018 &lt;NA&gt;  &lt;NA&gt;                        &lt;NA&gt;          &lt;NA&gt;  
-3 20160001     1.44  2020 51    not available for this year several time… 3     </code></pre>
-</div>
-</div>
+<section id="mutate-with-case_when" class="slide level2 smaller">
+<h2><code>mutate()</code> with <code>case_when()</code></h2>
+<p>Use <code>case_when()</code> inside <code>mutate()</code> to create values based on conditions.</p>
 <div class="fragment">
+<div class="task">
+<p><i class="fa-solid fa-lightbulb" aria-label="lightbulb"></i> What proportion of new parents had their first child as teenagers, in their 20s, 30s, or after age 40?</p>
+</div>
+<div class="cell columns column-output-location">
+<div class="column">
+<div class="sourceCode cell-code" id="cb6" data-code-line-numbers="1|5|6-9|10-11|13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href=""></a>gss_all <span class="ot">&lt;-</span>  gss_all <span class="sc">|&gt;</span>  </span>
+<span id="cb6-2"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">age_groups =</span> <span class="fu">case_when</span>(</span>
+<span id="cb6-3"><a href=""></a>    agekdbrn <span class="sc">&lt;</span> <span class="dv">18</span> <span class="sc">~</span> <span class="st">"&lt;18"</span>,</span>
+<span id="cb6-4"><a href=""></a>    agekdbrn <span class="sc">&gt;=</span> <span class="dv">18</span> <span class="sc">&amp;</span> agekdbrn <span class="sc">&lt;=</span> <span class="dv">29</span> <span class="sc">~</span> <span class="st">"18–29"</span>,</span>
+<span id="cb6-5"><a href=""></a>    agekdbrn <span class="sc">&gt;=</span> <span class="dv">30</span> <span class="sc">&amp;</span> agekdbrn <span class="sc">&lt;=</span> <span class="dv">39</span> <span class="sc">~</span> <span class="st">"30–39"</span>,</span>
+<span id="cb6-6"><a href=""></a>    agekdbrn <span class="sc">&gt;=</span> <span class="dv">40</span> <span class="sc">~</span> <span class="st">"40+"</span>,</span>
+<span id="cb6-7"><a href=""></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA_character_</span>)</span>
+<span id="cb6-8"><a href=""></a>  ) </span>
+<span id="cb6-9"><a href=""></a></span>
+<span id="cb6-10"><a href=""></a>gss_all <span class="sc">|&gt;</span></span>
+<span id="cb6-11"><a href=""></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2022</span>) <span class="sc">|&gt;</span></span>
+<span id="cb6-12"><a href=""></a>  <span class="fu">freq</span>(age_groups, <span class="at">report.nas =</span> <span class="cn">FALSE</span>, <span class="at">headings =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div><div class="column fragment">
+<div class="cell-output cell-output-stdout">
+<pre><code>
+              Freq        %   % Cum.
+----------- ------ -------- --------
+        &lt;18    186     7.73     7.73
+      18–29   1704    70.82    78.55
+      30–39    463    19.24    97.80
+        40+     53     2.20   100.00
+      Total   2406   100.00   100.00</code></pre>
+</div>
+</div></div>
+</div>
+</section></section>
+<section>
+<section id="assignment-operators" class="title-slide slide level1 theme-section center">
+<h1>Assignment operators</h1>
+
+</section>
+<section id="overwriting-data" class="slide level2">
+<h2>Overwriting data</h2>
 <div class="callout callout-tip no-icon callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
 <p><strong><i class="fa-solid fa-hat-wizard" aria-label="hat-wizard"></i> Heads Up!</strong></p>
 </div>
 <div class="callout-content">
-<p><code>family16</code> is a time-invariant variable.</p>
+<p>Overwriting datasets and variables can be intentional or unintentional.</p>
 </div>
-</div>
-</div>
-</div>
-</section>
-<section id="relocate" class="slide level2 smaller">
-<h2><code>relocate()</code></h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href=""></a>my_data <span class="ot">&lt;-</span> my_data <span class="sc">|&gt;</span> </span>
-<span id="cb15-2"><a href=""></a>  <span class="fu">relocate</span>(panel)</span>
-<span id="cb15-3"><a href=""></a></span>
-<span id="cb15-4"><a href=""></a><span class="fu">head</span>(my_data, <span class="at">n =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 2 × 7
-  panel   yearid wtssnr_2 age   family16                   socfrend       childs
-  &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt; &lt;fct&gt; &lt;fct&gt;                      &lt;fct&gt;          &lt;fct&gt; 
-1  2016 20160001     1.44 47    both own mother and father several times… 3     
-2  2018 20160001     1.44 &lt;NA&gt;  &lt;NA&gt;                       &lt;NA&gt;           &lt;NA&gt;  </code></pre>
 </div>
 </div>
 <p><br></p>
-<div class="fragment">
+<p>Let’s make a tiny data frame to use as an example:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href=""></a>my_data <span class="ot">&lt;-</span> my_data <span class="sc">|&gt;</span> </span>
-<span id="cb17-2"><a href=""></a>  <span class="fu">relocate</span>(panel, <span class="at">.after =</span> yearid)</span>
-<span id="cb17-3"><a href=""></a></span>
-<span id="cb17-4"><a href=""></a><span class="fu">head</span>(my_data, <span class="at">n =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href=""></a>df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>), <span class="at">y =</span> <span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>, <span class="st">"c"</span>))</span>
+<span id="cb8-2"><a href=""></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 2 × 7
-    yearid panel wtssnr_2 age   family16                   socfrend       childs
-     &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt; &lt;fct&gt; &lt;fct&gt;                      &lt;fct&gt;          &lt;fct&gt; 
-1 20160001  2016     1.44 47    both own mother and father several times… 3     
-2 20160001  2018     1.44 &lt;NA&gt;  &lt;NA&gt;                       &lt;NA&gt;           &lt;NA&gt;  </code></pre>
-</div>
+<pre><code># A tibble: 5 × 2
+      x y    
+  &lt;dbl&gt; &lt;chr&gt;
+1     1 a    
+2     2 a    
+3     3 b    
+4     4 c    
+5     5 c    </code></pre>
 </div>
 </div>
 </section>
-<section id="arrange" class="slide level2 smaller">
-<h2><code>arrange()</code></h2>
-<div class="cell columns column-output-location">
+<section id="head" class="slide level2">
+<h2><code>head()</code></h2>
+</section>
+<section id="assignment-operators-cont" class="slide level2">
+<h2>Assignment operators (cont)</h2>
+<p>Suppose you run the following and <strong>then</strong> you inspect <code>df</code>.</p>
+<div style="font-family: 'Shadows Into Light'">
+<p>Will the <code>x</code> variable have values <span style="color: #18bc9c">1, 2, 3, 4, 5</span> or <span style="color: #F39C12">2, 4, 6, 8, 10</span>?</p>
+</div>
+<p><br></p>
+<div class="columns">
 <div class="column">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href=""></a>my_data <span class="sc">|&gt;</span> </span>
-<span id="cb19-2"><a href=""></a>  <span class="fu">arrange</span>(panel) <span class="sc">|&gt;</span></span>
-<span id="cb19-3"><a href=""></a>  <span class="fu">select</span>(yearid, panel, age) <span class="sc">|&gt;</span></span>
-<span id="cb19-4"><a href=""></a>  <span class="fu">head</span>(<span class="at">n =</span> <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div><div class="column">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href=""></a>df <span class="sc">|&gt;</span></span>
+<span id="cb10-2"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">x =</span> x <span class="sc">*</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 2
+      x y    
+  &lt;dbl&gt; &lt;chr&gt;
+1     2 a    
+2     4 a    
+3     6 b    
+4     8 c    
+5    10 c    </code></pre>
+</div>
+</div>
+</div><div class="column fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href=""></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 2
+      x y    
+  &lt;dbl&gt; &lt;chr&gt;
+1     1 a    
+2     2 a    
+3     3 b    
+4     4 c    
+5     5 c    </code></pre>
+</div>
+</div>
+</div></div>
+<div class="fragment">
+<blockquote>
+<p><strong>Do something and show me</strong></p>
+</blockquote>
+</div>
+</section>
+<section id="assignment-operators-cont-1" class="slide level2">
+<h2>Assignment operators (cont)</h2>
+<p>Suppose you run the following and <strong>then</strong> you inspect <code>df</code>.</p>
+<div style="font-family: 'Shadows Into Light'">
+<p>Will the <code>x</code> variable have values <span style="color: #18bc9c">1, 2, 3, 4, 5</span> or <span style="color: #F39C12">2, 4, 6, 8, 10</span>?</p>
+</div>
+<p><br></p>
+<div class="columns">
+<div class="column fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href=""></a>df <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
+<span id="cb14-2"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">x =</span> x <span class="sc">*</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href=""></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 2
+      x y    
+  &lt;dbl&gt; &lt;chr&gt;
+1     2 a    
+2     4 a    
+3     6 b    
+4     8 c    
+5    10 c    </code></pre>
+</div>
+</div>
+</div></div>
+<div class="fragment">
+<blockquote>
+<p><strong>Do something, save result, overwriting original</strong></p>
+</blockquote>
+</div>
+</section>
+<section id="assignment-overwriting" class="slide level2 smaller">
+<h2>Assignment: Overwriting</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<blockquote>
+<p><strong>Do something, save result, overwriting original</strong></p>
+</blockquote>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17" data-code-line-numbers="5-6|7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href=""></a>df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb17-2"><a href=""></a>  <span class="at">x =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>), </span>
+<span id="cb17-3"><a href=""></a>  <span class="at">y =</span> <span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>, <span class="st">"c"</span>)</span>
+<span id="cb17-4"><a href=""></a>)</span>
+<span id="cb17-5"><a href=""></a>df <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
+<span id="cb17-6"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">x =</span> x <span class="sc">*</span> <span class="dv">2</span>)</span>
+<span id="cb17-7"><a href=""></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell fragment">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 2
+      x y    
+  &lt;dbl&gt; &lt;chr&gt;
+1     2 a    
+2     4 a    
+3     6 b    
+4     8 c    
+5    10 c    </code></pre>
+</div>
+</div>
+</div><div class="column fragment" style="width:50%;">
+<blockquote>
+<p><strong>Do something, save result, <em>not</em> overwriting original</strong></p>
+</blockquote>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19" data-code-line-numbers="5-6|7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href=""></a>df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb19-2"><a href=""></a>  <span class="at">x =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>), </span>
+<span id="cb19-3"><a href=""></a>  <span class="at">y =</span> <span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>, <span class="st">"c"</span>)</span>
+<span id="cb19-4"><a href=""></a>)</span>
+<span id="cb19-5"><a href=""></a>df_new <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
+<span id="cb19-6"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">x =</span> x <span class="sc">*</span> <span class="dv">2</span>)</span>
+<span id="cb19-7"><a href=""></a>df_new</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell fragment">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 2
+      x y    
+  &lt;dbl&gt; &lt;chr&gt;
+1     2 a    
+2     4 a    
+3     6 b    
+4     8 c    
+5    10 c    </code></pre>
+</div>
+</div>
+</div></div>
+</section>
+<section id="assignment-overwriting-cont" class="slide level2 smaller">
+<h2>Assignment: Overwriting (cont)</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<blockquote>
+<p><strong>Do something, save result, overwriting original <span style="color: #E74C3C">when you shouldn’t</span></strong></p>
+</blockquote>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21" data-code-line-numbers="5-8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href=""></a>df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb21-2"><a href=""></a>  <span class="at">x =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>), </span>
+<span id="cb21-3"><a href=""></a>  <span class="at">y =</span> <span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>, <span class="st">"c"</span>)</span>
+<span id="cb21-4"><a href=""></a>)</span>
+<span id="cb21-5"><a href=""></a>df <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
+<span id="cb21-6"><a href=""></a>  <span class="fu">group_by</span>(y) <span class="sc">|&gt;</span></span>
+<span id="cb21-7"><a href=""></a>  <span class="fu">summarize</span>(<span class="at">mean_x =</span> <span class="fu">mean</span>(x))</span>
+<span id="cb21-8"><a href=""></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 2
+  y     mean_x
+  &lt;chr&gt;  &lt;dbl&gt;
+1 a        1.5
+2 b        3  
+3 c        4.5</code></pre>
+</div>
+</div>
+</div><div class="column fragment" style="width:50%;">
+<blockquote>
+<p><strong>Do something, save result, <span style="color: #18BC9C">not</span> overwriting original <span style="color: #18BC9C">when you shouldn’t</span></strong></p>
+</blockquote>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23" data-code-line-numbers="5-8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href=""></a>df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb23-2"><a href=""></a>  <span class="at">x =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>), </span>
+<span id="cb23-3"><a href=""></a>  <span class="at">y =</span> <span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>, <span class="st">"c"</span>)</span>
+<span id="cb23-4"><a href=""></a>)</span>
+<span id="cb23-5"><a href=""></a>df_summary <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
+<span id="cb23-6"><a href=""></a>  <span class="fu">group_by</span>(y) <span class="sc">|&gt;</span></span>
+<span id="cb23-7"><a href=""></a>  <span class="fu">summarize</span>(<span class="at">mean_x =</span> <span class="fu">mean</span>(x))</span>
+<span id="cb23-8"><a href=""></a>df_summary</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 2
+  y     mean_x
+  &lt;chr&gt;  &lt;dbl&gt;
+1 a        1.5
+2 b        3  
+3 c        4.5</code></pre>
+</div>
+</div>
+</div></div>
+</section>
+<section id="assignment-overwriting-cont-1" class="slide level2 smaller">
+<h2>Assignment: Overwriting (cont)</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<blockquote>
+<p><strong>Do something, save result, overwriting original</strong><br>
+<span style="color: #18BC9C"><strong><em>data frame</em></strong></span></p>
+</blockquote>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25" data-code-line-numbers="5-6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href=""></a>df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb25-2"><a href=""></a>  <span class="at">x =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>), </span>
+<span id="cb25-3"><a href=""></a>  <span class="at">y =</span> <span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>, <span class="st">"c"</span>)</span>
+<span id="cb25-4"><a href=""></a>)</span>
+<span id="cb25-5"><a href=""></a>df <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
+<span id="cb25-6"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">z =</span> x <span class="sc">+</span> <span class="dv">2</span>)</span>
+<span id="cb25-7"><a href=""></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 5 × 3
-    yearid panel age  
-     &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt;
-1 20160001  2016 47   
-2 20160002  2016 61   
-3 20160003  2016 72   
-4 20160004  2016 43   
-5 20160005  2016 55   </code></pre>
+      x y         z
+  &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt;
+1     1 a         3
+2     2 a         4
+3     3 b         5
+4     4 c         6
+5     5 c         7</code></pre>
 </div>
-</div></div>
-<p><br></p>
-<div class="fragment">
-<div class="cell columns column-output-location">
-<div class="column">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href=""></a>my_data <span class="sc">|&gt;</span> </span>
-<span id="cb21-2"><a href=""></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(panel)) <span class="sc">|&gt;</span></span>
-<span id="cb21-3"><a href=""></a>  <span class="fu">select</span>(yearid, panel, age) <span class="sc">|&gt;</span></span>
-<span id="cb21-4"><a href=""></a>  <span class="fu">head</span>(<span class="at">n =</span> <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div><div class="column">
+</div>
+</div><div class="column fragment" style="width:50%;">
+<blockquote>
+<p><strong>Do something, save result, overwriting original</strong><br>
+<span style="color: #f39c12"><strong><em>column</em></strong></span></p>
+</blockquote>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27" data-code-line-numbers="5-6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href=""></a>df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb27-2"><a href=""></a>  <span class="at">x =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>), </span>
+<span id="cb27-3"><a href=""></a>  <span class="at">y =</span> <span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>, <span class="st">"c"</span>)</span>
+<span id="cb27-4"><a href=""></a>)</span>
+<span id="cb27-5"><a href=""></a>df <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
+<span id="cb27-6"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">x =</span> x <span class="sc">+</span> <span class="dv">2</span>)</span>
+<span id="cb27-7"><a href=""></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 5 × 3
-    yearid panel age  
-     &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt;
-1 20160001  2020 51   
-2 20160002  2020 65   
-3 20160003  2020 &lt;NA&gt; 
-4 20160004  2020 47   
-5 20160005  2020 &lt;NA&gt; </code></pre>
+<pre><code># A tibble: 5 × 2
+      x y    
+  &lt;dbl&gt; &lt;chr&gt;
+1     3 a    
+2     4 a    
+3     5 b    
+4     6 c    
+5     7 c    </code></pre>
+</div>
 </div>
 </div></div>
-</div>
-</section></section>
-<section>
-<section id="joining-dataframes" class="title-slide slide level1 theme-section center">
-<h1>Joining Dataframes</h1>
-
 </section>
-<section id="appending-v.s.-merging" class="slide level2 sparse-slide">
-<h2>appending v.s. merging</h2>
-<div class="callout callout-note no-icon callout-titled callout-style-default">
-<div class="callout-body">
-<div class="callout-title">
-<p><strong><i class="fa-solid fa-pen-to-square" aria-label="pen-to-square"></i> APPEND</strong></p>
-</div>
-<div class="callout-content">
-<p>add new observations (rows) to existing variables</p>
-</div>
-</div>
-</div>
-<p><br></p>
-<div class="callout callout-note no-icon callout-titled callout-style-default">
-<div class="callout-body">
-<div class="callout-title">
-<p><strong><i class="fa-solid fa-pen-to-square" aria-label="pen-to-square"></i> MERGE</strong></p>
-</div>
-<div class="callout-content">
-<p>add new variables (columns) to existing observations (many merge types)</p>
-</div>
-</div>
-</div>
-</section>
-<section id="appending-v.s.-merging-1" class="slide level2 sparse-slide">
-<h2>appending v.s. merging</h2>
-
-<img data-src="images/04/append-merge.png" style="width:100.0%" class="r-stretch"></section>
-<section id="example-datasets" class="slide level2 sparse-slide">
-<h2>Example datasets</h2>
+<section id="assignment-overwriting-cont-2" class="slide level2 smaller">
+<h2>Assignment: Overwriting (cont)</h2>
 <div class="columns">
-<div class="column">
-<p><strong>dataframe 1</strong></p>
+<div class="column" style="width:50%;">
+<blockquote>
+<p><strong>Do something, save result, not overwriting original.</strong></p>
+</blockquote>
 <div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>  coupleid  name age
-1        2  John  42
-2        1 Megan  36
-3        3   Bin  38</code></pre>
+<div class="sourceCode cell-code" id="cb29" data-code-line-numbers="2|11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href=""></a>gss_all <span class="ot">&lt;-</span>  gss_all <span class="sc">|&gt;</span>  </span>
+<span id="cb29-2"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">age_groups =</span> <span class="fu">case_when</span>(</span>
+<span id="cb29-3"><a href=""></a>    agekdbrn <span class="sc">&lt;</span> <span class="dv">18</span> <span class="sc">~</span> <span class="st">"&lt;18"</span>,</span>
+<span id="cb29-4"><a href=""></a>    agekdbrn <span class="sc">&gt;=</span> <span class="dv">18</span> <span class="sc">&amp;</span> agekdbrn <span class="sc">&lt;=</span> <span class="dv">29</span> <span class="sc">~</span> <span class="st">"18–29"</span>,</span>
+<span id="cb29-5"><a href=""></a>    agekdbrn <span class="sc">&gt;=</span> <span class="dv">30</span> <span class="sc">&amp;</span> agekdbrn <span class="sc">&lt;=</span> <span class="dv">39</span> <span class="sc">~</span> <span class="st">"30–39"</span>,</span>
+<span id="cb29-6"><a href=""></a>    agekdbrn <span class="sc">&gt;=</span> <span class="dv">40</span> <span class="sc">~</span> <span class="st">"40+"</span>,</span>
+<span id="cb29-7"><a href=""></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA_character_</span>)</span>
+<span id="cb29-8"><a href=""></a>  ) </span>
+<span id="cb29-9"><a href=""></a></span>
+<span id="cb29-10"><a href=""></a>gss_all <span class="sc">|&gt;</span></span>
+<span id="cb29-11"><a href=""></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2022</span>) <span class="sc">|&gt;</span></span>
+<span id="cb29-12"><a href=""></a>  <span class="fu">freq</span>(age_groups, <span class="at">report.nas =</span> <span class="cn">FALSE</span>, <span class="at">headings =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</div>
-</div><div class="column">
-<p><strong>dataframe 2</strong></p>
+</div><div class="column fragment" style="width:50%;">
+<blockquote>
+<p><strong>Do something and show me</strong></p>
+</blockquote>
 <div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>  coupleid    name age
-1        1     Sue  40
-2        3  Ye-jin  39
-3        2 Chrissy  35</code></pre>
-</div>
-</div>
-</div></div>
-<p><br></p>
-<p><strong>dataframe 3</strong></p>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>  coupleid marstat numchild country
-1        3       1        1 S.Korea
-2        1       0        0      US
-3        4       1        2  Canada</code></pre>
-</div>
-</div>
-</section>
-<section id="append-data-with-bind_rows" class="slide level2 sparse-slide">
-<h2>append data with <code>bind_rows()</code></h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href=""></a>df_all <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(df_partner1, df_partner2)</span>
-<span id="cb26-2"><a href=""></a></span>
-<span id="cb26-3"><a href=""></a><span class="fu">tibble</span>(df_all)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 3
-  coupleid name      age
-     &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt;
-1        2 John       42
-2        1 Megan      36
-3        3 Bin        38
-4        1 Sue        40
-5        3 Ye-jin     39
-6        2 Chrissy    35</code></pre>
-</div>
-</div>
-</section>
-<section id="merge-data-with-joins" class="slide level2 sparse-slide">
-<h2>merge data with joins</h2>
-<p>add columns from <code>df1</code> to <code>df2</code>, matching observations based on the keys</p>
-<ul>
-<li><code>left_join()</code> keeps all observations in <code>df1</code>.</li>
-<li><code>right_join()</code> keeps all observations in <code>df2</code>.</li>
-<li><code>full_join()</code> keeps all observations in <code>df1</code> and <code>df2</code>.</li>
-<li><code>inner_join()</code> only keeps observations from <code>df1</code> that have a matching key in <code>df2</code></li>
-</ul>
-</section>
-<section id="left_join" class="slide level2 smaller">
-<h2><code>left_join()</code></h2>
-<div class="columns">
-<div class="column" style="width:35%;">
-<p><img data-src="images/04/left-join.gif"></p>
-</div><div class="column" style="width:65%;">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href=""></a>df_couples <span class="ot">&lt;-</span> <span class="fu">left_join</span>(df_partner1, df_family, <span class="at">by =</span> <span class="st">"coupleid"</span>)</span>
-<span id="cb28-2"><a href=""></a></span>
-<span id="cb28-3"><a href=""></a><span class="fu">tibble</span>(df_couples)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 3 × 6
-  coupleid name    age marstat numchild country
-     &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;  
-1        2 John     42      NA       NA &lt;NA&gt;   
-2        1 Megan    36       0        0 US     
-3        3 Bin      38       1        1 S.Korea</code></pre>
-</div>
-</div>
-</div></div>
-</section>
-<section id="right_join" class="slide level2 smaller">
-<h2><code>right_join()</code></h2>
-<div class="columns">
-<div class="column" style="width:35%;">
-<p><img data-src="images/04/right-join.gif"></p>
-</div><div class="column" style="width:65%;">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href=""></a>df_couples <span class="ot">&lt;-</span> <span class="fu">right_join</span>(df_partner1, df_family, <span class="at">by =</span> <span class="st">"coupleid"</span>)</span>
-<span id="cb30-2"><a href=""></a></span>
-<span id="cb30-3"><a href=""></a><span class="fu">tibble</span>(df_couples)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 3 × 6
-  coupleid name    age marstat numchild country
-     &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;  
-1        1 Megan    36       0        0 US     
-2        3 Bin      38       1        1 S.Korea
-3        4 &lt;NA&gt;     NA       1        2 Canada </code></pre>
-</div>
-</div>
-</div></div>
-</section>
-<section id="full_join" class="slide level2 smaller">
-<h2><code>full_join()</code></h2>
-<div class="columns">
-<div class="column" style="width:35%;">
-<p><img data-src="images/04/full-join.gif"></p>
-</div><div class="column" style="width:65%;">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href=""></a>df_couples <span class="ot">&lt;-</span> <span class="fu">full_join</span>(df_partner1, df_family, <span class="at">by =</span> <span class="st">"coupleid"</span>)</span>
-<span id="cb32-2"><a href=""></a></span>
-<span id="cb32-3"><a href=""></a><span class="fu">tibble</span>(df_couples)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 4 × 6
-  coupleid name    age marstat numchild country
-     &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;  
-1        2 John     42      NA       NA &lt;NA&gt;   
-2        1 Megan    36       0        0 US     
-3        3 Bin      38       1        1 S.Korea
-4        4 &lt;NA&gt;     NA       1        2 Canada </code></pre>
-</div>
-</div>
-</div></div>
-</section>
-<section id="inner_join" class="slide level2 smaller">
-<h2><code>inner_join()</code></h2>
-<div class="columns">
-<div class="column" style="width:35%;">
-<p><img data-src="images/04/inner-join.gif"></p>
-</div><div class="column" style="width:65%;">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href=""></a>df_couples <span class="ot">&lt;-</span> <span class="fu">inner_join</span>(df_partner1, df_family, <span class="at">by =</span> <span class="st">"coupleid"</span>)</span>
-<span id="cb34-2"><a href=""></a></span>
-<span id="cb34-3"><a href=""></a><span class="fu">tibble</span>(df_couples)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 2 × 6
-  coupleid name    age marstat numchild country
-     &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;  
-1        1 Megan    36       0        0 US     
-2        3 Bin      38       1        1 S.Korea</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb30" data-code-line-numbers="11-14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href=""></a>gss_all <span class="sc">|&gt;</span>  </span>
+<span id="cb30-2"><a href=""></a>  <span class="fu">select</span>(year, agekdbrn) <span class="sc">|&gt;</span> </span>
+<span id="cb30-3"><a href=""></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2022</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb30-4"><a href=""></a>  <span class="fu">drop_na</span>(agekdbrn)  <span class="sc">|&gt;</span></span>
+<span id="cb30-5"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">age_groups =</span> <span class="fu">case_when</span>(</span>
+<span id="cb30-6"><a href=""></a>    agekdbrn <span class="sc">&lt;</span> <span class="dv">18</span> <span class="sc">~</span> <span class="st">"&lt;18"</span>,</span>
+<span id="cb30-7"><a href=""></a>    agekdbrn <span class="sc">&gt;=</span> <span class="dv">18</span> <span class="sc">&amp;</span> agekdbrn <span class="sc">&lt;=</span> <span class="dv">29</span> <span class="sc">~</span> <span class="st">"18–29"</span>,</span>
+<span id="cb30-8"><a href=""></a>    agekdbrn <span class="sc">&gt;=</span> <span class="dv">30</span> <span class="sc">&amp;</span> agekdbrn <span class="sc">&lt;=</span> <span class="dv">39</span> <span class="sc">~</span> <span class="st">"30–39"</span>,</span>
+<span id="cb30-9"><a href=""></a>    agekdbrn <span class="sc">&gt;=</span> <span class="dv">40</span> <span class="sc">~</span> <span class="st">"40+"</span>,</span>
+<span id="cb30-10"><a href=""></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA_character_</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb30-11"><a href=""></a>  <span class="fu">group_by</span>(age_groups) <span class="sc">|&gt;</span>  </span>
+<span id="cb30-12"><a href=""></a>  <span class="fu">summarise</span>(</span>
+<span id="cb30-13"><a href=""></a>    <span class="at">count =</span> <span class="fu">n</span>(),</span>
+<span id="cb30-14"><a href=""></a>    <span class="at">proportion =</span> <span class="fu">round</span>(count <span class="sc">/</span> <span class="fu">sum</span>(count), <span class="dv">3</span>)</span>
+<span id="cb30-15"><a href=""></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div></div>
 </section></section>
 <section>
 <section id="think-like-a-statistician" class="title-slide slide level1 center" data-background-image="images/lightbulb-solid.png" data-background-size="80px" data-background-repeat="repeat">
 <h1>Think Like a Statistician</h1>
-<p>Are married people above or below average in internet use or income? Does it vary by survey year?</p>
+<p>On average, in 2024, did parents with 4 or more kids work fewer hours for pay than other parents?</p>
 <p><br></p>
 <p><span style="color: #F39C12; font-size: 175%; font-family: 'Shadows Into Light'"><i class="fa-regular fa-lightbulb" aria-label="lightbulb"></i> <strong>How do we find out?</strong></span></p>
 </section>
-<section id="section-3" class="slide level2" data-menu-title="Think Like a Statistician" data-background-image="images/lightbulb-solid.png" data-background-size="80px" data-background-repeat="repeat">
-<h2></h2>
-<p>Answering this research question takes a few steps. But, the first step is to create a dataframe with all the necessary information.</p>
-<p><span style="color: #F39C12; font-size: 150%; font-family: 'Shadows Into Light'"><i class="fa-regular fa-lightbulb" aria-label="lightbulb"></i> <strong>Can you reproduce this table?</strong></span></p>
+<section id="think-like-a-statistician-1" class="slide level2" data-background-image="images/lightbulb-solid.png" data-background-size="80px" data-background-repeat="repeat">
+<h2>Think Like a Statistician</h2>
 <p><br></p>
+<div style="color: #f39c12; font-size: 200%;  font-family: 'Shadows Into Light'">
+<p><i class="fa-regular fa-lightbulb" aria-label="lightbulb"></i> <strong>Can you reproduce this table?</strong></p>
+</div>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 7
-    yearid panel marital       wwwhr     realrinc avg_www avg_inc
-     &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt;         &lt;dbl+lbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
-1 20160001  2016 married          15      164382.    14.2  24929.
-2 20160001  2018 &lt;NA&gt;          NA(i)          NA     14.8  26103.
-3 20160001  2020 married          20      147659.    15.0  28222.
-4 20160002  2016 never married     5       25740     14.2  24929.
-5 20160002  2018 &lt;NA&gt;          NA(i)          NA     14.8  26103.
-6 20160002  2020 never married    10       23980     15.0  28222.</code></pre>
+<pre><code># A tibble: 4 × 5
+  childs_group       count  mean median    sd
+  &lt;chr&gt;              &lt;int&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+1 1 child              279  40.1     40  12.8
+2 2 children           437  39.4     40  14.1
+3 3 children           226  39.4     40  14.4
+4 4 or more children   170  39.9     40  16.5</code></pre>
 </div>
 </div>
 </section>
-<section id="section-4" class="slide level2 smaller" data-menu-title="Your Data Take" data-background-image="images/lightbulb-solid.png" data-background-size="80px" data-background-repeat="repeat">
-<h2></h2>
+<section id="your-data-take" class="slide level2" data-menu-title="Your Data Take" data-background-image="images/lightbulb-solid.png" data-background-size="80px" data-background-repeat="repeat">
+<h2>Your Data Take</h2>
+<p><br></p>
 <div style="color: #f39c12; font-size: 175%; font-family: 'Shadows Into Light'">
 <p><i class="fa-regular fa-lightbulb" aria-label="lightbulb"></i> <strong>What’s your conclusion to our research question?</strong></p>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href=""></a><span class="co"># Income status</span></span>
-<span id="cb37-2"><a href=""></a><span class="fu">ctable</span>(think_married<span class="sc">$</span>income_status, think_married<span class="sc">$</span>panel, </span>
-<span id="cb37-3"><a href=""></a>  <span class="at">prop =</span> <span class="st">"c"</span>, </span>
-<span id="cb37-4"><a href=""></a>  <span class="at">format =</span> <span class="st">"p"</span>, </span>
-<span id="cb37-5"><a href=""></a>  <span class="at">useNA =</span> <span class="st">"no"</span>,</span>
-<span id="cb37-6"><a href=""></a>  <span class="at">headings =</span> <span class="cn">FALSE</span></span>
-<span id="cb37-7"><a href=""></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
---------------- ------- -------------- -------------- -------------- ---------------
-                  panel           2016           2018           2020           Total
-  income_status                                                                     
-  Above Average           328 ( 43.8%)   235 ( 38.3%)   247 ( 45.6%)    810 ( 42.5%)
-  Below Average           421 ( 56.2%)   379 ( 61.7%)   295 ( 54.4%)   1095 ( 57.5%)
-          Total           749 (100.0%)   614 (100.0%)   542 (100.0%)   1905 (100.0%)
---------------- ------- -------------- -------------- -------------- ---------------</code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href=""></a><span class="co"># Internet status</span></span>
-<span id="cb39-2"><a href=""></a><span class="fu">ctable</span>(think_married<span class="sc">$</span>internet_status, think_married<span class="sc">$</span>panel, </span>
-<span id="cb39-3"><a href=""></a>  <span class="at">prop =</span> <span class="st">"c"</span>, </span>
-<span id="cb39-4"><a href=""></a>  <span class="at">format =</span> <span class="st">"p"</span>, </span>
-<span id="cb39-5"><a href=""></a>  <span class="at">useNA =</span> <span class="st">"no"</span>,</span>
-<span id="cb39-6"><a href=""></a>  <span class="at">headings =</span> <span class="cn">FALSE</span></span>
-<span id="cb39-7"><a href=""></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
------------------ ------- -------------- -------------- -------------- ---------------
-                    panel           2016           2018           2020           Total
-  internet_status                                                                     
-    Above Average           207 ( 29.4%)   180 ( 29.4%)   165 ( 33.4%)    552 ( 30.5%)
-    Below Average           496 ( 70.6%)   433 ( 70.6%)   329 ( 66.6%)   1258 ( 69.5%)
-            Total           703 (100.0%)   613 (100.0%)   494 (100.0%)   1810 (100.0%)
------------------ ------- -------------- -------------- -------------- ---------------</code></pre>
-</div>
 </div>
 
 
@@ -1220,342 +1142,324 @@ Each variable in its own column, and each observation in its own row.</p>
     
 
     <script id="quarto-html-after-body" type="application/javascript">
-    window.document.addEventListener("DOMContentLoaded", function (event) {
-      const toggleBodyColorMode = (bsSheetEl) => {
-        const mode = bsSheetEl.getAttribute("data-mode");
-        const bodyEl = window.document.querySelector("body");
-        if (mode === "dark") {
-          bodyEl.classList.add("quarto-dark");
-          bodyEl.classList.remove("quarto-light");
-        } else {
-          bodyEl.classList.add("quarto-light");
-          bodyEl.classList.remove("quarto-dark");
-        }
-      }
-      const toggleBodyColorPrimary = () => {
-        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
-        if (bsSheetEl) {
-          toggleBodyColorMode(bsSheetEl);
-        }
-      }
-      toggleBodyColorPrimary();  
-      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
-      tabsets.forEach(function(tabset) {
-        const tabby = new Tabby('#' + tabset.id);
-      });
-      const isCodeAnnotation = (el) => {
-        for (const clz of el.classList) {
-          if (clz.startsWith('code-annotation-')) {                     
-            return true;
-          }
-        }
-        return false;
-      }
-      const onCopySuccess = function(e) {
-        // button target
-        const button = e.trigger;
-        // don't keep focus
-        button.blur();
-        // flash "checked"
-        button.classList.add('code-copy-button-checked');
-        var currentTitle = button.getAttribute("title");
-        button.setAttribute("title", "Copied!");
-        let tooltip;
-        if (window.bootstrap) {
-          button.setAttribute("data-bs-toggle", "tooltip");
-          button.setAttribute("data-bs-placement", "left");
-          button.setAttribute("data-bs-title", "Copied!");
-          tooltip = new bootstrap.Tooltip(button, 
-            { trigger: "manual", 
-              customClass: "code-copy-button-tooltip",
-              offset: [0, -8]});
-          tooltip.show();    
-        }
-        setTimeout(function() {
-          if (tooltip) {
-            tooltip.hide();
-            button.removeAttribute("data-bs-title");
-            button.removeAttribute("data-bs-toggle");
-            button.removeAttribute("data-bs-placement");
-          }
-          button.setAttribute("title", currentTitle);
-          button.classList.remove('code-copy-button-checked');
-        }, 1000);
-        // clear code selection
-        e.clearSelection();
-      }
-      const getTextToCopy = function(trigger) {
-          const codeEl = trigger.previousElementSibling.cloneNode(true);
-          for (const childEl of codeEl.children) {
-            if (isCodeAnnotation(childEl)) {
-              childEl.remove();
-            }
-          }
-          return codeEl.innerText;
-      }
-      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
-        text: getTextToCopy
-      });
-      clipboard.on('success', onCopySuccess);
-      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
-          text: getTextToCopy,
-          container: window.document.getElementById('quarto-embedded-source-code-modal')
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
         });
-        clipboardModal.on('success', onCopySuccess);
-      }
-        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-        var mailtoRegex = new RegExp(/^mailto:/);
-          var filterRegex = new RegExp('/' + window.location.host + '/');
-        var isInternal = (href) => {
-            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
-        }
-        // Inspect non-navigation links and adorn them if external
-     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
-        for (var i=0; i<links.length; i++) {
-          const link = links[i];
-          if (!isInternal(link.href)) {
-            // undo the damage that might have been done by quarto-nav.js in the case of
-            // links that we want to consider external
-            if (link.dataset.originalHref !== undefined) {
-              link.href = link.dataset.originalHref;
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
             }
           }
+          return false;
         }
-      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
-        const config = {
-          allowHTML: true,
-          maxWidth: 500,
-          delay: 100,
-          arrow: false,
-          appendTo: function(el) {
-              return el.closest('section.slide') || el.parentElement;
-          },
-          interactive: true,
-          interactiveBorder: 10,
-          theme: 'light-border',
-          placement: 'bottom-start',
-        };
-        if (contentFn) {
-          config.content = contentFn;
-        }
-        if (onTriggerFn) {
-          config.onTrigger = onTriggerFn;
-        }
-        if (onUntriggerFn) {
-          config.onUntrigger = onUntriggerFn;
-        }
-          config['offset'] = [0,0];
-          config['maxWidth'] = 700;
-        window.tippy(el, config); 
-      }
-      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
-      for (var i=0; i<noterefs.length; i++) {
-        const ref = noterefs[i];
-        tippyHover(ref, function() {
-          // use id or data attribute instead here
-          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
-          try { href = new URL(href).hash; } catch {}
-          const id = href.replace(/^#\/?/, "");
-          const note = window.document.getElementById(id);
-          if (note) {
-            return note.innerHTML;
-          } else {
-            return "";
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "Copied!");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "Copied!");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
           }
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+            const codeEl = trigger.previousElementSibling.cloneNode(true);
+            for (const childEl of codeEl.children) {
+              if (isCodeAnnotation(childEl)) {
+                childEl.remove();
+              }
+            }
+            return codeEl.innerText;
+        }
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
         });
-      }
-          let selectedAnnoteEl;
-          const selectorForAnnotation = ( cell, annotation) => {
-            let cellAttr = 'data-code-cell="' + cell + '"';
-            let lineAttr = 'data-code-annotation="' +  annotation + '"';
-            const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
-            return selector;
-          }
-          const selectCodeLines = (annoteEl) => {
-            const doc = window.document;
-            const targetCell = annoteEl.getAttribute("data-target-cell");
-            const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
-            const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
-            const lines = annoteSpan.getAttribute("data-code-lines").split(",");
-            const lineIds = lines.map((line) => {
-              return targetCell + "-" + line;
-            })
-            let top = null;
-            let height = null;
-            let parent = null;
-            if (lineIds.length > 0) {
-                //compute the position of the single el (top and bottom and make a div)
-                const el = window.document.getElementById(lineIds[0]);
-                top = el.offsetTop;
-                height = el.offsetHeight;
-                parent = el.parentElement.parentElement;
-              if (lineIds.length > 1) {
-                const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
-                const bottom = lastEl.offsetTop + lastEl.offsetHeight;
-                height = bottom - top;
-              }
-              if (top !== null && height !== null && parent !== null) {
-                // cook up a div (if necessary) and position it 
-                let div = window.document.getElementById("code-annotation-line-highlight");
-                if (div === null) {
-                  div = window.document.createElement("div");
-                  div.setAttribute("id", "code-annotation-line-highlight");
-                  div.style.position = 'absolute';
-                  parent.appendChild(div);
-                }
-                div.style.top = top - 2 + "px";
-                div.style.height = height + 4 + "px";
-                div.style.left = 0;
-                let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
-                if (gutterDiv === null) {
-                  gutterDiv = window.document.createElement("div");
-                  gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
-                  gutterDiv.style.position = 'absolute';
-                  const codeCell = window.document.getElementById(targetCell);
-                  const gutter = codeCell.querySelector('.code-annotation-gutter');
-                  gutter.appendChild(gutterDiv);
-                }
-                gutterDiv.style.top = top - 2 + "px";
-                gutterDiv.style.height = height + 4 + "px";
-              }
-              selectedAnnoteEl = annoteEl;
-            }
-          };
-          const unselectCodeLines = () => {
-            const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
-            elementsIds.forEach((elId) => {
-              const div = window.document.getElementById(elId);
-              if (div) {
-                div.remove();
-              }
-            });
-            selectedAnnoteEl = undefined;
-          };
-            // Handle positioning of the toggle
-        window.addEventListener(
-          "resize",
-          throttle(() => {
-            elRect = undefined;
-            if (selectedAnnoteEl) {
-              selectCodeLines(selectedAnnoteEl);
-            }
-          }, 10)
-        );
-        function throttle(fn, ms) {
-        let throttle = false;
-        let timer;
-          return (...args) => {
-            if(!throttle) { // first call gets through
-                fn.apply(this, args);
-                throttle = true;
-            } else { // all the others get throttled
-                if(timer) clearTimeout(timer); // cancel #2
-                timer = setTimeout(() => {
-                  fn.apply(this, args);
-                  timer = throttle = false;
-                }, ms);
-            }
-          };
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
         }
-          const annoteTargets = window.document.querySelectorAll('.code-annotation-anchor');
-          for (let i=0; i<annoteTargets.length; i++) {
-            const annoteTarget = annoteTargets[i];
-            const targetCell = annoteTarget.getAttribute("data-target-cell");
-            const targetAnnotation = annoteTarget.getAttribute("data-target-annotation");
-            const contentFn = () => {
-              const content = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
-              if (content) {
-                const tipContent = content.cloneNode(true);
-                tipContent.classList.add("code-annotation-tip-content");
-                return tipContent.outerHTML;
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp('/' + window.location.host + '/');
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
               }
             }
-            const config = {
-              allowHTML: true,
-              content: contentFn,
-              onShow: (instance) => {
-                selectCodeLines(instance.reference);
-                instance.reference.classList.add('code-annotation-active');
-                window.tippy.hideAll();
-              },
-              onHide: (instance) => {
-                unselectCodeLines();
-                instance.reference.classList.remove('code-annotation-active');
-              },
-              maxWidth: 300,
-              delay: [50, 0],
-              duration: [200, 0],
-              offset: [5, 10],
-              arrow: true,
-              appendTo: function(el) {
-                return el.parentElement.parentElement.parentElement;
-              },
-              interactive: true,
-              interactiveBorder: 10,
-              theme: 'light-border',
-              placement: 'right',
-              popperOptions: {
-                modifiers: [
-                {
-                  name: 'flip',
-                  options: {
-                    flipVariations: false, // true by default
-                    allowedAutoPlacements: ['right'],
-                    fallbackPlacements: ['right', 'top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end', 'left'],
-                  },
-                },
-                {
-                  name: 'preventOverflow',
-                  options: {
-                    mainAxis: false,
-                    altAxis: false
-                  }
-                }
-                ]        
-              }      
-            };
-            window.tippy(annoteTarget, config); 
           }
-      const findCites = (el) => {
-        const parentEl = el.parentElement;
-        if (parentEl) {
-          const cites = parentEl.dataset.cites;
-          if (cites) {
-            return {
-              el,
-              cites: cites.split(' ')
-            };
-          } else {
-            return findCites(el.parentElement)
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
           }
-        } else {
-          return undefined;
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
+          }
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
         }
-      };
-      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
-      for (var i=0; i<bibliorefs.length; i++) {
-        const ref = bibliorefs[i];
-        const citeInfo = findCites(ref);
-        if (citeInfo) {
-          tippyHover(citeInfo.el, function() {
-            var popup = window.document.createElement('div');
-            citeInfo.cites.forEach(function(cite) {
-              var citeDiv = window.document.createElement('div');
-              citeDiv.classList.add('hanging-indent');
-              citeDiv.classList.add('csl-entry');
-              var biblioDiv = window.document.getElementById('ref-' + cite);
-              if (biblioDiv) {
-                citeDiv.innerHTML = biblioDiv.innerHTML;
-              }
-              popup.appendChild(citeDiv);
-            });
-            return popup.innerHTML;
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
           });
         }
-      }
-    });
-    </script>
+            let selectedAnnoteEl;
+            const selectorForAnnotation = ( cell, annotation) => {
+              let cellAttr = 'data-code-cell="' + cell + '"';
+              let lineAttr = 'data-code-annotation="' +  annotation + '"';
+              const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+              return selector;
+            }
+            const selectCodeLines = (annoteEl) => {
+              const doc = window.document;
+              const targetCell = annoteEl.getAttribute("data-target-cell");
+              const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+              const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+              const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+              const lineIds = lines.map((line) => {
+                return targetCell + "-" + line;
+              })
+              let top = null;
+              let height = null;
+              let parent = null;
+              if (lineIds.length > 0) {
+                  //compute the position of the single el (top and bottom and make a div)
+                  const el = window.document.getElementById(lineIds[0]);
+                  top = el.offsetTop;
+                  height = el.offsetHeight;
+                  parent = el.parentElement.parentElement;
+                if (lineIds.length > 1) {
+                  const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+                  const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+                  height = bottom - top;
+                }
+                if (top !== null && height !== null && parent !== null) {
+                  // cook up a div (if necessary) and position it 
+                  let div = window.document.getElementById("code-annotation-line-highlight");
+                  if (div === null) {
+                    div = window.document.createElement("div");
+                    div.setAttribute("id", "code-annotation-line-highlight");
+                    div.style.position = 'absolute';
+                    parent.appendChild(div);
+                  }
+                  div.style.top = top - 2 + "px";
+                  div.style.height = height + 4 + "px";
+                  div.style.left = 0;
+                  let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+                  if (gutterDiv === null) {
+                    gutterDiv = window.document.createElement("div");
+                    gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                    gutterDiv.style.position = 'absolute';
+                    const codeCell = window.document.getElementById(targetCell);
+                    const gutter = codeCell.querySelector('.code-annotation-gutter');
+                    gutter.appendChild(gutterDiv);
+                  }
+                  gutterDiv.style.top = top - 2 + "px";
+                  gutterDiv.style.height = height + 4 + "px";
+                }
+                selectedAnnoteEl = annoteEl;
+              }
+            };
+            const unselectCodeLines = () => {
+              const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+              elementsIds.forEach((elId) => {
+                const div = window.document.getElementById(elId);
+                if (div) {
+                  div.remove();
+                }
+              });
+              selectedAnnoteEl = undefined;
+            };
+              // Handle positioning of the toggle
+          window.addEventListener(
+            "resize",
+            throttle(() => {
+              elRect = undefined;
+              if (selectedAnnoteEl) {
+                selectCodeLines(selectedAnnoteEl);
+              }
+            }, 10)
+          );
+          function throttle(fn, ms) {
+          let throttle = false;
+          let timer;
+            return (...args) => {
+              if(!throttle) { // first call gets through
+                  fn.apply(this, args);
+                  throttle = true;
+              } else { // all the others get throttled
+                  if(timer) clearTimeout(timer); // cancel #2
+                  timer = setTimeout(() => {
+                    fn.apply(this, args);
+                    timer = throttle = false;
+                  }, ms);
+              }
+            };
+          }
+            const annoteTargets = window.document.querySelectorAll('.code-annotation-anchor');
+            for (let i=0; i<annoteTargets.length; i++) {
+              const annoteTarget = annoteTargets[i];
+              const targetCell = annoteTarget.getAttribute("data-target-cell");
+              const targetAnnotation = annoteTarget.getAttribute("data-target-annotation");
+              const contentFn = () => {
+                const content = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+                if (content) {
+                  const tipContent = content.cloneNode(true);
+                  tipContent.classList.add("code-annotation-tip-content");
+                  return tipContent.outerHTML;
+                }
+              }
+              const config = {
+                allowHTML: true,
+                content: contentFn,
+                onShow: (instance) => {
+                  selectCodeLines(instance.reference);
+                  instance.reference.classList.add('code-annotation-active');
+                  window.tippy.hideAll();
+                },
+                onHide: (instance) => {
+                  unselectCodeLines();
+                  instance.reference.classList.remove('code-annotation-active');
+                },
+                maxWidth: 300,
+                delay: [50, 0],
+                duration: [200, 0],
+                offset: [5, 10],
+                arrow: true,
+                appendTo: function(el) {
+                  return el.parentElement.parentElement.parentElement;
+                },
+                interactive: true,
+                interactiveBorder: 10,
+                theme: 'light-border',
+                placement: 'right',
+                popperOptions: {
+                  modifiers: [
+                  {
+                    name: 'flip',
+                    options: {
+                      flipVariations: false, // true by default
+                      allowedAutoPlacements: ['right'],
+                      fallbackPlacements: ['right', 'top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end', 'left'],
+                    },
+                  },
+                  {
+                    name: 'preventOverflow',
+                    options: {
+                      mainAxis: false,
+                      altAxis: false
+                    }
+                  }
+                  ]        
+                }      
+              };
+              window.tippy(annoteTarget, config); 
+            }
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
     
 
 </body></html>

@@ -315,7 +315,7 @@
 <button class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="2">2</button><span id="annotated-cell-3-2" class="code-annotation-target"><a href="#annotated-cell-3-2"></a>  <span class="fu">select</span>(year, agekdbrn, childs, hrs1)</span>
 <span id="annotated-cell-3-3"><a href="#annotated-cell-3-3"></a></span>
 <span id="annotated-cell-3-4"><a href="#annotated-cell-3-4"></a><span class="co"># look at the first rows &amp; columns of the dataframe</span></span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="3">3</button><span id="annotated-cell-3-5" class="code-annotation-target"><a href="#annotated-cell-3-5"></a><span class="fu">head</span>(my_data)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="annotated-cell-3-5"><a href="#annotated-cell-3-5"></a><span class="fu">head</span>(my_data)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-annotation">
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-3" data-target-annotation="1">1</dt>
@@ -325,10 +325,6 @@
 <dt data-target-cell="annotated-cell-3" data-target-annotation="2">2</dt>
 <dd>
 <span data-code-cell="annotated-cell-3" data-code-lines="2" data-code-annotation="2">Keep only the listed variables</span>
-</dd>
-<dt data-target-cell="annotated-cell-3" data-target-annotation="3">3</dt>
-<dd>
-<span data-code-cell="annotated-cell-3" data-code-lines="5" data-code-annotation="3">Returns the first part of the object</span>
 </dd>
 </dl>
 </div>
@@ -361,7 +357,54 @@
       }</style></aside>
 </div>
 </section>
+<section id="head-tail" class="slide level2 smaller sparse-slide">
+<h2><code>head()</code> &amp; <code>tail()</code></h2>
+<p><code>head()</code> looks at the first few column names and <strong>first</strong> few rows of your df.<br>
+<code>tail()</code> looks at the first few column names and <strong>last</strong> few rows of your df.</p>
+<p><br></p>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href=""></a><span class="co"># look at the first rows &amp; columns of the data frame</span></span>
+<span id="cb4-2"><a href=""></a><span class="fu">head</span>(my_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 4
+  year      agekdbrn    childs    hrs1       
+  &lt;dbl+lbl&gt; &lt;dbl+lbl&gt;   &lt;dbl+lbl&gt; &lt;dbl+lbl&gt;  
+1 1972      NA(i) [iap] 0         NA(i) [iap]
+2 1972      NA(i) [iap] 5         NA(i) [iap]
+3 1972      NA(i) [iap] 4         NA(i) [iap]
+4 1972      NA(i) [iap] 0         NA(i) [iap]
+5 1972      NA(i) [iap] 2         NA(i) [iap]
+6 1972      NA(i) [iap] 0         NA(i) [iap]</code></pre>
+</div>
+</div>
+</div>
+</section>
 <section id="mini-task" class="slide level2 sparse-slide">
+<h2>Mini-task</h2>
+<div class="task">
+<p><i class="fa-solid fa-check-double" aria-label="check-double"></i> Use <code>tail()</code> to look at the last few rows of <code>my_data</code></p>
+</div>
+<p><br></p>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href=""></a><span class="co"># look at the first rows &amp; LAST columns of the data frame</span></span>
+<span id="cb6-2"><a href=""></a><span class="fu">tail</span>(my_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 4
+  year      agekdbrn                              childs    hrs1       
+  &lt;dbl+lbl&gt; &lt;dbl+lbl&gt;                             &lt;dbl+lbl&gt; &lt;dbl+lbl&gt;  
+1 2024      NA(x) [not available in this release] 2         NA(i) [iap]
+2 2024      NA(x) [not available in this release] 3            15      
+3 2024      NA(x) [not available in this release] 4            18      
+4 2024      NA(x) [not available in this release] 3         NA(i) [iap]
+5 2024      NA(x) [not available in this release] 3            37      
+6 2024      NA(x) [not available in this release] 2         NA(i) [iap]</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="mini-task-1" class="slide level2 sparse-slide">
 <h2>Mini-task</h2>
 <div class="task">
 <p><i class="fa-solid fa-check-double" aria-label="check-double"></i> Create a dataframe with the variables <code>year</code>, <code>agekdbrn</code>, <code>childs</code>, and <code>hrs1</code>, including only respondents from the year 2022 who have no missing values in any of these variables.</p>
@@ -369,17 +412,17 @@
 <p><br></p>
 <div class="fragment">
 <div class="cell">
-<div class="sourceCode cell-code" id="annotated-cell-4" data-code-line-numbers="1-2|3|4|6"><pre class="sourceCode numberSource r code-annotation-code number-lines code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-4-1"><a href="#annotated-cell-4-1"></a>my_data <span class="ot">&lt;-</span> gss_all <span class="sc">|&gt;</span> </span>
-<span id="annotated-cell-4-2"><a href="#annotated-cell-4-2"></a>  <span class="fu">select</span>(year, agekdbrn, childs, hrs1) <span class="sc">|&gt;</span></span>
-<span id="annotated-cell-4-3"><a href="#annotated-cell-4-3"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2022</span>) <span class="sc">|&gt;</span></span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="1">1</button><span id="annotated-cell-4-4" class="code-annotation-target"><a href="#annotated-cell-4-4"></a>  <span class="fu">drop_na</span>()</span>
-<span id="annotated-cell-4-5"><a href="#annotated-cell-4-5"></a></span>
-<span id="annotated-cell-4-6"><a href="#annotated-cell-4-6"></a><span class="fu">head</span>(my_data)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="annotated-cell-6" data-code-line-numbers="1-2|3|4|6"><pre class="sourceCode numberSource r code-annotation-code number-lines code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-6-1"><a href="#annotated-cell-6-1"></a>my_data <span class="ot">&lt;-</span> gss_all <span class="sc">|&gt;</span> </span>
+<span id="annotated-cell-6-2"><a href="#annotated-cell-6-2"></a>  <span class="fu">select</span>(year, agekdbrn, childs, hrs1) <span class="sc">|&gt;</span></span>
+<span id="annotated-cell-6-3"><a href="#annotated-cell-6-3"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2022</span>) <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="1">1</button><span id="annotated-cell-6-4" class="code-annotation-target"><a href="#annotated-cell-6-4"></a>  <span class="fu">drop_na</span>()</span>
+<span id="annotated-cell-6-5"><a href="#annotated-cell-6-5"></a></span>
+<span id="annotated-cell-6-6"><a href="#annotated-cell-6-6"></a><span class="fu">head</span>(my_data) </span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-annotation">
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
-<dt data-target-cell="annotated-cell-4" data-target-annotation="1">1</dt>
+<dt data-target-cell="annotated-cell-6" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-4" data-code-lines="4" data-code-annotation="1">No need to list all variables inside drop_na()</span>
+<span data-code-cell="annotated-cell-6" data-code-lines="4" data-code-annotation="1">No need to list all variables inside drop_na()</span>
 </dd>
 </dl>
 </div>
@@ -401,7 +444,7 @@
       }</style></aside>
 </div>
 </section>
-<section id="mini-task-output" class="slide level2 sparse-slide output-location-slide"><h2>Mini-task</h2><div class="cell output-location-slide">
+<section id="mini-task-1-output" class="slide level2 sparse-slide output-location-slide"><h2>Mini-task</h2><div class="cell output-location-slide">
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 4
   year      agekdbrn  childs    hrs1     
@@ -419,11 +462,11 @@
 <p><br></p>
 <div class="fragment">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5" data-code-line-numbers="1-2|3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a><span class="co"># Use mutate to create a new variable: annual_hrs1</span></span>
-<span id="cb5-2"><a href=""></a>my_data <span class="ot">&lt;-</span> my_data <span class="sc">|&gt;</span></span>
-<span id="cb5-3"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">annual_hrs1 =</span> hrs1 <span class="sc">*</span> <span class="dv">52</span>)</span>
-<span id="cb5-4"><a href=""></a></span>
-<span id="cb5-5"><a href=""></a><span class="fu">head</span>(my_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9" data-code-line-numbers="1-2|3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href=""></a><span class="co"># Use mutate to create a new variable: annual_hrs1</span></span>
+<span id="cb9-2"><a href=""></a>my_data <span class="ot">&lt;-</span> my_data <span class="sc">|&gt;</span></span>
+<span id="cb9-3"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">annual_hrs1 =</span> hrs1 <span class="sc">*</span> <span class="dv">52</span>)</span>
+<span id="cb9-4"><a href=""></a></span>
+<span id="cb9-5"><a href=""></a><span class="fu">head</span>(my_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell fragment">
 <div class="cell-output cell-output-stdout">
@@ -440,7 +483,7 @@
 </div>
 </div>
 </section>
-<section id="mini-task-1" class="slide level2 sparse-slide">
+<section id="mini-task-2" class="slide level2 sparse-slide">
 <h2>Mini-task</h2>
 <div class="task">
 <p><i class="fa-solid fa-lightbulb" aria-label="lightbulb"></i> Use <code>mutate()</code>, <code>mean()</code>, and <code>sd()</code> to create a column with Z scores for <code>hrs1</code></p>
@@ -448,18 +491,18 @@
 <p><br></p>
 <div class="fragment">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7" data-code-line-numbers="1|3-5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href=""></a>my_data <span class="ot">&lt;-</span> my_data<span class="sc">|&gt;</span></span>
-<span id="cb7-2"><a href=""></a>  <span class="co"># Create Z-score for annual_hours</span></span>
-<span id="cb7-3"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">z_hrs1 =</span> (hrs1 <span class="sc">-</span> <span class="fu">mean</span>(hrs1)) <span class="sc">/</span> </span>
-<span id="cb7-4"><a href=""></a>           <span class="fu">sd</span>(hrs1) </span>
-<span id="cb7-5"><a href=""></a>  )</span>
-<span id="cb7-6"><a href=""></a></span>
-<span id="cb7-7"><a href=""></a><span class="fu">head</span>(my_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11" data-code-line-numbers="1|3-5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href=""></a>my_data <span class="ot">&lt;-</span> my_data<span class="sc">|&gt;</span></span>
+<span id="cb11-2"><a href=""></a>  <span class="co"># Create Z-score for annual_hours</span></span>
+<span id="cb11-3"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">z_hrs1 =</span> (hrs1 <span class="sc">-</span> <span class="fu">mean</span>(hrs1)) <span class="sc">/</span> </span>
+<span id="cb11-4"><a href=""></a>           <span class="fu">sd</span>(hrs1) </span>
+<span id="cb11-5"><a href=""></a>  )</span>
+<span id="cb11-6"><a href=""></a></span>
+<span id="cb11-7"><a href=""></a><span class="fu">head</span>(my_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 </div>
 </section>
-<section id="mini-task-1-output" class="slide level2 sparse-slide output-location-slide"><h2>Mini-task</h2><div class="cell output-location-slide">
+<section id="mini-task-2-output" class="slide level2 sparse-slide output-location-slide"><h2>Mini-task</h2><div class="cell output-location-slide">
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 6
   year      agekdbrn  childs    hrs1      annual_hrs1   z_hrs1
@@ -474,15 +517,15 @@
 </div></section><section id="mutate-logical-variables" class="slide level2 sparse-slide">
 <h2><code>mutate()</code> &amp; logical variables</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="annotated-cell-7" data-code-line-numbers="1-2"><pre class="sourceCode numberSource r code-annotation-code number-lines code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-7-1"><a href="#annotated-cell-7-1"></a>my_data <span class="ot">&lt;-</span> my_data<span class="sc">|&gt;</span></span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="1">1</button><span id="annotated-cell-7-2" class="code-annotation-target"><a href="#annotated-cell-7-2"></a>  <span class="fu">mutate</span>(<span class="at">teen_parent =</span> (agekdbrn <span class="sc">&lt;</span> <span class="dv">18</span>) <span class="sc">*</span> <span class="dv">1</span>)</span>
-<span id="annotated-cell-7-3"><a href="#annotated-cell-7-3"></a>  </span>
-<span id="annotated-cell-7-4"><a href="#annotated-cell-7-4"></a><span class="fu">head</span>(my_data)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="annotated-cell-9" data-code-line-numbers="1-2"><pre class="sourceCode numberSource r code-annotation-code number-lines code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-9-1"><a href="#annotated-cell-9-1"></a>my_data <span class="ot">&lt;-</span> my_data<span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-9" data-target-annotation="1">1</button><span id="annotated-cell-9-2" class="code-annotation-target"><a href="#annotated-cell-9-2"></a>  <span class="fu">mutate</span>(<span class="at">teen_parent =</span> (agekdbrn <span class="sc">&lt;</span> <span class="dv">18</span>) <span class="sc">*</span> <span class="dv">1</span>)</span>
+<span id="annotated-cell-9-3"><a href="#annotated-cell-9-3"></a>  </span>
+<span id="annotated-cell-9-4"><a href="#annotated-cell-9-4"></a><span class="fu">head</span>(my_data)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-annotation">
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
-<dt data-target-cell="annotated-cell-7" data-target-annotation="1">1</dt>
+<dt data-target-cell="annotated-cell-9" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-7" data-code-lines="2" data-code-annotation="1">Returns a logical vector (TRUE, FALSE, or NA) and * 1 converts it to numeric</span>
+<span data-code-cell="annotated-cell-9" data-code-lines="2" data-code-annotation="1">Returns a logical vector (TRUE, FALSE, or NA) and * 1 converts it to numeric</span>
 </dd>
 </dl>
 </div>
@@ -512,13 +555,13 @@
 <p><br></p>
 <div class="fragment">
 <div class="cell">
-<div class="sourceCode cell-code" id="annotated-cell-8" data-code-line-numbers="1|2"><pre class="sourceCode numberSource r code-annotation-code number-lines code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-8-1"><a href="#annotated-cell-8-1"></a>my_data <span class="sc">|&gt;</span> </span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="1">1</button><span id="annotated-cell-8-2" class="code-annotation-target"><a href="#annotated-cell-8-2"></a>  <span class="fu">summarise</span>(<span class="at">proportion =</span> <span class="fu">mean</span>(teen_parent))</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="annotated-cell-10" data-code-line-numbers="1|2"><pre class="sourceCode numberSource r code-annotation-code number-lines code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-10-1"><a href="#annotated-cell-10-1"></a>my_data <span class="sc">|&gt;</span> </span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-10" data-target-annotation="1">1</button><span id="annotated-cell-10-2" class="code-annotation-target"><a href="#annotated-cell-10-2"></a>  <span class="fu">summarise</span>(<span class="at">proportion =</span> <span class="fu">mean</span>(teen_parent))</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-annotation">
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
-<dt data-target-cell="annotated-cell-8" data-target-annotation="1">1</dt>
+<dt data-target-cell="annotated-cell-10" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-8" data-code-lines="2" data-code-annotation="1">Mean of the variable, which equals the proportion of <code>1s</code></span>
+<span data-code-cell="annotated-cell-10" data-code-lines="2" data-code-annotation="1">Mean of the variable, which equals the proportion of <code>1s</code></span>
 </dd>
 </dl>
 </div>
@@ -550,7 +593,7 @@
 <aside><div>
 <p><code>agekdbrn</code>: How old were you when your first child was born?</p>
 </div></aside></section>
-<section id="mini-task-2" class="slide level2 sparse-slide">
+<section id="mini-task-3" class="slide level2 sparse-slide">
 <h2>Mini-task</h2>
 <div class="task">
 <p><i class="fa-solid fa-lightbulb" aria-label="lightbulb"></i> Use <code>mutate()</code> and <code>summarise()</code> to determine what proportion of new parents were older than 40 years old.</p>
@@ -558,9 +601,9 @@
 <p><br></p>
 <div class="fragment">
 <div class="cell">
-<div class="sourceCode cell-code" id="annotated-cell-9" data-code-line-numbers="1-2|3"><pre class="sourceCode numberSource r code-annotation-code number-lines code-with-copy"><code class="sourceCode r"><span id="annotated-cell-9-1"><a href="#annotated-cell-9-1"></a>my_data <span class="sc">|&gt;</span> </span>
-<span id="annotated-cell-9-2"><a href="#annotated-cell-9-2"></a>  <span class="fu">mutate</span>(<span class="at">older_parent =</span> (agekdbrn <span class="sc">&gt;</span> <span class="dv">40</span>) <span class="sc">*</span> <span class="dv">1</span>) <span class="sc">|&gt;</span></span>
-<span id="annotated-cell-9-3"><a href="#annotated-cell-9-3"></a>  <span class="fu">summarise</span>(<span class="at">proportion =</span> <span class="fu">mean</span>(older_parent))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="annotated-cell-11" data-code-line-numbers="1-2|3"><pre class="sourceCode numberSource r code-annotation-code number-lines code-with-copy"><code class="sourceCode r"><span id="annotated-cell-11-1"><a href="#annotated-cell-11-1"></a>my_data <span class="sc">|&gt;</span> </span>
+<span id="annotated-cell-11-2"><a href="#annotated-cell-11-2"></a>  <span class="fu">mutate</span>(<span class="at">older_parent =</span> (agekdbrn <span class="sc">&gt;</span> <span class="dv">40</span>) <span class="sc">*</span> <span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="annotated-cell-11-3"><a href="#annotated-cell-11-3"></a>  <span class="fu">summarise</span>(<span class="at">proportion =</span> <span class="fu">mean</span>(older_parent))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell fragment">
 <div class="cell-output cell-output-stdout">
@@ -592,17 +635,17 @@
 <p><br></p>
 <div class="fragment">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12" data-code-line-numbers="1|2-3|4|5|6|7-8|10-11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href=""></a>my_data <span class="ot">&lt;-</span>  my_data <span class="sc">|&gt;</span>  </span>
-<span id="cb12-2"><a href=""></a><span class="co"># Use mutate to create a new variable: childs_3cat</span></span>
-<span id="cb12-3"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">childs_3cat =</span> <span class="fu">case_when</span>(</span>
-<span id="cb12-4"><a href=""></a>    childs <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">"1 kid"</span>,</span>
-<span id="cb12-5"><a href=""></a>    childs <span class="sc">==</span> <span class="dv">2</span> <span class="sc">~</span> <span class="st">"2 kids"</span>,</span>
-<span id="cb12-6"><a href=""></a>    childs <span class="sc">&gt;</span>  <span class="dv">3</span> <span class="sc">~</span> <span class="st">"3+ kids"</span>,</span>
-<span id="cb12-7"><a href=""></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA_character_</span>)</span>
-<span id="cb12-8"><a href=""></a>  ) </span>
-<span id="cb12-9"><a href=""></a></span>
-<span id="cb12-10"><a href=""></a><span class="co"># Always double check your work!</span></span>
-<span id="cb12-11"><a href=""></a><span class="fu">table</span>(my_data<span class="sc">$</span>childs, my_data<span class="sc">$</span>childs_3cat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16" data-code-line-numbers="1|2-3|4|5|6|7-8|10-11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href=""></a>my_data <span class="ot">&lt;-</span>  my_data <span class="sc">|&gt;</span>  </span>
+<span id="cb16-2"><a href=""></a><span class="co"># Use mutate to create a new variable: childs_3cat</span></span>
+<span id="cb16-3"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">childs_3cat =</span> <span class="fu">case_when</span>(</span>
+<span id="cb16-4"><a href=""></a>    childs <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">"1 kid"</span>,</span>
+<span id="cb16-5"><a href=""></a>    childs <span class="sc">==</span> <span class="dv">2</span> <span class="sc">~</span> <span class="st">"2 kids"</span>,</span>
+<span id="cb16-6"><a href=""></a>    childs <span class="sc">&gt;</span>  <span class="dv">3</span> <span class="sc">~</span> <span class="st">"3+ kids"</span>,</span>
+<span id="cb16-7"><a href=""></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA_character_</span>)</span>
+<span id="cb16-8"><a href=""></a>  ) </span>
+<span id="cb16-9"><a href=""></a></span>
+<span id="cb16-10"><a href=""></a><span class="co"># Always double check your work!</span></span>
+<span id="cb16-11"><a href=""></a><span class="fu">table</span>(my_data<span class="sc">$</span>childs, my_data<span class="sc">$</span>childs_3cat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 </div>
@@ -628,17 +671,17 @@
 <p><br></p>
 <div class="fragment">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14" data-code-line-numbers="1|2|3|4|5|6|7-8|10-11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href=""></a>my_data <span class="ot">&lt;-</span>  my_data <span class="sc">|&gt;</span>  </span>
-<span id="cb14-2"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">age_groups =</span> <span class="fu">case_when</span>(</span>
-<span id="cb14-3"><a href=""></a>    agekdbrn <span class="sc">&lt;</span> <span class="dv">18</span> <span class="sc">~</span> <span class="st">"&lt;18"</span>,</span>
-<span id="cb14-4"><a href=""></a>    agekdbrn <span class="sc">&gt;=</span> <span class="dv">18</span> <span class="sc">&amp;</span> agekdbrn <span class="sc">&lt;=</span> <span class="dv">29</span> <span class="sc">~</span> <span class="st">"18–29"</span>,</span>
-<span id="cb14-5"><a href=""></a>    agekdbrn <span class="sc">&gt;=</span> <span class="dv">30</span> <span class="sc">&amp;</span> agekdbrn <span class="sc">&lt;=</span> <span class="dv">39</span> <span class="sc">~</span> <span class="st">"30–39"</span>,</span>
-<span id="cb14-6"><a href=""></a>    agekdbrn <span class="sc">&gt;=</span> <span class="dv">40</span> <span class="sc">~</span> <span class="st">"40+"</span>,</span>
-<span id="cb14-7"><a href=""></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA_character_</span>)</span>
-<span id="cb14-8"><a href=""></a>  ) </span>
-<span id="cb14-9"><a href=""></a></span>
-<span id="cb14-10"><a href=""></a>my_data <span class="sc">|&gt;</span></span>
-<span id="cb14-11"><a href=""></a>  <span class="fu">freq</span>(age_groups, <span class="at">report.nas =</span> <span class="cn">FALSE</span>, <span class="at">headings =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18" data-code-line-numbers="1|2|3|4|5|6|7-8|10-11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href=""></a>my_data <span class="ot">&lt;-</span>  my_data <span class="sc">|&gt;</span>  </span>
+<span id="cb18-2"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">age_groups =</span> <span class="fu">case_when</span>(</span>
+<span id="cb18-3"><a href=""></a>    agekdbrn <span class="sc">&lt;</span> <span class="dv">18</span> <span class="sc">~</span> <span class="st">"&lt;18"</span>,</span>
+<span id="cb18-4"><a href=""></a>    agekdbrn <span class="sc">&gt;=</span> <span class="dv">18</span> <span class="sc">&amp;</span> agekdbrn <span class="sc">&lt;=</span> <span class="dv">29</span> <span class="sc">~</span> <span class="st">"18–29"</span>,</span>
+<span id="cb18-5"><a href=""></a>    agekdbrn <span class="sc">&gt;=</span> <span class="dv">30</span> <span class="sc">&amp;</span> agekdbrn <span class="sc">&lt;=</span> <span class="dv">39</span> <span class="sc">~</span> <span class="st">"30–39"</span>,</span>
+<span id="cb18-6"><a href=""></a>    agekdbrn <span class="sc">&gt;=</span> <span class="dv">40</span> <span class="sc">~</span> <span class="st">"40+"</span>,</span>
+<span id="cb18-7"><a href=""></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA_character_</span>)</span>
+<span id="cb18-8"><a href=""></a>  ) </span>
+<span id="cb18-9"><a href=""></a></span>
+<span id="cb18-10"><a href=""></a>my_data <span class="sc">|&gt;</span></span>
+<span id="cb18-11"><a href=""></a>  <span class="fu">freq</span>(age_groups, <span class="at">report.nas =</span> <span class="cn">FALSE</span>, <span class="at">headings =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 <aside class="notes">
@@ -689,12 +732,12 @@
 <p>Let’s make a tiny data frame to use as an example:</p>
 <div class="cell columns column-output-location">
 <div class="column">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href=""></a>df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
-<span id="cb16-2"><a href=""></a>        <span class="at">x =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>), </span>
-<span id="cb16-3"><a href=""></a>        <span class="at">y =</span> <span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>, <span class="st">"c"</span>)</span>
-<span id="cb16-4"><a href=""></a>      )</span>
-<span id="cb16-5"><a href=""></a></span>
-<span id="cb16-6"><a href=""></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href=""></a>df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb20-2"><a href=""></a>        <span class="at">x =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>), </span>
+<span id="cb20-3"><a href=""></a>        <span class="at">y =</span> <span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>, <span class="st">"c"</span>)</span>
+<span id="cb20-4"><a href=""></a>      )</span>
+<span id="cb20-5"><a href=""></a></span>
+<span id="cb20-6"><a href=""></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div><div class="column fragment">
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 5 × 2
@@ -718,8 +761,8 @@
 <div class="columns">
 <div class="column">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href=""></a>df <span class="sc">|&gt;</span></span>
-<span id="cb18-2"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">x =</span> x <span class="sc">*</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href=""></a>df <span class="sc">|&gt;</span></span>
+<span id="cb22-2"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">x =</span> x <span class="sc">*</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 5 × 2
       x y    
@@ -733,7 +776,7 @@
 </div>
 </div><div class="column fragment">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href=""></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href=""></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 5 × 2
       x y    
@@ -762,12 +805,12 @@
 <div class="columns">
 <div class="column fragment">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href=""></a>df <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
-<span id="cb22-2"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">x =</span> x <span class="sc">*</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href=""></a>df <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
+<span id="cb26-2"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">x =</span> x <span class="sc">*</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column fragment">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href=""></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href=""></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 5 × 2
       x y    
@@ -794,13 +837,13 @@
 <p><strong>Do something, save result, overwriting original</strong></p>
 </blockquote>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25" data-code-line-numbers="5-6|7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href=""></a>df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
-<span id="cb25-2"><a href=""></a>  <span class="at">x =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>), </span>
-<span id="cb25-3"><a href=""></a>  <span class="at">y =</span> <span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>, <span class="st">"c"</span>)</span>
-<span id="cb25-4"><a href=""></a>)</span>
-<span id="cb25-5"><a href=""></a>df <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
-<span id="cb25-6"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">x =</span> x <span class="sc">*</span> <span class="dv">2</span>)</span>
-<span id="cb25-7"><a href=""></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29" data-code-line-numbers="5-6|7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href=""></a>df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb29-2"><a href=""></a>  <span class="at">x =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>), </span>
+<span id="cb29-3"><a href=""></a>  <span class="at">y =</span> <span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>, <span class="st">"c"</span>)</span>
+<span id="cb29-4"><a href=""></a>)</span>
+<span id="cb29-5"><a href=""></a>df <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
+<span id="cb29-6"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">x =</span> x <span class="sc">*</span> <span class="dv">2</span>)</span>
+<span id="cb29-7"><a href=""></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell fragment">
 <div class="cell-output cell-output-stdout">
@@ -819,13 +862,13 @@
 <p><strong>Do something, save result, <em>not</em> overwriting original</strong></p>
 </blockquote>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27" data-code-line-numbers="5-6|7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href=""></a>df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
-<span id="cb27-2"><a href=""></a>  <span class="at">x =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>), </span>
-<span id="cb27-3"><a href=""></a>  <span class="at">y =</span> <span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>, <span class="st">"c"</span>)</span>
-<span id="cb27-4"><a href=""></a>)</span>
-<span id="cb27-5"><a href=""></a>df_new <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
-<span id="cb27-6"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">x =</span> x <span class="sc">*</span> <span class="dv">2</span>)</span>
-<span id="cb27-7"><a href=""></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31" data-code-line-numbers="5-6|7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href=""></a>df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb31-2"><a href=""></a>  <span class="at">x =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>), </span>
+<span id="cb31-3"><a href=""></a>  <span class="at">y =</span> <span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>, <span class="st">"c"</span>)</span>
+<span id="cb31-4"><a href=""></a>)</span>
+<span id="cb31-5"><a href=""></a>df_new <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
+<span id="cb31-6"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">x =</span> x <span class="sc">*</span> <span class="dv">2</span>)</span>
+<span id="cb31-7"><a href=""></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell fragment">
 <div class="cell-output cell-output-stdout">
@@ -849,14 +892,14 @@
 <p><strong>Do something, save result, overwriting original <span style="color: #E74C3C">when you shouldn’t</span></strong></p>
 </blockquote>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29" data-code-line-numbers="5-8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href=""></a>df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
-<span id="cb29-2"><a href=""></a>  <span class="at">x =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>), </span>
-<span id="cb29-3"><a href=""></a>  <span class="at">y =</span> <span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>, <span class="st">"c"</span>)</span>
-<span id="cb29-4"><a href=""></a>)</span>
-<span id="cb29-5"><a href=""></a>df <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
-<span id="cb29-6"><a href=""></a>  <span class="fu">group_by</span>(y) <span class="sc">|&gt;</span></span>
-<span id="cb29-7"><a href=""></a>  <span class="fu">summarize</span>(<span class="at">mean_x =</span> <span class="fu">mean</span>(x))</span>
-<span id="cb29-8"><a href=""></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33" data-code-line-numbers="5-8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href=""></a>df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb33-2"><a href=""></a>  <span class="at">x =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>), </span>
+<span id="cb33-3"><a href=""></a>  <span class="at">y =</span> <span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>, <span class="st">"c"</span>)</span>
+<span id="cb33-4"><a href=""></a>)</span>
+<span id="cb33-5"><a href=""></a>df <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
+<span id="cb33-6"><a href=""></a>  <span class="fu">group_by</span>(y) <span class="sc">|&gt;</span></span>
+<span id="cb33-7"><a href=""></a>  <span class="fu">summarize</span>(<span class="at">mean_x =</span> <span class="fu">mean</span>(x))</span>
+<span id="cb33-8"><a href=""></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 2
   y     mean_x
@@ -871,14 +914,14 @@
 <p><strong>Do something, save result, <span style="color: #18BC9C">not</span> overwriting original <span style="color: #18BC9C">when you shouldn’t</span></strong></p>
 </blockquote>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb31" data-code-line-numbers="5-8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href=""></a>df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
-<span id="cb31-2"><a href=""></a>  <span class="at">x =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>), </span>
-<span id="cb31-3"><a href=""></a>  <span class="at">y =</span> <span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>, <span class="st">"c"</span>)</span>
-<span id="cb31-4"><a href=""></a>)</span>
-<span id="cb31-5"><a href=""></a>df_summary <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
-<span id="cb31-6"><a href=""></a>  <span class="fu">group_by</span>(y) <span class="sc">|&gt;</span></span>
-<span id="cb31-7"><a href=""></a>  <span class="fu">summarize</span>(<span class="at">mean_x =</span> <span class="fu">mean</span>(x))</span>
-<span id="cb31-8"><a href=""></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35" data-code-line-numbers="5-8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href=""></a>df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb35-2"><a href=""></a>  <span class="at">x =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>), </span>
+<span id="cb35-3"><a href=""></a>  <span class="at">y =</span> <span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>, <span class="st">"c"</span>)</span>
+<span id="cb35-4"><a href=""></a>)</span>
+<span id="cb35-5"><a href=""></a>df_summary <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
+<span id="cb35-6"><a href=""></a>  <span class="fu">group_by</span>(y) <span class="sc">|&gt;</span></span>
+<span id="cb35-7"><a href=""></a>  <span class="fu">summarize</span>(<span class="at">mean_x =</span> <span class="fu">mean</span>(x))</span>
+<span id="cb35-8"><a href=""></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 5 × 2
       x y    
@@ -901,13 +944,13 @@
 <span style="color: #18BC9C"><strong><em>data frame</em></strong></span></p>
 </blockquote>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb33" data-code-line-numbers="5-6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href=""></a>df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
-<span id="cb33-2"><a href=""></a>  <span class="at">x =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>), </span>
-<span id="cb33-3"><a href=""></a>  <span class="at">y =</span> <span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>, <span class="st">"c"</span>)</span>
-<span id="cb33-4"><a href=""></a>)</span>
-<span id="cb33-5"><a href=""></a>df <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
-<span id="cb33-6"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">z =</span> x <span class="sc">+</span> <span class="dv">2</span>)</span>
-<span id="cb33-7"><a href=""></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37" data-code-line-numbers="5-6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href=""></a>df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb37-2"><a href=""></a>  <span class="at">x =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>), </span>
+<span id="cb37-3"><a href=""></a>  <span class="at">y =</span> <span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>, <span class="st">"c"</span>)</span>
+<span id="cb37-4"><a href=""></a>)</span>
+<span id="cb37-5"><a href=""></a>df <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
+<span id="cb37-6"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">z =</span> x <span class="sc">+</span> <span class="dv">2</span>)</span>
+<span id="cb37-7"><a href=""></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 5 × 3
       x y         z
@@ -925,13 +968,13 @@
 <span style="color: #f39c12"><strong><em>column</em></strong></span></p>
 </blockquote>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb35" data-code-line-numbers="5-6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href=""></a>df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
-<span id="cb35-2"><a href=""></a>  <span class="at">x =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>), </span>
-<span id="cb35-3"><a href=""></a>  <span class="at">y =</span> <span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>, <span class="st">"c"</span>)</span>
-<span id="cb35-4"><a href=""></a>)</span>
-<span id="cb35-5"><a href=""></a>df <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
-<span id="cb35-6"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">x =</span> x <span class="sc">+</span> <span class="dv">2</span>)</span>
-<span id="cb35-7"><a href=""></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb39" data-code-line-numbers="5-6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href=""></a>df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb39-2"><a href=""></a>  <span class="at">x =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>), </span>
+<span id="cb39-3"><a href=""></a>  <span class="at">y =</span> <span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>, <span class="st">"c"</span>)</span>
+<span id="cb39-4"><a href=""></a>)</span>
+<span id="cb39-5"><a href=""></a>df <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
+<span id="cb39-6"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">x =</span> x <span class="sc">+</span> <span class="dv">2</span>)</span>
+<span id="cb39-7"><a href=""></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 5 × 2
       x y    
@@ -953,47 +996,47 @@
 <p><strong>Do something and show me</strong></p>
 </blockquote>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb37" data-code-line-numbers="1-4|5-10|11-15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href=""></a>gss_all <span class="sc">|&gt;</span>  </span>
-<span id="cb37-2"><a href=""></a>  <span class="fu">select</span>(year, agekdbrn) <span class="sc">|&gt;</span> </span>
-<span id="cb37-3"><a href=""></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2022</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb37-4"><a href=""></a>  <span class="fu">drop_na</span>()  <span class="sc">|&gt;</span></span>
-<span id="cb37-5"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">age_groups =</span> <span class="fu">case_when</span>(</span>
-<span id="cb37-6"><a href=""></a>    agekdbrn <span class="sc">&lt;</span> <span class="dv">18</span> <span class="sc">~</span> <span class="st">"&lt;18"</span>,</span>
-<span id="cb37-7"><a href=""></a>    agekdbrn <span class="sc">&gt;=</span> <span class="dv">18</span> <span class="sc">&amp;</span> agekdbrn <span class="sc">&lt;=</span> <span class="dv">29</span> <span class="sc">~</span> <span class="st">"18–29"</span>,</span>
-<span id="cb37-8"><a href=""></a>    agekdbrn <span class="sc">&gt;=</span> <span class="dv">30</span> <span class="sc">&amp;</span> agekdbrn <span class="sc">&lt;=</span> <span class="dv">39</span> <span class="sc">~</span> <span class="st">"30–39"</span>,</span>
-<span id="cb37-9"><a href=""></a>    agekdbrn <span class="sc">&gt;=</span> <span class="dv">40</span> <span class="sc">~</span> <span class="st">"40+"</span>,</span>
-<span id="cb37-10"><a href=""></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA_character_</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb37-11"><a href=""></a>  <span class="fu">group_by</span>(age_groups) <span class="sc">|&gt;</span>  </span>
-<span id="cb37-12"><a href=""></a>  <span class="fu">summarise</span>(</span>
-<span id="cb37-13"><a href=""></a>    <span class="at">count =</span> <span class="fu">n</span>(),</span>
-<span id="cb37-14"><a href=""></a>    <span class="at">proportion =</span> <span class="fu">round</span>(count <span class="sc">/</span> <span class="fu">sum</span>(count), <span class="dv">3</span>)</span>
-<span id="cb37-15"><a href=""></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb41" data-code-line-numbers="1-4|5-10|11-15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href=""></a>gss_all <span class="sc">|&gt;</span>  </span>
+<span id="cb41-2"><a href=""></a>  <span class="fu">select</span>(year, agekdbrn) <span class="sc">|&gt;</span> </span>
+<span id="cb41-3"><a href=""></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2022</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb41-4"><a href=""></a>  <span class="fu">drop_na</span>()  <span class="sc">|&gt;</span></span>
+<span id="cb41-5"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">age_groups =</span> <span class="fu">case_when</span>(</span>
+<span id="cb41-6"><a href=""></a>    agekdbrn <span class="sc">&lt;</span> <span class="dv">18</span> <span class="sc">~</span> <span class="st">"&lt;18"</span>,</span>
+<span id="cb41-7"><a href=""></a>    agekdbrn <span class="sc">&gt;=</span> <span class="dv">18</span> <span class="sc">&amp;</span> agekdbrn <span class="sc">&lt;=</span> <span class="dv">29</span> <span class="sc">~</span> <span class="st">"18–29"</span>,</span>
+<span id="cb41-8"><a href=""></a>    agekdbrn <span class="sc">&gt;=</span> <span class="dv">30</span> <span class="sc">&amp;</span> agekdbrn <span class="sc">&lt;=</span> <span class="dv">39</span> <span class="sc">~</span> <span class="st">"30–39"</span>,</span>
+<span id="cb41-9"><a href=""></a>    agekdbrn <span class="sc">&gt;=</span> <span class="dv">40</span> <span class="sc">~</span> <span class="st">"40+"</span>,</span>
+<span id="cb41-10"><a href=""></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA_character_</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb41-11"><a href=""></a>  <span class="fu">group_by</span>(age_groups) <span class="sc">|&gt;</span>  </span>
+<span id="cb41-12"><a href=""></a>  <span class="fu">summarise</span>(</span>
+<span id="cb41-13"><a href=""></a>    <span class="at">count =</span> <span class="fu">n</span>(),</span>
+<span id="cb41-14"><a href=""></a>    <span class="at">proportion =</span> <span class="fu">round</span>(count <span class="sc">/</span> <span class="fu">sum</span>(count), <span class="dv">3</span>)</span>
+<span id="cb41-15"><a href=""></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column fragment" style="width:50%;">
 <blockquote>
 <p><strong>Do something, save result, not overwriting original.</strong></p>
 </blockquote>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb38" data-code-line-numbers="1-9|11-20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href=""></a><span class="co"># Do something</span></span>
-<span id="cb38-2"><a href=""></a>gss_all <span class="ot">&lt;-</span>  gss_all <span class="sc">|&gt;</span>  </span>
-<span id="cb38-3"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">age_groups =</span> <span class="fu">case_when</span>(</span>
-<span id="cb38-4"><a href=""></a>    agekdbrn <span class="sc">&lt;</span> <span class="dv">18</span> <span class="sc">~</span> <span class="st">"&lt;18"</span>,</span>
-<span id="cb38-5"><a href=""></a>    agekdbrn <span class="sc">&gt;=</span> <span class="dv">18</span> <span class="sc">&amp;</span> agekdbrn <span class="sc">&lt;=</span> <span class="dv">29</span> <span class="sc">~</span> <span class="st">"18–29"</span>,</span>
-<span id="cb38-6"><a href=""></a>    agekdbrn <span class="sc">&gt;=</span> <span class="dv">30</span> <span class="sc">&amp;</span> agekdbrn <span class="sc">&lt;=</span> <span class="dv">39</span> <span class="sc">~</span> <span class="st">"30–39"</span>,</span>
-<span id="cb38-7"><a href=""></a>    agekdbrn <span class="sc">&gt;=</span> <span class="dv">40</span> <span class="sc">~</span> <span class="st">"40+"</span>,</span>
-<span id="cb38-8"><a href=""></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA_character_</span>)</span>
-<span id="cb38-9"><a href=""></a>  ) </span>
-<span id="cb38-10"><a href=""></a></span>
-<span id="cb38-11"><a href=""></a><span class="co"># Now show me</span></span>
-<span id="cb38-12"><a href=""></a>gss_all <span class="sc">|&gt;</span></span>
-<span id="cb38-13"><a href=""></a>  <span class="fu">select</span>(year, age_groups) <span class="sc">|&gt;</span> </span>
-<span id="cb38-14"><a href=""></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2022</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb38-15"><a href=""></a>  <span class="fu">drop_na</span>()  <span class="sc">|&gt;</span></span>
-<span id="cb38-16"><a href=""></a>  <span class="fu">group_by</span>(age_groups) <span class="sc">|&gt;</span>  </span>
-<span id="cb38-17"><a href=""></a>  <span class="fu">summarise</span>(</span>
-<span id="cb38-18"><a href=""></a>    <span class="at">count =</span> <span class="fu">n</span>(),</span>
-<span id="cb38-19"><a href=""></a>    <span class="at">proportion =</span> <span class="fu">round</span>(count <span class="sc">/</span> <span class="fu">sum</span>(count), <span class="dv">3</span>)</span>
-<span id="cb38-20"><a href=""></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb42" data-code-line-numbers="1-9|11-20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href=""></a><span class="co"># Do something</span></span>
+<span id="cb42-2"><a href=""></a>gss_all <span class="ot">&lt;-</span>  gss_all <span class="sc">|&gt;</span>  </span>
+<span id="cb42-3"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">age_groups =</span> <span class="fu">case_when</span>(</span>
+<span id="cb42-4"><a href=""></a>    agekdbrn <span class="sc">&lt;</span> <span class="dv">18</span> <span class="sc">~</span> <span class="st">"&lt;18"</span>,</span>
+<span id="cb42-5"><a href=""></a>    agekdbrn <span class="sc">&gt;=</span> <span class="dv">18</span> <span class="sc">&amp;</span> agekdbrn <span class="sc">&lt;=</span> <span class="dv">29</span> <span class="sc">~</span> <span class="st">"18–29"</span>,</span>
+<span id="cb42-6"><a href=""></a>    agekdbrn <span class="sc">&gt;=</span> <span class="dv">30</span> <span class="sc">&amp;</span> agekdbrn <span class="sc">&lt;=</span> <span class="dv">39</span> <span class="sc">~</span> <span class="st">"30–39"</span>,</span>
+<span id="cb42-7"><a href=""></a>    agekdbrn <span class="sc">&gt;=</span> <span class="dv">40</span> <span class="sc">~</span> <span class="st">"40+"</span>,</span>
+<span id="cb42-8"><a href=""></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA_character_</span>)</span>
+<span id="cb42-9"><a href=""></a>  ) </span>
+<span id="cb42-10"><a href=""></a></span>
+<span id="cb42-11"><a href=""></a><span class="co"># Now show me</span></span>
+<span id="cb42-12"><a href=""></a>gss_all <span class="sc">|&gt;</span></span>
+<span id="cb42-13"><a href=""></a>  <span class="fu">select</span>(year, age_groups) <span class="sc">|&gt;</span> </span>
+<span id="cb42-14"><a href=""></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2022</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb42-15"><a href=""></a>  <span class="fu">drop_na</span>()  <span class="sc">|&gt;</span></span>
+<span id="cb42-16"><a href=""></a>  <span class="fu">group_by</span>(age_groups) <span class="sc">|&gt;</span>  </span>
+<span id="cb42-17"><a href=""></a>  <span class="fu">summarise</span>(</span>
+<span id="cb42-18"><a href=""></a>    <span class="at">count =</span> <span class="fu">n</span>(),</span>
+<span id="cb42-19"><a href=""></a>    <span class="at">proportion =</span> <span class="fu">round</span>(count <span class="sc">/</span> <span class="fu">sum</span>(count), <span class="dv">3</span>)</span>
+<span id="cb42-20"><a href=""></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div></div>
 </section>
@@ -1019,18 +1062,18 @@
 <p><br></p>
 <div class="fragment">
 <div class="cell">
-<div class="sourceCode cell-code" id="annotated-cell-13" data-code-line-numbers="1|3"><pre class="sourceCode numberSource r code-annotation-code number-lines code-with-copy code-annotated"><code class="sourceCode r"><button class="code-annotation-anchor" data-target-cell="annotated-cell-13" data-target-annotation="1">1</button><span id="annotated-cell-13-1" class="code-annotation-target"><a href="#annotated-cell-13-1"></a><span class="fu">write_rds</span>(my_data, <span class="st">"my_data_file.rds"</span>)</span>
-<span id="annotated-cell-13-2"><a href="#annotated-cell-13-2"></a></span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-13" data-target-annotation="2">2</button><span id="annotated-cell-13-3" class="code-annotation-target"><a href="#annotated-cell-13-3"></a><span class="fu">read_rds</span>(<span class="st">"my_data_file.rds"</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="annotated-cell-15" data-code-line-numbers="1|3"><pre class="sourceCode numberSource r code-annotation-code number-lines code-with-copy code-annotated"><code class="sourceCode r"><button class="code-annotation-anchor" data-target-cell="annotated-cell-15" data-target-annotation="1">1</button><span id="annotated-cell-15-1" class="code-annotation-target"><a href="#annotated-cell-15-1"></a><span class="fu">write_rds</span>(my_data, <span class="st">"my_data_file.rds"</span>)</span>
+<span id="annotated-cell-15-2"><a href="#annotated-cell-15-2"></a></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-15" data-target-annotation="2">2</button><span id="annotated-cell-15-3" class="code-annotation-target"><a href="#annotated-cell-15-3"></a><span class="fu">read_rds</span>(<span class="st">"my_data_file.rds"</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-annotation">
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
-<dt data-target-cell="annotated-cell-13" data-target-annotation="1">1</dt>
+<dt data-target-cell="annotated-cell-15" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-13" data-code-lines="1" data-code-annotation="1">Saves your df in current working directory</span>
+<span data-code-cell="annotated-cell-15" data-code-lines="1" data-code-annotation="1">Saves your df in current working directory</span>
 </dd>
-<dt data-target-cell="annotated-cell-13" data-target-annotation="2">2</dt>
+<dt data-target-cell="annotated-cell-15" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-13" data-code-lines="3" data-code-annotation="2">Opens your df if in current working directory</span>
+<span data-code-cell="annotated-cell-15" data-code-lines="3" data-code-annotation="2">Opens your df if in current working directory</span>
 </dd>
 </dl>
 </div>

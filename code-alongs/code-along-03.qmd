@@ -35,8 +35,7 @@ data(gss_all)
 
 ```
 
-Use the `gss_which_years()` function to identify the survey years a
-variable appeared.
+Use the `gss_which_years()` function to identify the survey years a variable appeared.
 
 ```{r}
 #| label: which-years
@@ -60,8 +59,7 @@ gss_which_years(gss_all, ________)
 
 ## The pipe `|>`
 
-The pipe operator passes what comes before it into the function that
-comes after it as the first argument in that function.
+The pipe operator passes what comes before it into the function that comes after it as the first argument in that function.
 
 ```{r}
 sum(1, 2)
@@ -89,8 +87,7 @@ gss_all |>
 
 ```
 
-**Use a `|>` & `gss_which_years()` to find out which survey years the
-variable `agekdbrn` appears.**
+**Use a `|>` & `gss_which_years()` to find out which survey years the variable `agekdbrn` appears.**
 
 ```{r, eval=FALSE}
 #| label: which-years-pipe
@@ -104,7 +101,6 @@ variable `agekdbrn` appears.**
 Use `filter()` to keep rows that meet a condition.\
 Use `drop_na()` to remove rows with missing (NA) values.
 
-
 ```{r}
 #| label: pipe01
 
@@ -115,9 +111,7 @@ gss_all |>
 
 ```
 
-**Create a dataframe with the variables `year`, `sex`, `hrs1`, and `childs` for
-only the 2024 respondents without missing data for `hrs1` and
-`childs`.**
+**Limit the dataframe to only the 2024 respondents without missing data for `sex`, `hrs1`, and `childs`. How many men and women are left?**
 
 ```{r, eval=FALSE}
 #| label: pipe01-mini-task
@@ -140,8 +134,7 @@ gss_all |>
 median(gss_all$agekdbrn, na.rm=TRUE) 
 ```
 
-Note: `na.rm` is a logical evaluating to `TRUE` or `FALSE` indicating
-whether `NA` values should be stripped before the computation proceeds.
+Note: `na.rm` is a logical evaluating to `TRUE` or `FALSE` indicating whether `NA` values should be stripped before the computation proceeds.
 
 ```{r}
 #| label: mean
@@ -191,8 +184,7 @@ Use [dplyr grammar]() to find the frequency, mean, and median.
 
 Add lots of summary variables using functions inside `summarise()`.
 
-1.  Use `n()` function to create a count variable (no variable in
-    parentheses)
+1.  Use `n()` function to create a count variable (no variable in parentheses)
 2.  Use `mean()` function on a variable
 3.  Use `median()` function on a variable
 
@@ -209,8 +201,7 @@ gss_all |>
 
 ```
 
-**Use `dplyr` grammar to find the frequency, mean, and median for the
-variable: `hrs1`.**
+**Use `dplyr` grammar to find the frequency, mean, and median for the variable: `hrs1`.**
 
 ```{r, eval=FALSE}
 #| label: pipe02-mini-task
@@ -224,20 +215,16 @@ gss_all |>
 
 ## `group_by()` and `summarize()` {.sparse-slide}
 
-A common pipeline is `group_by()` and then `summarize()` to calculate
-summary statistics for each group:
+A common pipeline is `group_by()` and then `summarize()` to calculate summary statistics for each group:
 
-Use `group_by()` to organize your data into groups based on one or more
-variables.\
-Use `summarize()` to compute statistics like total, mean, or median for
-each group.\
+Use `group_by()` to organize your data into groups based on one or more variables.\
+Use `summarize()` to compute statistics like total, mean, or median for each group.\
 <br>
 
 1.  Start with the `gss_all` data frame:
 2.  Remove any observations with missing data for our key variables
 3.  Do the next steps separately for each group in the variable
-4.  Creates a new data frame with one row for each combination of
-    grouping variables
+4.  Creates a new data frame with one row for each combination of grouping variables
 
 ```{r}
 #| label: pipe03
@@ -249,8 +236,7 @@ gss_all |>
 
 ```
 
-**Compare the average and median work hours (`hrs`) for U.S. men and
-women.**
+**Compare the average and median work hours (`hrs`) for U.S. men and women.**
 
 ```{r, eval=FALSE}
 #| label: pipe03-mini-task
@@ -284,9 +270,7 @@ gss_all |>
 
 # Think Like a Statistician
 
-**How did the mean and standard deviation of weekly work hours differ
-between men and women in 2024, and what do these differences suggest
-about gender-based variability in labor patterns.**
+**How did the mean and standard deviation of weekly work hours differ between men and women in 2024, and what do these differences suggest about gender-based variability in labor patterns.**
 
 *How do we find out?*
 

@@ -526,6 +526,20 @@
 # ℹ 25 more rows</code></pre>
 </div>
 </div></div>
+<aside class="notes">
+<p>Demo in console:</p>
+<p>gss_all |&gt; gss_which_years(agekdbrn) |&gt; print(n = 40)</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </div>
 </section>
 <section id="dplyr-style" class="slide level2 sparse-slide">
@@ -638,7 +652,7 @@ Use <code>drop_na()</code> to remove rows with missing (NA) values.</p>
 <section id="mini-task-2" class="slide level2 sparse-slide">
 <h2>Mini-task</h2>
 <div class="task">
-<p><i class="fa-solid fa-check-double" aria-label="check-double"></i> Create a dataframe with the variables <code>year</code>, <code>sex</code>, <code>hrs1</code>, and <code>childs</code> for only the 2024 respondents without missing data for <code>sex</code>, <code>hrs1</code>, and <code>childs</code>.</p>
+<p><i class="fa-solid fa-check-double" aria-label="check-double"></i> Limit the dataframe to only the 2024 respondents without missing data for <code>sex</code>, <code>hrs1</code>, and <code>childs</code>. How many men and women are left?</p>
 </div>
 <div class="fragment">
 <div class="cell columns column-output-location">
@@ -656,6 +670,20 @@ Use <code>drop_na()</code> to remove rows with missing (NA) values.</p>
 2 2 [female]   888</code></pre>
 </div>
 </div></div>
+<aside class="notes">
+<p><span style="color: #6f42c1">ASK: Why are the numbers different than the table before?</span><br>
+</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </div>
 </section></section>
 <section>
@@ -875,7 +903,7 @@ Use <code>summarize()</code> to compute statistics like total, mean, or median f
 <section id="mini-task-5" class="slide level2 sparse-slide">
 <h2>Mini-task</h2>
 <div class="task">
-<p><i class="fa-solid fa-lightbulb" aria-label="lightbulb"></i> Compare the average and median work hours (<code>hrs</code>) for U.S. men and women.</p>
+<p><i class="fa-solid fa-lightbulb" aria-label="lightbulb"></i> Compare the median and average work hours (<code>hrs</code>) for U.S. men and women.</p>
 </div>
 <div class="fragment">
 <div class="cell columns column-output-location">
@@ -884,16 +912,16 @@ Use <code>summarize()</code> to compute statistics like total, mean, or median f
 <span id="cb32-2"><a href=""></a>  <span class="fu">drop_na</span>(sex, hrs1) <span class="sc">|&gt;</span> </span>
 <span id="cb32-3"><a href=""></a>  <span class="fu">group_by</span>(sex) <span class="sc">|&gt;</span> </span>
 <span id="cb32-4"><a href=""></a>  <span class="fu">summarize</span>(</span>
-<span id="cb32-5"><a href=""></a>    <span class="at">avg =</span> <span class="fu">mean</span>(hrs1),</span>
-<span id="cb32-6"><a href=""></a>    <span class="at">med =</span> <span class="fu">median</span>(hrs1)</span>
+<span id="cb32-5"><a href=""></a>    <span class="at">med =</span> <span class="fu">median</span>(hrs1),</span>
+<span id="cb32-6"><a href=""></a>    <span class="at">avg =</span> <span class="fu">mean</span>(hrs1)</span>
 <span id="cb32-7"><a href=""></a>    ) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div><div class="column fragment">
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 3
-  sex          avg   med
+  sex          med   avg
   &lt;dbl+lbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
-1 1 [male]    44.3    40
-2 2 [female]  37.8    40</code></pre>
+1 1 [male]      40  44.3
+2 2 [female]    40  37.8</code></pre>
 </div>
 </div></div>
 </div>

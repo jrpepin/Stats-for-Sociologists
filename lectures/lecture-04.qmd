@@ -95,7 +95,6 @@ data(gss_all)
 
 ```
 
-
 # dplyr II {.theme-section}
 
 ## `select()` {.sparse-slide}
@@ -108,12 +107,13 @@ Use `select()` to choose columns in a dataframe.\
 
 ```{r}
 #| label: select
-#| code-line-numbers: "1|2"
+#| code-line-numbers: "1|2|5"
 #| output-location: fragment
 
 my_data <- gss_all |>  # <1>
-  select(year, agekdbrn, childs, hrs1, marital) # <2>
+  select(year, agekdbrn, childs, hrs1) # <2>
 
+# look at the first rows & columns of the dataframe
 head(my_data) # <3>
 
 ```
@@ -123,13 +123,14 @@ head(my_data) # <3>
 3.  Returns the first part of the object
 
 ::: notes
-
 :::
 
 ## Mini-task {.sparse-slide}
 
 ::: task
-{{< fa check-double >}} Create a dataframe with the variables year, agekdbrn, childs, hrs1, and marital, including only respondents from the year 2022 who have no missing values in any of these variables.
+{{< fa check-double >}} Create a dataframe with the variables `year`,
+`agekdbrn`, `childs`, and `hrs1`, including only respondents
+from the year 2022 who have no missing values in any of these variables.
 :::
 
 <br>
@@ -142,7 +143,7 @@ head(my_data) # <3>
 #| output-location: slide
 
 my_data <- gss_all |> 
-  select(year, agekdbrn, childs, hrs1, marital) |>
+  select(year, agekdbrn, childs, hrs1) |>
   filter(year == 2022) |>
   drop_na() # <1>
 
@@ -151,66 +152,181 @@ head(my_data) # <3>
 
 ```
 
-
 1.  No need to list all variables inside drop_na()
 
 ::: notes
-[ASK: ]{style="color: #6f42c1"}\
+[ASK:]{style="color: #6f42c1"}\
 :::
 
+## `mutate()` {.sparse-slide}
 
+Use `mutate()` to add new columns or change existing ones.
 
-## `mutate()` 
-
-Use `mutate()` to add new columns or change existing ones.  
-
-## Use mutate to create Z scores
-
-use dplyr to create and interpret sd and z scores
-
-
-## Mini-task
-
-::: task
-{{< fa lightbulb >}} What proportion of new parents were teenagers (e.g., under 18 years old)?
-:::
-
-
-```{r}
-#| label: mutate00
-#| code-line-numbers: "1-4|5|6"
-#| output-location: fragment
-
-gss_all |>  # <1>
-  select(year, agekdbrn) |> # <1>
-  filter(year == 2022) |> # <1>
-  drop_na(agekdbrn) |> # <2>
-  mutate(teen_parent = (agekdbrn < 18) * 1) |> # <3>
-  summarise(proportion = mean(teen_parent)) # <4>
-```
-
-1.  Manipulate the dataset to variables and observations of interest
-2.  Remove missing or `summarise()` will report NA
-3.  Returns a logical vector (TRUE, FALSE, or NA) and * 1 converts it to numeric
-4.  Mean of the variable, which equals the proportion of `1s`
-
-
-## `mutate()` with `case_when()`  {.smaller}
-
-Use `case_when()` inside `mutate()` to create values based on conditions.  
+<br>
 
 . . .
 
+```{r}
+#| label: mutate
+#| code-line-numbers: "1-2|3"
+#| output-location: fragment
+
+# Use mutate to create a new variable: annual_hrs1
+my_data <- my_data |>
+  mutate(annual_hrs1 = hrs1 * 52)
+
+head(my_data)
+```
+
+## Mini-task {.sparse-slide}
+
 ::: task
-{{< fa lightbulb >}} What proportion of new parents had their first child as teenagers, in their 20s, 30s, or after age 40?
+{{< fa lightbulb >}} Use `mutate()`, `mean()`, and `sd()` to create a
+column with Z scores for `hrs1`
 :::
+
+<br>
+
+. . .
+
+```{r}
+#| label: mutate-mini-task
+#| code-line-numbers: "1|3-5"
+#| output-location: slide
+
+my_data <- my_data|>
+  # Create Z-score for annual_hours
+  mutate(z_hrs1 = (hrs1 - mean(hrs1)) / 
+           sd(hrs1) 
+  )
+
+head(my_data)
+
+```
+
+## `mutate()` & logical variables {.sparse-slide}
+
+```{r}
+#| label: mutate-logical
+#| code-line-numbers: "1-2"
+#| output-location: fragment
+
+my_data <- my_data|>
+  mutate(teen_parent = (agekdbrn < 18) * 1) # <1>
+  
+head(my_data)
+  
+```
+
+1.  Returns a logical vector (TRUE, FALSE, or NA) and \* 1 converts it
+    to numeric
+
+::: aside
+`agekdbrn`: How old were you when your first child was born?
+:::
+
+## Code Meets Question {.sparse-slide background-image="images/gears-solid-full.png" background-size="80px" background-repeat="repeat"}
+
+::: task
+{{< fa lightbulb >}} What proportion of new parents were teenagers
+(e.g., under 18 years old)?
+:::
+
+<br>
+
+. . .
+
+```{r}
+#| label: mutate-logical-CMQ
+#| code-line-numbers: "1|2"
+#| output-location: fragment
+
+my_data |> 
+  summarise(proportion = mean(teen_parent)) # <1>
+  
+```
+
+1.  Mean of the variable, which equals the proportion of `1s`
+
+::: aside
+`agekdbrn`: How old were you when your first child was born?
+:::
+
+::: notes
+[ASK: Tell me what this number means in a
+sentence.]{style="color: #6f42c1"}\
+:::
+
+## Mini-task {.sparse-slide}
+
+::: task
+{{< fa lightbulb >}} Use `mutate()` and `summarise()` to determine what
+proportion of new parents were older than 40 years old.
+:::
+
+<br>
+
+. . .
+
+```{r}
+#| label: mutate-logical-mini-task
+#| code-line-numbers: "1-2|3"
+#| output-location: fragment
+
+my_data |> 
+  mutate(older_parent = (agekdbrn > 40) * 1) |> # <1>
+  summarise(proportion = mean(older_parent)) # <2>
+  
+```
+
+::: notes
+[ASK: Tell me what this means in a sentence.]{style="color: #6f42c1"}\
+:::
+
+## `mutate()` with `case_when()` {.sparse-slide}
+
+Use `case_when()` inside `mutate()` to create values based on
+conditions.
+
+<br>
+
+. . .
+
+```{r}
+#| label: mutate-case-when
+#| code-line-numbers: "1|2-3|4|5|6|7-8|10-11"
+#| output-location: slide
+
+my_data <-  my_data |>  
+# Use mutate to create a new variable: childs_3cat
+  mutate(childs_3cat = case_when(
+    childs == 1 ~ "1 kid",
+    childs == 2 ~ "2 kids",
+    childs >  3 ~ "3+ kids",
+    TRUE ~ NA_character_)
+  ) 
+
+# Always double check your work!
+table(my_data$childs, my_data$childs_3cat)
+```
+
+## Code Meets Question {.sparse-slide background-image="images/gears-solid-full.png" background-size="80px" background-repeat="repeat"}
+
+::: task
+{{< fa lightbulb >}} What proportion of new parents had their first
+child in their teens, 20s, 30s, or after age 40?
+:::
+
+<br>
+
+. . .
 
 ```{r}
 #| label: mutate01
-#| code-line-numbers: "1|5|6-9|10-11|13"
-#| output-location: column-fragment
+#| code-line-numbers: "1|2|3|4|5|6|7-8|10-11"
+#| output-location: slide
 
-gss_all <-  gss_all |>  
+my_data <-  my_data |>  
   mutate(age_groups = case_when(
     agekdbrn < 18 ~ "<18",
     agekdbrn >= 18 & agekdbrn <= 29 ~ "18–29",
@@ -219,13 +335,14 @@ gss_all <-  gss_all |>
     TRUE ~ NA_character_)
   ) 
 
-gss_all |>
-  filter(year == 2022) |>
+my_data |>
   freq(age_groups, report.nas = FALSE, headings = FALSE)
 ```
 
-
-
+::: notes
+[ASK: Tell me what this output means in a
+sentence.]{style="color: #6f42c1"}\
+:::
 
 # Assignment operators {.theme-section}
 
@@ -243,25 +360,28 @@ Let's make a tiny data frame to use as an example:
 
 ```{r}
 #| label: tibble
+#| output-location: column-fragment
 
-df <- tibble(x = c(1, 2, 3, 4, 5), y = c("a", "a", "b", "c", "c"))
+df <- tibble(
+        x = c(1, 2, 3, 4, 5), 
+        y = c("a", "a", "b", "c", "c")
+      )
+
 df
 ```
 
-## `head()`
-
-
-## Assignment operators (cont)
+## {.sparse-slide data-menu-title="Assignment operators"}
 
 Suppose you run the following and **then** you inspect `df`.
 
 ::: {style="font-family: 'Shadows Into Light'"}
-Will the `x` variable have values [1, 2, 3, 4, 5]{style="color: #18bc9c"} or [2, 4, 6, 8, 10]{style="color: #F39C12"}?
+Will the `x` variable have values [1, 2, 3, 4,
+5]{style="color: #18bc9c"} or [2, 4, 6, 8, 10]{style="color: #F39C12"}?
 :::
 
 <br>
 
-::: columns
+::::: columns
 ::: column
 ```{r}
 #| label: no-assignment
@@ -277,24 +397,25 @@ df |>
 df
 ```
 :::
-:::
+:::::
 
 . . .
 
 > **Do something and show me**
 
 
-## Assignment operators (cont)
+## {.sparse-slide data-menu-title="Assignment operators (cont)"}
 
 Suppose you run the following and **then** you inspect `df`.
 
 ::: {style="font-family: 'Shadows Into Light'"}
-Will the `x` variable have values [1, 2, 3, 4, 5]{style="color: #18bc9c"} or [2, 4, 6, 8, 10]{style="color: #F39C12"}?
+Will the `x` variable have values [1, 2, 3, 4,
+5]{style="color: #18bc9c"} or [2, 4, 6, 8, 10]{style="color: #F39C12"}?
 :::
 
 <br>
 
-::: columns
+::::: columns
 ::: {.column .fragment}
 ```{r}
 #| label: assignment
@@ -312,16 +433,15 @@ df <- df |>
 df
 ```
 :::
-:::
+:::::
 
 . . .
 
 > **Do something, save result, overwriting original**
 
+## Assignment: Overwriting {.smaller .sparse-slide}
 
-## Assignment: Overwriting {.smaller}
-
-::: columns
+::::: columns
 ::: {.column width="50%"}
 > **Do something, save result, overwriting original**
 
@@ -354,16 +474,17 @@ df <- tibble(
 )
 df_new <- df |>
   mutate(x = x * 2)
-df_new
+df
 ```
 :::
-:::
+:::::
 
-## Assignment: Overwriting (cont) {.smaller}
+## Assignment: Overwriting (cont) {.smaller .sparse-slide}
 
-::: columns
+::::: columns
 ::: {.column width="50%"}
-> **Do something, save result, overwriting original [when you shouldn't]{style="color: #E74C3C"}**
+> **Do something, save result, overwriting original [when you
+> shouldn't]{style="color: #E74C3C"}**
 
 ```{r}
 #| code-line-numbers: "5-8"
@@ -380,7 +501,8 @@ df
 :::
 
 ::: {.column .fragment width="50%"}
-> **Do something, save result, [not]{style="color: #18BC9C"} overwriting original [when you shouldn't]{style="color: #18BC9C"}**
+> **Do something, save result, [not]{style="color: #18BC9C"} overwriting
+> original [when you shouldn't]{style="color: #18BC9C"}**
 
 ```{r}
 #| code-line-numbers: "5-8"
@@ -392,15 +514,14 @@ df <- tibble(
 df_summary <- df |>
   group_by(y) |>
   summarize(mean_x = mean(x))
-df_summary
+df
 ```
 :::
-:::
+:::::
 
+## Assignment: Overwriting (cont) {.smaller .sparse-slide}
 
-## Assignment: Overwriting (cont) {.smaller}
-
-::: columns
+::::: columns
 ::: {.column width="50%"}
 > **Do something, save result, overwriting original**\
 > [***data frame***]{style="color: #18BC9C"}
@@ -434,9 +555,9 @@ df <- df |>
 df
 ```
 :::
-:::
+:::::
 
-## Assignment: Overwriting (cont) {.smaller}
+## Assignment: Overwriting (cont) {.smaller .sparse-slide}
 
 ::::: columns
 ::: {.column width="50%"}
@@ -492,7 +613,7 @@ gss_all |>
 
 # Think Like a Statistician {background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
 
-On average, in 2024, did parents with 4 or more kids work fewer hours for pay than other parents?
+On average, in 2024, did married people watch more or less television that never married people? What about compared to widowed/divorced/separated people?
 
 <br>
 
@@ -507,38 +628,37 @@ out?**]{style="color: #F39C12; font-size: 175%; font-family: 'Shadows Into Light
 {{< fa regular lightbulb >}} **Can you reproduce this table?**
 :::
 
+Use `select()`, `filter()`, `mutate()`, `group_by()`, and `summarise()`
+
+<br>
+
 ```{r}
 #| label: think-output
 #| echo: false
 
-gss_all$childs <- as.numeric(gss_all$childs)
-
 gss_all |> 
+  select(year, marital, tvhours) |>
   filter(year == 2024) |>
-  select(year, childs, hrs1) |>
-  mutate(childs_group = case_when(
-    childs == 1 ~ "1 child",
-    childs == 2 ~ "2 children",
-    childs == 3 ~ "3 children",
-    childs >= 4 ~ "4 or more children",
+  drop_na() |>
+  mutate(mar_cat = case_when(
+    marital == 1 ~ "Married",
+    marital > 1 & marital < 5 ~ "Widow/div/sep",
+    marital == 5 ~ "Never married",
     TRUE ~ NA_character_)) |>
-  drop_na(childs_group, hrs1) |>
-  group_by(childs_group) |>  
+  group_by(mar_cat) |>  
   summarise(
     count = n(),
-    mean = round(mean(hrs1), digits = 2), 
-    median = round(median(hrs1)),
-    sd = round(sd(hrs1), digits = 2)
+    mean = round(mean(tvhours), digits = 2), 
+    median = round(median(tvhours)),
+    sd = round(sd(tvhours), digits = 2)
     ) 
 ```
-
 
 ## Your Data Take {data-menu-title="Your Data Take" background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
 
 <br>
 
 ::: {style="color: #f39c12; font-size: 175%; font-family: 'Shadows Into Light'"}
-{{< fa regular lightbulb >}} **What's your conclusion to our research question?**
+{{< fa regular lightbulb >}} **What's your conclusion to our research
+question?**
 :::
-
-

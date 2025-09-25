@@ -250,7 +250,7 @@
 <h1>Agenda</h1>
 <ul>
 <li><code>dplyr</code> II</li>
-<li>Assignment operators</li>
+<li>Overwriting data</li>
 </ul>
 <aside class="notes">
 <p>missing data? &amp; <strong>outliers</strong> - dates? - lists</p>
@@ -669,12 +669,12 @@
 </div>
 </div></section></section>
 <section>
-<section id="assignment-operators" class="title-slide slide level1 theme-section center">
-<h1>Assignment operators</h1>
+<section id="overwriting-data" class="title-slide slide level1 theme-section center">
+<h1>Overwriting data</h1>
 
 </section>
-<section id="overwriting-data" class="slide level2">
-<h2>Overwriting data</h2>
+<section id="overwriting-assignment-operators" class="slide level2">
+<h2>Overwriting &amp; assignment operators</h2>
 <div class="callout callout-tip no-icon callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -786,8 +786,8 @@
 </blockquote>
 </div>
 </section>
-<section id="assignment-overwriting" class="slide level2 smaller sparse-slide">
-<h2>Assignment: Overwriting</h2>
+<section id="section-2" class="slide level2 smaller sparse-slide" data-menu-title="Assignment operators (cont)">
+<h2></h2>
 <div class="columns">
 <div class="column" style="width:50%;">
 <blockquote>
@@ -841,8 +841,8 @@
 </div>
 </div></div>
 </section>
-<section id="assignment-overwriting-cont" class="slide level2 smaller sparse-slide">
-<h2>Assignment: Overwriting (cont)</h2>
+<section id="section-3" class="slide level2 smaller sparse-slide" data-menu-title="Assignment operators (cont)">
+<h2></h2>
 <div class="columns">
 <div class="column" style="width:50%;">
 <blockquote>
@@ -892,8 +892,8 @@
 </div>
 </div></div>
 </section>
-<section id="assignment-overwriting-cont-1" class="slide level2 smaller sparse-slide">
-<h2>Assignment: Overwriting (cont)</h2>
+<section id="section-4" class="slide level2 smaller sparse-slide" data-menu-title="Assignment operators (cont)">
+<h2></h2>
 <div class="columns">
 <div class="column" style="width:50%;">
 <blockquote>
@@ -945,64 +945,113 @@
 </div>
 </div></div>
 </section>
-<section id="assignment-overwriting-cont-2" class="slide level2 smaller sparse-slide">
-<h2>Assignment: Overwriting (cont)</h2>
+<section id="section-5" class="slide level2 smaller sparse-slide" data-menu-title="Assignment operators (cont)">
+<h2></h2>
 <div class="columns">
 <div class="column" style="width:50%;">
-<blockquote>
-<p><strong>Do something, save result, not overwriting original.</strong></p>
-</blockquote>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb37" data-code-line-numbers="2|11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href=""></a>gss_all <span class="ot">&lt;-</span>  gss_all <span class="sc">|&gt;</span>  </span>
-<span id="cb37-2"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">age_groups =</span> <span class="fu">case_when</span>(</span>
-<span id="cb37-3"><a href=""></a>    agekdbrn <span class="sc">&lt;</span> <span class="dv">18</span> <span class="sc">~</span> <span class="st">"&lt;18"</span>,</span>
-<span id="cb37-4"><a href=""></a>    agekdbrn <span class="sc">&gt;=</span> <span class="dv">18</span> <span class="sc">&amp;</span> agekdbrn <span class="sc">&lt;=</span> <span class="dv">29</span> <span class="sc">~</span> <span class="st">"18–29"</span>,</span>
-<span id="cb37-5"><a href=""></a>    agekdbrn <span class="sc">&gt;=</span> <span class="dv">30</span> <span class="sc">&amp;</span> agekdbrn <span class="sc">&lt;=</span> <span class="dv">39</span> <span class="sc">~</span> <span class="st">"30–39"</span>,</span>
-<span id="cb37-6"><a href=""></a>    agekdbrn <span class="sc">&gt;=</span> <span class="dv">40</span> <span class="sc">~</span> <span class="st">"40+"</span>,</span>
-<span id="cb37-7"><a href=""></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA_character_</span>)</span>
-<span id="cb37-8"><a href=""></a>  ) </span>
-<span id="cb37-9"><a href=""></a></span>
-<span id="cb37-10"><a href=""></a>gss_all <span class="sc">|&gt;</span></span>
-<span id="cb37-11"><a href=""></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2022</span>) <span class="sc">|&gt;</span></span>
-<span id="cb37-12"><a href=""></a>  <span class="fu">freq</span>(age_groups, <span class="at">report.nas =</span> <span class="cn">FALSE</span>, <span class="at">headings =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div><div class="column fragment" style="width:50%;">
 <blockquote>
 <p><strong>Do something and show me</strong></p>
 </blockquote>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb38" data-code-line-numbers="11-14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href=""></a>gss_all <span class="sc">|&gt;</span>  </span>
-<span id="cb38-2"><a href=""></a>  <span class="fu">select</span>(year, agekdbrn) <span class="sc">|&gt;</span> </span>
-<span id="cb38-3"><a href=""></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2022</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb38-4"><a href=""></a>  <span class="fu">drop_na</span>(agekdbrn)  <span class="sc">|&gt;</span></span>
-<span id="cb38-5"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">age_groups =</span> <span class="fu">case_when</span>(</span>
-<span id="cb38-6"><a href=""></a>    agekdbrn <span class="sc">&lt;</span> <span class="dv">18</span> <span class="sc">~</span> <span class="st">"&lt;18"</span>,</span>
-<span id="cb38-7"><a href=""></a>    agekdbrn <span class="sc">&gt;=</span> <span class="dv">18</span> <span class="sc">&amp;</span> agekdbrn <span class="sc">&lt;=</span> <span class="dv">29</span> <span class="sc">~</span> <span class="st">"18–29"</span>,</span>
-<span id="cb38-8"><a href=""></a>    agekdbrn <span class="sc">&gt;=</span> <span class="dv">30</span> <span class="sc">&amp;</span> agekdbrn <span class="sc">&lt;=</span> <span class="dv">39</span> <span class="sc">~</span> <span class="st">"30–39"</span>,</span>
-<span id="cb38-9"><a href=""></a>    agekdbrn <span class="sc">&gt;=</span> <span class="dv">40</span> <span class="sc">~</span> <span class="st">"40+"</span>,</span>
-<span id="cb38-10"><a href=""></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA_character_</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb38-11"><a href=""></a>  <span class="fu">group_by</span>(age_groups) <span class="sc">|&gt;</span>  </span>
-<span id="cb38-12"><a href=""></a>  <span class="fu">summarise</span>(</span>
-<span id="cb38-13"><a href=""></a>    <span class="at">count =</span> <span class="fu">n</span>(),</span>
-<span id="cb38-14"><a href=""></a>    <span class="at">proportion =</span> <span class="fu">round</span>(count <span class="sc">/</span> <span class="fu">sum</span>(count), <span class="dv">3</span>)</span>
-<span id="cb38-15"><a href=""></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37" data-code-line-numbers="1-4|5-10|11-15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href=""></a>gss_all <span class="sc">|&gt;</span>  </span>
+<span id="cb37-2"><a href=""></a>  <span class="fu">select</span>(year, agekdbrn) <span class="sc">|&gt;</span> </span>
+<span id="cb37-3"><a href=""></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2022</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb37-4"><a href=""></a>  <span class="fu">drop_na</span>()  <span class="sc">|&gt;</span></span>
+<span id="cb37-5"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">age_groups =</span> <span class="fu">case_when</span>(</span>
+<span id="cb37-6"><a href=""></a>    agekdbrn <span class="sc">&lt;</span> <span class="dv">18</span> <span class="sc">~</span> <span class="st">"&lt;18"</span>,</span>
+<span id="cb37-7"><a href=""></a>    agekdbrn <span class="sc">&gt;=</span> <span class="dv">18</span> <span class="sc">&amp;</span> agekdbrn <span class="sc">&lt;=</span> <span class="dv">29</span> <span class="sc">~</span> <span class="st">"18–29"</span>,</span>
+<span id="cb37-8"><a href=""></a>    agekdbrn <span class="sc">&gt;=</span> <span class="dv">30</span> <span class="sc">&amp;</span> agekdbrn <span class="sc">&lt;=</span> <span class="dv">39</span> <span class="sc">~</span> <span class="st">"30–39"</span>,</span>
+<span id="cb37-9"><a href=""></a>    agekdbrn <span class="sc">&gt;=</span> <span class="dv">40</span> <span class="sc">~</span> <span class="st">"40+"</span>,</span>
+<span id="cb37-10"><a href=""></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA_character_</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb37-11"><a href=""></a>  <span class="fu">group_by</span>(age_groups) <span class="sc">|&gt;</span>  </span>
+<span id="cb37-12"><a href=""></a>  <span class="fu">summarise</span>(</span>
+<span id="cb37-13"><a href=""></a>    <span class="at">count =</span> <span class="fu">n</span>(),</span>
+<span id="cb37-14"><a href=""></a>    <span class="at">proportion =</span> <span class="fu">round</span>(count <span class="sc">/</span> <span class="fu">sum</span>(count), <span class="dv">3</span>)</span>
+<span id="cb37-15"><a href=""></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column fragment" style="width:50%;">
+<blockquote>
+<p><strong>Do something, save result, not overwriting original.</strong></p>
+</blockquote>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38" data-code-line-numbers="1-9|11-20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href=""></a><span class="co"># Do something</span></span>
+<span id="cb38-2"><a href=""></a>gss_all <span class="ot">&lt;-</span>  gss_all <span class="sc">|&gt;</span>  </span>
+<span id="cb38-3"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">age_groups =</span> <span class="fu">case_when</span>(</span>
+<span id="cb38-4"><a href=""></a>    agekdbrn <span class="sc">&lt;</span> <span class="dv">18</span> <span class="sc">~</span> <span class="st">"&lt;18"</span>,</span>
+<span id="cb38-5"><a href=""></a>    agekdbrn <span class="sc">&gt;=</span> <span class="dv">18</span> <span class="sc">&amp;</span> agekdbrn <span class="sc">&lt;=</span> <span class="dv">29</span> <span class="sc">~</span> <span class="st">"18–29"</span>,</span>
+<span id="cb38-6"><a href=""></a>    agekdbrn <span class="sc">&gt;=</span> <span class="dv">30</span> <span class="sc">&amp;</span> agekdbrn <span class="sc">&lt;=</span> <span class="dv">39</span> <span class="sc">~</span> <span class="st">"30–39"</span>,</span>
+<span id="cb38-7"><a href=""></a>    agekdbrn <span class="sc">&gt;=</span> <span class="dv">40</span> <span class="sc">~</span> <span class="st">"40+"</span>,</span>
+<span id="cb38-8"><a href=""></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA_character_</span>)</span>
+<span id="cb38-9"><a href=""></a>  ) </span>
+<span id="cb38-10"><a href=""></a></span>
+<span id="cb38-11"><a href=""></a><span class="co"># Now show me</span></span>
+<span id="cb38-12"><a href=""></a>gss_all <span class="sc">|&gt;</span></span>
+<span id="cb38-13"><a href=""></a>  <span class="fu">select</span>(year, age_groups) <span class="sc">|&gt;</span> </span>
+<span id="cb38-14"><a href=""></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2022</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb38-15"><a href=""></a>  <span class="fu">drop_na</span>()  <span class="sc">|&gt;</span></span>
+<span id="cb38-16"><a href=""></a>  <span class="fu">group_by</span>(age_groups) <span class="sc">|&gt;</span>  </span>
+<span id="cb38-17"><a href=""></a>  <span class="fu">summarise</span>(</span>
+<span id="cb38-18"><a href=""></a>    <span class="at">count =</span> <span class="fu">n</span>(),</span>
+<span id="cb38-19"><a href=""></a>    <span class="at">proportion =</span> <span class="fu">round</span>(count <span class="sc">/</span> <span class="fu">sum</span>(count), <span class="dv">3</span>)</span>
+<span id="cb38-20"><a href=""></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div></div>
+</section>
+<section id="overwriting-raw-data" class="slide level2 sparse-slide">
+<h2>Overwriting &amp; raw data</h2>
+<p><span style="color: #E74C3C; font-size: 175%; font-family: 'Shadows Into Light'">Never overwrite your raw dataset!</span></p>
+<p><br></p>
+<div class="callout callout-tip no-icon callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<p><strong><i class="fa-solid fa-hat-wizard" aria-label="hat-wizard"></i> Heads Up!</strong></p>
+</div>
+<div class="callout-content">
+<p>Always save transformed data as a new object, which should remain untouched for reference and reproducibility.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="write_rds-read_rds" class="slide level2 sparse-slide">
+<h2><code>write_rds()</code> &amp; <code>read_rds()</code></h2>
+<p><code>write_rds()</code> saves an R object to a file<br>
+<code>read_rds()</code> loads an R object from a .rds file</p>
+<p><br></p>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="annotated-cell-13" data-code-line-numbers="1|3"><pre class="sourceCode numberSource r code-annotation-code number-lines code-with-copy code-annotated"><code class="sourceCode r"><button class="code-annotation-anchor" data-target-cell="annotated-cell-13" data-target-annotation="1">1</button><span id="annotated-cell-13-1" class="code-annotation-target"><a href="#annotated-cell-13-1"></a><span class="fu">write_rds</span>(my_data, <span class="st">"my_data_file.rds"</span>)</span>
+<span id="annotated-cell-13-2"><a href="#annotated-cell-13-2"></a></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-13" data-target-annotation="2">2</button><span id="annotated-cell-13-3" class="code-annotation-target"><a href="#annotated-cell-13-3"></a><span class="fu">read_rds</span>(<span class="st">"my_data_file.rds"</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-annotation">
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-13" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-13" data-code-lines="1" data-code-annotation="1">Saves your df in current working directory</span>
+</dd>
+<dt data-target-cell="annotated-cell-13" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-13" data-code-lines="3" data-code-annotation="2">Opens your df if in current working directory</span>
+</dd>
+</dl>
+</div>
+</div>
+</div>
 </section></section>
 <section>
 <section id="think-like-a-statistician" class="title-slide slide level1 center" data-background-image="images/lightbulb-solid.png" data-background-size="80px" data-background-repeat="repeat">
 <h1>Think Like a Statistician</h1>
-<p>On average, in 2024, did married people watch more or less television that never married people? What about compared to widowed/divorced/separated people?</p>
+<p>In 2024, how did the average amount of television watched differ between married people and those who were never married? And how did it compare to people who were widowed, divorced, or separated?</p>
 <p><br></p>
 <p><span style="color: #F39C12; font-size: 175%; font-family: 'Shadows Into Light'"><i class="fa-regular fa-lightbulb" aria-label="lightbulb"></i> <strong>How do we find out?</strong></span></p>
 </section>
-<section id="think-like-a-statistician-1" class="slide level2" data-background-image="images/lightbulb-solid.png" data-background-size="80px" data-background-repeat="repeat">
-<h2>Think Like a Statistician</h2>
+<section id="section-6" class="slide level2" data-menu-title="Think Like a Statistician" data-background-image="images/lightbulb-solid.png" data-background-size="80px" data-background-repeat="repeat">
+<h2></h2>
+<p>Use <code>select()</code>, <code>filter()</code>, <code>mutate()</code>, <code>group_by()</code>, &amp; <code>summarise()</code></p>
 <p><br></p>
+<div class="fragment">
 <div style="color: #f39c12; font-size: 200%;  font-family: 'Shadows Into Light'">
 <p><i class="fa-regular fa-lightbulb" aria-label="lightbulb"></i> <strong>Can you reproduce this table?</strong></p>
 </div>
-<p><br></p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 5
@@ -1013,7 +1062,12 @@
 3 Widow/div/sep   565  3.87      3  3.73</code></pre>
 </div>
 </div>
-</section>
+
+</div>
+<aside><div>
+<p><code>tvhours</code>: Hours per day watching tv<br>
+<code>marital</code>: Are you currently – married, widowed, divorced, separated, or have you never been married?</p>
+</div></aside></section>
 <section id="your-data-take" class="slide level2" data-menu-title="Your Data Take" data-background-image="images/lightbulb-solid.png" data-background-size="80px" data-background-repeat="repeat">
 <h2>Your Data Take</h2>
 <p><br></p>

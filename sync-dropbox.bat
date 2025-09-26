@@ -32,4 +32,34 @@ IF %ERRORLEVEL% NEQ 0 (
     exit /b
 )
 
-REM === STEP 2: Update dropbox-mirror to match
+REM === STEP 2: Stage and commit changes ===
+git add . >> "%LOG_PATH%" 2>&1
+IF %ERRORLEVEL% NEQ 0 (
+    echo Failed to stage changes >> "%LOG_PATH%"
+    exit /b
+)
+
+git commit -m "Auto-sync from Dropbox worktree" >> "%LOG_PATH%" 2>&1
+IF %ERRORLEVEL% EQU 1 (
+    echo No changes to commit >> "%LOG_PATH%"
+) ELSE IF %ERRORLEVEL% NEQ 0 (
+    echo Commit failed >> "%LOG_PATH%"
+    exit /b
+)
+
+REM === STEP 3: Pull latest changes from GitHub ===
+git pull origin main --rebase >> "%LOG_PATH%" 2>&1
+IF %ERRORLEVEL% NEQ 0 (
+    echo Pull (rebase) failed >> "%LOG_PATH%"
+    exit /b
+)
+
+REM === STEP 4: Push to GitHub ===
+git push origin HEAD:main >> "%LOG_PATH%" 2>&1
+IF %ERRORLEVEL% NEQ 0 (
+    echo Push failed >> "%LOG_PATH%"
+    exit /b
+)
+
+REM === LOG END ===
+echo === Sync completed on %DATE% at %TIME% === >> "%LOG_PATH%"

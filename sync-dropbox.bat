@@ -32,17 +32,18 @@ IF %ERRORLEVEL% NEQ 0 (
     exit /b
 )
 
-REM === STEP 2: Change to worktree and clean up conflicts if any ===
+REM === STEP 2: Change to worktree ===
 echo Changing directory to worktree: "%WORKTREE_PATH%" >> "%LOG_PATH%"
 cd /d "%WORKTREE_PATH%"
-git status >> "%LOG_PATH%" 2>&1 | findstr /C:"Unmerged paths" >nul
-IF %ERRORLEVEL% EQU 0 (
-    echo ERROR: Merge conflict detected in worktree. Resolve manually before running script. >> "%LOG_PATH%"
-    echo ERROR: Merge conflict detected in worktree. Resolve manually before running script.
+
+REM === STEP 3: Checkout dropbox-mirror branch ===
+git checkout dropbox-mirror >> "%LOG_PATH%" 2>&1
+IF %ERRORLEVEL% NEQ 0 (
+    echo Failed to checkout dropbox-mirror branch >> "%LOG_PATH%"
     exit /b
 )
 
-REM === STEP 3: Fetch and reset worktree to match origin/main ===
+REM === STEP 4: Force dropbox-mirror to match main ===
 git fetch origin >> "%LOG_PATH%" 2>&1
 git reset --hard origin/main >> "%LOG_PATH%" 2>&1
 IF %ERRORLEVEL% NEQ 0 (
@@ -50,25 +51,10 @@ IF %ERRORLEVEL% NEQ 0 (
     exit /b
 )
 
-REM === STEP 4: Stage and commit changes ===
-git add . >> "%LOG_PATH%" 2>&1
+REM === STEP 5: Force push dropbox-mirror to GitHub ===
+git push origin dropbox-mirror --force >> "%LOG_PATH%" 2>&1
 IF %ERRORLEVEL% NEQ 0 (
-    echo Failed to stage changes >> "%LOG_PATH%"
-    exit /b
-)
-
-git commit -m "Auto-sync from Dropbox worktree" >> "%LOG_PATH%" 2>&1
-IF %ERRORLEVEL% EQU 1 (
-    echo No changes to commit >> "%LOG_PATH%"
-) ELSE IF %ERRORLEVEL% NEQ 0 (
-    echo Commit failed >> "%LOG_PATH%"
-    exit /b
-)
-
-REM === STEP 5: Push to GitHub ===
-git push origin HEAD:main >> "%LOG_PATH%" 2>&1
-IF %ERRORLEVEL% NEQ 0 (
-    echo Push failed >> "%LOG_PATH%"
+    echo Force push failed >> "%LOG_PATH%"
     exit /b
 )
 

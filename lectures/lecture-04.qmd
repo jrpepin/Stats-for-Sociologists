@@ -29,7 +29,6 @@ execute:
 ---
 
 ```{r echo=FALSE}
-
 #| label: setup
 #| message: false
 #| include: false
@@ -77,7 +76,7 @@ Load the standard packages.
 #| message: false
 #| label: load
 
-library(tidyverse) 
+library(tidyverse)
 library(haven) # not core tidyverse
 library(gssr)
 library(gssrdoc) # load the GSS codebook
@@ -92,7 +91,6 @@ library(summarytools)
 
 # Get the data all survey years
 data(gss_all)
-
 ```
 
 # dplyr II {.theme-section}
@@ -110,9 +108,8 @@ Use `select()` to choose columns in a dataframe.\
 #| code-line-numbers: "1|2|5"
 #| output-location: fragment
 
-my_data <- gss_all |>  # <1>
+my_data <- gss_all |> # <1>
   select(year, agekdbrn, childs, hrs1) # <2>
-
 ```
 
 1.  Save a new data frame
@@ -137,7 +134,6 @@ your df.
 
 # look at the first rows & columns of the data frame
 head(my_data)
-
 ```
 
 ## Mini-task {.sparse-slide}
@@ -156,7 +152,6 @@ head(my_data)
 
 # look at the first rows & LAST columns of the data frame
 tail(my_data)
-
 ```
 
 ## Mini-task {.sparse-slide}
@@ -176,13 +171,12 @@ year 2022 who have no missing values in any of these variables.
 #| code-line-numbers: "1-2|3|4|6"
 #| output-location: slide
 
-my_data <- gss_all |> 
+my_data <- gss_all |>
   select(year, agekdbrn, childs, hrs1) |>
   filter(year == 2022) |>
   drop_na() # <1>
 
-head(my_data) 
-
+head(my_data)
 ```
 
 1.  No need to list all variables inside drop_na()
@@ -229,12 +223,10 @@ column with Z scores for `hrs1`
 
 my_data <- my_data |>
   # Create Z-score for annual_hours
-  mutate(z_hrs1 = (hrs1 - mean(hrs1)) / 
-           sd(hrs1) 
-  )
+  mutate(z_hrs1 = (hrs1 - mean(hrs1)) /
+    sd(hrs1))
 
 head(my_data) # Check your work
-
 ```
 
 ## `mutate()` & logical variables {.sparse-slide}
@@ -246,9 +238,8 @@ head(my_data) # Check your work
 
 my_data <- my_data |>
   mutate(teen_parent = (agekdbrn < 18) * 1) # <1>
-  
+
 head(my_data)
-  
 ```
 
 1.  Returns a logical vector (TRUE, FALSE, or NA) and \* 1 converts it
@@ -274,9 +265,8 @@ head(my_data)
 #| code-line-numbers: "1|2"
 #| output-location: fragment
 
-my_data |> 
+my_data |>
   summarise(proportion = mean(teen_parent)) # <1>
-  
 ```
 
 1.  Mean of the variable, which equals the proportion of `1s`
@@ -306,10 +296,9 @@ proportion of new parents were older than 40 years old.
 #| code-line-numbers: "1-2|3"
 #| output-location: fragment
 
-my_data |> 
+my_data |>
   mutate(older_parent = (agekdbrn > 40) * 1) |> # <1>
   summarise(proportion = mean(older_parent)) # <2>
-  
 ```
 
 ::: notes
@@ -330,14 +319,14 @@ conditions.
 #| code-line-numbers: "1|2-3|4|5|6|7-8|10-11"
 #| output-location: slide
 
-my_data <-  my_data |>  
-# Use mutate to create a new variable: childs_3cat
+my_data <- my_data |>
+  # Use mutate to create a new variable: childs_3cat
   mutate(childs_3cat = case_when(
     childs == 1 ~ "1 kid",
     childs == 2 ~ "2 kids",
-    childs >  3 ~ "3+ kids",
-    TRUE ~ NA_character_)
-  ) 
+    childs > 3 ~ "3+ kids",
+    TRUE ~ NA_character_
+  ))
 
 # Always double check your work!
 table(my_data$childs, my_data$childs_3cat)
@@ -359,14 +348,14 @@ child in their teens, 20s, 30s, or after age 40?
 #| code-line-numbers: "1|2|3|4|5|6|7-8|10-11"
 #| output-location: slide
 
-my_data <-  my_data |>  
+my_data <- my_data |>
   mutate(age_groups = case_when(
     agekdbrn < 18 ~ "<18",
     agekdbrn >= 18 & agekdbrn <= 29 ~ "18–29",
     agekdbrn >= 30 & agekdbrn <= 39 ~ "30–39",
     agekdbrn >= 40 ~ "40+",
-    TRUE ~ NA_character_)
-  ) 
+    TRUE ~ NA_character_
+  ))
 
 my_data |>
   freq(age_groups, report.nas = FALSE, headings = FALSE)
@@ -396,9 +385,9 @@ Let's make a tiny data frame to use as an example:
 #| output-location: column-fragment
 
 df <- tibble(
-        x = c(1, 2, 3, 4, 5), 
-        y = c("a", "a", "b", "c", "c")
-      )
+  x = c(1, 2, 3, 4, 5),
+  y = c("a", "a", "b", "c", "c")
+)
 
 df
 ```
@@ -483,7 +472,7 @@ df
 #| output-location: fragment
 
 df <- tibble(
-  x = c(1, 2, 3, 4, 5), 
+  x = c(1, 2, 3, 4, 5),
   y = c("a", "a", "b", "c", "c")
 )
 df <- df |>
@@ -501,7 +490,7 @@ df
 #| output-location: fragment
 
 df <- tibble(
-  x = c(1, 2, 3, 4, 5), 
+  x = c(1, 2, 3, 4, 5),
   y = c("a", "a", "b", "c", "c")
 )
 df_new <- df |>
@@ -523,7 +512,7 @@ df
 #| code-line-numbers: "5-8"
 
 df <- tibble(
-  x = c(1, 2, 3, 4, 5), 
+  x = c(1, 2, 3, 4, 5),
   y = c("a", "a", "b", "c", "c")
 )
 df <- df |>
@@ -542,7 +531,7 @@ df
 #| code-line-numbers: "5-8"
 
 df <- tibble(
-  x = c(1, 2, 3, 4, 5), 
+  x = c(1, 2, 3, 4, 5),
   y = c("a", "a", "b", "c", "c")
 )
 df_summary <- df |>
@@ -565,7 +554,7 @@ df
 #| code-line-numbers: "5-6"
 
 df <- tibble(
-  x = c(1, 2, 3, 4, 5), 
+  x = c(1, 2, 3, 4, 5),
   y = c("a", "a", "b", "c", "c")
 )
 df <- df |>
@@ -583,7 +572,7 @@ df
 #| code-line-numbers: "5-6"
 
 df <- tibble(
-  x = c(1, 2, 3, 4, 5), 
+  x = c(1, 2, 3, 4, 5),
   y = c("a", "a", "b", "c", "c")
 )
 df <- df |>
@@ -604,22 +593,22 @@ df
 #| code-line-numbers: "1-4|5-10|11-15"
 #| eval: false
 
-gss_all |>  
-  select(year, agekdbrn) |> 
-  filter(year == 2022) |> 
-  drop_na()  |>
+gss_all |>
+  select(year, agekdbrn) |>
+  filter(year == 2022) |>
+  drop_na() |>
   mutate(age_groups = case_when(
     agekdbrn < 18 ~ "<18",
     agekdbrn >= 18 & agekdbrn <= 29 ~ "18–29",
     agekdbrn >= 30 & agekdbrn <= 39 ~ "30–39",
     agekdbrn >= 40 ~ "40+",
-    TRUE ~ NA_character_)) |>
-  group_by(age_groups) |>  
+    TRUE ~ NA_character_
+  )) |>
+  group_by(age_groups) |>
   summarise(
     count = n(),
     proportion = round(count / sum(count), 3)
   )
-
 ```
 :::
 
@@ -632,26 +621,25 @@ gss_all |>
 #| eval: false
 
 # Do something
-gss_all <-  gss_all |>  
+gss_all <- gss_all |>
   mutate(age_groups = case_when(
     agekdbrn < 18 ~ "<18",
     agekdbrn >= 18 & agekdbrn <= 29 ~ "18–29",
     agekdbrn >= 30 & agekdbrn <= 39 ~ "30–39",
     agekdbrn >= 40 ~ "40+",
-    TRUE ~ NA_character_)
-  ) 
+    TRUE ~ NA_character_
+  ))
 
 # Now show me
 gss_all |>
-  select(year, age_groups) |> 
-  filter(year == 2022) |> 
-  drop_na()  |>
-  group_by(age_groups) |>  
+  select(year, age_groups) |>
+  filter(year == 2022) |>
+  drop_na() |>
+  group_by(age_groups) |>
   summarise(
     count = n(),
     proportion = round(count / sum(count), 3)
   )
-
 ```
 :::
 :::::
@@ -687,7 +675,6 @@ untouched for reference and reproducibility.
 write_rds(my_data, "my_data_file.rds") # <1>
 
 read_rds("my_data_file.rds") # <2>
-
 ```
 
 1.  Saves your df in current working directory
@@ -720,7 +707,7 @@ Use `select()`, `filter()`, `mutate()`, `group_by()`, & `summarise()`
 #| label: think-output
 #| echo: false
 
-gss_all |> 
+gss_all |>
   select(year, marital, tvhours) |>
   filter(year == 2024) |>
   drop_na() |>
@@ -728,14 +715,15 @@ gss_all |>
     marital == 1 ~ "Married",
     marital > 1 & marital < 5 ~ "Widow/div/sep",
     marital == 5 ~ "Never married",
-    TRUE ~ NA_character_)) |>
-  group_by(mar_cat) |>  
+    TRUE ~ NA_character_
+  )) |>
+  group_by(mar_cat) |>
   summarise(
     count = n(),
-    mean = round(mean(tvhours), digits = 2), 
+    mean = round(mean(tvhours), digits = 2),
     median = round(median(tvhours)),
     sd = round(sd(tvhours), digits = 2)
-    ) 
+  )
 ```
 
 ::: aside

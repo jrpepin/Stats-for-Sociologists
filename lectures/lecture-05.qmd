@@ -72,21 +72,47 @@ By the end of the lecture, you will be able to ...
 
 Download and open [code-along-05.qmd]()
 
-## Packages {.sparse-slide}
+## Mini-task {data-menu-title="Install `summarytools()`"}
 
-Load the standard packages & 1 new package: `Rmisc()`  
+::: task
+{{< fa check-double >}} Install the [`Rmisc()`](https://cran.r-project.org/web/packages/Rmisc/refman/Rmisc.html) package, available on CRAN.
+:::
+
+<br>
+
+::: {style="font-size: 80%"}
+[**Run the code chunk in your code-along.**]{style="color: #18BC9C; font-family: 'Shadows Into Light'"} 
   
-We'll use `Rmisc()` to calculate confidence intervals with `summarize()`.  
-  
+*OR:* Copy and paste the code into your [Console pane]{style="color: #F39C12;"}. 
+Then hit "Enter".
+:::
+
+<br>
+
+```{r}
+#| eval: false
+#| label: install-Rmisc
+
+install.packages("Rmisc")
+```
+
+::: notes
+[What does this mean in your code-along: "This chunk will not run (on purpose!) when rendered because eval: false."?]{style="color: #6f42c1"}
+:::
+
+## Mini-task {data-menu-title="Load the packages"}
+
+::: task
+{{< fa check-double >}} Load the standard packages and our new `Rmisc()` package.
+:::
+
+<br>
+
 ```{r}
 #| message: false
 #| label: load
 
-# Only need to install once per machine. 
-# install.packages("Rmisc")
-
-library(here)
-library(tidyverse) 
+library(tidyverse)
 library(haven) # not core tidyverse
 library(gssr)
 library(gssrdoc) # load the GSS codebook
@@ -95,7 +121,23 @@ library(Rmisc) # load the new package
 ```
 
 
-## Load your data
+::: aside
+We'll use `Rmisc()` to calculate confidence intervals with `summarize()`.  
+:::
+
+::: notes
+`haven()` was installed with tidyverse; but it doesn't load automatically
+:::
+
+## Mini-task {data-menu-title="Load your data"}
+
+::: task
+{{< fa check-double >}} Load the 2022 GSS data.
+:::
+
+<br>
+
+. . . 
 
 ```{r}
 #| message: false
@@ -103,7 +145,6 @@ library(Rmisc) # load the new package
 
 # Get the data from the 2022 survey
 gss22 <- gss_get_yr(2022)
-
 
 ```
 

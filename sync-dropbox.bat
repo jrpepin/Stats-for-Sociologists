@@ -23,7 +23,16 @@ if not exist "%MAIN_REPO_PATH%" (
     exit /b
 )
 
-REM === STEP 1: Detach worktree from dropbox-mirror ===
+REM === STEP 1: Update main repo from GitHub ===
+echo Updating main repo from GitHub >> "%LOG_PATH%"
+cd /d "%MAIN_REPO_PATH%"
+git pull origin main >> "%LOG_PATH%" 2>&1
+IF %ERRORLEVEL% NEQ 0 (
+    echo Failed to pull latest changes into main repo >> "%LOG_PATH%"
+    exit /b
+)
+
+REM === STEP 2: Detach worktree from dropbox-mirror ===
 echo Changing directory to worktree: "%WORKTREE_PATH%" >> "%LOG_PATH%"
 cd /d "%WORKTREE_PATH%"
 git checkout --detach >> "%LOG_PATH%" 2>&1
@@ -32,7 +41,14 @@ IF %ERRORLEVEL% NEQ 0 (
     exit /b
 )
 
-REM === STEP 2: Stage and commit changes ===
+REM === STEP 3: Rebase worktree onto updated main ===
+git rebase main >> "%LOG_PATH%" 2>&1
+IF %ERRORLEVEL% NEQ 0 (
+    echo Rebase failed — manual conflict resolution may be required >> "%LOG_PATH%"
+    exit /b
+)
+
+REM === STEP 4: Stage and commit changes ===
 git add . >> "%LOG_PATH%" 2>&1
 IF %ERRORLEVEL% NEQ 0 (
     echo Failed to stage changes >> "%LOG_PATH%"
@@ -47,14 +63,7 @@ IF %ERRORLEVEL% EQU 1 (
     exit /b
 )
 
-REM === STEP 3: Pull latest changes from GitHub ===
-git pull origin main --rebase >> "%LOG_PATH%" 2>&1
-IF %ERRORLEVEL% NEQ 0 (
-    echo Pull (rebase) failed >> "%LOG_PATH%"
-    exit /b
-)
-
-REM === STEP 4: Push to GitHub ===
+REM === STEP 5: Push to GitHub ===
 git push origin HEAD:main >> "%LOG_PATH%" 2>&1
 IF %ERRORLEVEL% NEQ 0 (
     echo Push failed >> "%LOG_PATH%"

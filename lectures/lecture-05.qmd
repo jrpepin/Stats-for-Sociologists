@@ -54,37 +54,40 @@ scale_colour_discrete <- function(...) scale_color_manual(values = my_palette)
 -   Hypothesis Testing
 
 ::: notes
--  missing data? 
--  **outliers** 
--  dates? 
--  lists
--  forcats (reorder factor levels)
+-   missing data?
+-   **outliers**
+-   dates?
+-   lists
+-   forcats (reorder factor levels)
 :::
 
 # Learning objectives
 
 By the end of the lecture, you will be able to ...
 
--   Use R to calculate confidence intervals for means and proportions 
+-   Use R to calculate confidence intervals for means and proportions
 -   Use R to conduct one and two sample t-tests
 
 # Code-along 05 {data-menu-title="Code-along" background-image="images/terminal.png"}
 
 Download and open [code-along-05.qmd]()
 
-## Mini-task {data-menu-title="Install `summarytools()`"}
+## Mini-task {data-menu-title="Install `Rmisc()`"}
 
 ::: task
-{{< fa check-double >}} Install the [`Rmisc()`](https://cran.r-project.org/web/packages/Rmisc/refman/Rmisc.html) package, available on CRAN.
+{{< fa check-double >}} Install the
+[`Rmisc()`](https://cran.r-project.org/web/packages/Rmisc/refman/Rmisc.html)
+package, available on CRAN.
 :::
 
 <br>
 
 ::: {style="font-size: 80%"}
-[**Run the code chunk in your code-along.**]{style="color: #18BC9C; font-family: 'Shadows Into Light'"} 
-  
-*OR:* Copy and paste the code into your [Console pane]{style="color: #F39C12;"}. 
-Then hit "Enter".
+[**Run the code chunk in your
+code-along.**]{style="color: #18BC9C; font-family: 'Shadows Into Light'"}
+
+*OR:* Copy and paste the code into your [Console
+pane]{style="color: #F39C12;"}. Then hit "Enter".
 :::
 
 <br>
@@ -97,13 +100,15 @@ install.packages("Rmisc")
 ```
 
 ::: notes
-[What does this mean in your code-along: "This chunk will not run (on purpose!) when rendered because eval: false."?]{style="color: #6f42c1"}
+[What does this mean in your code-along: "This chunk will not run (on
+purpose!) when rendered because eval: false."?]{style="color: #6f42c1"}
 :::
 
 ## Mini-task {data-menu-title="Load the packages"}
 
 ::: task
-{{< fa check-double >}} Load the standard packages and our new `Rmisc()` package.
+{{< fa check-double >}} Load the standard packages and our new `Rmisc()`
+package.
 :::
 
 <br>
@@ -120,13 +125,14 @@ library(summarytools)
 library(Rmisc) # load the new package
 ```
 
-
 ::: aside
-We'll use `Rmisc()` to calculate confidence intervals with `summarize()`.  
+We'll use `Rmisc()` to calculate confidence intervals with
+`summarize()`.
 :::
 
 ::: notes
-`haven()` was installed with tidyverse; but it doesn't load automatically
+`haven()` was installed with tidyverse; but it doesn't load
+automatically
 :::
 
 ## Mini-task {data-menu-title="Load your data"}
@@ -137,7 +143,7 @@ We'll use `Rmisc()` to calculate confidence intervals with `summarize()`.
 
 <br>
 
-. . . 
+. . .
 
 ```{r}
 #| message: false
@@ -150,12 +156,13 @@ gss22 <- gss_get_yr(2022)
 
 ## Variables
 
--    `wwwhr` Not counting e-mail, about how many minutes or hours per week do you use the Web?  
--    `postlife` Do you believe there is a life after death?  
--    `childs` How many children have you ever had?
--    `sex` Respondent's sex
+-   `wwwhr` Not counting e-mail, about how many minutes or hours per
+    week do you use the Web?\
+-   `postlife` Do you believe there is a life after death?\
+-   `childs` How many children have you ever had?
+-   `sex` Respondent's sex
 
-# Confidence Intervals{.theme-section}
+# Confidence Intervals {.theme-section}
 
 ## Review: `summarise()` {.sparse-slide}
 
@@ -175,19 +182,17 @@ gss22 |>
 
 ```
 
-## {data-menu-title="CIs equation" } 
+##  {data-menu-title="CIs equation"}
 
-:::: panel-tabset
-
+::: panel-tabset
 ### CI
 
-![](images/05/ci_equation.png "Confidence interval equation"){ width=100% }
+![](images/05/ci_equation.png "Confidence interval equation"){width="100%"}
 
 ### SE
 
 ![](images/05/estimate_se.png "Standard error equation")
-::::
-
+:::
 
 ## `summarise()` with equation
 
@@ -214,7 +219,8 @@ gss22 |>
 . . .
 
 ::: task
-{{< fa lightbulb >}} What can we infer about the population mean based on this confidence interval? 
+{{< fa lightbulb >}} What can we infer about the population mean based
+on this confidence interval?
 :::
 
 ## `summarise()` + `CI()` {.sparse-slide}
@@ -246,7 +252,10 @@ wwwhr_ci
 :::
 
 ::: notes
-That’s really interesting, but don’t we need to know our confidence level? Otherwise, how do we interpret the interval? What is the probability that the average number of hours people spend on the internet per week is between 14.17 hours and 15.62 hours?
+That’s really interesting, but don’t we need to know our confidence
+level? Otherwise, how do we interpret the interval? What is the
+probability that the average number of hours people spend on the
+internet per week is between 14.17 hours and 15.62 hours?
 :::
 
 ## `summarise()` + `CI()` {.sparse-slide}
@@ -271,14 +280,18 @@ wwwhr_ci99
 ```
 
 ::: notes
-The default confidence level of the CI() function is 95%. Let’s change our code to see what the confidence interval looks like if we wanted to be 99% confident that the true population average number of hours on the internet was within our confidence interval.
+The default confidence level of the CI() function is 95%. Let’s change
+our code to see what the confidence interval looks like if we wanted to
+be 99% confident that the true population average number of hours on the
+internet was within our confidence interval.
 :::
 
 ## CIs & percision {.smaller}
 
-:::: columns
+::::: columns
 ::: column
 **95% confidence intervals**
+
 ```{r}
 #| message: false
 #| label: table-ci95
@@ -289,6 +302,7 @@ wwwhr_ci
 
 ::: column
 **99% confidence intervals**
+
 ```{r}
 #| message: false
 #| label: table-ci99
@@ -296,14 +310,15 @@ wwwhr_ci
 wwwhr_ci99
 ```
 :::
-::::
+:::::
 
 <br>
 
 . . .
 
 ::: task
-{{< fa lightbulb >}} **How does a 95% confidence interval differ from a 99% confidence interval in terms of width and certainty?**
+{{< fa lightbulb >}} **How does a 95% confidence interval differ from a
+99% confidence interval in terms of width and certainty?**
 :::
 
 ## CIs (wrong) with proportions
@@ -333,7 +348,6 @@ gss22 |>
 
 ## CIs (correct) with proportions
 
-
 ```{r}
 #| message: false
 #| label: proportions02
@@ -357,8 +371,7 @@ gss22 |>
 
 ## Comparing CIs
 
-:::: panel-tabset
-
+::: panel-tabset
 ### Code
 
 ```{r}
@@ -413,14 +426,11 @@ df_ghosts |>
        x = " ",
        caption = "US General Social Survey 2022") 
 ```
-
-::::
-
+:::
 
 ## Comparing CIs
 
-:::: panel-tabset
-
+::: panel-tabset
 ### Code
 
 ```{r}
@@ -470,17 +480,14 @@ df_wwwhr |>
        x = " ",
        caption = "US General Social Survey 2022") 
 ```
-
-::::
-
-
+:::
 
 # Hypothesis Testing {.theme-section}
 
 ## `t.test()`
 
-Performs one and two sample t-tests. 
-To use this function, we’ll need to specify a few things:
+Performs one and two sample t-tests. To use this function, we’ll need to
+specify a few things:
 
 -   variable of interest
 -   mu (H0): a number indicating the true value of the mean
@@ -488,39 +495,46 @@ To use this function, we’ll need to specify a few things:
 
 ## `t.test()` in action
 
-In your family sociology course you learned that fertility rates have been dropping.
+In your family sociology course you learned that fertility rates have
+been dropping.
 
-You used to think that people had 2 children, on average. But, now you suspect that people are having fewer than 2 children.
+You used to think that people had 2 children, on average. But, now you
+suspect that people are having fewer than 2 children.
 
 <br>
 
 . . .
 
 ::: task
-{{< fa lightbulb >}} How do you test your hypothesis? 
+{{< fa lightbulb >}} How do you test your hypothesis?
 :::
 
 ##  {.quiz-question data-menu-title="Knowledge Check" background-image="images/clipboard-question.png" background-size="100px" background-repeat="repeat"}
 
 ::: {style="color: #F39C12"}
-{{< fa clipboard-question >}} Which of these equations represents your **research** hypothesis?
+{{< fa clipboard-question >}} Which of these equations represents your
+**research** hypothesis?
 :::
 
 -   [H1: µ ≠ 2]{data-explanation="😲 But you have a direction in mind."}
--   [H1: µ = 2]{data-explanation="You think the average is 2 kids exactly?"}
--   [H1: µ < 2]{.correct data-explanation="💯 Correct!"}
--   [H1: µ > 2]{data-explanation="You think the average is greater than 2 kids?"}
+-   [H1: µ =
+    2]{data-explanation="You think the average is 2 kids exactly?"}
+-   [H1: µ \< 2]{.correct data-explanation="💯 Correct!"}
+-   [H1: µ \>
+    2]{data-explanation="You think the average is greater than 2 kids?"}
 
 ##  {.quiz-question data-menu-title="Knowledge Check" background-image="images/clipboard-question.png" background-size="100px" background-repeat="repeat"}
 
 ::: {style="color: #F39C12"}
-{{< fa clipboard-question >}} Which of these equations represents your **null** hypothesis?
+{{< fa clipboard-question >}} Which of these equations represents your
+**null** hypothesis?
 :::
 
 -   [H0: µ ≠ 2]{data-explanation="The null hypothesis is always '='"}
 -   [H0: µ = 2]{.correct data-explanation="💯 Correct!"}
--   [H0: µ < 2]{data-explanation="😲 This was your research hypothesis."}
--   [H0: µ > 2]{data-explanation="The null hypothesis is always '='"}
+-   [H0: µ \<
+    2]{data-explanation="😲 This was your research hypothesis."}
+-   [H0: µ \> 2]{data-explanation="The null hypothesis is always '='"}
 
 ## Review: Summary Statistics
 
@@ -543,7 +557,9 @@ gss22 |>
 . . .
 
 ::: {style="color: #e74c3c; font-family: 'Shadows Into Light'"}
-Is the difference between our sample mean and 2 statistically significant or could we have gotten this mean simply by chance (sample variation)?
+Is the difference between our sample mean and 2 statistically
+significant or could we have gotten this mean simply by chance (sample
+variation)?
 :::
 
 ## Review: CIs
@@ -567,7 +583,6 @@ gss22 |>
     )
 
 ```
-
 
 . . .
 
@@ -607,32 +622,37 @@ t.test(gss22$childs, mu=2, alternative="less") # Ho: mu=2
 ##  {.quiz-question data-menu-title="Knowledge Check" background-image="images/clipboard-question.png" background-size="100px" background-repeat="repeat"}
 
 ::: {style="color: #F39C12"}
-{{< fa clipboard-question >}} Assuming an α level of .05, should you reject the null hypothesis? 
+{{< fa clipboard-question >}} Assuming an α level of .05, should you
+reject the null hypothesis?
 :::
 
--   [No, because the 𝛼 level of .01 is greater than the p-value (< .000).]{data-explanation="😲 The p-value is less than 𝛼."}
--   [No, because the p-value (< .000) is less than the 𝛼 level of .01.]{data-explanation="Y😲 The p-value is less than 𝛼."}
--   [Yes, because the p-value (< .000) is less than the 𝛼 level of .01.]{.correct data-explanation="💯 Correct!"}
-
+-   [No, because the 𝛼 level of .01 is greater than the p-value (\<
+    .000).]{data-explanation="😲 The p-value is less than 𝛼."}
+-   [No, because the p-value (\< .000) is less than the 𝛼 level of
+    .01.]{data-explanation="Y😲 The p-value is less than 𝛼."}
+-   [Yes, because the p-value (\< .000) is less than the 𝛼 level of
+    .01.]{.correct data-explanation="💯 Correct!"}
 
 ##  {.quiz-question data-menu-title="Knowledge Check" background-image="images/clipboard-question.png" background-size="100px" background-repeat="repeat"}
 
 ::: {style="color: #F39C12"}
-{{< fa clipboard-question >}} Which of these statements best summarizes your conclusion?
+{{< fa clipboard-question >}} Which of these statements best summarizes
+your conclusion?
 :::
 
--   [Our evidence proves that people have fewer than two children, on average.
-]{data-explanation="😲 We can't prove our research hypothesis."}
--   [People, on average, have two children.
-]{data-explanation="😲 Is that what the mean showed?"}
--   [On average, the number of children people have is statistically significantly lower than two.
-]{.correct data-explanation="💯 Correct!"}
-
+-   [Our evidence proves that people have fewer than two children, on
+    average.]{data-explanation="😲 We can't prove our research hypothesis."}
+-   [People, on average, have two
+    children.]{data-explanation="😲 Is that what the mean showed?"}
+-   [On average, the number of children people have is statistically
+    significantly lower than two.]{.correct
+    data-explanation="💯 Correct!"}
 
 ## two sample `t.test()` in action
 
 ::: task
-{{< fa lightbulb >}} Are the proportions of men and women who believe in ghosts statistically significantly different? 
+{{< fa lightbulb >}} Are the proportions of men and women who believe in
+ghosts statistically significantly different?
 :::
 
 . . .
@@ -649,17 +669,23 @@ t.test(gss22$ghosts ~ gss22$sex, alternative = "two.sided")
 ##  {.quiz-question data-menu-title="Knowledge Check" background-image="images/clipboard-question.png" background-size="100px" background-repeat="repeat"}
 
 ::: {style="color: #F39C12"}
-{{< fa clipboard-question >}} Assuming an α level of .05, what do you conclude? 
+{{< fa clipboard-question >}} Assuming an α level of .05, what do you
+conclude?
 :::
 
--   [There is no statistically significant difference between men and women in belief in ghosts.]{data-explanation="😲 The p-value is less than 𝛼."}
--   [Men are significantly more likely than women to believe in ghosts (p < .05). ]{data-explanation="Y😲 Look at the sample means again."}
--   [Women are significantly more likely than men to believe in ghosts (p < .05).]{.correct data-explanation="💯 Correct!"}
+-   [There is no statistically significant difference between men and
+    women in belief in
+    ghosts.]{data-explanation="😲 The p-value is less than 𝛼."}
+-   [Men are significantly more likely than women to believe in ghosts
+    (p \< .05).]{data-explanation="Y😲 Look at the sample means again."}
+-   [Women are significantly more likely than men to believe in ghosts
+    (p \< .05).]{.correct data-explanation="💯 Correct!"}
 
 ## Aside: paired `t.test()` {.sparse-slide}
 
-**Independent group t-test**  
-[Do two subsamples have the same mean?]{style="color: #F39C12; font-family: 'Shadows Into Light'"}  
+**Independent group t-test**\
+[Do two subsamples have the same
+mean?]{style="color: #F39C12; font-family: 'Shadows Into Light'"}
 
 ```{r}
 #| message: false
@@ -670,13 +696,13 @@ t.test(gss22$ghosts ~ gss22$sex, alternative = "two.sided")
 
 ```
 
-
 <br>
 
 . . .
 
-**Paired t-test**  
-[Do two variables have the same mean?]{style="color: #F39C12; font-family: 'Shadows Into Light'"}  
+**Paired t-test**\
+[Do two variables have the same
+mean?]{style="color: #F39C12; font-family: 'Shadows Into Light'"}
 
 ```{r}
 #| message: false
@@ -687,31 +713,32 @@ t.test(Pair(hrs1_2018, hrs1_2020) ~ 1, data = gss_panel)
 
 ```
 
-
-
 # Think Like a Statistician {background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
 
 ## Think Like a Statistician {background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
 
-[{{< fa regular lightbulb >}} **Do women have more years of education (`educ`) than men, on average?**]{style="color: #F39C12; font-size: 100%; font-family: 'Shadows Into Light'"}
+[{{< fa regular lightbulb >}} **Do women have more years of education
+(`educ`) than men, on
+average?**]{style="color: #F39C12; font-size: 100%; font-family: 'Shadows Into Light'"}
 
 <br>
 
 . . .
 
-[{{< fa regular lightbulb >}} **Are the proportions of men & women who support abortion for any reason (`abany`) statistically different?**]{style="color: #F39C12; font-size: 100%; font-family: 'Shadows Into Light'"}
+[{{< fa regular lightbulb >}} **Are the proportions of men & women who
+support abortion for any reason (`abany`) statistically
+different?**]{style="color: #F39C12; font-size: 100%; font-family: 'Shadows Into Light'"}
 
 <br>
 
 . . .
 
-[{{< fa regular lightbulb >}} **Do fewer men than women support gun laws (`gunlaw`)?**]{style="color: #F39C12; font-size: 100%; font-family: 'Shadows Into Light'"}
-
+[{{< fa regular lightbulb >}} **Do fewer men than women support gun laws
+(`gunlaw`)?**]{style="color: #F39C12; font-size: 100%; font-family: 'Shadows Into Light'"}
 
 ## Think Like a Statistician {background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
 
-:::: panel-tabset
-
+::: panel-tabset
 ### `educ`
 
 ```{r}
@@ -749,7 +776,6 @@ gss22 |>
 t.test(gss22$educ ~ gss22$sex, alternative = "less")
 
 ```
-
 
 ### `abany`
 
@@ -793,7 +819,6 @@ t.test(gss22$abany ~ gss22$sex, alternative = "two.sided")
 
 ```
 
-
 ### `gunlaw`
 
 ```{r}
@@ -835,5 +860,4 @@ t.test(gss22$gunlaw ~ gss22$sex, alternative = "two.sided")
 t.test(gss22$gunlaw ~ gss22$sex, alternative = "two.sided")
 
 ```
-
-::::
+:::

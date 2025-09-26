@@ -287,7 +287,7 @@
 <h1>Code-along 05</h1>
 <p>Download and open <a href="" target="_blank">code-along-05.qmd</a></p>
 </section>
-<section id="mini-task" class="slide level2" data-menu-title="Install `summarytools()`">
+<section id="mini-task" class="slide level2" data-menu-title="Install `Rmisc()`">
 <h2>Mini-task</h2>
 <div class="task">
 <p><i class="fa-solid fa-check-double" aria-label="check-double"></i> Install the <a href="https://cran.r-project.org/web/packages/Rmisc/refman/Rmisc.html" target="_blank"><code>Rmisc()</code></a> package, available on CRAN.</p>
@@ -314,7 +314,10 @@
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
-</section>
+
+<aside><div>
+<p>We’ll use <code>Rmisc()</code> to calculate confidence intervals with <code>summarize()</code>.</p>
+</div></aside></section>
 <section id="mini-task-1" class="slide level2" data-menu-title="Load the packages">
 <h2>Mini-task</h2>
 <div class="task">
@@ -329,7 +332,6 @@
 <span id="cb2-5"><a href=""></a><span class="fu">library</span>(summarytools)</span>
 <span id="cb2-6"><a href=""></a><span class="fu">library</span>(Rmisc) <span class="co"># load the new package</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-
 <aside class="notes">
 <p><code>haven()</code> was installed with tidyverse; but it doesn’t load automatically</p>
 <style type="text/css">
@@ -343,9 +345,7 @@
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
-<aside><div>
-<p>We’ll use <code>Rmisc()</code> to calculate confidence intervals with <code>summarize()</code>.</p>
-</div></aside></section>
+</section>
 <section id="mini-task-2" class="slide level2" data-menu-title="Load your data">
 <h2>Mini-task</h2>
 <div class="task">
@@ -412,7 +412,7 @@
 <section id="summarise-with-equation" class="slide level2">
 <h2><code>summarise()</code> with equation</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6" data-code-line-numbers="7|8|9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href=""></a>gss22 <span class="sc">|&gt;</span></span>
+<div class="sourceCode cell-code" id="cb6" data-code-line-numbers="1-6|7|8|9-10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href=""></a>wwwhr_sum <span class="ot">&lt;-</span> gss22 <span class="sc">|&gt;</span></span>
 <span id="cb6-2"><a href=""></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(wwwhr))  <span class="sc">|&gt;</span></span>
 <span id="cb6-3"><a href=""></a>  <span class="fu">summarise</span>(</span>
 <span id="cb6-4"><a href=""></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
@@ -423,7 +423,15 @@
 <span id="cb6-9"><a href=""></a>    <span class="at">ci_upper =</span> mean_wwwhr <span class="sc">+</span> (<span class="fl">1.96</span> <span class="sc">*</span> se_wwwhr)</span>
 <span id="cb6-10"><a href=""></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell fragment">
+</section>
+<section id="code-meets-question" class="slide level2 sparse-slide" data-background-image="images/gears-solid-full.png" data-background-size="80px" data-background-repeat="repeat">
+<h2>Code Meets Question</h2>
+<div class="task">
+<p><i class="fa-solid fa-lightbulb" aria-label="lightbulb"></i> What can we infer about the population mean based on this confidence interval?</p>
+</div>
+<p><br></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href=""></a>wwwhr_sum</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 6
       n mean_wwwhr sd_wwwhr se_wwwhr ci_lower ci_upper
@@ -431,26 +439,21 @@
 1  2616       14.9     18.9    0.370     14.2     15.6</code></pre>
 </div>
 </div>
-<div class="fragment">
-<div class="task">
-<p><i class="fa-solid fa-lightbulb" aria-label="lightbulb"></i> What can we infer about the population mean based on this confidence interval?</p>
-</div>
-</div>
 </section>
 <section id="summarise-ci" class="slide level2 sparse-slide">
 <h2><code>summarise()</code> + <code>CI()</code></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8" data-code-line-numbers="7-8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href=""></a>wwwhr_ci <span class="ot">&lt;-</span> gss22 <span class="sc">|&gt;</span></span>
-<span id="cb8-2"><a href=""></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(wwwhr))  <span class="sc">|&gt;</span></span>
-<span id="cb8-3"><a href=""></a>  <span class="fu">summarise</span>(</span>
-<span id="cb8-4"><a href=""></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
-<span id="cb8-5"><a href=""></a>    <span class="at">mean_wwwhr =</span> <span class="fu">mean</span>(wwwhr),</span>
-<span id="cb8-6"><a href=""></a>    <span class="at">sd_wwwhr =</span> <span class="fu">sd</span>(wwwhr),</span>
-<span id="cb8-7"><a href=""></a>    <span class="at">lowCI_wwwhr =</span> Rmisc<span class="sc">::</span><span class="fu">CI</span>(wwwhr)[<span class="st">'lower'</span>],</span>
-<span id="cb8-8"><a href=""></a>    <span class="at">hiCI_wwwhr  =</span> Rmisc<span class="sc">::</span><span class="fu">CI</span>(wwwhr)[<span class="st">'upper'</span>]</span>
-<span id="cb8-9"><a href=""></a>    )</span>
-<span id="cb8-10"><a href=""></a></span>
-<span id="cb8-11"><a href=""></a>wwwhr_ci</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9" data-code-line-numbers="7-8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href=""></a>wwwhr_ci <span class="ot">&lt;-</span> gss22 <span class="sc">|&gt;</span></span>
+<span id="cb9-2"><a href=""></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(wwwhr))  <span class="sc">|&gt;</span></span>
+<span id="cb9-3"><a href=""></a>  <span class="fu">summarise</span>(</span>
+<span id="cb9-4"><a href=""></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb9-5"><a href=""></a>    <span class="at">mean_wwwhr =</span> <span class="fu">mean</span>(wwwhr),</span>
+<span id="cb9-6"><a href=""></a>    <span class="at">sd_wwwhr =</span> <span class="fu">sd</span>(wwwhr),</span>
+<span id="cb9-7"><a href=""></a>    <span class="at">lowCI_wwwhr =</span> Rmisc<span class="sc">::</span><span class="fu">CI</span>(wwwhr)[<span class="st">'lower'</span>],</span>
+<span id="cb9-8"><a href=""></a>    <span class="at">hiCI_wwwhr  =</span> Rmisc<span class="sc">::</span><span class="fu">CI</span>(wwwhr)[<span class="st">'upper'</span>]</span>
+<span id="cb9-9"><a href=""></a>    )</span>
+<span id="cb9-10"><a href=""></a></span>
+<span id="cb9-11"><a href=""></a>wwwhr_ci</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell fragment">
 <div class="cell-output cell-output-stdout">
@@ -482,17 +485,17 @@
 <section id="summarise-ci-1" class="slide level2 sparse-slide">
 <h2><code>summarise()</code> + <code>CI()</code></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10" data-code-line-numbers="7-8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href=""></a>wwwhr_ci99 <span class="ot">&lt;-</span> gss22 <span class="sc">|&gt;</span></span>
-<span id="cb10-2"><a href=""></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(wwwhr))  <span class="sc">|&gt;</span></span>
-<span id="cb10-3"><a href=""></a>  <span class="fu">summarise</span>(</span>
-<span id="cb10-4"><a href=""></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
-<span id="cb10-5"><a href=""></a>    <span class="at">mean_wwwhr =</span> <span class="fu">mean</span>(wwwhr),</span>
-<span id="cb10-6"><a href=""></a>    <span class="at">sd_wwwhr =</span> <span class="fu">sd</span>(wwwhr),</span>
-<span id="cb10-7"><a href=""></a>    <span class="at">lowCI_wwwhr =</span> <span class="fu">CI</span>(wwwhr, <span class="at">ci =</span> <span class="fl">0.99</span>)[<span class="st">'lower'</span>],</span>
-<span id="cb10-8"><a href=""></a>    <span class="at">hiCI_wwwhr  =</span> <span class="fu">CI</span>(wwwhr, <span class="at">ci =</span> <span class="fl">0.99</span>)[<span class="st">'upper'</span>]</span>
-<span id="cb10-9"><a href=""></a>    )</span>
-<span id="cb10-10"><a href=""></a></span>
-<span id="cb10-11"><a href=""></a>wwwhr_ci99</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11" data-code-line-numbers="7-8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href=""></a>wwwhr_ci99 <span class="ot">&lt;-</span> gss22 <span class="sc">|&gt;</span></span>
+<span id="cb11-2"><a href=""></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(wwwhr))  <span class="sc">|&gt;</span></span>
+<span id="cb11-3"><a href=""></a>  <span class="fu">summarise</span>(</span>
+<span id="cb11-4"><a href=""></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb11-5"><a href=""></a>    <span class="at">mean_wwwhr =</span> <span class="fu">mean</span>(wwwhr),</span>
+<span id="cb11-6"><a href=""></a>    <span class="at">sd_wwwhr =</span> <span class="fu">sd</span>(wwwhr),</span>
+<span id="cb11-7"><a href=""></a>    <span class="at">lowCI_wwwhr =</span> <span class="fu">CI</span>(wwwhr, <span class="at">ci =</span> <span class="fl">0.99</span>)[<span class="st">'lower'</span>],</span>
+<span id="cb11-8"><a href=""></a>    <span class="at">hiCI_wwwhr  =</span> <span class="fu">CI</span>(wwwhr, <span class="at">ci =</span> <span class="fl">0.99</span>)[<span class="st">'upper'</span>]</span>
+<span id="cb11-9"><a href=""></a>    )</span>
+<span id="cb11-10"><a href=""></a></span>
+<span id="cb11-11"><a href=""></a>wwwhr_ci99</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell fragment">
 <div class="cell-output cell-output-stdout">
@@ -522,7 +525,7 @@
 <div class="column">
 <p><strong>95% confidence intervals</strong></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href=""></a>wwwhr_ci</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href=""></a>wwwhr_ci</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 5
       n mean_wwwhr sd_wwwhr lowCI_wwwhr hiCI_wwwhr
@@ -533,7 +536,7 @@
 </div><div class="column">
 <p><strong>99% confidence intervals</strong></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href=""></a>wwwhr_ci99</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href=""></a>wwwhr_ci99</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 5
       n mean_wwwhr sd_wwwhr lowCI_wwwhr hiCI_wwwhr
@@ -552,15 +555,15 @@
 <section id="cis-wrong-with-proportions" class="slide level2">
 <h2>CIs (wrong) with proportions</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href=""></a>gss22 <span class="sc">|&gt;</span></span>
-<span id="cb16-2"><a href=""></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(postlife))  <span class="sc">|&gt;</span></span>
-<span id="cb16-3"><a href=""></a>  <span class="fu">summarise</span>(</span>
-<span id="cb16-4"><a href=""></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
-<span id="cb16-5"><a href=""></a>    <span class="at">mean_ghosts =</span> <span class="fu">mean</span>(postlife),</span>
-<span id="cb16-6"><a href=""></a>    <span class="at">sd_ghosts =</span> <span class="fu">sd</span>(postlife),</span>
-<span id="cb16-7"><a href=""></a>    <span class="at">lowCI_ghosts =</span> <span class="fu">CI</span>(postlife, <span class="at">ci =</span> <span class="fl">0.99</span>)[<span class="st">'lower'</span>],</span>
-<span id="cb16-8"><a href=""></a>    <span class="at">hiCI_ghosts  =</span> <span class="fu">CI</span>(postlife, <span class="at">ci =</span> <span class="fl">0.99</span>)[<span class="st">'upper'</span>]</span>
-<span id="cb16-9"><a href=""></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href=""></a>gss22 <span class="sc">|&gt;</span></span>
+<span id="cb17-2"><a href=""></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(postlife))  <span class="sc">|&gt;</span></span>
+<span id="cb17-3"><a href=""></a>  <span class="fu">summarise</span>(</span>
+<span id="cb17-4"><a href=""></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb17-5"><a href=""></a>    <span class="at">mean_ghosts =</span> <span class="fu">mean</span>(postlife),</span>
+<span id="cb17-6"><a href=""></a>    <span class="at">sd_ghosts =</span> <span class="fu">sd</span>(postlife),</span>
+<span id="cb17-7"><a href=""></a>    <span class="at">lowCI_ghosts =</span> <span class="fu">CI</span>(postlife, <span class="at">ci =</span> <span class="fl">0.99</span>)[<span class="st">'lower'</span>],</span>
+<span id="cb17-8"><a href=""></a>    <span class="at">hiCI_ghosts  =</span> <span class="fu">CI</span>(postlife, <span class="at">ci =</span> <span class="fl">0.99</span>)[<span class="st">'upper'</span>]</span>
+<span id="cb17-9"><a href=""></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell fragment">
 <div class="cell-output cell-output-stdout">
@@ -579,18 +582,18 @@
 <section id="cis-correct-with-proportions" class="slide level2">
 <h2>CIs (correct) with proportions</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18" data-code-line-numbers="1-2|4-12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href=""></a><span class="co"># Use logic to recode (yes: 1 = 1; no: 2 = 0)</span></span>
-<span id="cb18-2"><a href=""></a>gss22<span class="sc">$</span>ghosts <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(gss22<span class="sc">$</span>postlife <span class="sc">==</span> <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>)</span>
-<span id="cb18-3"><a href=""></a>  </span>
-<span id="cb18-4"><a href=""></a>gss22 <span class="sc">|&gt;</span></span>
-<span id="cb18-5"><a href=""></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(ghosts))  <span class="sc">|&gt;</span></span>
-<span id="cb18-6"><a href=""></a>  <span class="fu">summarise</span>(</span>
-<span id="cb18-7"><a href=""></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
-<span id="cb18-8"><a href=""></a>    <span class="at">mean_ghosts =</span> <span class="fu">mean</span>(ghosts),</span>
-<span id="cb18-9"><a href=""></a>    <span class="at">sd_ghosts =</span> <span class="fu">sd</span>(ghosts),</span>
-<span id="cb18-10"><a href=""></a>    <span class="at">lowCI_ghosts =</span> <span class="fu">CI</span>(ghosts, <span class="at">ci =</span> <span class="fl">0.99</span>)[<span class="st">'lower'</span>],</span>
-<span id="cb18-11"><a href=""></a>    <span class="at">hiCI_ghosts  =</span> <span class="fu">CI</span>(ghosts, <span class="at">ci =</span> <span class="fl">0.99</span>)[<span class="st">'upper'</span>]</span>
-<span id="cb18-12"><a href=""></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19" data-code-line-numbers="1-2|4-12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href=""></a><span class="co"># Use logic to recode (yes: 1 = 1; no: 2 = 0)</span></span>
+<span id="cb19-2"><a href=""></a>gss22<span class="sc">$</span>ghosts <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(gss22<span class="sc">$</span>postlife <span class="sc">==</span> <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>)</span>
+<span id="cb19-3"><a href=""></a>  </span>
+<span id="cb19-4"><a href=""></a>gss22 <span class="sc">|&gt;</span></span>
+<span id="cb19-5"><a href=""></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(ghosts))  <span class="sc">|&gt;</span></span>
+<span id="cb19-6"><a href=""></a>  <span class="fu">summarise</span>(</span>
+<span id="cb19-7"><a href=""></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb19-8"><a href=""></a>    <span class="at">mean_ghosts =</span> <span class="fu">mean</span>(ghosts),</span>
+<span id="cb19-9"><a href=""></a>    <span class="at">sd_ghosts =</span> <span class="fu">sd</span>(ghosts),</span>
+<span id="cb19-10"><a href=""></a>    <span class="at">lowCI_ghosts =</span> <span class="fu">CI</span>(ghosts, <span class="at">ci =</span> <span class="fl">0.99</span>)[<span class="st">'lower'</span>],</span>
+<span id="cb19-11"><a href=""></a>    <span class="at">hiCI_ghosts  =</span> <span class="fu">CI</span>(ghosts, <span class="at">ci =</span> <span class="fl">0.99</span>)[<span class="st">'upper'</span>]</span>
+<span id="cb19-12"><a href=""></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell fragment">
 <div class="cell-output cell-output-stdout">
@@ -608,25 +611,25 @@
 <div class="tab-content">
 <div id="tabset-2-1">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20" data-code-line-numbers="1-3|5|6-7|8-14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href=""></a>gss22<span class="sc">$</span>sex <span class="ot">&lt;-</span> <span class="fu">zap_missing</span>(gss22<span class="sc">$</span>sex) </span>
-<span id="cb20-2"><a href=""></a>gss22<span class="sc">$</span>sex <span class="ot">&lt;-</span> <span class="fu">as_factor</span>(gss22<span class="sc">$</span>sex)   </span>
-<span id="cb20-3"><a href=""></a>gss22<span class="sc">$</span>sex <span class="ot">&lt;-</span> <span class="fu">droplevels</span>(gss22<span class="sc">$</span>sex)  </span>
-<span id="cb20-4"><a href=""></a></span>
-<span id="cb20-5"><a href=""></a>df_ghosts <span class="ot">&lt;-</span> gss22 <span class="sc">|&gt;</span></span>
-<span id="cb20-6"><a href=""></a>  <span class="fu">group_by</span>(sex) <span class="sc">|&gt;</span></span>
-<span id="cb20-7"><a href=""></a>  <span class="fu">drop_na</span>(sex, ghosts) <span class="sc">|&gt;</span></span>
-<span id="cb20-8"><a href=""></a>  <span class="fu">summarise</span>(</span>
-<span id="cb20-9"><a href=""></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
-<span id="cb20-10"><a href=""></a>    <span class="at">mean =</span> <span class="fu">mean</span>(ghosts),</span>
-<span id="cb20-11"><a href=""></a>    <span class="at">sd =</span> <span class="fu">sd</span>(ghosts),</span>
-<span id="cb20-12"><a href=""></a>    <span class="at">lower =</span> <span class="fu">CI</span>(ghosts, <span class="at">ci =</span> <span class="fl">0.95</span>)[<span class="st">'lower'</span>],</span>
-<span id="cb20-13"><a href=""></a>    <span class="at">upper  =</span> <span class="fu">CI</span>(ghosts, <span class="at">ci =</span> <span class="fl">0.95</span>)[<span class="st">'upper'</span>]</span>
-<span id="cb20-14"><a href=""></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21" data-code-line-numbers="1-3|5|6-7|8-14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href=""></a>gss22<span class="sc">$</span>sex <span class="ot">&lt;-</span> <span class="fu">zap_missing</span>(gss22<span class="sc">$</span>sex) </span>
+<span id="cb21-2"><a href=""></a>gss22<span class="sc">$</span>sex <span class="ot">&lt;-</span> <span class="fu">as_factor</span>(gss22<span class="sc">$</span>sex)   </span>
+<span id="cb21-3"><a href=""></a>gss22<span class="sc">$</span>sex <span class="ot">&lt;-</span> <span class="fu">droplevels</span>(gss22<span class="sc">$</span>sex)  </span>
+<span id="cb21-4"><a href=""></a></span>
+<span id="cb21-5"><a href=""></a>df_ghosts <span class="ot">&lt;-</span> gss22 <span class="sc">|&gt;</span></span>
+<span id="cb21-6"><a href=""></a>  <span class="fu">group_by</span>(sex) <span class="sc">|&gt;</span></span>
+<span id="cb21-7"><a href=""></a>  <span class="fu">drop_na</span>(sex, ghosts) <span class="sc">|&gt;</span></span>
+<span id="cb21-8"><a href=""></a>  <span class="fu">summarise</span>(</span>
+<span id="cb21-9"><a href=""></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb21-10"><a href=""></a>    <span class="at">mean =</span> <span class="fu">mean</span>(ghosts),</span>
+<span id="cb21-11"><a href=""></a>    <span class="at">sd =</span> <span class="fu">sd</span>(ghosts),</span>
+<span id="cb21-12"><a href=""></a>    <span class="at">lower =</span> <span class="fu">CI</span>(ghosts, <span class="at">ci =</span> <span class="fl">0.95</span>)[<span class="st">'lower'</span>],</span>
+<span id="cb21-13"><a href=""></a>    <span class="at">upper  =</span> <span class="fu">CI</span>(ghosts, <span class="at">ci =</span> <span class="fl">0.95</span>)[<span class="st">'upper'</span>]</span>
+<span id="cb21-14"><a href=""></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <div id="tabset-2-2">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href=""></a>df_ghosts</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href=""></a>df_ghosts</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 6
   sex        n  mean    sd lower upper
@@ -657,21 +660,21 @@
 <div class="tab-content">
 <div id="tabset-3-1">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23" data-code-line-numbers="1-3|4-10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href=""></a>df_wwwhr <span class="ot">&lt;-</span> gss22 <span class="sc">|&gt;</span></span>
-<span id="cb23-2"><a href=""></a>  <span class="fu">group_by</span>(sex) <span class="sc">|&gt;</span></span>
-<span id="cb23-3"><a href=""></a>  <span class="fu">drop_na</span>(sex, wwwhr) <span class="sc">|&gt;</span></span>
-<span id="cb23-4"><a href=""></a>  <span class="fu">summarise</span>(</span>
-<span id="cb23-5"><a href=""></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
-<span id="cb23-6"><a href=""></a>    <span class="at">mean =</span> <span class="fu">mean</span>(wwwhr),</span>
-<span id="cb23-7"><a href=""></a>    <span class="at">sd =</span> <span class="fu">sd</span>(wwwhr),</span>
-<span id="cb23-8"><a href=""></a>    <span class="at">lower =</span> <span class="fu">CI</span>(wwwhr, <span class="at">ci =</span> <span class="fl">0.95</span>)[<span class="st">'lower'</span>],</span>
-<span id="cb23-9"><a href=""></a>    <span class="at">upper  =</span> <span class="fu">CI</span>(wwwhr, <span class="at">ci =</span> <span class="fl">0.95</span>)[<span class="st">'upper'</span>]</span>
-<span id="cb23-10"><a href=""></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24" data-code-line-numbers="1-3|4-10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href=""></a>df_wwwhr <span class="ot">&lt;-</span> gss22 <span class="sc">|&gt;</span></span>
+<span id="cb24-2"><a href=""></a>  <span class="fu">group_by</span>(sex) <span class="sc">|&gt;</span></span>
+<span id="cb24-3"><a href=""></a>  <span class="fu">drop_na</span>(sex, wwwhr) <span class="sc">|&gt;</span></span>
+<span id="cb24-4"><a href=""></a>  <span class="fu">summarise</span>(</span>
+<span id="cb24-5"><a href=""></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb24-6"><a href=""></a>    <span class="at">mean =</span> <span class="fu">mean</span>(wwwhr),</span>
+<span id="cb24-7"><a href=""></a>    <span class="at">sd =</span> <span class="fu">sd</span>(wwwhr),</span>
+<span id="cb24-8"><a href=""></a>    <span class="at">lower =</span> <span class="fu">CI</span>(wwwhr, <span class="at">ci =</span> <span class="fl">0.95</span>)[<span class="st">'lower'</span>],</span>
+<span id="cb24-9"><a href=""></a>    <span class="at">upper  =</span> <span class="fu">CI</span>(wwwhr, <span class="at">ci =</span> <span class="fl">0.95</span>)[<span class="st">'upper'</span>]</span>
+<span id="cb24-10"><a href=""></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <div id="tabset-3-2">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href=""></a>df_wwwhr</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href=""></a>df_wwwhr</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 6
   sex        n  mean    sd lower upper
@@ -747,13 +750,13 @@
 <section id="review-summary-statistics" class="slide level2">
 <h2>Review: Summary Statistics</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26" data-code-line-numbers="1-2|3-7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href=""></a>gss22 <span class="sc">|&gt;</span></span>
-<span id="cb26-2"><a href=""></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(childs))  <span class="sc">|&gt;</span></span>
-<span id="cb26-3"><a href=""></a>  <span class="fu">summarise</span>(</span>
-<span id="cb26-4"><a href=""></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
-<span id="cb26-5"><a href=""></a>    <span class="at">mean =</span> <span class="fu">mean</span>(childs),</span>
-<span id="cb26-6"><a href=""></a>    <span class="at">median =</span> <span class="fu">median</span>(childs),</span>
-<span id="cb26-7"><a href=""></a>    <span class="at">sd =</span> <span class="fu">sd</span>(childs))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27" data-code-line-numbers="1-2|3-7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href=""></a>gss22 <span class="sc">|&gt;</span></span>
+<span id="cb27-2"><a href=""></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(childs))  <span class="sc">|&gt;</span></span>
+<span id="cb27-3"><a href=""></a>  <span class="fu">summarise</span>(</span>
+<span id="cb27-4"><a href=""></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb27-5"><a href=""></a>    <span class="at">mean =</span> <span class="fu">mean</span>(childs),</span>
+<span id="cb27-6"><a href=""></a>    <span class="at">median =</span> <span class="fu">median</span>(childs),</span>
+<span id="cb27-7"><a href=""></a>    <span class="at">sd =</span> <span class="fu">sd</span>(childs))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell fragment">
 <div class="cell-output cell-output-stdout">
@@ -772,17 +775,17 @@
 <section id="review-cis" class="slide level2">
 <h2>Review: CIs</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28" data-code-line-numbers="8-12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href=""></a>gss22 <span class="sc">|&gt;</span></span>
-<span id="cb28-2"><a href=""></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(childs))  <span class="sc">|&gt;</span></span>
-<span id="cb28-3"><a href=""></a>  <span class="fu">summarise</span>(</span>
-<span id="cb28-4"><a href=""></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
-<span id="cb28-5"><a href=""></a>    <span class="at">mean =</span> <span class="fu">mean</span>(childs),</span>
-<span id="cb28-6"><a href=""></a>    <span class="at">median =</span> <span class="fu">median</span>(childs),</span>
-<span id="cb28-7"><a href=""></a>    <span class="at">sd =</span> <span class="fu">sd</span>(childs),</span>
-<span id="cb28-8"><a href=""></a>    <span class="at">se =</span> sd <span class="sc">/</span> <span class="fu">sqrt</span>(n),</span>
-<span id="cb28-9"><a href=""></a>    <span class="at">lower =</span> <span class="fu">CI</span>(childs, <span class="at">ci =</span> <span class="fl">0.99</span>)[<span class="st">'lower'</span>],</span>
-<span id="cb28-10"><a href=""></a>    <span class="at">upper  =</span> <span class="fu">CI</span>(childs, <span class="at">ci =</span> <span class="fl">0.99</span>)[<span class="st">'upper'</span>]</span>
-<span id="cb28-11"><a href=""></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29" data-code-line-numbers="8-12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href=""></a>gss22 <span class="sc">|&gt;</span></span>
+<span id="cb29-2"><a href=""></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(childs))  <span class="sc">|&gt;</span></span>
+<span id="cb29-3"><a href=""></a>  <span class="fu">summarise</span>(</span>
+<span id="cb29-4"><a href=""></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb29-5"><a href=""></a>    <span class="at">mean =</span> <span class="fu">mean</span>(childs),</span>
+<span id="cb29-6"><a href=""></a>    <span class="at">median =</span> <span class="fu">median</span>(childs),</span>
+<span id="cb29-7"><a href=""></a>    <span class="at">sd =</span> <span class="fu">sd</span>(childs),</span>
+<span id="cb29-8"><a href=""></a>    <span class="at">se =</span> sd <span class="sc">/</span> <span class="fu">sqrt</span>(n),</span>
+<span id="cb29-9"><a href=""></a>    <span class="at">lower =</span> <span class="fu">CI</span>(childs, <span class="at">ci =</span> <span class="fl">0.99</span>)[<span class="st">'lower'</span>],</span>
+<span id="cb29-10"><a href=""></a>    <span class="at">upper  =</span> <span class="fu">CI</span>(childs, <span class="at">ci =</span> <span class="fl">0.99</span>)[<span class="st">'upper'</span>]</span>
+<span id="cb29-11"><a href=""></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell fragment">
 <div class="cell-output cell-output-stdout">
@@ -801,7 +804,7 @@
 <section id="one-sample-t.test-for-means" class="slide level2">
 <h2>One sample <code>t.test()</code> for means</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href=""></a><span class="fu">t.test</span>(gss22<span class="sc">$</span>childs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href=""></a><span class="fu">t.test</span>(gss22<span class="sc">$</span>childs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell fragment">
 <div class="cell-output cell-output-stdout">
@@ -827,7 +830,7 @@ mean of x
 <section id="one-sample-t.test-for-means-1" class="slide level2">
 <h2>One sample <code>t.test()</code> for means</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href=""></a><span class="fu">t.test</span>(gss22<span class="sc">$</span>childs, <span class="at">mu=</span><span class="dv">2</span>, <span class="at">alternative=</span><span class="st">"less"</span>) <span class="co"># Ho: mu=2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href=""></a><span class="fu">t.test</span>(gss22<span class="sc">$</span>childs, <span class="at">mu=</span><span class="dv">2</span>, <span class="at">alternative=</span><span class="st">"less"</span>) <span class="co"># Ho: mu=2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     One Sample t-test
@@ -877,7 +880,7 @@ mean of x
 </div>
 <div class="fragment">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href=""></a><span class="fu">t.test</span>(gss22<span class="sc">$</span>ghosts <span class="sc">~</span> gss22<span class="sc">$</span>sex, <span class="at">alternative =</span> <span class="st">"two.sided"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href=""></a><span class="fu">t.test</span>(gss22<span class="sc">$</span>ghosts <span class="sc">~</span> gss22<span class="sc">$</span>sex, <span class="at">alternative =</span> <span class="st">"two.sided"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell fragment">
 <div class="cell-output cell-output-stdout">
@@ -912,14 +915,14 @@ sample estimates:
 <p><strong>Independent group t-test</strong><br>
 <span style="color: #F39C12; font-family: 'Shadows Into Light'">Do two subsamples have the same mean?</span></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href=""></a><span class="fu">t.test</span>(gss22<span class="sc">$</span>ghosts <span class="sc">~</span> gss22<span class="sc">$</span>sex, <span class="at">alternative =</span> <span class="st">"two.sided"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href=""></a><span class="fu">t.test</span>(gss22<span class="sc">$</span>ghosts <span class="sc">~</span> gss22<span class="sc">$</span>sex, <span class="at">alternative =</span> <span class="st">"two.sided"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><br></p>
 <div class="fragment">
 <p><strong>Paired t-test</strong><br>
 <span style="color: #F39C12; font-family: 'Shadows Into Light'">Do two variables have the same mean?</span></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href=""></a><span class="fu">t.test</span>(<span class="fu">Pair</span>(hrs1_2018, hrs1_2020) <span class="sc">~</span> <span class="dv">1</span>, <span class="at">data =</span> gss_panel)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href=""></a><span class="fu">t.test</span>(<span class="fu">Pair</span>(hrs1_2018, hrs1_2020) <span class="sc">~</span> <span class="dv">1</span>, <span class="at">data =</span> gss_panel)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </section></section>

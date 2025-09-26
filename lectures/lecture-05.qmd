@@ -104,6 +104,11 @@ install.packages("Rmisc")
 purpose!) when rendered because eval: false."?]{style="color: #6f42c1"}
 :::
 
+::: aside
+We'll use `Rmisc()` to calculate confidence intervals with
+`summarize()`.
+:::
+
 ## Mini-task {data-menu-title="Load the packages"}
 
 ::: task
@@ -125,10 +130,7 @@ library(summarytools)
 library(Rmisc) # load the new package
 ```
 
-::: aside
-We'll use `Rmisc()` to calculate confidence intervals with
-`summarize()`.
-:::
+
 
 ::: notes
 `haven()` was installed with tidyverse; but it doesn't load
@@ -199,10 +201,9 @@ gss22 |>
 ```{r}
 #| message: false
 #| label: summarise02
-#| code-line-numbers: "7|8|9"
-#| output-location: fragment
+#| code-line-numbers: "1-6|7|8|9-10"
 
-gss22 |>
+wwwhr_sum <- gss22 |>
   filter(!is.na(wwwhr))  |>
   summarise(
     n = n(),
@@ -213,15 +214,24 @@ gss22 |>
     ci_upper = mean_wwwhr + (1.96 * se_wwwhr)
     )
 
-
 ```
 
-. . .
+## Code Meets Question {.sparse-slide background-image="images/gears-solid-full.png" background-size="80px" background-repeat="repeat"}
 
 ::: task
 {{< fa lightbulb >}} What can we infer about the population mean based
 on this confidence interval?
 :::
+
+<br>
+
+```{r}
+#| label: wwwhr_sum-CMQ
+
+wwwhr_sum
+
+```
+
 
 ## `summarise()` + `CI()` {.sparse-slide}
 

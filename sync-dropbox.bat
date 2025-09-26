@@ -32,19 +32,21 @@ IF %ERRORLEVEL% NEQ 0 (
     exit /b
 )
 
-REM === STEP 2: Detach worktree from dropbox-mirror ===
+REM === STEP 2: Change to worktree and clean up conflicts if any ===
 echo Changing directory to worktree: "%WORKTREE_PATH%" >> "%LOG_PATH%"
 cd /d "%WORKTREE_PATH%"
-git checkout --detach >> "%LOG_PATH%" 2>&1
-IF %ERRORLEVEL% NEQ 0 (
-    echo Failed to detach worktree >> "%LOG_PATH%"
+git status >> "%LOG_PATH%" 2>&1 | findstr /C:"Unmerged paths" >nul
+IF %ERRORLEVEL% EQU 0 (
+    echo ERROR: Merge conflict detected in worktree. Resolve manually before running script. >> "%LOG_PATH%"
+    echo ERROR: Merge conflict detected in worktree. Resolve manually before running script.
     exit /b
 )
 
-REM === STEP 3: Rebase worktree onto updated main ===
-git rebase main >> "%LOG_PATH%" 2>&1
+REM === STEP 3: Fetch and reset worktree to match origin/main ===
+git fetch origin >> "%LOG_PATH%" 2>&1
+git reset --hard origin/main >> "%LOG_PATH%" 2>&1
 IF %ERRORLEVEL% NEQ 0 (
-    echo Rebase failed — manual conflict resolution may be required >> "%LOG_PATH%"
+    echo Reset failed — check for local changes or conflicts >> "%LOG_PATH%"
     exit /b
 )
 

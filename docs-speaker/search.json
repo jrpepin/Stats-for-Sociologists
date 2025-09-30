@@ -886,7 +886,7 @@
     "href": "lecture-03.html#mini-task-5",
     "title": "Data Management I",
     "section": "Mini-task",
-    "text": "Mini-task\n\n Compare the median and average work hours (hrs) for U.S. men and women.\n\n\n\n\ngss_all |&gt;  \n  drop_na(sex, hrs1) |&gt; \n  group_by(sex) |&gt; \n  summarize(\n    med = median(hrs1),\n    avg = mean(hrs1)\n    ) \n\n\n# A tibble: 2 × 3\n  sex          med   avg\n  &lt;dbl+lbl&gt;  &lt;dbl&gt; &lt;dbl&gt;\n1 1 [male]      40  44.3\n2 2 [female]    40  37.8"
+    "text": "Mini-task\n\n Compare the median and average work hours (hrs1) for U.S. men and women.\n\n\n\n\ngss_all |&gt;  \n  drop_na(sex, hrs1) |&gt; \n  group_by(sex) |&gt; \n  summarize(\n    med = median(hrs1),\n    avg = mean(hrs1)\n    ) \n\n\n# A tibble: 2 × 3\n  sex          med   avg\n  &lt;dbl+lbl&gt;  &lt;dbl&gt; &lt;dbl&gt;\n1 1 [male]      40  44.3\n2 2 [female]    40  37.8"
   },
   {
     "objectID": "lecture-03.html#summarize-variability-measures",
@@ -900,7 +900,7 @@
     "href": "lecture-04.html#packages",
     "title": "Data Management II",
     "section": "Packages",
-    "text": "Packages\nLoad the standard packages.\n\nlibrary(tidyverse) \nlibrary(haven) # not core tidyverse\nlibrary(gssr)\nlibrary(gssrdoc) # load the GSS codebook\nlibrary(summarytools)"
+    "text": "Packages\nLoad the standard packages.\n\nlibrary(tidyverse)\nlibrary(haven) # not core tidyverse\nlibrary(gssr)\nlibrary(gssrdoc) # load the GSS codebook\nlibrary(summarytools)"
   },
   {
     "objectID": "lecture-04.html#load-your-data",
@@ -935,7 +935,7 @@
     "href": "lecture-04.html#mini-task-1",
     "title": "Data Management II",
     "section": "Mini-task",
-    "text": "Mini-task\n\n Create a dataframe with the variables year, agekdbrn, childs, and hrs1, including only respondents from the year 2022 who have no missing values in any of these variables.\n\n\n\n\nmy_data &lt;- gss_all |&gt; \n  select(year, agekdbrn, childs, hrs1) |&gt;\n  filter(year == 2022) |&gt;\n1  drop_na()\n\nhead(my_data) \n\n\n1\n\nNo need to list all variables inside drop_na()\n\n\n\n\n\n\nASK:"
+    "text": "Mini-task\n\n Create a dataframe with the variables year, agekdbrn, childs, and hrs1, including only respondents from the year 2022 who have no missing values in any of these variables.\n\n\n\n\nmy_data &lt;- gss_all |&gt;\n  select(year, agekdbrn, childs, hrs1) |&gt;\n  filter(year == 2022) |&gt;\n1  drop_na()\n\nhead(my_data)\n\n\n1\n\nNo need to list all variables inside drop_na()\n\n\n\n\n\n\nASK:"
   },
   {
     "objectID": "lecture-04.html#mini-task-1-output",
@@ -956,7 +956,7 @@
     "href": "lecture-04.html#mini-task-2",
     "title": "Data Management II",
     "section": "Mini-task",
-    "text": "Mini-task\n\n Use mutate(), mean(), and sd() to create a column with Z scores for hrs1\n\n\n\n\nmy_data &lt;- my_data |&gt;\n  # Create Z-score for annual_hours\n  mutate(z_hrs1 = (hrs1 - mean(hrs1)) / \n           sd(hrs1) \n  )\n\nhead(my_data) # Check your work"
+    "text": "Mini-task\n\n Use mutate(), mean(), and sd() to create a column with Z scores for hrs1\n\n\n\n\nmy_data &lt;- my_data |&gt;\n  # Create Z-score for annual_hours\n  mutate(z_hrs1 = (hrs1 - mean(hrs1)) /\n    sd(hrs1))\n\nhead(my_data) # Check your work"
   },
   {
     "objectID": "lecture-04.html#mini-task-2-output",
@@ -970,42 +970,42 @@
     "href": "lecture-04.html#mutate-logical-variables",
     "title": "Data Management II",
     "section": "mutate() & logical variables",
-    "text": "mutate() & logical variables\n\nmy_data &lt;- my_data |&gt;\n1  mutate(teen_parent = (agekdbrn &lt; 18) * 1)\n  \nhead(my_data)\n\n\n1\n\nReturns a logical vector (TRUE, FALSE, or NA) and * 1 converts it to numeric\n\n\n\n\n\n\n# A tibble: 6 × 7\n  year      agekdbrn  childs    hrs1      annual_hrs1   z_hrs1 teen_parent\n  &lt;dbl+lbl&gt; &lt;dbl+lbl&gt; &lt;dbl+lbl&gt; &lt;dbl+lbl&gt;       &lt;dbl&gt;    &lt;dbl&gt;       &lt;dbl&gt;\n1 2022      27        1         40               2080 -0.00756           0\n2 2022      27        1         52               2704  0.820             0\n3 2022      28        1         31               1612 -0.628             0\n4 2022      24        2         40               2080 -0.00756           0\n5 2022      21        2         10                520 -2.08              0\n6 2022      25        7         20               1040 -1.39              0\n\n\n\n\nagekdbrn: How old were you when your first child was born?"
+    "text": "mutate() & logical variables\n\nmy_data &lt;- my_data |&gt;\n1  mutate(teen_parent = (agekdbrn &lt; 18) * 1)\n\nhead(my_data)\n\n\n1\n\nReturns a logical vector (TRUE, FALSE, or NA) and * 1 converts it to numeric\n\n\n\n\n\n\n# A tibble: 6 × 7\n  year      agekdbrn  childs    hrs1      annual_hrs1   z_hrs1 teen_parent\n  &lt;dbl+lbl&gt; &lt;dbl+lbl&gt; &lt;dbl+lbl&gt; &lt;dbl+lbl&gt;       &lt;dbl&gt;    &lt;dbl&gt;       &lt;dbl&gt;\n1 2022      27        1         40               2080 -0.00756           0\n2 2022      27        1         52               2704  0.820             0\n3 2022      28        1         31               1612 -0.628             0\n4 2022      24        2         40               2080 -0.00756           0\n5 2022      21        2         10                520 -2.08              0\n6 2022      25        7         20               1040 -1.39              0\n\n\n\n\nagekdbrn: How old were you when your first child was born?"
   },
   {
     "objectID": "lecture-04.html#code-meets-question",
     "href": "lecture-04.html#code-meets-question",
     "title": "Data Management II",
     "section": "Code Meets Question",
-    "text": "Code Meets Question\n\n What proportion of new parents were teenagers (e.g., under 18 years old)?\n\n\n\n\nmy_data |&gt; \n1  summarise(proportion = mean(teen_parent))\n\n\n1\n\nMean of the variable, which equals the proportion of 1s\n\n\n\n\n\n\n# A tibble: 1 × 1\n  proportion\n       &lt;dbl&gt;\n1     0.0696\n\n\n\n\nASK: Tell me what this number means in a sentence.\n\n\n\n\nagekdbrn: How old were you when your first child was born?"
+    "text": "Code Meets Question\n\n What proportion of new parents were teenagers (e.g., under 18 years old)?\n\n\n\n\nmy_data |&gt;\n1  summarise(proportion = mean(teen_parent))\n\n\n1\n\nMean of the variable, which equals the proportion of 1s\n\n\n\n\n\n\n# A tibble: 1 × 1\n  proportion\n       &lt;dbl&gt;\n1     0.0696\n\n\n\n\nASK: Tell me what this number means in a sentence.\n\n\n\n\nagekdbrn: How old were you when your first child was born?"
   },
   {
     "objectID": "lecture-04.html#mini-task-3",
     "href": "lecture-04.html#mini-task-3",
     "title": "Data Management II",
     "section": "Mini-task",
-    "text": "Mini-task\n\n Use mutate() and summarise() to determine what proportion of new parents were older than 40 years old.\n\n\n\n\nmy_data |&gt; \n  mutate(older_parent = (agekdbrn &gt; 40) * 1) |&gt;\n  summarise(proportion = mean(older_parent))\n\n\n\n# A tibble: 1 × 1\n  proportion\n       &lt;dbl&gt;\n1     0.0192\n\n\n\nASK: Tell me what this means in a sentence."
+    "text": "Mini-task\n\n Use mutate() and summarise() to determine what proportion of new parents were older than 40 years old.\n\n\n\n\nmy_data |&gt;\n  mutate(older_parent = (agekdbrn &gt; 40) * 1) |&gt;\n  summarise(proportion = mean(older_parent))\n\n\n\n# A tibble: 1 × 1\n  proportion\n       &lt;dbl&gt;\n1     0.0192\n\n\n\nASK: Tell me what this means in a sentence."
   },
   {
     "objectID": "lecture-04.html#mutate-with-case_when",
     "href": "lecture-04.html#mutate-with-case_when",
     "title": "Data Management II",
     "section": "mutate() with case_when()",
-    "text": "mutate() with case_when()\nUse case_when() inside mutate() to create values based on conditions.\n\n\n\nmy_data &lt;-  my_data |&gt;  \n# Use mutate to create a new variable: childs_3cat\n  mutate(childs_3cat = case_when(\n    childs == 1 ~ \"1 kid\",\n    childs == 2 ~ \"2 kids\",\n    childs &gt;  3 ~ \"3+ kids\",\n    TRUE ~ NA_character_)\n  ) \n\n# Always double check your work!\ntable(my_data$childs, my_data$childs_3cat)"
+    "text": "mutate() with case_when()\nUse case_when() inside mutate() to create values based on conditions.\n\n\n\nmy_data &lt;- my_data |&gt;\n  # Use mutate to create a new variable: childs_3cat\n  mutate(childs_3cat = case_when(\n    childs == 1 ~ \"1 kid\",\n    childs == 2 ~ \"2 kids\",\n    childs &gt;= 3 ~ \"3+ kids\",\n    TRUE ~ NA_character_\n  ))\n\n# Always double check your work!\ntable(my_data$childs, my_data$childs_3cat)"
   },
   {
     "objectID": "lecture-04.html#mutate-with-case_when-output",
     "href": "lecture-04.html#mutate-with-case_when-output",
     "title": "Data Management II",
     "section": "mutate() with case_when()",
-    "text": "mutate() with case_when()\n\n   \n    1 kid 2 kids 3+ kids\n  1   320      0       0\n  2     0    497       0\n  3     0      0       0\n  4     0      0     101\n  5     0      0      44\n  6     0      0      16\n  7     0      0       6\n  8     0      0      15"
+    "text": "mutate() with case_when()\n\n   \n    1 kid 2 kids 3+ kids\n  1   320      0       0\n  2     0    497       0\n  3     0      0     251\n  4     0      0     101\n  5     0      0      44\n  6     0      0      16\n  7     0      0       6\n  8     0      0      15"
   },
   {
     "objectID": "lecture-04.html#code-meets-question-1",
     "href": "lecture-04.html#code-meets-question-1",
     "title": "Data Management II",
     "section": "Code Meets Question",
-    "text": "Code Meets Question\n\n What proportion of new parents had their first child in their teens, 20s, 30s, or after age 40?\n\n\n\n\nmy_data &lt;-  my_data |&gt;  \n  mutate(age_groups = case_when(\n    agekdbrn &lt; 18 ~ \"&lt;18\",\n    agekdbrn &gt;= 18 & agekdbrn &lt;= 29 ~ \"18–29\",\n    agekdbrn &gt;= 30 & agekdbrn &lt;= 39 ~ \"30–39\",\n    agekdbrn &gt;= 40 ~ \"40+\",\n    TRUE ~ NA_character_)\n  ) \n\nmy_data |&gt;\n  freq(age_groups, report.nas = FALSE, headings = FALSE)\n\n\n\nASK: Tell me what this output means in a sentence."
+    "text": "Code Meets Question\n\n What proportion of new parents had their first child in their teens, 20s, 30s, or after age 40?\n\n\n\n\nmy_data &lt;- my_data |&gt;\n  mutate(age_groups = case_when(\n    agekdbrn &lt; 18 ~ \"&lt;18\",\n    agekdbrn &gt;= 18 & agekdbrn &lt;= 29 ~ \"18–29\",\n    agekdbrn &gt;= 30 & agekdbrn &lt;= 39 ~ \"30–39\",\n    agekdbrn &gt;= 40 ~ \"40+\",\n    TRUE ~ NA_character_\n  ))\n\nmy_data |&gt;\n  freq(age_groups, report.nas = FALSE, headings = FALSE)\n\n\n\nASK: Tell me what this output means in a sentence."
   },
   {
     "objectID": "lecture-04.html#code-meets-question-1-output",
@@ -1019,7 +1019,7 @@
     "href": "lecture-04.html#overwriting-assignment-operators",
     "title": "Data Management II",
     "section": "Overwriting & assignment operators",
-    "text": "Overwriting & assignment operators\n\n\n\n Heads Up!\n\n\nOverwriting datasets and variables can be intentional or unintentional.\n\n\n\n\nLet’s make a tiny data frame to use as an example:\n\n\ndf &lt;- tibble(\n        x = c(1, 2, 3, 4, 5), \n        y = c(\"a\", \"a\", \"b\", \"c\", \"c\")\n      )\n\ndf\n\n\n# A tibble: 5 × 2\n      x y    \n  &lt;dbl&gt; &lt;chr&gt;\n1     1 a    \n2     2 a    \n3     3 b    \n4     4 c    \n5     5 c"
+    "text": "Overwriting & assignment operators\n\n\n\n Heads Up!\n\n\nOverwriting datasets and variables can be intentional or unintentional.\n\n\n\n\nLet’s make a tiny data frame to use as an example:\n\n\ndf &lt;- tibble(\n  x = c(1, 2, 3, 4, 5),\n  y = c(\"a\", \"a\", \"b\", \"c\", \"c\")\n)\n\ndf\n\n\n# A tibble: 5 × 2\n      x y    \n  &lt;dbl&gt; &lt;chr&gt;\n1     1 a    \n2     2 a    \n3     3 b    \n4     4 c    \n5     5 c"
   },
   {
     "objectID": "lecture-04.html#section",
@@ -1040,28 +1040,28 @@
     "href": "lecture-04.html#section-2",
     "title": "Data Management II",
     "section": "",
-    "text": "Do something, save result, overwriting original\n\n\ndf &lt;- tibble(\n  x = c(1, 2, 3, 4, 5), \n  y = c(\"a\", \"a\", \"b\", \"c\", \"c\")\n)\ndf &lt;- df |&gt;\n  mutate(x = x * 2)\ndf\n\n\n\n# A tibble: 5 × 2\n      x y    \n  &lt;dbl&gt; &lt;chr&gt;\n1     2 a    \n2     4 a    \n3     6 b    \n4     8 c    \n5    10 c    \n\n\n\n\nDo something, save result, not overwriting original\n\n\ndf &lt;- tibble(\n  x = c(1, 2, 3, 4, 5), \n  y = c(\"a\", \"a\", \"b\", \"c\", \"c\")\n)\ndf_new &lt;- df |&gt;\n  mutate(x = x * 2)\ndf\n\n\n\n# A tibble: 5 × 2\n      x y    \n  &lt;dbl&gt; &lt;chr&gt;\n1     1 a    \n2     2 a    \n3     3 b    \n4     4 c    \n5     5 c"
+    "text": "Do something, save result, overwriting original\n\n\ndf &lt;- tibble(\n  x = c(1, 2, 3, 4, 5),\n  y = c(\"a\", \"a\", \"b\", \"c\", \"c\")\n)\ndf &lt;- df |&gt;\n  mutate(x = x * 2)\ndf\n\n\n\n# A tibble: 5 × 2\n      x y    \n  &lt;dbl&gt; &lt;chr&gt;\n1     2 a    \n2     4 a    \n3     6 b    \n4     8 c    \n5    10 c    \n\n\n\n\nDo something, save result, not overwriting original\n\n\ndf &lt;- tibble(\n  x = c(1, 2, 3, 4, 5),\n  y = c(\"a\", \"a\", \"b\", \"c\", \"c\")\n)\ndf_new &lt;- df |&gt;\n  mutate(x = x * 2)\ndf\n\n\n\n# A tibble: 5 × 2\n      x y    \n  &lt;dbl&gt; &lt;chr&gt;\n1     1 a    \n2     2 a    \n3     3 b    \n4     4 c    \n5     5 c"
   },
   {
     "objectID": "lecture-04.html#section-3",
     "href": "lecture-04.html#section-3",
     "title": "Data Management II",
     "section": "",
-    "text": "Do something, save result, overwriting original when you shouldn’t\n\n\ndf &lt;- tibble(\n  x = c(1, 2, 3, 4, 5), \n  y = c(\"a\", \"a\", \"b\", \"c\", \"c\")\n)\ndf &lt;- df |&gt;\n  group_by(y) |&gt;\n  summarize(mean_x = mean(x))\ndf\n\n# A tibble: 3 × 2\n  y     mean_x\n  &lt;chr&gt;  &lt;dbl&gt;\n1 a        1.5\n2 b        3  \n3 c        4.5\n\n\n\n\nDo something, save result, not overwriting original when you shouldn’t\n\n\ndf &lt;- tibble(\n  x = c(1, 2, 3, 4, 5), \n  y = c(\"a\", \"a\", \"b\", \"c\", \"c\")\n)\ndf_summary &lt;- df |&gt;\n  group_by(y) |&gt;\n  summarize(mean_x = mean(x))\ndf\n\n# A tibble: 5 × 2\n      x y    \n  &lt;dbl&gt; &lt;chr&gt;\n1     1 a    \n2     2 a    \n3     3 b    \n4     4 c    \n5     5 c"
+    "text": "Do something, save result, overwriting original when you shouldn’t\n\n\ndf &lt;- tibble(\n  x = c(1, 2, 3, 4, 5),\n  y = c(\"a\", \"a\", \"b\", \"c\", \"c\")\n)\ndf &lt;- df |&gt;\n  group_by(y) |&gt;\n  summarize(mean_x = mean(x))\ndf\n\n# A tibble: 3 × 2\n  y     mean_x\n  &lt;chr&gt;  &lt;dbl&gt;\n1 a        1.5\n2 b        3  \n3 c        4.5\n\n\n\n\nDo something, save result, not overwriting original when you shouldn’t\n\n\ndf &lt;- tibble(\n  x = c(1, 2, 3, 4, 5),\n  y = c(\"a\", \"a\", \"b\", \"c\", \"c\")\n)\ndf_summary &lt;- df |&gt;\n  group_by(y) |&gt;\n  summarize(mean_x = mean(x))\ndf\n\n# A tibble: 5 × 2\n      x y    \n  &lt;dbl&gt; &lt;chr&gt;\n1     1 a    \n2     2 a    \n3     3 b    \n4     4 c    \n5     5 c"
   },
   {
     "objectID": "lecture-04.html#section-4",
     "href": "lecture-04.html#section-4",
     "title": "Data Management II",
     "section": "",
-    "text": "Do something, save result, overwriting original\ndata frame\n\n\ndf &lt;- tibble(\n  x = c(1, 2, 3, 4, 5), \n  y = c(\"a\", \"a\", \"b\", \"c\", \"c\")\n)\ndf &lt;- df |&gt;\n  mutate(z = x + 2)\ndf\n\n# A tibble: 5 × 3\n      x y         z\n  &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt;\n1     1 a         3\n2     2 a         4\n3     3 b         5\n4     4 c         6\n5     5 c         7\n\n\n\n\nDo something, save result, overwriting original\ncolumn\n\n\ndf &lt;- tibble(\n  x = c(1, 2, 3, 4, 5), \n  y = c(\"a\", \"a\", \"b\", \"c\", \"c\")\n)\ndf &lt;- df |&gt;\n  mutate(x = x + 2)\ndf\n\n# A tibble: 5 × 2\n      x y    \n  &lt;dbl&gt; &lt;chr&gt;\n1     3 a    \n2     4 a    \n3     5 b    \n4     6 c    \n5     7 c"
+    "text": "Do something, save result, overwriting original\ndata frame\n\n\ndf &lt;- tibble(\n  x = c(1, 2, 3, 4, 5),\n  y = c(\"a\", \"a\", \"b\", \"c\", \"c\")\n)\ndf &lt;- df |&gt;\n  mutate(z = x + 2)\ndf\n\n# A tibble: 5 × 3\n      x y         z\n  &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt;\n1     1 a         3\n2     2 a         4\n3     3 b         5\n4     4 c         6\n5     5 c         7\n\n\n\n\nDo something, save result, overwriting original\ncolumn\n\n\ndf &lt;- tibble(\n  x = c(1, 2, 3, 4, 5),\n  y = c(\"a\", \"a\", \"b\", \"c\", \"c\")\n)\ndf &lt;- df |&gt;\n  mutate(x = x + 2)\ndf\n\n# A tibble: 5 × 2\n      x y    \n  &lt;dbl&gt; &lt;chr&gt;\n1     3 a    \n2     4 a    \n3     5 b    \n4     6 c    \n5     7 c"
   },
   {
     "objectID": "lecture-04.html#section-5",
     "href": "lecture-04.html#section-5",
     "title": "Data Management II",
     "section": "",
-    "text": "Do something and show me\n\n\ngss_all |&gt;  \n  select(year, agekdbrn) |&gt; \n  filter(year == 2022) |&gt; \n  drop_na()  |&gt;\n  mutate(age_groups = case_when(\n    agekdbrn &lt; 18 ~ \"&lt;18\",\n    agekdbrn &gt;= 18 & agekdbrn &lt;= 29 ~ \"18–29\",\n    agekdbrn &gt;= 30 & agekdbrn &lt;= 39 ~ \"30–39\",\n    agekdbrn &gt;= 40 ~ \"40+\",\n    TRUE ~ NA_character_)) |&gt;\n  group_by(age_groups) |&gt;  \n  summarise(\n    count = n(),\n    proportion = round(count / sum(count), 3)\n  )\n\n\n\nDo something, save result, not overwriting original.\n\n\n# Do something\ngss_all &lt;-  gss_all |&gt;  \n  mutate(age_groups = case_when(\n    agekdbrn &lt; 18 ~ \"&lt;18\",\n    agekdbrn &gt;= 18 & agekdbrn &lt;= 29 ~ \"18–29\",\n    agekdbrn &gt;= 30 & agekdbrn &lt;= 39 ~ \"30–39\",\n    agekdbrn &gt;= 40 ~ \"40+\",\n    TRUE ~ NA_character_)\n  ) \n\n# Now show me\ngss_all |&gt;\n  select(year, age_groups) |&gt; \n  filter(year == 2022) |&gt; \n  drop_na()  |&gt;\n  group_by(age_groups) |&gt;  \n  summarise(\n    count = n(),\n    proportion = round(count / sum(count), 3)\n  )"
+    "text": "Do something and show me\n\n\ngss_all |&gt;\n  select(year, agekdbrn) |&gt;\n  filter(year == 2022) |&gt;\n  drop_na() |&gt;\n  mutate(age_groups = case_when(\n    agekdbrn &lt; 18 ~ \"&lt;18\",\n    agekdbrn &gt;= 18 & agekdbrn &lt;= 29 ~ \"18–29\",\n    agekdbrn &gt;= 30 & agekdbrn &lt;= 39 ~ \"30–39\",\n    agekdbrn &gt;= 40 ~ \"40+\",\n    TRUE ~ NA_character_\n  )) |&gt;\n  group_by(age_groups) |&gt;\n  summarise(\n    count = n(),\n    proportion = round(count / sum(count), 3)\n  )\n\n\n\nDo something, save result, not overwriting original.\n\n\n# Do something\ngss_all &lt;- gss_all |&gt;\n  mutate(age_groups = case_when(\n    agekdbrn &lt; 18 ~ \"&lt;18\",\n    agekdbrn &gt;= 18 & agekdbrn &lt;= 29 ~ \"18–29\",\n    agekdbrn &gt;= 30 & agekdbrn &lt;= 39 ~ \"30–39\",\n    agekdbrn &gt;= 40 ~ \"40+\",\n    TRUE ~ NA_character_\n  ))\n\n# Now show me\ngss_all |&gt;\n  select(year, age_groups) |&gt;\n  filter(year == 2022) |&gt;\n  drop_na() |&gt;\n  group_by(age_groups) |&gt;\n  summarise(\n    count = n(),\n    proportion = round(count / sum(count), 3)\n  )"
   },
   {
     "objectID": "lecture-04.html#overwriting-raw-data",

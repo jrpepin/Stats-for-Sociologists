@@ -66,7 +66,8 @@ By the end of the lecture, you will be able to ...
 
 # Code-along 04 {data-menu-title="Code-along" background-image="images/terminal.png"}
 
-Download and open [code-along-04.qmd](https://www.dropbox.com/scl/fi/5jrxot2fr5p6v3xggr86h/code-along-04.qmd?rlkey=5okcd4ofidkxhwbffhb2hknz3&dl=1)
+Download and open
+[code-along-04.qmd](https://www.dropbox.com/scl/fi/5jrxot2fr5p6v3xggr86h/code-along-04.qmd?rlkey=5okcd4ofidkxhwbffhb2hknz3&dl=1)
 
 ## Packages {.sparse-slide}
 
@@ -105,7 +106,7 @@ Use `select()` to choose columns in a dataframe.\
 
 ```{r}
 #| label: select
-#| code-line-numbers: "1|2|5"
+#| code-line-numbers: "1|2"
 #| output-location: fragment
 
 my_data <- gss_all |> # <1>
@@ -324,7 +325,7 @@ my_data <- my_data |>
   mutate(childs_3cat = case_when(
     childs == 1 ~ "1 kid",
     childs == 2 ~ "2 kids",
-    childs > 3 ~ "3+ kids",
+    childs >= 3 ~ "3+ kids",
     TRUE ~ NA_character_
   ))
 

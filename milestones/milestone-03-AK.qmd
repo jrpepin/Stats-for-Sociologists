@@ -31,7 +31,7 @@ Load the 2022 GSS data
 #| label: gss-data
 #| message: false
 
-# ADD YOUR CODE HERE TO LOAD THE GSS 2024 DATA 
+# ADD YOUR CODE HERE TO LOAD THE GSS 2022 DATA 
 gss22 <- gss_get_yr(2022)
 
 ```
@@ -54,42 +54,19 @@ Reference specific statistics (where appropriate) from your output to
 justify your answers. Explain what the values tell you about the data;
 interpret their meaning in relation to the question.
 
-## Checkpoint 01: Select relevant variables
+## Checkpoint 01: Create a new dataframe
 
-A.  Create a df with `id`, `meovrwrk`, and `sex`. Then, use `zap_missing()`, `as_factor()`, and `droplevels()` to make them into clean factor variables.
+A.  Create a df named `my_data` with `meovrwrk`, `sex`, `marital`, `lifenow`, and `educ`. Then, use `drop_na()` to remove rows with missings data.
 
 ```{r}
-#| label: my-cat
+#| label: my_data
 
-# Categorical Variables
-my_cat <- gss22 |>
-  select(id, meovrwrk, sex, marital) |>
-  zap_missing() |>
-  as_factor() |>
-  droplevels()
+my_data <- gss22 |>
+  select(id, meovrwrk, sex, marital, lifenow, educ) |>
+  drop_na()
 
 ```
 
-B.  Create a df with `id`, `lifenow`, and `educ`. Then, use `mutate()` and `as.numeric()` to make them numerical variables.
-
-```{r}
-#| label: my-con
-
-# Continuous Variables
-my_con <- gss22 |>
-  select(id, lifenow, educ) |>
-  mutate(
-    lifenow = as.numeric(lifenow))
-```
-
-C.  Combine the two dataframes and name it `my_data`.
-
-```{r}
-#| label: my-data
-
-# Combine the two dataframes
-my_data <- left_join(my_cat, my_con, by = "id")
-```
 
 ## Checkpoint 02: Clean and create variables
 
@@ -97,7 +74,7 @@ A.   Use `mutate()` and `case_when()` to add a new variable to `my_data`
     called `hurt_num` that groups respondents as follows:
     
 -   1 if `meovrwrk` is 'strongly agree' or 'agree'
--   0 if `meovrwrk` equal anything else except missing (keep missing as missing)
+-   0 if `meovrwrk` equal anything else
 
 ```{r}
 #| label: hurtovrwrk
@@ -105,11 +82,11 @@ A.   Use `mutate()` and `case_when()` to add a new variable to `my_data`
 my_data <- my_data |>
   mutate(
     hurt_num = case_when(
-      meovrwrk == "strongly agree" |
-        meovrwrk == "agree" ~ 1,
-    is.na(meovrwrk) ~ NA_real_,
-    TRUE ~ 0 
+      meovrwrk %in% 1:2 ~ 1,
+      TRUE ~ 0 
     )) 
+
+table(my_data$meovrwrk, my_data$hurt_num)
 
 ```
 
@@ -128,6 +105,8 @@ my_data <- my_data |>
       educ < 16 ~ "No college degree",
       educ >= 16 ~ "College degree"
   )) 
+
+table(my_data$educ, my_data$college)
 
 ```
 
@@ -150,42 +129,145 @@ my_data <- my_data |>
       educ >= 16  ~ "College or more"
   )) 
 
+table(my_data$educ, my_data$edu_category)
+
 ```
 
-## Checkpoint 03: Remove rows with missing data
 
-Use `drop_na()` to keep only respondents who have non-missing values for
-all variables.
+D. Use `mutate()` and `case_when()` to add a new variable to `my_data`
+    called  `marstat` that groups respondents as follows:
+    
+-   "Married" if `marital` is 'married'
+-   "Single" if `marital` is 'never married'
+-   "Prev married" if `marital` is 'widowed', 'divorced', or 'separated'
 
 ```{r}
-#| label: drop-na
+#| label: educ
 
 my_data <- my_data |>
-  drop_na()
+  mutate(
+    marstat = case_when(
+      marital == 1 ~ "Married",
+      marital == 5 ~ "Single",
+      marital %in% 2:4   ~ "Prev married"
+  )) 
+
+table(my_data$marital, my_data$marstat)
 
 ```
 
+## Checkpoint 03: Create and interpret confidence intervals
+
+A. Create 95% confidence interval for `lifenow`
+
+```{r}
+#| label: ci-lifenow-95
+
+my_data |>
+  summarise(
+    n = n(),
+    mean_lifenow = mean(lifenow),
+    sd_lifenow = sd(lifenow),
+    lowCI_lifenow = CI(lifenow, ci = 0.95)['lower'],
+    hiCI_lifenow  = CI(lifenow, ci = 0.95)['upper']
+    )
+
+```
+
+**Interpret your confidence interval (e.g.,say in plain language what the CI is telling us).**
+
+B. Create 99% confidence interval for `lifenow`
+
+```{r}
+#| label: ci-lifenow-99
+
+my_data |>
+  summarise(
+    n = n(),
+    mean_lifenow = mean(lifenow),
+    sd_lifenow = sd(lifenow),
+    lowCI_lifenow = CI(lifenow, ci = 0.99)['lower'],
+    hiCI_lifenow  = CI(lifenow, ci = 0.99)['upper']
+    )
+
+```
+
+*How does the 95% confidence interval differ from the 99% confidence interval in terms of width and certainty?*
 
 ## Checkpoint 04: Create, compare and interpret confidence intervals
 
-A. continuous variable lifenow & college
+A. Create 95% confidence intervals for `lifenow` by `college`
 
-B. proportions hurt_num & college
+```{r}
+#| label: ci-lifenow-college
 
-## Checkpoint 05: Write a null and research hypothesis
+my_data |>
+  group_by(college) |>
+  summarise(
+    n = n(),
+    mean = mean(lifenow),
+    sd = sd(lifenow),
+    lowCI = CI(lifenow, ci = 0.95)['lower'],
+    hiCI  = CI(lifenow, ci = 0.95)['upper']
+    )
+
+```
+
+**Do the confidence intervals for these two groups overlap? What does that imply about the statistical significance of their difference?**
+
+B. Create 95% confidence intervals for `lifenow` by `edu_category`
+
+```{r}
+#| label: ci-lifenow-college
+
+my_data |>
+  group_by(edu_category) |>
+  summarise(
+    n = n(),
+    mean = mean(lifenow),
+    sd = sd(lifenow),
+    lowCI = CI(lifenow, ci = 0.95)['lower'],
+    hiCI  = CI(lifenow, ci = 0.95)['upper']
+    )
+
+```
+
+**Do the confidence intervals for these three groups overlap? What does that imply about the statistical significance of their difference?**
+
+## Checkpoint 05: Create, compare and interpret confidence intervals
+
+A. Create 95% confidence intervals for `hurt_num` by `sex` & `marstat` (e.g, married women, married men, single women, single, men, etc.)
+
+```{r}
+#| label: ci-hurt_num-marstat
+
+my_data |>
+  group_by(sex, marstat) |>
+  summarise(
+    n = n(),
+    mean = mean(hurt_num),
+    sd = sd(hurt_num),
+    lowCI = CI(hurt_num, ci = 0.95)['lower'],
+    hiCI  = CI(hurt_num, ci = 0.95)['upper']
+    )
+
+```
 
 
-## Checkpoint 06: Produce and interpret a two-sample t-tests
+## Checkpoint 06: Write a null and research hypothesis
+
+
+## Checkpoint 07: Produce and interpret a two-sample t-tests
 
 lifenow & college
 
 
-## Checkpoint 07: Create cross-tabs with chi-square tests
+## Checkpoint 08: Create cross-tabs with chi-square tests
 
 Use `tbl_cross()` and `add_p()` to create a cross-tab with a chi-square test to answer the following questions.
 
 
-A. Is there a gender difference (`sex`) in agreement that men hurt the family when they focus on work too much (`meovrwk`)?
+A. Is there a statistically significant gender difference (`sex`) in agreement that men hurt the family when they focus on work too much (`meovrwk`)?
 
 ```{r}
 #| message: false
@@ -200,9 +282,12 @@ my_data |>
 ```
 
 
-## Checkpoint 08: Produce and interpret a Pearson’s Correlation Coefficient (R)
+## Checkpoint 09: Produce and interpret a Pearson’s Correlation Coefficient (R)
 
 lifenow & educ
+
+
+## Checkpoint 10:
 
 # IPUMS Data
 

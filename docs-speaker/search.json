@@ -1307,5 +1307,159 @@
     "title": "Statistical Tests I",
     "section": "Think Like a Statistician",
     "text": "Think Like a Statistician\n\neducabanygunlaw\n\n\n\n\n\n    Welch Two Sample t-test\n\ndata:  gss22$educ by gss22$sex\nt = -0.38076, df = 4035.7, p-value = 0.3517\nalternative hypothesis: true difference in means between group 1 and group 2 is less than 0\n95 percent confidence interval:\n      -Inf 0.1144853\nsample estimates:\nmean in group 1 mean in group 2 \n       14.14338        14.17786 \n\n\n\n\n\n\n\n    Welch Two Sample t-test\n\ndata:  gss22$abany by gss22$sex\nt = -1.0701, df = 1317.7, p-value = 0.2848\nalternative hypothesis: true difference in means between group 1 and group 2 is not equal to 0\n95 percent confidence interval:\n -0.08169512  0.02402811\nsample estimates:\nmean in group 1 mean in group 2 \n      0.5786164       0.6074499 \n\n\n\n\n\n\n\n    Welch Two Sample t-test\n\ndata:  gss22$gunlaw by gss22$sex\nt = -8.9698, df = 2476.6, p-value &lt; 2.2e-16\nalternative hypothesis: true difference in means between group 1 and group 2 is not equal to 0\n95 percent confidence interval:\n -0.1872801 -0.1200856\nsample estimates:\nmean in group 1 mean in group 2 \n      0.6450593       0.7987421"
+  },
+  {
+    "objectID": "lecture-06.html#packages",
+    "href": "lecture-06.html#packages",
+    "title": "Statistical Tests II",
+    "section": "Packages",
+    "text": "Packages\nLoad the standard packages & 1 new package: gtsummary()\nWe’ll use gtsummary() to make pretty tables that include our statistical tests.\n\n# Only need to install once per machine. \n# install.packages(\"gtsummary\")\n\nlibrary(here)\nlibrary(tidyverse) \nlibrary(haven) # not core tidyverse\nlibrary(gssr)\nlibrary(gssrdoc) # load the GSS codebook\nlibrary(summarytools)\nlibrary(gtsummary) # load the new package"
+  },
+  {
+    "objectID": "lecture-06.html#load-your-data",
+    "href": "lecture-06.html#load-your-data",
+    "title": "Statistical Tests II",
+    "section": "Load your data",
+    "text": "Load your data\n\n# Get the data from the 2022 survey\ngss22 &lt;- gss_get_yr(2022)"
+  },
+  {
+    "objectID": "lecture-06.html#variables",
+    "href": "lecture-06.html#variables",
+    "title": "Statistical Tests II",
+    "section": "Variables",
+    "text": "Variables\n\nfefam Better for man to work, woman tend home\npostlife Belief in life after death\n\nlifenow R’s rating of life overall now from 0-10\npremarsx Sex before marriage\nagekdbrn R’s age when 1st child born\nsex Respondents sex\nage Age of respondent\npolviews Think of self as liberal or conservative"
+  },
+  {
+    "objectID": "lecture-06.html#variable-management",
+    "href": "lecture-06.html#variable-management",
+    "title": "Statistical Tests II",
+    "section": "Variable Management",
+    "text": "Variable Management\n\n Make a df with only the (pretty) categorical and continuous variables we’ll analyze.\n\n\n# Categorical Variables\nmy_cat &lt;- gss22 |&gt;\n  select(id, premarsx, fefam, postlife, sex, polviews) |&gt;\n  zap_missing() |&gt;\n  as_factor() |&gt;\n  droplevels()\n\n# Continuous Variables\nmy_con &lt;- gss22 |&gt;\n  select(id, age, educ, lifenow, agekdbrn) |&gt;\n  mutate(\n    age = as.numeric(age),\n    educ = as.numeric(educ),\n    lifenow = as.numeric(lifenow),\n    agekdbrn = as.numeric(agekdbrn))\n\n# Combine the two dataframes\nmy_data &lt;- left_join(my_cat, my_con, by = \"id\")"
+  },
+  {
+    "objectID": "lecture-06.html#chi2-test-1",
+    "href": "lecture-06.html#chi2-test-1",
+    "title": "Statistical Tests II",
+    "section": "\\(chi^2\\) test",
+    "text": "\\(chi^2\\) test\n\\(chi^2\\) determines if categorical variables are related\nTest if the rows and columns in a two-way table are independent"
+  },
+  {
+    "objectID": "lecture-06.html#chi2-in-action",
+    "href": "lecture-06.html#chi2-in-action",
+    "title": "Statistical Tests II",
+    "section": "\\(chi^2\\) in action",
+    "text": "\\(chi^2\\) in action\nThe news has been reporting a large gender difference in attitudes about gender roles.\nYou evaluate this narrative using the variable fefam:\n\nIt is much better for everyone involved if the man is the achiever outside the home and the woman takes care of the home and family.\n\n\n\n\n How do you test your hypothesis?"
+  },
+  {
+    "objectID": "lecture-06.html#section",
+    "href": "lecture-06.html#section",
+    "title": "Statistical Tests II",
+    "section": "",
+    "text": "Which of these equations represents your research hypothesis?\n\n\nThere is no association between gender identity and attitudes about gender roles (statistically independent).\nGender identity and attitudes about gender roles are related in the population (statistically independent).\nGender identity and attitudes about gender roles are related in the population (statistically dependent)."
+  },
+  {
+    "objectID": "lecture-06.html#section-1",
+    "href": "lecture-06.html#section-1",
+    "title": "Statistical Tests II",
+    "section": "",
+    "text": "Which of these equations represents your null hypothesis?\n\n\nThere is no association between gender identity and attitudes about gender roles (statistically independent).\nGender identity and attitudes about gender roles are related in the population (statistically independent).\nThere is no association between gender identity and attitudes about gender roles (statistically dependent)."
+  },
+  {
+    "objectID": "lecture-06.html#review-pretty-cross-tab",
+    "href": "lecture-06.html#review-pretty-cross-tab",
+    "title": "Statistical Tests II",
+    "section": "Review: Pretty cross-tab",
+    "text": "Review: Pretty cross-tab\nUse summarytools::ctable\n\n1ctable(my_data$fefam, my_data$sex,\n2  prop = \"c\",\n3  format = \"p\",\n  useNA = \"no\"\n4)\n\n\n1\n\nChange from table() to ctable().\n\n2\n\nThe “c” gives column %; “r” would give row %.\n\n3\n\nThis adds the % symbols to the table.\n\n4\n\nExclude the missing levels from the table.\n\n\n\n\n\n\nCross-Tabulation, Column Proportions  \nfefam * sex  \nData Frame: my_data  \n\n------------------- ----- --------------- --------------- ---------------\n                      sex            male          female           Total\n              fefam                                                      \n     strongly agree           87 (  6.8%)     84 (  5.8%)    171 (  6.3%)\n              agree          292 ( 22.9%)    221 ( 15.3%)    513 ( 18.9%)\n           disagree          573 ( 44.9%)    602 ( 41.6%)   1175 ( 43.2%)\n  strongly disagree          323 ( 25.3%)    539 ( 37.3%)    862 ( 31.7%)\n              Total         1275 (100.0%)   1446 (100.0%)   2721 (100.0%)\n------------------- ----- --------------- --------------- ---------------"
+  },
+  {
+    "objectID": "lecture-06.html#pretty-cross-tab-new",
+    "href": "lecture-06.html#pretty-cross-tab-new",
+    "title": "Statistical Tests II",
+    "section": "Pretty cross-tab (new)",
+    "text": "Pretty cross-tab (new)\nNow that we know how to use the dplyr |&gt;!\n\nmy_data |&gt;\n  tbl_cross(\n    row = fefam,\n    col = sex,\n    percent = \"column\",\n    missing = \"no\")\n\n\n\n\n\nTable 1\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nsex\n\nTotal\n\n\nmale\nfemale\n\n\n\n\nfefam\n\n\n\n\n\n\n\n\n    strongly agree\n87 (6.8%)\n84 (5.8%)\n171 (6.3%)\n\n\n    agree\n292 (23%)\n221 (15%)\n513 (19%)\n\n\n    disagree\n573 (45%)\n602 (42%)\n1,175 (43%)\n\n\n    strongly disagree\n323 (25%)\n539 (37%)\n862 (32%)\n\n\nTotal\n1,275 (100%)\n1,446 (100%)\n2,721 (100%)"
+  },
+  {
+    "objectID": "lecture-06.html#pretty-cross-tab-with-p-value",
+    "href": "lecture-06.html#pretty-cross-tab-with-p-value",
+    "title": "Statistical Tests II",
+    "section": "Pretty cross-tab with p-value",
+    "text": "Pretty cross-tab with p-value\n\nmy_data |&gt;\n  tbl_cross(\n    row = fefam,\n    col = sex,\n    percent = \"column\",\n    missing = \"no\") |&gt;\n  add_p(source_note = TRUE)\n\n\n\n\n\nTable 2\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nsex\n\nTotal\n\n\nmale\nfemale\n\n\n\n\nfefam\n\n\n\n\n\n\n\n\n    strongly agree\n87 (6.8%)\n84 (5.8%)\n171 (6.3%)\n\n\n    agree\n292 (23%)\n221 (15%)\n513 (19%)\n\n\n    disagree\n573 (45%)\n602 (42%)\n1,175 (43%)\n\n\n    strongly disagree\n323 (25%)\n539 (37%)\n862 (32%)\n\n\nTotal\n1,275 (100%)\n1,446 (100%)\n2,721 (100%)\n\n\n\nPearson’s Chi-squared test, p&lt;0.001"
+  },
+  {
+    "objectID": "lecture-06.html#section-2",
+    "href": "lecture-06.html#section-2",
+    "title": "Statistical Tests II",
+    "section": "",
+    "text": "Which of these statements best summarizes your conclusion?\n\n\nOur findings prove that gender identity has no effect on attitudes about gender roles\nSince the p-value is above 0.05, we can conclude that gender identity strongly influences attitudes about gender roles.\nWe find no statistically significant relationship between gender identity and attitudes about gender roles."
+  },
+  {
+    "objectID": "lecture-06.html#caution-size-matters",
+    "href": "lecture-06.html#caution-size-matters",
+    "title": "Statistical Tests II",
+    "section": "Caution: size matters",
+    "text": "Caution: size matters\n\nmy_data |&gt;\n  filter(age &lt; 21) |&gt;\n  tbl_cross(\n    row = fefam,\n    col = sex,\n    percent = \"column\",\n    missing = \"no\") |&gt;\n  add_p(source_note = TRUE)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nsex\n\nTotal\n\n\nmale\nfemale\n\n\n\n\nfefam\n\n\n\n\n\n\n\n\n    strongly agree\n3 (7.5%)\n3 (6.3%)\n6 (6.8%)\n\n\n    agree\n11 (28%)\n6 (13%)\n17 (19%)\n\n\n    disagree\n19 (48%)\n19 (40%)\n38 (43%)\n\n\n    strongly disagree\n7 (18%)\n20 (42%)\n27 (31%)\n\n\nTotal\n40 (100%)\n48 (100%)\n88 (100%)\n\n\n\nFisher’s exact test, p=0.065\n\n\n\n\n\n\n\n\n\nOur sample size is relatively small once we filtered out people older than 25. We have 88 people between the ages of 18-20 in our new sample, which is greater than the 50 observations necessary to assume the sampling distribution of the means is normal.\nYet, the frequency in each individual cell is quite small. Typically, each cell should have no fewer than 30 people to make meaningful statistical calculations.\nIn other words, large standard errors should be interpreted as an imprecise estimate, not as an indication that the null hypothesis is valid."
+  },
+  {
+    "objectID": "lecture-06.html#review-t.test-with-proportions",
+    "href": "lecture-06.html#review-t.test-with-proportions",
+    "title": "Statistical Tests II",
+    "section": "Review: t.test() with proportions",
+    "text": "Review: t.test() with proportions\n\n# Use logic to recode factor as mean (yes = 1; no: 2 = 0)\nmy_data$ghosts &lt;- ifelse(my_data$postlife == \"yes\", 1, 0)\n\n# t.test\nt.test(my_data$ghosts ~ my_data$sex, alternative = \"two.sided\")\n\n\n    Welch Two Sample t-test\n\ndata:  my_data$ghosts by my_data$sex\nt = -5.4996, df = 1418.2, p-value = 4.51e-08\nalternative hypothesis: true difference in means between group male and group female is not equal to 0\n95 percent confidence interval:\n -0.14739470 -0.06989112\nsample estimates:\n  mean in group male mean in group female \n           0.7553763            0.8640193"
+  },
+  {
+    "objectID": "lecture-06.html#t.test-chi2",
+    "href": "lecture-06.html#t.test-chi2",
+    "title": "Statistical Tests II",
+    "section": "t.test() & \\(chi^2\\)",
+    "text": "t.test() & \\(chi^2\\)\n\nmy_data |&gt;\n  tbl_cross(\n    row = ghosts,\n    col = sex,\n    percent = \"column\",\n    missing = \"no\") |&gt;\n  add_p(source_note = TRUE)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nsex\n\nTotal\n\n\nmale\nfemale\n\n\n\n\nghosts\n\n\n\n\n\n\n\n\n    0\n182 (24%)\n113 (14%)\n295 (19%)\n\n\n    1\n562 (76%)\n718 (86%)\n1,280 (81%)\n\n\nTotal\n744 (100%)\n831 (100%)\n1,575 (100%)\n\n\n\nPearson’s Chi-squared test, p&lt;0.001"
+  },
+  {
+    "objectID": "lecture-06.html#cor.test",
+    "href": "lecture-06.html#cor.test",
+    "title": "Statistical Tests II",
+    "section": "cor.test()",
+    "text": "cor.test()\nR is the correlation between two interval-ratio variables.\n\ncor.test(\n  ~ v1 + v2,\n  data = your_dataframe,\n  method = \"pearson\",\n  na.action = na.omit\n  ) \n\n\n\n\n\n Heads Up!\n\n\nBecause Pearson’s R doesn’t require specifying an independent and dependent variable, the order of the variables does not matter."
+  },
+  {
+    "objectID": "lecture-06.html#scatterplot",
+    "href": "lecture-06.html#scatterplot",
+    "title": "Statistical Tests II",
+    "section": "Scatterplot",
+    "text": "Scatterplot"
+  },
+  {
+    "objectID": "lecture-06.html#cor.test-in-action",
+    "href": "lecture-06.html#cor.test-in-action",
+    "title": "Statistical Tests II",
+    "section": "cor.test() in action",
+    "text": "cor.test() in action\n\ncor.test(\n  ~ educ + agekdbrn,\n  data = my_data,\n  method = \"pearson\",\n  na.action = na.omit\n)\n\n\n\n\n    Pearson's product-moment correlation\n\ndata:  educ and agekdbrn\nt = 17.865, df = 2780, p-value &lt; 2.2e-16\nalternative hypothesis: true correlation is not equal to 0\n95 percent confidence interval:\n 0.2871699 0.3538501\nsample estimates:\n      cor \n0.3209076"
+  },
+  {
+    "objectID": "lecture-06.html#tidy-cor.test",
+    "href": "lecture-06.html#tidy-cor.test",
+    "title": "Statistical Tests II",
+    "section": "Tidy cor.test()",
+    "text": "Tidy cor.test()\n\n\n\n# Save results\nmy_test &lt;- cor.test(\n  ~ educ + agekdbrn,\n  data = my_data,\n  method = \"pearson\",\n  na.action = na.omit\n)\n\n\n\n# Create a tibble with key stats\ncor_summary &lt;- tibble(\n  correlation = my_test$estimate,\n  p_value     = my_test$p.value,\n  conf_low    = my_test$conf.int[1],\n  conf_high   = my_test$conf.int[2]\n)\n\n\n\n\n\ncor_summary\n\n# A tibble: 1 × 4\n  correlation  p_value conf_low conf_high\n        &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;\n1       0.321 1.16e-67    0.287     0.354"
+  },
+  {
+    "objectID": "lecture-06.html#cor.test-t.test",
+    "href": "lecture-06.html#cor.test-t.test",
+    "title": "Statistical Tests II",
+    "section": "cor.test() & t.test()",
+    "text": "cor.test() & t.test()\n\nEquivalencecor.test()t.test()\n\n\n\n\n\n Heads Up!\n\n\nCorrelating a dichotomous variable and a continuous variable is equivalent to doing a t-test on that continuous variable by the dichotomous variable.\n\n\n\n\nWhen x is coded as 0/1, these formulas yield equivalent p-values, even if the t-statistics look slightly different due to rounding or variance assumptions.\n\n\n\n# Create numeric version of sex\nmy_data &lt;- my_data %&gt;%\n  mutate(female = if_else(sex == \"female\", 1, 0))\n\ncor.test(\n  ~ female + lifenow,\n  data = my_data,\n  method = \"pearson\",\n  na.action = na.omit\n)\n\n\n    Pearson's product-moment correlation\n\ndata:  female and lifenow\nt = -0.85827, df = 2142, p-value = 0.3908\nalternative hypothesis: true correlation is not equal to 0\n95 percent confidence interval:\n -0.06082662  0.02381053\nsample estimates:\n        cor \n-0.01854126 \n\n\n\n\n\nt.test(my_data$lifenow ~ my_data$sex, alternative = \"two.sided\")\n\n\n    Welch Two Sample t-test\n\ndata:  my_data$lifenow by my_data$sex\nt = 0.85806, df = 2137, p-value = 0.391\nalternative hypothesis: true difference in means between group male and group female is not equal to 0\n95 percent confidence interval:\n -0.07835816  0.20027032\nsample estimates:\n  mean in group male mean in group female \n            7.817837             7.756881"
+  },
+  {
+    "objectID": "lecture-06.html#think-like-a-statistician-1",
+    "href": "lecture-06.html#think-like-a-statistician-1",
+    "title": "Statistical Tests II",
+    "section": "Think Like a Statistician",
+    "text": "Think Like a Statistician\n Are beliefs about premarital sex (premarsx) dependent on political identity (polviews)?\n\n\n Is there a gender difference (sex) in political identity (polviews)?\n\n\n\n Describe the relationship between ageand life satisfaction (lifenow)."
+  },
+  {
+    "objectID": "lecture-06.html#think-like-a-statistician-2",
+    "href": "lecture-06.html#think-like-a-statistician-2",
+    "title": "Statistical Tests II",
+    "section": "Think Like a Statistician",
+    "text": "Think Like a Statistician\n\npremarsxpolviewslifenow\n\n\n\n\n\n\nTable 3\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\npolviews\n\nTotal\n\n\nextremely liberal\nliberal\nslightly liberal\nmoderate, middle of the road\nslightly conservative\nconservative\nextremely conservative\n\n\n\n\npremarsx\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n    always wrong\n7 (4.4%)\n19 (5.1%)\n16 (5.2%)\n122 (12%)\n48 (15%)\n103 (28%)\n44 (38%)\n359 (14%)\n\n\n    almost always wrong\n6 (3.8%)\n11 (2.9%)\n11 (3.6%)\n55 (5.6%)\n24 (7.3%)\n36 (9.9%)\n11 (9.5%)\n154 (5.8%)\n\n\n    wrong only sometimes\n7 (4.4%)\n32 (8.6%)\n33 (11%)\n150 (15%)\n59 (18%)\n57 (16%)\n13 (11%)\n351 (13%)\n\n\n    not wrong at all\n139 (87%)\n311 (83%)\n249 (81%)\n657 (67%)\n200 (60%)\n169 (46%)\n48 (41%)\n1,773 (67%)\n\n\nTotal\n159 (100%)\n373 (100%)\n309 (100%)\n984 (100%)\n331 (100%)\n365 (100%)\n116 (100%)\n2,637 (100%)\n\n\n\nPearson’s Chi-squared test, p&lt;0.001\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nTable 4\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nsex\n\nTotal\n\n\nmale\nfemale\n\n\n\n\npolviews\n\n\n\n\n\n\n\n\n    extremely liberal\n103 (5.5%)\n129 (6.0%)\n232 (5.8%)\n\n\n    liberal\n215 (12%)\n347 (16%)\n562 (14%)\n\n\n    slightly liberal\n229 (12%)\n247 (12%)\n476 (12%)\n\n\n    moderate, middle of the road\n661 (36%)\n848 (40%)\n1,509 (38%)\n\n\n    slightly conservative\n267 (14%)\n223 (10%)\n490 (12%)\n\n\n    conservative\n298 (16%)\n258 (12%)\n556 (14%)\n\n\n    extremely conservative\n83 (4.5%)\n92 (4.3%)\n175 (4.4%)\n\n\nTotal\n1,856 (100%)\n2,144 (100%)\n4,000 (100%)\n\n\n\nPearson’s Chi-squared test, p&lt;0.001\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n    Pearson's product-moment correlation\n\ndata:  lifenow and age\nt = 7.9037, df = 2031, p-value = 4.402e-15\nalternative hypothesis: true correlation is not equal to 0\n95 percent confidence interval:\n 0.1302456 0.2146032\nsample estimates:\n      cor \n0.1727412"
   }
 ]

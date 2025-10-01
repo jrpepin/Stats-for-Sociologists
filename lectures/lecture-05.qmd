@@ -130,8 +130,6 @@ library(summarytools)
 library(Rmisc) # load the new package
 ```
 
-
-
 ::: notes
 `haven()` was installed with tidyverse; but it doesn't load
 automatically
@@ -164,23 +162,41 @@ gss22 <- gss_get_yr(2022)
 -   `childs` How many children have you ever had?
 -   `sex` Respondent's sex
 
+## Mini-task {data-menu-title="Load your data"}
+
+::: task
+{{< fa check-double >}} Create a dataset named `my_data` with the variables `wwwhr`,
+`postlife`, `childs`, & `sex` with no missing data
+:::
+
+<br>
+
+. . .
+
+```{r}
+#| label: my_data
+
+# Create a new df
+my_data <-gss22 |>
+  select(wwwhr, postlife, childs, sex) |>
+  drop_na()
+
+```
+
 # Confidence Intervals {.theme-section}
 
 ## Review: `summarise()` {.sparse-slide}
 
 ```{r}
-#| message: false
 #| label: summarise01
 #| output-location: fragment
 
-gss22 |>
-  filter(!is.na(wwwhr))  |>
+my_data |>
   summarise(
     n = n(),
     mean = mean(wwwhr),
     sd = sd(wwwhr)
     )
-
 
 ```
 
@@ -201,10 +217,9 @@ gss22 |>
 ```{r}
 #| message: false
 #| label: summarise02
-#| code-line-numbers: "1-6|7|8|9-10"
+#| code-line-numbers: "1-5|6|7|8-9"
 
-wwwhr_sum <- gss22 |>
-  filter(!is.na(wwwhr))  |>
+wwwhr_sum <- my_data |>
   summarise(
     n = n(),
     mean_wwwhr = mean(wwwhr),
@@ -232,18 +247,14 @@ wwwhr_sum
 
 ```
 
-
 ## `summarise()` + `CI()` {.sparse-slide}
 
 ```{r}
-#| message: false
 #| label: summarise-ci95
-#| code-line-numbers: "7-8"
+#| code-line-numbers: "6-7"
 #| output-location: fragment
 
-
-wwwhr_ci <- gss22 |>
-  filter(!is.na(wwwhr))  |>
+wwwhr_ci <- my_data |>
   summarise(
     n = n(),
     mean_wwwhr = mean(wwwhr),
@@ -271,13 +282,11 @@ internet per week is between 14.17 hours and 15.62 hours?
 ## `summarise()` + `CI()` {.sparse-slide}
 
 ```{r}
-#| message: false
 #| label: summarise-ci99
-#| code-line-numbers: "7-8"
+#| code-line-numbers: "6-7"
 #| output-location: fragment
 
-wwwhr_ci99 <- gss22 |>
-  filter(!is.na(wwwhr))  |>
+wwwhr_ci99 <- my_data |>
   summarise(
     n = n(),
     mean_wwwhr = mean(wwwhr),
@@ -303,7 +312,6 @@ internet was within our confidence interval.
 **95% confidence intervals**
 
 ```{r}
-#| message: false
 #| label: table-ci95
 
 wwwhr_ci
@@ -314,7 +322,6 @@ wwwhr_ci
 **99% confidence intervals**
 
 ```{r}
-#| message: false
 #| label: table-ci99
 
 wwwhr_ci99
@@ -334,12 +341,10 @@ wwwhr_ci99
 ## CIs (wrong) with proportions
 
 ```{r}
-#| message: false
 #| label: proportions01
 #| output-location: fragment
 
-gss22 |>
-  filter(!is.na(postlife))  |>
+my_data |>
   summarise(
     n = n(),
     mean_ghosts = mean(postlife),
@@ -359,16 +364,13 @@ gss22 |>
 ## CIs (correct) with proportions
 
 ```{r}
-#| message: false
 #| label: proportions02
-#| code-line-numbers: "1-2|4-12"
 #| output-location: fragment
 
 # Use logic to recode (yes: 1 = 1; no: 2 = 0)
-gss22$ghosts <- ifelse(gss22$postlife == 1, 1, 0)
+my_data$ghosts <- ifelse(my_data$postlife == 1, 1, 0)
   
-gss22 |>
-  filter(!is.na(ghosts))  |>
+my_data |>
   summarise(
     n = n(),
     mean_ghosts = mean(ghosts),
@@ -385,18 +387,16 @@ gss22 |>
 ### Code
 
 ```{r}
-#| message: false
 #| label: proportions03
-#| code-line-numbers: "1-3|5|6-7|8-14"
+#| code-line-numbers: "1-3|5-6|7-13"
 
 
-gss22$sex <- zap_missing(gss22$sex) 
-gss22$sex <- as_factor(gss22$sex)   
-gss22$sex <- droplevels(gss22$sex)  
+my_data$sex <- zap_missing(my_data$sex) 
+my_data$sex <- as_factor(my_data$sex)   
+my_data$sex <- droplevels(my_data$sex)  
 
-df_ghosts <- gss22 |>
+df_ghosts <- my_data |>
   group_by(sex) |>
-  drop_na(sex, ghosts) |>
   summarise(
     n = n(),
     mean = mean(ghosts),
@@ -410,7 +410,6 @@ df_ghosts <- gss22 |>
 ### Table
 
 ```{r}
-#| message: false
 #| label: proportions04
 
 df_ghosts
@@ -421,7 +420,6 @@ df_ghosts
 
 ```{r}
 #| echo: false
-#| message: false
 #| label: proportions05
 
 df_ghosts |>
@@ -444,13 +442,11 @@ df_ghosts |>
 ### Code
 
 ```{r}
-#| message: false
 #| label: wwwhr01
-#| code-line-numbers: "1-3|4-10"
+#| code-line-numbers: "1-2|3-9"
 
-df_wwwhr <- gss22 |>
+df_wwwhr <- my_data |>
   group_by(sex) |>
-  drop_na(sex, wwwhr) |>
   summarise(
     n = n(),
     mean = mean(wwwhr),
@@ -483,7 +479,7 @@ df_wwwhr |>
   geom_point(size = 3) +
   geom_errorbar(aes(xmin = lower, xmax = upper), width = 0.2, size = 1.2) +
   theme(legend.position = "none") +
-  xlim(0, 20) +
+  xlim(0, 22) +
   labs(title = "Average hours of internet use per week",
        subtitle = "with 95% confidence intervals",
        y = " ",
@@ -549,13 +545,10 @@ suspect that people are having fewer than 2 children.
 ## Review: Summary Statistics
 
 ```{r}
-#| message: false
 #| label: childs-summarise
-#| code-line-numbers: "1-2|3-7"
 #| output-location: fragment
 
-gss22 |>
-  filter(!is.na(childs))  |>
+my_data |>
   summarise(
     n = n(),
     mean = mean(childs),
@@ -575,13 +568,11 @@ variation)?
 ## Review: CIs
 
 ```{r}
-#| message: false
 #| label: childs-CI
-#| code-line-numbers: "8-12"
+#| code-line-numbers: "7-11"
 #| output-location: fragment
 
-gss22 |>
-  filter(!is.na(childs))  |>
+my_data |>
   summarise(
     n = n(),
     mean = mean(childs),
@@ -603,11 +594,10 @@ Does the confidence interval overlap with 2? What does that tell you?
 ## One sample `t.test()` for means
 
 ```{r}
-#| message: false
 #| label: ttest01
 #| output-location: fragment
 
-t.test(gss22$childs)
+t.test(my_data$childs)
 
 ```
 
@@ -618,10 +608,9 @@ t.test(gss22$childs)
 ## One sample `t.test()` for means
 
 ```{r}
-#| message: false
 #| label: ttest02
 
-t.test(gss22$childs, mu=2, alternative="less") # Ho: mu=2
+t.test(my_data$childs, mu=2, alternative="less") # Ho: mu=2
 
 ```
 
@@ -668,11 +657,10 @@ ghosts statistically significantly different?
 . . .
 
 ```{r}
-#| message: false
 #| label: ttest03
 #| output-location: fragment
 
-t.test(gss22$ghosts ~ gss22$sex, alternative = "two.sided")
+t.test(my_data$ghosts ~ my_data$sex, alternative = "two.sided")
 
 ```
 
@@ -702,7 +690,7 @@ mean?]{style="color: #F39C12; font-family: 'Shadows Into Light'"}
 #| label: ttest-samples
 #| eval: false
 
-t.test(gss22$ghosts ~ gss22$sex, alternative = "two.sided")
+t.test(my_data$ghosts ~ my_data$sex, alternative = "two.sided")
 
 ```
 
@@ -745,6 +733,10 @@ different?**]{style="color: #F39C12; font-size: 100%; font-family: 'Shadows Into
 
 [{{< fa regular lightbulb >}} **Do fewer men than women support gun laws
 (`gunlaw`)?**]{style="color: #F39C12; font-size: 100%; font-family: 'Shadows Into Light'"}
+
+::: aside
+Use the 2022 GSS dataset
+:::
 
 ## Think Like a Statistician {background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
 

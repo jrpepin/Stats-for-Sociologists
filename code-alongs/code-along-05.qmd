@@ -1,0 +1,303 @@
+---
+title: "Code-along 05"
+author: "FirstName LastName"
+editor: visual
+execute:
+  error: true
+format: pdf # or replace 'pdf' with 'typst'
+---
+
+# Setup
+
+## Packages
+
+Install the
+[`Rmisc()`](https://cran.r-project.org/web/packages/Rmisc/refman/Rmisc.html)
+package, available on CRAN.
+
+```{r}
+#| eval: false
+#| label: install-Rmisc
+
+install.packages("Rmisc")
+```
+
+Load the standard packages and our new `Rmisc()` package.
+
+```{r}
+#| message: false
+#| label: load
+
+library(tidyverse)
+library(haven) # not core tidyverse
+library(gssr)
+library(gssrdoc) # load the GSS codebook
+library(summarytools)
+library(Rmisc) # load the new package
+```
+
+## Load your data
+
+Get the data from the 2022 survey
+
+```{r}
+#| label: gssdata
+
+# ADD YOUR CODE HERE
+
+```
+
+Create a dataset named `my_data` with the variables `wwwhr`, `postlife`, `childs`, &
+`sex` with no missing data
+
+```{r}
+#| message: false
+#| label: my_data
+
+# ADD YOUR CODE HERE
+
+```
+
+# Confidence Intervals
+
+## `summarise()` with equation
+
+```{r}
+#| label: summarise02
+
+wwwhr_sum <- my_data |>
+  summarise(
+    n = n(),
+    mean_wwwhr = mean(wwwhr),
+    sd_wwwhr = sd(wwwhr),
+    se_wwwhr = sd_wwwhr / sqrt(n),
+    ci_lower = mean_wwwhr - (1.96 * se_wwwhr),
+    ci_upper = mean_wwwhr + (1.96 * se_wwwhr)
+    )
+
+```
+
+## Code Meets Question
+
+What can we infer about the population mean based on this confidence
+interval?
+
+```{r}
+#| label: wwwhr_sum-CMQ
+
+wwwhr_sum
+
+```
+
+## `summarise()` + `CI()`
+
+```{r}
+#| label: summarise-ci95
+
+wwwhr_ci <- my_data |>
+  summarise(
+    n = n(),
+    mean_wwwhr = mean(wwwhr),
+    sd_wwwhr = sd(wwwhr),
+    lowCI_wwwhr = Rmisc::CI(wwwhr)['lower'],
+    hiCI_wwwhr  = Rmisc::CI(wwwhr)['upper']
+    )
+
+wwwhr_ci
+```
+
+## `summarise()` + `CI()`
+
+```{r}
+#| label: summarise-ci99
+
+wwwhr_ci99 <- my_data |>
+  summarise(
+    n = n(),
+    mean_wwwhr = mean(wwwhr),
+    sd_wwwhr = sd(wwwhr),
+    lowCI_wwwhr = CI(wwwhr, ci = 0.99)['lower'],
+    hiCI_wwwhr  = CI(wwwhr, ci = 0.99)['upper']
+    )
+
+wwwhr_ci99
+```
+
+::: task
+{{< fa lightbulb >}} **How does a 95% confidence interval differ from a
+99% confidence interval in terms of width and certainty?**
+:::
+
+## CIs (wrong) with proportions
+
+```{r}
+#| label: proportions01
+
+my_data |>
+  summarise(
+    n = n(),
+    mean_ghosts = mean(postlife),
+    sd_ghosts = sd(postlife),
+    lowCI_ghosts = CI(postlife, ci = 0.99)['lower'],
+    hiCI_ghosts  = CI(postlife, ci = 0.99)['upper']
+    )
+
+```
+
+## CIs (correct) with proportions
+
+```{r}
+#| label: proportions02
+
+# Use logic to recode (yes: 1 = 1; no: 2 = 0)
+my_data$ghosts <- ifelse(my_data$postlife == 1, 1, 0)
+  
+my_data |>
+  summarise(
+    n = n(),
+    mean_ghosts = mean(ghosts),
+    sd_ghosts = sd(ghosts),
+    lowCI_ghosts = CI(ghosts, ci = 0.99)['lower'],
+    hiCI_ghosts  = CI(ghosts, ci = 0.99)['upper']
+    )
+
+```
+
+## Comparing CIs
+
+
+```{r}
+#| label: proportions03
+
+my_data$sex <- zap_missing(my_data$sex) 
+my_data$sex <- as_factor(my_data$sex)   
+my_data$sex <- droplevels(my_data$sex)  
+
+df_ghosts <- my_data |>
+  group_by(sex) |>
+  summarise(
+    n = n(),
+    mean = mean(ghosts),
+    sd = sd(ghosts),
+    lower = CI(ghosts, ci = 0.95)['lower'],
+    upper  = CI(ghosts, ci = 0.95)['upper']
+    )
+
+df_ghosts
+
+```
+
+
+```{r}
+#| label: wwwhr01
+#| code-line-numbers: "1-2|3-9"
+
+df_wwwhr <- my_data |>
+  group_by(sex) |>
+  summarise(
+    n = n(),
+    mean = mean(wwwhr),
+    sd = sd(wwwhr),
+    lower = CI(wwwhr, ci = 0.95)['lower'],
+    upper  = CI(wwwhr, ci = 0.95)['upper']
+    )
+
+df_wwwhr
+
+```
+
+
+# Hypothesis Testing 
+
+## One sample `t.test()` for means
+
+```{r}
+#| label: ttest01
+
+t.test(my_data$childs)
+
+```
+
+> **H0 = 0 by default**
+
+## One sample `t.test()` for means
+
+```{r}
+#| label: ttest02
+
+t.test(my_data$childs, mu=2, alternative="less") # Ho: mu=2
+
+```
+
+> **H0 = 2; one-tail test**
+
+
+## two sample `t.test()` in action
+
+Are the proportions of men and women who believe in ghosts statistically significantly different?
+
+```{r}
+#| label: ttest03
+
+t.test(my_data$ghosts ~ my_data$sex, alternative = "two.sided")
+
+```
+
+ Assuming an α level of .05, what do you conclude?
+
+## Aside: paired `t.test()` 
+
+**Independent group t-test**\
+Do two subsamples have the same mean?
+
+```{r}
+#| label: ttest-samples
+
+t.test(my_data$ghosts ~ my_data$sex, alternative = "two.sided")
+
+```
+
+
+**Paired t-test**\
+Do two variables have the same mean?
+
+```{r}
+#| message: false
+#| label: ttest-paired
+#| eval: false
+
+t.test(Pair(hrs1_2018, hrs1_2020) ~ 1, data = gss_panel)
+
+```
+
+# Think Like a Statistician 
+
+(*Use the 2022 GSS dataset.*)
+
+**Do women have more years of education (`educ`) than men, on average?**
+
+```{r}
+#| label: educ01
+
+# YOUR CODE HERE
+
+```
+
+**Are the proportions of men & women who support abortion for any reason (`abany`) statistically different?**
+
+```{r}
+#| label: abany01
+
+# YOUR CODE HERE
+
+```
+
+ **Do fewer men than women support gun laws (`gunlaw`)?**
+
+```{r}
+#| label: gunlaw01
+
+# YOUR CODE HERE
+
+```
+

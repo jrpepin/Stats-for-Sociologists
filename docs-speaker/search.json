@@ -1090,5 +1090,222 @@
     "title": "Data Management II",
     "section": "Your Data Take",
     "text": "Your Data Take\n\n\n What’s your conclusion to our research question?"
+  },
+  {
+    "objectID": "lecture-05.html#mini-task",
+    "href": "lecture-05.html#mini-task",
+    "title": "Statistical Tests I",
+    "section": "Mini-task",
+    "text": "Mini-task\n\n Install the Rmisc() package, available on CRAN.\n\n\n\nRun the code chunk in your code-along.\nOR: Copy and paste the code into your Console pane. Then hit “Enter”.\n\n\n\ninstall.packages(\"Rmisc\")\n\n\nWhat does this mean in your code-along: “This chunk will not run (on purpose!) when rendered because eval: false.”?\n\n\n\nWe’ll use Rmisc() to calculate confidence intervals with summarize()."
+  },
+  {
+    "objectID": "lecture-05.html#mini-task-1",
+    "href": "lecture-05.html#mini-task-1",
+    "title": "Statistical Tests I",
+    "section": "Mini-task",
+    "text": "Mini-task\n\n Load the standard packages and our new Rmisc() package.\n\n\n\nlibrary(tidyverse)\nlibrary(haven) # not core tidyverse\nlibrary(gssr)\nlibrary(gssrdoc) # load the GSS codebook\nlibrary(summarytools)\nlibrary(Rmisc) # load the new package\n\n\nhaven() was installed with tidyverse; but it doesn’t load automatically"
+  },
+  {
+    "objectID": "lecture-05.html#mini-task-2",
+    "href": "lecture-05.html#mini-task-2",
+    "title": "Statistical Tests I",
+    "section": "Mini-task",
+    "text": "Mini-task\n\n Load the 2022 GSS data.\n\n\n\n\n# Get the data from the 2022 survey\ngss22 &lt;- gss_get_yr(2022)"
+  },
+  {
+    "objectID": "lecture-05.html#variables",
+    "href": "lecture-05.html#variables",
+    "title": "Statistical Tests I",
+    "section": "Variables",
+    "text": "Variables\n\nwwwhr Not counting e-mail, about how many minutes or hours per week do you use the Web?\n\npostlife Do you believe there is a life after death?\n\nchilds How many children have you ever had?\nsex Respondent’s sex"
+  },
+  {
+    "objectID": "lecture-05.html#mini-task-3",
+    "href": "lecture-05.html#mini-task-3",
+    "title": "Statistical Tests I",
+    "section": "Mini-task",
+    "text": "Mini-task\n\n Create a dataset named my_data with the variables wwwhr, postlife, childs, & sex with no missing data\n\n\n\n\n# Create a new df\nmy_data &lt;-gss22 |&gt;\n  select(wwwhr, postlife, childs, sex) |&gt;\n  drop_na()"
+  },
+  {
+    "objectID": "lecture-05.html#review-summarise",
+    "href": "lecture-05.html#review-summarise",
+    "title": "Statistical Tests I",
+    "section": "Review: summarise()",
+    "text": "Review: summarise()\n\nmy_data |&gt;\n  summarise(\n    n = n(),\n    mean = mean(wwwhr),\n    sd = sd(wwwhr)\n    )\n\n\n\n# A tibble: 1 × 3\n      n  mean    sd\n  &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;\n1   970  17.7  22.3"
+  },
+  {
+    "objectID": "lecture-05.html#section",
+    "href": "lecture-05.html#section",
+    "title": "Statistical Tests I",
+    "section": "",
+    "text": "CISE"
+  },
+  {
+    "objectID": "lecture-05.html#summarise-with-equation",
+    "href": "lecture-05.html#summarise-with-equation",
+    "title": "Statistical Tests I",
+    "section": "summarise() with equation",
+    "text": "summarise() with equation\n\nwwwhr_sum &lt;- my_data |&gt;\n  summarise(\n    n = n(),\n    mean_wwwhr = mean(wwwhr),\n    sd_wwwhr = sd(wwwhr),\n    se_wwwhr = sd_wwwhr / sqrt(n),\n    ci_lower = mean_wwwhr - (1.96 * se_wwwhr),\n    ci_upper = mean_wwwhr + (1.96 * se_wwwhr)\n    )"
+  },
+  {
+    "objectID": "lecture-05.html#code-meets-question",
+    "href": "lecture-05.html#code-meets-question",
+    "title": "Statistical Tests I",
+    "section": "Code Meets Question",
+    "text": "Code Meets Question\n\n What can we infer about the population mean based on this confidence interval?\n\n\n\nwwwhr_sum\n\n# A tibble: 1 × 6\n      n mean_wwwhr sd_wwwhr se_wwwhr ci_lower ci_upper\n  &lt;int&gt;      &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;\n1   970       17.7     22.3    0.716     16.3     19.1"
+  },
+  {
+    "objectID": "lecture-05.html#summarise-ci",
+    "href": "lecture-05.html#summarise-ci",
+    "title": "Statistical Tests I",
+    "section": "summarise() + CI()",
+    "text": "summarise() + CI()\n\nwwwhr_ci &lt;- my_data |&gt;\n  summarise(\n    n = n(),\n    mean_wwwhr = mean(wwwhr),\n    sd_wwwhr = sd(wwwhr),\n    lowCI_wwwhr = Rmisc::CI(wwwhr)['lower'],\n    hiCI_wwwhr  = Rmisc::CI(wwwhr)['upper']\n    )\n\nwwwhr_ci\n\n\n\n# A tibble: 1 × 5\n      n mean_wwwhr sd_wwwhr lowCI_wwwhr hiCI_wwwhr\n  &lt;int&gt;      &lt;dbl&gt;    &lt;dbl&gt;       &lt;dbl&gt;      &lt;dbl&gt;\n1   970       17.7     22.3        16.3       19.1\n\n\n\n\nNeat! But how confident are we?\n\n\nThat’s really interesting, but don’t we need to know our confidence level? Otherwise, how do we interpret the interval? What is the probability that the average number of hours people spend on the internet per week is between 14.17 hours and 15.62 hours?"
+  },
+  {
+    "objectID": "lecture-05.html#summarise-ci-1",
+    "href": "lecture-05.html#summarise-ci-1",
+    "title": "Statistical Tests I",
+    "section": "summarise() + CI()",
+    "text": "summarise() + CI()\n\nwwwhr_ci99 &lt;- my_data |&gt;\n  summarise(\n    n = n(),\n    mean_wwwhr = mean(wwwhr),\n    sd_wwwhr = sd(wwwhr),\n    lowCI_wwwhr = CI(wwwhr, ci = 0.99)['lower'],\n    hiCI_wwwhr  = CI(wwwhr, ci = 0.99)['upper']\n    )\n\nwwwhr_ci99\n\n\n\n# A tibble: 1 × 5\n      n mean_wwwhr sd_wwwhr lowCI_wwwhr hiCI_wwwhr\n  &lt;int&gt;      &lt;dbl&gt;    &lt;dbl&gt;       &lt;dbl&gt;      &lt;dbl&gt;\n1   970       17.7     22.3        15.8       19.5\n\n\n\nThe default confidence level of the CI() function is 95%. Let’s change our code to see what the confidence interval looks like if we wanted to be 99% confident that the true population average number of hours on the internet was within our confidence interval."
+  },
+  {
+    "objectID": "lecture-05.html#cis-percision",
+    "href": "lecture-05.html#cis-percision",
+    "title": "Statistical Tests I",
+    "section": "CIs & percision",
+    "text": "CIs & percision\n\n\n95% confidence intervals\n\nwwwhr_ci\n\n# A tibble: 1 × 5\n      n mean_wwwhr sd_wwwhr lowCI_wwwhr hiCI_wwwhr\n  &lt;int&gt;      &lt;dbl&gt;    &lt;dbl&gt;       &lt;dbl&gt;      &lt;dbl&gt;\n1   970       17.7     22.3        16.3       19.1\n\n\n\n99% confidence intervals\n\nwwwhr_ci99\n\n# A tibble: 1 × 5\n      n mean_wwwhr sd_wwwhr lowCI_wwwhr hiCI_wwwhr\n  &lt;int&gt;      &lt;dbl&gt;    &lt;dbl&gt;       &lt;dbl&gt;      &lt;dbl&gt;\n1   970       17.7     22.3        15.8       19.5\n\n\n\n\n\n\n How does a 95% confidence interval differ from a 99% confidence interval in terms of width and certainty?"
+  },
+  {
+    "objectID": "lecture-05.html#cis-wrong-with-proportions",
+    "href": "lecture-05.html#cis-wrong-with-proportions",
+    "title": "Statistical Tests I",
+    "section": "CIs (wrong) with proportions",
+    "text": "CIs (wrong) with proportions\n\nmy_data |&gt;\n  summarise(\n    n = n(),\n    mean_ghosts = mean(postlife),\n    sd_ghosts = sd(postlife),\n    lowCI_ghosts = CI(postlife, ci = 0.99)['lower'],\n    hiCI_ghosts  = CI(postlife, ci = 0.99)['upper']\n    )\n\n\n\n# A tibble: 1 × 5\n      n mean_ghosts sd_ghosts lowCI_ghosts hiCI_ghosts\n  &lt;int&gt;       &lt;dbl&gt;     &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt;\n1   970        1.19     0.389         1.15        1.22\n\n\n\n\nThis doesn’t work because the values aren’t coded 0 and 1."
+  },
+  {
+    "objectID": "lecture-05.html#cis-correct-with-proportions",
+    "href": "lecture-05.html#cis-correct-with-proportions",
+    "title": "Statistical Tests I",
+    "section": "CIs (correct) with proportions",
+    "text": "CIs (correct) with proportions\n\n# Use logic to recode (yes: 1 = 1; no: 2 = 0)\nmy_data$ghosts &lt;- ifelse(my_data$postlife == 1, 1, 0)\n  \nmy_data |&gt;\n  summarise(\n    n = n(),\n    mean_ghosts = mean(ghosts),\n    sd_ghosts = sd(ghosts),\n    lowCI_ghosts = CI(ghosts, ci = 0.99)['lower'],\n    hiCI_ghosts  = CI(ghosts, ci = 0.99)['upper']\n    )\n\n\n\n# A tibble: 1 × 5\n      n mean_ghosts sd_ghosts lowCI_ghosts hiCI_ghosts\n  &lt;int&gt;       &lt;dbl&gt;     &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt;\n1   970       0.814     0.389        0.782       0.847"
+  },
+  {
+    "objectID": "lecture-05.html#comparing-cis",
+    "href": "lecture-05.html#comparing-cis",
+    "title": "Statistical Tests I",
+    "section": "Comparing CIs",
+    "text": "Comparing CIs\n\nCodeTablePlot\n\n\n\nmy_data$sex &lt;- zap_missing(my_data$sex) \nmy_data$sex &lt;- as_factor(my_data$sex)   \nmy_data$sex &lt;- droplevels(my_data$sex)  \n\ndf_ghosts &lt;- my_data |&gt;\n  group_by(sex) |&gt;\n  summarise(\n    n = n(),\n    mean = mean(ghosts),\n    sd = sd(ghosts),\n    lower = CI(ghosts, ci = 0.95)['lower'],\n    upper  = CI(ghosts, ci = 0.95)['upper']\n    )\n\n\n\n\ndf_ghosts\n\n# A tibble: 2 × 6\n  sex        n  mean    sd lower upper\n  &lt;fct&gt;  &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;\n1 male     472 0.773 0.419 0.735 0.811\n2 female   498 0.853 0.354 0.822 0.885"
+  },
+  {
+    "objectID": "lecture-05.html#comparing-cis-1",
+    "href": "lecture-05.html#comparing-cis-1",
+    "title": "Statistical Tests I",
+    "section": "Comparing CIs",
+    "text": "Comparing CIs\n\nCodeTablePlot\n\n\n\ndf_wwwhr &lt;- my_data |&gt;\n  group_by(sex) |&gt;\n  summarise(\n    n = n(),\n    mean = mean(wwwhr),\n    sd = sd(wwwhr),\n    lower = CI(wwwhr, ci = 0.95)['lower'],\n    upper  = CI(wwwhr, ci = 0.95)['upper']\n    )\n\n\n\n\ndf_wwwhr\n\n# A tibble: 2 × 6\n  sex        n  mean    sd lower upper\n  &lt;fct&gt;  &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;\n1 male     472  16.2  19.8  14.4  17.9\n2 female   498  19.1  24.4  16.9  21.2"
+  },
+  {
+    "objectID": "lecture-05.html#t.test",
+    "href": "lecture-05.html#t.test",
+    "title": "Statistical Tests I",
+    "section": "t.test()",
+    "text": "t.test()\nPerforms one and two sample t-tests. To use this function, we’ll need to specify a few things:\n\nvariable of interest\nmu (H0): a number indicating the true value of the mean\nalternative hypothesis (H1): “two.sided”, “greater”, or “less”"
+  },
+  {
+    "objectID": "lecture-05.html#t.test-in-action",
+    "href": "lecture-05.html#t.test-in-action",
+    "title": "Statistical Tests I",
+    "section": "t.test() in action",
+    "text": "t.test() in action\nIn your family sociology course you learned that fertility rates have been dropping.\nYou used to think that people had 2 children, on average. But, now you suspect that people are having fewer than 2 children.\n\n\n\n How do you test your hypothesis?"
+  },
+  {
+    "objectID": "lecture-05.html#section-1",
+    "href": "lecture-05.html#section-1",
+    "title": "Statistical Tests I",
+    "section": "",
+    "text": "Which of these equations represents your research hypothesis?\n\n\nH1: µ ≠ 2\nH1: µ = 2\nH1: µ &lt; 2\nH1: µ &gt; 2"
+  },
+  {
+    "objectID": "lecture-05.html#section-2",
+    "href": "lecture-05.html#section-2",
+    "title": "Statistical Tests I",
+    "section": "",
+    "text": "Which of these equations represents your null hypothesis?\n\n\nH0: µ ≠ 2\nH0: µ = 2\nH0: µ &lt; 2\nH0: µ &gt; 2"
+  },
+  {
+    "objectID": "lecture-05.html#review-summary-statistics",
+    "href": "lecture-05.html#review-summary-statistics",
+    "title": "Statistical Tests I",
+    "section": "Review: Summary Statistics",
+    "text": "Review: Summary Statistics\n\nmy_data |&gt;\n  summarise(\n    n = n(),\n    mean = mean(childs),\n    median = median(childs),\n    sd = sd(childs))\n\n\n\n# A tibble: 1 × 4\n      n  mean median    sd\n  &lt;int&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;\n1   970  1.79      2  1.64\n\n\n\n\nIs the difference between our sample mean and 2 statistically significant or could we have gotten this mean simply by chance (sample variation)?"
+  },
+  {
+    "objectID": "lecture-05.html#review-cis",
+    "href": "lecture-05.html#review-cis",
+    "title": "Statistical Tests I",
+    "section": "Review: CIs",
+    "text": "Review: CIs\n\nmy_data |&gt;\n  summarise(\n    n = n(),\n    mean = mean(childs),\n    median = median(childs),\n    sd = sd(childs),\n    se = sd / sqrt(n),\n    lower = CI(childs, ci = 0.99)['lower'],\n    upper  = CI(childs, ci = 0.99)['upper']\n    )\n\n\n\n# A tibble: 1 × 7\n      n  mean median    sd     se lower upper\n  &lt;int&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;\n1   970  1.79      2  1.64 0.0526  1.66  1.93\n\n\n\n\nDoes the confidence interval overlap with 2? What does that tell you?"
+  },
+  {
+    "objectID": "lecture-05.html#one-sample-t.test-for-means",
+    "href": "lecture-05.html#one-sample-t.test-for-means",
+    "title": "Statistical Tests I",
+    "section": "One sample t.test() for means",
+    "text": "One sample t.test() for means\n\nt.test(my_data$childs)\n\n\n\n\n    One Sample t-test\n\ndata:  my_data$childs\nt = 34.102, df = 969, p-value &lt; 2.2e-16\nalternative hypothesis: true mean is not equal to 0\n95 percent confidence interval:\n 1.690587 1.897041\nsample estimates:\nmean of x \n 1.793814 \n\n\n\n\nH0 = 0 by default"
+  },
+  {
+    "objectID": "lecture-05.html#one-sample-t.test-for-means-1",
+    "href": "lecture-05.html#one-sample-t.test-for-means-1",
+    "title": "Statistical Tests I",
+    "section": "One sample t.test() for means",
+    "text": "One sample t.test() for means\n\nt.test(my_data$childs, mu=2, alternative=\"less\") # Ho: mu=2\n\n\n    One Sample t-test\n\ndata:  my_data$childs\nt = -3.9197, df = 969, p-value = 4.744e-05\nalternative hypothesis: true mean is less than 2\n95 percent confidence interval:\n    -Inf 1.88042\nsample estimates:\nmean of x \n 1.793814 \n\n\n\n\nH0 = 2; one-tail test"
+  },
+  {
+    "objectID": "lecture-05.html#section-3",
+    "href": "lecture-05.html#section-3",
+    "title": "Statistical Tests I",
+    "section": "",
+    "text": "Assuming an α level of .05, should you reject the null hypothesis?\n\n\nNo, because the 𝛼 level of .01 is greater than the p-value (&lt; .000).\nNo, because the p-value (&lt; .000) is less than the 𝛼 level of .01.\nYes, because the p-value (&lt; .000) is less than the 𝛼 level of .01."
+  },
+  {
+    "objectID": "lecture-05.html#section-4",
+    "href": "lecture-05.html#section-4",
+    "title": "Statistical Tests I",
+    "section": "",
+    "text": "Which of these statements best summarizes your conclusion?\n\n\nOur evidence proves that people have fewer than two children, on average.\nPeople, on average, have two children.\nOn average, the number of children people have is statistically significantly lower than two."
+  },
+  {
+    "objectID": "lecture-05.html#two-sample-t.test-in-action",
+    "href": "lecture-05.html#two-sample-t.test-in-action",
+    "title": "Statistical Tests I",
+    "section": "two sample t.test() in action",
+    "text": "two sample t.test() in action\n\n Are the proportions of men and women who believe in ghosts statistically significantly different?\n\n\n\nt.test(my_data$ghosts ~ my_data$sex, alternative = \"two.sided\")\n\n\n\n\n    Welch Two Sample t-test\n\ndata:  my_data$ghosts by my_data$sex\nt = -3.2072, df = 923.29, p-value = 0.001387\nalternative hypothesis: true difference in means between group male and group female is not equal to 0\n95 percent confidence interval:\n -0.1291289 -0.0310882\nsample estimates:\n  mean in group male mean in group female \n           0.7733051            0.8534137"
+  },
+  {
+    "objectID": "lecture-05.html#section-5",
+    "href": "lecture-05.html#section-5",
+    "title": "Statistical Tests I",
+    "section": "",
+    "text": "Assuming an α level of .05, what do you conclude?\n\n\nThere is no statistically significant difference between men and women in belief in ghosts.\nMen are significantly more likely than women to believe in ghosts (p &lt; .05).\nWomen are significantly more likely than men to believe in ghosts (p &lt; .05)."
+  },
+  {
+    "objectID": "lecture-05.html#aside-paired-t.test",
+    "href": "lecture-05.html#aside-paired-t.test",
+    "title": "Statistical Tests I",
+    "section": "Aside: paired t.test()",
+    "text": "Aside: paired t.test()\nIndependent group t-test\nDo two subsamples have the same mean?\n\nt.test(my_data$ghosts ~ my_data$sex, alternative = \"two.sided\")\n\n\n\nPaired t-test\nDo two variables have the same mean?\n\nt.test(Pair(hrs1_2018, hrs1_2020) ~ 1, data = gss_panel)"
+  },
+  {
+    "objectID": "lecture-05.html#think-like-a-statistician-1",
+    "href": "lecture-05.html#think-like-a-statistician-1",
+    "title": "Statistical Tests I",
+    "section": "Think Like a Statistician",
+    "text": "Think Like a Statistician\n Do women have more years of education (educ) than men, on average?\n\n\n Are the proportions of men & women who support abortion for any reason (abany) statistically different?\n\n\n\n Do fewer men than women support gun laws (gunlaw)?\n\n\n\nUse the 2022 GSS dataset"
+  },
+  {
+    "objectID": "lecture-05.html#think-like-a-statistician-2",
+    "href": "lecture-05.html#think-like-a-statistician-2",
+    "title": "Statistical Tests I",
+    "section": "Think Like a Statistician",
+    "text": "Think Like a Statistician\n\neducabanygunlaw\n\n\n\n\n\n    Welch Two Sample t-test\n\ndata:  gss22$educ by gss22$sex\nt = -0.38076, df = 4035.7, p-value = 0.3517\nalternative hypothesis: true difference in means between group 1 and group 2 is less than 0\n95 percent confidence interval:\n      -Inf 0.1144853\nsample estimates:\nmean in group 1 mean in group 2 \n       14.14338        14.17786 \n\n\n\n\n\n\n\n    Welch Two Sample t-test\n\ndata:  gss22$abany by gss22$sex\nt = -1.0701, df = 1317.7, p-value = 0.2848\nalternative hypothesis: true difference in means between group 1 and group 2 is not equal to 0\n95 percent confidence interval:\n -0.08169512  0.02402811\nsample estimates:\nmean in group 1 mean in group 2 \n      0.5786164       0.6074499 \n\n\n\n\n\n\n\n    Welch Two Sample t-test\n\ndata:  gss22$gunlaw by gss22$sex\nt = -8.9698, df = 2476.6, p-value &lt; 2.2e-16\nalternative hypothesis: true difference in means between group 1 and group 2 is not equal to 0\n95 percent confidence interval:\n -0.1872801 -0.1200856\nsample estimates:\nmean in group 1 mean in group 2 \n      0.6450593       0.7987421"
   }
 ]

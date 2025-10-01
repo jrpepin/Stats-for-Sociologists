@@ -1,0 +1,240 @@
+---
+title: "Code-along 06"
+author: "FirstName LastName"
+editor: visual
+execute:
+  error: true
+format: pdf # or replace 'pdf' with 'typst'
+---
+
+# Setup
+
+## Packages
+
+Install the [`gtsummary()`](https://www.danieldsjoberg.com/gtsummary/)
+package, available on CRAN.
+
+```{r}
+#| eval: false
+#| label: install-Rmisc
+
+install.packages("gtsummary")
+```
+
+Load the standard packages and our new `gtsummary()` package.
+
+```{r}
+#| message: false
+#| label: load
+
+library(tidyverse)
+library(haven) # not core tidyverse
+library(gssr)
+library(gssrdoc) # load the GSS codebook
+library(summarytools)
+library(gtsummary) # load the new package
+```
+
+## Load your data
+
+Get the data from the 2022 survey
+
+```{r}
+#| label: gssdata
+
+# ADD YOUR CODE HERE
+
+```
+
+Let's make a df with only the (pretty) categorical and continuous
+variables we'll analyze.
+
+```{r}
+#| label: my-data
+
+# Categorical Variables
+my_cat <- gss22 |>
+  select(id, premarsx, fefam, postlife, sex, polviews) |>
+  zap_missing() |>
+  as_factor() |>
+  droplevels()
+
+# Continuous Variables
+my_con <- gss22 |>
+  select(id, age, educ, lifenow, agekdbrn) |>
+  mutate(
+    age = as.numeric(age),
+    educ = as.numeric(educ),
+    lifenow = as.numeric(lifenow),
+    agekdbrn = as.numeric(agekdbrn))
+
+# Combine the two dataframes
+my_data <- left_join(my_cat, my_con, by = "id")
+```
+
+# $chi^2$ Test
+
+## Review: Pretty cross-tab
+
+Use `summarytools::ctable`
+
+```{r}
+#| label: ctable
+
+ctable(my_data$fefam, my_data$sex, 
+  prop = "c", 
+  format = "p", 
+  useNA = "no"
+) 
+```
+
+## Pretty cross-tab (new)
+
+Now that we know how to use the `dplyr |>`!
+
+```{r}
+#| label: tbl-cross
+
+my_data |>
+  tbl_cross(
+    row = fefam,
+    col = sex,
+    percent = "column",
+    missing = "no")
+```
+
+## Pretty cross-tab with `p-value`
+
+```{r}
+#| label: tbl-cross-p
+
+my_data |>
+  tbl_cross(
+    row = fefam,
+    col = sex,
+    percent = "column",
+    missing = "no") |>
+  add_p(source_note = TRUE)
+```
+
+## Caution: size matters
+
+```{r}
+#| label: sample-size
+
+my_data |>
+  filter(age < 21) |>
+  tbl_cross(
+    row = fefam,
+    col = sex,
+    percent = "column",
+    missing = "no") |>
+  add_p(source_note = TRUE)
+```
+
+## Review: `t.test()` with proportions
+
+```{r}
+#| label: t.test
+
+# Use logic to recode factor as mean (yes = 1; no: 2 = 0)
+my_data$ghosts <- ifelse(my_data$postlife == "yes", 1, 0)
+
+# t.test
+t.test(my_data$ghosts ~ my_data$sex, alternative = "two.sided")
+
+```
+
+## `t.test()` & [$chi^2$]{style="color: #18BC9C"}
+
+```{r}
+#| message: false
+#| label: postlife
+
+my_data |>
+  tbl_cross(
+    row = ghosts,
+    col = sex,
+    percent = "column",
+    missing = "no") |>
+  add_p(source_note = TRUE)
+
+```
+
+# Pearson’s Correlation Coefficient (R)
+
+R is the correlation between two interval-ratio variables.
+
+## `cor.test()` in action
+
+```{r}
+#| label: cor-educ01
+
+cor.test(
+  ~ educ + agekdbrn,
+  data = my_data,
+  method = "pearson",
+  na.action = na.omit
+)
+
+```
+
+## Tidy `cor.test()`
+
+```{r}
+#| label: cor-educ02
+
+# Save results
+my_test <- cor.test(
+  ~ educ + agekdbrn,
+  data = my_data,
+  method = "pearson",
+  na.action = na.omit
+)
+```
+
+```{r}
+#| label: cor-educ03
+
+# Create a tibble with key stats
+cor_summary <- tibble(
+  correlation = my_test$estimate,
+  p_value     = my_test$p.value,
+  conf_low    = my_test$conf.int[1],
+  conf_high   = my_test$conf.int[2]
+)
+
+cor_summary
+```
+
+# Think Like a Statistician
+
+**Are beliefs about premarital sex (`premarsx`) dependent on political
+identity (`polviews`)?**
+
+```{r}
+#| label: tbl-cross-premarsx
+
+# YOUR CODE HERE
+
+```
+
+**Is there a gender difference (`sex`) in political identity
+(`polviews`)?**
+
+```{r}
+#| label: tbl-cross-polviews
+
+# YOUR CODE HERE
+
+```
+
+**Describe the relationship between `age`and life satisfaction
+(`lifenow`).**
+
+```{r}
+#| label: cor-lifenow
+
+# YOUR CODE HERE
+
+```

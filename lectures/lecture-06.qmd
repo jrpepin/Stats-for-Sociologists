@@ -117,10 +117,13 @@ gss22 <- gss_get_yr(2022)
 -   `age` Age of respondent
 -   `polviews` Think of self as liberal or conservative
 
-## Variable Management
+## Variable Management {.smaller}
 
-Let's make a df with only the (pretty) categorical and continuous
+::: task
+{{< fa check-double >}} Make a df with only the (pretty) categorical and continuous
 variables we'll analyze.
+:::
+
 
 ```{r}
 #| message: false
@@ -334,7 +337,7 @@ t.test(my_data$ghosts ~ my_data$sex, alternative = "two.sided")
 
 my_data |>
   tbl_cross(
-    row = postlife,
+    row = ghosts,
     col = sex,
     percent = "column",
     missing = "no") |>

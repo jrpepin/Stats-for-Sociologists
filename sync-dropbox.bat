@@ -32,12 +32,23 @@ IF %ERRORLEVEL% NEQ 0 (
     exit /b
 )
 
-REM === STEP 2: Update Dropbox clone from GitHub ===
-echo Updating Dropbox clone from GitHub >> "%LOG_PATH%"
+REM === STEP 2: Sync Dropbox clone to match main repo ===
+echo Syncing Dropbox clone to match main repo >> "%LOG_PATH%"
 cd /d "%DROPBOX_CLONE_PATH%"
-git pull origin main >> "%LOG_PATH%" 2>&1
+git fetch origin >> "%LOG_PATH%" 2>&1
+git checkout dropbox-mirror >> "%LOG_PATH%" 2>&1
+git reset --hard origin/main >> "%LOG_PATH%" 2>&1
 IF %ERRORLEVEL% NEQ 0 (
-    echo Failed to pull latest changes into Dropbox clone >> "%LOG_PATH%"
+    echo Failed to sync Dropbox mirror branch >> "%LOG_PATH%"
+    exit /b
+)
+
+REM === STEP 3: Push Dropbox mirror branch to GitHub ===
+echo Pushing Dropbox mirror branch to GitHub >> "%LOG_PATH%"
+cd /d "%DROPBOX_CLONE_PATH%"
+git push origin dropbox-mirror --force >> "%LOG_PATH%" 2>&1
+IF %ERRORLEVEL% NEQ 0 (
+    echo Failed to push Dropbox mirror branch to GitHub >> "%LOG_PATH%"
     exit /b
 )
 

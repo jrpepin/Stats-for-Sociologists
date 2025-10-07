@@ -1,6 +1,6 @@
 ---
 title: "Milestone 02"
-author: "FirstName LastName"
+author: "Answer Key"
 format: pdf # or replace 'pdf' with 'typst'
 execute:
   error: true # change this to false when your assignment is complete.
@@ -103,7 +103,7 @@ frequency, median, mean, and sd of **`tvhours`**.
 gss24 |>
   drop_na(tvhours) |>
   summarize(
-    count = n(),
+    freq = n(),
     median_tv = round(median(tvhours), digits = 2),
     mean_tv = round(mean(tvhours), digits = 2), 
     sd_tv = round(sd(tvhours), digits = 2)
@@ -115,7 +115,7 @@ what might explain any differences.***
 
 **Interpret the mean and standard deviation for `tvhours`.**
 
-## Checkpoint 04: Summarize dailty tv hours (`tvhours`) by `sex`
+## Checkpoint 04: Summarize daily tv hours (`tvhours`) by `sex`
 
 Use `drop_na`, `group_by()` and `sumamrize()` to create a table showing
 the mean and sd of `tvhours` by `sex`.
@@ -190,6 +190,7 @@ my_data <- my_data |>
       hrs1 >= 35 ~ "Full-time"
   ))
 
+# table(my_data$hrs1, my_data$work_category)
 table(my_data$work_category)
 ```
 

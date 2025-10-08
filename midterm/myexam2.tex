@@ -1,0 +1,84 @@
+\documentclass[10pt]{article}
+
+%% packages
+\usepackage{color,verbatim,Sweave,url,xargs,amsmath}
+\usepackage[left=1in, right=1in, top=1in, bottom=1in]{geometry}
+\usepackage{times}
+\usepackage{multicol}
+\usepackage{enumitem}
+
+%% new environments
+\newenvironment{question}{\item}{}
+\newenvironment{solution}{\comment}{\endcomment}
+\newenvironment{answerlist}{\renewcommand{\labelenumi}{(\alph{enumi})}\begin{samepage}\begin{enumerate}[topsep=0pt,itemsep=-1ex,partopsep=1ex,parsep=1ex]}{\end{enumerate}\end{samepage}}
+
+%% paragraphs
+\setlength{\parskip}{0.7ex plus0.1ex minus0.1ex}
+\setlength{\parindent}{0em}
+
+%% compatibility with pandoc
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+%% answer formatting
+\newcommand{\extext}[1]{\textbf{\large #1}}
+
+%% multiple choice macro
+\newcommandx{\exmchoice}[9][2=-,3=-,4=-,5=-,6=-,7=-,8=-,9=-]{%
+  \mbox{(a) \,\, \framebox[8mm]{\rule[-1mm]{0mm}{5mm} \hspace*{-1.6mm} \extext{#1}} \hspace*{2mm}}%
+  \if #2- \else \mbox{(b) \,\, \framebox[8mm]{\rule[-1mm]{0mm}{5mm} \hspace*{-1.6mm} \extext{#2}} \hspace*{2mm}} \fi%
+  \if #3- \else \mbox{(c) \,\, \framebox[8mm]{\rule[-1mm]{0mm}{5mm} \hspace*{-1.6mm} \extext{#3}} \hspace*{2mm}} \fi%
+  \if #4- \else \mbox{(d) \,\, \framebox[8mm]{\rule[-1mm]{0mm}{5mm} \hspace*{-1.6mm} \extext{#4}} \hspace*{2mm}} \fi%
+  \if #5- \else \mbox{(e) \,\, \framebox[8mm]{\rule[-1mm]{0mm}{5mm} \hspace*{-1.6mm} \extext{#5}} \hspace*{2mm}} \fi%
+  \if #6- \else \mbox{(f) \,\, \framebox[8mm]{\rule[-1mm]{0mm}{5mm} \hspace*{-1.6mm} \extext{#6}} \hspace*{2mm}} \fi%
+  \if #7- \else \mbox{(g) \,\, \framebox[8mm]{\rule[-1mm]{0mm}{5mm} \hspace*{-1.6mm} \extext{#7}} \hspace*{2mm}} \fi%
+  \if #8- \else \mbox{(h) \,\, \framebox[8mm]{\rule[-1mm]{0mm}{5mm} \hspace*{-1.6mm} \extext{#8}} \hspace*{2mm}} \fi%
+  \if #9- \else \mbox{(i) \,\, \framebox[8mm]{\rule[-1mm]{0mm}{5mm} \hspace*{-1.6mm} \extext{#9}} \hspace*{2mm}} \fi%
+}
+
+%% metadata macros
+\makeatletter
+\newcommand{\ID}[1]{\def\@ID{#1}}
+\newcommand{\Date}[1]{\def\@Date{#1}}
+\ID{00001}
+\Date{YYYY-MM-DD}
+\newcommand{\myID}{\@ID}
+\newcommand{\myDate}{\@Date}
+\makeatother
+
+\begin{document}
+
+%% title page
+\thispagestyle{empty}
+{\sf
+\begin{center}
+  \textbf{\LARGE Stats for Sociologists}
+
+  \textbf{\large Course: SOC6302H1F}
+  
+  \textbf{\large Instructor: Professor Pepin}
+
+  \textbf{\large Date: October 21, 2025}
+\end{center}
+
+\vspace*{2cm}
+
+\textbf{INSTRUCTIONS:}
+
+Fill out the first page of the scantron. Confirm you have included:
+
+\begin{itemize}
+  \item The form code (A or B)
+  \item Your student number (write the number and fill in the ovals)
+  \item Your surname and first initial (write the letters and fill in the ovals)
+\end{itemize}
+}
+\newpage
+
+\begin{enumerate}
+%% \exinput{exercises}
+\end{enumerate}
+
+\newpage
+%% \exinput{questionnaire}
+
+\end{document}

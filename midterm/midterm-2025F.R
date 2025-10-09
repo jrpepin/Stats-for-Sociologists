@@ -1,4 +1,6 @@
 # Setup ------------------------------------------------------------------------
+# save the edited `myexam2.tex` file in `C:\R\library\exams\tex`
+# reference: https://deskreject.com/2019/01/r-exams/
 
 ## load packages
 library("here")
@@ -6,9 +8,7 @@ library("exams")
 library("quarto")
 library("qpdf")
 
-
 ## a list of vectors of exam questions in R/Markdown (.Rmd) format
-
 myexam <- list(c(
   here("midterm", "week01", "panes.Rmd"),
   here("midterm", "week01", "wheelan.Rmd"),
@@ -85,3 +85,10 @@ pdf_subset(
   pages = 1:(n_pages_B - 1),
   output = here("docs", "midterm", "midterm_B.pdf")
 )
+
+# Get rid of temporary docs ----------------------------------------------------
+
+file.remove(here("docs", "midterm", "midterm_1.pdf"))
+file.remove(here("docs", "midterm", "midterm_2.pdf"))
+file.remove(here("docs", "midterm", "title_1.pdf"))
+file.remove(here("docs", "midterm", "title_2.pdf"))

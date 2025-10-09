@@ -7,6 +7,8 @@ pacman::p_load(
   haven, # work with labeled data
   labelled, # use labels as values
   summarytools, # easy descriptive statistics
+  knitr, # pretty tables
+  kableExtra, # centered tables
   conflicted # declare primary packages
 )
 
@@ -15,49 +17,38 @@ conflict_prefer("is.labelled", "haven")
 conflict_prefer("filter", "dplyr")
 conflict_scout() # Identify the conflicts
 
-## Load the gss datasets
-
-data(gss_all) # Load all gss
+## Load the gss dataset
 gss24 <- gss_get_yr(2024) # 2024 survey respondents
-gss22 <- gss_get_yr(2022) # 2022 survey respondents
-
-# Load the codebook
-data(gss_dict)
-
-gss24$hapmar <- zap_missing(gss24$hapmar)
-gss24$hapmar <- as_factor(gss24$hapmar)
-gss24$hapmar <- droplevels(gss24$hapmar)
 
 ```
 
 Question
 ========
-The level of measurement for the `hapmar` variable is \_\_\_\_\_\_\_\_\_
+What is the result of the following code?
 
-```{r output, echo = FALSE, results = "asis"}
+```{r output, eval = FALSE, results = "asis"}
 #| message: false
 
-# Variable label
-var_label(gss_all$hapmar)
+gss24 |>  
+  filter(age > 20) |> 
+  select(age, childs)
 
-# Response options
-freq(gss24$hapmar, report.nas = FALSE)
 ```
 
 Answerlist
 ----------
 
-* dichotomous
+-   Only rows with `age` > 20 and columns `age` and `childs` are returned.
 
-* nominal
+-   A new column is added to `gss24`
 
-* ordinal
+-   rows with `age` > 20 are removed
 
-* interval
+-   The original gss24 dataset is overwritten.
 
 Meta-information
 ================
-exname: type
-extype: schoice
-exsolution: 0010
+exname: skew 
+extype: schoice 
+exsolution: 1000 
 exshuffle: 4

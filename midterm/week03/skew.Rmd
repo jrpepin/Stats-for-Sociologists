@@ -1,0 +1,64 @@
+```{r data type, echo = FALSE, results = "hide"}
+
+pacman::p_load(
+  tidyverse,
+  gssr, # load U.S. gss data
+  gssrdoc, # load the gss codebook
+  haven, # work with labeled data
+  labelled, # use labels as values
+  summarytools, # easy descriptive statistics
+  knitr, # pretty tables
+  kableExtra, # centered tables
+  conflicted # declare primary packages
+)
+
+## Address important conflicts
+conflict_prefer("is.labelled", "haven")
+conflict_prefer("filter", "dplyr")
+conflict_scout() # Identify the conflicts
+
+## Load the gss dataset
+gss24 <- gss_get_yr(2024) # 2024 survey respondents
+
+```
+
+Question
+========
+The U.S. General Social Survey asked people how many brothers and
+sisters they had. A researcher used R to produce the summary statistics
+of this variable (`sibs`) below. Based on this, you conclude the
+distribution for this variable is:
+
+```{r output, echo = FALSE, results = "asis"}
+#| message: false
+
+gss24 |>  
+  drop_na(sibs) |> 
+  summarize(
+    freq = n(), 
+    median = round(median(sibs), digits = 2), 
+    mean = round(mean(sibs), digits = 2),
+    sd = round(sd(sibs), digits = 2)
+    ) |>
+  kable(format = "latex", booktabs = TRUE) |>
+  kable_styling(latex_options = c("hold_position"), position = "center")
+
+```
+
+Answerlist
+----------
+
+-   positively skewed
+
+-   negatively skewed
+
+-   symmetrical
+
+-   nominal
+
+Meta-information
+================
+exname: skew 
+extype: schoice 
+exsolution: 0100 
+exshuffle: 4

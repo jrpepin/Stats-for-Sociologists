@@ -10,27 +10,50 @@ library("qpdf")
 
 ## a list of vectors of exam questions in R/Markdown (.Rmd) format
 myexam <- list(c(
+# Week 01
   here("midterm", "week01", "panes.Rmd"),
   here("midterm", "week01", "wheelan.Rmd"),
+# Week 02
   here("midterm", "week02", "gandy.Rmd"),
   here("midterm", "week02", "install.Rmd"),
   here("midterm", "week02", "library.Rmd"),
   here("midterm", "week02", "package.Rmd"),
   here("midterm", "week02", "percentage.Rmd"),
   here("midterm", "week02", "type.Rmd"),
+  here("midterm", "week02", "operator.Rmd"),
+  here("midterm", "week02", "relative-freq.Rmd"),
+# Week 03
+  here("midterm", "week03", "median-table.Rmd"),
+  here("midterm", "week03", "sd.Rmd"),
+  here("midterm", "week03", "sd-zero.Rmd"),
+  here("midterm", "week03", "skew.Rmd"),
+  here("midterm", "week03", "pipes-01.Rmd"),
+  here("midterm", "week03", "pipes-02.Rmd"),
+# Week 04
+  here("midterm", "week04", "z-score.Rmd"),
+  here("midterm", "week04", "z-score-02.Rmd"),
+  here("midterm", "week04", "z-score-proportion.Rmd"),
+  here("midterm", "week04", "sixty-eight.Rmd"),
+
+# Week 05
   here("midterm", "week05", "double-colon.Rmd")
+# Week 06
 ))
+
+## Number of available questions
+n_questions <- length(myexam[[1]])
 
 # Create exam versions ---------------------------------------------------------
 
+## Create exams
 exams2pdf(
   myexam, 
   n = 2, # number of exam versions
-  nsamp = 9, # number of exam questions
+  nsamp = n_questions, # number of exam questions
   name = "midterm_", 
   dir = here("docs", "midterm"),
   template="myexam2",
-  title = NULL # merge with own later
+  title = NULL # merge with own title page later
   )
 
 # Create title pages -----------------------------------------------------------
@@ -92,3 +115,11 @@ file.remove(here("docs", "midterm", "midterm_1.pdf"))
 file.remove(here("docs", "midterm", "midterm_2.pdf"))
 file.remove(here("docs", "midterm", "title_1.pdf"))
 file.remove(here("docs", "midterm", "title_2.pdf"))
+
+
+## find bad files (with - signs)
+files <- unlist(myexam)
+bad_files <- files[sapply(files, function(f) {
+  any(grepl("\u2212", readLines(f, warn = FALSE)))
+})]
+bad_files

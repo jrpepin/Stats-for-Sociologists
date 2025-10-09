@@ -1,0 +1,33 @@
+Question
+========
+What will the following code do?
+
+```{r output, eval = FALSE, results = "asis"}
+#| message: false
+
+gss24 <- gss24 |> 
+  mutate(status = case_when(
+  income > 100000 ~ "High",
+  income > 50000 ~ "Medium",
+  TRUE ~ "Low"
+))
+
+```
+
+Answerlist
+----------
+
+-   It creates a new column `status` with 3 possible values.
+
+-   It filters out rows where income is less than 50,000.
+
+-   It replaces the numeric values in the income column with text labels.
+
+-   It removes missing values from the income column.
+
+Meta-information
+================
+exname: summarize 
+extype: schoice 
+exsolution: 1000 
+exshuffle: 4

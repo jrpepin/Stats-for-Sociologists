@@ -29,12 +29,18 @@ myexam <- list(c(
   here("midterm", "week03", "skew.Rmd"),
   here("midterm", "week03", "pipes-01.Rmd"),
   here("midterm", "week03", "pipes-02.Rmd"),
+  here("midterm", "week03", "drop_na.Rmd"),
+  here("midterm", "week03", "code-01.Rmd"),
+  here("midterm", "week03", "summarize.Rmd"),
 # Week 04
   here("midterm", "week04", "z-score.Rmd"),
   here("midterm", "week04", "z-score-02.Rmd"),
   here("midterm", "week04", "z-score-proportion.Rmd"),
   here("midterm", "week04", "sixty-eight.Rmd"),
-
+  here("midterm", "week04", "sixty-eight-01.Rmd"),
+  here("midterm", "week04", "wheelen-08.Rmd"),
+  here("midterm", "week04", "mutate.Rmd"),
+  here("midterm", "week04", "case_when.Rmd"),
 # Week 05
   here("midterm", "week05", "double-colon.Rmd")
 # Week 06

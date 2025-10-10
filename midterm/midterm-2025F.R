@@ -8,11 +8,16 @@ library("exams")
 library("quarto")
 library("qpdf")
 
+conflicted::conflicts_prefer(here::here)
+conflicted::conflicts_prefer(dplyr::summarize)
+
 ## a list of vectors of exam questions in R/Markdown (.Rmd) format
 myexam <- list(c(
 # Week 01
-  here("midterm", "week01", "panes.Rmd"),
   here("midterm", "week01", "wheelan.Rmd"),
+  here("midterm", "week01", "panes.Rmd"),
+  here("midterm", "week01", "rproj.Rmd"),
+  here("midterm", "week01", "quarto.Rmd"),
 # Week 02
   here("midterm", "week02", "gandy.Rmd"),
   here("midterm", "week02", "install.Rmd"),
@@ -42,8 +47,28 @@ myexam <- list(c(
   here("midterm", "week04", "mutate.Rmd"),
   here("midterm", "week04", "case_when.Rmd"),
 # Week 05
-  here("midterm", "week05", "double-colon.Rmd")
+  here("midterm", "week05", "polling.Rmd"),
+  here("midterm", "week05", "inference.Rmd"),
+  here("midterm", "week05", "sample-size.Rmd"),
+  here("midterm", "week05", "ghosts.Rmd"),
+  here("midterm", "week05", "hrsrelax.Rmd"),
+  here("midterm", "week05", "p-value.Rmd"),
+  here("midterm", "week05", "false-neg.Rmd"),
+  here("midterm", "week05", "hypotheses.Rmd"),
+  here("midterm", "week05", "ttest.Rmd"),
+  here("midterm", "week05", "ttest-tv.Rmd"),
+  here("midterm", "week05", "double-colon.Rmd"),
 # Week 06
+  here("midterm", "week06", "ASA.Rmd"),
+  here("midterm", "week06", "Cohen.Rmd"),
+  here("midterm", "week06", "chi-square.Rmd"),
+  here("midterm", "week06", "chi-square-formula.Rmd"),
+  here("midterm", "week06", "chi-square-output.Rmd"),
+  here("midterm", "week06", "r-relationship.Rmd"),
+  here("midterm", "week06", "cor.test.Rmd"),
+  here("midterm", "week06", "tbl_cross.Rmd"),
+  here("midterm", "week06", "test-type01.Rmd"),
+  here("midterm", "week06", "test-type02.Rmd")
 ))
 
 ## Number of available questions
@@ -123,9 +148,27 @@ file.remove(here("docs", "midterm", "title_1.pdf"))
 file.remove(here("docs", "midterm", "title_2.pdf"))
 
 
-## find bad files (with - signs)
+## find bad files 
 files <- unlist(myexam)
+
+## (with - signs)
 bad_files <- files[sapply(files, function(f) {
   any(grepl("\u2212", readLines(f, warn = FALSE)))
 })]
 bad_files
+
+
+## (with α signs)
+bad_files <- files[sapply(files, function(f) {
+  any(grepl("\u03B1", readLines(f, warn = FALSE), useBytes = TRUE))
+})]
+
+bad_files
+
+## Replace ≠ with \neq in your files
+bad_files <- files[sapply(files, function(f) {
+  any(grepl("\u2260", readLines(f, warn = FALSE), useBytes = TRUE))
+})]
+
+bad_files
+

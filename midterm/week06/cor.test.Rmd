@@ -1,0 +1,65 @@
+```{r data type, echo = FALSE, results = "hide"}
+
+pacman::p_load(
+  tidyverse,
+  gssr, # load U.S. gss data
+  gssrdoc, # load the gss codebook
+  haven, # work with labeled data
+  labelled, # use labels as values
+  summarytools, # easy descriptive statistics
+  Rmisc, # confidence intervals
+  knitr, # pretty tables
+  kableExtra, # centered tables
+  conflicted # declare primary packages
+)
+
+## Address important conflicts
+conflict_prefer("is.labelled", "haven")
+conflict_prefer("filter", "dplyr")
+conflict_scout() # Identify the conflicts
+
+# Get the data from the 2022 survey
+gss22 <- gss_get_yr(2022)
+
+options(digits = 2)
+
+```
+
+Question
+========
+Which description best describes the correlation between personal income (`realrinc`) and number of days of poor mental health (`mntlhlth`)?
+
+```{r output, echo = FALSE, results = "asis"}
+#| message: false
+
+my_data <- gss22 |>
+  select(realrinc, mntlhlth) |>
+  drop_na()
+
+cor.test(
+  ~ realrinc + mntlhlth,
+  data = my_data,
+  method = "pearson",
+  na.action = na.omit
+)
+
+```
+
+Answerlist
+----------
+
+-   Results indicated an inverse relationship between personal income and days of poor mental health (r = -0.11, p < .05), suggesting that the number of days of poor mental health decreases as personal income increases.
+
+-  There is no evidence of an association between personal income and days of poor mental health (t = -5).
+
+-   There is a weakly positive association between personal income and days of poor mental health (r = -0.11, p < .05).
+
+-   Decreases in personal income was correlated with decreases in the number of days of poor mental health (t = -5, p < .05).
+
+
+Meta-information
+================
+exname: cor.test 
+extype: schoice 
+exsolution: 1000 
+exshuffle: 4

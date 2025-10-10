@@ -1,0 +1,64 @@
+```{r data type, echo = FALSE, results = "hide"}
+
+pacman::p_load(
+  tidyverse,
+  gssr, # load U.S. gss data
+  gssrdoc, # load the gss codebook
+  haven, # work with labeled data
+  labelled, # use labels as values
+  summarytools, # easy descriptive statistics
+  Rmisc, # confidence intervals
+  knitr, # pretty tables
+  kableExtra, # centered tables
+  conflicted # declare primary packages
+)
+
+## Address important conflicts
+conflict_prefer("is.labelled", "haven")
+conflict_prefer("filter", "dplyr")
+conflict_scout() # Identify the conflicts
+
+## Load the gss dataset
+data(gss_all)
+
+options(digits = 2)
+
+```
+
+Question
+========
+Using the U.S. General Social Survey data, a researcher tests whether the proportions who favor a law requiring a person to obtain a police permit before they could buy a gun have changed over time. Assuming an $\alpha$ level of .05, which of these statements best summarizes the researcher’s conclusion?
+
+
+```{r output, echo = FALSE, results = "asis"}
+#| message: false
+
+my_data <- gss_all |>
+  filter(year == 1984 | year == 2024) |>
+  select(year, gunlaw) |>
+  drop_na(gunlaw)
+
+# Use logic to recode (yes: 1 = 1; no: 2 = 0)
+my_data$gunlaw <- ifelse(my_data$gunlaw == 1, 1, 0)
+  
+t.test(my_data$gunlaw ~ my_data$year, alternative = "two.sided")
+
+```
+
+Answerlist
+----------
+
+-   There is not a statistically significant difference in support for the police permit law between 1984 and 2024, indicating that public opinion has remained stable.
+
+-   There is a statistically significant difference in support for the police permit law between 1984 and 2024, suggesting that public opinion has changed over time.
+
+-   The difference in support for the police permit law between 1984 and 2024 was due to sampling error and cannot be interpreted.
+
+-   The is a statistically significant increase in support for the police permit law from 1984 to 2024, proving that stricter gun control laws are now favored by most Americans.
+
+Meta-information
+================
+exname: ttest 
+extype: schoice 
+exsolution: 1000 
+exshuffle: 4

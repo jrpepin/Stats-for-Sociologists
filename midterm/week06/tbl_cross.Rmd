@@ -24,41 +24,35 @@ gss24 <- gss_get_yr(2024) # 2024 survey respondents
 
 Question
 ========
-The U.S. General Social Survey asked people how many brothers and
-sisters they had. A researcher used R to produce the summary statistics
-of this variable (`sibs`) below. Based on this, you conclude the
-distribution for this variable is:
+What does the following R code produce?
 
-```{r output, echo = FALSE, results = "asis"}
+```{r output, eval = FALSE, results = "asis"}
 #| message: false
 
-gss24 |>  
-  drop_na(sibs) |> 
-  dplyr::summarize(
-    freq = n(), 
-    median = round(median(sibs), digits = 2), 
-    mean = round(mean(sibs), digits = 2),
-    sd = round(sd(sibs), digits = 2)
-    ) |>
-  kable(format = "latex", booktabs = TRUE) |>
-  kable_styling(latex_options = c("hold_position"), position = "center")
+my_data |>
+  tbl_cross(
+    row = incgap,
+    col = sex,
+    percent = "column",
+    missing = "no") |>
+  add_p(source_note = TRUE)
 
 ```
 
 Answerlist
 ----------
 
--   positively skewed
+-   A cross-tabulation of `incgap` by `sex`, showing column percentages and a chi-square test of independence
 
--   negatively skewed
+-   A summary table comparing the mean values of `incgap` between men and women using a t-test
 
--   symmetrical
+-   A regression output predicting `incgap` from `sex`, including R-squared and p-values
 
--   nominal
+-   A frequency table of `incgap` responses with missing values imputed and grouped by `sex`
 
 Meta-information
 ================
-exname: skew 
+exname: tbl_cross 
 extype: schoice 
-exsolution: 0100 
+exsolution: 1000 
 exshuffle: 4

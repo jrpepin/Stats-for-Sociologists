@@ -1,0 +1,71 @@
+```{r data type, echo = FALSE, results = "hide"}
+
+pacman::p_load(
+  tidyverse,
+  gssr, # load U.S. gss data
+  gssrdoc, # load the gss codebook
+  haven, # work with labeled data
+  labelled, # use labels as values
+  summarytools, # easy descriptive statistics
+  Rmisc, # confidence intervals
+  knitr, # pretty tables
+  kableExtra, # centered tables
+  conflicted # declare primary packages
+)
+
+## Address important conflicts
+conflict_prefer("is.labelled", "haven")
+conflict_prefer("filter", "dplyr")
+conflict_scout() # Identify the conflicts
+
+# Get the data from the 2022 survey
+gss24 <- gss_get_yr(2024)
+
+options(digits = 2)
+
+```
+
+Question
+========
+Using the table, which of the following is the correct formula to find the expected frequency for U.S. liberals who oppose the death penalty in 2024?
+
+```{r output, echo = FALSE, results = "asis"}
+#| message: false
+
+gss24$cappun <- zap_missing(gss24$cappun) 
+gss24$cappun <- as_factor(gss24$cappun)   
+gss24$cappun <- droplevels(gss24$cappun)  
+
+gss24 <- gss24 |>
+  dplyr::mutate(ideology = case_when(
+    polviews %in% c(1, 2, 3) ~ "liberal",
+    polviews %in% c(5, 6, 7) ~ "conservative",
+    TRUE ~ NA_character_  # exclude moderates (4) or missing values
+  ))
+
+ctable(
+  gss24$cappun, 
+  gss24$ideology,
+  useNA = "no",
+  headings = FALSE)
+
+```
+
+Answerlist
+----------
+
+-   (600 * 513)/1280
+
+-   (600 * 767)/1280
+
+-   (345 * 513)/1280
+
+-   (345 * 600)/1280
+
+
+Meta-information
+================
+exname: chi-square-formula 
+extype: schoice 
+exsolution: 1000 
+exshuffle: 4

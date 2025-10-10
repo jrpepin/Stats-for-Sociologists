@@ -1,0 +1,67 @@
+```{r data type, echo = FALSE, results = "hide"}
+
+pacman::p_load(
+  tidyverse,
+  gssr, # load U.S. gss data
+  gssrdoc, # load the gss codebook
+  haven, # work with labeled data
+  labelled, # use labels as values
+  summarytools, # easy descriptive statistics
+  Rmisc, # confidence intervals
+  knitr, # pretty tables
+  kableExtra, # centered tables
+  conflicted # declare primary packages
+)
+
+## Address important conflicts
+conflict_prefer("is.labelled", "haven")
+conflict_prefer("filter", "dplyr")
+conflict_scout() # Identify the conflicts
+
+## Load the gss dataset
+gss24 <- gss_get_yr(2024) # 2024 survey respondents
+
+options(digits = 2)
+
+```
+
+Question
+========
+A researcher used the 2024 General Social Survey to find the proportion of the U.S. population that reports believing in some form of life after death. Based on the R output with 90% confidence intervals, which of the following is a correct interpretation of their results?
+
+```{r output, echo = FALSE, results = "asis"}
+#| message: false
+
+gss24$ghosts <- ifelse(gss24$postlife == 1, 1, 0)
+  
+gss24 |>
+  drop_na(ghosts) |>
+  dplyr::summarise(
+    n = n(),
+    mean = mean(ghosts),
+    sd = sd(ghosts),
+    lowCI = CI(ghosts, ci = 0.90)['lower'],
+    hiCI  = CI(ghosts, ci = 0.90)['upper']
+    ) |>
+  kable(format = "latex", booktabs = TRUE) |>
+  kable_styling(latex_options = c("hold_position"), position = "center")
+
+```
+
+Answerlist
+----------
+
+-   The researcher is 90% confident that the proportion of U.S. adults who believe in some form of life after death is between .81 and .85.
+
+-   If another survey had been conducted in 2024, there’s a 90% chance the point estimate would be between .81 and .85.
+
+-   About 90% of people responded to the national survey.
+
+-   Because the mean is within the confidence interval, there is a .90 probability that the proportion of U.S. adults who believe in some form of life after death is .83.
+
+Meta-information
+================
+exname: ghosts 
+extype: schoice 
+exsolution: 1000 
+exshuffle: 4

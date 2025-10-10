@@ -1,0 +1,71 @@
+```{r data type, echo = FALSE, results = "hide"}
+
+pacman::p_load(
+  tidyverse,
+  gssr, # load U.S. gss data
+  gssrdoc, # load the gss codebook
+  haven, # work with labeled data
+  labelled, # use labels as values
+  summarytools, # easy descriptive statistics
+  Rmisc, # confidence intervals
+  knitr, # pretty tables
+  kableExtra, # centered tables
+  conflicted # declare primary packages
+)
+
+## Address important conflicts
+conflict_prefer("is.labelled", "haven")
+conflict_prefer("filter", "dplyr")
+conflict_scout() # Identify the conflicts
+
+## Load the gss dataset
+gss22 <- gss_get_yr(2022) # 2024 survey respondents
+
+options(digits = 2)
+
+```
+
+Question
+========
+A researcher used the 2024 General Social Survey to find the proportion of the U.S. population that reports believing in some form of life after death. Based on the R output of their findings, with 95% confidence intervals, which of the following is a correct interpretation of their results?
+
+
+```{r output, echo = FALSE, results = "asis"}
+#| message: false
+
+gss22$sex <- zap_missing(gss22$sex) 
+gss22$sex <- as_factor(gss22$sex)   
+gss22$sex <- droplevels(gss22$sex)  
+
+gss22 |>
+  drop_na(hrsrelax, sex) |>
+  group_by(sex) |>
+  dplyr::summarise(
+    n = n(),
+    mean = mean(hrsrelax),
+    sd = sd(hrsrelax),
+    lowCI = CI(hrsrelax, ci = 0.95)['lower'],
+    hiCI  = CI(hrsrelax, ci = 0.95)['upper']
+    ) |>
+  kable(format = "latex", booktabs = TRUE) |>
+  kable_styling(latex_options = c("hold_position"), position = "center")
+
+```
+
+Answerlist
+----------
+
+-   The confidence intervals overlap, so we can’t know for sure if there is a statistical difference between the average time men and women spend on leisure activities per day.
+
+-   The confidence intervals do not overlap so we can conclude that the average time men and women spend on leisure activities per day are statistically significantly different.
+
+-   We cannot determine whether the null hypothesis of zero difference between the parameters will be rejected at the 0.05 level.
+
+-   We are 95% certain that women have less time per day than men for leisure activities, likely because of their greater time spent on housework and childcare.
+
+Meta-information
+================
+exname: hrsrelax 
+extype: schoice 
+exsolution: 1000 
+exshuffle: 4

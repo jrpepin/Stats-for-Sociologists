@@ -1,0 +1,61 @@
+```{r data type, echo = FALSE, results = "hide"}
+
+pacman::p_load(
+  tidyverse,
+  gssr, # load U.S. gss data
+  gssrdoc, # load the gss codebook
+  haven, # work with labeled data
+  labelled, # use labels as values
+  summarytools, # easy descriptive statistics
+  Rmisc, # confidence intervals
+  knitr, # pretty tables
+  kableExtra, # centered tables
+  conflicted # declare primary packages
+)
+
+## Address important conflicts
+conflict_prefer("is.labelled", "haven")
+conflict_prefer("filter", "dplyr")
+conflict_scout() # Identify the conflicts
+
+## Load the gss dataset
+data(gss_all)
+
+options(digits = 2)
+
+```
+
+Question
+========
+Using the U.S. General Social Survey data, a researcher suspects Americans are watching more tv today than in the 1970s. Assuming an $\alpha$ level of .05, should the researcher reject the null hypothesis? Why or why not?
+
+```{r output, echo = FALSE, results = "asis"}
+#| message: false
+
+my_data <- gss_all |>
+  filter(year == 1975 | year == 2024) |>
+  select(year, tvhours) |>
+  drop_na(tvhours)
+
+t.test(my_data$tvhours ~ my_data$year, alternative = "two.sided")
+
+```
+
+Answerlist
+----------
+
+-   Yes, because the p-value (0.005) is less than the $\alpha$ level of .05.
+
+-   No, because the p-value (0.005) is greater than the $\alpha$ level of .05.
+
+-   No, because the p-value (0.005) equals the $\alpha$ level of .05.
+
+-   Yes, because the p-value (0.005) is greater than the $\alpha$ level of .05.
+
+
+Meta-information
+================
+exname: ttest-tv 
+extype: schoice 
+exsolution: 1000 
+exshuffle: 4

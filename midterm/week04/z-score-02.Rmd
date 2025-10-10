@@ -7,6 +7,8 @@ pacman::p_load(
   haven, # work with labeled data
   labelled, # use labels as values
   summarytools, # easy descriptive statistics
+  knitr, # pretty tables
+  kableExtra, # centered tables
   conflicted # declare primary packages
 )
 
@@ -31,7 +33,7 @@ The variable `mntlhlth` measures how many days in the past 30 a respondent repor
 
 gss22 |>  
   drop_na(mntlhlth) |> 
-  summarize(
+  dplyr::summarize(
     freq = n(), 
     median = round(median(mntlhlth), digits = 2), 
     mean = round(mean(mntlhlth), digits = 2),

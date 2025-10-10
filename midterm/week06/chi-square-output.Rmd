@@ -1,0 +1,67 @@
+```{r data type, echo = FALSE, results = "hide"}
+
+pacman::p_load(
+  tidyverse,
+  gssr, # load U.S. gss data
+  gssrdoc, # load the gss codebook
+  haven, # work with labeled data
+  labelled, # use labels as values
+  knitr, # pretty tables
+  kableExtra, # centered tables
+  gtsummary  # cross-tabs
+)
+
+## Load the gss dataset
+data(gss_all)
+
+options(digits = 2)
+
+```
+
+Question
+========
+Has public opinion changed about whether Black Americans have worse jobs, income, and housing than white Americans mainly because of discrimination? Based on a significance level of $\alpha = 0.01$, what’s the best conclusion from the test?
+
+```{r output, echo = FALSE, results = "asis"}
+#| message: false
+
+my_data <- gss_all |>
+  filter(year == 2022 | year == 2024) |>
+  select(year, racdif1) |>
+  dplyr::mutate(
+    year = factor(year),
+    opinion = ifelse(racdif1 == 1, "yes", "no")
+  ) |>
+  drop_na(opinion)
+
+my_data |>
+  tbl_cross(
+    row = opinion,
+    col = year,
+    percent = "column",
+    missing = "no"
+  ) |>
+  add_p(source_note = TRUE) |>
+  as_kable_extra(format = "latex", booktabs = TRUE) |>
+  kable_styling(latex_options = c("hold_position"), position = "center")
+
+```
+
+Answerlist
+----------
+
+-   The evidence shows attitudes about racial inequality differ between 2022 and 2024.
+
+-   There is no statistically significant difference in attitudes between 2022 and 2024.
+
+-   The p-value of .000 means the null hypothesis is true.
+
+-   The results show that most people in both years agreed racial inequality is due to discrimination.
+
+
+Meta-information
+================
+exname: chi-square-output 
+extype: schoice 
+exsolution: 1000 
+exshuffle: 4

@@ -37,7 +37,19 @@ my_data <- gss_all |>
   select(year, tvhours) |>
   drop_na(tvhours)
 
-t.test(my_data$tvhours ~ my_data$year, alternative = "two.sided")
+# Run the t-test
+ttest_result <- t.test(my_data$tvhours ~ my_data$year, alternative = "two.sided")
+
+# Create a tibble with key results
+tibble(
+  `t-statistic` = round(ttest_result$statistic, 2),
+  `df` = round(ttest_result$parameter, 2),
+  `p-value` = round(ttest_result$p.value, 4),
+  `95% CI Lower` = round(ttest_result$conf.int[1], 2),
+  `95% CI Upper` = round(ttest_result$conf.int[2], 2)
+) |>
+  kable(format = "latex", booktabs = TRUE) |>
+  kable_styling(latex_options = c("hold_position"), position = "center")
 
 ```
 

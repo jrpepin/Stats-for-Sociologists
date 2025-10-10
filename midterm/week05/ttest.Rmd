@@ -41,7 +41,19 @@ my_data <- gss_all |>
 # Use logic to recode (yes: 1 = 1; no: 2 = 0)
 my_data$gunlaw <- ifelse(my_data$gunlaw == 1, 1, 0)
   
-t.test(my_data$gunlaw ~ my_data$year, alternative = "two.sided")
+# Run the t-test
+ttest_result <- t.test(my_data$gunlaw ~ my_data$year, alternative = "two.sided")
+
+# Create a tibble with key results
+tibble(
+  `t-statistic` = round(ttest_result$statistic, 2),
+  `df` = round(ttest_result$parameter, 2),
+  `p-value` = round(ttest_result$p.value, 4),
+  `95% CI Lower` = round(ttest_result$conf.int[1], 2),
+  `95% CI Upper` = round(ttest_result$conf.int[2], 2)
+) |>
+  kable(format = "latex", booktabs = TRUE) |>
+  kable_styling(latex_options = c("hold_position"), position = "center")
 
 ```
 

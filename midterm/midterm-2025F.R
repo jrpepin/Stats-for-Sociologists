@@ -7,6 +7,7 @@ library("here")
 library("exams")
 library("quarto")
 library("qpdf")
+library("pdftools")
 
 conflicted::conflicts_prefer(here::here)
 conflicted::conflicts_prefer(dplyr::summarize)
@@ -123,20 +124,24 @@ pdf_combine(
 
 # Exams without the answer key -------------------------------------------------
 
-# Get total number of pages
-n_pages_A <- pdf_length(here("docs", "midterm", "midterm_A_AK.pdf"))
-n_pages_B <- pdf_length(here("docs", "midterm", "midterm_B_AK.pdf"))
+# Load the PDF text
+pdf_text_vec_A <- pdf_text(here("docs", "midterm", "midterm_A_AK.pdf"))
+pdf_text_vec_B <- pdf_text(here("docs", "midterm", "midterm_B_AK.pdf"))
 
-# Keep all pages except the last
+# Find the page number where "Answer Sheet" appears
+answer_sheet_page_A <- which(sapply(pdf_text_vec_A, function(x) grepl("Answer Sheet", x)))
+answer_sheet_page_B <- which(sapply(pdf_text_vec_B, function(x) grepl("Answer Sheet", x)))
+
+# Keep all pages except the answer sheets
 pdf_subset(
   input = here("docs", "midterm", "midterm_A_AK.pdf"),
-  pages = 1:(n_pages_A - 1),
+  pages = 1:(answer_sheet_page_A - 1),
   output = here("docs", "midterm", "midterm_A.pdf")
 )
 
 pdf_subset(
   input = here("docs", "midterm", "midterm_B_AK.pdf"),
-  pages = 1:(n_pages_B - 1),
+  pages = 1:(answer_sheet_page_B - 1),
   output = here("docs", "midterm", "midterm_B.pdf")
 )
 
@@ -147,6 +152,8 @@ file.remove(here("docs", "midterm", "midterm_2.pdf"))
 file.remove(here("docs", "midterm", "title_1.pdf"))
 file.remove(here("docs", "midterm", "title_2.pdf"))
 
+
+# problems ---------------------------------------------------------------------
 
 ## find bad files 
 files <- unlist(myexam)
@@ -171,4 +178,13 @@ bad_files <- files[sapply(files, function(f) {
 })]
 
 bad_files
+
+## key word
+find_something <- files[sapply(files, function(f) {
+  any(grepl("poor", readLines(f, warn = FALSE), useBytes = TRUE))
+})]
+
+
+find_something
+
 

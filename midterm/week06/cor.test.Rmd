@@ -36,12 +36,24 @@ my_data <- gss22 |>
   select(realrinc, mntlhlth) |>
   drop_na()
 
-cor.test(
+cor_result <- cor.test(
   ~ realrinc + mntlhlth,
   data = my_data,
   method = "pearson",
   na.action = na.omit
 )
+
+# Create a tibble with selected results
+tibble(
+  `Correlation Coefficient` = round(cor_result$estimate, 3),
+  `t-statistic` = round(cor_result$statistic, 2),
+  `df` = cor_result$parameter,
+  `p-value` = round(cor_result$p.value, 4),
+  `95% CI Lower` = round(cor_result$conf.int[1], 2),
+  `95% CI Upper` = round(cor_result$conf.int[2], 2)
+) |>
+  kable(format = "latex", booktabs = TRUE) |>
+  kable_styling(latex_options = c("hold_position"), position = "center")
 
 ```
 

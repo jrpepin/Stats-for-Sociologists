@@ -15,7 +15,7 @@ conflicted::conflicts_prefer(dplyr::summarize)
 ## a list of vectors of exam questions in R/Markdown (.Rmd) format
 myexam <- list(c(
 # Week 01
-  here("midterm", "week01", "wheelan.Rmd"),
+  here("midterm", "week01", "wheelan-point.Rmd"),
   here("midterm", "week01", "panes.Rmd"),
   here("midterm", "week01", "rproj.Rmd"),
   here("midterm", "week01", "quarto.Rmd"),
@@ -39,17 +39,17 @@ myexam <- list(c(
   here("midterm", "week03", "code-01.Rmd"),
   here("midterm", "week03", "summarize.Rmd"),
 # Week 04
+  here("midterm", "week04", "wheelen-CLT.Rmd"),
   here("midterm", "week04", "z-score.Rmd"),
   here("midterm", "week04", "z-score-02.Rmd"),
   here("midterm", "week04", "z-score-proportion.Rmd"),
   here("midterm", "week04", "sixty-eight.Rmd"),
   here("midterm", "week04", "sixty-eight-01.Rmd"),
-  here("midterm", "week04", "wheelen-08.Rmd"),
   here("midterm", "week04", "mutate.Rmd"),
   here("midterm", "week04", "case_when.Rmd"),
 # Week 05
-  here("midterm", "week05", "polling.Rmd"),
-  here("midterm", "week05", "inference.Rmd"),
+  here("midterm", "week05", "wheelen-polling.Rmd"),
+  here("midterm", "week05", "wheelen-inference.Rmd"),
   here("midterm", "week05", "sample-size.Rmd"),
   here("midterm", "week05", "ghosts.Rmd"),
   here("midterm", "week05", "hrsrelax.Rmd"),
@@ -61,7 +61,7 @@ myexam <- list(c(
   here("midterm", "week05", "double-colon.Rmd"),
 # Week 06
   here("midterm", "week06", "ASA.Rmd"),
-  here("midterm", "week06", "Cohen.Rmd"),
+  here("midterm", "week06", "cohen.Rmd"),
   here("midterm", "week06", "chi-square.Rmd"),
   here("midterm", "week06", "chi-square-formula.Rmd"),
   here("midterm", "week06", "chi-square-output.Rmd"),
@@ -80,12 +80,14 @@ n_questions <- length(myexam[[1]])
 ## Create exams
 exams2pdf(
   myexam, 
+  header = "\\renewenvironment{question}{\\item \\begin{samepage}}{\\end{samepage}}",
   n = 2, # number of exam versions
   nsamp = n_questions, # number of exam questions
   name = "midterm_", 
   dir = here("docs", "midterm"),
   template="myexam2",
-  title = NULL # merge with own title page later
+  title = NULL, # merge with own title page later
+  verbose = TRUE
   )
 
 # Create title pages -----------------------------------------------------------
@@ -181,10 +183,26 @@ bad_files
 
 ## key word
 find_something <- files[sapply(files, function(f) {
-  any(grepl("poor", readLines(f, warn = FALSE), useBytes = TRUE))
+  any(grepl("cappun", readLines(f, warn = FALSE), useBytes = TRUE))
 })]
 
 
 find_something
 
+## Try out to word
+
+exams2html(  
+  myexam, 
+  n = 1, # number of exam versions
+  nsamp = n_questions, # number of exam questions
+  name = "midterm_", 
+  dir = here("docs", "midterm")
+)
+
+# Convert HTML to Word using Pandoc
+rmarkdown::pandoc_convert(
+  input = here::here("docs", "midterm", "midterm_1.html"),
+  to = "docx",
+  output = here::here("docs", "midterm", "midterm_1.docx")
+)
 

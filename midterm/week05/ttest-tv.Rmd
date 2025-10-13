@@ -27,7 +27,7 @@ options(digits = 2)
 
 Question
 ========
-Using the U.S. General Social Survey data, a researcher suspects Americans are watching more tv today than in the 1970s. Assuming an $\alpha$ level of .05, should the researcher reject the null hypothesis? Why or why not?
+A researcher suspects Americans are watching more tv today than in the 1970s. Assuming an $\alpha$ level of .05, should the researcher reject the null hypothesis? Why or why not?
 
 ```{r output, echo = FALSE, results = "asis"}
 #| message: false
@@ -40,6 +40,7 @@ my_data <- gss_all |>
 # Run the t-test
 ttest_result <- t.test(my_data$tvhours ~ my_data$year, alternative = "two.sided")
 
+cat("\\begin{samepage}\n")
 # Create a tibble with key results
 tibble(
   `t-statistic` = round(ttest_result$statistic, 2),
@@ -50,7 +51,7 @@ tibble(
 ) |>
   kable(format = "latex", booktabs = TRUE) |>
   kable_styling(latex_options = c("hold_position"), position = "center")
-
+cat("\\end{samepage}\n")
 ```
 
 Answerlist

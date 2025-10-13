@@ -24,14 +24,12 @@ gss24 <- gss_get_yr(2024) # 2024 survey respondents
 
 Question
 ========
-The U.S. General Social Survey asked people how many brothers and
-sisters they had. A researcher used R to produce the summary statistics
-of this variable (`sibs`) below. Based on this, you conclude the
-distribution for this variable is:
+A researcher summarized the `sibs` variable from the U.S. General Social Survey, a measure of how many brothers and sisters respondents had. Based on the summary table, the distribution appears to be:
 
 ```{r output, echo = FALSE, results = "asis"}
 #| message: false
 
+cat("\\begin{samepage}\n")
 gss24 |>  
   drop_na(sibs) |> 
   dplyr::summarize(
@@ -42,15 +40,16 @@ gss24 |>
     ) |>
   kable(format = "latex", booktabs = TRUE) |>
   kable_styling(latex_options = c("hold_position"), position = "center")
+cat("\\end{samepage}\n")
 
 ```
 
 Answerlist
 ----------
 
--   positively skewed
-
 -   negatively skewed
+
+-   positively skewed
 
 -   symmetrical
 
@@ -60,5 +59,5 @@ Meta-information
 ================
 exname: skew 
 extype: schoice 
-exsolution: 0100 
+exsolution: 1000 
 exshuffle: 4

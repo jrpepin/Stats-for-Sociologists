@@ -7,6 +7,7 @@ pacman::p_load(
   haven, # work with labeled data
   labelled, # use labels as values
   summarytools, # easy descriptive statistics
+  gtsummary, 
   knitr, # pretty tables
   kableExtra, # centered tables
   conflicted # declare primary packages
@@ -18,7 +19,7 @@ conflict_prefer("filter", "dplyr")
 conflict_scout() # Identify the conflicts
 
 ## Load the gss dataset
-gss24 <- gss_get_yr(2024) # 2024 survey respondents
+gss21 <- gss_get_yr(2021) # 2021 survey respondents
 
 ```
 
@@ -29,13 +30,13 @@ What does the following R code produce?
 ```{r output, eval = FALSE, results = "asis"}
 #| message: false
 
-my_data |>
+gss21 |>
   tbl_cross(
     row = incgap,
     col = sex,
     percent = "column",
     missing = "no") |>
-  add_p(source_note = TRUE)
+  add_p()
 
 ```
 

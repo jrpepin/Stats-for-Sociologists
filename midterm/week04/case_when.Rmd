@@ -7,8 +7,8 @@ What will the following code do?
 
 gss24 <- gss24 |> 
   mutate(status = case_when(
-  income > 100000 ~ "High",
-  income > 50000 ~ "Medium",
+  income >= 100000 ~ "High",
+  income > 50000 & income < 100000 ~ "Medium",
   TRUE ~ "Low"
 ))
 
@@ -17,7 +17,7 @@ gss24 <- gss24 |>
 Answerlist
 ----------
 
--   It creates a new column `status` with 3 possible values.
+-   It creates a new column named `status` with 3 possible values.
 
 -   It filters out rows where income is less than 50,000.
 

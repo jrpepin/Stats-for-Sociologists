@@ -19,6 +19,15 @@ data(gss_all)
 
 options(digits = 2)
 
+```
+
+Question
+========
+Has public opinion shifted on whether Black Americans face worse jobs, income, and housing than white Americans due to discrimination? Using a significance level of $\alpha = 0.01$, what conclusion should be drawn from the test results?
+
+```{r output, echo = FALSE, results = "asis"}
+#| message: false
+
 my_data <- gss_all |>
   filter(year == 2022 | year == 2024) |>
   select(year, racdif1) |>
@@ -35,22 +44,12 @@ tbl_chi <- my_data |>
     percent = "column",
     missing = "no"
   ) |>
-  add_p(source_note = TRUE) |>
-  as_gt() |>
-  gt::tab_options(table.align = "center", table.font.size = "small")
+  add_p(source_note = TRUE) 
 
-# Save as image
-gtsave(tbl_chi, "chi-square-output.png")
+flextable_obj <- as_flex_table(tbl_chi)
+knitr::knit_print(flextable_obj)
 
 ```
-
-Question
-========
-Has public opinion shifted on whether Black Americans face worse jobs, income, and housing than white Americans due to discrimination? Using a significance level of $\alpha = 0.01$, what conclusion should be drawn from the test results?
-
-\begin{center}
-\includegraphics[width=0.4\textwidth]{chi-square-output.png}
-\end{center}
 
 
 Answerlist

@@ -9,6 +9,7 @@ pacman::p_load(
   kableExtra, # pretty tables
   flextable, # formatted pretty tables
   summarytools, # easy descriptive statistics
+  gtsummary, # descriptive tables
   learnr, # interactive practice questions & coding
   gradethis, # automated feedback for interactive exercises
   fontawesome, # icons

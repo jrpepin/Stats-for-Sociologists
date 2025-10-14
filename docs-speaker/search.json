@@ -1313,7 +1313,7 @@
     "href": "lecture-06.html#packages",
     "title": "Statistical Tests II",
     "section": "Packages",
-    "text": "Packages\nLoad the standard packages & 1 new package: gtsummary()\nWe’ll use gtsummary() to make pretty tables that include our statistical tests.\n\n# Only need to install once per machine. \n# install.packages(\"gtsummary\")\n\nlibrary(here)\nlibrary(tidyverse) \nlibrary(haven) # not core tidyverse\nlibrary(gssr)\nlibrary(gssrdoc) # load the GSS codebook\nlibrary(summarytools)\nlibrary(gtsummary) # load the new package"
+    "text": "Packages\nLoad the standard packages & 1 new package: gtsummary()\n\n# Only need to install once per machine. \n# install.packages(\"gtsummary\")\n\nlibrary(here)\nlibrary(tidyverse) \nlibrary(haven) # not core tidyverse\nlibrary(gssr)\nlibrary(gssrdoc) # load the GSS codebook\nlibrary(summarytools)\nlibrary(gtsummary) # load the new package\n\n\nWe’ll use gtsummary() to make pretty tables that include our statistical tests."
   },
   {
     "objectID": "lecture-06.html#load-your-data",
@@ -1341,7 +1341,7 @@
     "href": "lecture-06.html#chi2-test-1",
     "title": "Statistical Tests II",
     "section": "\\(chi^2\\) test",
-    "text": "\\(chi^2\\) test\n\\(chi^2\\) determines if categorical variables are related\nTest if the rows and columns in a two-way table are independent"
+    "text": "\\(chi^2\\) test\n\\(chi^2\\) determines if categorical variables are related\n\nTests if the rows and columns in a two-way table are independent"
   },
   {
     "objectID": "lecture-06.html#chi2-in-action",
@@ -1355,14 +1355,14 @@
     "href": "lecture-06.html#section",
     "title": "Statistical Tests II",
     "section": "",
-    "text": "Which of these equations represents your research hypothesis?\n\n\nThere is no association between gender identity and attitudes about gender roles (statistically independent).\nGender identity and attitudes about gender roles are related in the population (statistically independent).\nGender identity and attitudes about gender roles are related in the population (statistically dependent)."
+    "text": "Which of the following expressions correctly checks if a is equal to b in R?\n\n\na == b\na = b\na &lt;= b\na |&gt; b"
   },
   {
     "objectID": "lecture-06.html#section-1",
     "href": "lecture-06.html#section-1",
     "title": "Statistical Tests II",
     "section": "",
-    "text": "Which of these equations represents your null hypothesis?\n\n\nThere is no association between gender identity and attitudes about gender roles (statistically independent).\nGender identity and attitudes about gender roles are related in the population (statistically independent).\nThere is no association between gender identity and attitudes about gender roles (statistically dependent)."
+    "text": "Which of the following best describes the benefit of using pipes in dplyr?\n\n\nPipes help chain multiple operations in a readable sequence.\nPipes make code shorter but harder to read.\nPipes allow you to write loops more efficiently.\nPipes automatically optimize your code for speed."
   },
   {
     "objectID": "lecture-06.html#review-pretty-cross-tab",
@@ -1390,7 +1390,7 @@
     "href": "lecture-06.html#section-2",
     "title": "Statistical Tests II",
     "section": "",
-    "text": "Which of these statements best summarizes your conclusion?\n\n\nOur findings prove that gender identity has no effect on attitudes about gender roles\nSince the p-value is above 0.05, we can conclude that gender identity strongly influences attitudes about gender roles.\nWe find no statistically significant relationship between gender identity and attitudes about gender roles."
+    "text": "What does the filter() function do in dplyr?\n\n\nIt converts character variables to factors.\nIt removes columns with missing values.\nIt selects specific columns from a data frame.\nIt keeps rows that meet a specified condition."
   },
   {
     "objectID": "lecture-06.html#caution-size-matters",
@@ -1432,14 +1432,14 @@
     "href": "lecture-06.html#cor.test-in-action",
     "title": "Statistical Tests II",
     "section": "cor.test() in action",
-    "text": "cor.test() in action\n\ncor.test(\n  ~ educ + agekdbrn,\n  data = my_data,\n  method = \"pearson\",\n  na.action = na.omit\n)\n\n\n\n\n    Pearson's product-moment correlation\n\ndata:  educ and agekdbrn\nt = 17.865, df = 2780, p-value &lt; 2.2e-16\nalternative hypothesis: true correlation is not equal to 0\n95 percent confidence interval:\n 0.2871699 0.3538501\nsample estimates:\n      cor \n0.3209076"
+    "text": "cor.test() in action\n\ncor.test(\n  ~ educ + agekdbrn,\n  data = my_data,\n  method = \"pearson\",\n  na.action = na.omit\n)\n\n\n\n\n    Pearson's product-moment correlation\n\ndata:  educ and agekdbrn\nt = 19.88, df = 2780, p-value &lt; 2.2e-16\nalternative hypothesis: true correlation is not equal to 0\n95 percent confidence interval:\n 0.3198258 0.3849110\nsample estimates:\n      cor \n0.3527951"
   },
   {
     "objectID": "lecture-06.html#tidy-cor.test",
     "href": "lecture-06.html#tidy-cor.test",
     "title": "Statistical Tests II",
     "section": "Tidy cor.test()",
-    "text": "Tidy cor.test()\n\n\n\n# Save results\nmy_test &lt;- cor.test(\n  ~ educ + agekdbrn,\n  data = my_data,\n  method = \"pearson\",\n  na.action = na.omit\n)\n\n\n\n# Create a tibble with key stats\ncor_summary &lt;- tibble(\n  correlation = my_test$estimate,\n  p_value     = my_test$p.value,\n  conf_low    = my_test$conf.int[1],\n  conf_high   = my_test$conf.int[2]\n)\n\n\n\n\n\ncor_summary\n\n# A tibble: 1 × 4\n  correlation  p_value conf_low conf_high\n        &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;\n1       0.321 1.16e-67    0.287     0.354"
+    "text": "Tidy cor.test()\n\n\n\n# Save results\nmy_test &lt;- cor.test(\n  ~ educ + agekdbrn,\n  data = my_data,\n  method = \"pearson\",\n  na.action = na.omit\n)\n\n\n\n# Create a tibble with key stats\ncor_summary &lt;- tibble(\n  correlation = my_test$estimate,\n  p_value     = my_test$p.value,\n  conf_low    = my_test$conf.int[1],\n  conf_high   = my_test$conf.int[2]\n)\n\n\n\n\n\ncor_summary\n\n# A tibble: 1 × 4\n  correlation  p_value conf_low conf_high\n        &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;\n1       0.353 2.47e-82    0.320     0.385"
   },
   {
     "objectID": "lecture-06.html#cor.test-t.test",
@@ -1461,5 +1461,33 @@
     "title": "Statistical Tests II",
     "section": "Think Like a Statistician",
     "text": "Think Like a Statistician\n\npremarsxpolviewslifenow\n\n\n\n\n\n\nTable 3\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\npolviews\n\nTotal\n\n\nextremely liberal\nliberal\nslightly liberal\nmoderate, middle of the road\nslightly conservative\nconservative\nextremely conservative\n\n\n\n\npremarsx\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n    always wrong\n7 (4.4%)\n19 (5.1%)\n16 (5.2%)\n122 (12%)\n48 (15%)\n103 (28%)\n44 (38%)\n359 (14%)\n\n\n    almost always wrong\n6 (3.8%)\n11 (2.9%)\n11 (3.6%)\n55 (5.6%)\n24 (7.3%)\n36 (9.9%)\n11 (9.5%)\n154 (5.8%)\n\n\n    wrong only sometimes\n7 (4.4%)\n32 (8.6%)\n33 (11%)\n150 (15%)\n59 (18%)\n57 (16%)\n13 (11%)\n351 (13%)\n\n\n    not wrong at all\n139 (87%)\n311 (83%)\n249 (81%)\n657 (67%)\n200 (60%)\n169 (46%)\n48 (41%)\n1,773 (67%)\n\n\nTotal\n159 (100%)\n373 (100%)\n309 (100%)\n984 (100%)\n331 (100%)\n365 (100%)\n116 (100%)\n2,637 (100%)\n\n\n\nPearson’s Chi-squared test, p&lt;0.001\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nTable 4\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nsex\n\nTotal\n\n\nmale\nfemale\n\n\n\n\npolviews\n\n\n\n\n\n\n\n\n    extremely liberal\n103 (5.5%)\n129 (6.0%)\n232 (5.8%)\n\n\n    liberal\n215 (12%)\n347 (16%)\n562 (14%)\n\n\n    slightly liberal\n229 (12%)\n247 (12%)\n476 (12%)\n\n\n    moderate, middle of the road\n661 (36%)\n848 (40%)\n1,509 (38%)\n\n\n    slightly conservative\n267 (14%)\n223 (10%)\n490 (12%)\n\n\n    conservative\n298 (16%)\n258 (12%)\n556 (14%)\n\n\n    extremely conservative\n83 (4.5%)\n92 (4.3%)\n175 (4.4%)\n\n\nTotal\n1,856 (100%)\n2,144 (100%)\n4,000 (100%)\n\n\n\nPearson’s Chi-squared test, p&lt;0.001\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n    Pearson's product-moment correlation\n\ndata:  lifenow and age\nt = 7.9037, df = 2031, p-value = 4.402e-15\nalternative hypothesis: true correlation is not equal to 0\n95 percent confidence interval:\n 0.1302456 0.2146032\nsample estimates:\n      cor \n0.1727412"
+  },
+  {
+    "objectID": "lecture-06.html#section-3",
+    "href": "lecture-06.html#section-3",
+    "title": "Statistical Tests II",
+    "section": "",
+    "text": "Which of the following uses mutate() correctly to create a new column called income_level?\n\n\nmutate(income_level &lt;- income &gt; 50000)\nmutate(income_level = filter(income &gt; 50000))\nmutate(income_level = select(income))\nmutate(income_level = income &gt; 50000)"
+  },
+  {
+    "objectID": "lecture-06.html#section-4",
+    "href": "lecture-06.html#section-4",
+    "title": "Statistical Tests II",
+    "section": "",
+    "text": "Which of these equations represents your research hypothesis?\n\n\nThere is no association between gender identity and attitudes about gender roles (statistically independent).\nGender identity and attitudes about gender roles are related in the population (statistically independent).\nGender identity and attitudes about gender roles are related in the population (statistically dependent)."
+  },
+  {
+    "objectID": "lecture-06.html#section-5",
+    "href": "lecture-06.html#section-5",
+    "title": "Statistical Tests II",
+    "section": "",
+    "text": "Which of these equations represents your null hypothesis?\n\n\nThere is no association between gender identity and attitudes about gender roles (statistically independent).\nGender identity and attitudes about gender roles are related in the population (statistically independent).\nThere is no association between gender identity and attitudes about gender roles (statistically dependent)."
+  },
+  {
+    "objectID": "lecture-06.html#section-6",
+    "href": "lecture-06.html#section-6",
+    "title": "Statistical Tests II",
+    "section": "",
+    "text": "Which of these statements best summarizes your conclusion?\n\n\nOur findings prove that gender identity has no effect on attitudes about gender roles\nSince the p-value is above 0.05, we can conclude that gender identity strongly influences attitudes about gender roles.\nWe find no statistically significant relationship between gender identity and attitudes about gender roles."
   }
 ]

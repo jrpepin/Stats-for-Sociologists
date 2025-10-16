@@ -26,7 +26,7 @@ Question
 ========
 A researcher summarized the `sibs` variable from the U.S. General Social Survey, a measure of how many brothers and sisters respondents had. Based on the summary table, the distribution appears to be:
 
-```{r output, echo = FALSE, results = "asis"}
+```{r output, echo = FALSE, results = "asis", fig.pos='H'}
 #| message: false
 
 cat("\\begin{samepage}\n")
@@ -38,7 +38,7 @@ gss24 |>
     mean = round(mean(sibs), digits = 2),
     sd = round(sd(sibs), digits = 2)
     ) |>
-  kable(format = "latex", booktabs = TRUE) |>
+  kable(format = "latex", booktabs = TRUE, longtable = FALSE) |>
   kable_styling(latex_options = c("hold_position"), position = "center")
 cat("\\end{samepage}\n")
 

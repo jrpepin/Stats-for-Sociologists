@@ -27,9 +27,9 @@ options(digits = 2)
 
 Question
 ========
-A researcher suspects Americans are watching more tv today than in the 1970s. Assuming an $\alpha$ level of .05, should the researcher reject the null hypothesis? Why or why not?
+In the 1970s, Americans watched an average of 3.05 TV hours per day, compared with an average of 3.3 hours per day in 2024. Assuming an $\alpha$ level of .05, what does the researcher conclude about the statistically significant difference?
 
-```{r output, echo = FALSE, results = "asis"}
+```{r output, echo = FALSE, results = "asis", fig.pos='H'}
 #| message: false
 
 my_data <- gss_all |>
@@ -37,34 +37,39 @@ my_data <- gss_all |>
   select(year, tvhours) |>
   drop_na(tvhours)
 
+#my_data |>
+ # group_by(year) |>
+  #summarise(
+   # mean = mean(tvhours))
+
 # Run the t-test
 ttest_result <- t.test(my_data$tvhours ~ my_data$year, alternative = "two.sided")
 
 cat("\\begin{samepage}\n")
 # Create a tibble with key results
 tibble(
-  `t-statistic` = round(ttest_result$statistic, 2),
-  `df` = round(ttest_result$parameter, 2),
-  `p-value` = round(ttest_result$p.value, 4),
-  `95% CI Lower` = round(ttest_result$conf.int[1], 2),
-  `95% CI Upper` = round(ttest_result$conf.int[2], 2)
-) |>
-  kable(format = "latex", booktabs = TRUE) |>
+  `t-statistic` = sprintf("%.2f", ttest_result$statistic),
+  `df` = sprintf("%.2f", ttest_result$parameter),
+  `p-value` = sprintf("%.3f", ttest_result$p.value),
+  `95% CI Lower` = sprintf("%.2f", ttest_result$conf.int[1]),
+  `95% CI Upper` = sprintf("%.2f", ttest_result$conf.int[2])) |>
+  kable(format = "latex", booktabs = TRUE, longtable = FALSE) |>
   kable_styling(latex_options = c("hold_position"), position = "center")
+
+
 cat("\\end{samepage}\n")
 ```
 
 Answerlist
 ----------
 
--   Yes, because the p-value (0.005) is less than the $\alpha$ level of .05.
+-   The means indicate that Americans watch more TV in 2024 than in the 1970s. 
 
--   No, because the p-value (0.005) is greater than the $\alpha$ level of .05.
+-   The negative t-statistic suggests a decrease, meaning Americans watch less TV in 2024 than in the 1970s.
 
--   No, because the p-value (0.005) equals the $\alpha$ level of .05.
+-   Although there is a statistically significant difference, the direction of change is unclear.
 
--   Yes, because the p-value (0.005) is greater than the $\alpha$ level of .05.
-
+-   The confidence interval is below zero, indicating Americans watch less TV in 2024 than in the 1970s.
 
 Meta-information
 ================

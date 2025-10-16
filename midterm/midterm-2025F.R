@@ -11,6 +11,7 @@ library("pdftools")
 
 conflicted::conflicts_prefer(here::here)
 conflicted::conflicts_prefer(dplyr::summarize)
+conflicts_prefer(dplyr::mutate)
 
 ## a list of vectors of exam questions in R/Markdown (.Rmd) format
 myexam <- list(c(
@@ -78,9 +79,7 @@ n_questions <- length(myexam[[1]])
 # Create exam versions ---------------------------------------------------------
 
 ## Create exams
-exams2pdf(
-  myexam, 
-  header = "\\renewenvironment{question}{\\item \\begin{samepage}}{\\end{samepage}}",
+exams2pdf(  myexam, 
   n = 2, # number of exam versions
   nsamp = n_questions, # number of exam questions
   name = "midterm_", 
@@ -183,7 +182,7 @@ bad_files
 
 ## key word
 find_something <- files[sapply(files, function(f) {
-  any(grepl("cappun", readLines(f, warn = FALSE), useBytes = TRUE))
+  any(grepl("liberals", readLines(f, warn = FALSE), useBytes = TRUE))
 })]
 
 
@@ -193,7 +192,7 @@ find_something
 
 exams2html(  
   myexam, 
-  n = 1, # number of exam versions
+  n = 2, # number of exam versions
   nsamp = n_questions, # number of exam questions
   name = "midterm_", 
   dir = here("docs", "midterm")

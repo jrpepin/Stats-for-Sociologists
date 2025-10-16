@@ -29,7 +29,7 @@ Question
 ========
 Using 2024 GSS data, a researcher estimated how many Americans believe in life after death. Based on the 90% confidence interval from R, which interpretation is correct?
 
-```{r output, echo = FALSE, results = "asis"}
+```{r output, echo = FALSE, results = "asis", fig.pos='H'}
 #| message: false
 
 gss24$ghosts <- ifelse(gss24$postlife == 1, 1, 0)
@@ -43,7 +43,7 @@ gss24 |>
     lowCI = CI(ghosts, ci = 0.90)['lower'],
     hiCI  = CI(ghosts, ci = 0.90)['upper']
     ) |>
-  kable(format = "latex", booktabs = TRUE) |>
+  kable(format = "latex", booktabs = TRUE, longtable = FALSE) |>
   kable_styling(latex_options = c("hold_position"), position = "center")
 
 ```

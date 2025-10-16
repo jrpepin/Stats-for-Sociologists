@@ -30,7 +30,7 @@ Question
 Using 2024 GSS data, a researcher estimated the proportion of Americans who believe in life after death. Based on the 95% confidence interval from R, which interpretation is correct?
 
 
-```{r output, echo = FALSE, results = "asis"}
+```{r output, echo = FALSE, results = "asis", fig.pos='H'}
 #| message: false
 
 gss22$sex <- zap_missing(gss22$sex) 
@@ -47,7 +47,7 @@ gss22 |>
     lowCI = CI(hrsrelax, ci = 0.95)['lower'],
     hiCI  = CI(hrsrelax, ci = 0.95)['upper']
     ) |>
-  kable(format = "latex", booktabs = TRUE) |>
+  kable(format = "latex", booktabs = TRUE, longtable = FALSE) |>
   kable_styling(latex_options = c("hold_position"), position = "center")
 
 ```

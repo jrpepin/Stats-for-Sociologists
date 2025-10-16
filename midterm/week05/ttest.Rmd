@@ -46,14 +46,16 @@ ttest_result <- t.test(my_data$gunlaw ~ my_data$year, alternative = "two.sided")
 
 # Create a tibble with key results
 tibble(
-  `t-statistic` = round(ttest_result$statistic, 2),
-  `df` = round(ttest_result$parameter, 2),
-  `p-value` = round(ttest_result$p.value, 4),
-  `95% CI Lower` = round(ttest_result$conf.int[1], 2),
-  `95% CI Upper` = round(ttest_result$conf.int[2], 2)
+  `t-statistic` = sprintf("%.2f", ttest_result$statistic),
+  `df` = sprintf("%.2f", ttest_result$parameter),
+  `p-value` = sprintf("%.3f", ttest_result$p.value),
+  `95% CI Lower` = sprintf("%.2f", ttest_result$conf.int[1]),
+  `95% CI Upper` = sprintf("%.2f", ttest_result$conf.int[2])
 ) |>
   kable(format = "latex", booktabs = TRUE) |>
   kable_styling(latex_options = c("hold_position"), position = "center")
+
+
 
 ```
 
@@ -64,9 +66,9 @@ Answerlist
 
 -   There is a statistically significant difference in support for the police permit law between 1984 and 2024, suggesting that public opinion has changed over time.
 
--   The difference in support for the police permit law between 1984 and 2024 was due to sampling error and cannot be interpreted.
+-   There is a statistically significant difference in support for the police permit law between 1984 and 2024, but it was due to sampling error and cannot be interpreted.
 
--   The is a statistically significant increase in support for the police permit law from 1984 to 2024, proving that stricter gun control laws are now favored by most Americans.
+-   There is a statistically significant increase in support for the police permit law from 1984 to 2024, proving that stricter gun control laws are now favored by most Americans.
 
 Meta-information
 ================

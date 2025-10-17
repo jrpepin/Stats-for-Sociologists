@@ -8,10 +8,11 @@ library("exams")
 library("quarto")
 library("qpdf")
 library("pdftools")
+library("sak")
 
 conflicted::conflicts_prefer(here::here)
 conflicted::conflicts_prefer(dplyr::summarize)
-conflicts_prefer(dplyr::mutate)
+conflicted::conflicts_prefer(dplyr::mutate)
 
 ## a list of vectors of exam questions in R/Markdown (.Rmd) format
 myexam <- list(c(
@@ -80,7 +81,7 @@ n_questions <- length(myexam[[1]])
 
 ## Create exams
 exams2pdf(  myexam, 
-  n = 2, # number of exam versions
+  n = 1, # number of exam versions
   nsamp = n_questions, # number of exam questions
   name = "midterm_", 
   dir = here("docs", "midterm"),
@@ -89,69 +90,46 @@ exams2pdf(  myexam,
   verbose = TRUE
   )
 
+## Convert a single PDF file
+#convert_pdf_to_docx(here("docs", "midterm", "midterm_1.pdf"))
+
 # Create title pages -----------------------------------------------------------
 
 quarto_render(
   input = here("midterm", "title-page.qmd"),
   output_file = "title_1.pdf",
-  execute_params = list(form_code = "A", captions = c("Intro caption"))
-)
-
-quarto_render(
-  input = here("midterm", "title-page.qmd"),
-  output_file = "title_2.pdf",
-  execute_params = list(form_code = "B", captions = c("Instructions caption"))
-)
+  )
 
 # Combine documents ------------------------------------------------------------
 
-## Form A
 pdf_combine(
   input = c(
     here("docs", "midterm", "title_1.pdf"),
     here("docs", "midterm", "midterm_1.pdf")
   ),
-  output = here("docs", "midterm", "midterm_A_AK.pdf")
+  output = here("docs", "midterm", "midterm_AK.pdf")
 )
 
-## Form B
-pdf_combine(
-  input = c(
-    here("docs", "midterm", "title_2.pdf"),
-    here("docs", "midterm", "midterm_2.pdf")
-  ),
-  output = here("docs", "midterm", "midterm_B_AK.pdf")
-)
 
-# Exams without the answer key -------------------------------------------------
+# Exam without the answer key -------------------------------------------------
 
 # Load the PDF text
-pdf_text_vec_A <- pdf_text(here("docs", "midterm", "midterm_A_AK.pdf"))
-pdf_text_vec_B <- pdf_text(here("docs", "midterm", "midterm_B_AK.pdf"))
+pdf_text_vec <- pdf_text(here("docs", "midterm", "midterm_AK.pdf"))
 
 # Find the page number where "Answer Sheet" appears
-answer_sheet_page_A <- which(sapply(pdf_text_vec_A, function(x) grepl("Answer Sheet", x)))
-answer_sheet_page_B <- which(sapply(pdf_text_vec_B, function(x) grepl("Answer Sheet", x)))
+answer_sheet_page <- which(sapply(pdf_text_vec, function(x) grepl("Answer Sheet", x)))
 
 # Keep all pages except the answer sheets
 pdf_subset(
-  input = here("docs", "midterm", "midterm_A_AK.pdf"),
-  pages = 1:(answer_sheet_page_A - 1),
-  output = here("docs", "midterm", "midterm_A.pdf")
-)
-
-pdf_subset(
-  input = here("docs", "midterm", "midterm_B_AK.pdf"),
-  pages = 1:(answer_sheet_page_B - 1),
-  output = here("docs", "midterm", "midterm_B.pdf")
+  input = here("docs", "midterm", "midterm_AK.pdf"),
+  pages = 1:(answer_sheet_page - 1),
+  output = here("docs", "midterm", "midterm.pdf")
 )
 
 # Get rid of temporary docs ----------------------------------------------------
 
 file.remove(here("docs", "midterm", "midterm_1.pdf"))
-file.remove(here("docs", "midterm", "midterm_2.pdf"))
 file.remove(here("docs", "midterm", "title_1.pdf"))
-file.remove(here("docs", "midterm", "title_2.pdf"))
 
 
 # problems ---------------------------------------------------------------------
@@ -182,7 +160,7 @@ bad_files
 
 ## key word
 find_something <- files[sapply(files, function(f) {
-  any(grepl("liberals", readLines(f, warn = FALSE), useBytes = TRUE))
+  any(grepl("as_kable_extra", readLines(f, warn = FALSE), useBytes = TRUE))
 })]
 
 

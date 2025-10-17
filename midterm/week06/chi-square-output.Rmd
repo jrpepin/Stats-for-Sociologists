@@ -18,7 +18,16 @@ pacman::p_load(
 data(gss_all)
 
 options(digits = 2)
+```
 
+
+Question
+========
+Has agreement with the statement that 'Black Americans face worse jobs, income, and housing than white Americans due to discrimination' shifted? Using a significance level of $\alpha = 0.01$, what conclusion should be drawn?
+
+
+```{r output, echo = FALSE, results = "asis", fig.pos='H'}
+#| message: false
 my_data <- gss_all |>
   filter(year == 2022 | year == 2024) |>
   select(year, racdif1) |>
@@ -28,7 +37,7 @@ my_data <- gss_all |>
   ) |>
   drop_na(opinion)
 
-tbl_chi <- my_data |>
+my_data |>
   tbl_cross(
     row = opinion,
     col = year,
@@ -36,21 +45,13 @@ tbl_chi <- my_data |>
     missing = "no"
   ) |>
   add_p(source_note = TRUE) |>
-  as_gt() |>
-  gt::tab_options(table.align = "center", table.font.size = "small")
-
-# Save as image
-gtsave(tbl_chi, "chi-square-output.png")
+  as_kable_extra(format = "latex", booktabs = TRUE) |>
+  kable_styling(latex_options = c("hold_position"), position = "center")
+  
+ # as_gt() |>
+ # gt::tab_options(table.align = "center", table.font.size = "small")
 
 ```
-
-Question
-========
-Has agreement with the statement that 'Black Americans face worse jobs, income, and housing than white Americans due to discrimination' shifted? Using a significance level of $\alpha = 0.01$, what conclusion should be drawn?
-
-\begin{center}
-\includegraphics[width=0.4\textwidth]{chi-square-output.png}
-\end{center}
 
 
 Answerlist

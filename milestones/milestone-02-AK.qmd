@@ -3,7 +3,7 @@ title: "Milestone 02"
 author: "Answer Key"
 format: pdf # or replace 'pdf' with 'typst'
 execute:
-  error: true # change this to false when your assignment is complete.
+  error: false # change this to false when your assignment is complete.
 ---
 
 # Environment
@@ -23,7 +23,7 @@ library(gssrdoc)
 library(summarytools)
 ```
 
-Load the 2024 GSS data and the GSS panel data
+Load the 2024 GSS data
 
 ```{r}
 #| label: gss-data
@@ -85,14 +85,13 @@ gss24 |>
     ) 
 ```
 
-***Is the median value for `hrs1` consistent with the mean? Speculate
-what might explain any differences.***
+***Is the median value for `hrs1` consistent with the mean? Speculate what might explain any differences.***
 
-The median (40) and mean (39.44) are close, suggesting little skew. The slightly lower mean than median suggests a mild left (e.g., negative) skew, indicating a few respondents report very low hours (likely due to unemployment or few part-time hours).
+The median (40) and mean (39.44) are close, suggesting little skew. The slightly lower mean than median suggests a mild left (e.g., negative) skew, indicating some respondents report very low hours (likely due to unemployment or few part-time hours).
 
 **Interpret the mean and standard deviation for `hrs1`.**
 
-On average, people in the sample work just under a standard full-time schedule of 40 hours per week (39 hours). The standard deviation of 14 hours indicates 68% of respondents report between 25.6 and and 53 weekly work hours. This is a substantial amount of variation, as some people work significantly fewer or more hours per week. This likely reflects a mix of part-time, full-time, and overtime work patterns.
+On average, Americans work slightly less than a standard full-time schedule of 40 hours per week (39 hours). The standard deviation of 14 hours indicates 68% of respondents report between 25.6 and and 53 weekly work hours. This is a substantial amount of variation, as some people work significantly fewer or more hours per week. This likely reflects a mix of part-time, full-time, and overtime work patterns.
 
 ## Checkpoint 03: Summarize dailty tv hours (`tvhours`)
 
@@ -114,10 +113,13 @@ gss24 |>
     ) 
 ```
 
-***Is the median value for `tvhours` consistent with the mean? Speculate
-what might explain any differences.***
+***Is the median value for `tvhours` consistent with the mean? Speculate what might explain any differences.***
+
+The median shows that the typical American watches 2 hours of TV per day. The mean (3.3 hours per day) is higher than the median, which suggests the data is right-skewed (e.g., positively skewed), indicating some people watch much more TV than typical Americans, pulling the average up.
 
 **Interpret the mean and standard deviation for `tvhours`.**
+
+Americans watch an average of 3.3 hours of TV per day. The standard deviation of 3.3 daily hours suggests a great amount of variability in TV habits. Based on the 68-95-99 rule, about 95% of individuals likely watch TV between 0 and nearly 10 hours daily, showing that some watch none or very little television per day and others spend most of their day watching TV.
 
 ## Checkpoint 04: Summarize daily tv hours (`tvhours`) by `sex`
 
@@ -137,9 +139,9 @@ gss24 |>
 
 ```
 
-**How did the mean and standard deviation of daily tv hours differ
-between men and women and what do these differences suggest about
-gender-based variability in tv viewing patterns?**
+**How did the mean and standard deviation of daily tv hours differ between men and women and what do these differences suggest about gender-based variability in tv viewing patterns?**
+
+On average, women reported slightly more daily TV hours (3.38) compared with men (3.21). The difference in variability was similar, with women's TV time 7 minutes more variable than men's TV time.
 
 ## Checkpoint 05: Create a new data frame
 
@@ -245,11 +247,13 @@ my_data |>
     ) 
 ```
 
-***Which work-hours group reported the most daily tv hours in 2024? Was
-there a lot or a little variability in tv hours?***
+***Which work-hours group reported the most daily tv hours in 2024? Was there a lot or a little variability in tv hours?***
 
-***Is the median value for `tvhours` consistent with the mean? Speculate
-what might explain any differences.***
+Part-time workers watched more TV daily (2.77 hours) than full-time workers (2.55 hours), with both groups showing high variability — standard deviations exceeded 2 hours per day. 
+
+***Is the median value for `tvhours` consistent with the mean? Speculate what might explain any differences.***
+
+The mean is greater than the median for both groups, suggesting that there is a positive skew to both distributions. In other words, there are people who watch much more TV than typical of both part-time and full-time workers.
 
 ## Checkpoint 09: Summarize weekly work and daily tv hours by political identity
 
@@ -272,11 +276,13 @@ my_data |>
     ) 
 ```
 
-***Which political group reported the most work hours in 2024? Was there
-a lot or a little variability in work hours?***
+**Which political group reported the most work hours in 2024? Was there a lot or a little variability in work hours?**
 
-***Is the median value for*** **`hrs1`** ***consistent with the mean?
-Speculate what might explain any differences.***
+Although moderates work more weekly hours (39.39) than Conservatives (39.89) or Liberals (38.45) on average, these differences are minor. Additionally, there was great variability in average work hours for each group, with standard deviations exceeding 13 works hours per week. For example, 95% of Conservatives worked between About 95% worked between 11 and 70 hours per week (2 SD from the mean).
+
+**Is the median value for `hrs1` consistent with the mean? Speculate what might explain any differences.**
+
+The median work hours is 40 across all political groups and closely aligns with each group's mean. Liberals show a a SD (38.45) slightly lower than the others (39.39 and 39.89), indicating a few more Liberals report working significantly fewer hours than the typical respondent compared with the other groups.
 
 B.  Use `group_by()` and `sumamrize()` to create a table showing the
     frequency, mean, median, and sd of **`tvhours`** for each of the
@@ -296,8 +302,9 @@ my_data |>
     ) 
 ```
 
-***Which political group watched the most television in 2024? Was there
-a lot or a little variability in television hours?***
+**Which political group watched the most television in 2024? Was there a lot or a little variability in television hours?**
+
+Moderates reported the highest average daily TV time (2.75 hours), followed by Conservatives (2.56) and Liberals (2.47). All three groups showed substantial variability, with standard deviations over 2 hours, indicating wide differences in individual viewing habits.
 
 ## Checkpoint 10: Create a summary dataframe
 
@@ -318,26 +325,27 @@ gss24_summary <- my_data |>
 head(gss24_summary)
 ```
 
-***Did men or women report more average work hours in 2024? What about
-TV hours?***
+***Did men or women report more average work hours in 2024? What about TV hours?***
 
-***What percentage of men worked 40 hours or less than per week in 2024?
-(You can either add `R` code chunk to this document or calculate it with
-the formula. Show your work either way.)***
+Men reported more average work time (42 hours) than women (37 hours), whereas women reported more average TV time (2.67 hours) than men (2.53 hours).
+
+***What percentage of men worked 40 hours or less than per week in 2024? (You can either add `R` code chunk to this document or calculate it with the formula. Show your work either way.)***
 
 ```{r}
 #| label: percentage
 
 my_data|>
-  dplyr::mutate(extra_hrs = case_when(
+  dplyr::mutate(no_overtime = case_when(
     hrs1 <= 40 ~ 1,
     hrs1 >  40 ~ 0,
     TRUE ~ NA_integer_)) |>
   group_by(sex) |>
-  summarise(proportion = mean(extra_hrs)
+  summarise(proportion = mean(no_overtime)
 )
 
 ```
+
+About 64% of men worked 40 hours or less than per week in 2024.
 
 # IPUMS Data
 

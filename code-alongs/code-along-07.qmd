@@ -1,0 +1,318 @@
+---
+title: "Code-along 07"
+author: "FirstName LastName"
+editor: visual
+execute:
+  error: true
+output: pdf_document
+---
+
+# Setup
+
+## Packages
+
+Load the standard packages.
+
+```{r}
+#| message: false
+#| label: load
+
+library(tidyverse)
+library(haven) # not core tidyverse
+library(gssr)
+library(gssrdoc) # load the GSS codebook
+library(summarytools)
+library(gtsummary) 
+```
+
+## Load your data
+
+Get the data from the 2022 survey
+
+```{r}
+#| label: gssdata
+
+gss22 <- gss_get_yr(2022)
+
+```
+
+Let's make a df with only the (pretty) categorical and continuous
+variables we'll analyze.
+
+```{r}
+#| label: my-data
+
+# Categorical Variables
+my_cat <- gss22 |>
+  select(id, fefam, race, sex) |>
+  zap_missing() |>
+  as_factor() |>
+  droplevels()
+
+# Continuous Variables
+my_con <- gss22 |>
+  select(id,lifenow, age, educ, hrs1) |>
+  mutate(
+    lifenow = as.numeric(lifenow),
+    age = as.numeric(age),
+    educ = as.numeric(educ),
+    hrs1 = as.numeric(hrs1))
+
+# Combine the two dataframes
+my_data <- left_join(my_cat, my_con, by = "id")
+```
+
+# Descriptive Tables
+
+```{r}
+#| label: tbl_summary
+#| eval: false
+
+my_data |>
+  tbl_summary()
+
+```
+
+```{r}
+#| label: drop_na
+#| eval: false
+
+my_data |>
+  drop_na() |>
+  tbl_summary()
+
+```
+
+```{r}
+#| label: statistics
+#| eval: false
+
+my_data |>
+  drop_na() |>
+  tbl_summary(
+    statistic = list(
+      all_continuous() ~ "{mean} ({sd})",
+      all_categorical() ~ "{p}"
+    ))
+
+```
+
+```{r}
+#| label: variables
+#| eval: false
+
+my_data |>
+  drop_na() |>
+  select(lifenow, race, sex, fefam, age, hrs1, educ) |>
+  tbl_summary(
+    statistic = list(
+      all_continuous() ~ "{mean} ({sd})",
+      all_categorical() ~ "{p}"
+    ))
+
+```
+
+```{r}
+#| label: labels
+#| eval: false
+
+my_data |>
+  drop_na() |>
+  select(lifenow, race, sex, fefam, age, hrs1, educ) |>
+  tbl_summary(
+    label = list(
+      race     ~ "Race",
+      sex      ~ "Gender",
+      fefam    ~ "Better for man to work, woman tend home",
+      lifenow  ~ "Life satisfaction (0-10)",
+      age      ~ "Age",
+      hrs1     ~ "Number of hours worked last week",
+      educ     ~ "Years of education"),
+    statistic = list(
+      all_continuous() ~ "{mean} ({sd})",
+      all_categorical() ~ "{p}"
+    ))
+
+```
+
+```{r}
+#| label: dichotomous
+#| eval: false
+
+my_data |>
+  drop_na() |>
+  select(lifenow, race, sex, fefam, age, hrs1, educ) |>
+  tbl_summary(
+    label = list(
+      race     ~ "Race",
+      sex      ~ "Women",
+      fefam    ~ "Better for man to work, woman tend home",
+      lifenow  ~ "Life satisfaction (0-10)",
+      age      ~ "Age",
+      hrs1     ~ "Number of hours worked last week",
+      educ     ~ "Years of education"),
+     type  = list(sex  ~ "dichotomous"),
+     value = list(sex  = "female"),  
+    statistic = list(
+      all_continuous() ~ "{mean} ({sd})",
+      all_categorical() ~ "{p}"),
+  )
+
+```
+
+```{r}
+#| label: group
+#| eval: false
+
+my_data |>
+  drop_na() |>
+  select(lifenow, race, sex, fefam, age, hrs1, educ) |>
+  tbl_summary(
+    by = race,  # This groups the summary by race
+    label = list(
+      sex      ~ "Women",
+      fefam    ~ "Better for man to work, woman tend home",
+      lifenow  ~ "Life satisfaction (0-10)",
+      age      ~ "Age",
+      hrs1     ~ "Number of hours worked last week",
+      educ     ~ "Years of education"
+    ),
+    type = list(sex ~ "dichotomous"),
+    value = list(sex = "female"),  
+    statistic = list(
+      all_continuous() ~ "{mean} ({sd})",
+      all_categorical() ~ "{p}"
+    )
+  )
+
+```
+
+
+```{r}
+#| label: total
+#| eval: false
+
+my_data |>
+  drop_na() |>
+  select(lifenow, race, sex, fefam, age, hrs1, educ) |>
+  tbl_summary(
+    by = race,
+    label = list(
+      sex      ~ "Women",
+      fefam    ~ "Better for man to work, woman tend home",
+      lifenow  ~ "Life satisfaction (0–10)",
+      age      ~ "Age",
+      hrs1     ~ "Number of hours worked last week",
+      educ     ~ "Years of education"
+    ),
+    type = list(sex ~ "dichotomous"),
+    value = list(sex = "female"),  
+    statistic = list(
+      all_continuous() ~ "{mean} ({sd})",
+      all_categorical() ~ "{p}"
+    )
+  ) |>
+  add_overall()  # This adds the Total column
+
+
+```
+
+
+```{r}
+#| label: header
+#| eval: false
+
+my_data |>
+  drop_na() |>
+  select(lifenow, race, sex, fefam, age, hrs1, educ) |>
+  tbl_summary(
+    by = race,
+    label = list(
+      sex      ~ "Women",
+      fefam    ~ "Better for man to work, woman tend home",
+      lifenow  ~ "Life satisfaction (0–10)",
+      age      ~ "Age",
+      hrs1     ~ "Number of hours worked last week",
+      educ     ~ "Years of education"
+    ),
+    type = list(sex ~ "dichotomous"),
+    value = list(sex = "female"),  
+    statistic = list(
+      all_continuous() ~ "{mean} ({sd})",
+      all_categorical() ~ "{p}"
+    )
+  ) |>
+  add_overall()  |>
+  modify_header(
+    label = '**Variable**') 
+
+```
+
+Changed YAML:
+
+`output: pdf_document`
+
+```{r}
+#| label: two-lines
+#| eval: false
+
+my_data |>
+  drop_na() |>
+  select(lifenow, race, sex, fefam, age, hrs1, educ) |>
+  tbl_summary(
+    by = race,
+    label = list(
+      sex      ~ "Women",
+      fefam    ~ "Better for man to work, \nwoman tend home",
+      lifenow  ~ "Life satisfaction (0–10)",
+      age      ~ "Age",
+      hrs1     ~ "Number of hours \nworked last week",
+      educ     ~ "Years of education"
+    ),
+    type = list(sex ~ "dichotomous"),
+    value = list(sex = "female"),  
+    statistic = list(
+      all_continuous() ~ "{mean} ({sd})",
+      all_categorical() ~ "{p}"
+    )
+  ) |>
+  add_overall() |>
+  modify_header(
+    label = '**Variable**') |>
+  as_flex_table()
+```
+
+
+```{r}
+#| label: two-lines
+
+my_data |>
+  drop_na() |>
+  select(lifenow, race, sex, fefam, age, hrs1, educ) |>
+  tbl_summary(
+    by = race,
+    label = list(
+      sex      ~ "Women",
+      fefam    ~ "Better for man to work, \nwoman tend home",
+      lifenow  ~ "Life satisfaction (0–10)",
+      age      ~ "Age",
+      hrs1     ~ "Number of hours \nworked last week",
+      educ     ~ "Years of education"
+    ),
+    type = list(sex ~ "dichotomous"),
+    value = list(sex = "female"),  
+    statistic = list(
+      all_continuous() ~ "{mean} ({sd})",
+      all_categorical() ~ "{p}"
+    )
+  ) |>
+  add_overall() |>
+  modify_header(
+    label = '**Variable**') |>
+  as_flex_table() |>
+  add_footer_lines(values = "Notes: Unweighted data from the 2022 U.S. General Social Survey")
+  
+```
+
+
+# Data Storytelling

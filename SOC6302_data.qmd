@@ -35,8 +35,9 @@ data(gss_all)
 # Get the data only for the 2024 survey respondents
 gss24 <- gss_get_yr(2024)
 
-# Load the codebook
-data(gss_dict)
+# Get the data only for the 2024 survey respondents
+gss22 <- gss_get_yr(2022)
+
 ```
 
 # 01.1 Intro
@@ -198,6 +199,20 @@ THINK
 -   `sex`: Respondent’s gender
 -   `lifenow` R's rating of life overall now from 0-10
 -   `educ` Highest year of school completed
+
+
+# 07.1 Description
+
+```{r}
+
+## GSS22
+gss_all |>
+  subset(year == 2022) |>
+  select(lifenow, age, fefam, hrs1, race, sex, educ) |>
+  drop_na() |>
+  saveRDS(file = "tutorials/SOC6302-07/data/gss22.rds")
+
+```
 
 # Some future lecture
 

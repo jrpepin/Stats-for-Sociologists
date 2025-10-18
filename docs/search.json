@@ -4786,5 +4786,26 @@
     "title": "Question",
     "section": "Answerlist",
     "text": "Answerlist\n\npositively skewed\nnegatively skewed\nsymmetrical\nnominal"
+  },
+  {
+    "objectID": "code-alongs/code-along-07.html",
+    "href": "code-alongs/code-along-07.html",
+    "title": "Code-along 07",
+    "section": "",
+    "text": "Load the standard packages.\n\nlibrary(tidyverse)\nlibrary(haven) # not core tidyverse\nlibrary(gssr)\nlibrary(gssrdoc) # load the GSS codebook\nlibrary(summarytools)\nlibrary(gtsummary) \n\n\n\n\nGet the data from the 2022 survey\n\ngss22 &lt;- gss_get_yr(2022)\n\nFetching: https://gss.norc.org/documents/stata/2022_stata.zip\n\n\nLet’s make a df with only the (pretty) categorical and continuous variables we’ll analyze.\n\n# Categorical Variables\nmy_cat &lt;- gss22 |&gt;\n  select(id, fefam, race, sex) |&gt;\n  zap_missing() |&gt;\n  as_factor() |&gt;\n  droplevels()\n\n# Continuous Variables\nmy_con &lt;- gss22 |&gt;\n  select(id,lifenow, age, educ, hrs1) |&gt;\n  mutate(\n    lifenow = as.numeric(lifenow),\n    age = as.numeric(age),\n    educ = as.numeric(educ),\n    hrs1 = as.numeric(hrs1))\n\n# Combine the two dataframes\nmy_data &lt;- left_join(my_cat, my_con, by = \"id\")"
+  },
+  {
+    "objectID": "code-alongs/code-along-07.html#packages",
+    "href": "code-alongs/code-along-07.html#packages",
+    "title": "Code-along 07",
+    "section": "",
+    "text": "Load the standard packages.\n\nlibrary(tidyverse)\nlibrary(haven) # not core tidyverse\nlibrary(gssr)\nlibrary(gssrdoc) # load the GSS codebook\nlibrary(summarytools)\nlibrary(gtsummary)"
+  },
+  {
+    "objectID": "code-alongs/code-along-07.html#load-your-data",
+    "href": "code-alongs/code-along-07.html#load-your-data",
+    "title": "Code-along 07",
+    "section": "",
+    "text": "Get the data from the 2022 survey\n\ngss22 &lt;- gss_get_yr(2022)\n\nFetching: https://gss.norc.org/documents/stata/2022_stata.zip\n\n\nLet’s make a df with only the (pretty) categorical and continuous variables we’ll analyze.\n\n# Categorical Variables\nmy_cat &lt;- gss22 |&gt;\n  select(id, fefam, race, sex) |&gt;\n  zap_missing() |&gt;\n  as_factor() |&gt;\n  droplevels()\n\n# Continuous Variables\nmy_con &lt;- gss22 |&gt;\n  select(id,lifenow, age, educ, hrs1) |&gt;\n  mutate(\n    lifenow = as.numeric(lifenow),\n    age = as.numeric(age),\n    educ = as.numeric(educ),\n    hrs1 = as.numeric(hrs1))\n\n# Combine the two dataframes\nmy_data &lt;- left_join(my_cat, my_con, by = \"id\")"
   }
 ]

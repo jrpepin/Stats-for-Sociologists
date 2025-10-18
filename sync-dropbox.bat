@@ -35,9 +35,8 @@ IF %ERRORLEVEL% NEQ 0 (
 REM === STEP 2: Sync Dropbox clone to match main repo ===
 echo Syncing Dropbox clone to match main repo >> "%LOG_PATH%"
 cd /d "%DROPBOX_CLONE_PATH%"
-git fetch origin >> "%LOG_PATH%" 2>&1
-git checkout dropbox-mirror >> "%LOG_PATH%" 2>&1
-git reset --hard origin/main >> "%LOG_PATH%" 2>&1
+git checkout main >> "%LOG_PATH%" 2>&1
+git pull origin main >> "%LOG_PATH%" 2>&1
 IF %ERRORLEVEL% NEQ 0 (
     echo Failed to sync Dropbox mirror branch >> "%LOG_PATH%"
     exit /b

@@ -71,13 +71,13 @@ knitr::opts_chunk$set(echo = FALSE,
 
 ## Description
 
-![](images/snail07.png "Happy snail with tie"){width="75%"}
+![](images/snail07.png "Happy snail with tie"){width="50%"}
 
 `r fa("fas fa-lightbulb", fill = "#18BC9C")` [**LEARNING OBJECTIVES**]{style="color: #18BC9C;"}
 
-1.  X
-2.  Y
-3.  Develop best practices in creating data visualizations
+1.  Further explore a bivariate relationship by introducing another variable.
+2.  Develop best practices in viewing and creating a descriptive summary table.
+3.  Develop best practices in viewing and creating data visualizations
 
 <br>
 
@@ -85,8 +85,8 @@ knitr::opts_chunk$set(echo = FALSE,
 
 Readings are available on Quercus.
 
-1.  XX\
-2.  YY
+1. Charts That Lie by Being Poorly Designed
+2. 500,000 Dots Is Too Many
 
 <br>
 
@@ -97,6 +97,15 @@ Readings are available on Quercus.
 -   CONTROL VARIABLE
 -   SPURIOUS RELATIONSHIP
 -   CONDITIONAL RELATIONSHIP
+-   EXPLORATORY DATA ANALYSIS  
+-   CONFIRMATION BIAS  
+-   CHART LEGENDS  
+-   AXIS TRUNCATION  
+-   DUBIOUS DATA  
+-   PRIMARY DATA SOURCE  
+-   DUBIOUS SOURCES  
+-   CHERRY-PICKING  
+-   CHART JUNK  
 
 Elaboration
 --------------------------------------------------------------------------------
@@ -306,9 +315,9 @@ influenced their time spent in daily activities such as childcare, housework, le
     
   
 The table below is from research I published analyzing data from the American Time Use Survey to investigate this hypothesis. 
-The table shows the means and standard deviations for the variables I analyzed, summarized for all mothers and grouped by mothers' partnership status. 
+The table shows the means and standard errors for the variables I analyzed, summarized for all mothers and grouped by mothers' partnership status. 
 
-![](images/table01_example.png "Table 01: Means and Standard Deviations of Variables."){width="100%"}
+![](images/table01_example.png "Table 01: Means and Standard Errors of Variables."){width="100%"}
 
 <br>
 
@@ -337,12 +346,12 @@ question("How many mothers are in the sample?",
 
 <br>
 
-Notice that some of the variables have a standard deviation (S.D.) reported in parentheses. 
+Notice that some of the variables have a standard errors (S.E.) reported in parentheses. 
 These variables are all interval-ratio variables. 
 The variables without the standard deviation are either nominal or ordinal variables,
-so a S.D. wouldn't make sense to report. 
+so a S.E. wouldn't make sense to report. 
   
-The first row shows the number of minutes per day that mothers report providing childcare. For example, married mothers reported about 125 daily minutes of childcare and the standard deviation was 1 minute. This means there was little variability among married mothers' time spent providing childcare.
+The first row shows the number of minutes per day that mothers report providing childcare. For example, married mothers reported about 125 daily minutes of childcare and the standard error was 1 minute. This means there was little uncertainty around the estimate of the mean of 125 daily minutes.
 
 <br>
 
@@ -439,9 +448,9 @@ question("Which statement could we make given the information in the table?",
 
 Below are some best practices and general guidelines for formatting and presenting Table 01 in research articles:
 
-**Standard Deviations in Parentheses**
+**Standard Deviations/Errors in Parentheses**
 
-> Include standard deviations in parentheses next to means for continuous variables to clearly convey variability and support interpretation.
+> Include standard deviations/errors in parentheses next to means for continuous variables to clearly convey variability and support interpretation.
 
 **Dependent Variables (DVs) Placement**
 
@@ -540,7 +549,7 @@ Choosing which approach to use depends on what you are currently trying to achie
 
 #### Brute-force approach
 
-If you're not using Quarto, or are just in a hurry to make your table, a common approach is to simply set up a table shell (empty table) in Excel or Google Sheets. Then, you'll copy and paste the R stats you need to fill out your table into your spreadsheet.  
+If you're not using Quarto, or you are just in a hurry to make your table, a common approach is to simply set up a table shell (empty table) in Excel or Google Sheets. Then, you'll copy and paste the R stats you need to fill out your table into your spreadsheet.  
 
 1. Setup a “shell” for the table in Excel
 
@@ -563,7 +572,7 @@ The best practices for formatting Table 01 in research articles can be illustrat
 # Create the data frame
 gtsummary_best_practices <- data.frame(
   best_practice = c(
-    "Standard Deviations in Parentheses",
+    "Standard Deviations/errors in Parentheses",
     "Variable Placement",
     "Weighted vs. Unweighted Data",
     "Data Source and Notes",
@@ -582,7 +591,7 @@ gtsummary_best_practices <- data.frame(
     "`modify_header()` and `modify_caption()` enable bolding and styling for clarity.",
     "Variable labels and captions can be customized to maintain consistent capitalization.",
     "Default layout includes clean lines and spacing; `as_gt()` allows further customization.",
-    "`by = group_var` compares subgroups; `add_n()` adds total sample size for context."
+    "`by = group_var` compares subgroups; `add_overall` adds total sample size for context."
   )
 )
 
@@ -614,13 +623,517 @@ These nicely formatted tables can also be [exported into a Word document](https:
 
 Data Storytelling
 --------------------------------------------------------------------------------
+Data visualization is simply the visual presentation of data or information. 
+It combines both art and data science. 
+There are two primary purposes of data visualization:  
+  
+1) Exploratory data analysis and  
+2) Conveying information.  
+  
+<br>  
+
+#### Exploratory data analysis
+  
+When we're exploring data, visualizations are used primarily to summarize the main characteristics of a variable or dataset. Sometimes data visualization is used to determine if a statistical technique is appropriate for the data.  
+  
+Most of our work with plots so far have been exploratory in nature. 
+Exploratory data analysis is undertaken to help **YOU**, the researcher, interpret and understand data.  
+  
+![](images/summary-metrics.png "4 datasets with the same summary statistics."){ width=100% }
+  
+Data scientists routinely graph their data in order to see patterns in the data that might not be apparent in the summary statistics. For example, the graph above illustrates four different datasets that all have identical summary statistics (measures of central tendency).  
+  
+  
+<br>  
+
+#### Conveying information 
+  
+Data visualization is also used to present information to an audience, 
+to share the results of a study or to provide context about a real world issue.  
+  
+Data visualizations conveying information are around you every day. 
+Newspapers and websites routinely present data in their articles to help describe realities of the social world. 
+Data visualizations break down information to help us easily digest large sets of numbers and 
+explain how individual stories relate to larger social patterns.  
+  
+Storytelling with data visuals is done to help an **AUDIENCE** interpret and understand data.  
+  
+Watch this short [video](https://youtu.be/TA_tNh0LMEs) about data journalism, the practice of telling stories with data [4 minutes].
+  
+![](https://youtu.be/TA_tNh0LMEs)  
+  
+<br>  
+  
+Data visualizations are produced to communicate a message supported by the data. 
+That is to say, plots are used to persuade viewers to believe or do something.  
+  
+  
+According to Alberto Cairo, author of the book [How Charts Lie](https://wwnorton.com/books/9781324001560), 
+<span style="color:#F39C12">__"Visualizations are not images. They are visual arguments__."</span>     
+  
+### Reading Data Stories  
+  
+The primary way most of us interact with data visualizations is as consumers. 
+We're the audience, active readers of data stories.  
+    
+If data visualizations are arguments, not images, then we need to know how to read and evaluate them. When consuming graphs, we are all victims of **confirmation bias**, 
+readily believing information that confirms or supports our prior beliefs. 
+  
+Cairo cautions us:  
+  
+> "Don't read too much into a graph, particularly if you are reading what you want to read."  
+  
+Data visualizations can be misleading for many reasons: accidentally, 
+because the creator intended to deceive, if presented out of context, and so on. 
+It is easier to be misled than you might even realize.  
+  
+Watch this [video](https://youtu.be/vbDObzI-CTc) for an example of how you can even mislead yourself [8 minutes].  
+  
+NOTE: Stop watching at 7 minutes, where the commercial begins.  
+  
+![](https://youtu.be/vbDObzI-CTc)
+  
+  
+<br>  
+  
+Many charts are designed carefully and are accurate and persuasive visualizations. 
+But, consuming data visualizations without a critical eye can still leave people with inaccurate impressions.  
+  
+<br>  
+
+#### Understanding data visualizations requires actively reading 
+  
+Using one chart as an example, this short [video](https://youtu.be/O-3Mlj3MQ_Q) provides a nice overview of things to consider when consuming data visualizations [5 minutes].  
+  
+![](https://youtu.be/O-3Mlj3MQ_Q)
+  
+  
+<br> 
+  
+
+### Misleading Plots
+
+**Numbers (data), and thus charts, are not facts.**  
+There is no undeniable truth and many, MANY decisions have been made to present data visually. 
+  
+There are common ways that charts mislead us. 
+  
+#### 5 Ways Graphs Lie (according to Cairo)
+
+1. Poor design
+2. Dubious data
+3. Insufficient data
+4. Concealing uncertainty
+5. Suggesting misleading patterns
+  
+  
+Watch these two short videos for a summary of how charts commonly mislead readers.  
+  
+<br>  
+
+[Data Visualization and Misrepresentation](https://youtu.be/x-rDVXVwW9s) [4 minutes]
+![](https://youtu.be/x-rDVXVwW9s)
+  
+<br>  
+  
+[How to spot a misleading graph](https://youtu.be/E91bGT9BjYk) [4 minutes]
+![](https://youtu.be/E91bGT9BjYk)
+  
+<br>  
+
+**Let's summarize a few of the things to be on the lookout for.**  
+  
+#### Chart legends  
+  
+::: my-def
+#### Chart Legends 
+
+A description of what is being counted on a graph's Y-axis.</card>  
+:::
+  
+Legends are one of the first things readers should pay attention to on a chart. 
+Verify what is being counted and how it is being counted. 
+A common mistake is the label on the y-axis is missing, which means readers may assume incorrectly what the data shows.  
+  
+For example, in the chart below, the reader has no idea what information is being presented because it is missing both a title and a label for the y-axis. 
+
+![](images/agekid1.png "Bar graph without labels."){ width=100% }
+  
+  
+What is being counted (and how) should be clearly stated, either in the title or in the y-axis label.
+The chart should also state what the values of the y-axis refer to and which units they represent: 
+frequencies? percentages? ages? dollars? rates?  
+  
+Be particularly scrupulous with rates. 1 out 10 people is much different than 1 out of 10,000.  
+  
+  
+#### Chart axes  
+  
+When presented with a chart, readers should also pay attention to the axes. 
+Look at the y and x axis of all charts. 
+Does the y-axis of a bar chart start at zero? Should it?
+  
+::: my-def
+#### Axis truncation
+
+Scale on a graph that does not start at 0.
+:::
+  
+<br> 
+Darrell Huff's 1954 book ["How to Lie with Statistics"](https://wwnorton.com/books/How-to-Lie-with-Statistics/) 
+popularized the notion that all charts should start at zero. 
+Huff persuasively argued that axis truncation, in particular starting the y-axis at a value other than zero, misleads readers by exaggerating differences when variation is actually minimal.  
+  
+![](images/baseline.png "Bar graph starting at zero."){ width=100% }
+  
+<br>
+  
+This is still a good guideline, but there are instances in which it is appropriate to change the y-axis.  
+  
+Let's look at an example. 
+The bar graph below shows the average age U.S. women have their first child for each year. 
+There appears to be a slight but not substantial change over time in women's ages at the time they first give birth.  
+  
+  
+![](images/agekid2.png "Bar graph starting at zero."){ width=100% }
+  
+  
+But, it is kinda weird to start the y-axis at zero for this chart. Why? 
+Well, people don't generally birth a baby when they are babies themselves (0 years old). 
+Starting this scale at zero is silly.  
+  
+Let's look at the SAME DATA, but change the y-axis so that we're zoomed in on the twenties age-range.  
+  
+  
+![](images/agekid3.png "Bar graph with truncated y-axis."){ width=100% }
+  
+  
+Now it is easier to see that the average age when women have their first child has slowly but steadily been climbing. 
+The average age has risen from about 25.5 years old to 27 years old in less than a decade (this is a LOT of change). 
+  
+Still, there is a good reason NOT to change the minimum value of a bar chart. 
+The bars are meant to convey relative sizes. 
+But, manipulating the y-axis changes the underlying quantities.  
+
+<span style="color:#F39C12">__The y-axis of a bar chart should typically start at zero.__ </span>  
+  
+-----
+  
+How do charts illustrate small changes without breaking the expectation that bar charts start at zero? 
+By presenting the data as a line graph.  
+  
+This example chart shows trends over time, so the data is well-suited to be presented as a line graph. 
+Starting the y-axis at zero for line graphs can have the same issue as bar charts, 
+minimizing important changes.  
+  
+But, unlike bar charts, the y-axis can be adjusted without violating assumptions about the relative sizing of quantities. 
+  
+  
+![](images/agekid4.png "Bar graph with truncated y-axis."){ width=100% }
+  
+<br>  
+
+In the chart on the right, it is easier to see that women's average age when having her first child has climbed over the decade. 
+And, the chart doesn't violate visual assumptions.  
+  
+A more modern guideline might be:  
+  
+> Scale the y-axis of line graphs to emphasize the point, without obscuring or magnifying differences.  
+  
+  
+To summarize, the appropriate scale always depends on the context. 
+
+The y-axis can be misleading when truncated or shown in full. 
+It is up to the consumer to critically evaluate the information presented.  
+  
+When you encounter bar graphs with a y-axis that does not start at zero, you should be very skeptical of the data visualization. 
+And, judge for yourself whether the y-axis of line graphs have been appropriately scaled to show real differences, 
+without obscuring or exaggerating changes.  
+  
+#### Uncertainty  
+  
+Data visualizations can also mislead viewers when they omit uncertainty. 
+*Estimates* can look like precise numbers when shown in a chart.  
+  
+Data visualizations almost always show point estimates, exact values. 
+But, data visualizations that are based on samples sometimes need to make explicit the uncertainty in the point estimate. 
+A common approach is to present either the confidence intervals on the data visualization or to note the range of the standard error on the chart.  
+  
+<br>
+
+Take a look at the two graphs below.  
+  
+![](images/uncertainty.png "Two plots, one with margins of error reported."){ width=80% }
+  
+  
+Both data visuals report the uncertainty in a political poll. 
+In the first instance, the margin of error is listed as +3 percent point. 
+The reader of the graph must do some math themselves to realize that 
+Lamb is expected to take between 39% and 45% of the total votes. 
+Saccone is expected to take between 42% and 48% of the vote. 
+Most people won't do this and will assume Saccone is expected to receive more votes than Lamb.  
+  
+Now look at Visual B. 
+This visual conveys the uncertainty in the political poll. 
+Without having to subtract or add the margin of error, 
+readers can see that the confidence intervals overlap.  
+  
+Neither chart is wrong, but one data visual is careful to highlight the uncertainty of the point estimate in the data visualization.  
+  
+It is a smart move to look for information about the range of an estimate.  
+Error bars around point estimates, like in the graph below, 
+help readers know how much variation to expect in a point estimate. 
+But, do not forget to also look for a label explaining what the range represents.  
+
+It is a safe bet to assume most error bars represent either the standard error 
+or a 95% confidence interval, but readers won't know for sure unless the visual says so explicitly.  
+  
+  
+![](images/ranges.png "Types of uncertainty."){ width=90% }
+
+  
+#### Dubious Data
+   
+Critically consuming data visualizations requires evaluating the sources of both the **data** and the **chart designer**.  
+  
+Sometimes a data visualization is well executed, but the data presented is poor quality. 
+A common refrain among statisticians is:
+  
+> Garbage in, garbage out.  
+  
+In other words, if a pretty chart is built on bad data, the data visualization is still terrible.  
+  
+Look to see if the primary source of the data is listed 
+and read any chart notes about decisions the chart designer made when presenting the data.  
+  
+It is not uncommon for sources to be listed, but to take viewers on an endless number of clicks before getting to the primary data source. 
+  
+::: my-def
+#### Primary data source
+
+Original data collected firsthand by researchers.  
+:::  
+  
+Data should be evaluated on:  
+  
+1. **Currency**: How recently was it collected? 
+2. **Relevance**: Does the data measure the construct intended?
+3. **Sample**: What is the information based on? Who does it represent?
+4. **Purpose**: What was the intention of the data collection?
+  
+  
+<br>  
+
+Take this example. 
+[Coca-Cola sponsored research](https://www.ucsusa.org/resources/how-coca-cola-disguised-its-influence-science-about-sugar-and-health) on sugar and health. Private funding for the research does not necessarily compromise the findings, but skeptisim is certainly warrented since Coca-Cola would financially benefit from the results of the study.  
+  
+  
+It is a good habit to be distrustful of any data visualization that does not clearly label (or better yet, link to) to the primary source of the data. 
+Even when the source of the data is stated, it might be wise to remain skeptical. 
+  
+<br>  
+
+#### Dubious Source
+  
+Other times, the data is sound but the author of the chart has bad or biased intentions.  
+  
+Because people often mistake charts for fact, bad actors sometimes use data visualizations to intentionally mislead people. 
+Misleading charts can often be spotted by the use of language meant to **evoke a strong emotional reaction** from the audience rather than the use of neutral terms.  
+  
+Sometimes charts are misleading because the creator intentionally left out the context needed to interpret the data. 
+
+Charts can also lie when they show too little or too much data. 
+When you see charts that show raw numbers without any comparisons, that is a flag to be wary before drawing any conclusions. You probably don't have enough information to discern what the number represents. 
+Charts can also mislead by showing too little data when creators cherry-pick which data to present. 
+  
+<br>  
+
+::: my-def
+#### Cherry-picking
+
+Selecting only information that supports a particular position.  
+:::
+
+Cherry-picking data is the practice of presenting only the data that supports your point and then discarding the rest of the data. 
+A common way data is cherry-picked is changing the x-axis to exaggerate variation that otherwise would show minimal changes. 
+  
+  
+![](images/cherry-picking-vote.png "Chery-picking example of voting trends."){ width=100% }
+
+  
+Misleading charts sometimes also show too much data. When data points overlap too much, it obscures patterns and density.  
+
+**Summary:** Evaluate the bylines (who made the graphic) AND the data sources (who collected the data and how). If a chart panders to your most deeply held beliefs, take an extra critical eye to the data visualization. 
+  
+::: my-tip
+#### Heads Up! 
+Charts alone rarely prove anything (Alberto Cairo).
+:::
 
 
-#### Summary 
+### Designing Plots
+
+Most of the time most of us are consumers of data visualizations, 
+but many of us will at some time be tasked with creating data visuals.  
+  
+#### What makes bad figures bad?
+  
+Healy suggests that bad graphs come in three varieties:  
+  
+1. aesthetic  
+2. substantive  
+3. perceptual  
+  
+  
+**Read**: [Section 1.2 What makes bad figures bad?](https://socviz.co/lookatdata.html#what-makes-bad-figures-bad) 
+from the book *"Data Visualization: A practical introduction"* by Kieran Healy.  
+(Note: The link will open in a new tab of your web browser. You can stop reading when you get to section 1.3.)  
+  
+The flip side of knowing how to identify bad and misleading charts is knowing the
+best practices in creating good data visualizations.  
+
+![](images/coronavirus.png "Joke example of hard to read coronavirus chart."){ width=100% }
+  
+<br>  
+  
+The video below suggests 3 simple techniques for telling compelling data stories:  
+  
+1. Choose a human-friendly chart type  
+2. Ruthless minimalism  
+3. Everything contributes to a key takeaway  
+  
+<br >
+Watch the [video](https://youtu.be/edAf1jx1wh8) now for the details [17 minutes].  
+  
+![](https://youtu.be/edAf1jx1wh8)
+  
+<br>
+  
+#### Choose a human-friendly chart type  
+  
+The first task in creating good data visualizations is to be able to 
+distinguish between different types of plots.  
+  
+Watch this [video](https://youtu.be/C07k0euBpr8) detailing the common uses of each type of graph [12 minutes].  
+  
+  
+![](https://youtu.be/C07k0euBpr8)
+
+<br>
+
+#### Design
+
+In addition to selecting an appropriate type of plot, 
+data scientists must also select appropriate elements for the plot.  
+  
+**Remember, every chart must have**: 
+
+* title
+* variable names
+* category labels
+* units of measurement
+* data source
+
+> Great data visualizations strive for a balance between simplicity and accuracy. 
+  
+Usually there is a trade-off. 
+As the designer simplifies the chart, some accuracy in the data visualization is lost. 
+Precise visualizations also can be overly complicated, 
+making it hard for readers to understand the point.  
+  
+  
+::: my-def
+#### Chart junk 
+
+Distracting elements on a chart that are not necessary to comprehend the information.
+:::
+  
+Chart designers should avoid adding any unnecessary elements to a chart. 
+In the chart below, the pictures of the motorocyles make it difficult to focus on the trend lines.  
+  
+![](images/chartjunk.png "Area plot with chart junk."){ width=100% }
+  
+<br>
+
+Sometimes chart junk is much more subtle than the addition of needless pictures. 
+Charts are often littered with needless gridlines, unnecessary legends, and distracting background colors.  
+  
+Check on this [video](https://youtu.be/zObrKaahU_U) for ways to reduce chart junk [5 minutes].  
+  
+![](https://youtu.be/zObrKaahU_U)  
+  
+<br>
+
+Unlike chart junk, data scientists should be thoughtful about ADDING information about the uncertainty in point estimates. Whenever possible, don't make readers do the math themselves.  
+  
+Examples of conveying uncertainty.  
+  
+![](images/uncertainty_ex.png "Area plot with chart junk."){ width=100% }
+
+<br>
+
+#### Make an argument
+
+Effective data visualizations make a point. 
+Which means, every visualization decision should focus attention on the main point of the visual. 
+  
+<br>
+  
+#### Colors  
+
+The use of colors in charts is a topic that could be its own class. 
+But, we'll focus on a few key strategies in using colors to make the argument clear, without misleading readers.  
+  
+#### Numeric data 
+  
+Color scales should be used to represent interval-ratio data. 
+
+![](images/colorscale.png "Example of color scales."){ width=100% }
+  
+  
+Dark colors are perceived as having higher values than lighter colors. So small ends of a scale should have light colors whereas high ends of scales should be presented in dark colors. 
+  
+![](images/convention.png "Use the convention of dark colors to represent high density."){ width=100% }
+
+<br>
+  
+#### Categorical data  
+  
+Don’t use a scale for mapping categorical data. Categorical data (i.e., nominal, ordinal) should be mapped to a distinct color rather than a gradient scale of just one color.  
+  
+A concern with picking distinct colors is that adjacent color hues often look the nicest to the eye. But, the colors can be hard to distinguish on old computers, printed out or projected on a screen, or for people with impaired vision. Picking colors around the color wheel improves readability but can make charts look ugly, distracting readers from the point of the data visualization. So, chart designers have to try and balance these two features.  
+  
+  
+![](images/distinctcolors.png "Use the convention of dark colors to represent high density."){ width=50% }
+
+  
+#### Labels
+  
+Labels should not use confusing abbreviations.  
+  
+Every chart needs labels, but not every chart requires a legend. Sometimes when a legend is required, labeling the series directly can make it easier for the reader.  
+  
+  
+#### Axis
+
+Chart designers should allow for an appropriate amount of zooming in on the data, without minimizing changes OR over-emphasizing effect sizes.  
+  
+[A guideline](https://chezvoila.com/blog/yaxis/) for line graphs is that 
+no data should appear in the **bottom third of the plotting area**.  
+  
+  
+#### Source
+
+Chart designers should always cite the source of the data so readers can find it and evaluate it themselves. It is also ideal to name the person or organization who designed the chart.  
+
+![](images/summary.png "Table with elements of data visualization."){width=100%}
+
+
+### Summary 
 
 Tables are a vital part of describing and presenting data. But, sometimes it's better to simply explain something in text and other times a picture would do a better job at conveying information.  
 
-![](images/table-vs-figure.png "Table explaining the use of a table, figure, or text"){width="60%"}
+![](images/table-vs-figure.png "Table explaining the use of a table, figure, or text"){width="100%"}
 
 Source: [Velany Rodrigues](https://www.editage.com/insights/tips-on-effective-use-of-tables-and-figures-in-research-papers)
 
@@ -708,3 +1221,66 @@ defined as an immediate family member being incarcerated.
     random_answer_order    = TRUE
   )
 ```
+
+![](images/piechartfail.png "Biggest COVID-19 Worries."){ width=100% }
+
+```{r Q06, echo=FALSE}
+  question("What is wrong with the pie chart?",
+    answer("The percentages in a pie chart should sum to 100%.",  correct = TRUE),
+    answer("It has needless keys and legends and superfluous axis marks."),
+    answer("Some people were likely not worried about COVID-19 and this data category is not presented."),
+    answer("The categories are not mutually exhaustive, it does not show all possible worries related to COVID-19."),
+    random_answer_order    = TRUE
+  )
+```
+  
+```{r Q07, echo=FALSE}
+  question("___________ helps the researcher interpret and understand data, whereas ___________ is used to persuade viewers to believe or do something.",
+    answer("Exploratory data visualization; data storytelling",  correct = TRUE),
+    answer("Data storytelling; exploratory data visualization"),
+    answer("Data storytelling; cherry-picking"),
+    answer("Cherry-picking; chart junk"),
+    random_answer_order    = TRUE
+  )
+```
+  
+```{r Q08, echo=FALSE}
+  question("According to your reading, the NYTimes 500,000 dots data visualization of COVID-19 deaths suggests which of the following about data visualization?",
+    answer("Data visualization is good for showing aggregates but it does not reveal individual experiences.",  
+           correct = TRUE),
+    answer("Data visualization is terrible at showing aggregates but it is well-suited to revealing individual experiences."),
+    answer("Well-made data visulaizations should always include color to capture readers' attention."),
+    answer("Data visualizations made in grayscale are most effective in conveying a tragedy."),
+    random_answer_order    = TRUE
+  )
+```
+  
+  
+![](images/example.png "Example chart from Cairo 2019."){ width=100% }
+
+```{r Q09, echo=FALSE}
+  question("Aside from the chart junk, why is this example chart from Cairo (2019) misleading?",
+    answer("The height of the bars (books) should be proportional to the numbers by putting the baseline at 0%.", correct = TRUE),
+    answer("The appropriate chart type for this data is a pie graph, not a bar graph."),
+    answer("The x-axis is truncated and should start the first year of data collection."),
+    answer("The trend line is cumulative and can only rise but not fall.", 
+           message = "This would be the correct answer if the chart showed the number of Americans who have ever received a high school diploma. This chart appropriately shows the % graduating each year."),
+    random_answer_order    = TRUE
+  )
+```
+
+
+![](images/NASA.png "Average annual global temperature in degrees Fahrenheit."){ width=100% }
+  
+```{r Q10, echo=FALSE}
+  question("Why is the line chart above misleading?",
+    answer("The choice of scale minimizes meaningful changes in global temperatures.", correct = TRUE),
+    answer("The appropriate chart type for this data is a bar graph, not a line graph."),
+    answer("The data used to make this chart is dubious.", 
+           message = "The data from NASA is accurate and high quality."),
+    answer("The aspect-ratio of the chart selected is too narrow.", 
+           message = "If anything, the chart is too wide."),
+    random_answer_order    = TRUE
+  )
+```
+  

@@ -219,7 +219,7 @@ my_data |>
 
 
 ```{r}
-#| label: header
+#| label: sub-header
 #| eval: false
 
 my_data |>
@@ -233,15 +233,12 @@ my_data |>
       lifenow  ~ "Life satisfaction (0–10)",
       age      ~ "Age",
       hrs1     ~ "Number of hours worked last week",
-      educ     ~ "Years of education"
-    ),
+      educ     ~ "Years of education"),
     type = list(sex ~ "dichotomous"),
     value = list(sex = "female"),  
     statistic = list(
       all_continuous() ~ "{mean} ({sd})",
-      all_categorical() ~ "{p}"
-    )
-  ) |>
+      all_categorical() ~ "{p}")) |>
   add_overall()  |>
   modify_header(
     label = '**Variable**') 
@@ -267,24 +264,23 @@ my_data |>
       lifenow  ~ "Life satisfaction (0–10)",
       age      ~ "Age",
       hrs1     ~ "Number of hours \nworked last week",
-      educ     ~ "Years of education"
-    ),
+      educ     ~ "Years of education"),
     type = list(sex ~ "dichotomous"),
     value = list(sex = "female"),  
     statistic = list(
       all_continuous() ~ "{mean} ({sd})",
-      all_categorical() ~ "{p}"
-    )
-  ) |>
+      all_categorical() ~ "{p}")) |>
   add_overall() |>
   modify_header(
     label = '**Variable**') |>
   as_flex_table()
 ```
 
+**Table 01. Unweighted Descriptive Statistics by Race**
 
 ```{r}
-#| label: two-lines
+#| label: header-footer
+#| echo: false # R will not display the code, but will run & display results
 
 my_data |>
   drop_na() |>
@@ -297,22 +293,21 @@ my_data |>
       lifenow  ~ "Life satisfaction (0–10)",
       age      ~ "Age",
       hrs1     ~ "Number of hours \nworked last week",
-      educ     ~ "Years of education"
-    ),
+      educ     ~ "Years of education"),
     type = list(sex ~ "dichotomous"),
     value = list(sex = "female"),  
     statistic = list(
       all_continuous() ~ "{mean} ({sd})",
-      all_categorical() ~ "{p}"
-    )
-  ) |>
+      all_categorical() ~ "{p}")) |>
   add_overall() |>
-  modify_header(
-    label = '**Variable**') |>
-  as_flex_table() |>
-  add_footer_lines(values = "Notes: Unweighted data from the 2022 U.S. General Social Survey")
+  modify_header(label = '**Variable**') |>
+  as_flex_table() 
   
 ```
+
+*Notes: Unweighted data from the 2022 U.S. General Social Survey*
+
+
 
 
 # Data Storytelling

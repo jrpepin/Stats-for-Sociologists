@@ -13,7 +13,7 @@ format:
     code-annotations: hover
     chalkboard: true
     title-slide-attributes:
-      data-background-image: "images/06/test-hat.png"
+      data-background-image: "images/07/polaroid.png"
       data-background-size: 250px
       data-background-position: bottom center
 revealjs-plugins:
@@ -48,3 +48,462 @@ scale_colour_discrete <- function(...) scale_color_manual(values = my_palette)
 # https://egallic.fr/Recherche/aide-memoire/quarto_equation_colors.html#colors-in-equations-with-revealjs
 ```
 
+# Agenda {data-menu-title="Agenda" background-image="images/calendar.png" background-size="100px" background-repeat="repeat"}
+
+-   Table 01
+-   Data Quality Essentials
+
+::: notes
+-   forcats (reorder factor levels)
+-   missing data?
+-   **outliers** -- data viz & tables
+:::
+
+# Learning objectives
+
+By the end of the lecture, you will be able to ...
+
+-   Use `tbl_summary()` to create a descriptive summary table
+-   Detect and address missing values and outliers 
+
+# Code-along 07 {data-menu-title="Code-along" background-image="images/terminal.png"}
+
+Download and open [code-along-07.qmd]()
+
+## Packages {.sparse-slide}
+
+Load the standard packages & 1 new package: `gtsummary()`
+
+
+```{r}
+#| message: false
+#| label: load
+
+# Only need to install once per machine. 
+# install.packages("gtsummary")
+
+library(here)
+library(tidyverse) 
+library(haven) # not core tidyverse
+library(gssr)
+library(summarytools)
+library(gtsummary) # load the new package
+```
+
+::: notes
+We'll use `gtsummary()` to make pretty tables that include our
+statistical tests.
+:::
+
+## Load your data {.sparse-slide}
+
+```{r}
+#| message: false
+#| label: gssdata
+
+# Get the data from the 2022 survey
+gss22 <- gss_get_yr(2022)
+
+```
+
+## Variables {.smaller}
+
+-   `fefam` Better for man to work, woman tend home
+-   `race` What race do you consider yourself
+-   `sex` Respondents sex
+-   `lifenow` R's rating of life overall now from 0-10
+-   `age` Age of respondent
+-   `educ` Respondents highest edu credit
+-   `hrs1` how many hours did you work last week
+
+## Variable Management {.smaller}
+
+::: task
+{{< fa check-double >}} Make a df with only the (pretty) categorical and continuous
+variables we'll analyze.
+:::
+
+
+```{r}
+#| message: false
+#| label: my-data
+#| code-line-numbers: "1-6|8-15|17-18"
+
+# Categorical Variables
+my_cat <- gss22 |>
+  select(id, fefam, race, sex) |>
+  zap_missing() |>
+  as_factor() |>
+  droplevels()
+
+# Continuous Variables
+my_con <- gss22 |>
+  select(id,lifenow, age, educ, hrs1) |>
+  mutate(
+    lifenow = as.numeric(lifenow),
+    age = as.numeric(age),
+    educ = as.numeric(educ),
+    hrs1 = as.numeric(hrs1))
+
+# Combine the two dataframes
+my_data <- left_join(my_cat, my_con, by = "id")
+```
+
+# Table 01 {.theme-section}
+
+## `tbl_summary()` {.sparse-slide .scrollable}
+
+Calculates descriptive statistics for continuous, categorical, and dichotomous variables
+
+```{r}
+#| message: false
+#| label: tbl_summary
+#| output-location: column-fragment
+
+my_data |>
+  tbl_summary()
+```
+
+::: notes
+code-along-07 TASK: Write narrative about what each code chunk is doing!
+:::
+
+## {data-menu-title="drop_na()" .sparse-slide}
+
+```{r}
+#| label: drop_na
+#| eval: false
+#| code-line-numbers: "2"
+
+my_data |>
+  drop_na() |>
+  tbl_summary()
+
+```
+
+## {data-menu-title="statistics" .sparse-slide}
+
+```{r}
+#| label: statistics
+#| eval: false
+#| code-line-numbers: "5-6"
+
+my_data |>
+  drop_na() |>
+  tbl_summary(
+    statistic = list(
+      all_continuous() ~ "{mean} ({sd})",
+      all_categorical() ~ "{p}")
+    )
+
+```
+
+## {data-menu-title="variables" .sparse-slide}
+
+```{r}
+#| label: variables
+#| eval: false
+#| code-line-numbers: "3"
+
+my_data |>
+  drop_na() |>
+  select(lifenow, race, sex, fefam, age, hrs1, educ) |>
+  tbl_summary(
+    statistic = list(
+      all_continuous() ~ "{mean} ({sd})",
+      all_categorical() ~ "{p}")
+    )
+
+```
+
+
+## {data-menu-title="labels" .sparse-slide}
+
+```{r}
+#| label: labels
+#| eval: false
+#| code-line-numbers: "5-12"
+
+my_data |>
+  drop_na() |>
+  select(lifenow, race, sex, fefam, age, hrs1, educ) |>
+  tbl_summary(
+    label = list(
+      race     ~ "Race",
+      sex      ~ "Gender",
+      fefam    ~ "Better for man to work, woman tend home",
+      lifenow  ~ "Life satisfaction (0-10)",
+      age      ~ "Age",
+      hrs1     ~ "Number of hours worked last week",
+      educ     ~ "Years of education"),
+    statistic = list(
+      all_continuous() ~ "{mean} ({sd})",
+      all_categorical() ~ "{p}"
+    ))
+
+```
+
+
+## {data-menu-title="dichotomous" .sparse-slide}
+
+```{r}
+#| label: dichotomous
+#| eval: false
+#| code-line-numbers: "13-14"
+
+my_data |>
+  drop_na() |>
+  select(lifenow, race, sex, fefam, age, hrs1, educ) |>
+  tbl_summary(
+    label = list(
+      race     ~ "Race",
+      sex      ~ "Women",
+      fefam    ~ "Better for man to work, woman tend home",
+      lifenow  ~ "Life satisfaction (0-10)",
+      age      ~ "Age",
+      hrs1     ~ "Number of hours worked last week",
+      educ     ~ "Years of education"),
+     type  = list(sex  ~ "dichotomous"),
+     value = list(sex  = "female"),  
+    statistic = list(
+      all_continuous() ~ "{mean} ({sd})",
+      all_categorical() ~ "{p}"),
+  )
+
+```
+
+## {data-menu-title="group" .sparse-slide}
+
+```{r}
+#| label: group
+#| eval: false
+#| code-line-numbers: "5"
+
+my_data |>
+  drop_na() |>
+  select(lifenow, race, sex, fefam, age, hrs1, educ) |>
+  tbl_summary(
+    by = race,  
+    label = list(
+      sex      ~ "Women",
+      fefam    ~ "Better for man to work, woman tend home",
+      lifenow  ~ "Life satisfaction (0-10)",
+      age      ~ "Age",
+      hrs1     ~ "Number of hours worked last week",
+      educ     ~ "Years of education"),
+    type = list(sex ~ "dichotomous"),
+    value = list(sex = "female"),  
+    statistic = list(
+      all_continuous() ~ "{mean} ({sd})",
+      all_categorical() ~ "{p}")
+  )
+
+```
+
+## {data-menu-title="total" .sparse-slide}
+
+```{r}
+#| label: total
+#| eval: false
+#| code-line-numbers: "18"
+
+my_data |>
+  drop_na() |>
+  select(lifenow, race, sex, fefam, age, hrs1, educ) |>
+  tbl_summary(
+    by = race,
+    label = list(
+      sex      ~ "Women",
+      fefam    ~ "Better for man to work, woman tend home",
+      lifenow  ~ "Life satisfaction (0–10)",
+      age      ~ "Age",
+      hrs1     ~ "Number of hours worked last week",
+      educ     ~ "Years of education"),
+    type = list(sex ~ "dichotomous"),
+    value = list(sex = "female"),  
+    statistic = list(
+      all_continuous() ~ "{mean} ({sd})",
+      all_categorical() ~ "{p}")) |>
+  add_overall()  # This adds the Total column
+
+```
+
+## {data-menu-title="sub-header" .sparse-slide}
+
+```{r}
+#| label: sub-header
+#| eval: false
+#| code-line-numbers: "19-20"
+
+my_data |>
+  drop_na() |>
+  select(lifenow, race, sex, fefam, age, hrs1, educ) |>
+  tbl_summary(
+    by = race,
+    label = list(
+      sex      ~ "Women",
+      fefam    ~ "Better for man to work, woman tend home",
+      lifenow  ~ "Life satisfaction (0–10)",
+      age      ~ "Age",
+      hrs1     ~ "Number of hours worked last week",
+      educ     ~ "Years of education"),
+    type = list(sex ~ "dichotomous"),
+    value = list(sex = "female"),  
+    statistic = list(
+      all_continuous() ~ "{mean} ({sd})",
+      all_categorical() ~ "{p}")) |>
+  add_overall()  |>
+  modify_header(
+    label = '**Variable**') 
+
+```
+
+
+## {data-menu-title="two-lines" .sparse-slide}
+
+> Change YAML 
+`output: pdf_document`
+
+```{r}
+#| label: two-lines
+#| eval: false
+#| code-line-numbers: "8, 11, 21"
+
+my_data |>
+  drop_na() |>
+  select(lifenow, race, sex, fefam, age, hrs1, educ) |>
+  tbl_summary(
+    by = race,
+    label = list(
+      sex      ~ "Women",
+      fefam    ~ "Better for man to work, \nwoman tend home",
+      lifenow  ~ "Life satisfaction (0–10)",
+      age      ~ "Age",
+      hrs1     ~ "Number of hours \nworked last week",
+      educ     ~ "Years of education"),
+    type = list(sex ~ "dichotomous"),
+    value = list(sex = "female"),  
+    statistic = list(
+      all_continuous() ~ "{mean} ({sd})",
+      all_categorical() ~ "{p}")) |>
+  add_overall() |>
+  modify_header(
+    label = '**Variable**') |>
+  as_flex_table()
+```
+
+## Title & Notes {.sparse-slide}
+
+::: task
+{{< fa check-double >}} Add a title and footnotes to your Quarto document
+:::
+
+<br>
+
+Title:  
+> **Table 01. Unweighted Descriptive Statistics by Race**
+
+<br>
+
+Footnotes:  
+> *Notes: Unweighted data from the 2022 U.S. General Social Survey*
+
+# Data Quality Essentials {.theme-section}
+
+## Missing Data: {data-menu-title="Missing Data: Problem" .sparse-slide}
+
+[**Problem**]{style="color: #E74C3C; font-size: 200%; font-family: 'Shadows Into Light'"}
+
+-   Reduces sample size (and thus, statistical power)
+-   Potential bias (and thus, non-representativeness) 
+
+::: notes
+missing for lots of reasons, some of which can be addressed.  
+requires another hour of lecture which we don't have.
+:::
+
+## Missing Data: {data-menu-title="Missing Data: Detection" .sparse-slide}
+
+[**Detection**]{style="color: #F39C12; font-size: 200%; font-family: 'Shadows Into Light'"}
+
+-   descriptive statistics of each variable
+-   Ns change across regression models
+-   ggplot2 warning: “Removed X rows containing missing values”.
+
+## Missing Data: {data-menu-title="Missing Data: Solutions" .sparse-slide}
+
+[**Solutions**]{style="color: #18BC9C; font-size: 200%; font-family: 'Shadows Into Light'"}
+
+-   drop or change variable(s)
+-   treat missing as a category
+-   recode values
+-   listwise deletion
+-   imputation
+
+::: notes
+-   mutate: missing as category  
+-   logical skip -- recode  
+-   listwise deletion -- what we've been doing  
+:::
+
+## Missing Data: Solutions {.sparse-slide}
+
+Listwise deletion
+
+```{r}
+#| label: listwise-deletion
+#| eval: false
+
+df_clean <- df |>
+  drop_na()
+
+```
+
+<br>
+
+. . .
+
+Imputation
+
+```{r}
+#| label: impute-mean
+#| eval: false
+
+df <- df |>
+  mutate(var_A = if_else(is.na(var_A), 
+                         mean(var_A, na.rm = TRUE), var_A))
+
+```
+
+## Outliers: {data-menu-title="Outliers: Problem" .sparse-slide}
+
+[**Problem**]{style="color: #E74C3C; font-size: 200%; font-family: 'Shadows Into Light'"}
+
+-   conclusions may be inaccurate or unreliable
+-   may mask patterns or inflate summary statistics
+-   can skew scales in figures
+
+::: notes
+makes replication unlikely
+:::
+
+## Outliers: {data-menu-title="Outliers: Solutions" .sparse-slide}
+
+[**Solutions**]{style="color: #18BC9C; font-size: 200%; font-family: 'Shadows Into Light'"}
+
+-   descriptive statistics of each variable
+-   scatterplots
+
+
+::: notes
+-   are the values believable?  
+-   IQR (Interquartile Range): Identifies values outside the typical spread.  
+:::
+
+## Outliers: {data-menu-title="Outliers: Solutions" .sparse-slide}
+
+[**Solutions**]{style="color: #18BC9C; font-size: 200%; font-family: 'Shadows Into Light'"}
+
+-   correct or remove errors
+-   cap or transform: limit their influence
+-   transparent reporting (drop or keep)

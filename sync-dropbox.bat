@@ -42,6 +42,14 @@ IF %ERRORLEVEL% NEQ 0 (
     exit /b
 )
 
+REM === STEP 2.5: Merge main into dropbox-mirror to preserve file identity ===
+git checkout dropbox-mirror >> "%LOG_PATH%" 2>&1
+git merge main >> "%LOG_PATH%" 2>&1
+IF %ERRORLEVEL% NEQ 0 (
+    echo Failed to merge main into dropbox-mirror >> "%LOG_PATH%"
+    exit /b
+)
+
 REM === STEP 3: Push Dropbox mirror branch to GitHub ===
 echo Pushing Dropbox mirror branch to GitHub >> "%LOG_PATH%"
 cd /d "%DROPBOX_CLONE_PATH%"

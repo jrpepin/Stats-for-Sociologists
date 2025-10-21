@@ -8,7 +8,7 @@ library("exams")
 library("quarto")
 library("qpdf")
 library("pdftools")
-library("sak")
+# library("sak")
 
 conflicted::conflicts_prefer(here::here)
 conflicted::conflicts_prefer(dplyr::summarize)
@@ -160,7 +160,7 @@ bad_files
 
 ## key word
 find_something <- files[sapply(files, function(f) {
-  any(grepl("as_kable_extra", readLines(f, warn = FALSE), useBytes = TRUE))
+  any(grepl("leisure", readLines(f, warn = FALSE), useBytes = TRUE))
 })]
 
 

@@ -8,11 +8,16 @@ pacman::p_load(
   haven, # work with labeled data
   labelled, # use labels as values
   summarytools, # easy descriptive statistics
-  gtsummary, # tbl_cross
-  gt, # make latex tables
-  webshot,  # Needed for saving as image
+  Rmisc, # confidence intervals
+  knitr, # pretty tables
+  kableExtra, # centered tables
+  gtsummary, # as_kable_extra
   conflicted # declare primary packages
 )
+
+## Address important conflicts
+conflict_prefer("is.labelled", "haven")
+conflict_prefer("filter", "dplyr")
 
 ## Load the gss dataset
 data(gss_all)
@@ -29,8 +34,8 @@ Has agreement with the statement that 'Black Americans face worse jobs, income, 
 ```{r output, echo = FALSE, results = "asis", fig.pos='H'}
 #| message: false
 my_data <- gss_all |>
-  filter(year == 2022 | year == 2024) |>
-  select(year, racdif1) |>
+  dplyr::filter(year == 2022 | year == 2024) |>
+  dplyr::select(year, racdif1) |>
   dplyr::mutate(
     year = factor(year),
     opinion = ifelse(racdif1 == 1, "yes", "no")

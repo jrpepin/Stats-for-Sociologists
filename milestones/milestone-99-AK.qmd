@@ -1,0 +1,196 @@
+---
+title: "Milestone 99"
+author: "FirstName LastName"
+format: pdf # or replace 'pdf' with 'typst'
+execute:
+  error: true # change this to false when your assignment is complete.
+---
+
+This assignment asks students to work with wide and long dataformats.
+
+# Environment
+
+Update the YAML with your first and last name.
+
+Load the packages.
+
+```{r}
+#| label: load
+#| message: false
+
+library(tidyverse) 
+library(haven) 
+library(gssr)
+library(gssrdoc)
+library(summarytools)
+library(Rmisc) # load the new package
+library(gtsummary) # load the new package
+```
+
+Load the GSS panel data
+
+```{r}
+#| label: gss-data
+#| message: false
+
+# Use here() to construct the file path of the panel data
+gss_panel.dta <- here("data", "GSS_2020_panel_stata_1a/gss2020panel_r1a.dta")
+
+#load the panel data using `haven::read_dta()`
+gss_panel <- read_dta(gss_panel.dta)
+
+```
+
+
+*Use the panel data for checkpoints 06-10.*
+
+## Checkpoint 06: Code for within-person change
+
+Run the following code to produce the average within-person change
+between 2018 and 2020.
+
+It shows the average change from 2018 to 2020 in work and TV hours for
+each gender.
+
+Positive values mean an increase from 2018 to 2020; negative values mean
+a decrease.
+
+```{r}
+#| label: within-change
+
+gss_panel |>
+  select(sex_2, hrs1_2, hrs1_1b, tvhours_2, tvhours_1b) |>
+  drop_na(sex_2) |>
+  mutate(
+    work_change = hrs1_2 - hrs1_1b,
+    tv_change = tvhours_2 - tvhours_1b,
+  ) |>
+  group_by(as_factor(sex_2)) |>
+  summarise(
+    avg_work_change = round(mean(work_change, na.rm = TRUE), digits = 2),
+    sd_work_change = round(sd(work_change, na.rm = TRUE), digits = 2),
+    avg_tv_change = round(mean(tv_change, na.rm = TRUE), digits = 2),
+    sd_tv_change = round(sd(tv_change, na.rm = TRUE), digits = 2)
+  )
+```
+
+***Did the number of work hours increase or decrease from 2018 to 2020
+for men? What about for women?***
+
+***Did the number of hours spent watching TV increase or decrease from
+2018 to 2020 for men? What about for women?***
+
+***Was there a gender difference in the average within-person change
+between 2018 and 2020 for work hours? What about for tv hours?***
+
+## Checkpoint 07: Reshape panel data so it is tidy
+
+Use `select()` and `pivot_longer()` to create tidy data.
+
+Add `relocate()` to put the variables in a logical order and `drop_na()`
+to remove rows with any missing data.
+
+```{r}
+#| label: tidy-data
+
+my_gss_panel <- gss_panel |>
+  select(yearid, sex_2,
+         starts_with("hrs1_"),
+         starts_with("tvhours_")) |>
+    pivot_longer(
+        cols = c( -yearid, -sex_2),
+        names_to = c(".value", "panel"),
+        names_sep = "_") |>
+  relocate(panel, .after = yearid) |>
+  drop_na()
+
+head(my_gss_panel)
+```
+
+## Checkpoint 08: Recode panel variables
+
+A.  Use `mutate()` and `case_when()` to re-code the `sex_2` variable so
+    that "1" = man, "2" = woman. Use `TRUE ~ NA_character_` for missing
+    values.
+
+```{r}
+#| label: recode-sex
+
+my_gss_panel <- my_gss_panel |>
+  mutate(sex = case_when(
+         sex_2 == 1 ~ "male",
+         sex_2 == 2 ~ "female",
+         TRUE ~ NA_character_))
+
+```
+
+B.  Use `mutate()` and `case_when()` to re-code the `panel` variable so
+    that "1a" = 2016, "1b" = 2018, and "2" = 2020. Use
+    `TRUE ~ NA_integer_` for missing values.
+
+```{r}
+#| label: recode-panel
+
+my_gss_panel <- my_gss_panel |>
+  mutate(panel = case_when(
+         panel == "1a" ~ 2016,
+         panel == "1b" ~ 2018,
+         panel == "2" ~ 2020,
+         TRUE ~ NA_integer_))
+
+head(my_gss_panel)
+```
+
+## Checkpoint 09: Create a summary panel table
+
+Use `group_by()` and `summarise()` to create a table showing the average
+work hours for men and women for each panel year.
+
+```{r}
+#| label: summary-panel
+
+panel_summary <- my_gss_panel |>
+  group_by(sex, panel) |>
+    summarise(
+    count = n(),
+    avg_work = round(mean(hrs1), digits = 2), 
+    avg_tv = round(mean(tvhours), digits = 2)
+    ) 
+
+panel_summary
+```
+
+***Do women differ in their average work and television hours from 2016,
+2018, and 2020? What about men?***
+
+## Checkpoint 10: Join and calculate the average panel differences by sex
+
+Use `full_join()` to merge the `gss24_summary` data and the
+`panel_summary` data, matching *by* the variable `sex`.
+
+Calculate the difference in average work and tv hours between 2016,
+2018, 2020 and the 2024 average.
+
+```{r}
+#| label: change
+
+## ADD YOUR CODE HERE TO JOIN THE DATA
+my_data_all <- full_join(gss24_summary, panel_summary, by = "sex")
+
+# Create change variables
+my_data_all <- my_data_all |>
+  mutate(
+    work_change = avg_work_24 - avg_work,
+    tv_change = avg_tv_24 - avg_tv
+    ) |>
+  select(sex, panel, count, 
+         avg_work_24, avg_work, work_change,
+         avg_tv_24, avg_tv, tv_change
+         )
+
+my_data_all
+```
+
+***Speculate about whether there is evidence of a post-pandemic (2024)
+shift in work or TV time. Are the patterns the same or different for men
+and women?***

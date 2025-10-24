@@ -13,7 +13,7 @@ format:
     code-annotations: hover
     chalkboard: true
     title-slide-attributes:
-      data-background-image: "images/08/test-hat.png"
+      data-background-image: "images/08/scatcart.png"
       data-background-size: 250px
       data-background-position: bottom center
 revealjs-plugins:
@@ -75,559 +75,375 @@ Download and open [code-along-08.qmd]()
 
 ## Packages {.sparse-slide}
 
-Load the standard packages.
+Load the standard packages
 
 ```{r}
 #| message: false
 #| label: load
 
-# Only need to install once per machine. 
-# install.packages("gtsummary")
-
+library(here)
 library(tidyverse) 
 library(haven) # not core tidyverse
 library(gssr)
-library(gssrdoc) # load the GSS codebook
+library(gssrdoc)
 library(summarytools)
 library(gtsummary) 
-library(here) # change this!!!
 ```
 
-## GSS Panel Data: Download
+::: notes
 
-<https://gss.norc.org/get-the-data/stata>
-
-<br>
-
-![](images/04/gss-panel.png){width="100%"}
-
-::: {.callout-tip icon="false"}
-## {{< fa hat-wizard >}} Heads Up!
-
-Save the **unzipped** file in your class `data` folder.
 :::
 
-## GSS Panel Data: Load {.sparse-slide}
+## Load your data {.sparse-slide}
 
 ```{r}
 #| message: false
-#| label: gsspanel-01
+#| label: gssdata
 
-# Use here() to construct the file path
-gss_panel.dta <- here("data", "GSS_2020_panel_stata_1a/gss2020panel_r1a.dta")
-
-#load the data using `haven::read_dta()`
-data <- read_dta(gss_panel.dta)
-
-# Or, do both at the same time!
-# data <- read_dta(here("data", "GSS_2020_panel_stata_1a/gss2020panel_r1a.dta"))
+# Get the data from the 2022 survey
+gss22 <- gss_get_yr(2022)
 
 ```
 
-## GSS 2016-2020 Panel Dataset {.sparse-slide}
+## Variables {.smaller}
 
-Study of former 2016 and 2018 GSS respondents were interviewed again in
-2020
+-   `height` R is how tall
+-   `weight` About how much do you weigh without shoes?
+-   `lifenow` R's rating of life overall now from 0-10
+-   `age` Age of respondent
+-   `educ` Respondents highest edu credit
+-   `hrs1` how many hours did you work last week
+-   `race` What race do you consider yourself
+-   `sex` Respondents sex
+-   `marital` R's marital status
 
--   Variables from 2016 (Wave 1a) have
-    [**\_1a**]{style="color: #e74c3c"} appended
--   Variables from 2018 (Wave 1b) have
-    [**\_1b**]{style="color: #e74c3c"} appended
--   Variables from 2020 (Wave 2) have [**\_2**]{style="color: #e74c3c"}
-    appended
 
-## GSS 2016-2020 Panel Dataset {.sparse-slide}
+## Variable Management {.smaller}
+
+::: task
+{{< fa check-double >}} Make a df with only the (pretty) categorical and continuous
+variables we'll analyze.
+:::
+
 
 ```{r}
-#| label: gsspanel-02
-#| echo: false
+#| message: false
+#| label: my-data
+#| code-line-numbers: "1-6|8-15|17-18"
 
-set.seed(815)  # Ensures you get the same sample every time
+# Categorical Variables
+my_cat <- gss22 |>
+  select(id, race, sex, marital) |>
+  zap_missing() |>
+  as_factor() |>
+  droplevels()
 
-data |>
-  select(yearid, starts_with("year_"), starts_with("age_")) |>
-  slice_sample(n = 10) 
+# Continuous Variables
+my_con <- gss22 |>
+  select(id, height, weight, lifenow, age, educ, hrs1) |>
+  mutate(
+    lifenow = as.numeric(lifenow),
+    age = as.numeric(age),
+    educ = as.numeric(educ),
+    hrs1 = as.numeric(hrs1))
+
+# Combine the two dataframes
+my_data <- left_join(my_cat, my_con, by = "id")
 ```
+
 
 # Regression {.theme-section}
 
+## Bivariate Regression  {.sparse-slide}
 
-# Manipulating Dataframes {.theme-section}
-
-## Selection helpers {.smaller}
-
-Match variables according to a given pattern.
-
--   `starts_with()`: Starts with an exact prefix.
--   `ends_with()`: Ends with an exact suffix.
--   `contains()`: Contains a literal string.
--   ...
-
-```{r}
-#| label: starts-with-01
-#| eval: false
-
-my_data <- data |>
-  select(yearid, wtssnr_2, 
-         starts_with("age_"), 
-         starts_with("family16_"),
-         starts_with("socfrend_"),
-         starts_with("childs_")) 
-
-```
+Regression and correlation are ways to identify whether two interval-ratio variables are statistically dependent 
 
 <br>
 
-. . .
+> as the value of one variable changes, the other also tends to change
+
+## Code Meets Question {.sparse-slide background-image="images/gears-solid-full.png" background-size="80px" background-repeat="repeat"}
+
+::: task
+{{< fa lightbulb >}}What is the relationship between literacy rate and rate of tertiary education?
+:::
+
+<br>
+
+[**literacy rate**]{style="color: #18BC9C"}  
+% of adult population that is literate
+
+[**rate of tertiary education**]{style="color: #18BC9C"}  
+the # of students enrolled/eligible within age range
+
+## Example df
 
 ```{r}
-#| label: starts-with-02
-#| code-line-numbers: "4|7"
+#| label: df
+#| output-location: column
 
-# You can supply multiple prefixes or suffixes.
-my_data <- data |>
-  select(yearid, wtssnr_2, 
-         starts_with(c("age_", "family16_", "socfrend", "childs"))
-         )
+# Create columns
+literacy <- c(31.7, 79.3, 85.4, 41.0, 54.7, 97.9, 92.8, 67.1, 97.8, 60.4, 87.5, 99.1)
+educ <- c(3.74, 10.4, 20.4, 4.46, 9.53, 78.6, 31.5, 16.2, 65.8, 10.3, 30.8, 40.1)
 
-my_data <- as_factor(my_data) # Apply labels to data
+# Combine into a data frame
+df <- data.frame(literacy, educ)
+
+# View the data frame
+print(df)
 
 ```
 
+##  {data-menu-title="Scatterplot"}
 
-## Reminder: Tidy data
+```{r}
+#| label: scatterplot
+#| output-location: slide
 
-![](images/04/tidy-data.png){width="100%"}
+# Create scatterplot
+df |>
+  ggplot(aes(x = literacy, y = educ)) +
+  geom_point(color = "#18BC9C", size = 3) +
+  labs(
+    title = "Scatterplot of Education vs Literacy",
+    x = "Literacy Rate (X)",
+    y = "Years of Education (Y)"
+  ) +
+  theme_minimal(20)
+```
 
-##  {data-menu-title="Not tidy data"}
+##  {data-menu-title="Relationships" .sparse-slide}
 
-![](images/04/not-tidy.png){width="100%"}
+[**Linear relationship**]{style="color: #18BC9C"}  
 
-. . .
+When two interval-ratio level variables are related to one another we can approximate the relationship by drawing a straight line through the center of the observations on the scatterplot.  
+
+<br>
 
 ::: {style="color: #e74c3c; font-family: 'Shadows Into Light'"}
-**This data is NOT tidy!**\
-Some column names include values of a variable (survey year).
+A bivariate regression analysis finds the best possible line to summarize the observed relationship between X and Y
 :::
 
-##  {data-menu-title="Tidy data"}
+## {data-menu-title="Scatterplot + Regression line" .sparse-slide}
 
 ```{r}
-#| label: tidy
-#| echo: false
+#| label: scatterplot-ols
+#| output-location: slide
 
-my_data |>
-  pivot_longer(
-    cols = c(-yearid, -wtssnr_2),
-    names_to = c(".value", "panel"),
-    names_sep = "_") 
+# Create scatterplot with regression line
+ggplot(df, aes(x = literacy, y = educ)) +
+  geom_point(color = "#18BC9C", size = 3) +
+  geom_smooth(method = "lm", se = FALSE, color = "#3498DB") +
+  labs(
+    title = "Scatterplot of Education vs Literacy with Regression Line",
+    x = "Literacy Rate (%)",
+    y = "Years of Education"
+  ) +
+  theme_minimal(20)
 
 ```
 
-<br>
+## {data-menu-title="Regression equation"}
 
-::: {style="color: #18bc9c; font-family: 'Shadows Into Light'"}
-**This data is tidy!**\
-Each variable in its own column, and each observation in its own row.
-:::
-
-##  {data-menu-title="Wide vs Long"}
-
-![](images/04/wide-long.png){width="100%"}
-
-## Reshaping data
-
-![](images/04/tidyr-pivoting.gif)
-
-## `pivot_longer()`
-
-```{r}
-#| label: pivot-longer
-#| code-line-numbers: "2|3|4|5"
-
-my_data <- my_data |>
-  pivot_longer(
-    cols = 3:14, # <1> 
-    names_to = c(".value", "panel"), # <2>
-    names_sep = "_") # <3>
-    
-head(my_data, n = 5)
-```
-
-1.  `cols =` specifies which columns to pivot;
-2.  `names_to =` creates multiple value columns from the name parts and
-    a new column that stores the identifier.
-3.  `names_sep =` where to split the names into a variable (.value) and
-    what to use as a key identifier
-
-## `pivot_wider()`
-
-```{r}
-#| label: wider
-#| code-line-numbers: "1|2|3|4"
-
-my_data |> # not overwriting my_data
-  pivot_wider( # <1>
-    names_from = panel, # <2>
-    values_from = c(-yearid, -wtssnr_2)) # <3>
-
-head(my_data, n = 5)
-
-```
-
-1.  Increasing the number of columns and decreasing the number of rows
-2.  Which column to get the name of the output columns
-3.  Which columns to exclude from the pivot
-
-## Recode the reshaped variable
-
-```{r}
-#| label: recode-panel
-
-my_data <- my_data |>
-  mutate(panel = case_when(
-         panel == "1a" ~ 2016,
-         panel == "1b" ~ 2018,
-         panel == "2" ~ 2020,
-         TRUE ~ NA_integer_))
-
-head(my_data, n = 3)
-```
-
-. . .
-
-::: {.callout-tip icon="false"}
-## {{< fa hat-wizard >}} Heads Up!
-
-`family16` is a time-invariant variable.
-:::
-
-## `relocate()` {.smaller}
-
-```{r}
-#| label: relocate-01
-
-my_data <- my_data |> 
-  relocate(panel)
-
-head(my_data, n = 2)
-```
-
-<br>
-
-. . .
-
-```{r}
-#| label: relocate-02
-
-my_data <- my_data |> 
-  relocate(panel, .after = yearid)
-
-head(my_data, n = 2)
-```
-
-## `arrange()` {.smaller}
-
-```{r}
-#| label: arrange-01
-#| output-location: column
-
-
-my_data |> 
-  arrange(panel) |>
-  select(yearid, panel, age) |>
-  head(n = 5)
-
-```
-
-<br>
-
-. . .
-
-```{r}
-#| label: arrange-02
-#| output-location: column
-
-my_data |> 
-  arrange(desc(panel)) |>
-  select(yearid, panel, age) |>
-  head(n = 5)
-
-```
-
-
-
-# Joining Dataframes {.theme-section}
-
-## appending v.s. merging {.sparse-slide}
-
-::: {.callout-note icon="false"}
-## {{< fa pen-to-square >}} APPEND
-
-add new observations (rows) to existing variables
+::: {style="font-size: 150%; color: #e74c3c"}
+$\hat{y} = a + bX$
 :::
 
 <br>
 
-::: {.callout-note icon="false"}
-## {{< fa pen-to-square >}} MERGE
+$\hat{y}$ = the predicted score on the dependent variable
 
-add new variables (columns) to existing observations (many merge types)
+$X$ = the score on the independent variable
+
+$a$ = the Y-intercept, or the point where the line crosses the Y-axis ($a$ is the value of $Y$ when $X$ is equal to 0).
+
+$b$ = the slope of the regression line, or the change in $Y$ for each unit of change in $X$.
+
+## {data-menu-title="Regression relationship"}
+
+::: {style="font-size: 150%; color: #e74c3c"}
+$\hat{y} = a + bX$
 :::
 
-## appending v.s. merging {.sparse-slide}
+<br>
 
-![](images/08/append-merge.png){width="100%"}
+Positive relationship
+When $b$ is positive, then when $X$ increases, $\hat{y}$ increases
 
-## Example datasets {.sparse-slide}
+Negative relationship
+When $b$ is negative, then when $X$ increases, $\hat{y}$ decreases
 
-::::: columns
-::: column
-**dataframe 1**
+## {data-menu-title="Best fitting line"}
 
-```{r}
-#| label: df1
-#| echo: false
+```{r, echo = FALSE}
+#| label: scatterplot-lines
 
-# Create the example dataframes
-df_partner1 <- data.frame(
-  coupleid = c(2, 1, 3),
-  name = c("John", "Megan", "Bin"),
-  age = c(42, 36, 38)
+# Create scatterplot with regression line
+ggplot(df, aes(x = literacy, y = educ)) +
+  geom_point(color = "#18BC9C", size = 3) +
+  geom_smooth(method = "lm", se = FALSE, color = "#3498DB") +
+  # Plausible but incorrect lines
+  geom_abline(intercept = -20, slope = 0.9, color = "#E74C3C", linetype = "dashed", size = 1.2) +
+  geom_abline(intercept = -10, slope = 0.4, color = "#F39C12", linetype = "dotted", size = 1.2) +
+  geom_abline(intercept = -15, slope = 0.7, color = "#9B59B6", linetype = "twodash", size = 1.2) +
+  labs(
+    title = "Scatterplot of Education vs Literacy with Regression Line",
+    x = "Literacy Rate (%)",
+    y = "Years of Education"
+  ) +
+  theme_minimal(20)
+
+```
+
+::: notes
+With relationships that are imperfect, we must fit the best available line to represent the data.
+:::
+
+## {data-menu-title="Regression relationship"}
+
+::: {style="font-size: 150%; color: #e74c3c"}
+$\hat{y} = a + bX$
+:::
+
+<br>
+
+Regression finds the best fitting line that goes through the data with the least distance (error) between all points and the line.
+
+<br>
+
+::: {style="color: #3498DB; font-family: 'Shadows Into Light'"}
+AKA the “least squares line” referring to the least amount of squared error.
+:::
+
+::: notes
+$\hat{y}$ is the predicted value of the dependent variable, based on a given value of the independent variable.
+:::
+
+## Residual = error($e$) {.sparse-slide}
+
+Calculated based on the difference between $Y$ and $\hat{y}$
+
+<br>
+
+$Y$ = observed value of $Y$ for given value of $X$  
+
+<br>
+
+$\hat{y}$ = predicted value of $Y$ for given value of $X$ 
+
+
+## {data-menu-title="Scatterplot"}
+
+```{r, echo=FALSE}
+#| label: scatterplot-point
+#| output-location: slide
+
+# Generate circle coordinates inline
+theta <- seq(0, 2 * pi, length.out = 100)
+circle_df <- data.frame(
+  x = 79.3 + 2 * cos(theta),
+  y = 10.4 + 4 * sin(theta)
 )
 
-df_partner1
-```
-:::
-
-::: column
-**dataframe 2**
-
-```{r}
-#| label: df2
-#| echo: false
-
-df_partner2 <- data.frame(
-  coupleid = c(1, 3, 2),
-  name = c("Sue", "Ye-jin", "Chrissy"),
-  age = c(40, 39, 35)
-)
-df_partner2
-```
-:::
-:::::
-
-<br>
-
-**dataframe 3**
-
-```{r}
-#| label: df3
-#| echo: false
-
-df_family <- data.frame(
-  coupleid = c(3, 1, 4),
-  marstat = c(1, 0, 1),
-  numchild = c(1, 0, 2),
-  country = c("S.Korea", "US", "Canada")
-)
-df_family
-```
-
-## append data with `bind_rows()` {.sparse-slide}
-
-```{r}
-#| label: append
-
-df_all <- bind_rows(df_partner1, df_partner2)
-
-tibble(df_all)
-```
-
-## merge data with joins {.sparse-slide}
-
-add columns from `df1` to `df2`, matching observations based on the keys
-
--   `left_join()` keeps all observations in `df1`.
--   `right_join()` keeps all observations in `df2`.
--   `full_join()` keeps all observations in `df1` and `df2`.
--   `inner_join()` only keeps observations from `df1` that have a
-    matching key in `df2`
-
-## `left_join()` {.smaller}
-
-::::: columns
-::: {.column width="35%"}
-![](images/08/left-join.gif)
-:::
-
-::: {.column width="65%"}
-```{r}
-#| label: left-join
-
-df_couples <- left_join(df_partner1, df_family, by = "coupleid")
-
-tibble(df_couples)
-```
-:::
-:::::
-
-## `right_join()` {.smaller}
-
-::::: columns
-::: {.column width="35%"}
-![](images/08/right-join.gif)
-:::
-
-::: {.column width="65%"}
-```{r}
-#| label: right-join
-
-df_couples <- right_join(df_partner1, df_family, by = "coupleid")
-
-tibble(df_couples)
-```
-:::
-:::::
-
-## `full_join()` {.smaller}
-
-::::: columns
-::: {.column width="35%"}
-![](images/08/full-join.gif)
-:::
-
-::: {.column width="65%"}
-```{r}
-#| label: full-join
-
-df_couples <- full_join(df_partner1, df_family, by = "coupleid")
-
-tibble(df_couples)
-```
-:::
-:::::
-
-## `inner_join()` {.smaller}
-
-::::: columns
-::: {.column width="35%"}
-![](images/08/inner-join.gif)
-:::
-
-::: {.column width="65%"}
-```{r}
-#| label: inner-join
-
-df_couples <- inner_join(df_partner1, df_family, by = "coupleid")
-
-tibble(df_couples)
-```
-:::
-:::::
-
-# Think Like a Statistician {background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
-
-Are married people above or below average in internet use or income?
-Does it vary by survey year?
-
-<br>
-
-[{{< fa regular lightbulb >}} **How do we find
-out?**]{style="color: #F39C12; font-size: 175%; font-family: 'Shadows Into Light'"}
-
-##  {data-menu-title="Think Like a Statistician" background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
-
-Answering this research question takes a few steps. But, the first step
-is to create a dataframe with all the necessary information.
-
-[{{< fa regular lightbulb >}} **Can you reproduce this
-table?**]{style="color: #F39C12; font-size: 150%; font-family: 'Shadows Into Light'"}
-
-<br>
-
-```{r}
-#| label: think-output
-#| echo: false
-
-# Reshape data
-think_data <- data |>
-    select(yearid, 
-         starts_with("marital_"), 
-         starts_with("wwwhr_"),
-         starts_with("realrinc_")) |>
-    pivot_longer(
-      cols = 2:10,
-      names_to = c(".value", "panel"), 
-      names_sep = "_") |>
-    relocate(panel, .after = yearid)
-
-# recode variables
-think_data <- think_data |>
-  mutate(panel = case_when(
-         panel == "1a" ~ 2016,
-         panel == "1b" ~ 2018,
-         panel == "2" ~ 2020,
-         TRUE ~ NA_integer_),
-         marital = as_factor(marital))
-
-## summarize by panel
-think_summary <- think_data |>
-  drop_na(wwwhr, realrinc)  |>
-  group_by(panel) |>  
-  summarise(
-    avg_www = round(mean(wwwhr), digits = 2), 
-    avg_inc = round(mean(realrinc), digits = 2)
-    )
-
-think_full <- full_join(think_data, think_summary, by = "panel")
-
-head(think_full, n = 6)
+# Create scatterplot with regression line
+ggplot(df, aes(x = literacy, y = educ)) +
+  geom_point(color = "#18BC9C", size = 3) +
+  geom_smooth(method = "lm", se = FALSE, color = "#3498DB") +
+# Add circle using path
+  geom_path(data = circle_df, aes(x = x, y = y), color = "black", linewidth = 1.2) +
+   # Add text label
+  annotate("text", x = 79.3, y = 3, label = "X = 79.3, Y = 10.4", color = "black", size = 6) +
+  labs(
+    title = "Scatterplot of Education vs Literacy",
+    x = "Literacy Rate (%)",
+    y = "Years of Education"
+  ) +
+  theme_minimal(20)
 
 ```
 
-##  {.smaller data-menu-title="Your Data Take" background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
 
-::: {style="color: #f39c12; font-size: 175%; font-family: 'Shadows Into Light'"}
-{{< fa regular lightbulb >}} **What's your conclusion to our research
-question?**
-:::
+## {data-menu-title="Scatterplot"}
 
-```{r}
-#| label: think-answer
-#| echo: false
+```{r, echo=FALSE}
+#| label: scatterplot-predicted-point
+#| output-location: slide
+#| message: false
 
-# Filter for married individuals and create flags
-think_married <- think_full |>
-  filter(marital == "married") |>
-  group_by(panel) |>
-  mutate(
-    income_status = ifelse(realrinc > avg_inc, "Above Average", "Below Average"),
-    internet_status = ifelse(wwwhr > avg_www, "Above Average", "Below Average")
-  )
-```
+# Define the new point
+new_point <- data.frame(literacy = 79.3, educ = 30.49)
 
-```{r}
-#| label: think-answer-01
-
-# Income status
-ctable(think_married$income_status, think_married$panel, 
-  prop = "c", 
-  format = "p", 
-  useNA = "no",
-  headings = FALSE
+# Generate circle coordinates inline
+theta <- seq(0, 2 * pi, length.out = 100)
+circle_df <- data.frame(
+  x = 79.3 + 2 * cos(theta),
+  y = 10.4 + 4 * sin(theta)
 )
 
+# Create scatterplot with regression line
+ggplot(df, aes(x = literacy, y = educ)) +
+  geom_point(color = "#18BC9C", size = 3) +
+  geom_smooth(method = "lm", se = FALSE, color = "#3498DB") +
+# Add circle using path
+  geom_path(data = circle_df, aes(x = x, y = y), color = "#18BC9C", linewidth = 1.2) +
+   # Add text label
+  annotate("text", x = 79.3, y = 3, label = "X = 79.3, Y = 10.4", color = "#18BC9C", size = 6) +
+  # Add the new point
+  geom_point(data = new_point, aes(x = literacy, y = educ), 
+             color = "#E74C3C", size = 4, shape = 16) +
+annotate("text", x = 79.3, y = 45,
+         label = expression("X = 79.3, " * hat(y) * " = 30.49"),
+         color = "#E74C3C", size = 6) +
+  labs(
+    title = "Scatterplot of Education vs Literacy",
+    x = "Literacy Rate (%)",
+    y = "Years of Education"
+  ) +
+  theme_minimal(20)
+
 ```
 
-```{r}
-#| label: think-answer-02
+## {data-menu-title="Scatterplot"}
 
-# Internet status
-ctable(think_married$internet_status, think_married$panel, 
-  prop = "c", 
-  format = "p", 
-  useNA = "no",
-  headings = FALSE
+```{r, echo=FALSE}
+#| label: scatterplot-predicted-point
+#| output-location: slide
+#| message: false
+
+# Define the new point
+new_point <- data.frame(literacy = 79.3, educ = 30.49)
+
+# Generate circle coordinates inline
+theta <- seq(0, 2 * pi, length.out = 100)
+circle_df <- data.frame(
+  x = 79.3 + 2 * cos(theta),
+  y = 10.4 + 4 * sin(theta)
 )
+
+# Create scatterplot with regression line
+ggplot(df, aes(x = literacy, y = educ)) +
+  geom_point(color = "#18BC9C", size = 3) +
+  geom_smooth(method = "lm", se = FALSE, color = "#3498DB") +
+# Add circle using path
+geom_path(data = circle_df, aes(x = x, y = y), color = "#18BC9C", linewidth = 1.2) +
+# Add text label
+annotate("text", x = 79.3, y = 3, label = "X = 79.3, Y = 10.4", color = "#18BC9C", size = 6) +
+# Add the new point
+geom_point(data = new_point, aes(x = literacy, y = educ), 
+           color = "#E74C3C", size = 4, shape = 16) +
+annotate("text", x = 79.3, y = 45,
+         label = expression("X = 79.3, " * hat(y) * " = 30.49"),
+         color = "#E74C3C", size = 6) +
+# Add a segment between the two points
+annotate("segment",
+         x = 79.3, y = 10.4,
+         xend = 79.3, yend = 30.49,
+         color = "black", linewidth = 1.2) +
+  labs(
+    title = "Scatterplot of Education vs Literacy",
+    x = "Literacy Rate (%)",
+    y = "Years of Education"
+  ) +
+  theme_minimal(20)
+
 ```

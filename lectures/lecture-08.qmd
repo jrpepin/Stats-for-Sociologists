@@ -79,8 +79,6 @@ Load the standard packages & new package `moderndrive`
 library(here)
 library(tidyverse) 
 library(haven) # not core tidyverse
-library(gssr)
-library(gssrdoc)
 library(summarytools)
 library(gtsummary) 
 library(moderndive)
@@ -521,6 +519,8 @@ There is a strong, positive association between the literacy rate and enrollment
 ## `get_regression_table()` {.sparse-slide}
 
 ```{r}
+#| label: regress-table
+
 model <- lm(educ ~ literacy, data = df)
 
 get_regression_table(model)
@@ -592,6 +592,7 @@ annotate("text", x = 50, y = 20,
 ## Add a categorical variable {.sparse-slide}
 
 ```{r}
+#| label: cat-var
 
 # Use mutate and case_when to add the country_group column
 df <- df %>%
@@ -608,6 +609,8 @@ head(df)
 ## `get_regression_table()` {.sparse-slide}
 
 ```{r}
+#| label: lm-2
+
 model_2 <- lm(educ ~ country_group, data = df)
 
 get_regression_table(model_2)
@@ -698,7 +701,7 @@ get_regression_points(model)
 
 ## {data-menu-title="$R^2$ interpretation" .sparse-slide}  
 
-$r^2$ ranges from 0 to 1.0
+$R^2$ ranges from 0 to 1.0
 
 <br>
 
@@ -710,7 +713,7 @@ $r^2$ ranges from 0 to 1.0
 
 <br>
 
-[In the social sciences, a high $r^2$ is rare!]{style="color: #3498db; font-size: 100%; font-family: 'Shadows Into Light'"}
+[In the social sciences, a high $R^2$ is rare!]{style="color: #3498db; font-size: 100%; font-family: 'Shadows Into Light'"}
 
 
 ## $R^2$ calculation {.sparse-slide }
@@ -734,7 +737,7 @@ my_test$estimate
 ## {data-menu-title="`get_regression_summaries()`" .sparse-slide}  
 
 ::: task
-{{< fa check-double >}} Use `get_regression_summaries()` to see $r^2$.
+{{< fa check-double >}} Use `get_regression_summaries()` to see $R^2$.
 :::
 
 <br>
@@ -742,6 +745,7 @@ my_test$estimate
 . . .
 
 ```{r}
+#| label: get-regression-summ
 
 model <- lm(educ ~ literacy, data = df)
 

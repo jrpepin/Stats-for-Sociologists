@@ -1,0 +1,199 @@
+---
+title: "Code-along 08"
+author: "FirstName LastName"
+editor: visual
+execute:
+  error: true
+format: pdf # or replace 'pdf' with 'typst'
+---
+
+# Setup
+
+## Packages
+
+Load the standard packages and install `moderndrive`
+
+```{r}
+#| message: false
+#| label: load
+
+# install.packages("moderndive")
+
+library(here)
+library(tidyverse) 
+library(haven) # not core tidyverse
+library(summarytools)
+library(gtsummary) 
+library(moderndive)
+```
+
+## Create an example dataframe
+
+```{r}
+#| label: df
+
+# Create columns
+literacy <- c(31.7, 79.3, 85.4, 41.0, 54.7, 97.9, 92.8, 67.1, 97.8, 60.4, 87.5, 99.1)
+educ <- c(3.74, 10.4, 20.4, 4.46, 9.53, 78.6, 31.5, 16.2, 65.8, 10.3, 30.8, 40.1)
+
+# Combine into a data frame
+df <- data.frame(literacy, educ)
+
+# View the data frame
+print(df)
+
+```
+
+## Look at descriptive statistics
+
+`moderndive::tidy_summary()` returns commonly used summary statistics in
+a tidy format.
+
+```{r}
+#| label: tidy-summary
+
+df |>
+  tidy_summary()
+
+```
+
+Create a scatterplot.
+
+```{r}
+#| label: scatterplot
+
+# Create scatterplot
+df |>
+  ggplot(aes(x = literacy, y = educ)) +
+  geom_point(color = "#18BC9C", size = 3) +
+  labs(
+    title = "Scatterplot of Education vs Literacy",
+    x = "Literacy Rate (X)",
+      y = "College enrollment (Y)"
+  ) +
+  theme_minimal()
+```
+
+Add a regression line to the scatterplot.
+
+```{r}
+#| label: scatterplot-ols
+
+# Create scatterplot with regression line
+df |>
+  ggplot(aes(x = literacy, y = educ)) +
+    geom_point(color = "#18BC9C", size = 3) +
+    geom_smooth(method = "lm", se = FALSE, color = "#3498DB") +
+    labs(
+      title = "Scatterplot of Education vs Literacy with Regression Line",
+      x = "Literacy Rate (%)",
+      y = "College enrollment (Y)"
+    ) +
+    theme_minimal()
+
+```
+
+# Regression
+
+Use base R to run a regression.
+
+```{r}
+#| label: regression
+
+lm(educ ~ literacy, data = df)
+
+```
+
+Run a correlation test.
+
+```{r}
+#| label: cor.test
+
+cor.test(
+     ~ educ + literacy,
+     data = df,
+     method = "pearson",
+     na.action = na.omit
+ ) 
+
+```
+
+Use `get_regression_table()` to run a regression.
+
+```{r}
+#| label: regress-table
+
+model <- lm(educ ~ literacy, data = df)
+
+get_regression_table(model)
+
+```
+
+# Categorical IV
+
+Add a categorical variable to the example df.
+
+```{r}
+#| label: cat-var
+
+# Use mutate and case_when to add the country_group column
+df <- df %>%
+  mutate(country_group = case_when(
+    literacy < 50 ~ "Low Literacy",
+    literacy >= 50 & literacy <= 80 ~ "Medium Literacy",
+    literacy > 80 ~ "High Literacy"
+  ))
+
+head(df)
+
+```
+
+Use `get_regression_table()` with a categorical IV.
+
+```{r}
+#| label: lm-2
+
+model_2 <- lm(educ ~ country_group, data = df)
+
+get_regression_table(model_2)
+```
+
+# $R^2$
+
+Use `get_regression_points()` to see the residuals.
+
+```{r}
+#| label: get_regression_points
+
+model <- lm(educ ~ literacy, data = df)
+
+get_regression_points(model)
+
+```
+
+Calculate $R^2$
+
+```{r}
+#| label: r-squared
+
+my_test <- cor.test(
+     ~ educ + literacy,
+     data = df,
+     method = "pearson",
+     na.action = na.omit
+ ) 
+
+my_test$estimate
+(my_test$estimate)^2
+
+```
+
+Use `get_regression_summaries()` to see $R^2$.
+
+```{r}
+#| label: get-regression-summ
+
+model <- lm(educ ~ literacy, data = df)
+
+get_regression_summaries(model)
+```

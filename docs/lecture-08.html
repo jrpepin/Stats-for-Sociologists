@@ -11,7 +11,7 @@
 <link href="lecture-08_files/libs/quarto-contrib/fontawesome6-1.2.0/latex-fontsize.css" rel="stylesheet"><meta charset="utf-8">
   <meta name="generator" content="quarto-1.7.32">
 
-  <title>OLS Regression I</title>
+  <title>Bivariate Regression</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -240,7 +240,7 @@
     <div class="slides">
 
 <section id="title-slide" data-background-image="images/08/scatcart.png" data-background-position="bottom center" data-background-size="250px" class="quarto-title-block center">
-  <h1 class="title">OLS Regression I</h1>
+  <h1 class="title">Bivariate Regression</h1>
 
 <div class="quarto-title-authors">
 </div>
@@ -249,37 +249,18 @@
 <section id="agenda" class="title-slide slide level1 center" data-menu-title="Agenda" data-background-image="images/calendar.png" data-background-size="100px" data-background-repeat="repeat">
 <h1>Agenda</h1>
 <ul>
-<li>Manipulating Dataframes</li>
-<li>Joining Dataframes</li>
+<li>Simple regression</li>
+<li>Categorical IV</li>
+<li><span class="math inline">\(R^2\)</span></li>
 </ul>
-<aside class="notes">
-<ul>
-<li>forcats (reorder factor levels)</li>
-<li>missing data?</li>
-<li><strong>outliers</strong> – data viz &amp; tables</li>
-<li>dates?</li>
-<li>lists</li>
-</ul>
-<style type="text/css">
-        span.MJX_Assistive_MathML {
-          position:absolute!important;
-          clip: rect(1px, 1px, 1px, 1px);
-          padding: 1px 0 0 0!important;
-          border: 0!important;
-          height: 1px!important;
-          width: 1px!important;
-          overflow: hidden!important;
-          display:block!important;
-      }</style></aside>
 </section>
 
 <section id="learning-objectives" class="title-slide slide level1 center">
 <h1>Learning objectives</h1>
 <p>By the end of the lecture, you will be able to …</p>
 <ul>
-<li>Reshape data between wide and long formats</li>
-<li>Reorder columns and rows</li>
-<li>Combine and expand dataframes</li>
+<li>Use R to produce bivariate regression</li>
+<li>Use R to produce <span class="math inline">\(R^2\)</span></li>
 </ul>
 </section>
 
@@ -290,84 +271,27 @@
 </section>
 <section id="packages" class="slide level2 sparse-slide">
 <h2>Packages</h2>
-<p>Load the standard packages</p>
+<p>Load the standard packages &amp; new package <code>moderndrive</code></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a><span class="fu">library</span>(here)</span>
-<span id="cb1-2"><a href=""></a><span class="fu">library</span>(tidyverse) </span>
-<span id="cb1-3"><a href=""></a><span class="fu">library</span>(haven) <span class="co"># not core tidyverse</span></span>
-<span id="cb1-4"><a href=""></a><span class="fu">library</span>(gssr)</span>
-<span id="cb1-5"><a href=""></a><span class="fu">library</span>(gssrdoc)</span>
-<span id="cb1-6"><a href=""></a><span class="fu">library</span>(summarytools)</span>
-<span id="cb1-7"><a href=""></a><span class="fu">library</span>(gtsummary) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<aside class="notes">
-
-<style type="text/css">
-        span.MJX_Assistive_MathML {
-          position:absolute!important;
-          clip: rect(1px, 1px, 1px, 1px);
-          padding: 1px 0 0 0!important;
-          border: 0!important;
-          height: 1px!important;
-          width: 1px!important;
-          overflow: hidden!important;
-          display:block!important;
-      }</style></aside>
-</section>
-<section id="load-your-data" class="slide level2 sparse-slide">
-<h2>Load your data</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href=""></a><span class="co"># Get the data from the 2022 survey</span></span>
-<span id="cb2-2"><a href=""></a>gss22 <span class="ot">&lt;-</span> <span class="fu">gss_get_yr</span>(<span class="dv">2022</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="variables" class="slide level2 smaller">
-<h2>Variables</h2>
-<ul>
-<li><code>height</code> R is how tall</li>
-<li><code>weight</code> About how much do you weigh without shoes?</li>
-<li><code>lifenow</code> R’s rating of life overall now from 0-10</li>
-<li><code>age</code> Age of respondent</li>
-<li><code>educ</code> Respondents highest edu credit</li>
-<li><code>hrs1</code> how many hours did you work last week</li>
-<li><code>race</code> What race do you consider yourself</li>
-<li><code>sex</code> Respondents sex</li>
-<li><code>marital</code> R’s marital status</li>
-</ul>
-</section>
-<section id="variable-management" class="slide level2 smaller">
-<h2>Variable Management</h2>
-<div class="task">
-<p><i class="fa-solid fa-check-double" aria-label="check-double"></i> Make a df with only the (pretty) categorical and continuous variables we’ll analyze.</p>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb3" data-code-line-numbers="1-6|8-15|17-18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a><span class="co"># Categorical Variables</span></span>
-<span id="cb3-2"><a href=""></a>my_cat <span class="ot">&lt;-</span> gss22 <span class="sc">|&gt;</span></span>
-<span id="cb3-3"><a href=""></a>  <span class="fu">select</span>(id, race, sex, marital) <span class="sc">|&gt;</span></span>
-<span id="cb3-4"><a href=""></a>  <span class="fu">zap_missing</span>() <span class="sc">|&gt;</span></span>
-<span id="cb3-5"><a href=""></a>  <span class="fu">as_factor</span>() <span class="sc">|&gt;</span></span>
-<span id="cb3-6"><a href=""></a>  <span class="fu">droplevels</span>()</span>
-<span id="cb3-7"><a href=""></a></span>
-<span id="cb3-8"><a href=""></a><span class="co"># Continuous Variables</span></span>
-<span id="cb3-9"><a href=""></a>my_con <span class="ot">&lt;-</span> gss22 <span class="sc">|&gt;</span></span>
-<span id="cb3-10"><a href=""></a>  <span class="fu">select</span>(id, height, weight, lifenow, age, educ, hrs1) <span class="sc">|&gt;</span></span>
-<span id="cb3-11"><a href=""></a>  <span class="fu">mutate</span>(</span>
-<span id="cb3-12"><a href=""></a>    <span class="at">lifenow =</span> <span class="fu">as.numeric</span>(lifenow),</span>
-<span id="cb3-13"><a href=""></a>    <span class="at">age =</span> <span class="fu">as.numeric</span>(age),</span>
-<span id="cb3-14"><a href=""></a>    <span class="at">educ =</span> <span class="fu">as.numeric</span>(educ),</span>
-<span id="cb3-15"><a href=""></a>    <span class="at">hrs1 =</span> <span class="fu">as.numeric</span>(hrs1))</span>
-<span id="cb3-16"><a href=""></a></span>
-<span id="cb3-17"><a href=""></a><span class="co"># Combine the two dataframes</span></span>
-<span id="cb3-18"><a href=""></a>my_data <span class="ot">&lt;-</span> <span class="fu">left_join</span>(my_cat, my_con, <span class="at">by =</span> <span class="st">"id"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a><span class="co"># install.packages("moderndive")</span></span>
+<span id="cb1-2"><a href=""></a></span>
+<span id="cb1-3"><a href=""></a><span class="fu">library</span>(here)</span>
+<span id="cb1-4"><a href=""></a><span class="fu">library</span>(tidyverse) </span>
+<span id="cb1-5"><a href=""></a><span class="fu">library</span>(haven) <span class="co"># not core tidyverse</span></span>
+<span id="cb1-6"><a href=""></a><span class="fu">library</span>(gssr)</span>
+<span id="cb1-7"><a href=""></a><span class="fu">library</span>(gssrdoc)</span>
+<span id="cb1-8"><a href=""></a><span class="fu">library</span>(summarytools)</span>
+<span id="cb1-9"><a href=""></a><span class="fu">library</span>(gtsummary) </span>
+<span id="cb1-10"><a href=""></a><span class="fu">library</span>(moderndive)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section></section>
 <section>
-<section id="regression" class="title-slide slide level1 theme-section center">
-<h1>Regression</h1>
+<section id="simple-regression" class="title-slide slide level1 theme-section center">
+<h1>Simple Regression</h1>
 
 </section>
-<section id="bivariate-regression" class="slide level2 sparse-slide">
-<h2>Bivariate Regression</h2>
+<section id="simple-regression-1" class="slide level2 sparse-slide">
+<h2>Simple Regression</h2>
 <p>Regression and correlation are ways to identify whether two interval-ratio variables are statistically dependent</p>
 <p><br></p>
 <blockquote>
@@ -377,27 +301,27 @@
 <section id="code-meets-question" class="slide level2 sparse-slide" data-background-image="images/gears-solid-full.png" data-background-size="80px" data-background-repeat="repeat">
 <h2>Code Meets Question</h2>
 <div class="task">
-<p><i class="fa-solid fa-lightbulb" aria-label="lightbulb"></i>What is the relationship between literacy rate and rate of tertiary education?</p>
+<p><i class="fa-solid fa-lightbulb" aria-label="lightbulb"></i> What is the relationship between literacy rate and rate of tertiary education?</p>
 </div>
 <p><br></p>
 <p><span style="color: #18BC9C"><strong>literacy rate</strong></span><br>
 % of adult population that is literate</p>
 <p><span style="color: #18BC9C"><strong>rate of tertiary education</strong></span><br>
-the # of students enrolled/eligible within age range</p>
+the % of students enrolled/eligible within the age range</p>
 </section>
 <section id="example-df" class="slide level2">
 <h2>Example df</h2>
 <div class="cell columns column-output-location">
 <div class="column">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href=""></a><span class="co"># Create columns</span></span>
-<span id="cb4-2"><a href=""></a>literacy <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">31.7</span>, <span class="fl">79.3</span>, <span class="fl">85.4</span>, <span class="fl">41.0</span>, <span class="fl">54.7</span>, <span class="fl">97.9</span>, <span class="fl">92.8</span>, <span class="fl">67.1</span>, <span class="fl">97.8</span>, <span class="fl">60.4</span>, <span class="fl">87.5</span>, <span class="fl">99.1</span>)</span>
-<span id="cb4-3"><a href=""></a>educ <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">3.74</span>, <span class="fl">10.4</span>, <span class="fl">20.4</span>, <span class="fl">4.46</span>, <span class="fl">9.53</span>, <span class="fl">78.6</span>, <span class="fl">31.5</span>, <span class="fl">16.2</span>, <span class="fl">65.8</span>, <span class="fl">10.3</span>, <span class="fl">30.8</span>, <span class="fl">40.1</span>)</span>
-<span id="cb4-4"><a href=""></a></span>
-<span id="cb4-5"><a href=""></a><span class="co"># Combine into a data frame</span></span>
-<span id="cb4-6"><a href=""></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(literacy, educ)</span>
-<span id="cb4-7"><a href=""></a></span>
-<span id="cb4-8"><a href=""></a><span class="co"># View the data frame</span></span>
-<span id="cb4-9"><a href=""></a><span class="fu">print</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href=""></a><span class="co"># Create columns</span></span>
+<span id="cb2-2"><a href=""></a>literacy <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">31.7</span>, <span class="fl">79.3</span>, <span class="fl">85.4</span>, <span class="fl">41.0</span>, <span class="fl">54.7</span>, <span class="fl">97.9</span>, <span class="fl">92.8</span>, <span class="fl">67.1</span>, <span class="fl">97.8</span>, <span class="fl">60.4</span>, <span class="fl">87.5</span>, <span class="fl">99.1</span>)</span>
+<span id="cb2-3"><a href=""></a>educ <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">3.74</span>, <span class="fl">10.4</span>, <span class="fl">20.4</span>, <span class="fl">4.46</span>, <span class="fl">9.53</span>, <span class="fl">78.6</span>, <span class="fl">31.5</span>, <span class="fl">16.2</span>, <span class="fl">65.8</span>, <span class="fl">10.3</span>, <span class="fl">30.8</span>, <span class="fl">40.1</span>)</span>
+<span id="cb2-4"><a href=""></a></span>
+<span id="cb2-5"><a href=""></a><span class="co"># Combine into a data frame</span></span>
+<span id="cb2-6"><a href=""></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(literacy, educ)</span>
+<span id="cb2-7"><a href=""></a></span>
+<span id="cb2-8"><a href=""></a><span class="co"># View the data frame</span></span>
+<span id="cb2-9"><a href=""></a><span class="fu">print</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div><div class="column">
 <div class="cell-output cell-output-stdout">
 <pre><code>   literacy  educ
@@ -416,6 +340,23 @@ the # of students enrolled/eligible within age range</p>
 </div>
 </div></div>
 </section>
+<section id="tidy_summary" class="slide level2 sparse-slide">
+<h2><code>tidy_summary()</code></h2>
+<p><code>moderndive::tidy_summary()</code> returns commonly used summary statistics in a tidy format.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href=""></a>df <span class="sc">|&gt;</span></span>
+<span id="cb4-2"><a href=""></a>  <span class="fu">tidy_summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell fragment">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 11
+  column       n group type      min    Q1  mean median    Q3   max    sd
+  &lt;chr&gt;    &lt;int&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1 literacy    12 &lt;NA&gt;  numeric 31.7   59.0  74.6   82.4  94.0  99.1  23.2
+2 educ        12 &lt;NA&gt;  numeric  3.74  10.1  26.8   18.3  33.6  78.6  24.2</code></pre>
+</div>
+</div>
+</section>
 <section id="section" class="slide level2" data-menu-title="Scatterplot">
 <h2></h2>
 <div class="cell">
@@ -426,21 +367,13 @@ the # of students enrolled/eligible within age range</p>
 <span id="cb6-5"><a href=""></a>  <span class="fu">labs</span>(</span>
 <span id="cb6-6"><a href=""></a>    <span class="at">title =</span> <span class="st">"Scatterplot of Education vs Literacy"</span>,</span>
 <span id="cb6-7"><a href=""></a>    <span class="at">x =</span> <span class="st">"Literacy Rate (X)"</span>,</span>
-<span id="cb6-8"><a href=""></a>    <span class="at">y =</span> <span class="st">"Years of Education (Y)"</span></span>
+<span id="cb6-8"><a href=""></a>      <span class="at">y =</span> <span class="st">"College enrollment (Y)"</span></span>
 <span id="cb6-9"><a href=""></a>  ) <span class="sc">+</span></span>
 <span id="cb6-10"><a href=""></a>  <span class="fu">theme_minimal</span>(<span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
 
-</section>
-<section id="section-output" class="slide level2 output-location-slide"><h2></h2><div class="cell output-location-slide">
-<div class="cell-output-display">
-<div>
-<figure>
-<p><img data-src="lecture-08_files/figure-revealjs/scatterplot-1.png" width="960"></p>
-</figure>
 </div>
-</div>
-</div></section><section id="section-1" class="slide level2 sparse-slide" data-menu-title="Relationships">
+<img data-src="lecture-08_files/figure-revealjs/scatterplot-1.png" width="960" class="r-stretch"></section>
+<section id="section-1" class="slide level2 sparse-slide" data-menu-title="Relationships">
 <h2></h2>
 <p><span style="color: #18BC9C"><strong>Linear relationship</strong></span></p>
 <p>When two interval-ratio level variables are related to one another we can approximate the relationship by drawing a straight line through the center of the observations on the scatterplot.</p>
@@ -452,28 +385,21 @@ the # of students enrolled/eligible within age range</p>
 <section id="section-2" class="slide level2 sparse-slide" data-menu-title="Scatterplot + Regression line">
 <h2></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href=""></a><span class="co"># Create scatterplot with regression line</span></span>
-<span id="cb7-2"><a href=""></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> literacy, <span class="at">y =</span> educ)) <span class="sc">+</span></span>
-<span id="cb7-3"><a href=""></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"#18BC9C"</span>, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb7-4"><a href=""></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> <span class="st">"#3498DB"</span>) <span class="sc">+</span></span>
-<span id="cb7-5"><a href=""></a>  <span class="fu">labs</span>(</span>
-<span id="cb7-6"><a href=""></a>    <span class="at">title =</span> <span class="st">"Scatterplot of Education vs Literacy with Regression Line"</span>,</span>
-<span id="cb7-7"><a href=""></a>    <span class="at">x =</span> <span class="st">"Literacy Rate (%)"</span>,</span>
-<span id="cb7-8"><a href=""></a>    <span class="at">y =</span> <span class="st">"Years of Education"</span></span>
-<span id="cb7-9"><a href=""></a>  ) <span class="sc">+</span></span>
-<span id="cb7-10"><a href=""></a>  <span class="fu">theme_minimal</span>(<span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
+<div class="sourceCode cell-code" id="cb7" data-code-line-numbers="5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href=""></a><span class="co"># Create scatterplot with regression line</span></span>
+<span id="cb7-2"><a href=""></a>df <span class="sc">|&gt;</span></span>
+<span id="cb7-3"><a href=""></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> literacy, <span class="at">y =</span> educ)) <span class="sc">+</span></span>
+<span id="cb7-4"><a href=""></a>    <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"#18BC9C"</span>, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb7-5"><a href=""></a>    <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> <span class="st">"#3498DB"</span>) <span class="sc">+</span></span>
+<span id="cb7-6"><a href=""></a>    <span class="fu">labs</span>(</span>
+<span id="cb7-7"><a href=""></a>      <span class="at">title =</span> <span class="st">"Scatterplot of Education vs Literacy with Regression Line"</span>,</span>
+<span id="cb7-8"><a href=""></a>      <span class="at">x =</span> <span class="st">"Literacy Rate (%)"</span>,</span>
+<span id="cb7-9"><a href=""></a>      <span class="at">y =</span> <span class="st">"College enrollment (Y)"</span></span>
+<span id="cb7-10"><a href=""></a>    ) <span class="sc">+</span></span>
+<span id="cb7-11"><a href=""></a>    <span class="fu">theme_minimal</span>(<span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
-</section>
-<section id="section-2-output" class="slide level2 sparse-slide output-location-slide"><h2></h2><div class="cell output-location-slide">
-<div class="cell-output-display">
-<div>
-<figure>
-<p><img data-src="lecture-08_files/figure-revealjs/scatterplot-ols-1.png" width="960"></p>
-</figure>
 </div>
-</div>
-</div></section><section id="section-3" class="slide level2" data-menu-title="Regression equation">
+<img data-src="lecture-08_files/figure-revealjs/scatterplot-ols-1.png" width="960" class="r-stretch"></section>
+<section id="section-3" class="slide level2" data-menu-title="Regression equation">
 <h2></h2>
 <div style="font-size: 150%; color: #e74c3c">
 <p><span class="math inline">\(\hat{y} = a + bX\)</span></p>
@@ -490,14 +416,18 @@ the # of students enrolled/eligible within age range</p>
 <p><span class="math inline">\(\hat{y} = a + bX\)</span></p>
 </div>
 <p><br></p>
-<p>Positive relationship When <span class="math inline">\(b\)</span> is positive, then when <span class="math inline">\(X\)</span> increases, <span class="math inline">\(\hat{y}\)</span> increases</p>
-<p>Negative relationship When <span class="math inline">\(b\)</span> is negative, then when <span class="math inline">\(X\)</span> increases, <span class="math inline">\(\hat{y}\)</span> decreases</p>
+<p><span style="color: #18bc9c">Positive relationship</span><br>
+When <span class="math inline">\(b\)</span> is positive, then when <span class="math inline">\(X\)</span> increases, <span class="math inline">\(\hat{y}\)</span> increases</p>
+<p><br></p>
+<p><span style="color: #18bc9c">Negative relationship</span><br>
+When <span class="math inline">\(b\)</span> is negative, then when <span class="math inline">\(X\)</span> increases, <span class="math inline">\(\hat{y}\)</span> decreases</p>
 </section>
 <section id="section-5" class="slide level2" data-menu-title="Best fitting line">
 <h2></h2>
 
 <img data-src="lecture-08_files/figure-revealjs/scatterplot-lines-1.png" width="960" class="r-stretch"><aside class="notes">
 <p>With relationships that are imperfect, we must fit the best available line to represent the data.</p>
+<p>ASK: Would <span class="math inline">\(b\)</span> be positive or negative? What about <span class="math inline">\(a\)</span>?</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -535,8 +465,8 @@ the # of students enrolled/eligible within age range</p>
           display:block!important;
       }</style></aside>
 </section>
-<section id="residual-errore" class="slide level2 sparse-slide">
-<h2>Residual = error(<span class="math inline">\(e\)</span>)</h2>
+<section id="residual-error-e" class="slide level2 sparse-slide">
+<h2>Residual = error (<span class="math inline">\(e\)</span>)</h2>
 <p>Calculated based on the difference between <span class="math inline">\(Y\)</span> and <span class="math inline">\(\hat{y}\)</span></p>
 <p><br></p>
 <p><span class="math inline">\(Y\)</span> = observed value of <span class="math inline">\(Y\)</span> for given value of <span class="math inline">\(X\)</span></p>
@@ -549,13 +479,421 @@ the # of students enrolled/eligible within age range</p>
 <img data-src="lecture-08_files/figure-revealjs/scatterplot-point-1.png" width="960" class="r-stretch"></section>
 <section id="section-8" class="slide level2" data-menu-title="Scatterplot">
 <h2></h2>
-<div class="cell">
 
+<img data-src="lecture-08_files/figure-revealjs/scatterplot-predicted-point-1.png" width="960" class="r-stretch"></section>
+<section id="section-9" class="slide level2" data-menu-title="Scatterplot">
+<h2></h2>
+
+<img data-src="lecture-08_files/figure-revealjs/residual-1.png" width="960" class="r-stretch"></section>
+<section id="residual-table" class="slide level2 sparse-slide">
+<h2>Residual table</h2>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: right;">literacy</th>
+<th style="text-align: right;">educ</th>
+<th style="text-align: right;">educ_hat</th>
+<th style="text-align: right;">residual</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">31.7</td>
+<td style="text-align: right;">3.74</td>
+<td style="text-align: right;">-7.995</td>
+<td style="text-align: right;">11.735</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">79.3</td>
+<td style="text-align: right;">10.40</td>
+<td style="text-align: right;">30.671</td>
+<td style="text-align: right;">-20.271</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">85.4</td>
+<td style="text-align: right;">20.40</td>
+<td style="text-align: right;">35.626</td>
+<td style="text-align: right;">-15.226</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">41.0</td>
+<td style="text-align: right;">4.46</td>
+<td style="text-align: right;">-0.440</td>
+<td style="text-align: right;">4.900</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">54.7</td>
+<td style="text-align: right;">9.53</td>
+<td style="text-align: right;">10.688</td>
+<td style="text-align: right;">-1.158</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">97.9</td>
+<td style="text-align: right;">78.60</td>
+<td style="text-align: right;">45.780</td>
+<td style="text-align: right;">32.820</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="ols-regression" class="slide level2 sparse-slide">
+<h2>OLS Regression</h2>
+<div style="font-size: 150%; color: #e74c3c">
+<p><span class="math inline">\(\hat{y} = a + bX\)</span></p>
+</div>
+<p><br></p>
+<p><span style="color: #18BC9C"><strong>Least-squares line</strong></span><br>
+The line where the residual sum of squares is at a minimum</p>
+<p><br></p>
+<p><span style="color: #18BC9C"><strong>Ordinary least-squares (OLS) regression</strong></span><br>
+The statistical technique that produces the least-squares line Sometimes referred to as linear regression</p>
+</section>
+<section id="section-10" class="slide level2 sparse-slide" data-menu-title="OLS Regression">
+<h2></h2>
+<div style="font-size: 150%; color: #e74c3c">
+<p><span class="math inline">\(\hat{y} = a + bX\)</span></p>
+</div>
+<p><br></p>
+<p>Calculus demonstrates the formula for <span class="math inline">\(b\)</span> and <span class="math inline">\(a\)</span> will result in a regression line that minimizes the sum of squares.</p>
+<p><br></p>
+<div class="task">
+<p><i class="fa-solid fa-check-double" aria-label="check-double"></i> Run a regression model.</p>
+</div>
+</section>
+<section id="section-11" class="slide level2 sparse-slide" data-menu-title="OLS Regression">
+<h2></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href=""></a><span class="fu">lm</span>(educ <span class="sc">~</span> literacy, <span class="at">data =</span> df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>NULL</code></pre>
+<pre><code>
+Call:
+lm(formula = educ ~ literacy, data = df)
+
+Coefficients:
+(Intercept)     literacy  
+   -33.7449       0.8123  </code></pre>
 </div>
 </div>
-<img data-src="lecture-08_files/figure-revealjs/scatterplot-predicted-point-1.png" width="960" class="r-stretch">
+<p><br></p>
+<div class="fragment">
+<div style="font-size: 80%; color: #e74c3c">
+<p><span class="math inline">\(\hat{y} = -33.75 + .81X\)</span></p>
+</div>
+</div>
+</section>
+<section id="section-12" class="slide level2 sparse-slide" data-menu-title="Interpretation">
+<h2></h2>
+<div style="font-size: 80%; color: #e74c3c">
+<p><span class="math inline">\(\hat{y} = -33.75 + .81X\)</span></p>
+</div>
+<p><br></p>
+<p>When the literacy rate in a country is 0, the college enrollment rate is predicted to be -33.57 (<span class="math inline">\(a\)</span>)</p>
+<p><br></p>
+<p>For every one unit increase in the literacy rate, the college enrollment rate is expected to rise by 0.81 (<span class="math inline">\(b\)</span>)</p>
+<div class="fragment">
+<div class="task">
+<p><i class="fa-solid fa-lightbulb" aria-label="lightbulb"></i> Is this statistically significant?</p>
+</div>
+</div>
+</section>
+<section id="cor.test" class="slide level2 sparse-slide">
+<h2><code>cor.test()</code></h2>
+<div class="task">
+<p><i class="fa-solid fa-check-double" aria-label="check-double"></i> Run and interpret the correlation for <code>educ</code> and <code>literacy</code>.</p>
+</div>
+<p><br></p>
+<div class="fragment">
+<div class="cell columns column-output-location">
+<div class="column">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href=""></a><span class="fu">cor.test</span>(</span>
+<span id="cb10-2"><a href=""></a>     <span class="sc">~</span> educ <span class="sc">+</span> literacy,</span>
+<span id="cb10-3"><a href=""></a>     <span class="at">data =</span> df,</span>
+<span id="cb10-4"><a href=""></a>     <span class="at">method =</span> <span class="st">"pearson"</span>,</span>
+<span id="cb10-5"><a href=""></a>     <span class="at">na.action =</span> na.omit</span>
+<span id="cb10-6"><a href=""></a> ) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div><div class="column fragment">
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Pearson's product-moment correlation
+
+data:  educ and literacy
+t = 3.942, df = 10, p-value = 0.002766
+alternative hypothesis: true correlation is not equal to 0
+95 percent confidence interval:
+ 0.3731885 0.9352545
+sample estimates:
+      cor 
+0.7800287 </code></pre>
+</div>
+</div></div>
+<aside class="notes">
+<p>There is a strong, positive association between the literacy rate and enrollment in tertiary education among nations.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</div>
+</section>
+<section id="get_regression_table" class="slide level2 sparse-slide">
+<h2><code>get_regression_table()</code></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href=""></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(educ <span class="sc">~</span> literacy, <span class="at">data =</span> df)</span>
+<span id="cb12-2"><a href=""></a></span>
+<span id="cb12-3"><a href=""></a><span class="fu">get_regression_table</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 7
+  term      estimate std_error statistic p_value lower_ci upper_ci
+  &lt;chr&gt;        &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+1 intercept  -33.7      16.0       -2.10   0.062  -69.5       1.98
+2 literacy     0.812     0.206      3.94   0.003    0.353     1.27</code></pre>
+</div>
+</div>
+<p><br></p>
+<div style="font-size: 80%">
+<p><span style="color: #18BC9C"><strong>statistic</strong></span> Test whether the coefficient is different from 0. Get the t-values by dividing the estimate by its standard error.</p>
+<p><span style="color: #18BC9C"><strong>p-value</strong></span> Two-tail p-values for the test statistic</p>
+</div>
+<aside class="notes">
+<p>The p value is the same for correlation and simple regression.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="prediction" class="slide level2 sparse-slide">
+<h2>Prediction</h2>
+<div style="font-size: 100%; color: #e74c3c">
+<p><span class="math inline">\(\hat{y} = -33.75 + .81X\)</span></p>
+</div>
+<p><br></p>
+<p>A regression equation can also be used to create predicted Y values for each value of X</p>
+<p><br></p>
+<p>If X = 60, <span class="math inline">\(Y\)</span> is predicted to be:</p>
+<p><span class="math inline">\(\hat{y} = -33.75 + .81(60)\)</span><br>
+<span class="math inline">\(\hat{y} = -33.75 + 48.6\)</span><br>
+<span class="math inline">\(\hat{y} = 15.03\)</span></p>
+</section>
+<section id="section-13" class="slide level2 sparse-slide" data-menu-title="Prediction">
+<h2></h2>
+
+<img data-src="lecture-08_files/figure-revealjs/prediction-1.png" width="960" class="r-stretch"></section></section>
+<section>
+<section id="categorical-iv" class="title-slide slide level1 theme-section center">
+<h1>Categorical IV</h1>
+
+</section>
+<section id="add-a-categorical-variable" class="slide level2 sparse-slide">
+<h2>Add a categorical variable</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href=""></a><span class="co"># Use mutate and case_when to add the country_group column</span></span>
+<span id="cb14-2"><a href=""></a>df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb14-3"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">country_group =</span> <span class="fu">case_when</span>(</span>
+<span id="cb14-4"><a href=""></a>    literacy <span class="sc">&lt;</span> <span class="dv">50</span> <span class="sc">~</span> <span class="st">"Low Literacy"</span>,</span>
+<span id="cb14-5"><a href=""></a>    literacy <span class="sc">&gt;=</span> <span class="dv">50</span> <span class="sc">&amp;</span> literacy <span class="sc">&lt;=</span> <span class="dv">80</span> <span class="sc">~</span> <span class="st">"Medium Literacy"</span>,</span>
+<span id="cb14-6"><a href=""></a>    literacy <span class="sc">&gt;</span> <span class="dv">80</span> <span class="sc">~</span> <span class="st">"High Literacy"</span></span>
+<span id="cb14-7"><a href=""></a>  ))</span>
+<span id="cb14-8"><a href=""></a></span>
+<span id="cb14-9"><a href=""></a><span class="fu">head</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  literacy  educ   country_group
+1     31.7  3.74    Low Literacy
+2     79.3 10.40 Medium Literacy
+3     85.4 20.40   High Literacy
+4     41.0  4.46    Low Literacy
+5     54.7  9.53 Medium Literacy
+6     97.9 78.60   High Literacy</code></pre>
+</div>
+</div>
+</section>
+<section id="get_regression_table-1" class="slide level2 sparse-slide">
+<h2><code>get_regression_table()</code></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href=""></a>model_2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(educ <span class="sc">~</span> country_group, <span class="at">data =</span> df)</span>
+<span id="cb16-2"><a href=""></a></span>
+<span id="cb16-3"><a href=""></a><span class="fu">get_regression_table</span>(model_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 7
+  term                    estimate std_error statistic p_value lower_ci upper_ci
+  &lt;chr&gt;                      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+1 intercept                   44.5      6.94      6.42   0         28.8    60.2 
+2 country_group: Low Lit…    -40.4     13.9      -2.91   0.017    -71.8    -9.03
+3 country_group: Medium …    -32.9     11.0      -3      0.015    -57.8    -8.10</code></pre>
+</div>
+</div>
+<aside class="notes">
+<p>What does the intercept mean? Which group has the smallest proportion of college enrolles? Is it statistically significantly different (than what group?)? What proportion is enrolled in college in low literacy countries? medium literacy?</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section></section>
+<section>
+<section id="r2" class="title-slide slide level1 theme-section center">
+<h1><span class="math inline">\(R^2\)</span></h1>
+
+</section>
+<section id="proportional-reduction-of-error" class="slide level2 sparse-slide">
+<h2>Proportional Reduction of Error</h2>
+<p>The better a least-squares line is, the better it can predict an outcome with the least amount of error</p>
+<p><br></p>
+<p><span class="math inline">\(r^2\)</span> is a <strong>p</strong>roportional <strong>r</strong>eduction of <strong>e</strong>rror (PRE) measure</p>
+<p><br></p>
+<p><span class="math inline">\(PRE = \frac{E1 - E2}{E1}\)</span></p>
+<p><br></p>
+<p>It tells us how well the regression model fits the data</p>
+</section>
+<section id="section-14" class="slide level2 sparse-slide smaller" data-menu-title="PRE Equation">
+<h2></h2>
+<p><span class="math inline">\(PRE = \frac{E1 - E2}{E1}\)</span></p>
+<p><br></p>
+<div class="columns smaller">
+<div class="column">
+<p><strong>E1</strong><br>
+Errors of prediction made when IV is ignored</p>
+<p><br></p>
+<p>Equivalent to the sum of errors we would have if we guessed that every Y was equal to the mean of Y</p>
+<p><br></p>
+<p><span style="color: #3498db; font-family: 'Shadows Into Light'">aka Sum of Squares Total (SST)</span></p>
+</div><div class="column">
+<p><strong>E2</strong><br>
+Errors of prediction made based on IV</p>
+<p><br></p>
+<p>Equivalent to the sum of errors we would have if we used our least squares line to predict Y</p>
+<p><br></p>
+<p><span style="color: #3498db; font-family: 'Shadows Into Light'">aka Sum of Squared Errors (SSE)</span></p>
+</div></div>
+</section>
+<section id="section-15" class="slide level2 sparse-slide" data-menu-title="`get_regression_points()`">
+<h2></h2>
+<div class="task">
+<p><i class="fa-solid fa-check-double" aria-label="check-double"></i> Use <code>get_regression_points()</code> to see the residuals.</p>
+</div>
+<p><br></p>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href=""></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(educ <span class="sc">~</span> literacy, <span class="at">data =</span> df)</span>
+<span id="cb18-2"><a href=""></a></span>
+<span id="cb18-3"><a href=""></a><span class="fu">get_regression_points</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 12 × 5
+      ID  educ literacy educ_hat residual
+   &lt;int&gt; &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+ 1     1  3.74     31.7    -8.00    11.7 
+ 2     2 10.4      79.3    30.7    -20.3 
+ 3     3 20.4      85.4    35.6    -15.2 
+ 4     4  4.46     41      -0.44     4.9 
+ 5     5  9.53     54.7    10.7     -1.16
+ 6     6 78.6      97.9    45.8     32.8 
+ 7     7 31.5      92.8    41.6    -10.1 
+ 8     8 16.2      67.1    20.8     -4.56
+ 9     9 65.8      97.8    45.7     20.1 
+10    10 10.3      60.4    15.3     -5.02
+11    11 30.8      87.5    37.3     -6.53
+12    12 40.1      99.1    46.8     -6.65</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="section-16" class="slide level2 sparse-slide" data-menu-title="$R^2$ interpretation">
+<h2></h2>
+<p><span class="math inline">\(r^2\)</span> ranges from 0 to 1.0</p>
+<p><br></p>
+<p><strong>1.0</strong> = Our independent variable accounts for all the variation that we find in the dependent variable (it predicts the dependent variable perfectly).</p>
+<p><br></p>
+<p><strong>0.0</strong> = Our independent variable does not improve our ability to predict the dependent variable.</p>
+<p><br></p>
+<p><span style="color: #3498db; font-size: 100%; font-family: 'Shadows Into Light'">In the social sciences, a high <span class="math inline">\(r^2\)</span> is rare!</span></p>
+</section>
+<section id="r2-calculation" class="slide level2 sparse-slide">
+<h2><span class="math inline">\(R^2\)</span> calculation</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href=""></a>my_test <span class="ot">&lt;-</span> <span class="fu">cor.test</span>(</span>
+<span id="cb20-2"><a href=""></a>     <span class="sc">~</span> educ <span class="sc">+</span> literacy,</span>
+<span id="cb20-3"><a href=""></a>     <span class="at">data =</span> df,</span>
+<span id="cb20-4"><a href=""></a>     <span class="at">method =</span> <span class="st">"pearson"</span>,</span>
+<span id="cb20-5"><a href=""></a>     <span class="at">na.action =</span> na.omit</span>
+<span id="cb20-6"><a href=""></a> ) </span>
+<span id="cb20-7"><a href=""></a></span>
+<span id="cb20-8"><a href=""></a>my_test<span class="sc">$</span>estimate</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      cor 
+0.7800287 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href=""></a>(my_test<span class="sc">$</span>estimate)<span class="sc">^</span><span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      cor 
+0.6084447 </code></pre>
+</div>
+</div>
+</section>
+<section id="section-17" class="slide level2 sparse-slide" data-menu-title="`get_regression_summaries()`">
+<h2></h2>
+<div class="task">
+<p><i class="fa-solid fa-check-double" aria-label="check-double"></i> Use <code>get_regression_summaries()</code> to see <span class="math inline">\(r^2\)</span>.</p>
+</div>
+<p><br></p>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href=""></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(educ <span class="sc">~</span> literacy, <span class="at">data =</span> df)</span>
+<span id="cb24-2"><a href=""></a></span>
+<span id="cb24-3"><a href=""></a><span class="fu">get_regression_summaries</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 9
+  r_squared adj_r_squared   mse  rmse sigma statistic p_value    df  nobs
+      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1     0.608         0.569  210.  14.5  15.9      15.5   0.003     1    12</code></pre>
+</div>
+</div>
+<p><br></p>
+<p><span class="math inline">\(R^2\)</span> shows the amount of variance of the DV is explained by IV(s).</p>
+</div>
+</section>
+<section id="r2-interpretation" class="slide level2 sparse-slide">
+<h2><span class="math inline">\(R^2\)</span> interpretation</h2>
+<p>An <span class="math inline">\(R^2\)</span> of <span class="math inline">\(0.61\)</span> means that knowing the literacy rate of a country reduces our error in predicting college enrollment by <span style="color: #18bc9c"><strong>61%</strong></span>.</p>
+<p><br></p>
+<p>The national literacy rate explains <span style="color: #18bc9c"><strong>61%</strong></span> of variation in college enrollment.</p>
+</section></section>
+<section>
+<section id="think-like-a-statistician" class="title-slide slide level1 sparse-slide center" data-background-image="images/lightbulb-solid.png" data-background-size="80px" data-background-repeat="repeat">
+<h1>Think Like a Statistician</h1>
+
+</section>
+<section id="think-like-a-statistician-1" class="slide level2 sparse-slide" data-background-image="images/lightbulb-solid.png" data-background-size="80px" data-background-repeat="repeat">
+<h2>Think Like a Statistician</h2>
+<div class="task">
+<p><i class="fa-solid fa-check-double" aria-label="check-double"></i> 1. Run and interpret a simple regression using with your IPUMS data</p>
+</div>
+<p><br></p>
+<div class="task">
+<p><i class="fa-solid fa-check-double" aria-label="check-double"></i> 2. Run and interpret a regression with a categorical IV and your DV using your IPUMS data</p>
+</div>
+
 
 </section></section>
     </div>

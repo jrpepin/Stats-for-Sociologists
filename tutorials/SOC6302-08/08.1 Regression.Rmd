@@ -12,7 +12,7 @@ output:
     df_print: "paged"
 runtime: shiny_prerendered
 tutorial:
-  id: "07.1"
+  id: "08.1"
 editor_options: 
   markdown: 
     wrap: sentence
@@ -30,14 +30,17 @@ editor_options:
 ## data(gss_all)
 ## gss24 <- gss_get_yr(2024)
 
+library(moderndive) # regression output
+library(gtsummary) # tbl_cross
+
 ## Load packages, custom functions, and styles
 source("custom-setup-styles.R")
 
 ## Load all gss
 #gss_all <- readRDS("data/gss_all.rds")
 
-# Get the data only for the 2024 survey respondents
-#gss24 <- readRDS("data/gss24.rds")
+# Get the data only for the 2022 survey respondents
+gss22 <- readRDS("data/gss22.rds")
 
 # Override default discrete color and fill scales
 scale_colour_discrete <- function(...) scale_color_manual(values = my_palette)
@@ -68,16 +71,16 @@ knitr::opts_chunk$set(echo = FALSE,
 </script>
 ```
 
-Regression
+Bivariate Regression
 --------------------------------------------------------------------------------
 
 
-![](images/snail08.png "alt text here"){width="25%"}
+![](images/snail08.png "snail with flower"){width="25%"}
 
 `r fa("fas fa-lightbulb", fill = "#18BC9C")` [**LEARNING OBJECTIVES**]{style="color: #18BC9C;"}
 
 1. Describe linear relationships for bivariate regression models.
-2. Interpret the intercept and coefficients.
+2. Interpret the intercept and slope
 3. Interpret the goodness of fit ($R^2$).
 
 <br>
@@ -99,13 +102,12 @@ Readings are available on Quercus.
 * OLS REGRESSION
 * LEAST-SQUARES LINE
 * RESIDUAL
-* COEFFICIENTS
-* MULTIPLE REGRESSION
-* STATISTICAL SIGNIFICANCE
 * $R^2$
 
-Review 
+Simple Regression
 --------------------------------------------------------------------------------
+
+### Review 
 
 [Terri Nelson](https://twitter.com/TerriDrawsStuff/status/1331362372179554304) pointed out on Twitter that there were numerous complaints that people's Yankee candles did not have any smell. 
 Because the loss of smell (and taste) is one of the known symptoms of COVID-19, 
@@ -131,6 +133,8 @@ The candle scatterplot shows the relationship between time (independent variable
 The average candle rating stayed above 4 points until the beginning of the pandemic. The average appears to drop about 1 month after the pandemic began. By November, the average appears to be less than 3.5.  
   
 With this scatterplot, we find evidence to reject the null hypothesis. In other words, the scatterplot is consistent with the research hypothesis.  
+
+<br>
   
 #### Elaboration
   
@@ -144,8 +148,32 @@ Notice that unlike the scented candle reviews, the review averages for unscented
 These findings suggest the decline is consistent with a loss of smell among candle reviewers.  
   
 We can also formally test whether the average review score of scented candles has been declining over the course of the year, as an increasing number of people contracted COVID-19.  
+
+<br>
   
 #### Pearson’s Correlation Coefficient (R)
+
+::: my-def
+#### Pearson’s Correlation Coefficient
+
+A measure of association between two interval-ratio level variables.
+:::
+  
+  
+[**r ranges from -1 to +1**]{style="color: #18bc9c"}  
+
+-1: 	perfect negative correlation  
+ 0: 	no relationship  
+ 1: 	perfect positive correlation  
+  
+  
+[**Strength of relationship**]{style="color: #18bc9c"}  
+
+Strong:     Over 0.6  
+Moderate:   0.3 to 0.5  
+Weak:       0.1 to 0.2  
+Very weak:  Below 0.1  
+
   
 In our candle example, the R value for scented candles was -0.346, whereas the R value for unscented candles was -.134. Therefore, we could say:
 
@@ -153,9 +181,7 @@ There is a moderately negative relationship between reviews for scented candles 
   
 In both cases the relationships are statistically significant. But the strength of the relationship between candle reviews and day of the year was substantially much stronger for the scented candles than for the unscented candles.  
   
-
- Regression Equation
---------------------------------------------------------------------------------
+### Regression Line
 
 Watch this short [video](https://youtu.be/VqD-nf1YUks) for an introduction to regression analysis [5 minutes].  
 ![](https://youtu.be/VqD-nf1YUks)
@@ -170,13 +196,15 @@ The best fitting line is represented as an equation:
 Let's walk through each part of this equation with the candle example. 
 The following is a scatterplot of the reviews in 2020. 
 The x-axis shows the day of the year and the y-axis shows the average rating for each day. 
-The figure also shows the regression equation.  
+
   
 ![](images/candlereg.png "Scatterplot: 2020 Amazon Reviews for Top 3 Scented Candles"){ width=80% }
   
-<br>
+<br>  
+
+The figure also shows the regression equation.   
   
-### $a$ (y-intercept)
+### $a$ (y-intercept)  
 
 The y-intercept is represented as $a$, the value of Y when X is equal to 0. 
 The y-intercept is the place where the regression line crosses the y-axis.  
@@ -219,11 +247,11 @@ question("What does it mean that the value of $a$ is 15.6?",
       allow_retry = TRUE
 )
 ```
-
-<br>
-
-### $b$ (Slope)
-
+  
+<br>  
+  
+### $b$ (Slope)  
+  
 The slope of the regression line, represented as $b$, is the change in the dependent variable for each change in the independent variable. 
 As you move along the x-axis by 1, the value of the Y variable increases or decreases by the value of $b$. 
   
@@ -265,9 +293,31 @@ question("What is the best interpretation of $b$ (.463)?",
 ```
 
 <br>
+  
+### OLS  
+  
+To determine exactly where to draw the regression line, 
+we have to find the **least-squares line**.  
+  
+::: my-def
+#### Least-squares Line
 
-### Predictions 
+The best-fitting line is the one that generates the least amount of error.
+:::
 
+The error (vertical distance) between the actual data point ($Y$) and the predicted data point ($\hat{Y}$) is referred to as a **residual**.  
+  
+![](images/residual.png "Scatterplot of scented candle reviews with residuals."){ width=100% }
+  
+Data points above the line will have a positive residual and data points below the line will have a negative residual. In the candle example, the line fits point A better than it fits point B, but not as well as it fits point E.  
+  
+The best fitting line (regression line) is the one that minimizes the sum of the **squared residuals**. 
+Squaring the residuals removes the negative signs (so the errors don't cancel each other out when they are summed) and the larger residuals are weighted more heavily.    
+  
+The statistical technique that produces the least-squares line is called **Ordinary Least-squares Regression** (OLS), or sometimes shortened to simply linear regression. Calculus is used to determine the formula. 
+  
+### Predictions  
+  
 We can use the equation for the best fitting line to predict the value of the dependent variable once we know the y-intercept ($a$) and the slope of the line ($b$). Meaning, this equation can be used to obtain a predicted value for a value of y, given any x value.  
   
 The predicted y variable is denoted as $\hat{Y}$ (pronounced "Y hat"). In other words, $\hat{Y}$ is the predicted value of the dependent variable, based on a given value of the independent variable.  
@@ -334,123 +384,281 @@ Making predictions beyond the scope of the actual data, called extrapolation, ca
 
 ![](images/extrapolating.png "Cartoon about the dangers of extrapolating"){ width=60% }
 
-
-OLS & $R^2$
---------------------------------------------------------------------------------
-
-To determine exactly where to draw the regression line, 
-we have to find the **least-squares line**.  
+<br>  
   
-::: my-def
-#### Least-squares Line
+### Regression in R
 
-The best-fitting line is the one that generates the least amount of error.
+Let's try running a regression using R.
+
+We'll start by creating a scatterplot showing the relationship between people's height and weight. 
+In 2022, the GSS asked respondents "About how much do you weigh without shoes?" (`weight`) and "About how tall are you without shoes? (`height`). People's weights were reported in pounds and height reported in inches.  
+  
+::: my-tip
+#### Heads Up!
+
+The x-axis of a scatterplot contains the independent variable and the y-axis contains the dependent variable.  
 :::
 
-The error (vertical distance) between the actual data point ($Y$) and the predicted data point ($\hat{Y}$) is referred to as a **residual**.  
   
-![](images/residual.png "Scatterplot of scented candle reviews with residuals."){ width=100% }
-  
-Data points above the line will have a positive residual and data points below the line will have a negative residual. In the candle example, the line fits point A better than it fits point B, but not as well as it fits point E.  
-  
-The best fitting line (regression line) is the one that minimizes the sum of the **squared residuals**. 
-Squaring the residuals removes the negative signs (so the errors don't cancel each other out when they are summed) and the larger residuals are weighted more heavily.    
-  
-The statistical technique that produces the least-squares line is called **Ordinary Least-squares Regression** (OLS), or sometimes shortened to simply linear regression. Calculus is used to determine the formula. In this course, I'm not going to ask you to calculate the best-fitting line.  
-  
-  
-### Coefficients
-
-The slope ($b$) of $X$ is sometimes called a regression coefficient, or simply a coefficient. 
-A coefficient is just a number used to multiply a variable. In the candle example, we could say the coefficient for the variable "day" is -.00303.  
-  
-So far we have examined simple linear regressions, an equation model with one independent variable used to predict another variable. But, often we want to use two or more variables to predict the value of the dependent variable. Using more than one independent variable in our equation is referred to as **multiple regression**.  
-  
-In the candle example, we might want to predict the average rating for scented candles based on both the day of the year and the number of candle orders. Maybe we think scented candle reviews could also be declining because fewer people are buying candles in 2020. The 2020 candle consumers could be the true candle lovers, people with high candle smelling expectations, since fewer people may be buying candles because they aren't expecting any visitors to their homes.  
-  
-Then we could find the predicted average rating of scented candles (dependent variable) based on a combination of two independent variables: $b_1$ (day) and $b_2$ (orders).  
-  
-Our equation would then look like this:  
-  
-$\hat{Y}$ = $a$ + $b_1$*$X_1$ + $b_2$*$X_2$  
-  
-  
-To predict the average rating for scented candles, you add the intercept ($a$), the day of the year multiplied by $b_1$, and the number of candle orders multiplied by $b_2$.  
-  
-The regression coefficient for day of the year ($b_1$) is the slope of the relationship between the dependent variable (average rating of scented candles) and the independent variable (day of the year) that is not correlated with the number of candle orders. It represents the change in the dependent variable associated with a change in the independent variable when the other independent variable is held constant.  
-  
-  
-### Statistical significance
-  
-Each coefficient in the regression equation has its own standard error, test statistic (*t* value), and p-value.  
-  
-Researchers denote the p-values with asterisks (*), typically referred to as stars, in tables reporting the results from a regression. 
-The table notes often include the following type of statement:
-
-> `* p < .05; ** p < .01; *** p < .001`
-
-
-We might display the results from the regression in the candle example in a table that looks like this: 
-
-![](images/candletable.png "Table 1. OLS Regression Analysis of 2020 Scented Candle Reviews"){ width=100% }
-  
-The p-value for each independent variable tests the null hypothesis, that the variable has no correlation with the dependent variable. The p-value for the "day" coefficient (-.00303) was 2.18e-08 (i.e., p < .0001). This is denoted in the table with the three *. Therefore, using an alpha level of .05, we can reject the null hypothesis that there is no association between the day of the year and change in the average ratings of scented candles in 2020.  
-  
-***
-  
-`r fa("otter", fill = "#F39C12")`<practice> PRACTICE:</practice>
-
-![](images/martable.png "Table 1. OLS Regression Analysis of Men's Ideal Age of Marriage"){ width=100% }
-
-
 ```{r P06, echo=FALSE}
-question("Is women's ideal age of marriage a statistically significant predictor of men's ideal age of marriage?",
-    answer("No, because the p-value is greater than .05.", correct = TRUE, 
-           message = "Note the very small sample size. These variables may be related if the sample size were larger."),
-    answer("Yes, because the p-value is less than .001.", 
-           message = "A lack of stars means the p-value is greater than .05"),
-    answer("No, because the p-value is equal to .001.",
-           message = "A lack of stars means the p-value is greater than .05"),
-    answer("Yes, because the coefficient (.463) is positive.", 
-           message = "The positive coefficient tells you the direction of the relationship, not the statistical significance."),
-         random_answer_order = TRUE,
-         allow_retry = TRUE
+  question("Which variable will go along the y-axis of a scatterplot?",
+    answer("weight",  correct = TRUE),
+    answer("height", message = "A person's height doesn't usually depend on their weight."),
+      random_answer_order    = TRUE,
+      allow_retry = TRUE
+  )
+```
+  
+  
+#### Jitter and alpha  
+  
+We'll turn to the now familiar `ggplot()` function to create a graph. Instead of using `geom_point()`, this time we'll add the `geom_jitter()` layer to `ggplot()`.  
+  
+**Jittering** is a method for adding a small amount of random variation to the location of each point (observation) in the dataset. Why would we want to add random error into our plot? It's useful when variables are round, concrete numbers (**discrete**). Although weight and height are technically continuous (can be any number with lots of decimal places), in social surveys, many interval-ratio variables are recorded as discrete numbers.  
+  
+Without *jittering*, scatterplots can be difficult to read because the points overlap one another. For instance, in the plot below, it's hard to know how many people are 60 inches and 150 pounds. The dot could represent one person or hundreds, all plotted on top of each other.  
+  
+![](images/point.png "Scatterplot without jittering."){ width=100% }
+  
+Adding random noise to a plot can make it easier to read.  
+  
+The second way to improve a scatterplot is to modify the transparency of the values. 
+We'll do this by defining an [alpha level](https://ggplot2.tidyverse.org/reference/aes_colour_fill_alpha.html) inside of the `geom_jitter()` layer. The amount of transparency can range from 0 to 1, with lower alpha values corresponding to more transparency.  
+  
+1. Tell `ggplot()` to put the variables `weight` and `height` on the correct axes. 
+2. Run the code to see your results. 
+3. When you are satisfied with your answer, click "Submit Answer."  
+  
+  
+```{r scat01, exercise=TRUE, error= TRUE, warning=FALSE}
+gss22 |>
+  filter(weight < 600) |>
+  ggplot(aes(x = ______, y = ______)) +
+    geom_jitter(alpha = 0.2) +
+    labs( title    = "Scatterplot of Adults' Weight",
+          subtitle = "By height",
+          caption  = "2022 U.S. General Social Survey")
+```
+  
+```{r scat01-solution}
+gss22 |>
+  filter(weight < 600) |>
+  ggplot(aes(x = height, y = weight)) +
+    geom_jitter(alpha = 0.2) +
+    labs( title    = "Scatterplot of Adults' Weight",
+          subtitle = "By height",
+          caption  = "2022 U.S. General Social Survey")
+```
+  
+```{r scat01-hint-1, error=TRUE}
+gss22 |>
+  filter(weight < 600) |>
+  ggplot(aes(x = height, y = ______)) +
+    geom_jitter(alpha = 0.2) +
+    labs( title    = "Scatterplot of Adults' Weight",
+          subtitle = "By height",
+          caption  = "2022 U.S. General Social Survey")
+```
+  
+```{r scat01-check}
+grade_code("What a nice graph!")
+```
+
+In the scatterplot, we can see that there appears to be a positive correlation between height and weight. 
+Taller people appear to weigh more, on average. Let's add a regression line, the line that creates the least amount of error in the distance between the line and each data point.  
+  
+To add the regression line to our plot, we'll use the `geom_smooth()` to add this layer. 
+Inside the `geom_smooth()` function, we'll add the argument `method = "lm"` to specify that the smoothed line we want on the plot is a linear model (a straight line).  
+  
+Add it to your plot now.  
+  
+::: my-tip
+#### Heads Up!
+  
+"lm" stands for **L**inear **M**odel  
+:::
+  
+1. Specify the method to use in the `geom_smooth()` layer is a liner model ("lm"). 
+2. Run the code to see your results. 
+3. When you are satisfied with your answer, click "Submit Answer."  
+  
+  
+```{r scat02, exercise=TRUE, error= TRUE, warning=FALSE, message = FALSE}
+gss22 |>
+  filter(weight < 600) |>
+  ggplot(aes(x = height, y = weight)) +
+  geom_jitter(alpha = 0.2) +
+  geom_smooth(method = "__") +
+  labs( title    = "Scatterplot of Adults' Weight",
+        subtitle = "By height",
+        caption  = "General Social Survey (2014 & 2018)")
+```
+  
+```{r scat02-solution}
+gss22 |>
+  filter(weight < 600) |>
+  ggplot(aes(x = height, y = weight)) +
+  geom_jitter(alpha = 0.2) +
+  geom_smooth(method = "lm") +
+  labs( title    = "Scatterplot of Adults' Weight",
+        subtitle = "By height",
+        caption  = "General Social Survey (2014 & 2018)")
+```
+  
+<div id="scat02-hint">
+**Hint:** Did you replace the blank line with the type of line as "lm"?
+</div>  
+  
+```{r scat02-check}
+grade_code("A regression line!")
+```
+
+<br>
+
+The `lm()` function runs a regression for us in R. The syntax looks like this:  
+
+>   lm(DV ~ IV, data = dataname)
+    
+See how it works by trying it out now.  
+  
+1. Replace the blank lines in the code below, specifying `weight` as the dependent variable and `height` as the independent variable. 
+2. Run the code to see your results. 
+3. When you are satisfied with your answer, click "Submit Answer."  
+  
+```{r reg01, exercise=TRUE, error= TRUE, warning=FALSE}
+lm(______ ~ ______, data = gss22)
+```
+  
+```{r reg01-solution}
+lm(weight ~ height, data = gss22)
+```
+  
+```{r reg01-hint-1, error=TRUE}
+lm(weight ~ ______, data = gss22)
+
+```
+  
+```{r reg01-check}
+grade_code("Your first regression!")
+```
+
+```{r P07, echo=FALSE}
+question("What does it mean that the value of $a$ is --145.40?",
+    answer("When a person's height is 0 inches, their predicted weight is -145.40 pounds.", 
+           correct = TRUE, message = "Another meaningless intercept value!"),
+    answer("The model indicates that each 1 inch increase in height was associated with a decrease in -145.40 pounds.", message = "Lots of imaginary people!"),
+    answer("The model indicates that the average height in inches is -145.40."),
+    answer("The model indicates that the average weight in pounds is -145.40."),
+      random_answer_order = TRUE,
+      allow_retry = TRUE
 )
 ```
   
-<br>  
+```{r P08, echo=FALSE}
+question("What is the best interpretation of the slope (4.938)?",
+    answer("For every one unit increase in height, a person's weight is expected to rise by 4.938 pounds.", correct = TRUE),
+    answer("The model predicts that the average weight is 4.938 pounds greater than the average height in inches."),
+    answer("When a person's height is 0 inches, their predicted weight is 4.938 pounds."),
+    answer("For every one unit increase in a person's weight, a person's height is expected to rise by 4.938 inches."),
+         random_answer_order = TRUE,
+      allow_retry = TRUE
+)
+```
+
+Categorical IV
+--------------------------------------------------------------------------------
+
+### Dichotomous Independent Variable  
   
-#### Dichotomous Independent Variable  
-  
-Regression can be used to evaluate the relationship between a dichotomous variable and an interval-ratio dependent variable. When a dichotomous variable is coded as 0/1, a one unit difference represents switching from one category to the other.  
+Regression can be used to evaluate the relationship between a categorical variable and an interval-ratio dependent variable. When a dichotomous variable is coded as 0/1, a one unit difference represents switching from one category to the other.  
   
 * The intercept (α) is the average among the group coded as 0.  
 * The intercept (α) + the slope (b1) is the average among the group coded as 1.  
 * The slope (b1) is the average difference between group 1 and group 2.  
+
+Run a regression looking at the difference in height by gender.
+
+1. Replace the blank lines in the code below, specifying `height` as the dependent variable and `sex` as the independent variable. 
+2. Run the code to see your results. 
+3. When you are satisfied with your answer, click "Submit Answer."  
+
+```{r sex01-setup}
+gss22$sex <- zap_missing(gss22$sex)
+gss22$sex <- as_factor(gss22$sex)
+gss22$sex <- droplevels(gss22$sex)
+```
   
+```{r sex01, exercise=TRUE, error= TRUE, warning=FALSE}
+lm(______ ~ ______, data = gss22)
+```
   
-![](images/inc-sex.png "Table 1. OLS Regression Ananlysis of Income by Gender"){ width=100% }
+```{r sex01-solution}
+lm(height ~ sex, data = gss22)
+```
+
+```{r sex01-hint-1, error=TRUE}
+lm(height ~ ______, data = gss22)
+
+```
+
+Now, something magical happens in how you can interpret the *intercept* ($a$) and the *slope* ($b_1$).  
+
+The *MEAN* of the missing category in the table is the intercept ($a$). In this case, the men are missing from the output. The intercept ($a$) is 70.19 which means that men's average height is 70.19 inches.
   
+We refer to the category missing from the table as the reference category because the slopes represent the difference in averages in relation to this group. 
+
+So, $b$ is the difference in means between the reference category (aka male) and the category listed in the table (female).  
+  
+Here, $b$ = -5.57. Meaning, women are -5.57 inches shorter than men on average. 
+If you add the intercept (70.19) and $b$ (-5.57), you'll get the average height for women = 64.62.
+
+<br>
+
 ***
 
 `r fa("otter", fill = "#F39C12")`<practice> PRACTICE:</practice>
 
-```{r P07, echo=FALSE}
+Run a regression looking at the difference in family income by gender.
+
+1. Replace the blank lines in the code below, specifying `realinc` as the dependent variable and `sex` as the independent variable. 
+2. Run the code to see your results. 
+3. When you are satisfied with your answer, click "Submit Answer."  
+  
+```{r sex02-setup}
+gss22$sex <- zap_missing(gss22$sex)
+gss22$sex <- as_factor(gss22$sex)
+gss22$sex <- droplevels(gss22$sex)
+```
+  
+```{r sex02, exercise=TRUE, error= TRUE, warning=FALSE}
+lm(______ ~ ______, data = gss22)
+```
+  
+```{r sex02-solution}
+lm(realinc ~ sex, data = gss22)
+```
+  
+```{r sex02-hint-1, error=TRUE}
+lm(realinc ~ ______, data = gss22)
+
+```
+
+```{r P09, echo=FALSE}
 question("What is men's average income?",
-    answer("$30,560", correct = TRUE, 
-           message = "Yes, α is the value of y when X = 0."),
-    answer("$-10,581",
+    answer("$45,843", correct = TRUE, 
+           message = "Yes, α is the mean for the reference category."),
+    answer("$-6,908",
            message = "This is the difference in income between men and women."),
     answer("There isn't enough information in the table to determine.",
-           message = "The intercept (α) is the value of y when X = 0."),
-    answer("$19,979", 
+           message = "α is the mean for the reference category."),
+    answer("$38,935", 
            message = "This is the average income for women."),
          random_answer_order = TRUE,
          allow_retry = TRUE
 )
 ```
   
-```{r P08, echo=FALSE}
+```{r P10, echo=FALSE}
 question("What is women's average income?",
     answer("$19,979", correct = TRUE, 
            message = "The intercept + the slope for women (30,560 - 10,581)."),
@@ -467,45 +675,132 @@ question("What is women's average income?",
   
 <br>
 
-#### Nominal/Ordinal Independent Variable  
+### Nominal/Ordinal Independent Variable  
 
 The same logic can be used for categorical variables by transforming them into a series of dichotomous variables.  
 
 ![](images/cat_IV.png "Table showing 3 groups and two dummy variables"){ width=90% }
   
-<span style="color:#F39C12">The mean of the missing category in the table is the intercept ($a$).</span>  
+::: {style="color: #3498DB; font-family: 'Shadows Into Light'"}
+The mean of the missing category in the table is the intercept ($a$).
+:::
+  
 The group coded 0 across all of the dummy variables becomes the **"reference category."** 
 The intercept ($a$) becomes the *MEAN* of the reference category. 
 
-The slopes for each of the other categories represent the difference in averages in relation to the reference category. 
+The slopes for each of the other categories represent the difference in averages in relation to the reference category.  
   
+Let's look at an example. Below is a crosstab showing the relative frequencies of `lifenow`  by `marital`.
 
-![](images/inc-mar.png "Table 1. OLS Regression Ananlysis of Income by Marital Status"){ width=100% }
+```{r, echo = FALSE}
+
+gss22$marital <- zap_missing(gss22$marital)
+gss22$marital <- as_factor(gss22$marital)
+gss22$marital <- droplevels(gss22$marital)
+
+gss22 |>
+  tbl_cross(
+    row = lifenow,
+    col = marital,
+    percent = "column")
+```
+  
+<br>
+  
+Run a regression looking at the difference in life satisfaction by marital status.  
+  
+1. Replace the blank lines in the code below, specifying `lifenow` as the dependent variable and `marital` as the independent variable. 
+2. Run the code to see your results. 
+3. When you are satisfied with your answer, click "Submit Answer."  
+  
+```{r marital01-setup}
+gss22$marital <- zap_missing(gss22$marital)
+gss22$marital <- as_factor(gss22$marital)
+gss22$marital <- droplevels(gss22$marital)
+```
+
+```{r marital01, exercise=TRUE, error= TRUE, warning=FALSE}
+lm(______ ~ ______, data = gss22)
+```
+  
+```{r marital01-solution}
+lm(lifenow ~ marital, data = gss22)
+```
+  
+```{r marital01-hint-1, error=TRUE}
+lm(lifenow ~ ______, data = gss22)
+
+```
+
+<br>
+
+The *MEAN* of the missing category in the table is the intercept ($a$). In this case, married people are missing from the output. The intercept ($a$) is 8.329 which means that average life satisfaction for married people is 8.329 (on a scale from 0-10).
+
+There is a $b$ for each marital category which represents the difference in means between the reference category (e.g., married) and each other category.  
+  
+The $b$ for widowers is -0.239. Meaning, the average life satisfaction of widowers is -0.239 points lower on the scale compared with the average for married people. 
+
+If you add the $a$ intercept (8.329) and $b$ (-0.239), you'll get the average life satisfaction for widowers = 8.09.
+
+You can do the same thing for each of the other categories. Let's try never married people. The $b$ for never married folks is -0.865. In other words, the average life satisfaction of never married people is -0.865 points lower on the scale compared with the average for married people. We could also say the average life satisfaction for married people is 8.33 whereas the average life satisfaction for never married people is 7.464 (8.329-.865).
+
+::: my-tip
+#### Heads Up!
+
+Referring to the “slope” of marital status doesn’t make sense. Rather, when talking about $b$ for categorical variables, it represents the difference in the constant (or “level”).
+:::
 
 ***
 
 `r fa("otter", fill = "#F39C12")`<practice> PRACTICE:</practice>
 
-```{r P10, echo=FALSE}
+Run a regression looking at the difference in income by marital status.  
+  
+1. Replace the blank lines in the code below, specifying `realinc` as the dependent variable and `marital` as the independent variable. 
+2. Run the code to see your results. 
+3. When you are satisfied with your answer, click "Submit Answer."  
+  
+```{r marital02-setup}
+gss22$marital <- zap_missing(gss22$marital)
+gss22$marital <- as_factor(gss22$marital)
+gss22$marital <- droplevels(gss22$marital)
+```
+
+```{r marital02, exercise=TRUE, error= TRUE, warning=FALSE}
+lm(______ ~ ______, data = gss22)
+```
+  
+```{r marital02-solution}
+lm(realinc ~ marital, data = gss22)
+```
+  
+```{r marital02-hint-1, error=TRUE}
+lm(realinc ~ ______, data = gss22)
+
+```
+
+
+
+```{r P11, echo=FALSE}
 question("What is the average income of married people?",
-    answer("$30,425", correct = TRUE, message = "Yes, α is the value of y when X = 0."),
-    answer("$-14,561",
+    answer("$58,279", correct = TRUE, message = "Yes, α is the value of y when X = 0."),
+    answer("$-30,301",
            message = "This is the difference in income between never married and married people"),
     answer("There isn't enough information in the table to determine.",
            message = "The intercept (α) is the value of y when X = 0."),
-    answer("$15,864", 
+    answer("$27,978", 
            message = "This is the average income for never married people."),
          random_answer_order = TRUE,
          allow_retry = TRUE
 )
 ```
   
-```{r P11, echo=FALSE}
+```{r P12, echo=FALSE}
 question("What is the average income of never-married people?",
-    answer("$15,864", correct = TRUE,
-           message = "The intercept + the slope for never-married (30,425 - 14,561)."),
-    answer("$30,425",  message = "Yes, α is the value of y when X = 0."),
-    answer("$-14,561",
+    answer("$27,978", correct = TRUE,
+           message = "The intercept + the slope for never-married (58,279 - 30,301)."),
+    answer("$58,279",  message = "α is the value of y when X = 0."),
+    answer("$-30,301",
            message = "This is the difference in income between never married and married people"),
     answer("There isn't enough information in the table to determine.",
            message = "The intercept (α) is the value of y when X = 0."),
@@ -517,16 +812,36 @@ question("What is the average income of never-married people?",
 
 <br>
 
-__Watch this [video](https://youtu.be/8tAPsX0YuNE) for a summary of OLS [12 minutes].__
 
-![](https://youtu.be/8tAPsX0YuNE)
+$R^2$
+--------------------------------------------------------------------------------
 
+The better a least-squares line is, the better it can predict an outcome with the least amount of error.
 
-
-### $R^2$
-
-$R^2$ is a measure of the proportional reduction of error, meaning that it measures the extent that knowing the value of one or more variables can help predict the value of the dependent variable. $R^2$ quantifies how much prediction error is eliminated by using least-squares regression.  
+$r^2$ is a **p**roportional **r**eduction of **e**rror (PRE) measure, meaning that it measures the extent that knowing the value of one or more variables can help predict the value of the dependent variable. It tells us how well the regression model fits the data.  
   
+$R^2$ quantifies how much prediction error is eliminated by using least-squares regression.  
+
+$PRE = \frac{E1 - E2}{E1}$  
+
+<br>
+  
+#### E1 = Errors of prediction made when IV is ignored  
+  
+E1 is equivalent to the sum of errors we would have if we guessed that every Y was equal to the mean of Y.  
+  
+[aka Sum of Squares Total (SST)]{style="color: #3498db; font-family: 'Shadows Into Light'"}  
+ 
+<br>
+ 
+#### E2 = Errors of prediction made based on IV  
+  
+Equivalent to the sum of errors we would have if we used our least squares line to predict Y  
+  
+[aka Sum of Squared Errors (SSE)]{style="color: #3498db; font-family: 'Shadows Into Light'"}  
+
+<br>
+
 $R^2$ ranges from 0 to 1, representing the proportion of the variance of a dependent variable that is explained by the independent variable(s) in a regression model.  
   
 > When $R^2$ is equal to 0, there is no relationship between the two variables. 
@@ -540,16 +855,27 @@ Knowing the value(s) of the independent variable(s) leads to a perfect predictio
 When observations are closely grouped around the regression line, the $R^2$ will be larger. 
 In the social sciences, a high $R^2$ is rare (people are complicated!).  
   
+  
+__Watch this [video](https://youtu.be/8tAPsX0YuNE) for a summary of OLS & $R^2$ [12 minutes].__
+
+![](https://youtu.be/8tAPsX0YuNE)
+  
+  
+  
 In order to obtain the percentage of variation in the dependent variable explained by the independent variable(s), multiply $R^2$ by 100.  
    
-In our candle example, the $R^2$ was .092. This means that knowing the day of the year has reduced the uncertainty of our prediction of the average rating of scented candles by 9.2%. Or, by knowing the day of the year of the candle review (independent variable), we reduce our error in predicting the average rating of scented candles (dependent variable) by 9.2%. Or, knowing the day of the year of the candle review (the independent variable) explains about 9.2% of the variation in the average review of scented candles (the dependent variable).  
+In our candle example, the $R^2$ was .092. This means that knowing the day of the year has reduced the uncertainty of our prediction of the average rating of scented candles by 9.2%.  
+  
+Or, by knowing the day of the year of the candle review (independent variable), we reduce our error in predicting the average rating of scented candles (dependent variable) by 9.2%.  
+  
+Or, knowing the day of the year of the candle review (the independent variable) explains about 9.2% of the variation in the average review of scented candles (the dependent variable).  
   
   
 ***
   
 `r fa("otter", fill = "#F39C12")`<practice> PRACTICE:</practice>
 
-```{r P12, echo=FALSE}
+```{r P13, echo=FALSE}
 question("The $R^2$ value of the relationship between men's ideal age of marriage and women's ideal age of marriage was .13. Which of the following statements best reflects an interpretation of this $R^2$?",
     answer("By knowing women's ideal age of marriage, we reduce our error in predicting men's ideal age of marriage by 13%.", correct = TRUE),
     answer("By knowing men's ideal age of marriage, we can predict women's ideal age of marriage with 13% accuracy."),
@@ -563,7 +889,7 @@ question("The $R^2$ value of the relationship between men's ideal age of marriag
 ```
   
   
-```{r P13, echo=FALSE}
+```{r P14, echo=FALSE}
 question("The $R^2$ value of the relationship between gender and income was .034. Which of the following statements best reflects an interpretation of this $R^2$?",
     answer("By knowing someone’s gender, we reduce our error in predicting their income by 3%.", correct = TRUE),
     answer("By knowing someone’s gender, we can predict their income with 3% accuracy."),
@@ -589,6 +915,7 @@ Put all the pieces back together to understand the regression technique by watch
   
 ![](https://youtu.be/WWqE7YHR4Jc)
 
+<br>
 
 Learning Check 08
 --------------------------------------------------------------------------------
@@ -680,6 +1007,10 @@ question("Q07. The $R^2$ value of the relationship between age (IV) and income (
 ```
   
   
+Use the following regression equation to answer the next questions.  
+
+  $\hat{Y}$ = 14.8 + 0.501$X$
+  
 ![](images/gssreg.png "Scatterplot: Age at First Marriage"){ width=70% }
   
   
@@ -705,7 +1036,6 @@ question("Q09. What is the best interpretation of the slope (.501)?",
 )
 ```
   
-  
 ```{r Q10, echo=FALSE}
 question("Q10. What would be the predicted age of first marriage if someone had 16 years of education?",
     answer("22.82", correct = TRUE),
@@ -717,23 +1047,8 @@ question("Q10. What would be the predicted age of first marriage if someone had 
 )
 ```
 
-  
-![](images/gsstable.png "Table: OLS Regression Analysis of Age at First Marriage"){ width=80% }
-  
-  
 ```{r Q11, echo=FALSE}
-question("Q11. Is years of education a statistically significant predictor of age at first marriage?",
-    answer("Yes, because the p-value is less than .001.", correct = TRUE),
-    answer("No, because the p-value is greater than .05."),
-    answer("No, because the p-value is equal to .001."),
-    answer("Yes, because the coefficient (.501) is positive."),
-         random_answer_order = TRUE,
-         allow_retry = TRUE
-)
-```
-  
-```{r Q12, echo=FALSE}
-question("Q12. The $R^2$ value of the relationship between age at first marriage and years of education is .13. Which of the following statements best reflects an interpretation of this $R^2$?",
+question("Q11. The $R^2$ value of the relationship between age at first marriage and years of education is .13. Which of the following statements best reflects an interpretation of this $R^2$?",
     answer("By knowing someone's years of education, we reduce our error in predicting their age at first marriage by 13%.", correct = TRUE),
     answer("By knowing someone's age at first marriage, we can predict someone's years of education with 13% accuracy."),
     answer("People's age at first marriage is .13 years greater than their years of education."),
@@ -743,39 +1058,45 @@ question("Q12. The $R^2$ value of the relationship between age at first marriage
 )
 ```
   
-![](images/agekdbrn_table.png "Table: OLS Regression Analysis of Age First Child Born"){ width=80% }
-
   
+The following output shows the regression results predicting `weight` in pounds by `marital` status. Married people are the reference group.  
+  
+```{r}
+mod <- lm(weight ~ marital, data = gss22)
+
+get_regression_table(mod) |>
+  select(term, estimate)
+```
+
+```{r Q12, echo=FALSE}
+question("Q12. Identify and interpret $a$",
+    answer("The average married person weighs 189 pounds", correct = TRUE),
+    answer("By knowing someone's marital status, we can predict someone's weight with 189% accuracy."),
+    answer("The model indicates that the average weight at first marriage is 189 pounds."),
+    answer("For each one unit increase in X, Y increases by 189."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
 ```{r Q13, echo=FALSE}
-question("Q13. What does it mean that the value of $a$ is 23.44?",
-    answer("Women's average age when their first child is born is predicted to be 23.44 years.", correct = TRUE),
-    answer("The model indicates that each 1 year increase in age was associated with an increase of 23.44 years in age at the time a first child is born."),
-    answer("The model indicates that the average age when a first child is born is 23.44 years old."),
-    answer("Men's average age when their first child is born is predicted to be 23.44 years."),
-         random_answer_order = TRUE,
-         allow_retry = TRUE
-)
-```
-  
-```{r Q14, echo=FALSE}
-question("Q14. What is the best interpretation of the slope (2.11)?",
-    answer("Compared with women, men's average age when their first child is born is expected to be 2.11 years greater.", correct = TRUE),
-    answer("Men's average age when their first child is born is predicted to be 2.11 years"),
-    answer("The model indicates that for every one additional child born, a person's average age increases by 2.11 years"),
-    answer("Compared with men, women's average age when their first child is born is expected to be 2.11 years greater."),
-         random_answer_order = TRUE,
-         allow_retry = TRUE
-)
-```
-  
-```{r Q15, echo=FALSE}
-question("Q15. Is gender a statistically significant predictor of someone's age when their first child was born?",
-    answer("Yes, because the p-value is less than .001.", correct = TRUE),
-    answer("No, because the p-value is greater than .05."),
-    answer("No, because the p-value is equal to .001."),
-    answer("Yes, because the coefficient (2.11) is positive."),
+question("Q13. What is the average weight of never married people?",
+    answer("187 pounds", correct = TRUE),
+    answer("197 pounds"),
+    answer("There isn't enough information in the table to determine."),
+    answer("189 pounds."),
          random_answer_order = TRUE,
          allow_retry = TRUE
 )
 ```
 
+```{r Q14, echo=FALSE}
+question("Q14. Which of the following statements is correct?",
+    answer("On average, separated people weigh more than married people.", correct = TRUE),
+    answer("On average, married people weigh more than separated people."),
+    answer("On average, divorced people weigh more than married people."),
+    answer("On average, married people weigh more than all other marital status groups."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```

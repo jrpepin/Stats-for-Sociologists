@@ -102,8 +102,73 @@ library(gssrdoc)
 library(summarytools)
 ```
 
+## Load your data {.sparse-slide}
+
+```{r}
+#| message: false
+#| label: gssdata
+
+# Get the data from the 2022 survey
+gss22 <- gss_get_yr(2022)
+
+```
+
+## Variables {.sparse-slide}
+
+-   `lifenow` R's rating of life overall now from 0-10
+-   `age` Age of respondent
+-   `educ` Respondents highest edu credit
+-   `hrs1` how many hours did you work last week
+-   `race` What race do you consider yourself
+-   `sex` Respondents sex
+-   `marital` R's marital status
+
+
+
+## Variable Management {.smaller}
+
+::: task
+{{< fa check-double >}} Make a df with only the (pretty) categorical and continuous
+variables we'll analyze.
+:::
+
+
+```{r}
+#| message: false
+#| label: my-data
+#| code-line-numbers: "1-6|8-15|17-18"
+
+# Categorical Variables
+my_cat <- gss22 |>
+  select(id, race, sex, marital) |>
+  zap_missing() |>
+  as_factor() |>
+  droplevels()
+
+# Continuous Variables
+my_con <- gss22 |>
+  select(id, lifenow, age, educ, hrs1) |>
+  mutate(
+    lifenow = as.numeric(lifenow),
+    age = as.numeric(age),
+    educ = as.numeric(educ),
+    hrs1 = as.numeric(hrs1))
+
+# Combine the two dataframes
+my_data <- left_join(my_cat, my_con, by = "id")
+```
+
 
 # Table II {.theme-section}
+
+## `tbl_regression()`
+
+```{r}
+model |>
+  tbl_regression() |>
+  modify_column_hide(conf.low) |>
+  modify_column_unhide(column = std.error) 
+```
 
 
 # Reproducible workflow {.theme-section}

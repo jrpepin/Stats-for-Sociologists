@@ -236,14 +236,27 @@ gss_all |>
 
 ```
 
+# 09.1 Regression
+
+```{r}
+
+## GSS24
+gss_all |>
+  subset(year == 2024) |>
+  select(tvhours, hrs1, educ, age, childs, sex, marital, polviews) |>
+  drop_na() |>
+  saveRDS(file = "tutorials/SOC6302-09/data/gss24.rds")
+
+```
+
 ## Lecture 09
 
 -   `height` R is how tall
 -   `weight` About how much do you weigh without shoes?
 -   `lifenow` R's rating of life overall now from 0-10
--   `age` Age of respondent
 -   `educ` Respondents highest edu credit
 -   `hrs1` how many hours did you work last week
+-   `age` Age of respondent
 -   `race` What race do you consider yourself
 -   `sex` Respondents sex
 -   `marital` R's marital status

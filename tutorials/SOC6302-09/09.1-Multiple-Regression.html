@@ -168,19 +168,20 @@ Pine Forge Press.</li>
 <ul>
 <li>REGRESSION EQUATION<br />
 </li>
+<li>ERROR TERM</li>
 <li>COEFFICIENTS</li>
 <li>MULTIPLE REGRESSION</li>
 <li>STATISTICAL SIGNIFICANCE</li>
+<li>MULTICOLLINEARITY</li>
+<li>REFERENCE GROUP</li>
+<li>INTERACTION</li>
 </ul>
 </div>
 <div id="section-two-continuous-variables" class="section level2">
 <h2>Two continuous variables</h2>
 <p>So far we have examined bivariate linear regressions, an equation
-model with one independent variable used to predict another variable.
-But, often we want to use two or more variables to predict the value of
-the dependent variable. Using more than one independent variable in our
-equation is referred to as <strong>multiple regression</strong>.</p>
-<p>We have been using the following equation:</p>
+model with one independent variable used to predict another variable. We
+have been using the following equation:</p>
 <p><span class="math inline">\(\hat{y} = a + bX\)</span></p>
 <p>It shows how changes in X affect Y. It’s strength is that it is
 predictable. Every time you plug in a value for X, you get one exact
@@ -191,8 +192,10 @@ style="color: #3498DB; font-size: 125%; font-family: &#39;Shadows Into Light&#39
 independent variable?</strong></p>
 </div>
 <p>Often times, we believe believe many predictors can help explain
-changes our outcome variable. We can adjust our equation by adding
-another predictor variable to it.</p>
+changes in our outcome variable. Using more than one independent
+variable in our equation is referred to as <strong>multiple
+regression</strong>. We can adjust our equation by adding another
+predictor variable to it:</p>
 <p><span class="math inline">\(\hat{y} = a + b_1X_1 +
 b_2X_2\)</span></p>
 <p>In a graph, a simple linear regression appears as a straight line
@@ -201,7 +204,7 @@ extends this idea into two or more dimensions, forming a plane when
 there are two predictors (or a hyperplane when there are more).</p>
 <p><img src="images/planes.png"
 title="Picture of regression planes with 2 IVs"
-style="width:100.0%" /></p>
+style="width:60.0%" /></p>
 <p>In real life, things aren’t neat and perfect. That’s where an error
 term comes in. Our full multiple regression equation looks like
 this:</p>
@@ -211,25 +214,29 @@ e\)</span></p>
 while X1 and X2 helps explain Y, there’s always some randomness or
 noise—stuff we can’t fully predict or measure. The <span
 class="math inline">\(e\)</span> accounts for all those little unknowns,
-like measurement errors or other factors we didn’t include. These other
-factors are often called “unobservables,” because they are factors we
-think matter to y but which we cannot account for within our model.</p>
+like measurement errors or other factors we didn’t include. This
+equation is more realistic and better suited for modeling actual
+data.</p>
 <div id="section-error-term-e" class="section level4 my-def">
 <h4>Error term (<span class="math inline">\(e\)</span>)</h4>
 <p>Represents all other factors that affect Y</p>
 </div>
-<p>This equation is more realistic and better suited for modeling actual
-data. Unobservable factors are influences on the outcome that we can’t
-directly measure. But the good news is, some of these factors are
-observable. Observable factors are all the independent variables we can
-measure and put into our equation.</p>
-<div id="section-example" class="section level3">
-<h3>Example</h3>
-<p>We might suspect that daily tvhours are related to both someone’s age
-and educational attainment. We could look at how <code>age</code> and
-<code>educ</code> both relate to our outcome of <code>tvhours</code>.
-Let’s start by looking at a scatterplot of each of these
-correlations.</p>
+<p>Observable factors are all the independent variables we can measure
+and put into our equation. Other factors, what <span
+class="math inline">\(e\)</span> accounts for, are often called
+“unobservables.” They are factors we think matter to <span
+class="math inline">\(Y\)</span> but we cannot account for them within
+our model. Unobservable factors are influences on the outcome that we
+can’t directly measure.</p>
+<p><br></p>
+<div id="section-model-with-2-continuous-variables"
+class="section level3">
+<h3>Model with 2 continuous variables</h3>
+<p>We might suspect that daily TV hours are related to both someone’s
+age and educational attainment. We could look at how the variables
+<code>age</code> and <code>educ</code> both relate to our outcome
+variable <code>tvhours</code>. Let’s start by looking at a scatterplot
+of each of these correlations.</p>
 <p><img src="09.1-Multiple-Regression_files/figure-html/unnamed-chunk-1-1.png" width="624" /></p>
 <p><img src="09.1-Multiple-Regression_files/figure-html/unnamed-chunk-2-1.png" width="624" /></p>
 <p>As you can see, age is positively associated with average daily TV
@@ -239,7 +246,7 @@ daily TV hours.</p>
 <div id="section-strategy-1-do-separate-bivariate-regressions"
 class="section level4">
 <h4>Strategy #1: Do separate bivariate regressions</h4>
-<p>This yields separate slope estimates for each independent variable
+<p>This yields separate slope estimates for each independent variable.
 Bivariate slope estimates implicitly assume that the two independent
 variables are separately related to the outcome.</p>
 <p><svg aria-hidden="true" role="img" viewBox="0 0 640 512" style="height:1em;width:1.25em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:#F39C12;overflow:visible;position:relative;"><path d="M181.5 197.1l12.9 6.4c5.9 3 12.4 4.5 19.1 4.5c23.5 0 42.6-19.1 42.6-42.6V144c0-35.3-28.7-64-64-64H128c-35.3 0-64 28.7-64 64v21.4c0 23.5 19.1 42.6 42.6 42.6c6.6 0 13.1-1.5 19.1-4.5l12.9-6.4 8.4-4.2L135.1 185c-4.5-3-7.1-8-7.1-13.3V168c0-13.3 10.7-24 24-24h16c13.3 0 24 10.7 24 24v3.7c0 5.3-2.7 10.3-7.1 13.3l-11.8 7.9 8.4 4.2zm-8.6 49.4L160 240l-12.9 6.4c-12.6 6.3-26.5 9.6-40.5 9.6c-3.6 0-7.1-.2-10.6-.6v.6c0 35.3 28.7 64 64 64h64c17.7 0 32 14.3 32 32s-14.3 32-32 32H384V336 320c0-23.7 12.9-44.4 32-55.4c9.4-5.4 20.3-8.6 32-8.6V240c0-26.5 21.5-48 48-48c8.8 0 16 7.2 16 16v32 16 48c0 8.8 7.2 16 16 16s16-7.2 16-16V204.3c0-48.2-30.8-91-76.6-106.3l-8.5-2.8c-8-2.7-12.6-11.1-10.4-19.3s10.3-13.2 18.6-11.6l19.9 4C576 86.1 640 164.2 640 254.9l0 1.1h0c0 123.7-100.3 224-224 224h-1.1H256h-.6C132 480 32 380 32 256.6V256 216.8c-10.1-14.6-16-32.3-16-51.4V144l0-1.4C6.7 139.3 0 130.5 0 120c0-13.3 10.7-24 24-24h2.8C44.8 58.2 83.3 32 128 32h64c44.7 0 83.2 26.2 101.2 64H296c13.3 0 24 10.7 24 24c0 10.5-6.7 19.3-16 22.6l0 1.4v21.4c0 1.4 0 2.8-.1 4.3c12-6.2 25.7-9.6 40.1-9.6h8c17.7 0 32 14.3 32 32s-14.3 32-32 32h-8c-13.3 0-24 10.7-24 24v8h56.4c-15.2 17-24.4 39.4-24.4 64H320c-42.3 0-78.2-27.4-91-65.3c-5.1 .9-10.3 1.3-15.6 1.3c-14.1 0-27.9-3.3-40.5-9.6zM96 128a16 16 0 1 1 0 32 16 16 0 1 1 0-32zm112 16a16 16 0 1 1 32 0 16 16 0 1 1 -32 0z"/></svg><practice>
@@ -340,8 +347,8 @@ variables have been taken into account.</p>
 </div>
 <p>Let’s stick with our regression and this time put both
 <code>age</code> and <code>educ</code> into the regression equation.</p>
-<p>We can find the predicted average tvhours (dependent variable) based
-on a combination of two independent variables: <span
+<p>We can find the predicted average <code>tvhours</code> (dependent
+variable) based on a combination of two independent variables: <span
 class="math inline">\(b_1\)</span> (<code>age</code>) and <span
 class="math inline">\(b_2\)</span> (<code>educ</code>).</p>
 <p>Our equation would then look like this:</p>
@@ -381,22 +388,27 @@ data-lines="0" data-pipe="|&gt;">
 </div>
 <p><br></p>
 <p>The intercept value (sometimes referred to as <span
-class="math inline">\(b_0\)</span>) is is the expected value of Y when
-all Xs are 0. In this case, the intercept is 3.18. This is the predicted
-value of the outcome variable (tvhours) when both predictors (age and
-education) are set to zero. This means we would expect an average of
-3.18 daily TV hours for people 0 years old and with 0 years of
-education. In other words, it has no meaningful interpretation.</p>
+class="math inline">\(b_0\)</span>) is the expected value of <span
+class="math inline">\(Y\)</span> when all <span
+class="math inline">\(X\)</span>s are <span
+class="math inline">\(0\)</span>. In this case, the intercept is <span
+class="math inline">\(3.18\)</span>. This is the predicted value of the
+outcome variable (<code>tvhours</code>) when both predictors
+(<code>age</code> and <code>education</code>) are set to zero. This
+means we would expect an average of 3.18 daily TV hours for people 0
+years old and with 0 years of education. In other words, it has no
+meaningful interpretation.</p>
 <p>The intercept is often less about practical interpretation and more
 about helping the model fit the data. It’s just a mathematical anchor
 for our regression line. But if zero is meaningful for your predictors,
 then the intercept tells you what the baseline outcome would be in that
 scenario.</p>
 <p>The slopes (<span class="math inline">\(b\)</span>) of each IV are
-sometimes called a regression coefficient, or simply a coefficient. A
-coefficient is just the number used to multiply each variable. In this
-example, we could say the coefficient for the variable <code>age</code>
-is 0.01. The coefficient for the variable <code>educ</code> is -.08.</p>
+sometimes called a <strong>regression coefficient</strong>, or simply a
+coefficient. A coefficient is just the number used to multiply each
+variable. In this example, we could say the coefficient for the variable
+<code>age</code> is 0.01. The coefficient for the variable
+<code>educ</code> is -.08.</p>
 <p><img src="images/equation.png"
 title="Picture of regression planes with 2 IVs"
 style="width:100.0%" /></p>
@@ -409,22 +421,23 @@ of another variable. This doesn’t mean the variable is literally set to
 one specific number, it means the model accounts for its influence
 mathematically, so we can isolate the effect of another predictor.</p>
 <div style="color: #18BC9C; font-family: &#39;Shadows Into Light&#39;">
-<p>For every one year increase in age, there is a predicted .01 increase
-in daily TV hours, controlling for years of education.</p>
+<p><strong>For every one year increase in age, there is a predicted .01
+increase in daily TV hours, controlling for years of
+education.</strong></p>
 </div>
 <div style="color: #18BC9C; font-family: &#39;Shadows Into Light&#39;">
-<p>For every one year increase in education, there is a predicted -0.08
-decrease in daily TV hours, after accounting for age.</p>
+<p><strong>For every one year increase in education, there is a
+predicted -0.08 decrease in daily TV hours, after accounting for
+age.</strong></p>
 </div>
 </div>
 <div id="section-statistical-significance" class="section level3">
 <h3>Statistical significance</h3>
 <p>Each coefficient in the regression equation has its own standard
 error, test statistic (<em>t</em> value), and p-value.</p>
-<p>Let’s use the function <code>get_regression_table()</code> from the
-<a
+<p>Use the function <code>get_regression_table()</code> from the <a
 href="https://moderndive.github.io/moderndive/"><code>moderndive</code></a>
-package.</p>
+package to see what I mean.</p>
 <p><svg aria-hidden="true" role="img" viewBox="0 0 640 512" style="height:1em;width:1.25em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:#F39C12;overflow:visible;position:relative;"><path d="M181.5 197.1l12.9 6.4c5.9 3 12.4 4.5 19.1 4.5c23.5 0 42.6-19.1 42.6-42.6V144c0-35.3-28.7-64-64-64H128c-35.3 0-64 28.7-64 64v21.4c0 23.5 19.1 42.6 42.6 42.6c6.6 0 13.1-1.5 19.1-4.5l12.9-6.4 8.4-4.2L135.1 185c-4.5-3-7.1-8-7.1-13.3V168c0-13.3 10.7-24 24-24h16c13.3 0 24 10.7 24 24v3.7c0 5.3-2.7 10.3-7.1 13.3l-11.8 7.9 8.4 4.2zm-8.6 49.4L160 240l-12.9 6.4c-12.6 6.3-26.5 9.6-40.5 9.6c-3.6 0-7.1-.2-10.6-.6v.6c0 35.3 28.7 64 64 64h64c17.7 0 32 14.3 32 32s-14.3 32-32 32H384V336 320c0-23.7 12.9-44.4 32-55.4c9.4-5.4 20.3-8.6 32-8.6V240c0-26.5 21.5-48 48-48c8.8 0 16 7.2 16 16v32 16 48c0 8.8 7.2 16 16 16s16-7.2 16-16V204.3c0-48.2-30.8-91-76.6-106.3l-8.5-2.8c-8-2.7-12.6-11.1-10.4-19.3s10.3-13.2 18.6-11.6l19.9 4C576 86.1 640 164.2 640 254.9l0 1.1h0c0 123.7-100.3 224-224 224h-1.1H256h-.6C132 480 32 380 32 256.6V256 216.8c-10.1-14.6-16-32.3-16-51.4V144l0-1.4C6.7 139.3 0 130.5 0 120c0-13.3 10.7-24 24-24h2.8C44.8 58.2 83.3 32 128 32h64c44.7 0 83.2 26.2 101.2 64H296c13.3 0 24 10.7 24 24c0 10.5-6.7 19.3-16 22.6l0 1.4v21.4c0 1.4 0 2.8-.1 4.3c12-6.2 25.7-9.6 40.1-9.6h8c17.7 0 32 14.3 32 32s-14.3 32-32 32h-8c-13.3 0-24 10.7-24 24v8h56.4c-15.2 17-24.4 39.4-24.4 64H320c-42.3 0-78.2-27.4-91-65.3c-5.1 .9-10.3 1.3-15.6 1.3c-14.1 0-27.9-3.3-40.5-9.6zM96 128a16 16 0 1 1 0 32 16 16 0 1 1 0-32zm112 16a16 16 0 1 1 32 0 16 16 0 1 1 -32 0z"/></svg><practice>
 PRACTICE:</practice></p>
 <ol style="list-style-type: decimal">
@@ -451,13 +464,16 @@ get_regression_table(model)</code></pre>
 <p><br></p>
 <p>The p-value for each independent variable tests the null hypothesis,
 that the variable has no correlation with the dependent variable. The
-p-value for the <code>age</code> coefficient (0.014) was0.008 (i.e., p
-&lt; .001). Therefore, using an alpha level of .05, we can reject the
-null hypothesis that there is no association between the daily tvhours
-and age.</p>
-<p>Likewise, the p-value for the <code>educ</code> coefficient was .003,
-so we can say there is a statistically significant negative association
-between years of education and tvhours.</p>
+<code>age</code> coefficient (<span class="math inline">\(.014\)</span>)
+has a p-value of <span class="math inline">\(.008\)</span> (i.e., p &lt;
+.001). Therefore, using an alpha level of .05, we can reject the null
+hypothesis that there is no association between the daily TV hours and
+age.</p>
+<p>Likewise, the <code>educ</code> coefficient (<span
+class="math inline">\(-.083\)</span>) has a p-value of <span
+class="math inline">\(.003\)</span>, so we can say there is a
+statistically significant negative association between years of
+education and TV hours.</p>
 <p>Researchers denote the p-values with asterisks (*), typically
 referred to as stars, in tables reporting the results from a regression.
 The table notes often include the following type of statement:</p>
@@ -469,23 +485,23 @@ table that looks like this:</p>
 <p><br></p>
 <p><strong>Table 2.</strong> OLS Regression Analysis of Americans Daily
 TV Hours</p>
-<div id="ptsshkrngj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#ptsshkrngj table {
+<div id="yioxxrykzo" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#yioxxrykzo table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#ptsshkrngj thead, #ptsshkrngj tbody, #ptsshkrngj tfoot, #ptsshkrngj tr, #ptsshkrngj td, #ptsshkrngj th {
+#yioxxrykzo thead, #yioxxrykzo tbody, #yioxxrykzo tfoot, #yioxxrykzo tr, #yioxxrykzo td, #yioxxrykzo th {
   border-style: none;
 }
 
-#ptsshkrngj p {
+#yioxxrykzo p {
   margin: 0;
   padding: 0;
 }
 
-#ptsshkrngj .gt_table {
+#yioxxrykzo .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -511,12 +527,12 @@ TV Hours</p>
   border-left-color: #D3D3D3;
 }
 
-#ptsshkrngj .gt_caption {
+#yioxxrykzo .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#ptsshkrngj .gt_title {
+#yioxxrykzo .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -528,7 +544,7 @@ TV Hours</p>
   border-bottom-width: 0;
 }
 
-#ptsshkrngj .gt_subtitle {
+#yioxxrykzo .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -540,7 +556,7 @@ TV Hours</p>
   border-top-width: 0;
 }
 
-#ptsshkrngj .gt_heading {
+#yioxxrykzo .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -552,13 +568,13 @@ TV Hours</p>
   border-right-color: #D3D3D3;
 }
 
-#ptsshkrngj .gt_bottom_border {
+#yioxxrykzo .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#ptsshkrngj .gt_col_headings {
+#yioxxrykzo .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -573,7 +589,7 @@ TV Hours</p>
   border-right-color: #D3D3D3;
 }
 
-#ptsshkrngj .gt_col_heading {
+#yioxxrykzo .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -593,7 +609,7 @@ TV Hours</p>
   overflow-x: hidden;
 }
 
-#ptsshkrngj .gt_column_spanner_outer {
+#yioxxrykzo .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -605,15 +621,15 @@ TV Hours</p>
   padding-right: 4px;
 }
 
-#ptsshkrngj .gt_column_spanner_outer:first-child {
+#yioxxrykzo .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ptsshkrngj .gt_column_spanner_outer:last-child {
+#yioxxrykzo .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ptsshkrngj .gt_column_spanner {
+#yioxxrykzo .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -625,11 +641,11 @@ TV Hours</p>
   width: 100%;
 }
 
-#ptsshkrngj .gt_spanner_row {
+#yioxxrykzo .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#ptsshkrngj .gt_group_heading {
+#yioxxrykzo .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -655,7 +671,7 @@ TV Hours</p>
   text-align: left;
 }
 
-#ptsshkrngj .gt_empty_group_heading {
+#yioxxrykzo .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -670,15 +686,15 @@ TV Hours</p>
   vertical-align: middle;
 }
 
-#ptsshkrngj .gt_from_md > :first-child {
+#yioxxrykzo .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ptsshkrngj .gt_from_md > :last-child {
+#yioxxrykzo .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ptsshkrngj .gt_row {
+#yioxxrykzo .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -697,7 +713,7 @@ TV Hours</p>
   overflow-x: hidden;
 }
 
-#ptsshkrngj .gt_stub {
+#yioxxrykzo .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -710,7 +726,7 @@ TV Hours</p>
   padding-right: 5px;
 }
 
-#ptsshkrngj .gt_stub_row_group {
+#yioxxrykzo .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -724,15 +740,15 @@ TV Hours</p>
   vertical-align: top;
 }
 
-#ptsshkrngj .gt_row_group_first td {
+#yioxxrykzo .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#ptsshkrngj .gt_row_group_first th {
+#yioxxrykzo .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#ptsshkrngj .gt_summary_row {
+#yioxxrykzo .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -742,16 +758,16 @@ TV Hours</p>
   padding-right: 5px;
 }
 
-#ptsshkrngj .gt_first_summary_row {
+#yioxxrykzo .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#ptsshkrngj .gt_first_summary_row.thick {
+#yioxxrykzo .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#ptsshkrngj .gt_last_summary_row {
+#yioxxrykzo .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -761,7 +777,7 @@ TV Hours</p>
   border-bottom-color: #D3D3D3;
 }
 
-#ptsshkrngj .gt_grand_summary_row {
+#yioxxrykzo .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -771,7 +787,7 @@ TV Hours</p>
   padding-right: 5px;
 }
 
-#ptsshkrngj .gt_first_grand_summary_row {
+#yioxxrykzo .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -781,7 +797,7 @@ TV Hours</p>
   border-top-color: #D3D3D3;
 }
 
-#ptsshkrngj .gt_last_grand_summary_row_top {
+#yioxxrykzo .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -791,11 +807,11 @@ TV Hours</p>
   border-bottom-color: #D3D3D3;
 }
 
-#ptsshkrngj .gt_striped {
+#yioxxrykzo .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#ptsshkrngj .gt_table_body {
+#yioxxrykzo .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -804,7 +820,7 @@ TV Hours</p>
   border-bottom-color: #D3D3D3;
 }
 
-#ptsshkrngj .gt_footnotes {
+#yioxxrykzo .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -818,7 +834,7 @@ TV Hours</p>
   border-right-color: #D3D3D3;
 }
 
-#ptsshkrngj .gt_footnote {
+#yioxxrykzo .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -827,7 +843,7 @@ TV Hours</p>
   padding-right: 5px;
 }
 
-#ptsshkrngj .gt_sourcenotes {
+#yioxxrykzo .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -841,7 +857,7 @@ TV Hours</p>
   border-right-color: #D3D3D3;
 }
 
-#ptsshkrngj .gt_sourcenote {
+#yioxxrykzo .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -849,72 +865,72 @@ TV Hours</p>
   padding-right: 5px;
 }
 
-#ptsshkrngj .gt_left {
+#yioxxrykzo .gt_left {
   text-align: left;
 }
 
-#ptsshkrngj .gt_center {
+#yioxxrykzo .gt_center {
   text-align: center;
 }
 
-#ptsshkrngj .gt_right {
+#yioxxrykzo .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ptsshkrngj .gt_font_normal {
+#yioxxrykzo .gt_font_normal {
   font-weight: normal;
 }
 
-#ptsshkrngj .gt_font_bold {
+#yioxxrykzo .gt_font_bold {
   font-weight: bold;
 }
 
-#ptsshkrngj .gt_font_italic {
+#yioxxrykzo .gt_font_italic {
   font-style: italic;
 }
 
-#ptsshkrngj .gt_super {
+#yioxxrykzo .gt_super {
   font-size: 65%;
 }
 
-#ptsshkrngj .gt_footnote_marks {
+#yioxxrykzo .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#ptsshkrngj .gt_asterisk {
+#yioxxrykzo .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#ptsshkrngj .gt_indent_1 {
+#yioxxrykzo .gt_indent_1 {
   text-indent: 5px;
 }
 
-#ptsshkrngj .gt_indent_2 {
+#yioxxrykzo .gt_indent_2 {
   text-indent: 10px;
 }
 
-#ptsshkrngj .gt_indent_3 {
+#yioxxrykzo .gt_indent_3 {
   text-indent: 15px;
 }
 
-#ptsshkrngj .gt_indent_4 {
+#yioxxrykzo .gt_indent_4 {
   text-indent: 20px;
 }
 
-#ptsshkrngj .gt_indent_5 {
+#yioxxrykzo .gt_indent_5 {
   text-indent: 25px;
 }
 
-#ptsshkrngj .katex-display {
+#yioxxrykzo .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#ptsshkrngj div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#yioxxrykzo div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -927,6 +943,9 @@ TV Hours</p>
     </tr>
   </thead>
   <tbody class="gt_table_body">
+    <tr><td headers="label" class="gt_row gt_left">(Intercept)</td>
+<td headers="estimate" class="gt_row gt_center">3.2***</td>
+<td headers="std.error" class="gt_row gt_center">0.453</td></tr>
     <tr><td headers="label" class="gt_row gt_left">Age of respondent</td>
 <td headers="estimate" class="gt_row gt_center">0.01**</td>
 <td headers="std.error" class="gt_row gt_center">0.005</td></tr>
@@ -975,7 +994,8 @@ operates through <span class="math inline">\(X_1\)</span>.</p></li>
 class="math inline">\(X_2\)</span> shrink a little, each has an effect,
 but some overlap or mediation is occurring.</p></li>
 </ul>
-<div style="color: #F39C12; font-family: &#39;Shadows Into Light&#39;">
+<div
+style="color: #F39C12; font-size: 125%; font-family: &#39;Shadows Into Light&#39;">
 <p><strong>Things to watch out for:</strong></p>
 </div>
 <p><span style="color: #F39C12"><strong>Correlation is not
@@ -989,6 +1009,13 @@ causality</strong></span><br />
 Many sociological processes involve bi-directional causality. Regression
 slopes (and correlations) do not identify which variable “causes” the
 other.</p>
+<p><span style="color: #F39C12"><strong>Statistical significance <span
+class="math inline">\(\neq\)</span> practical
+significance</strong></span><br />
+More stars (or a low p-value) indicates that an effect is unlikely to be
+due to chance, but it says nothing about the size or importance of that
+effect. Even tiny effects can be statistically significant in large
+samples. Focus on effect sizes and context, not just stars.</p>
 </div>
 </div>
 </div>
@@ -1007,9 +1034,9 @@ class="section level4">
 <p>We could create different dataframes for each category of our
 variable and then run a regression.</p>
 <p>For example, if we thought the relationship between average TV hours
-and years of education was conditional on gender, that is the
-correlation between tv hours and education was different for men and
-women, we could run two separate regressions.</p>
+and years of education was conditional on gender (e.g., the correlation
+between TV hours and education was different for men and women), we
+could run two separate regressions.</p>
 <p><strong>OLS Regression of average daily TV hours among
 men</strong></p>
 <div data-pagedtable="false">
@@ -1042,7 +1069,8 @@ PRACTICE:</practice></p>
 <div id="section-dummy-variable" class="section level4 my-def">
 <h4>Dummy variable</h4>
 <p>Dichotomous variables coded to indicate the presence or absence of
-something Absence coded as zero, presence coded as 1.</p>
+something. Absence is coded as <span class="math inline">\(0\)</span>,
+presence coded as <span class="math inline">\(1\)</span>.</p>
 </div>
 <p>A different approach is to turn categorical variables into
 <strong>dummy variables</strong> to be included in one regression.</p>
@@ -1054,36 +1082,33 @@ can’t estimate unique effects. If you included all the categories plus
 an intercept, the model wouldn’t be able tell which variable is doing
 what because they’re too closely related.</p>
 <p>Instead, one category is dropped on purpose to remove redundant
-information. This “missing” category is called the reference group. The
-coefficients for the other categories show how they differ from the
-reference group.</p>
+information. This “missing” category is called the <strong>reference
+group</strong>. The coefficients for the other categories show how they
+differ from the reference group.</p>
 <p>Consider the following regression equation:</p>
 <p><span class="math inline">\(\hat{y} = a + b_1educ_1 + b_2female_2 +
 e\)</span></p>
-<p>In this equation, the first coefficient, <span
-class="math inline">\(b_1\)</span>, is our continuous variable
-<code>educ</code> that contains respondents years of education. The
-second coefficient, <span class="math inline">\(b_2\)</span> is a new
-variable <code>female</code> where men are coded as <code>0</code> and
-women are coded as <code>1</code>.</p>
-<p><span style="color: #3498DB"><strong>What if the case is a
-man?</strong></span></p>
+<p><br></p>
+<p>The first coefficient, <span class="math inline">\(b_1\)</span>, is
+our continuous variable <code>educ</code> that contains values
+representing respondents’ years of education. The second coefficient,
+<span class="math inline">\(b_2\)</span> is a new variable
+<code>female</code> where men are coded as <code>0</code> and women are
+coded as <code>1</code>.</p>
 <p>In our equation, <span class="math inline">\(b_2\)</span> would be
-equal to 0 for men. So, our regression model will drop the
+equal to <code>0</code> for men. So, our regression model will drop the
 <code>female</code> coefficient:</p>
 <p><span class="math inline">\(\hat{y} = a + b_1educ_1 + e\)</span></p>
-<p><span style="color: #3498DB"><strong>What if the case is a
-woman?</strong></span></p>
-<p>Women are coded as 1, so <span class="math inline">\(b_2\)</span>
-stays in the equation (and is added to the constant). Women are modeled
-using the full regression line:</p>
+<p>Women are coded as <code>1</code>, so <span
+class="math inline">\(b_2\)</span> stays in the equation (and is added
+to the constant). Women are modeled using the full regression line:</p>
 <p><span class="math inline">\(\hat{y} = a + b_1educ_1 + b_2female_2 +
 e\)</span></p>
 <p>The coefficient <span class="math inline">\(b_2\)</span> represents
 the difference in the intercept between women and men. When using a
-dummy variable like <code>female</code> (coded as 1 for women, 0 for
-men), the regression line shifts depending on the value of the
-coefficient:</p>
+dummy variable like <code>female</code> (coded as <code>1</code> for
+women, <code>0</code> for men), the regression line shifts depending on
+the value of the coefficient:</p>
 <blockquote>
 <p>A positive coefficient means women score higher than men on the
 dependent variable.</p>
@@ -1091,11 +1116,12 @@ dependent variable.</p>
 <blockquote>
 <p>A negative coefficient means women score lower.</p>
 </blockquote>
-<p>Example: If the coefficient for FEMALE is 1.2, it means: “Women are,
-on average, 1.2 points higher than men on the outcome variable.”</p>
+<p>Example: If the coefficient for <code>female</code> is <span
+class="math inline">\(1.2\)</span>, it means: “Women are, on average,
+1.2 points higher than men on the outcome variable.”</p>
 <p>This shift reflects a different starting point (intercept) for each
 group, resulting in separate regression lines.</p>
-<p>Let’s try it out with our tvhours regression example.</p>
+<p>Try it out with our <code>tvhours</code> regression example.</p>
 <hr />
 <p><svg aria-hidden="true" role="img" viewBox="0 0 640 512" style="height:1em;width:1.25em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:#F39C12;overflow:visible;position:relative;"><path d="M181.5 197.1l12.9 6.4c5.9 3 12.4 4.5 19.1 4.5c23.5 0 42.6-19.1 42.6-42.6V144c0-35.3-28.7-64-64-64H128c-35.3 0-64 28.7-64 64v21.4c0 23.5 19.1 42.6 42.6 42.6c6.6 0 13.1-1.5 19.1-4.5l12.9-6.4 8.4-4.2L135.1 185c-4.5-3-7.1-8-7.1-13.3V168c0-13.3 10.7-24 24-24h16c13.3 0 24 10.7 24 24v3.7c0 5.3-2.7 10.3-7.1 13.3l-11.8 7.9 8.4 4.2zm-8.6 49.4L160 240l-12.9 6.4c-12.6 6.3-26.5 9.6-40.5 9.6c-3.6 0-7.1-.2-10.6-.6v.6c0 35.3 28.7 64 64 64h64c17.7 0 32 14.3 32 32s-14.3 32-32 32H384V336 320c0-23.7 12.9-44.4 32-55.4c9.4-5.4 20.3-8.6 32-8.6V240c0-26.5 21.5-48 48-48c8.8 0 16 7.2 16 16v32 16 48c0 8.8 7.2 16 16 16s16-7.2 16-16V204.3c0-48.2-30.8-91-76.6-106.3l-8.5-2.8c-8-2.7-12.6-11.1-10.4-19.3s10.3-13.2 18.6-11.6l19.9 4C576 86.1 640 164.2 640 254.9l0 1.1h0c0 123.7-100.3 224-224 224h-1.1H256h-.6C132 480 32 380 32 256.6V256 216.8c-10.1-14.6-16-32.3-16-51.4V144l0-1.4C6.7 139.3 0 130.5 0 120c0-13.3 10.7-24 24-24h2.8C44.8 58.2 83.3 32 128 32h64c44.7 0 83.2 26.2 101.2 64H296c13.3 0 24 10.7 24 24c0 10.5-6.7 19.3-16 22.6l0 1.4v21.4c0 1.4 0 2.8-.1 4.3c12-6.2 25.7-9.6 40.1-9.6h8c17.7 0 32 14.3 32 32s-14.3 32-32 32h-8c-13.3 0-24 10.7-24 24v8h56.4c-15.2 17-24.4 39.4-24.4 64H320c-42.3 0-78.2-27.4-91-65.3c-5.1 .9-10.3 1.3-15.6 1.3c-14.1 0-27.9-3.3-40.5-9.6zM96 128a16 16 0 1 1 0 32 16 16 0 1 1 0-32zm112 16a16 16 0 1 1 32 0 16 16 0 1 1 -32 0z"/></svg><practice>
 PRACTICE:</practice></p>
@@ -1122,12 +1148,14 @@ data-completion="1" data-diagnostics="1" data-startover="1"
 data-lines="0" data-pipe="|&gt;">
 <pre class="text"><code>lm(______ ~ educ + ______, data = gss24)</code></pre>
 </div>
-<p>The intercept, 3.65, represents the average daily TV hours for men
-(the reference group) with an education level of zero.</p>
-<p>The coefficient for education (-0.0771), means that for each
-additional year of education, daily TV hours decrease by about 0.08
-hours.</p>
-<p>The coefficient for sexfemale (0.1564) indicates that women watch, on
+<p>The intercept, <span class="math inline">\(3.65\)</span>, represents
+the average daily TV hours for men (the reference group) with an
+education level of <span class="math inline">\(0\)</span>.</p>
+<p>The coefficient for <code>educ</code> (<span
+class="math inline">\(-0.0771\)</span>), means that for each additional
+year of education, daily TV hours decrease by about 0.08 hours.</p>
+<p>The coefficient for <code>sexfemale</code> (<span
+class="math inline">\(0.1564\)</span>) indicates that women watch, on
 average, 0.16 more hours of TV per day than men, after accounting for
 education.</p>
 <p>Is this gender difference statistically significant? Let’s find
@@ -1144,7 +1172,7 @@ PRACTICE:</practice></p>
 <div class="tutorial-exercise" data-label="reg06" data-completion="1"
 data-diagnostics="1" data-startover="1" data-lines="0"
 data-pipe="|&gt;">
-<pre class="text"><code>model &lt;- lm(tvhours ~ age + sex, data = gss24)
+<pre class="text"><code>model &lt;- lm(tvhours ~ educ + sex, data = gss24)
 
 get_regression_table(_____)</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":true,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
@@ -1152,7 +1180,7 @@ get_regression_table(_____)</code></pre>
 <div class="tutorial-exercise-support" data-label="reg06-solution"
 data-completion="1" data-diagnostics="1" data-startover="1"
 data-lines="0" data-pipe="|&gt;">
-<pre class="text"><code>model &lt;- lm(tvhours ~ age + sex, data = gss24)
+<pre class="text"><code>model &lt;- lm(tvhours ~ educ + sex, data = gss24)
 
 get_regression_table(model)</code></pre>
 </div>
@@ -1165,17 +1193,498 @@ get_regression_table(model)</code></pre>
 </div>
 </div>
 <p><br></p>
-<div id="section-section" class="section level3">
-<h3></h3>
+<p>We might display the results from the regression in the example in a
+table that looks like this:</p>
+<p><br></p>
+<p><strong>Table 2.</strong> OLS Regression Analysis of Americans Daily
+TV Hours</p>
+<div id="eexcakpced" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#eexcakpced table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#eexcakpced thead, #eexcakpced tbody, #eexcakpced tfoot, #eexcakpced tr, #eexcakpced td, #eexcakpced th {
+  border-style: none;
+}
+
+#eexcakpced p {
+  margin: 0;
+  padding: 0;
+}
+
+#eexcakpced .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#eexcakpced .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#eexcakpced .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#eexcakpced .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#eexcakpced .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#eexcakpced .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#eexcakpced .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#eexcakpced .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#eexcakpced .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#eexcakpced .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#eexcakpced .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#eexcakpced .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#eexcakpced .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#eexcakpced .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#eexcakpced .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#eexcakpced .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#eexcakpced .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#eexcakpced .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#eexcakpced .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#eexcakpced .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#eexcakpced .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#eexcakpced .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#eexcakpced .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#eexcakpced .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#eexcakpced .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#eexcakpced .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#eexcakpced .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#eexcakpced .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#eexcakpced .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#eexcakpced .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#eexcakpced .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#eexcakpced .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#eexcakpced .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#eexcakpced .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#eexcakpced .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#eexcakpced .gt_left {
+  text-align: left;
+}
+
+#eexcakpced .gt_center {
+  text-align: center;
+}
+
+#eexcakpced .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#eexcakpced .gt_font_normal {
+  font-weight: normal;
+}
+
+#eexcakpced .gt_font_bold {
+  font-weight: bold;
+}
+
+#eexcakpced .gt_font_italic {
+  font-style: italic;
+}
+
+#eexcakpced .gt_super {
+  font-size: 65%;
+}
+
+#eexcakpced .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#eexcakpced .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#eexcakpced .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#eexcakpced .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#eexcakpced .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#eexcakpced .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#eexcakpced .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#eexcakpced .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#eexcakpced div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <thead>
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="label"><span class='gt_from_md'><strong>Characteristic</strong></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="estimate"><span class='gt_from_md'><strong>Beta</strong></span><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="std.error"><span class='gt_from_md'><strong>SE</strong></span></th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="label" class="gt_row gt_left">(Intercept)</td>
+<td headers="estimate" class="gt_row gt_center">3.6***</td>
+<td headers="std.error" class="gt_row gt_center">0.413</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">Highest year of school completed</td>
+<td headers="estimate" class="gt_row gt_center">-0.08**</td>
+<td headers="std.error" class="gt_row gt_center">0.027</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">Women</td>
+<td headers="estimate" class="gt_row gt_center">0.16</td>
+<td headers="std.error" class="gt_row gt_center">0.151</td></tr>
+  </tbody>
+  
+  <tfoot class="gt_footnotes">
+    <tr>
+      <td class="gt_footnote" colspan="3"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span> <span class='gt_from_md'>*p&lt;0.05; **p&lt;0.01; ***p&lt;0.001</span></td>
+    </tr>
+  </tfoot>
+</table>
 </div>
+<p><em>Source: U.S. General Social Survey 2024 (N = 1093)</em></p>
+<p><br></p>
 <div id="section-visualize-predictions" class="section level3">
 <h3>Visualize predictions</h3>
 <p>It often helps to visualize the results from a regression model.
-Let’s use the <code>ggpredict()</code> function from {ggeffects} package
-to do so. <code>ggpredict()</code> calculates predicted values from a
-regression model for specific values of the variables. It shows you what
-your model says the outcome would be if you held some variables constant
-and changed others.</p>
+Let’s use the <code>ggpredict()</code> function from the <a
+href="https://easystats.github.io/modelbased/">{modelbased}</a> package
+to do so. <code>estimate_means()</code> calculates predicted values from
+a regression model for specific values of the variables. It shows you
+what your model says the outcome would be if you held some variables
+constant and changed others.</p>
 <p>It helps you see the effect of one variable while controlling for
 others.</p>
 <p>It creates a clean data frame with predicted values (and confidence
@@ -1187,7 +1696,7 @@ data-pipe="|&gt;">
 model &lt;- lm(tvhours ~ educ + sex, data = gss24)
 
 # Get predicted values
-preds &lt;- ggpredict(model, terms = c(&quot;educ&quot;, &quot;sex&quot;))
+preds &lt;- estimate_means(model, by = c(&quot;educ&quot;, &quot;sex&quot;))
 
 # Preview the new df
 preds |&gt;
@@ -1206,18 +1715,18 @@ is <span class="math inline">\(3.80\)</span>. Where did this number come
 from? Add the intercept <span class="math inline">\(3.65\)</span> to the
 coefficient for our <code>sex</code> variable: <span
 class="math inline">\(0.1564\)</span>.</p>
-<p>What about the next row which shows men with 3 years of education:
-3.41 average TV hours. We add our intercept of <span
+<p>What about the next row which shows men with 2.22 years of education
+average 3.47 TV hours. We add our intercept of <span
 class="math inline">\(3.65\)</span> to our <code>educ</code> coefficient
-<span class="math inline">\(-0.0771\)</span> three times (3 units of
-change):</p>
-<p><span class="math inline">\(3.65 + (-.0771*3)\)</span> <span
-class="math inline">\(3.65 -0.2313 = 3.419\)</span></p>
+<span class="math inline">\(-0.0771\)</span> multiplied by <span
+class="math inline">\(2.222\)</span>:</p>
+<p><span class="math inline">\(3.6455 + (-.0771*2.222)\)</span> <span
+class="math inline">\(3.6455 -0.1713 = 3.474\)</span></p>
 <p>And what about the following row showing the predicted average TV
-hours for women with 3 years of education? The same thing except you
-also include the <code>sex</code> coefficient:</p>
-<p><span class="math inline">\(3.65 + (-.0771*3) + 0.1564\)</span> <span
-class="math inline">\(3.65 -0.2313 + 0.1564 = 3.575\)</span></p>
+hours for women with 2.222 years of education? We do the same thing
+except also include the <code>sex</code> coefficient:</p>
+<p><span class="math inline">\(3.6455 + (-.0771*2.222) + 0.1564\)</span>
+<span class="math inline">\(3.6455 -0.1713 + 0.1564 = 3.631\)</span></p>
 <p>You can easily plot these predictions with the <code>ggplot2</code>
 package to make your results more understandable.</p>
 <div class="tutorial-exercise" data-label="plot" data-completion="1"
@@ -1227,20 +1736,21 @@ data-pipe="|&gt;">
 model &lt;- lm(tvhours ~ educ + sex, data = gss24)
 
 # Get predicted values
-preds &lt;- ggpredict(model, terms = c(&quot;educ&quot;, &quot;sex&quot;))
+preds &lt;- estimate_means(model, by = c(&quot;educ&quot;, &quot;sex&quot;))
 
 # Plot using ggplot2
-ggplot(preds, aes(x = x, y = predicted, color = group)) +
-  geom_line(size = 1.2) +
-  labs(
-    title = &quot;Predicted Daily TV Hours by Education and Sex&quot;,
-    x = &quot;Education Level&quot;,
-    y = &quot;Predicted TV Hours&quot;,
-    color = &quot;Sex&quot;,
-    fill = &quot;Sex&quot;
-  ) +
-  theme_minimal() +
-  theme(legend.position = &quot;top&quot;)</code></pre>
+preds |&gt;
+  ggplot(aes(x = educ, y = Mean, color = sex)) +
+    geom_line(size = 1.2) +
+    labs(
+      title = &quot;Predicted Daily TV Hours by Education and Sex&quot;,
+      x = &quot;Education Level&quot;,
+      y = &quot;Predicted TV Hours&quot;,
+      color = &quot;Sex&quot;,
+      fill = &quot;Sex&quot;
+    ) +
+    theme_minimal() +
+    theme(legend.position = &quot;top&quot;)</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
 <p><br></p>
@@ -1294,12 +1804,18 @@ get_regression_table(model)</code></pre>
 <p>The interaction term <code>educ:sexfemale</code> tells us whether the
 relationship between education and daily TV hours differs between men
 and women.</p>
-<p>The coefficient for educ is <code>–0.12</code>, meaning that for men
-(the reference group), each additional unit of education is associated
-with watching <code>0.12</code> fewer hours of TV per day.</p>
-<p>The interaction term <code>educ:sexfemale</code> is +0.08, which
-adjusts the slope of education for women. So for women, the effect of
-education is:</p>
+<p>The coefficient for <code>educ</code> is <span
+class="math inline">\(–0.12\)</span>, meaning that for men (the
+reference group), each additional unit of education is associated with
+watching 0.12 fewer hours of TV per day.</p>
+<p>The coefficient for <code>sex: female</code> is <span
+class="math inline">\(−1.02\)</span>. This is the difference in the
+outcome between women and men when education = 0. Women score 1.02 units
+lower than men at zero education, but this difference is not
+statistically significant (p = 0.214).</p>
+<p>The interaction term <code>educ:sexfemale</code> is <span
+class="math inline">\(0.08\)</span>, which adjusts the slope of
+education for women. So for women, the effect of education is:</p>
 <p><span class="math inline">\(−0.12 + 0.08 = -0.04\)</span></p>
 <p>This means that for women, each additional unit of education is
 associated with only <span class="math inline">\(0.04\)</span> fewer
@@ -1328,20 +1844,21 @@ data-lines="0" data-pipe="|&gt;">
 model &lt;- lm(tvhours ~ educ * sex, data = gss24)
 
 # Get predicted values
-preds &lt;- ggpredict(model, terms = c(&quot;educ&quot;, &quot;sex&quot;))
+preds &lt;- estimate_means(model, by = c(&quot;educ&quot;, &quot;sex&quot;))
 
 # Plot using ggplot2
-ggplot(preds, aes(x = x, y = predicted, color = group)) +
-  geom_line(size = 1.2) +
-  labs(
-    title = &quot;Predicted Daily TV Hours by Education and Sex&quot;,
-    x = &quot;Education Level&quot;,
-    y = &quot;Predicted TV Hours&quot;,
-    color = &quot;Sex&quot;,
-    fill = &quot;Sex&quot;
-  ) +
-  theme_minimal() +
-  theme(legend.position = &quot;top&quot;)</code></pre>
+preds |&gt;
+  ggplot(aes(x = educ, y = Mean, color = sex)) +
+    geom_line(size = 1.2) +
+    labs(
+      title = &quot;Predicted Daily TV Hours by Education and Sex&quot;,
+      x = &quot;Education Level&quot;,
+      y = &quot;Predicted TV Hours&quot;,
+      color = &quot;Sex&quot;,
+      fill = &quot;Sex&quot;
+    ) +
+    theme_minimal() +
+    theme(legend.position = &quot;top&quot;)</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
 <p><br></p>
@@ -1354,9 +1871,12 @@ crosses the x-axis at 0) and slopes for men and women.</p>
 <h2>Learning Check 09</h2>
 <p>Please answer the following questions to verify you understand the
 topics in this tutorial.</p>
-<p><img src="images/agekdbrn_table.png"
-title="Table: OLS Regression Analysis of Age First Child Born"
-style="width:80.0%" /></p>
+<p>Use the following regression output to answer the next questions.</p>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["term"],"name":[1],"type":["chr"],"align":["left"]},{"label":["estimate"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["std_error"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["statistic"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["p_value"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["lower_ci"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["upper_ci"],"name":[7],"type":["dbl"],"align":["right"]}],"data":[{"1":"intercept","2":"42.324","3":"2.515","4":"16.832","5":"0.000","6":"37.390","7":"47.257"},{"1":"age","2":"-0.112","3":"0.030","4":"-3.792","5":"0.000","6":"-0.170","7":"-0.054"},{"1":"educ","2":"0.121","3":"0.153","4":"0.791","5":"0.429","6":"-0.179","7":"0.421"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
 <div class="panel panel-default tutorial-question-container">
 <div data-label="Q01" class="tutorial-question panel-body">
 <div id="Q01-answer_container" class="shiny-html-output"></div>
@@ -1381,14 +1901,523 @@ style="width:80.0%" /></p>
 <script>if (Tutorial.triggerMathJax) Tutorial.triggerMathJax()</script>
 </div>
 </div>
-<p><img src="images/gsstable.png"
-title="Table: OLS Regression Analysis of Age at First Marriage"
-style="width:80.0%" /></p>
+<p>Use the following regression output to answer the next questions.</p>
+<p><strong>Table 2.</strong> OLS Regression Analysis of Americans Weekly
+Work Hours</p>
+<div id="iertorebuy" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#iertorebuy table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#iertorebuy thead, #iertorebuy tbody, #iertorebuy tfoot, #iertorebuy tr, #iertorebuy td, #iertorebuy th {
+  border-style: none;
+}
+
+#iertorebuy p {
+  margin: 0;
+  padding: 0;
+}
+
+#iertorebuy .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#iertorebuy .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#iertorebuy .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#iertorebuy .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#iertorebuy .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#iertorebuy .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#iertorebuy .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#iertorebuy .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#iertorebuy .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#iertorebuy .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#iertorebuy .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#iertorebuy .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#iertorebuy .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#iertorebuy .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#iertorebuy .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#iertorebuy .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#iertorebuy .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#iertorebuy .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#iertorebuy .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#iertorebuy .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#iertorebuy .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#iertorebuy .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#iertorebuy .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#iertorebuy .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#iertorebuy .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#iertorebuy .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#iertorebuy .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#iertorebuy .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#iertorebuy .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#iertorebuy .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#iertorebuy .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#iertorebuy .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#iertorebuy .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#iertorebuy .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#iertorebuy .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#iertorebuy .gt_left {
+  text-align: left;
+}
+
+#iertorebuy .gt_center {
+  text-align: center;
+}
+
+#iertorebuy .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#iertorebuy .gt_font_normal {
+  font-weight: normal;
+}
+
+#iertorebuy .gt_font_bold {
+  font-weight: bold;
+}
+
+#iertorebuy .gt_font_italic {
+  font-style: italic;
+}
+
+#iertorebuy .gt_super {
+  font-size: 65%;
+}
+
+#iertorebuy .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#iertorebuy .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#iertorebuy .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#iertorebuy .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#iertorebuy .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#iertorebuy .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#iertorebuy .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#iertorebuy .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#iertorebuy div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <thead>
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="label"><span class='gt_from_md'><strong>Characteristic</strong></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="estimate"><span class='gt_from_md'><strong>Beta</strong></span><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="std.error"><span class='gt_from_md'><strong>SE</strong></span></th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="label" class="gt_row gt_left">(Intercept)</td>
+<td headers="estimate" class="gt_row gt_center">46***</td>
+<td headers="std.error" class="gt_row gt_center">1.39</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">Age of respondent</td>
+<td headers="estimate" class="gt_row gt_center">-0.10***</td>
+<td headers="std.error" class="gt_row gt_center">0.029</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">Women</td>
+<td headers="estimate" class="gt_row gt_center">-4.8***</td>
+<td headers="std.error" class="gt_row gt_center">0.823</td></tr>
+  </tbody>
+  
+  <tfoot class="gt_footnotes">
+    <tr>
+      <td class="gt_footnote" colspan="3"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span> <span class='gt_from_md'>*p&lt;0.05; **p&lt;0.01; ***p&lt;0.001</span></td>
+    </tr>
+  </tfoot>
+</table>
+</div>
+<p><em>Source: U.S. General Social Survey 2024 (N = 1093)</em></p>
 <div class="panel panel-default tutorial-question-container">
-<div data-label="Q11" class="tutorial-question panel-body">
-<div id="Q11-answer_container" class="shiny-html-output"></div>
-<div id="Q11-message_container" class="shiny-html-output"></div>
-<div id="Q11-action_button_container" class="shiny-html-output"></div>
+<div data-label="Q04" class="tutorial-question panel-body">
+<div id="Q04-answer_container" class="shiny-html-output"></div>
+<div id="Q04-message_container" class="shiny-html-output"></div>
+<div id="Q04-action_button_container" class="shiny-html-output"></div>
+<script>if (Tutorial.triggerMathJax) Tutorial.triggerMathJax()</script>
+</div>
+</div>
+<div class="panel panel-default tutorial-question-container">
+<div data-label="Q05" class="tutorial-question panel-body">
+<div id="Q05-answer_container" class="shiny-html-output"></div>
+<div id="Q05-message_container" class="shiny-html-output"></div>
+<div id="Q05-action_button_container" class="shiny-html-output"></div>
+<script>if (Tutorial.triggerMathJax) Tutorial.triggerMathJax()</script>
+</div>
+</div>
+<div class="panel panel-default tutorial-question-container">
+<div data-label="Q06" class="tutorial-question panel-body">
+<div id="Q06-answer_container" class="shiny-html-output"></div>
+<div id="Q06-message_container" class="shiny-html-output"></div>
+<div id="Q06-action_button_container" class="shiny-html-output"></div>
+<script>if (Tutorial.triggerMathJax) Tutorial.triggerMathJax()</script>
+</div>
+</div>
+<div class="panel panel-default tutorial-question-container">
+<div data-label="Q07" class="tutorial-question panel-body">
+<div id="Q07-answer_container" class="shiny-html-output"></div>
+<div id="Q07-message_container" class="shiny-html-output"></div>
+<div id="Q07-action_button_container" class="shiny-html-output"></div>
+<script>if (Tutorial.triggerMathJax) Tutorial.triggerMathJax()</script>
+</div>
+</div>
+<div class="panel panel-default tutorial-question-container">
+<div data-label="Q08" class="tutorial-question panel-body">
+<div id="Q08-answer_container" class="shiny-html-output"></div>
+<div id="Q08-message_container" class="shiny-html-output"></div>
+<div id="Q08-action_button_container" class="shiny-html-output"></div>
 <script>if (Tutorial.triggerMathJax) Tutorial.triggerMathJax()</script>
 </div>
 </div>
@@ -1400,9 +2429,11 @@ style="width:80.0%" /></p>
 ## library(gssrdoc)
 ## data(gss_all)
 ## gss24 <- gss_get_yr(2024)
+library(broom.helpers) # needed for moderndive
 library(moderndive) # regression output
 library(gtsummary) # tbl_cross
-library(ggeffects) # ggplots with predictions
+library(marginaleffects) # needed for modelbased
+library(modelbased) # ggplots with predictions
 
 ## Load packages, custom functions, and styles
 source("custom-setup-styles.R")
@@ -1413,8 +2444,13 @@ source("custom-setup-styles.R")
 # Get the data only for the 2022 survey respondents
 gss24 <- readRDS("data/gss24.rds")
 
-# Override default discrete color and fill scales
-scale_colour_discrete <- function(...) scale_color_manual(values = my_palette)
+gss24$sex <- zap_missing(gss24$sex)
+gss24$sex <- as_factor(gss24$sex)
+gss24$sex <- droplevels(gss24$sex)
+
+## Override default discrete color and fill scales
+scale_colour_discrete <- function(...) ggplot2::scale_color_manual(values = my_palette, ...)
+scale_fill_discrete <- function(...) ggplot2::scale_fill_manual(values = my_palette, ...)
 
 ## Options
 tutorial_options(exercise.checker = gradethis::grade_learnr)
@@ -1461,12 +2497,16 @@ output$`tutorial-exercise-reg01-output` <- renderUI({
 learnr:::store_exercise_cache(structure(list(label = "reg01", global_setup = structure(c("# GLOBAL ENVIRONMENT PANE", 
 "## source(\"tutorials/SOC6302-03/custom-setup-styles.R\")", 
 "## library(gssr)", "## library(gssrdoc)", "## data(gss_all)", 
-"## gss24 <- gss_get_yr(2024)", "library(moderndive) # regression output", 
-"library(gtsummary) # tbl_cross", "library(ggeffects) # ggplots with predictions", 
+"## gss24 <- gss_get_yr(2024)", "library(broom.helpers) # needed for moderndive", 
+"library(moderndive) # regression output", "library(gtsummary) # tbl_cross", 
+"library(marginaleffects) # needed for modelbased", "library(modelbased) # ggplots with predictions", 
 "", "## Load packages, custom functions, and styles", "source(\"custom-setup-styles.R\")", 
 "", "## Load all gss", "#gss_all <- readRDS(\"data/gss_all.rds\")", 
 "", "# Get the data only for the 2022 survey respondents", "gss24 <- readRDS(\"data/gss24.rds\")", 
-"", "# Override default discrete color and fill scales", "scale_colour_discrete <- function(...) scale_color_manual(values = my_palette)", 
+"", "gss24$sex <- zap_missing(gss24$sex)", "gss24$sex <- as_factor(gss24$sex)", 
+"gss24$sex <- droplevels(gss24$sex)", "", "## Override default discrete color and fill scales", 
+"scale_colour_discrete <- function(...) ggplot2::scale_color_manual(values = my_palette, ...)", 
+"scale_fill_discrete <- function(...) ggplot2::scale_fill_manual(values = my_palette, ...)", 
 "", "## Options", "tutorial_options(exercise.checker = gradethis::grade_learnr)", 
 "options(dplyr.summarise.inform=F)   # Avoid grouping warning", 
 "options(digits=4)                   # Round numbers", "theme_set(theme_minimal())          # set ggplot theme", 
@@ -1505,24 +2545,24 @@ learnr:::store_exercise_cache(structure(list(label = "reg01", global_setup = str
  
 <script type="application/shiny-prerendered" data-context="server">
 learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "P01", question = structure("What does it mean that the value of \\(a\\) is 2.04?", html = TRUE, class = c("html", 
-"character")), answers = list(structure(list(id = "lnr_ans_2ff9e97", 
+"character")), answers = list(structure(list(id = "lnr_ans_ea0f167", 
     option = "When a person is 0 years old, their are predicted to report 2.04 daily TV hours.", 
     value = "When a person is 0 years old, their are predicted to report 2.04 daily TV hours.", 
     label = structure("When a person is 0 years old, their are predicted to report 2.04 daily TV hours.", html = TRUE, class = c("html", 
     "character")), correct = TRUE, message = structure("Another meaningless intercept value!", html = TRUE, class = c("html", 
     "character")), type = "literal"), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_2780e5f", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_6fa88ed", 
     option = "The model indicates that each 1 year increase in age was associated with an increase in 2.04 TV hours.", 
     value = "The model indicates that each 1 year increase in age was associated with an increase in 2.04 TV hours.", 
     label = structure("The model indicates that each 1 year increase in age was associated with an increase in 2.04 TV hours.", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = structure("Whoa. That would be a lot of TV", html = TRUE, class = c("html", 
     "character")), type = "literal"), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_2085da1", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_d847692", 
     option = "The model indicates that the average daily TV hours is 2.04.", 
     value = "The model indicates that the average daily TV hours is 2.04.", 
     label = structure("The model indicates that the average daily TV hours is 2.04.", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_9520952", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_9e339e8", 
     option = "The model indicates that the average age is 2.04.", 
     value = "The model indicates that the average age is 2.04.", 
     label = structure("The model indicates that the average age is 2.04.", html = TRUE, class = c("html", 
@@ -1534,7 +2574,7 @@ learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label 
 "character")), incorrect = structure("Incorrect", html = TRUE, class = c("html", 
 "character")), message = NULL, post_message = NULL), ids = list(
     answer = "P01-answer", question = "P01"), loading = NULL, 
-    random_answer_order = TRUE, allow_retry = TRUE, seed = 1192144395.44486, 
+    random_answer_order = TRUE, allow_retry = TRUE, seed = 2076275996.53316, 
     options = list()), class = c("learnr_radio", "tutorial_question"
 )), session = session)
 </script>
@@ -1542,22 +2582,22 @@ learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label 
 
 <script type="application/shiny-prerendered" data-context="server">
 learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "P02", question = structure("What is the best interpretation of the slope (0.01)?", html = TRUE, class = c("html", 
-"character")), answers = list(structure(list(id = "lnr_ans_43ee94a", 
+"character")), answers = list(structure(list(id = "lnr_ans_f53ea19", 
     option = "For every one unit increase in age, a person's daily TV hours is expected to rise by 0.01.", 
     value = "For every one unit increase in age, a person's daily TV hours is expected to rise by 0.01.", 
     label = structure("For every one unit increase in age, a person’s daily TV hours is expected to rise by 0.01.", html = TRUE, class = c("html", 
     "character")), correct = TRUE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_9715d39", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_35ef47c", 
     option = "The model predicts that the average daily TV hours is 0.01 greater than the average age.", 
     value = "The model predicts that the average daily TV hours is 0.01 greater than the average age.", 
     label = structure("The model predicts that the average daily TV hours is 0.01 greater than the average age.", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_4274d48", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_6f374fe", 
     option = "When a person's age is 0 years old, their predicted TV hours is 0.01.", 
     value = "When a person's age is 0 years old, their predicted TV hours is 0.01.", 
     label = structure("When a person’s age is 0 years old, their predicted TV hours is 0.01.", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_b57b5cc", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_4ce8e0e", 
     option = "For every one unit increase in a person's TV hours, a person's age is expected to rise by 0.01 years.", 
     value = "For every one unit increase in a person's TV hours, a person's age is expected to rise by 0.01 years.", 
     label = structure("For every one unit increase in a person’s TV hours, a person’s age is expected to rise by 0.01 years.", html = TRUE, class = c("html", 
@@ -1569,7 +2609,7 @@ learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label 
 "character")), incorrect = structure("Incorrect", html = TRUE, class = c("html", 
 "character")), message = NULL, post_message = NULL), ids = list(
     answer = "P02-answer", question = "P02"), loading = NULL, 
-    random_answer_order = TRUE, allow_retry = TRUE, seed = 1035478998.01782, 
+    random_answer_order = TRUE, allow_retry = TRUE, seed = 2029847600.05478, 
     options = list()), class = c("learnr_radio", "tutorial_question"
 )), session = session)
 </script>
@@ -1586,12 +2626,16 @@ output$`tutorial-exercise-reg02-output` <- renderUI({
 learnr:::store_exercise_cache(structure(list(label = "reg02", global_setup = structure(c("# GLOBAL ENVIRONMENT PANE", 
 "## source(\"tutorials/SOC6302-03/custom-setup-styles.R\")", 
 "## library(gssr)", "## library(gssrdoc)", "## data(gss_all)", 
-"## gss24 <- gss_get_yr(2024)", "library(moderndive) # regression output", 
-"library(gtsummary) # tbl_cross", "library(ggeffects) # ggplots with predictions", 
+"## gss24 <- gss_get_yr(2024)", "library(broom.helpers) # needed for moderndive", 
+"library(moderndive) # regression output", "library(gtsummary) # tbl_cross", 
+"library(marginaleffects) # needed for modelbased", "library(modelbased) # ggplots with predictions", 
 "", "## Load packages, custom functions, and styles", "source(\"custom-setup-styles.R\")", 
 "", "## Load all gss", "#gss_all <- readRDS(\"data/gss_all.rds\")", 
 "", "# Get the data only for the 2022 survey respondents", "gss24 <- readRDS(\"data/gss24.rds\")", 
-"", "# Override default discrete color and fill scales", "scale_colour_discrete <- function(...) scale_color_manual(values = my_palette)", 
+"", "gss24$sex <- zap_missing(gss24$sex)", "gss24$sex <- as_factor(gss24$sex)", 
+"gss24$sex <- droplevels(gss24$sex)", "", "## Override default discrete color and fill scales", 
+"scale_colour_discrete <- function(...) ggplot2::scale_color_manual(values = my_palette, ...)", 
+"scale_fill_discrete <- function(...) ggplot2::scale_fill_manual(values = my_palette, ...)", 
 "", "## Options", "tutorial_options(exercise.checker = gradethis::grade_learnr)", 
 "options(dplyr.summarise.inform=F)   # Avoid grouping warning", 
 "options(digits=4)                   # Round numbers", "theme_set(theme_minimal())          # set ggplot theme", 
@@ -1630,24 +2674,24 @@ learnr:::store_exercise_cache(structure(list(label = "reg02", global_setup = str
  
 <script type="application/shiny-prerendered" data-context="server">
 learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "P03", question = structure("What does it mean that the value of \\(a\\) is 3.70?", html = TRUE, class = c("html", 
-"character")), answers = list(structure(list(id = "lnr_ans_e2e8026", 
+"character")), answers = list(structure(list(id = "lnr_ans_11c00d2", 
     option = "When a person has 0 years of education, their are predicted to report 3.70 daily TV hours.", 
     value = "When a person has 0 years of education, their are predicted to report 3.70 daily TV hours.", 
     label = structure("When a person has 0 years of education, their are predicted to report 3.70 daily TV hours.", html = TRUE, class = c("html", 
     "character")), correct = TRUE, message = structure("Another meaningless intercept value!", html = TRUE, class = c("html", 
     "character")), type = "literal"), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_86afe70", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_ea06fa3", 
     option = "The model indicates that each 1 year increase in education was associated with an increase in 3.70 TV hours.", 
     value = "The model indicates that each 1 year increase in education was associated with an increase in 3.70 TV hours.", 
     label = structure("The model indicates that each 1 year increase in education was associated with an increase in 3.70 TV hours.", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = structure("Whoa. That would be a lot of TV", html = TRUE, class = c("html", 
     "character")), type = "literal"), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_8fa0b9f", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_347a37b", 
     option = "The model indicates that the average daily TV hours is 3.70.", 
     value = "The model indicates that the average daily TV hours is 3.70.", 
     label = structure("The model indicates that the average daily TV hours is 3.70.", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_1e23ffe", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_323d55a", 
     option = "The model indicates that the average years of education is 3.70.", 
     value = "The model indicates that the average years of education is 3.70.", 
     label = structure("The model indicates that the average years of education is 3.70.", html = TRUE, class = c("html", 
@@ -1659,7 +2703,7 @@ learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label 
 "character")), incorrect = structure("Incorrect", html = TRUE, class = c("html", 
 "character")), message = NULL, post_message = NULL), ids = list(
     answer = "P03-answer", question = "P03"), loading = NULL, 
-    random_answer_order = TRUE, allow_retry = TRUE, seed = 317834239.351997, 
+    random_answer_order = TRUE, allow_retry = TRUE, seed = 1867648083.13031, 
     options = list()), class = c("learnr_radio", "tutorial_question"
 )), session = session)
 </script>
@@ -1667,22 +2711,22 @@ learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label 
 
 <script type="application/shiny-prerendered" data-context="server">
 learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "P04", question = structure("What is the best interpretation of the slope (-0.08)?", html = TRUE, class = c("html", 
-"character")), answers = list(structure(list(id = "lnr_ans_9308ae3", 
+"character")), answers = list(structure(list(id = "lnr_ans_a0d3df0", 
     option = "For every one unit increase in years of education, a person's daily TV hours is expected to decrease by 0.08.", 
     value = "For every one unit increase in years of education, a person's daily TV hours is expected to decrease by 0.08.", 
     label = structure("For every one unit increase in years of education, a person’s daily TV hours is expected to decrease by 0.08.", html = TRUE, class = c("html", 
     "character")), correct = TRUE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_5394464", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_1807b14", 
     option = "The model predicts that the average daily TV hours is 0.08 greater than the average years of education", 
     value = "The model predicts that the average daily TV hours is 0.08 greater than the average years of education", 
     label = structure("The model predicts that the average daily TV hours is 0.08 greater than the average years of education", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_4e4a2b5", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_71ce4de", 
     option = "When a person has 0 years of education, their predicted TV hours is -0.08.", 
     value = "When a person has 0 years of education, their predicted TV hours is -0.08.", 
     label = structure("When a person has 0 years of education, their predicted TV hours is -0.08.", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_c6026b9", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_2c8ec1", 
     option = "For every one unit increase in a person's TV hours, a person's years of education is expected to decrease by -0.08 years.", 
     value = "For every one unit increase in a person's TV hours, a person's years of education is expected to decrease by -0.08 years.", 
     label = structure("For every one unit increase in a person’s TV hours, a person’s years of education is expected to decrease by -0.08 years.", html = TRUE, class = c("html", 
@@ -1694,7 +2738,7 @@ learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label 
 "character")), incorrect = structure("Incorrect", html = TRUE, class = c("html", 
 "character")), message = NULL, post_message = NULL), ids = list(
     answer = "P04-answer", question = "P04"), loading = NULL, 
-    random_answer_order = TRUE, allow_retry = TRUE, seed = 1905672840.6126, 
+    random_answer_order = TRUE, allow_retry = TRUE, seed = 2060077064.0407, 
     options = list()), class = c("learnr_radio", "tutorial_question"
 )), session = session)
 </script>
@@ -1711,12 +2755,16 @@ output$`tutorial-exercise-reg03-output` <- renderUI({
 learnr:::store_exercise_cache(structure(list(label = "reg03", global_setup = structure(c("# GLOBAL ENVIRONMENT PANE", 
 "## source(\"tutorials/SOC6302-03/custom-setup-styles.R\")", 
 "## library(gssr)", "## library(gssrdoc)", "## data(gss_all)", 
-"## gss24 <- gss_get_yr(2024)", "library(moderndive) # regression output", 
-"library(gtsummary) # tbl_cross", "library(ggeffects) # ggplots with predictions", 
+"## gss24 <- gss_get_yr(2024)", "library(broom.helpers) # needed for moderndive", 
+"library(moderndive) # regression output", "library(gtsummary) # tbl_cross", 
+"library(marginaleffects) # needed for modelbased", "library(modelbased) # ggplots with predictions", 
 "", "## Load packages, custom functions, and styles", "source(\"custom-setup-styles.R\")", 
 "", "## Load all gss", "#gss_all <- readRDS(\"data/gss_all.rds\")", 
 "", "# Get the data only for the 2022 survey respondents", "gss24 <- readRDS(\"data/gss24.rds\")", 
-"", "# Override default discrete color and fill scales", "scale_colour_discrete <- function(...) scale_color_manual(values = my_palette)", 
+"", "gss24$sex <- zap_missing(gss24$sex)", "gss24$sex <- as_factor(gss24$sex)", 
+"gss24$sex <- droplevels(gss24$sex)", "", "## Override default discrete color and fill scales", 
+"scale_colour_discrete <- function(...) ggplot2::scale_color_manual(values = my_palette, ...)", 
+"scale_fill_discrete <- function(...) ggplot2::scale_fill_manual(values = my_palette, ...)", 
 "", "## Options", "tutorial_options(exercise.checker = gradethis::grade_learnr)", 
 "options(dplyr.summarise.inform=F)   # Avoid grouping warning", 
 "options(digits=4)                   # Round numbers", "theme_set(theme_minimal())          # set ggplot theme", 
@@ -1765,12 +2813,16 @@ output$`tutorial-exercise-reg04-output` <- renderUI({
 learnr:::store_exercise_cache(structure(list(label = "reg04", global_setup = structure(c("# GLOBAL ENVIRONMENT PANE", 
 "## source(\"tutorials/SOC6302-03/custom-setup-styles.R\")", 
 "## library(gssr)", "## library(gssrdoc)", "## data(gss_all)", 
-"## gss24 <- gss_get_yr(2024)", "library(moderndive) # regression output", 
-"library(gtsummary) # tbl_cross", "library(ggeffects) # ggplots with predictions", 
+"## gss24 <- gss_get_yr(2024)", "library(broom.helpers) # needed for moderndive", 
+"library(moderndive) # regression output", "library(gtsummary) # tbl_cross", 
+"library(marginaleffects) # needed for modelbased", "library(modelbased) # ggplots with predictions", 
 "", "## Load packages, custom functions, and styles", "source(\"custom-setup-styles.R\")", 
 "", "## Load all gss", "#gss_all <- readRDS(\"data/gss_all.rds\")", 
 "", "# Get the data only for the 2022 survey respondents", "gss24 <- readRDS(\"data/gss24.rds\")", 
-"", "# Override default discrete color and fill scales", "scale_colour_discrete <- function(...) scale_color_manual(values = my_palette)", 
+"", "gss24$sex <- zap_missing(gss24$sex)", "gss24$sex <- as_factor(gss24$sex)", 
+"gss24$sex <- droplevels(gss24$sex)", "", "## Override default discrete color and fill scales", 
+"scale_colour_discrete <- function(...) ggplot2::scale_color_manual(values = my_palette, ...)", 
+"scale_fill_discrete <- function(...) ggplot2::scale_fill_manual(values = my_palette, ...)", 
 "", "## Options", "tutorial_options(exercise.checker = gradethis::grade_learnr)", 
 "options(dplyr.summarise.inform=F)   # Avoid grouping warning", 
 "options(digits=4)                   # Round numbers", "theme_set(theme_minimal())          # set ggplot theme", 
@@ -1811,23 +2863,23 @@ learnr:::store_exercise_cache(structure(list(label = "reg04", global_setup = str
  
 <script type="application/shiny-prerendered" data-context="server">
 learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "P05", question = structure("Is education a statistically significant predictor of daily tv hours?", html = TRUE, class = c("html", 
-"character")), answers = list(structure(list(id = "lnr_ans_ab541d8", 
+"character")), answers = list(structure(list(id = "lnr_ans_23bc37", 
     option = "Yes, because the p-value is less than .01.", value = "Yes, because the p-value is less than .01.", 
     label = structure("Yes, because the p-value is less than .01.", html = TRUE, class = c("html", 
     "character")), correct = TRUE, message = structure("Note the very small sample size. These variables may be related if the sample size were larger.", html = TRUE, class = c("html", 
     "character")), type = "literal"), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_59d066f", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_bf93579", 
     option = "Yes, because the p-value is less than .001.", value = "Yes, because the p-value is less than .001.", 
     label = structure("Yes, because the p-value is less than .001.", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = structure("It’s not statistically significant at this alpha level.", html = TRUE, class = c("html", 
     "character")), type = "literal"), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_3d69103", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_d8a6266", 
     option = "Unknown, because the p-value is missing from the table.", 
     value = "Unknown, because the p-value is missing from the table.", 
     label = structure("Unknown, because the p-value is missing from the table.", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = structure("Look at the star key.", html = TRUE, class = c("html", 
     "character")), type = "literal"), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_e75e603", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_c6d234c", 
     option = "Yes, because p is .028", value = "Yes, because p is .028", 
     label = structure("Yes, because p is .028", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = structure("Careful, this is the standard error.", html = TRUE, class = c("html", 
@@ -1839,7 +2891,7 @@ learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label 
 "character")), incorrect = structure("Incorrect", html = TRUE, class = c("html", 
 "character")), message = NULL, post_message = NULL), ids = list(
     answer = "P05-answer", question = "P05"), loading = NULL, 
-    random_answer_order = TRUE, allow_retry = TRUE, seed = 453557745.288796, 
+    random_answer_order = TRUE, allow_retry = TRUE, seed = 660290744.192528, 
     options = list()), class = c("learnr_radio", "tutorial_question"
 )), session = session)
 </script>
@@ -1847,22 +2899,22 @@ learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label 
 
 <script type="application/shiny-prerendered" data-context="server">
 learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "P06", question = structure("Is education a statistically significant predictor of daily tv hours for men and women?", html = TRUE, class = c("html", 
-"character")), answers = list(structure(list(id = "lnr_ans_2463aad", 
+"character")), answers = list(structure(list(id = "lnr_ans_bd7fa0d", 
     option = "Yes, but only for men (p < 0.05 for men; p > 0.05 for women)", 
     value = "Yes, but only for men (p < 0.05 for men; p > 0.05 for women)", 
     label = structure("Yes, but only for men (p &lt; 0.05 for men; p &gt; 0.05 for women)", html = TRUE, class = c("html", 
     "character")), correct = TRUE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_e8e6108", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_c7e323a", 
     option = "Yes, for both men and women (p < 0.05 for both)", 
     value = "Yes, for both men and women (p < 0.05 for both)", 
     label = structure("Yes, for both men and women (p &lt; 0.05 for both)", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_35ceec9", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_3798810", 
     option = "Yes, but only for women (p < 0.05 for women; p > 0.05 for men)", 
     value = "Yes, but only for women (p < 0.05 for women; p > 0.05 for men)", 
     label = structure("Yes, but only for women (p &lt; 0.05 for women; p &gt; 0.05 for men)", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_7f21a01", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_f3678db", 
     option = "No, for neither group (p > 0.05 for both)", value = "No, for neither group (p > 0.05 for both)", 
     label = structure("No, for neither group (p &gt; 0.05 for both)", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
@@ -1873,7 +2925,7 @@ learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label 
 "character")), incorrect = structure("Incorrect", html = TRUE, class = c("html", 
 "character")), message = NULL, post_message = NULL), ids = list(
     answer = "P06-answer", question = "P06"), loading = NULL, 
-    random_answer_order = TRUE, allow_retry = TRUE, seed = 677511018.684509, 
+    random_answer_order = TRUE, allow_retry = TRUE, seed = 1390308522.85259, 
     options = list()), class = c("learnr_radio", "tutorial_question"
 )), session = session)
 </script>
@@ -1890,12 +2942,16 @@ output$`tutorial-exercise-reg05-output` <- renderUI({
 learnr:::store_exercise_cache(structure(list(label = "reg05", global_setup = structure(c("# GLOBAL ENVIRONMENT PANE", 
 "## source(\"tutorials/SOC6302-03/custom-setup-styles.R\")", 
 "## library(gssr)", "## library(gssrdoc)", "## data(gss_all)", 
-"## gss24 <- gss_get_yr(2024)", "library(moderndive) # regression output", 
-"library(gtsummary) # tbl_cross", "library(ggeffects) # ggplots with predictions", 
+"## gss24 <- gss_get_yr(2024)", "library(broom.helpers) # needed for moderndive", 
+"library(moderndive) # regression output", "library(gtsummary) # tbl_cross", 
+"library(marginaleffects) # needed for modelbased", "library(modelbased) # ggplots with predictions", 
 "", "## Load packages, custom functions, and styles", "source(\"custom-setup-styles.R\")", 
 "", "## Load all gss", "#gss_all <- readRDS(\"data/gss_all.rds\")", 
 "", "# Get the data only for the 2022 survey respondents", "gss24 <- readRDS(\"data/gss24.rds\")", 
-"", "# Override default discrete color and fill scales", "scale_colour_discrete <- function(...) scale_color_manual(values = my_palette)", 
+"", "gss24$sex <- zap_missing(gss24$sex)", "gss24$sex <- as_factor(gss24$sex)", 
+"gss24$sex <- droplevels(gss24$sex)", "", "## Override default discrete color and fill scales", 
+"scale_colour_discrete <- function(...) ggplot2::scale_color_manual(values = my_palette, ...)", 
+"scale_fill_discrete <- function(...) ggplot2::scale_fill_manual(values = my_palette, ...)", 
 "", "## Options", "tutorial_options(exercise.checker = gradethis::grade_learnr)", 
 "options(dplyr.summarise.inform=F)   # Avoid grouping warning", 
 "options(digits=4)                   # Round numbers", "theme_set(theme_minimal())          # set ggplot theme", 
@@ -1903,13 +2959,10 @@ learnr:::store_exercise_cache(structure(list(label = "reg05", global_setup = str
 " # any reason need to see this?!?! CHECK FOR SP22", "  ", "knitr::opts_chunk$set(echo = FALSE,", 
 "                      warning = FALSE, ", "                      messages = FALSE)"
 ), chunk_opts = list(label = "setup", message = FALSE, include = FALSE)), 
-    setup = "gss24$sex <- zap_missing(gss24$sex)\ngss24$sex <- as_factor(gss24$sex)\ngss24$sex <- droplevels(gss24$sex)", 
-    chunks = list(list(label = "reg05-setup", code = "gss24$sex <- zap_missing(gss24$sex)\ngss24$sex <- as_factor(gss24$sex)\ngss24$sex <- droplevels(gss24$sex)", 
-        opts = list(label = "\"reg05-setup\""), engine = "r"), 
-        list(label = "reg05", code = "lm(______ ~ ______ + ______, data = gss24)", 
-            opts = list(label = "\"reg05\"", exercise = "TRUE", 
-                error = "TRUE", warning = "FALSE"), engine = "r")), 
-    code_check = NULL, error_check = NULL, check = structure("grade_code(\"Rock on!\")", chunk_opts = list(
+    setup = NULL, chunks = list(list(label = "reg05", code = "lm(______ ~ ______ + ______, data = gss24)", 
+        opts = list(label = "\"reg05\"", exercise = "TRUE", error = "TRUE", 
+            warning = "FALSE"), engine = "r")), code_check = NULL, 
+    error_check = NULL, check = structure("grade_code(\"Rock on!\")", chunk_opts = list(
         label = "reg05-check")), solution = structure("lm(tvhours ~ educ + sex, data = gss24)", chunk_opts = list(
         label = "reg05-solution")), tests = NULL, options = list(
         eval = FALSE, echo = TRUE, results = "markup", tidy = FALSE, 
@@ -1947,12 +3000,16 @@ output$`tutorial-exercise-reg06-output` <- renderUI({
 learnr:::store_exercise_cache(structure(list(label = "reg06", global_setup = structure(c("# GLOBAL ENVIRONMENT PANE", 
 "## source(\"tutorials/SOC6302-03/custom-setup-styles.R\")", 
 "## library(gssr)", "## library(gssrdoc)", "## data(gss_all)", 
-"## gss24 <- gss_get_yr(2024)", "library(moderndive) # regression output", 
-"library(gtsummary) # tbl_cross", "library(ggeffects) # ggplots with predictions", 
+"## gss24 <- gss_get_yr(2024)", "library(broom.helpers) # needed for moderndive", 
+"library(moderndive) # regression output", "library(gtsummary) # tbl_cross", 
+"library(marginaleffects) # needed for modelbased", "library(modelbased) # ggplots with predictions", 
 "", "## Load packages, custom functions, and styles", "source(\"custom-setup-styles.R\")", 
 "", "## Load all gss", "#gss_all <- readRDS(\"data/gss_all.rds\")", 
 "", "# Get the data only for the 2022 survey respondents", "gss24 <- readRDS(\"data/gss24.rds\")", 
-"", "# Override default discrete color and fill scales", "scale_colour_discrete <- function(...) scale_color_manual(values = my_palette)", 
+"", "gss24$sex <- zap_missing(gss24$sex)", "gss24$sex <- as_factor(gss24$sex)", 
+"gss24$sex <- droplevels(gss24$sex)", "", "## Override default discrete color and fill scales", 
+"scale_colour_discrete <- function(...) ggplot2::scale_color_manual(values = my_palette, ...)", 
+"scale_fill_discrete <- function(...) ggplot2::scale_fill_manual(values = my_palette, ...)", 
 "", "## Options", "tutorial_options(exercise.checker = gradethis::grade_learnr)", 
 "options(dplyr.summarise.inform=F)   # Avoid grouping warning", 
 "options(digits=4)                   # Round numbers", "theme_set(theme_minimal())          # set ggplot theme", 
@@ -1960,11 +3017,11 @@ learnr:::store_exercise_cache(structure(list(label = "reg06", global_setup = str
 " # any reason need to see this?!?! CHECK FOR SP22", "  ", "knitr::opts_chunk$set(echo = FALSE,", 
 "                      warning = FALSE, ", "                      messages = FALSE)"
 ), chunk_opts = list(label = "setup", message = FALSE, include = FALSE)), 
-    setup = NULL, chunks = list(list(label = "reg06", code = "model <- lm(tvhours ~ age + sex, data = gss24)\n\nget_regression_table(_____)", 
+    setup = NULL, chunks = list(list(label = "reg06", code = "model <- lm(tvhours ~ educ + sex, data = gss24)\n\nget_regression_table(_____)", 
         opts = list(label = "\"reg06\"", exercise = "TRUE", error = "TRUE", 
             warning = "FALSE"), engine = "r")), code_check = NULL, 
     error_check = NULL, check = structure("grade_code(\"Well done!\")", chunk_opts = list(
-        label = "reg06-check")), solution = structure(c("model <- lm(tvhours ~ age + sex, data = gss24)", 
+        label = "reg06-check")), solution = structure(c("model <- lm(tvhours ~ educ + sex, data = gss24)", 
     "", "get_regression_table(model)", ""), chunk_opts = list(
         label = "reg06-solution")), tests = NULL, options = list(
         eval = FALSE, echo = TRUE, results = "markup", tidy = FALSE, 
@@ -1984,7 +3041,7 @@ learnr:::store_exercise_cache(structure(list(label = "reg06", global_setup = str
         engine = "r", split = FALSE, include = TRUE, purl = TRUE, 
         max.print = 1000, exercise.timelimit = 60, exercise.checker = "function (...) \n{\n    lifecycle::deprecate_soft(\"0.2.2\", \"grade_learnr()\", \"gradethis_exercise_checker()\")\n    gradethis_exercise_checker(...)\n}", 
         exercise.error.check.code = "gradethis_error_checker()", 
-        messages = FALSE, label = "reg06", exercise = TRUE, code = c("model <- lm(tvhours ~ age + sex, data = gss24)", 
+        messages = FALSE, label = "reg06", exercise = TRUE, code = c("model <- lm(tvhours ~ educ + sex, data = gss24)", 
         "", "get_regression_table(_____)"), out.width.px = 624, 
         out.height.px = 384, params.src = "reg06, exercise=TRUE, error= TRUE, warning=FALSE", 
         fig.num = 0, exercise.df_print = "paged"), engine = "r", 
@@ -1993,23 +3050,23 @@ learnr:::store_exercise_cache(structure(list(label = "reg06", global_setup = str
  
 <script type="application/shiny-prerendered" data-context="server">
 learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "P07", question = structure("Is gender a statistically significant predictor of daily tv hours, after controlling for years of education?", html = TRUE, class = c("html", 
-"character")), answers = list(structure(list(id = "lnr_ans_9050363", 
-    option = "No, because the p-value for sex: female is 0.451 and the confidence interval includes zero", 
-    value = "No, because the p-value for sex: female is 0.451 and the confidence interval includes zero", 
-    label = structure("No, because the p-value for sex: female is 0.451 and the confidence interval includes zero", html = TRUE, class = c("html", 
+"character")), answers = list(structure(list(id = "lnr_ans_760cd76", 
+    option = "No, because the p-value for sex: female is 0.301 and the confidence interval includes zero", 
+    value = "No, because the p-value for sex: female is 0.301 and the confidence interval includes zero", 
+    label = structure("No, because the p-value for sex: female is 0.301 and the confidence interval includes zero", html = TRUE, class = c("html", 
     "character")), correct = TRUE, message = structure("Nice! This is a test of whether the coefficient is different from 0.", html = TRUE, class = c("html", 
     "character")), type = "literal"), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_ad0658c", 
-    option = "Yes, because the coefficient for sex: female is 0.114 and the p-value is 0.021", 
-    value = "Yes, because the coefficient for sex: female is 0.114 and the p-value is 0.021", 
-    label = structure("Yes, because the coefficient for sex: female is 0.114 and the p-value is 0.021", html = TRUE, class = c("html", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_7a0e76d", 
+    option = "Yes, because the coefficient for sex: female is 0.156 and the p-value is 0.301", 
+    value = "Yes, because the coefficient for sex: female is 0.156 and the p-value is 0.301", 
+    label = structure("Yes, because the coefficient for sex: female is 0.156 and the p-value is 0.301", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_9d6bd01", 
-    option = "Yes, because the p-value for sex: female is 0.000 and the confidence interval does not include zero", 
-    value = "Yes, because the p-value for sex: female is 0.000 and the confidence interval does not include zero", 
-    label = structure("Yes, because the p-value for sex: female is 0.000 and the confidence interval does not include zero", html = TRUE, class = c("html", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_1096237", 
+    option = "Yes, because the p-value for sex: female is 0.301 and the confidence interval does not include zero", 
+    value = "Yes, because the p-value for sex: female is 0.301 and the confidence interval does not include zero", 
+    label = structure("Yes, because the p-value for sex: female is 0.301 and the confidence interval does not include zero", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_3a5e2e7", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_d3b764e", 
     option = "No, because the coefficient for sex: female is negative and the standard error is high", 
     value = "No, because the coefficient for sex: female is negative and the standard error is high", 
     label = structure("No, because the coefficient for sex: female is negative and the standard error is high", html = TRUE, class = c("html", 
@@ -2021,7 +3078,7 @@ learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label 
 "character")), incorrect = structure("Incorrect", html = TRUE, class = c("html", 
 "character")), message = NULL, post_message = NULL), ids = list(
     answer = "P07-answer", question = "P07"), loading = NULL, 
-    random_answer_order = TRUE, allow_retry = TRUE, seed = 1348621312.372, 
+    random_answer_order = TRUE, allow_retry = TRUE, seed = 595491865.222703, 
     options = list()), class = c("learnr_radio", "tutorial_question"
 )), session = session)
 </script>
@@ -2038,12 +3095,16 @@ output$`tutorial-exercise-preds-output` <- renderUI({
 learnr:::store_exercise_cache(structure(list(label = "preds", global_setup = structure(c("# GLOBAL ENVIRONMENT PANE", 
 "## source(\"tutorials/SOC6302-03/custom-setup-styles.R\")", 
 "## library(gssr)", "## library(gssrdoc)", "## data(gss_all)", 
-"## gss24 <- gss_get_yr(2024)", "library(moderndive) # regression output", 
-"library(gtsummary) # tbl_cross", "library(ggeffects) # ggplots with predictions", 
+"## gss24 <- gss_get_yr(2024)", "library(broom.helpers) # needed for moderndive", 
+"library(moderndive) # regression output", "library(gtsummary) # tbl_cross", 
+"library(marginaleffects) # needed for modelbased", "library(modelbased) # ggplots with predictions", 
 "", "## Load packages, custom functions, and styles", "source(\"custom-setup-styles.R\")", 
 "", "## Load all gss", "#gss_all <- readRDS(\"data/gss_all.rds\")", 
 "", "# Get the data only for the 2022 survey respondents", "gss24 <- readRDS(\"data/gss24.rds\")", 
-"", "# Override default discrete color and fill scales", "scale_colour_discrete <- function(...) scale_color_manual(values = my_palette)", 
+"", "gss24$sex <- zap_missing(gss24$sex)", "gss24$sex <- as_factor(gss24$sex)", 
+"gss24$sex <- droplevels(gss24$sex)", "", "## Override default discrete color and fill scales", 
+"scale_colour_discrete <- function(...) ggplot2::scale_color_manual(values = my_palette, ...)", 
+"scale_fill_discrete <- function(...) ggplot2::scale_fill_manual(values = my_palette, ...)", 
 "", "## Options", "tutorial_options(exercise.checker = gradethis::grade_learnr)", 
 "options(dplyr.summarise.inform=F)   # Avoid grouping warning", 
 "options(digits=4)                   # Round numbers", "theme_set(theme_minimal())          # set ggplot theme", 
@@ -2051,7 +3112,7 @@ learnr:::store_exercise_cache(structure(list(label = "preds", global_setup = str
 " # any reason need to see this?!?! CHECK FOR SP22", "  ", "knitr::opts_chunk$set(echo = FALSE,", 
 "                      warning = FALSE, ", "                      messages = FALSE)"
 ), chunk_opts = list(label = "setup", message = FALSE, include = FALSE)), 
-    setup = NULL, chunks = list(list(label = "preds", code = "# Fit the model\nmodel <- lm(tvhours ~ educ + sex, data = gss24)\n\n# Get predicted values\npreds <- ggpredict(model, terms = c(\"educ\", \"sex\"))\n\n# Preview the new df\npreds |>\n  as_tibble() |> \n  head()", 
+    setup = NULL, chunks = list(list(label = "preds", code = "# Fit the model\nmodel <- lm(tvhours ~ educ + sex, data = gss24)\n\n# Get predicted values\npreds <- estimate_means(model, by = c(\"educ\", \"sex\"))\n\n# Preview the new df\npreds |>\n  as_tibble() |> \n  head()", 
         opts = list(label = "\"preds\"", exercise = "TRUE"), 
         engine = "r")), code_check = NULL, error_check = NULL, 
     check = NULL, solution = NULL, tests = NULL, options = list(
@@ -2074,7 +3135,7 @@ learnr:::store_exercise_cache(structure(list(label = "preds", global_setup = str
         exercise.error.check.code = "gradethis_error_checker()", 
         messages = FALSE, label = "preds", exercise = TRUE, code = c("# Fit the model", 
         "model <- lm(tvhours ~ educ + sex, data = gss24)", "", 
-        "# Get predicted values", "preds <- ggpredict(model, terms = c(\"educ\", \"sex\"))", 
+        "# Get predicted values", "preds <- estimate_means(model, by = c(\"educ\", \"sex\"))", 
         "", "# Preview the new df", "preds |>", "  as_tibble() |> ", 
         "  head()"), out.width.px = 624, out.height.px = 384, 
         params.src = "preds, exercise=TRUE", fig.num = 0, exercise.df_print = "paged"), 
@@ -2094,12 +3155,16 @@ output$`tutorial-exercise-plot-output` <- renderUI({
 learnr:::store_exercise_cache(structure(list(label = "plot", global_setup = structure(c("# GLOBAL ENVIRONMENT PANE", 
 "## source(\"tutorials/SOC6302-03/custom-setup-styles.R\")", 
 "## library(gssr)", "## library(gssrdoc)", "## data(gss_all)", 
-"## gss24 <- gss_get_yr(2024)", "library(moderndive) # regression output", 
-"library(gtsummary) # tbl_cross", "library(ggeffects) # ggplots with predictions", 
+"## gss24 <- gss_get_yr(2024)", "library(broom.helpers) # needed for moderndive", 
+"library(moderndive) # regression output", "library(gtsummary) # tbl_cross", 
+"library(marginaleffects) # needed for modelbased", "library(modelbased) # ggplots with predictions", 
 "", "## Load packages, custom functions, and styles", "source(\"custom-setup-styles.R\")", 
 "", "## Load all gss", "#gss_all <- readRDS(\"data/gss_all.rds\")", 
 "", "# Get the data only for the 2022 survey respondents", "gss24 <- readRDS(\"data/gss24.rds\")", 
-"", "# Override default discrete color and fill scales", "scale_colour_discrete <- function(...) scale_color_manual(values = my_palette)", 
+"", "gss24$sex <- zap_missing(gss24$sex)", "gss24$sex <- as_factor(gss24$sex)", 
+"gss24$sex <- droplevels(gss24$sex)", "", "## Override default discrete color and fill scales", 
+"scale_colour_discrete <- function(...) ggplot2::scale_color_manual(values = my_palette, ...)", 
+"scale_fill_discrete <- function(...) ggplot2::scale_fill_manual(values = my_palette, ...)", 
 "", "## Options", "tutorial_options(exercise.checker = gradethis::grade_learnr)", 
 "options(dplyr.summarise.inform=F)   # Avoid grouping warning", 
 "options(digits=4)                   # Round numbers", "theme_set(theme_minimal())          # set ggplot theme", 
@@ -2107,7 +3172,7 @@ learnr:::store_exercise_cache(structure(list(label = "plot", global_setup = stru
 " # any reason need to see this?!?! CHECK FOR SP22", "  ", "knitr::opts_chunk$set(echo = FALSE,", 
 "                      warning = FALSE, ", "                      messages = FALSE)"
 ), chunk_opts = list(label = "setup", message = FALSE, include = FALSE)), 
-    setup = NULL, chunks = list(list(label = "plot", code = "# Fit the model\nmodel <- lm(tvhours ~ educ + sex, data = gss24)\n\n# Get predicted values\npreds <- ggpredict(model, terms = c(\"educ\", \"sex\"))\n\n# Plot using ggplot2\nggplot(preds, aes(x = x, y = predicted, color = group)) +\n  geom_line(size = 1.2) +\n  labs(\n    title = \"Predicted Daily TV Hours by Education and Sex\",\n    x = \"Education Level\",\n    y = \"Predicted TV Hours\",\n    color = \"Sex\",\n    fill = \"Sex\"\n  ) +\n  theme_minimal() +\n  theme(legend.position = \"top\")", 
+    setup = NULL, chunks = list(list(label = "plot", code = "# Fit the model\nmodel <- lm(tvhours ~ educ + sex, data = gss24)\n\n# Get predicted values\npreds <- estimate_means(model, by = c(\"educ\", \"sex\"))\n\n# Plot using ggplot2\npreds |>\n  ggplot(aes(x = educ, y = Mean, color = sex)) +\n    geom_line(size = 1.2) +\n    labs(\n      title = \"Predicted Daily TV Hours by Education and Sex\",\n      x = \"Education Level\",\n      y = \"Predicted TV Hours\",\n      color = \"Sex\",\n      fill = \"Sex\"\n    ) +\n    theme_minimal() +\n    theme(legend.position = \"top\")", 
         opts = list(label = "\"plot\"", exercise = "TRUE"), engine = "r")), 
     code_check = NULL, error_check = NULL, check = NULL, solution = NULL, 
     tests = NULL, options = list(eval = FALSE, echo = TRUE, results = "markup", 
@@ -2130,12 +3195,12 @@ learnr:::store_exercise_cache(structure(list(label = "plot", global_setup = stru
         exercise.error.check.code = "gradethis_error_checker()", 
         messages = FALSE, label = "plot", exercise = TRUE, code = c("# Fit the model", 
         "model <- lm(tvhours ~ educ + sex, data = gss24)", "", 
-        "# Get predicted values", "preds <- ggpredict(model, terms = c(\"educ\", \"sex\"))", 
-        "", "# Plot using ggplot2", "ggplot(preds, aes(x = x, y = predicted, color = group)) +", 
-        "  geom_line(size = 1.2) +", "  labs(", "    title = \"Predicted Daily TV Hours by Education and Sex\",", 
-        "    x = \"Education Level\",", "    y = \"Predicted TV Hours\",", 
-        "    color = \"Sex\",", "    fill = \"Sex\"", "  ) +", 
-        "  theme_minimal() +", "  theme(legend.position = \"top\")"
+        "# Get predicted values", "preds <- estimate_means(model, by = c(\"educ\", \"sex\"))", 
+        "", "# Plot using ggplot2", "preds |>", "  ggplot(aes(x = educ, y = Mean, color = sex)) +", 
+        "    geom_line(size = 1.2) +", "    labs(", "      title = \"Predicted Daily TV Hours by Education and Sex\",", 
+        "      x = \"Education Level\",", "      y = \"Predicted TV Hours\",", 
+        "      color = \"Sex\",", "      fill = \"Sex\"", "    ) +", 
+        "    theme_minimal() +", "    theme(legend.position = \"top\")"
         ), out.width.px = 624, out.height.px = 384, params.src = "plot, exercise=TRUE", 
         fig.num = 0, exercise.df_print = "paged"), engine = "r", 
     version = "4"), class = c("r", "tutorial_exercise")))
@@ -2153,12 +3218,16 @@ output$`tutorial-exercise-interaction-model-output` <- renderUI({
 learnr:::store_exercise_cache(structure(list(label = "interaction-model", global_setup = structure(c("# GLOBAL ENVIRONMENT PANE", 
 "## source(\"tutorials/SOC6302-03/custom-setup-styles.R\")", 
 "## library(gssr)", "## library(gssrdoc)", "## data(gss_all)", 
-"## gss24 <- gss_get_yr(2024)", "library(moderndive) # regression output", 
-"library(gtsummary) # tbl_cross", "library(ggeffects) # ggplots with predictions", 
+"## gss24 <- gss_get_yr(2024)", "library(broom.helpers) # needed for moderndive", 
+"library(moderndive) # regression output", "library(gtsummary) # tbl_cross", 
+"library(marginaleffects) # needed for modelbased", "library(modelbased) # ggplots with predictions", 
 "", "## Load packages, custom functions, and styles", "source(\"custom-setup-styles.R\")", 
 "", "## Load all gss", "#gss_all <- readRDS(\"data/gss_all.rds\")", 
 "", "# Get the data only for the 2022 survey respondents", "gss24 <- readRDS(\"data/gss24.rds\")", 
-"", "# Override default discrete color and fill scales", "scale_colour_discrete <- function(...) scale_color_manual(values = my_palette)", 
+"", "gss24$sex <- zap_missing(gss24$sex)", "gss24$sex <- as_factor(gss24$sex)", 
+"gss24$sex <- droplevels(gss24$sex)", "", "## Override default discrete color and fill scales", 
+"scale_colour_discrete <- function(...) ggplot2::scale_color_manual(values = my_palette, ...)", 
+"scale_fill_discrete <- function(...) ggplot2::scale_fill_manual(values = my_palette, ...)", 
 "", "## Options", "tutorial_options(exercise.checker = gradethis::grade_learnr)", 
 "options(dplyr.summarise.inform=F)   # Avoid grouping warning", 
 "options(digits=4)                   # Round numbers", "theme_set(theme_minimal())          # set ggplot theme", 
@@ -2208,12 +3277,16 @@ output$`tutorial-exercise-interaction-plot-output` <- renderUI({
 learnr:::store_exercise_cache(structure(list(label = "interaction-plot", global_setup = structure(c("# GLOBAL ENVIRONMENT PANE", 
 "## source(\"tutorials/SOC6302-03/custom-setup-styles.R\")", 
 "## library(gssr)", "## library(gssrdoc)", "## data(gss_all)", 
-"## gss24 <- gss_get_yr(2024)", "library(moderndive) # regression output", 
-"library(gtsummary) # tbl_cross", "library(ggeffects) # ggplots with predictions", 
+"## gss24 <- gss_get_yr(2024)", "library(broom.helpers) # needed for moderndive", 
+"library(moderndive) # regression output", "library(gtsummary) # tbl_cross", 
+"library(marginaleffects) # needed for modelbased", "library(modelbased) # ggplots with predictions", 
 "", "## Load packages, custom functions, and styles", "source(\"custom-setup-styles.R\")", 
 "", "## Load all gss", "#gss_all <- readRDS(\"data/gss_all.rds\")", 
 "", "# Get the data only for the 2022 survey respondents", "gss24 <- readRDS(\"data/gss24.rds\")", 
-"", "# Override default discrete color and fill scales", "scale_colour_discrete <- function(...) scale_color_manual(values = my_palette)", 
+"", "gss24$sex <- zap_missing(gss24$sex)", "gss24$sex <- as_factor(gss24$sex)", 
+"gss24$sex <- droplevels(gss24$sex)", "", "## Override default discrete color and fill scales", 
+"scale_colour_discrete <- function(...) ggplot2::scale_color_manual(values = my_palette, ...)", 
+"scale_fill_discrete <- function(...) ggplot2::scale_fill_manual(values = my_palette, ...)", 
 "", "## Options", "tutorial_options(exercise.checker = gradethis::grade_learnr)", 
 "options(dplyr.summarise.inform=F)   # Avoid grouping warning", 
 "options(digits=4)                   # Round numbers", "theme_set(theme_minimal())          # set ggplot theme", 
@@ -2222,7 +3295,7 @@ learnr:::store_exercise_cache(structure(list(label = "interaction-plot", global_
 "                      warning = FALSE, ", "                      messages = FALSE)"
 ), chunk_opts = list(label = "setup", message = FALSE, include = FALSE)), 
     setup = NULL, chunks = list(list(label = "interaction-plot", 
-        code = "# Fit the model\nmodel <- lm(tvhours ~ educ * sex, data = gss24)\n\n# Get predicted values\npreds <- ggpredict(model, terms = c(\"educ\", \"sex\"))\n\n# Plot using ggplot2\nggplot(preds, aes(x = x, y = predicted, color = group)) +\n  geom_line(size = 1.2) +\n  labs(\n    title = \"Predicted Daily TV Hours by Education and Sex\",\n    x = \"Education Level\",\n    y = \"Predicted TV Hours\",\n    color = \"Sex\",\n    fill = \"Sex\"\n  ) +\n  theme_minimal() +\n  theme(legend.position = \"top\")", 
+        code = "\n# Fit the model\nmodel <- lm(tvhours ~ educ * sex, data = gss24)\n\n# Get predicted values\npreds <- estimate_means(model, by = c(\"educ\", \"sex\"))\n\n# Plot using ggplot2\npreds |>\n  ggplot(aes(x = educ, y = Mean, color = sex)) +\n    geom_line(size = 1.2) +\n    labs(\n      title = \"Predicted Daily TV Hours by Education and Sex\",\n      x = \"Education Level\",\n      y = \"Predicted TV Hours\",\n      color = \"Sex\",\n      fill = \"Sex\"\n    ) +\n    theme_minimal() +\n    theme(legend.position = \"top\")", 
         opts = list(label = "\"interaction-plot\"", exercise = "TRUE"), 
         engine = "r")), code_check = NULL, error_check = NULL, 
     check = NULL, solution = NULL, tests = NULL, options = list(
@@ -2244,13 +3317,13 @@ learnr:::store_exercise_cache(structure(list(label = "interaction-plot", global_
         max.print = 1000, exercise.timelimit = 60, exercise.checker = "function (...) \n{\n    lifecycle::deprecate_soft(\"0.2.2\", \"grade_learnr()\", \"gradethis_exercise_checker()\")\n    gradethis_exercise_checker(...)\n}", 
         exercise.error.check.code = "gradethis_error_checker()", 
         messages = FALSE, label = "interaction-plot", exercise = TRUE, 
-        code = c("# Fit the model", "model <- lm(tvhours ~ educ * sex, data = gss24)", 
-        "", "# Get predicted values", "preds <- ggpredict(model, terms = c(\"educ\", \"sex\"))", 
-        "", "# Plot using ggplot2", "ggplot(preds, aes(x = x, y = predicted, color = group)) +", 
-        "  geom_line(size = 1.2) +", "  labs(", "    title = \"Predicted Daily TV Hours by Education and Sex\",", 
-        "    x = \"Education Level\",", "    y = \"Predicted TV Hours\",", 
-        "    color = \"Sex\",", "    fill = \"Sex\"", "  ) +", 
-        "  theme_minimal() +", "  theme(legend.position = \"top\")"
+        code = c("", "# Fit the model", "model <- lm(tvhours ~ educ * sex, data = gss24)", 
+        "", "# Get predicted values", "preds <- estimate_means(model, by = c(\"educ\", \"sex\"))", 
+        "", "# Plot using ggplot2", "preds |>", "  ggplot(aes(x = educ, y = Mean, color = sex)) +", 
+        "    geom_line(size = 1.2) +", "    labs(", "      title = \"Predicted Daily TV Hours by Education and Sex\",", 
+        "      x = \"Education Level\",", "      y = \"Predicted TV Hours\",", 
+        "      color = \"Sex\",", "      fill = \"Sex\"", "    ) +", 
+        "    theme_minimal() +", "    theme(legend.position = \"top\")"
         ), out.width.px = 624, out.height.px = 384, params.src = "interaction-plot, exercise=TRUE", 
         fig.num = 0, exercise.df_print = "paged"), engine = "r", 
     version = "4"), class = c("r", "tutorial_exercise")))
@@ -2258,26 +3331,26 @@ learnr:::store_exercise_cache(structure(list(label = "interaction-plot", global_
 
 
 <script type="application/shiny-prerendered" data-context="server">
-learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "Q01", question = structure("Q01. What does it mean that the value of \\(a\\) is 23.44?", html = TRUE, class = c("html", 
-"character")), answers = list(structure(list(id = "lnr_ans_92875f9", 
-    option = "Women's average age when their first child is born is predicted to be 23.44 years.", 
-    value = "Women's average age when their first child is born is predicted to be 23.44 years.", 
-    label = structure("Women’s average age when their first child is born is predicted to be 23.44 years.", html = TRUE, class = c("html", 
+learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "Q01", question = structure("Q01. What does the intercept mean?", html = TRUE, class = c("html", 
+"character")), answers = list(structure(list(id = "lnr_ans_a269619", 
+    option = "The predicted weekly work hours for someone zero years of age and with zero years of education.", 
+    value = "The predicted weekly work hours for someone zero years of age and with zero years of education.", 
+    label = structure("The predicted weekly work hours for someone zero years of age and with zero years of education.", html = TRUE, class = c("html", 
     "character")), correct = TRUE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_ab84a93", 
-    option = "The model indicates that each 1 year increase in age was associated with an increase of 23.44 years in age at the time a first child is born.", 
-    value = "The model indicates that each 1 year increase in age was associated with an increase of 23.44 years in age at the time a first child is born.", 
-    label = structure("The model indicates that each 1 year increase in age was associated with an increase of 23.44 years in age at the time a first child is born.", html = TRUE, class = c("html", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_736b035", 
+    option = "The average number of hours worked per week by individuals with average age and education.", 
+    value = "The average number of hours worked per week by individuals with average age and education.", 
+    label = structure("The average number of hours worked per week by individuals with average age and education.", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_edaacd4", 
-    option = "The model indicates that the average age when a first child is born is 23.44 years old.", 
-    value = "The model indicates that the average age when a first child is born is 23.44 years old.", 
-    label = structure("The model indicates that the average age when a first child is born is 23.44 years old.", html = TRUE, class = c("html", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_cc1ce97", 
+    option = "The maximum number of hours worked per week in the sample.", 
+    value = "The maximum number of hours worked per week in the sample.", 
+    label = structure("The maximum number of hours worked per week in the sample.", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_ad15fba", 
-    option = "Men's average age when their first child is born is predicted to be 23.44 years.", 
-    value = "Men's average age when their first child is born is predicted to be 23.44 years.", 
-    label = structure("Men’s average age when their first child is born is predicted to be 23.44 years.", html = TRUE, class = c("html", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_730af8d", 
+    option = "The effect of age and education on weekly work hours.", 
+    value = "The effect of age and education on weekly work hours.", 
+    label = structure("The effect of age and education on weekly work hours.", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
 "tutorial_quiz_answer"))), button_labels = list(submit = structure("<span data-i18n=\"button.questionsubmit\">Submit Answer<\u002fspan>", html = TRUE, class = c("html", 
 "character")), try_again = structure("<span data-i18n=\"button.questiontryagain\">Try Again<\u002fspan>", html = TRUE, class = c("html", 
@@ -2286,32 +3359,32 @@ learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label 
 "character")), incorrect = structure("Incorrect", html = TRUE, class = c("html", 
 "character")), message = NULL, post_message = NULL), ids = list(
     answer = "Q01-answer", question = "Q01"), loading = NULL, 
-    random_answer_order = TRUE, allow_retry = TRUE, seed = 1153418378.4629, 
+    random_answer_order = TRUE, allow_retry = TRUE, seed = 659453060.692918, 
     options = list()), class = c("learnr_radio", "tutorial_question"
 )), session = session)
 </script>
  
 <script type="application/shiny-prerendered" data-context="server">
-learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "Q02", question = structure("Q14. What is the best interpretation of the slope (2.11)?", html = TRUE, class = c("html", 
-"character")), answers = list(structure(list(id = "lnr_ans_3c876c6", 
-    option = "Compared with women, men's average age when their first child is born is expected to be 2.11 years greater.", 
-    value = "Compared with women, men's average age when their first child is born is expected to be 2.11 years greater.", 
-    label = structure("Compared with women, men’s average age when their first child is born is expected to be 2.11 years greater.", html = TRUE, class = c("html", 
+learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "Q02", question = structure("Q02. What is the best interpretation of the coefficient for age?", html = TRUE, class = c("html", 
+"character")), answers = list(structure(list(id = "lnr_ans_2d9dc8d", 
+    option = "Each additional year of age is associated with working 0.112 fewer hours per week, on average, holding education constant.", 
+    value = "Each additional year of age is associated with working 0.112 fewer hours per week, on average, holding education constant.", 
+    label = structure("Each additional year of age is associated with working 0.112 fewer hours per week, on average, holding education constant.", html = TRUE, class = c("html", 
     "character")), correct = TRUE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_a9a5a4f", 
-    option = "Men's average age when their first child is born is predicted to be 2.11 years", 
-    value = "Men's average age when their first child is born is predicted to be 2.11 years", 
-    label = structure("Men’s average age when their first child is born is predicted to be 2.11 years", html = TRUE, class = c("html", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_86699fe", 
+    option = "Older individuals work 0.112 fewer hours per week than younger individuals.", 
+    value = "Older individuals work 0.112 fewer hours per week than younger individuals.", 
+    label = structure("Older individuals work 0.112 fewer hours per week than younger individuals.", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_6d40a64", 
-    option = "The model indicates that for every one additional child born, a person's average age increases by 2.11 years", 
-    value = "The model indicates that for every one additional child born, a person's average age increases by 2.11 years", 
-    label = structure("The model indicates that for every one additional child born, a person’s average age increases by 2.11 years", html = TRUE, class = c("html", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_cbed95f", 
+    option = "Age causes a reduction of 0.112 hours in weekly work time for everyone.", 
+    value = "Age causes a reduction of 0.112 hours in weekly work time for everyone.", 
+    label = structure("Age causes a reduction of 0.112 hours in weekly work time for everyone.", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_f999dfb", 
-    option = "Compared with men, women's average age when their first child is born is expected to be 2.11 years greater.", 
-    value = "Compared with men, women's average age when their first child is born is expected to be 2.11 years greater.", 
-    label = structure("Compared with men, women’s average age when their first child is born is expected to be 2.11 years greater.", html = TRUE, class = c("html", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_b978942", 
+    option = "People with higher education work 0.112 fewer hours per week as they age.", 
+    value = "People with higher education work 0.112 fewer hours per week as they age.", 
+    label = structure("People with higher education work 0.112 fewer hours per week as they age.", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
 "tutorial_quiz_answer"))), button_labels = list(submit = structure("<span data-i18n=\"button.questionsubmit\">Submit Answer<\u002fspan>", html = TRUE, class = c("html", 
 "character")), try_again = structure("<span data-i18n=\"button.questiontryagain\">Try Again<\u002fspan>", html = TRUE, class = c("html", 
@@ -2320,30 +3393,33 @@ learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label 
 "character")), incorrect = structure("Incorrect", html = TRUE, class = c("html", 
 "character")), message = NULL, post_message = NULL), ids = list(
     answer = "Q02-answer", question = "Q02"), loading = NULL, 
-    random_answer_order = TRUE, allow_retry = TRUE, seed = 1059350670.0067, 
+    random_answer_order = TRUE, allow_retry = TRUE, seed = 2015838330.0613, 
     options = list()), class = c("learnr_radio", "tutorial_question"
 )), session = session)
 </script>
 
 
 <script type="application/shiny-prerendered" data-context="server">
-learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "Q03", question = structure("Q15. Is gender a statistically significant predictor of someone’s age when their first child was born?", html = TRUE, class = c("html", 
-"character")), answers = list(structure(list(id = "lnr_ans_b060139", 
-    option = "Yes, because the p-value is less than .001.", value = "Yes, because the p-value is less than .001.", 
-    label = structure("Yes, because the p-value is less than .001.", html = TRUE, class = c("html", 
+learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "Q03", question = structure("Q03. Is education a statistically significant predictor of weekly work hours?", html = TRUE, class = c("html", 
+"character")), answers = list(structure(list(id = "lnr_ans_6c3ff01", 
+    option = "No, because the p-value is greater than 0.05.", 
+    value = "No, because the p-value is greater than 0.05.", 
+    label = structure("No, because the p-value is greater than 0.05.", html = TRUE, class = c("html", 
     "character")), correct = TRUE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_58cb176", 
-    option = "No, because the p-value is greater than .05.", 
-    value = "No, because the p-value is greater than .05.", label = structure("No, because the p-value is greater than .05.", html = TRUE, class = c("html", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_bad6615", 
+    option = "Yes, because the coefficient for education is positive.", 
+    value = "Yes, because the coefficient for education is positive.", 
+    label = structure("Yes, because the coefficient for education is positive.", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_156826a", 
-    option = "No, because the p-value is equal to .001.", value = "No, because the p-value is equal to .001.", 
-    label = structure("No, because the p-value is equal to .001.", html = TRUE, class = c("html", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_32fbff5", 
+    option = "Yes, because the confidence interval does not include zero.", 
+    value = "Yes, because the confidence interval does not include zero.", 
+    label = structure("Yes, because the confidence interval does not include zero.", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_c8fbf8", 
-    option = "Yes, because the coefficient (2.11) is positive.", 
-    value = "Yes, because the coefficient (2.11) is positive.", 
-    label = structure("Yes, because the coefficient (2.11) is positive.", html = TRUE, class = c("html", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_1498aa2", 
+    option = "No, because the effect of education is negative.", 
+    value = "No, because the effect of education is negative.", 
+    label = structure("No, because the effect of education is negative.", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
 "tutorial_quiz_answer"))), button_labels = list(submit = structure("<span data-i18n=\"button.questionsubmit\">Submit Answer<\u002fspan>", html = TRUE, class = c("html", 
 "character")), try_again = structure("<span data-i18n=\"button.questiontryagain\">Try Again<\u002fspan>", html = TRUE, class = c("html", 
@@ -2352,29 +3428,32 @@ learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label 
 "character")), incorrect = structure("Incorrect", html = TRUE, class = c("html", 
 "character")), message = NULL, post_message = NULL), ids = list(
     answer = "Q03-answer", question = "Q03"), loading = NULL, 
-    random_answer_order = TRUE, allow_retry = TRUE, seed = 216407404.399227, 
+    random_answer_order = TRUE, allow_retry = TRUE, seed = 1355034678.36901, 
     options = list()), class = c("learnr_radio", "tutorial_question"
 )), session = session)
 </script>
  
 <script type="application/shiny-prerendered" data-context="server">
-learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "Q11", question = structure("Q11. Is years of education a statistically significant predictor of age at first marriage?", html = TRUE, class = c("html", 
-"character")), answers = list(structure(list(id = "lnr_ans_8288f93", 
-    option = "Yes, because the p-value is less than .001.", value = "Yes, because the p-value is less than .001.", 
-    label = structure("Yes, because the p-value is less than .001.", html = TRUE, class = c("html", 
+learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "Q04", question = structure("Q04. What does the intercept represent in this model?", html = TRUE, class = c("html", 
+"character")), answers = list(structure(list(id = "lnr_ans_f0da2a9", 
+    option = "The predicted weekly work hours for a man who is 0 years old.", 
+    value = "The predicted weekly work hours for a man who is 0 years old.", 
+    label = structure("The predicted weekly work hours for a man who is 0 years old.", html = TRUE, class = c("html", 
     "character")), correct = TRUE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_d8f904a", 
-    option = "No, because the p-value is greater than .05.", 
-    value = "No, because the p-value is greater than .05.", label = structure("No, because the p-value is greater than .05.", html = TRUE, class = c("html", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_8f7e649", 
+    option = "The average number of hours worked per week by all individuals in the sample.", 
+    value = "The average number of hours worked per week by all individuals in the sample.", 
+    label = structure("The average number of hours worked per week by all individuals in the sample.", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_4761afa", 
-    option = "No, because the p-value is equal to .001.", value = "No, because the p-value is equal to .001.", 
-    label = structure("No, because the p-value is equal to .001.", html = TRUE, class = c("html", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_9eda62d", 
+    option = "The predicted weekly work hours for a women of average age.", 
+    value = "The predicted weekly work hours for a women of average age.", 
+    label = structure("The predicted weekly work hours for a women of average age.", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_7420597", 
-    option = "Yes, because the coefficient (.501) is positive.", 
-    value = "Yes, because the coefficient (.501) is positive.", 
-    label = structure("Yes, because the coefficient (.501) is positive.", html = TRUE, class = c("html", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_f2be5e4", 
+    option = "The predicted weekly work hours for a man of average age.", 
+    value = "The predicted weekly work hours for a man of average age.", 
+    label = structure("The predicted weekly work hours for a man of average age.", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
 "tutorial_quiz_answer"))), button_labels = list(submit = structure("<span data-i18n=\"button.questionsubmit\">Submit Answer<\u002fspan>", html = TRUE, class = c("html", 
 "character")), try_again = structure("<span data-i18n=\"button.questiontryagain\">Try Again<\u002fspan>", html = TRUE, class = c("html", 
@@ -2382,8 +3461,142 @@ learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label 
 "character")), try_again = structure("Incorrect", html = TRUE, class = c("html", 
 "character")), incorrect = structure("Incorrect", html = TRUE, class = c("html", 
 "character")), message = NULL, post_message = NULL), ids = list(
-    answer = "Q11-answer", question = "Q11"), loading = NULL, 
-    random_answer_order = TRUE, allow_retry = TRUE, seed = 1268735004.9092, 
+    answer = "Q04-answer", question = "Q04"), loading = NULL, 
+    random_answer_order = TRUE, allow_retry = TRUE, seed = 340140105.34161, 
+    options = list()), class = c("learnr_radio", "tutorial_question"
+)), session = session)
+</script>
+
+
+<script type="application/shiny-prerendered" data-context="server">
+learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "Q05", question = structure("Q05. What is the best interpretation of the coefficient for age?", html = TRUE, class = c("html", 
+"character")), answers = list(structure(list(id = "lnr_ans_b687bb8", 
+    option = "Adjusting for gender, each additional year of age is associated with working on average 0.101 fewer hours per week.", 
+    value = "Adjusting for gender, each additional year of age is associated with working on average 0.101 fewer hours per week.", 
+    label = structure("Adjusting for gender, each additional year of age is associated with working on average 0.101 fewer hours per week.", html = TRUE, class = c("html", 
+    "character")), correct = TRUE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_373ac7c", 
+    option = "Older individuals work 0.101 fewer hours per week than younger individuals.", 
+    value = "Older individuals work 0.101 fewer hours per week than younger individuals.", 
+    label = structure("Older individuals work 0.101 fewer hours per week than younger individuals.", html = TRUE, class = c("html", 
+    "character")), correct = FALSE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_8cc206f", 
+    option = "Age causes an average reduction of 0.101 hours in weekly work time, adjusting for gender.", 
+    value = "Age causes an average reduction of 0.101 hours in weekly work time, adjusting for gender.", 
+    label = structure("Age causes an average reduction of 0.101 hours in weekly work time, adjusting for gender.", html = TRUE, class = c("html", 
+    "character")), correct = FALSE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_5ba351c", 
+    option = "The predicted weekly work hours for man is reduced by .101 weekly work hours.", 
+    value = "The predicted weekly work hours for man is reduced by .101 weekly work hours.", 
+    label = structure("The predicted weekly work hours for man is reduced by .101 weekly work hours.", html = TRUE, class = c("html", 
+    "character")), correct = FALSE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
+"tutorial_quiz_answer"))), button_labels = list(submit = structure("<span data-i18n=\"button.questionsubmit\">Submit Answer<\u002fspan>", html = TRUE, class = c("html", 
+"character")), try_again = structure("<span data-i18n=\"button.questiontryagain\">Try Again<\u002fspan>", html = TRUE, class = c("html", 
+"character"))), messages = list(correct = structure("Correct!", html = TRUE, class = c("html", 
+"character")), try_again = structure("Incorrect", html = TRUE, class = c("html", 
+"character")), incorrect = structure("Incorrect", html = TRUE, class = c("html", 
+"character")), message = NULL, post_message = NULL), ids = list(
+    answer = "Q05-answer", question = "Q05"), loading = NULL, 
+    random_answer_order = TRUE, allow_retry = TRUE, seed = 1487267441.80744, 
+    options = list()), class = c("learnr_radio", "tutorial_question"
+)), session = session)
+</script>
+ 
+<script type="application/shiny-prerendered" data-context="server">
+learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "Q06", question = structure("Q06. Is age a statistically significant predictor of weekly work hours?", html = TRUE, class = c("html", 
+"character")), answers = list(structure(list(id = "lnr_ans_bcbb200", 
+    option = "Yes, because the p-value is less than 0.05", value = "Yes, because the p-value is less than 0.05", 
+    label = structure("Yes, because the p-value is less than 0.05", html = TRUE, class = c("html", 
+    "character")), correct = TRUE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_23afd0b", 
+    option = "No, because the coefficient is small", value = "No, because the coefficient is small", 
+    label = structure("No, because the coefficient is small", html = TRUE, class = c("html", 
+    "character")), correct = FALSE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_441ffb0", 
+    option = "No, because the confidence interval includes zero", 
+    value = "No, because the confidence interval includes zero", 
+    label = structure("No, because the confidence interval includes zero", html = TRUE, class = c("html", 
+    "character")), correct = FALSE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_b4db247", 
+    option = "Yes, because older people work less", value = "Yes, because older people work less", 
+    label = structure("Yes, because older people work less", html = TRUE, class = c("html", 
+    "character")), correct = FALSE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
+"tutorial_quiz_answer"))), button_labels = list(submit = structure("<span data-i18n=\"button.questionsubmit\">Submit Answer<\u002fspan>", html = TRUE, class = c("html", 
+"character")), try_again = structure("<span data-i18n=\"button.questiontryagain\">Try Again<\u002fspan>", html = TRUE, class = c("html", 
+"character"))), messages = list(correct = structure("Correct!", html = TRUE, class = c("html", 
+"character")), try_again = structure("Incorrect", html = TRUE, class = c("html", 
+"character")), incorrect = structure("Incorrect", html = TRUE, class = c("html", 
+"character")), message = NULL, post_message = NULL), ids = list(
+    answer = "Q06-answer", question = "Q06"), loading = NULL, 
+    random_answer_order = TRUE, allow_retry = TRUE, seed = 1275397508.9061, 
+    options = list()), class = c("learnr_radio", "tutorial_question"
+)), session = session)
+</script>
+
+
+<script type="application/shiny-prerendered" data-context="server">
+learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "Q07", question = structure("Q07. What does the coefficient for sex: female mean?", html = TRUE, class = c("html", 
+"character")), answers = list(structure(list(id = "lnr_ans_7d906d0", 
+    option = "Holding age constant, on average women work 4.83 fewer hours per week than men.", 
+    value = "Holding age constant, on average women work 4.83 fewer hours per week than men.", 
+    label = structure("Holding age constant, on average women work 4.83 fewer hours per week than men.", html = TRUE, class = c("html", 
+    "character")), correct = TRUE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_e6e4a88", 
+    option = "Holding age constant, on average women work 4.83 more hours per week than men.", 
+    value = "Holding age constant, on average women work 4.83 more hours per week than men.", 
+    label = structure("Holding age constant, on average women work 4.83 more hours per week than men.", html = TRUE, class = c("html", 
+    "character")), correct = FALSE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_48b6d75", 
+    option = "The effect of gender on work hours is not statistically significant.", 
+    value = "The effect of gender on work hours is not statistically significant.", 
+    label = structure("The effect of gender on work hours is not statistically significant.", html = TRUE, class = c("html", 
+    "character")), correct = FALSE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_f85a960", 
+    option = "Holding age constant, the model predicts that all women work less than men.", 
+    value = "Holding age constant, the model predicts that all women work less than men.", 
+    label = structure("Holding age constant, the model predicts that all women work less than men.", html = TRUE, class = c("html", 
+    "character")), correct = FALSE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
+"tutorial_quiz_answer"))), button_labels = list(submit = structure("<span data-i18n=\"button.questionsubmit\">Submit Answer<\u002fspan>", html = TRUE, class = c("html", 
+"character")), try_again = structure("<span data-i18n=\"button.questiontryagain\">Try Again<\u002fspan>", html = TRUE, class = c("html", 
+"character"))), messages = list(correct = structure("Correct!", html = TRUE, class = c("html", 
+"character")), try_again = structure("Incorrect", html = TRUE, class = c("html", 
+"character")), incorrect = structure("Incorrect", html = TRUE, class = c("html", 
+"character")), message = NULL, post_message = NULL), ids = list(
+    answer = "Q07-answer", question = "Q07"), loading = NULL, 
+    random_answer_order = TRUE, allow_retry = TRUE, seed = 175145681.918441, 
+    options = list()), class = c("learnr_radio", "tutorial_question"
+)), session = session)
+</script>
+ 
+<script type="application/shiny-prerendered" data-context="server">
+learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "Q08", question = structure("Q08. If the model is changed from <code>hrs1 ~ age + sex<\u002fcode> to <code>hrs1 ~ age * sex<\u002fcode>, what would you expect to see in the regression output?", html = TRUE, class = c("html", 
+"character")), answers = list(structure(list(id = "lnr_ans_21e7d8a", 
+    option = "Separate coefficients for age, sex, and their interaction, allowing the effect of age to differ by gender", 
+    value = "Separate coefficients for age, sex, and their interaction, allowing the effect of age to differ by gender", 
+    label = structure("Separate coefficients for age, sex, and their interaction, allowing the effect of age to differ by gender", html = TRUE, class = c("html", 
+    "character")), correct = TRUE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_2e605bd", 
+    option = "Only the interaction term will be included, and the main effects will be removed", 
+    value = "Only the interaction term will be included, and the main effects will be removed", 
+    label = structure("Only the interaction term will be included, and the main effects will be removed", html = TRUE, class = c("html", 
+    "character")), correct = FALSE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_15e1f6d", 
+    option = "The model will assume the effect of age is the same for men and women", 
+    value = "The model will assume the effect of age is the same for men and women", 
+    label = structure("The model will assume the effect of age is the same for men and women", html = TRUE, class = c("html", 
+    "character")), correct = FALSE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_87725a9", 
+    option = "The intercept will be dropped from the model", 
+    value = "The intercept will be dropped from the model", label = structure("The intercept will be dropped from the model", html = TRUE, class = c("html", 
+    "character")), correct = FALSE, message = NULL, type = "literal"), class = c("tutorial_question_answer", 
+"tutorial_quiz_answer"))), button_labels = list(submit = structure("<span data-i18n=\"button.questionsubmit\">Submit Answer<\u002fspan>", html = TRUE, class = c("html", 
+"character")), try_again = structure("<span data-i18n=\"button.questiontryagain\">Try Again<\u002fspan>", html = TRUE, class = c("html", 
+"character"))), messages = list(correct = structure("Correct!", html = TRUE, class = c("html", 
+"character")), try_again = structure("Incorrect", html = TRUE, class = c("html", 
+"character")), incorrect = structure("Incorrect", html = TRUE, class = c("html", 
+"character")), message = NULL, post_message = NULL), ids = list(
+    answer = "Q08-answer", question = "Q08"), loading = NULL, 
+    random_answer_order = TRUE, allow_retry = TRUE, seed = 20927024.4902551, 
     options = list()), class = c("learnr_radio", "tutorial_question"
 )), session = session)
 </script>
@@ -2395,7 +3608,7 @@ learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label 
 <!--/html_preserve-->
 <!--html_preserve-->
 <script type="application/shiny-prerendered" data-context="execution_dependencies">
-{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages","version"]},"class":{"type":"character","attributes":{},"value":["data.frame"]},"row.names":{"type":"integer","attributes":{},"value":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129,130,131]}},"value":[{"type":"character","attributes":{},"value":["askpass","backports","base","base64enc","broom","broom.helpers","bslib","cachem","cards","checkmate","cli","codetools","commonmark","compiler","conflicted","crayon","crul","curl","data.table","datasets","digest","dplyr","ellipsis","evaluate","farver","fastmap","flextable","fontawesome","fontBitstreamVera","fontLiberation","fontquiver","forcats","formula.tools","gdtools","generics","gfonts","ggeffects","ggplot2","glue","gradethis","graphics","grDevices","grid","gt","gtable","gtsummary","haven","hms","htmltools","htmlwidgets","httpcode","httpuv","infer","insight","janitor","jquerylib","jsonlite","kableExtra","knitr","labeling","labelled","later","lattice","learnr","lifecycle","litedown","lubridate","magick","magrittr","markdown","MASS","Matrix","matrixStats","memoise","methods","mgcv","mime","moderndive","nlme","officer","openssl","operator.tools","pacman","pander","pillar","pkgconfig","plyr","promises","pryr","purrr","R6","ragg","rapportools","RColorBrewer","Rcpp","readr","reshape2","rlang","rmarkdown","rprojroot","rstudioapi","sass","scales","shiny","snakecase","splines","stats","stringi","stringr","summarytools","svglite","systemfonts","tcltk","textshaping","tibble","tidyr","tidyselect","tidyverse","timechange","tools","tzdb","utils","uuid","vctrs","viridisLite","withr","xfun","xml2","xtable","yaml","zip"]},{"type":"character","attributes":{},"value":["1.2.1","1.5.0","4.5.1","0.1-3","1.0.8","1.22.0","0.9.0","1.1.0","0.7.0","2.3.2","3.6.5","0.2-20","2.0.0","4.5.1","1.2.0","1.5.3","1.5.0","6.3.0","1.17.6","4.5.1","0.6.37","1.1.4","0.3.2","1.0.4","2.1.2","1.2.0","0.9.7","0.5.3","0.1.1","0.1.0","0.2.1","1.0.0","1.7.1","0.4.1","0.1.4","0.2.0","2.0.0","3.5.2","1.8.0","0.2.14","4.5.1","4.5.1","4.5.1","1.0.0","0.3.6","2.4.0","2.5.5","1.1.3","0.5.8.1","1.6.4","0.3.0","1.6.15","1.0.9","1.3.0","2.2.1","0.1.4","2.0.0","1.4.0","1.50","0.4.3","2.14.1","1.4.1","0.22-7","0.11.5","1.0.4","0.7","1.9.4","2.8.7","2.0.3","2.0","7.3-65","1.7-1","1.5.0","2.0.1","4.5.1","1.9-3","0.13","0.7.0","3.1-168","0.6.7","2.3.3","1.6.3","0.5.1","0.6.6","1.11.0","2.0.3","1.8.9","1.3.2","0.1.6","1.0.4","2.6.1","1.4.0","1.2","1.1-3","1.0.14","2.1.5","1.4.4","1.1.6","2.29","2.1.1","0.17.1","0.4.10","1.4.0","1.11.1","0.11.1","4.5.1","4.5.1","1.8.7","1.5.1","1.1.4","2.1.3","1.2.3","4.5.1","1.0.1","3.3.0","1.3.1","1.2.1","2.0.0","0.3.0","4.5.1","0.5.0","4.5.1","1.2-1","0.6.5","0.4.2","3.0.2","0.52","1.3.8","1.8-4","2.3.10","2.3.3"]}]}]}
+{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages","version"]},"class":{"type":"character","attributes":{},"value":["data.frame"]},"row.names":{"type":"integer","attributes":{},"value":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129,130,131,132,133]}},"value":[{"type":"character","attributes":{},"value":["askpass","backports","base","base64enc","broom","broom.helpers","bslib","cachem","cards","checkmate","cli","codetools","commonmark","compiler","conflicted","crayon","crul","curl","data.table","datasets","datawizard","digest","dplyr","ellipsis","evaluate","farver","fastmap","flextable","fontawesome","fontBitstreamVera","fontLiberation","fontquiver","forcats","formula.tools","gdtools","generics","gfonts","ggplot2","glue","gradethis","graphics","grDevices","grid","gt","gtable","gtsummary","haven","hms","htmltools","htmlwidgets","httpcode","httpuv","infer","insight","janitor","jquerylib","jsonlite","kableExtra","knitr","labeling","labelled","later","lattice","learnr","lifecycle","litedown","lubridate","magick","magrittr","marginaleffects","markdown","MASS","Matrix","matrixStats","memoise","methods","mgcv","mime","modelbased","moderndive","nlme","officer","openssl","operator.tools","pacman","pander","pillar","pkgconfig","plyr","promises","pryr","purrr","R6","ragg","rapportools","RColorBrewer","Rcpp","readr","reshape2","rlang","rmarkdown","rprojroot","rstudioapi","sass","scales","shiny","snakecase","splines","stats","stringi","stringr","summarytools","svglite","systemfonts","tcltk","textshaping","tibble","tidyr","tidyselect","tidyverse","timechange","tools","tzdb","utils","uuid","vctrs","viridisLite","withr","xfun","xml2","xtable","yaml","zip"]},{"type":"character","attributes":{},"value":["1.2.1","1.5.0","4.5.1","0.1-3","1.0.8","1.22.0","0.9.0","1.1.0","0.7.0","2.3.2","3.6.5","0.2-20","2.0.0","4.5.1","1.2.0","1.5.3","1.5.0","6.3.0","1.17.6","4.5.1","1.3.0","0.6.37","1.1.4","0.3.2","1.0.4","2.1.2","1.2.0","0.9.7","0.5.3","0.1.1","0.1.0","0.2.1","1.0.0","1.7.1","0.4.1","0.1.4","0.2.0","3.5.2","1.8.0","0.2.14","4.5.1","4.5.1","4.5.1","1.0.0","0.3.6","2.4.0","2.5.5","1.1.3","0.5.8.1","1.6.4","0.3.0","1.6.15","1.0.9","1.4.2","2.2.1","0.1.4","2.0.0","1.4.0","1.50","0.4.3","2.14.1","1.4.1","0.22-7","0.11.5","1.0.4","0.7","1.9.4","2.8.7","2.0.3","0.30.0","2.0","7.3-65","1.7-1","1.5.0","2.0.1","4.5.1","1.9-3","0.13","0.13.0","0.7.0","3.1-168","0.6.7","2.3.3","1.6.3","0.5.1","0.6.6","1.11.0","2.0.3","1.8.9","1.3.2","0.1.6","1.0.4","2.6.1","1.4.0","1.2","1.1-3","1.0.14","2.1.5","1.4.4","1.1.6","2.29","2.1.1","0.17.1","0.4.10","1.4.0","1.11.1","0.11.1","4.5.1","4.5.1","1.8.7","1.5.1","1.1.4","2.1.3","1.2.3","4.5.1","1.0.1","3.3.0","1.3.1","1.2.1","2.0.0","0.3.0","4.5.1","0.5.0","4.5.1","1.2-1","0.6.5","0.4.2","3.0.2","0.52","1.3.8","1.8-4","2.3.10","2.3.3"]}]}]}
 </script>
 <!--/html_preserve-->
 </div>

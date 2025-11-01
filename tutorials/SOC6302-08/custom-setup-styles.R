@@ -26,10 +26,10 @@ conflict_scout() # Identify the conflicts
 
 ## Define color palette
 my_palette <- c(
-  "#3498DB",
-  "#E74C3C",
   "#18BC9C",
-  "#F39C12"
+  "#F39C12",
+  "#3498DB",
+  "#E74C3C"
 )
 
 ## Flextbale formatting

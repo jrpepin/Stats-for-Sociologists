@@ -29,9 +29,11 @@ editor_options:
 ## library(gssrdoc)
 ## data(gss_all)
 ## gss24 <- gss_get_yr(2024)
+library(broom.helpers) # needed for moderndive
 library(moderndive) # regression output
 library(gtsummary) # tbl_cross
-library(ggeffects) # ggplots with predictions
+library(marginaleffects) # needed for modelbased
+library(modelbased) # ggplots with predictions
 
 ## Load packages, custom functions, and styles
 source("custom-setup-styles.R")
@@ -42,8 +44,13 @@ source("custom-setup-styles.R")
 # Get the data only for the 2022 survey respondents
 gss24 <- readRDS("data/gss24.rds")
 
-# Override default discrete color and fill scales
-scale_colour_discrete <- function(...) scale_color_manual(values = my_palette)
+gss24$sex <- zap_missing(gss24$sex)
+gss24$sex <- as_factor(gss24$sex)
+gss24$sex <- droplevels(gss24$sex)
+
+## Override default discrete color and fill scales
+scale_colour_discrete <- function(...) ggplot2::scale_color_manual(values = my_palette, ...)
+scale_fill_discrete <- function(...) ggplot2::scale_fill_manual(values = my_palette, ...)
 
 ## Options
 tutorial_options(exercise.checker = gradethis::grade_learnr)
@@ -96,16 +103,18 @@ Readings are available on Quercus.
 `r fa("fas fa-language", fill = "#18BC9C")` [**TERMS**]{style="color: #18BC9C;"}
 
 * REGRESSION EQUATION  
+* ERROR TERM
 * COEFFICIENTS
 * MULTIPLE REGRESSION
 * STATISTICAL SIGNIFICANCE
+* MULTICOLLINEARITY
+* REFERENCE GROUP
+* INTERACTION
 
 Two continuous variables
 --------------------------------------------------------------------------------
 
-So far we have examined bivariate linear regressions, an equation model with one independent variable used to predict another variable. But, often we want to use two or more variables to predict the value of the dependent variable. Using more than one independent variable in our equation is referred to as **multiple regression**.  
-
-We have been using the following equation:
+So far we have examined bivariate linear regressions, an equation model with one independent variable used to predict another variable. We have been using the following equation:
 
 $\hat{y} = a + bX$
 
@@ -114,15 +123,15 @@ It shows how changes in X affect Y. It’s strength is that it is predictable. E
 ::: {style="color: #3498DB; font-size: 125%; font-family: 'Shadows Into Light'"}
 **What if a dependent variable is affected by more than one independent variable?** 
 :::
-  
-Often times, we believe believe many predictors can help explain changes our outcome variable. We can adjust our equation by adding another predictor variable to it.  
+
+Often times, we believe believe many predictors can help explain changes in our outcome variable. Using more than one independent variable in our equation is referred to as **multiple regression**. We can adjust our equation by adding another predictor variable to it:  
   
 $\hat{y} = a + b_1X_1 + b_2X_2$  
   
   
 In a graph, a simple linear regression appears as a straight line that best fits the data points, whereas a multiple linear regression extends this idea into two or more dimensions, forming a plane when there are two predictors (or a hyperplane when there are more).  
 
-![](images/planes.png "Picture of regression planes with 2 IVs"){ width=100% }
+![](images/planes.png "Picture of regression planes with 2 IVs"){ width=60% }
 
 
 
@@ -130,7 +139,7 @@ In real life, things aren’t neat and perfect. That’s where an error term com
 
 $\hat{y} = a + b_1X_1 + b_2X_2 + e$
 
-By adding $e$, we’re saying that while X1 and X2 helps explain Y, there’s always some randomness or noise—stuff we can’t fully predict or measure. The $e$ accounts for all those little unknowns, like measurement errors or other factors we didn’t include. These other factors are often called “unobservables,” because they are factors we think matter to y but which we cannot account for within our model. 
+By adding $e$, we’re saying that while X1 and X2 helps explain Y, there’s always some randomness or noise—stuff we can’t fully predict or measure. The $e$ accounts for all those little unknowns, like measurement errors or other factors we didn’t include. This equation is more realistic and better suited for modeling actual data.  
 
 ::: my-def
 #### Error term ($e$)
@@ -138,11 +147,13 @@ By adding $e$, we’re saying that while X1 and X2 helps explain Y, there’s al
 Represents all other factors that affect Y
 :::
 
-This equation is more realistic and better suited for modeling actual data. Unobservable factors are influences on the outcome that we can’t directly measure. But the good news is, some of these factors are observable. Observable factors are all the independent variables we can measure and put into our equation.  
+Observable factors are all the independent variables we can measure and put into our equation. Other factors, what $e$ accounts for, are often called “unobservables.” They are factors we think matter to $Y$ but we cannot account for them within our model. Unobservable factors are influences on the outcome that we can’t directly measure.  
   
-### Example  
+<br>  
+  
+### Model with 2 continuous variables
 
-We might suspect that daily tvhours are related to both someone's age and educational attainment. We could look at how `age` and `educ` both relate to our outcome of `tvhours`. Let's start by looking at a scatterplot of each of these correlations.
+We might suspect that daily TV hours are related to both someone's age and educational attainment. We could look at how the variables `age` and `educ` both relate to our outcome variable `tvhours`. Let's start by looking at a scatterplot of each of these correlations.
 
 ```{r, echo=FALSE}
 #| message: false
@@ -159,7 +170,8 @@ gss24 |>
       x        = "Age",
       y        = "Average TV Hours",
       caption  = "2024 U.S. General Social Survey"
-    )
+    ) +
+  theme_minimal()
 ```
 
 
@@ -179,7 +191,8 @@ gss24 |>
       x        = "Years of education",
       y        = "Average TV Hours",
       caption  = "2024 U.S. General Social Survey"
-    )
+    ) +
+  theme_minimal()
 ```
 
 
@@ -189,8 +202,7 @@ As you can see, age is positively associated with average daily TV hours, wherea
 
 #### Strategy #1:  Do separate bivariate regressions
 
-This yields separate slope estimates for each independent variable
-Bivariate slope estimates implicitly assume that the two independent variables are separately related to the outcome.
+This yields separate slope estimates for each independent variable. Bivariate slope estimates implicitly assume that the two independent variables are separately related to the outcome.
 
 `r fa("otter", fill = "#F39C12")`<practice> PRACTICE:</practice>
 
@@ -296,7 +308,7 @@ Correlation between two variables after the effects of other variables have been
 
 Let's stick with our regression and this time put both `age` and `educ` into the regression equation.
 
-We can find the predicted average tvhours (dependent variable) based on a combination of two independent variables: $b_1$ (`age`) and $b_2$ (`educ`).  
+We can find the predicted average `tvhours` (dependent variable) based on a combination of two independent variables: $b_1$ (`age`) and $b_2$ (`educ`).  
   
 Our equation would then look like this:  
   
@@ -329,12 +341,11 @@ grade_code("Your first multiple regression!")
 
 <br>
 
-The intercept value (sometimes referred to as $b_0$) is is the expected value of Y when all Xs are 0. In this case, the intercept is 3.18. This is the predicted value of the outcome variable (tvhours) when both predictors (age and education) are set to zero. This means we would expect an average of 3.18 daily TV hours for people 0 years old and with 0 years of education. In other words, it has no meaningful interpretation.  
+The intercept value (sometimes referred to as $b_0$) is the expected value of $Y$ when all $X$s are $0$. In this case, the intercept is $3.18$. This is the predicted value of the outcome variable (`tvhours`) when both predictors (`age` and `education`) are set to zero. This means we would expect an average of 3.18 daily TV hours for people 0 years old and with 0 years of education. In other words, it has no meaningful interpretation.  
 
 The intercept is often less about practical interpretation and more about helping the model fit the data. It’s just a mathematical anchor for our regression line. But if zero is meaningful for your predictors, then the intercept tells you what the baseline outcome would be in that scenario.
 
-The slopes ($b$) of each IV are sometimes called a regression coefficient, or simply a coefficient. 
-A coefficient is just the number used to multiply each variable. In this example, we could say the coefficient for the variable `age` is 0.01. The coefficient for the variable `educ` is -.08.  
+The slopes ($b$) of each IV are sometimes called a **regression coefficient**, or simply a coefficient. A coefficient is just the number used to multiply each variable. In this example, we could say the coefficient for the variable `age` is 0.01. The coefficient for the variable `educ` is -.08.  
 
 ![](images/equation.png "Picture of regression planes with 2 IVs"){ width=100% }
   
@@ -342,11 +353,11 @@ We interpret each IV coefficient as we did before, but we add a statement that w
 
 
 ::: {style="color: #18BC9C; font-family: 'Shadows Into Light'"}
-For every one year increase in age, there is a predicted .01 increase in daily TV hours, controlling for years of education.
+**For every one year increase in age, there is a predicted .01 increase in daily TV hours, controlling for years of education.**
 :::
   
 ::: {style="color: #18BC9C; font-family: 'Shadows Into Light'"}
-For every one year increase in education, there is a predicted -0.08 decrease in daily TV hours, after accounting for age.
+**For every one year increase in education, there is a predicted -0.08 decrease in daily TV hours, after accounting for age.**
 :::
   
 
@@ -354,7 +365,7 @@ For every one year increase in education, there is a predicted -0.08 decrease in
   
 Each coefficient in the regression equation has its own standard error, test statistic (*t* value), and p-value.  
 
-Let's use the function `get_regression_table()` from the [`moderndive`](https://moderndive.github.io/moderndive/) package.
+Use the function `get_regression_table()` from the [`moderndive`](https://moderndive.github.io/moderndive/) package to see what I mean.
 
 `r fa("otter", fill = "#F39C12")`<practice> PRACTICE:</practice>
 
@@ -381,9 +392,9 @@ grade_code("Well done!")
 
 <br>
 
-The p-value for each independent variable tests the null hypothesis, that the variable has no correlation with the dependent variable. The p-value for the `age` coefficient (0.014) was0.008 (i.e., p < .001). Therefore, using an alpha level of .05, we can reject the null hypothesis that there is no association between the daily tvhours and age.  
+The p-value for each independent variable tests the null hypothesis, that the variable has no correlation with the dependent variable. The `age` coefficient ($.014$) has a p-value of $.008$ (i.e., p < .001). Therefore, using an alpha level of .05, we can reject the null hypothesis that there is no association between the daily TV hours and age.  
 
-Likewise, the p-value for the `educ` coefficient was .003, so we can say there is a statistically significant negative association between years of education and tvhours.  
+Likewise, the `educ` coefficient ($-.083$) has a p-value of $.003$, so we can say there is a statistically significant negative association between years of education and TV hours.  
   
   
 Researchers denote the p-values with asterisks (*), typically referred to as stars, in tables reporting the results from a regression. 
@@ -403,7 +414,8 @@ We might display the results from the regression in the example in a table that 
 model <- lm(tvhours ~ age + educ, data = gss24)
 
 model |>
-  tbl_regression() |>
+  tbl_regression(
+    intercept = TRUE) |>
   modify_column_hide(conf.low) |>
   modify_column_unhide(column = std.error) |>
   add_significance_stars() |>
@@ -447,7 +459,7 @@ Some other things we might be able to say, given the output of a multiple regres
   
 -   If both $X_1$ and $X_2$ shrink a little, each has an effect, but some overlap or mediation is occurring.  
 
-::: {style="color: #F39C12; font-family: 'Shadows Into Light'"}
+::: {style="color: #F39C12; font-size: 125%; font-family: 'Shadows Into Light'"}
 **Things to watch out for:**
 :::
 
@@ -457,6 +469,9 @@ The ability to control for many variables can help detect spurious relationships
 
 [**Reverse causality**]{style="color: #F39C12"}  
 Many sociological processes involve bi-directional causality. Regression slopes (and correlations) do not identify which variable “causes” the other.
+
+[**Statistical significance $\neq$ practical significance**]{style="color: #F39C12"}  
+More stars (or a low p-value) indicates that an effect is unlikely to be due to chance, but it says nothing about the size or importance of that effect. Even tiny effects can be statistically significant in large samples. Focus on effect sizes and context, not just stars.  
 
 
 One continuous and one categorical variable
@@ -472,17 +487,12 @@ One continuous and one categorical variable
 
 We could create different dataframes for each category of our variable and then run a regression. 
 
-For example, if we thought the relationship between average TV hours and years of education was conditional on gender, that is the correlation between tv hours and education was different for men and women, we could run two separate regressions.
+For example, if we thought the relationship between average TV hours and years of education was conditional on gender (e.g., the correlation between TV hours and education was different for men and women), we could run two separate regressions.
 
 **OLS Regression of average daily TV hours among men**
 
 ```{r}
 # Create a dataset for men
-
-gss24$sex <- zap_missing(gss24$sex)
-gss24$sex <- as_factor(gss24$sex)
-gss24$sex <- droplevels(gss24$sex)
-
 df_men <- gss24 |>
   filter(sex == "male")
 
@@ -497,11 +507,6 @@ get_regression_table(mod_men)
 
 ```{r}
 # Create a dataset for women
-
-gss24$sex <- zap_missing(gss24$sex)
-gss24$sex <- as_factor(gss24$sex)
-gss24$sex <- droplevels(gss24$sex)
-
 df_women <- gss24 |>
   filter(sex == "female")
 
@@ -532,48 +537,44 @@ question("Is education a statistically significant predictor of daily tv hours f
 ::: my-def
 #### Dummy variable
 
-Dichotomous variables coded to indicate the presence or absence of something
-Absence coded as zero, presence coded as 1.
+Dichotomous variables coded to indicate the presence or absence of something. 
+Absence is coded as $0$, presence coded as $1$.
 :::
 
 A different approach is to turn categorical variables into **dummy variables** to be included in one regression. 
 
 When you include a categorical variable in a regression model, one category is left out of the model to avoid a problem called **perfect multicollinearity**. The multicollinearity problem occurs when variables are perfectly correlated and the model can't estimate unique effects. If you included all the categories plus an intercept, the model wouldn’t be able tell which variable is doing what because they’re too closely related.
 
-Instead, one category is dropped on purpose to remove redundant information. This "missing" category is called the reference group. The coefficients for the other categories show how they differ from the reference group.
+Instead, one category is dropped on purpose to remove redundant information. This "missing" category is called the **reference group**. The coefficients for the other categories show how they differ from the reference group.
 
 Consider the following regression equation:
 
 $\hat{y} = a + b_1educ_1 + b_2female_2 + e$  
 
-In this equation, the first coefficient, $b_1$, is our continuous variable `educ` that contains respondents years of education. The second coefficient, $b_2$ is a new variable `female` where men are coded as `0` and women are coded as `1`.  
+<br>
 
+The first coefficient, $b_1$, is our continuous variable `educ` that contains values representing respondents' years of education. The second coefficient, $b_2$ is a new variable `female` where men are coded as `0` and women are coded as `1`.  
 
-[**What if the case is a man?**]{style="color: #3498DB"} 
-
-In our equation, $b_2$ would be equal to 0 for men. So, our regression model will drop the `female` coefficient:
+In our equation, $b_2$ would be equal to `0` for men. So, our regression model will drop the `female` coefficient:
 
 $\hat{y} = a + b_1educ_1 + e$  
 
-
-[**What if the case is a woman?**]{style="color: #3498DB"} 
-
-Women are coded as 1, so $b_2$ stays in the equation (and is added to the constant). Women are modeled using the full regression line: 
+Women are coded as `1`, so $b_2$ stays in the equation (and is added to the constant). Women are modeled using the full regression line: 
 
 $\hat{y} = a + b_1educ_1 + b_2female_2 + e$  
 
 
-The coefficient $b_2$ represents the difference in the intercept between women and men. When using a dummy variable like `female` (coded as 1 for women, 0 for men), the regression line shifts depending on the value of the coefficient:
+The coefficient $b_2$ represents the difference in the intercept between women and men. When using a dummy variable like `female` (coded as `1` for women, `0` for men), the regression line shifts depending on the value of the coefficient:
 
 > A positive coefficient means women score higher than men on the dependent variable.
 
 > A negative coefficient means women score lower.
 
-Example: If the coefficient for FEMALE is 1.2, it means: “Women are, on average, 1.2 points higher than men on the outcome variable.”
+Example: If the coefficient for `female` is $1.2$, it means: “Women are, on average, 1.2 points higher than men on the outcome variable.”
 
 This shift reflects a different starting point (intercept) for each group, resulting in separate regression lines.
 
-Let's try it out with our tvhours regression example. 
+Try it out with our `tvhours` regression example. 
 
 ***
 
@@ -583,12 +584,6 @@ Let's try it out with our tvhours regression example.
 2. Run the code to see your results. 
 3. When you are satisfied with your answer, click "Submit Answer."  
 
-```{r reg05-setup}
-gss24$sex <- zap_missing(gss24$sex)
-gss24$sex <- as_factor(gss24$sex)
-gss24$sex <- droplevels(gss24$sex)
-```
-  
 ```{r reg05, exercise=TRUE, error= TRUE, warning=FALSE}
 lm(______ ~ ______ + ______, data = gss24)
 ```
@@ -607,11 +602,11 @@ grade_code("Rock on!")
 ```
 
 
-The intercept, 3.65, represents the average daily TV hours for men (the reference group) with an education level of zero. 
+The intercept, $3.65$, represents the average daily TV hours for men (the reference group) with an education level of $0$. 
 
-The coefficient for education (-0.0771), means that for each additional year of education, daily TV hours decrease by about 0.08 hours. 
+The coefficient for `educ` ($-0.0771$), means that for each additional year of education, daily TV hours decrease by about 0.08 hours. 
 
-The coefficient for sexfemale (0.1564) indicates that women watch, on average, 0.16 more hours of TV per day than men, after accounting for education.
+The coefficient for `sexfemale` ($0.1564$) indicates that women watch, on average, 0.16 more hours of TV per day than men, after accounting for education.
 
 Is this gender difference statistically significant? Let's find out!
 
@@ -624,13 +619,13 @@ Is this gender difference statistically significant? Let's find out!
 3. When you are satisfied with your answer, click "Submit Answer."  
 
 ```{r reg06, exercise=TRUE, error= TRUE, warning=FALSE}
-model <- lm(tvhours ~ age + sex, data = gss24)
+model <- lm(tvhours ~ educ + sex, data = gss24)
 
 get_regression_table(_____)
 ```
   
 ```{r reg06-solution}
-model <- lm(tvhours ~ age + sex, data = gss24)
+model <- lm(tvhours ~ educ + sex, data = gss24)
 
 get_regression_table(model)
 
@@ -640,11 +635,12 @@ get_regression_table(model)
 grade_code("Well done!")
 ```
 
+
 ```{r P07, echo=FALSE}
 question("Is gender a statistically significant predictor of daily tv hours, after controlling for years of education?",
-    answer("No, because the p-value for sex: female is 0.451 and the confidence interval includes zero", correct = TRUE, message = "Nice! This is a test of whether the coefficient is different from 0. "),
-    answer("Yes, because the coefficient for sex: female is 0.114 and the p-value is 0.021"),
-    answer("Yes, because the p-value for sex: female is 0.000 and the confidence interval does not include zero"),
+    answer("No, because the p-value for sex: female is 0.301 and the confidence interval includes zero", correct = TRUE, message = "Nice! This is a test of whether the coefficient is different from 0. "),
+    answer("Yes, because the coefficient for sex: female is 0.156 and the p-value is 0.301"),
+    answer("Yes, because the p-value for sex: female is 0.301 and the confidence interval does not include zero"),
     answer("No, because the coefficient for sex: female is negative and the standard error is high"),
          random_answer_order = TRUE,
          allow_retry = TRUE
@@ -653,11 +649,35 @@ question("Is gender a statistically significant predictor of daily tv hours, aft
 
 <br>
 
-###
+We might display the results from the regression in the example in a table that looks like this:  
 
+<br>
+
+**Table 2.** OLS Regression Analysis of Americans Daily TV Hours
+
+```{r, echo=FALSE}
+
+model <- lm(tvhours ~ educ + sex, data = gss24)
+
+model |>
+  tbl_regression(
+    intercept = TRUE,
+    show_single_row = sex,
+    label = list(sex = "Women")
+  ) |>
+  modify_column_hide(conf.low) |>
+  modify_column_unhide(column = std.error) |>
+  add_significance_stars() |>
+  remove_abbreviation()
+
+```
+*Source: U.S. General Social Survey 2024 (N = 1093)*
+  
+<br>
+  
 ### Visualize predictions
 
-It often helps to visualize the results from a regression model. Let's use the `ggpredict()` function from {ggeffects} package to do so. `ggpredict()` calculates predicted values from a regression model for specific values of the variables. It shows you what your model says the outcome would be if you held some variables constant and changed others.
+It often helps to visualize the results from a regression model. Let's use the `ggpredict()` function from the [{modelbased}](https://easystats.github.io/modelbased/) package to do so. `estimate_means()` calculates predicted values from a regression model for specific values of the variables. It shows you what your model says the outcome would be if you held some variables constant and changed others.
 
 It helps you see the effect of one variable while controlling for others.
 
@@ -668,7 +688,7 @@ It creates a clean data frame with predicted values (and confidence intervals).
 model <- lm(tvhours ~ educ + sex, data = gss24)
 
 # Get predicted values
-preds <- ggpredict(model, terms = c("educ", "sex"))
+preds <- estimate_means(model, by = c("educ", "sex"))
 
 # Preview the new df
 preds |>
@@ -682,15 +702,15 @@ Looking at this new table, we can see that the predicted average TV hours for me
 
 For women, the predicted average TV hours with 0 years of schooling is $3.80$. Where did this number come from? Add the intercept $3.65$ to the coefficient for our `sex` variable: $0.1564$.
 
-What about the next row which shows men with 3 years of education: 3.41 average TV hours. We add our intercept of $3.65$ to our `educ` coefficient $-0.0771$ three times (3 units of change):
+What about the next row which shows men with 2.22 years of education average 3.47 TV hours. We add our intercept of $3.65$ to our `educ` coefficient $-0.0771$ multiplied by $2.222$:
 
-$3.65 + (-.0771*3)$
-$3.65 -0.2313 = 3.419$
+$3.6455 + (-.0771*2.222)$
+$3.6455 -0.1713 = 3.474$
 
-And what about the following row showing the predicted average TV hours for women with 3 years of education? The same thing except you also include the `sex` coefficient:
+And what about the following row showing the predicted average TV hours for women with 2.222 years of education? We do the same thing except also include the `sex` coefficient:
 
-$3.65 + (-.0771*3) + 0.1564$
-$3.65 -0.2313 + 0.1564 = 3.575$
+$3.6455 + (-.0771*2.222) + 0.1564$
+$3.6455 -0.1713 + 0.1564 = 3.631$
 
 You can easily plot these predictions with the `ggplot2` package to make your results more understandable.
 
@@ -700,20 +720,21 @@ You can easily plot these predictions with the `ggplot2` package to make your re
 model <- lm(tvhours ~ educ + sex, data = gss24)
 
 # Get predicted values
-preds <- ggpredict(model, terms = c("educ", "sex"))
+preds <- estimate_means(model, by = c("educ", "sex"))
 
 # Plot using ggplot2
-ggplot(preds, aes(x = x, y = predicted, color = group)) +
-  geom_line(size = 1.2) +
-  labs(
-    title = "Predicted Daily TV Hours by Education and Sex",
-    x = "Education Level",
-    y = "Predicted TV Hours",
-    color = "Sex",
-    fill = "Sex"
-  ) +
-  theme_minimal() +
-  theme(legend.position = "top")
+preds |>
+  ggplot(aes(x = educ, y = Mean, color = sex)) +
+    geom_line(size = 1.2) +
+    labs(
+      title = "Predicted Daily TV Hours by Education and Sex",
+      x = "Education Level",
+      y = "Predicted TV Hours",
+      color = "Sex",
+      fill = "Sex"
+    ) +
+    theme_minimal() +
+    theme(legend.position = "top")
 ```
 
 <br>
@@ -745,9 +766,11 @@ get_regression_table(model)
 
 The interaction term `educ:sexfemale` tells us whether the relationship between education and daily TV hours differs between men and women.
 
-The coefficient for educ is `–0.12`, meaning that for men (the reference group), each additional unit of education is associated with watching `0.12` fewer hours of TV per day.
+The coefficient for `educ` is $–0.12$, meaning that for men (the reference group), each additional unit of education is associated with watching 0.12 fewer hours of TV per day.
 
-The interaction term `educ:sexfemale` is +0.08, which adjusts the slope of education for women. So for women, the effect of education is:
+The coefficient for `sex: female` is $−1.02$. This is the difference in the outcome between women and men when education = 0. Women score 1.02 units lower than men at zero education, but this difference is not statistically significant (p = 0.214).
+
+The interaction term `educ:sexfemale` is $0.08$, which adjusts the slope of education for women. So for women, the effect of education is:
 
 $−0.12 + 0.08 = -0.04$
 
@@ -766,24 +789,26 @@ Still, to fully grasp the power of interacting variables, let's graph our new pr
 `r fa("otter", fill = "#F39C12")`<practice> PRACTICE:</practice>
 
 ```{r interaction-plot, exercise=TRUE}
+
 # Fit the model
 model <- lm(tvhours ~ educ * sex, data = gss24)
 
 # Get predicted values
-preds <- ggpredict(model, terms = c("educ", "sex"))
+preds <- estimate_means(model, by = c("educ", "sex"))
 
 # Plot using ggplot2
-ggplot(preds, aes(x = x, y = predicted, color = group)) +
-  geom_line(size = 1.2) +
-  labs(
-    title = "Predicted Daily TV Hours by Education and Sex",
-    x = "Education Level",
-    y = "Predicted TV Hours",
-    color = "Sex",
-    fill = "Sex"
-  ) +
-  theme_minimal() +
-  theme(legend.position = "top")
+preds |>
+  ggplot(aes(x = educ, y = Mean, color = sex)) +
+    geom_line(size = 1.2) +
+    labs(
+      title = "Predicted Daily TV Hours by Education and Sex",
+      x = "Education Level",
+      y = "Predicted TV Hours",
+      color = "Sex",
+      fill = "Sex"
+    ) +
+    theme_minimal() +
+    theme(legend.position = "top")
 ``` 
 
 <br>
@@ -796,52 +821,120 @@ Learning Check 09
 Please answer the following questions to verify you understand the
 topics in this tutorial.
   
+Use the following regression output to answer the next questions.  
 
-![](images/agekdbrn_table.png "Table: OLS Regression Analysis of Age First Child Born"){ width=80% }
+```{r}
+model <- lm(hrs1 ~ age + educ, data = gss24)
 
+get_regression_table(model)
+```
   
 ```{r Q01, echo=FALSE}
-question("Q01. What does it mean that the value of $a$ is 23.44?",
-    answer("Women's average age when their first child is born is predicted to be 23.44 years.", correct = TRUE),
-    answer("The model indicates that each 1 year increase in age was associated with an increase of 23.44 years in age at the time a first child is born."),
-    answer("The model indicates that the average age when a first child is born is 23.44 years old."),
-    answer("Men's average age when their first child is born is predicted to be 23.44 years."),
+question("Q01. What does the intercept mean?",
+    answer("The predicted weekly work hours for someone zero years of age and with zero years of education.", correct = TRUE),
+    answer("The average number of hours worked per week by individuals with average age and education."),
+    answer("The maximum number of hours worked per week in the sample."),
+    answer("The effect of age and education on weekly work hours."),
          random_answer_order = TRUE,
          allow_retry = TRUE
 )
 ```
   
 ```{r Q02, echo=FALSE}
-question("Q14. What is the best interpretation of the slope (2.11)?",
-    answer("Compared with women, men's average age when their first child is born is expected to be 2.11 years greater.", correct = TRUE),
-    answer("Men's average age when their first child is born is predicted to be 2.11 years"),
-    answer("The model indicates that for every one additional child born, a person's average age increases by 2.11 years"),
-    answer("Compared with men, women's average age when their first child is born is expected to be 2.11 years greater."),
+question("Q02. What is the best interpretation of the coefficient for age?",
+    answer("Each additional year of age is associated with working 0.112 fewer hours per week, on average, holding education constant.", correct = TRUE),
+    answer("Older individuals work 0.112 fewer hours per week than younger individuals."),
+    answer("Age causes a reduction of 0.112 hours in weekly work time for everyone."),
+    answer("People with higher education work 0.112 fewer hours per week as they age."),
          random_answer_order = TRUE,
          allow_retry = TRUE
 )
 ```
   
 ```{r Q03, echo=FALSE}
-question("Q15. Is gender a statistically significant predictor of someone's age when their first child was born?",
-    answer("Yes, because the p-value is less than .001.", correct = TRUE),
-    answer("No, because the p-value is greater than .05."),
-    answer("No, because the p-value is equal to .001."),
-    answer("Yes, because the coefficient (2.11) is positive."),
+question("Q03. Is education a statistically significant predictor of weekly work hours?",
+    answer("No, because the p-value is greater than 0.05.", correct = TRUE),
+    answer("Yes, because the coefficient for education is positive."),
+    answer("Yes, because the confidence interval does not include zero."),
+    answer("No, because the effect of education is negative."),
          random_answer_order = TRUE,
          allow_retry = TRUE
 )
 ```
 
-![](images/gsstable.png "Table: OLS Regression Analysis of Age at First Marriage"){ width=80% }
-  
-  
-```{r Q11, echo=FALSE}
-question("Q11. Is years of education a statistically significant predictor of age at first marriage?",
-    answer("Yes, because the p-value is less than .001.", correct = TRUE),
-    answer("No, because the p-value is greater than .05."),
-    answer("No, because the p-value is equal to .001."),
-    answer("Yes, because the coefficient (.501) is positive."),
+Use the following regression output to answer the next questions.  
+
+
+**Table 2.** OLS Regression Analysis of Americans Weekly Work Hours
+
+```{r, echo=FALSE}
+
+model <- lm(hrs1 ~ age + sex, data = gss24)
+
+model |>
+  tbl_regression(
+    intercept = TRUE,
+    show_single_row = sex,
+    label = list(sex = "Women")
+  ) |>
+  modify_column_hide(conf.low) |>
+  modify_column_unhide(column = std.error) |>
+  add_significance_stars() |>
+  remove_abbreviation()
+
+```
+*Source: U.S. General Social Survey 2024 (N = 1093)*
+
+```{r Q04, echo=FALSE}
+question("Q04. What does the intercept represent in this model?",
+    answer("The predicted weekly work hours for a man who is 0 years old.", correct = TRUE),
+    answer("The average number of hours worked per week by all individuals in the sample."),
+    answer("The predicted weekly work hours for a women of average age."),
+    answer("The predicted weekly work hours for a man of average age."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+```{r Q05, echo=FALSE}
+question("Q05. What is the best interpretation of the coefficient for age?",
+    answer("Adjusting for gender, each additional year of age is associated with working on average 0.101 fewer hours per week.", correct = TRUE),
+    answer("Older individuals work 0.101 fewer hours per week than younger individuals."),
+    answer("Age causes an average reduction of 0.101 hours in weekly work time, adjusting for gender."),
+    answer("The predicted weekly work hours for man is reduced by .101 weekly work hours."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+```{r Q06, echo=FALSE}
+question("Q06. Is age a statistically significant predictor of weekly work hours?",
+    answer("Yes, because the p-value is less than 0.05", correct = TRUE),
+    answer("No, because the coefficient is small"),
+    answer("No, because the confidence interval includes zero"),
+    answer("Yes, because older people work less"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+```{r Q07, echo=FALSE}
+question("Q07. What does the coefficient for sex: female mean?",
+    answer("Holding age constant, on average women work 4.83 fewer hours per week than men.", correct = TRUE),
+    answer("Holding age constant, on average women work 4.83 more hours per week than men."),
+    answer("The effect of gender on work hours is not statistically significant."),
+    answer("Holding age constant, the model predicts that all women work less than men."),
+         random_answer_order = TRUE,
+         allow_retry = TRUE
+)
+```
+
+```{r Q08, echo=FALSE}
+question("Q08. If the model is changed from `hrs1 ~ age + sex` to `hrs1 ~ age * sex`, what would you expect to see in the regression output?",
+    answer("Separate coefficients for age, sex, and their interaction, allowing the effect of age to differ by gender", correct = TRUE),
+    answer("Only the interaction term will be included, and the main effects will be removed"),
+    answer("The model will assume the effect of age is the same for men and women"),
+    answer("The intercept will be dropped from the model"),
          random_answer_order = TRUE,
          allow_retry = TRUE
 )

@@ -13,7 +13,7 @@ format:
     code-annotations: hover
     chalkboard: true
     title-slide-attributes:
-      data-background-image: "images/08/test-hat.png"
+      data-background-image: "images/09/tophat.png"
       data-background-size: 250px
       data-background-position: bottom center
 revealjs-plugins:
@@ -50,22 +50,18 @@ scale_colour_discrete <- function(...) scale_color_manual(values = my_palette)
 
 # Agenda {data-menu-title="Agenda" background-image="images/calendar.png" background-size="100px" background-repeat="repeat"}
 
--   Reproducible Workflow
--   Y
+-   Two continuous variables
+-   One continuous & one categorcial
 
 ::: notes
--   forcats (reorder factor levels)
--   missing data?
--   **outliers** -- data viz & tables
--   dates?
--   lists
+
 :::
 
 # Learning objectives
 
 By the end of the lecture, you will be able to ...
 
--   Setup relative file paths for reproducible projects
+-   xx
 -   YY
 
 # Code-along 09 {data-menu-title="Code-along" background-image="images/terminal.png"}
@@ -74,32 +70,23 @@ Download and open [code-along-09.qmd]()
 
 ## Packages {.sparse-slide}
 
-Install the
-[`here()`](https://cran.r-project.org/web/packages/summarytools/vignettes/introduction.html)
-package, available on CRAN.
-
-```{r}
-#| message: false
-#| label: summarytools
-#| eval: false
-
-install.packages("here")
-```
-
-<br>
-
-Load the standard packages and our new `here()` package.
+Load the standard packages and new package `modelbased`.
 
 ```{r}
 #| message: false
 #| label: load
 
-library(here)
+# install.packages("marginaleffects") # needed for modelbased
+# install.packages("modelbased")
+
 library(tidyverse) 
 library(haven) # not core tidyverse
 library(gssr)
 library(gssrdoc)
 library(summarytools)
+library(gtsummary) 
+library(moderndive)
+library(modelbased)
 ```
 
 ## Load your data {.sparse-slide}
@@ -108,22 +95,22 @@ library(summarytools)
 #| message: false
 #| label: gssdata
 
-# Get the data from the 2022 survey
-gss22 <- gss_get_yr(2022)
+# Load all gss
+data(gss_all)
 
 ```
 
 ## Variables {.sparse-slide}
 
--   `lifenow` R's rating of life overall now from 0-10
+-   `year` Survey year
+-   `tvhours` Hours per day watching tv
+-   `realrinc` R's income in constant $
 -   `age` Age of respondent
 -   `educ` Respondents highest edu credit
--   `hrs1` how many hours did you work last week
--   `race` What race do you consider yourself
+-   `hrs1` How many hours did you work last week
+-   `polviews` Think of self as liberal or conservative
 -   `sex` Respondents sex
 -   `marital` R's marital status
-
-
 
 ## Variable Management {.smaller}
 
@@ -136,361 +123,106 @@ variables we'll analyze.
 ```{r}
 #| message: false
 #| label: my-data
-#| code-line-numbers: "1-6|8-15|17-18"
+#| code-line-numbers: "1-8|10-17|18-23"
 
 # Categorical Variables
-my_cat <- gss22 |>
-  select(id, race, sex, marital) |>
+my_cat <- gss_all |>
+  select(id, year, polviews, sex, marital) |>
   zap_missing() |>
-  as_factor() |>
+  mutate(
+    polviews = as_factor(polviews),
+    sex = as_factor(sex),
+    marital = as_factor(marital)) |> 
   droplevels()
 
 # Continuous Variables
-my_con <- gss22 |>
-  select(id, lifenow, age, educ, hrs1) |>
+my_con <- gss_all |>
+  select(id, year, tvhours, age, educ, hrs1, realrinc) |>
   mutate(
-    lifenow = as.numeric(lifenow),
     age = as.numeric(age),
     educ = as.numeric(educ),
-    hrs1 = as.numeric(hrs1))
+    hrs1 = as.numeric(hrs1),
+    realrinc = as.numeric(realrinc))
 
 # Combine the two dataframes
-my_data <- left_join(my_cat, my_con, by = "id")
+my_data <- full_join(my_cat, my_con, by = c("year", "id")) # match by 2 vars
+
+my_data <- my_data |>
+  drop_na()
 ```
 
 
-# Table II {.theme-section}
+# Two continuous variables {.theme-section}
+
+##
+model <- lm(formula = tvhours ~ year + hrs1, data = my_data)
+get_regression_table(model)
+
+##
+model <- lm(formula = educ ~ year + hrs1, data = my_data)
+get_regression_table(model)
+
+##
+model <- lm(formula = realrinc ~ hrs1 + educ, data = my_data)
+get_regression_table(model)
 
 ## `tbl_regression()`
 
 ```{r}
+#| label: tbl_regression-full
+
+model <- lm(formula = realrinc ~ hrs1 + educ, data = my_data)
+
 model |>
-  tbl_regression() |>
+  tbl_regression(
+    intercept = TRUE) |>
   modify_column_hide(conf.low) |>
-  modify_column_unhide(column = std.error) 
+  modify_column_unhide(column = std.error) |>
+  remove_abbreviation() |>
+  add_significance_stars() 
+
 ```
 
+# 1 continuous variable & 1 categorical variable  {.theme-section}
 
-# Reproducible workflow {.theme-section}
-
-## Replication
-
-[**The guiding principle for workflow.**]{style="color: #18BC9C"}
-
-A workflow of data analysis is a process for managing all aspects of
-data analysis.
-
-<br>
-
-Planning, documenting, and organizing your work; cleaning the data;
-creating, renaming, and verifying variables; performing and presenting
-statistical analyses; producing replicable results; and archiving what
-you have done are all integral parts of your workflow.
-
-::: aside
-Source: (Long 2008)
-:::
-
-## Steps in a workflow
-
-|  |  |
-|-------------------------------|-----------------------------------------|
-| **Set up** | Systematic organization of the project and project files. |
-| **Familiarize self with data** | Skipping takes more time in the long run. |
-| **Process data** | Takes the [**MOST**]{style="color: #e74c3c;"} time. |
-| **Running analyses** | What people **THINK** takes the most time. |
-| **Presenting results** | What people (wrongly) think does not take time. |
-
-
-## Filepaths {.smaller}
-
-A project-based workflow + `here()` avoids changing file paths.
-
-<br>
-
-::::: columns
-::: {.column width="60%"}
-**ABSOLUTE FILE PATHS**
-
-Department of Sociology\
-Unit 17100, 17th Floor, Ontario Power Building\
-700 University Ave., Toronto, ON M5G 1Z5
-
-`C:\Users\Pepin\GitHub\SOC6302\scripts`
-:::
-
-::: {.column width="40%"}
-**RELATIVE FILE PATHS**
-
-Take the left side elevators to the 17th floor.\
-Go through the double doors and a take a right.\
-First door on your left.
-
-`here`([scripts]{style="color: #18BC9C"})
-:::
-:::::
-
-## File names
-
-should be:
-
--   machine-readable
--   human-readable
--   play well with default-ordering
-
-## Project structure
-
-Let's set up your project structure using the `here()` package.
-
-![](https://raw.githubusercontent.com/allisonhorst/stats-illustrations/master/rstats-artwork/here.png)
-
-## `here()` {.sparse-slide}
-
-First, let's establish our project directory
+##
+model <- lm(formula = hrs1 ~ educ + sex, data = my_data)
+get_regression_table(model)
 
 ```{r}
-#| eval: false
-#| message: false
-#| label: here
+#| label: dichotomous
 
-# shows the file path to the root of the project
-here()
+model <- lm(formula = hrs1 ~ educ + sex, data = my_data)
+
+model |>
+  tbl_regression(
+    intercept = TRUE,
+    show_single_row = sex,
+    label = list(sex = "Women")
+  ) |>
+  modify_column_hide(conf.low) |>
+  modify_column_unhide(column = std.error) |>
+  remove_abbreviation() |>
+  add_significance_stars() 
 
 ```
 
-<br>
-
-Next, we'll create folders within our project.
-
-## Example folder structure {.smaller}
-
-::::::::::::::::::::: columns
-
-:::::::: {.column width="40%"}
-**SOC6302**
-
-::::::: file-tree
-<details open>
-
-<summary>SOC6302/</summary>
-
-<details>
-
-<summary>data/</summary>
-
-<div>
-
-gss7924-raw.rda
-
-</div>
-
-<div>
-
-gss7924-processed.Rdata/
-
-</div>
-
-</details>
-
-<details>
-
-<summary>code-alongs/</summary>
-
-</details>
-
-<details>
-
-<summary>milestones/</summary>
-
-</details>
-
-<details>
-
-<summary>project/</summary>
-
-<details>
-
-<summary>data/</summary>
-
-</details>
-
-<details>
-
-<summary>scripts/</summary>
-
-</details>
-
-<details>
-
-<summary>outputs/</summary>
-
-</details>
-
-</details>
-
-<div>
-
-readme.qmd
-
-</div>
-
-<div>
-
-SOC6302.Rproj
-
-</div>
-
-</details>
-:::::::
-::::::::
-
-:::::::::::::: {.column width="60%"}
-**Research Projects**
-
-::::::::::::: file-tree
-<details open>
-
-<summary>project/</summary>
-
-<details>
-
-<summary>data/</summary>
-
-<div>
-
-gss7924-raw.rda
-
-</div>
-
-<div>
-
-gss7924-processed.Rdata/
-
-</div>
-
-</details>
-
-<details>
-
-<summary>scripts/</summary>
-
-<div>
-
-clean_data.R
-
-</div>
-
-<div>
-
-analyze_data.R
-
-</div>
-
-<div>
-
-draft.qmd
-
-</div>
-
-</details>
-
-<details>
-
-<summary>outputs/</summary>
-
-<div>
-
-draft.html
-
-</div>
-
-<details>
-
-<summary>figures/</summary>
-
-<div>
-
-plot1.png
-
-</div>
-
-<div>
-
-plot2.png
-
-</div>
-
-</details>
-
-</details>
-
-<div>
-
-readme.qmd
-
-</div>
-
-<div>
-
-project.Rproj
-
-</div>
-
-</details>
-:::::::::::::
-::::::::::::::
-
-
-:::::::::::::::::::::
-
-## Create a folder structure
-
-using `here()` and `dir.create()`
+##
+model <- lm(formula = hrs1 ~ educ + marital, data = my_data)
+get_regression_table(model)
+
+##
+model <- lm(formula = tvhours ~ polviews + educ, data = my_data)
+get_regression_table(model)
+
+## Relevel polviews so "moderate" is the reference
 
 ```{r}
-#| eval: false
-#| message: false
-#| label: base-folders
+my_data$polviews <- relevel(factor(my_data$polviews), ref = "moderate, middle of the road")
 
-# Create base folders
-dir.create(here("data"), recursive = TRUE)
-dir.create(here("code-alongs"), recursive = TRUE)
-dir.create(here("milestones"), recursive = TRUE)
-dir.create(here("project"), recursive = TRUE)
+model <- lm(formula = tvhours ~ polviews, data = my_data)
+get_regression_table(model)
 ```
 
-## Create sub-folders
 
-using `here()` and `dir.create()`
 
-```{r}
-#| eval: false
-#| message: false
-#| label: sub-folders
-
-# Create project sub-folders
-dir.create(here("project", "data"), recursive = TRUE)
-dir.create(here("project", "scripts"), recursive = TRUE)
-dir.create(here("project", "outputs"), recursive = TRUE)
-
-```
-
-## Check your work
-
-report a list of folders and or files in the R-project folders and
-sub-folder.
-
-```{r}
-#| eval: false
-#| message: false
-#| label: list-files
-
-# Your SOC6302 class folder
-list.files(path = here())
-
-# Your "Project" sub-folder
-list.files(path = here("project"))
-
-```
-
-# Predicted Probabilities {.theme-section}

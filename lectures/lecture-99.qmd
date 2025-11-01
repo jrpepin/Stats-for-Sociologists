@@ -52,13 +52,10 @@ scale_colour_discrete <- function(...) scale_color_manual(values = my_palette)
 
 -   Manipulating Dataframes
 -   Joining Dataframes
+-   Reproducible Workflow
 
 ::: notes
--   forcats (reorder factor levels)
--   missing data?
--   **outliers** -- data viz & tables
--   dates?
--   lists
+
 :::
 
 # Learning objectives
@@ -75,24 +72,33 @@ Download and open [code-along-99.qmd]()
 
 ## Packages {.sparse-slide}
 
-Load the standard packages.
+Install the
+[`here()`](https://cran.r-project.org/web/packages/summarytools/vignettes/introduction.html)
+package, available on CRAN.
+
+```{r}
+#| message: false
+#| label: summarytools
+#| eval: false
+
+install.packages("here")
+```
+
+<br>
+
+Load the standard packages and our new `here()` package.
 
 ```{r}
 #| message: false
 #| label: load
 
-# Only need to install once per machine. 
-# install.packages("gtsummary")
-
+library(here)
 library(tidyverse) 
 library(haven) # not core tidyverse
 library(gssr)
-library(gssrdoc) # load the GSS codebook
+library(gssrdoc)
 library(summarytools)
-library(gtsummary) 
-library(here) # change this!!!
 ```
-
 ## GSS Panel Data: Download
 
 <https://gss.norc.org/get-the-data/stata>
@@ -629,3 +635,328 @@ ctable(think_married$internet_status, think_married$panel,
   headings = FALSE
 )
 ```
+
+# Reproducible workflow {.theme-section}
+
+## Replication
+
+[**The guiding principle for workflow.**]{style="color: #18BC9C"}
+
+A workflow of data analysis is a process for managing all aspects of
+data analysis.
+
+<br>
+
+Planning, documenting, and organizing your work; cleaning the data;
+creating, renaming, and verifying variables; performing and presenting
+statistical analyses; producing replicable results; and archiving what
+you have done are all integral parts of your workflow.
+
+::: aside
+Source: (Long 2008)
+:::
+
+## Steps in a workflow
+
+|  |  |
+|-------------------------------|-----------------------------------------|
+| **Set up** | Systematic organization of the project and project files. |
+| **Familiarize self with data** | Skipping takes more time in the long run. |
+| **Process data** | Takes the [**MOST**]{style="color: #e74c3c;"} time. |
+| **Running analyses** | What people **THINK** takes the most time. |
+| **Presenting results** | What people (wrongly) think does not take time. |
+
+
+## Filepaths {.smaller}
+
+A project-based workflow + `here()` avoids changing file paths.
+
+<br>
+
+::::: columns
+::: {.column width="60%"}
+**ABSOLUTE FILE PATHS**
+
+Department of Sociology\
+Unit 17100, 17th Floor, Ontario Power Building\
+700 University Ave., Toronto, ON M5G 1Z5
+
+`C:\Users\Pepin\GitHub\SOC6302\scripts`
+:::
+
+::: {.column width="40%"}
+**RELATIVE FILE PATHS**
+
+Take the left side elevators to the 17th floor.\
+Go through the double doors and a take a right.\
+First door on your left.
+
+`here`([scripts]{style="color: #18BC9C"})
+:::
+:::::
+
+## File names
+
+should be:
+
+-   machine-readable
+-   human-readable
+-   play well with default-ordering
+
+## Project structure
+
+Let's set up your project structure using the `here()` package.
+
+![](https://raw.githubusercontent.com/allisonhorst/stats-illustrations/master/rstats-artwork/here.png)
+
+## `here()` {.sparse-slide}
+
+First, let's establish our project directory
+
+```{r}
+#| eval: false
+#| message: false
+#| label: here
+
+# shows the file path to the root of the project
+here()
+
+```
+
+<br>
+
+Next, we'll create folders within our project.
+
+## Example folder structure {.smaller}
+
+::::::::::::::::::::: columns
+
+:::::::: {.column width="40%"}
+**SOC6302**
+
+::::::: file-tree
+<details open>
+
+<summary>SOC6302/</summary>
+
+<details>
+
+<summary>data/</summary>
+
+<div>
+
+gss7924-raw.rda
+
+</div>
+
+<div>
+
+gss7924-processed.Rdata/
+
+</div>
+
+</details>
+
+<details>
+
+<summary>code-alongs/</summary>
+
+</details>
+
+<details>
+
+<summary>milestones/</summary>
+
+</details>
+
+<details>
+
+<summary>project/</summary>
+
+<details>
+
+<summary>data/</summary>
+
+</details>
+
+<details>
+
+<summary>scripts/</summary>
+
+</details>
+
+<details>
+
+<summary>outputs/</summary>
+
+</details>
+
+</details>
+
+<div>
+
+readme.qmd
+
+</div>
+
+<div>
+
+SOC6302.Rproj
+
+</div>
+
+</details>
+:::::::
+::::::::
+
+:::::::::::::: {.column width="60%"}
+**Research Projects**
+
+::::::::::::: file-tree
+<details open>
+
+<summary>project/</summary>
+
+<details>
+
+<summary>data/</summary>
+
+<div>
+
+gss7924-raw.rda
+
+</div>
+
+<div>
+
+gss7924-processed.Rdata/
+
+</div>
+
+</details>
+
+<details>
+
+<summary>scripts/</summary>
+
+<div>
+
+clean_data.R
+
+</div>
+
+<div>
+
+analyze_data.R
+
+</div>
+
+<div>
+
+draft.qmd
+
+</div>
+
+</details>
+
+<details>
+
+<summary>outputs/</summary>
+
+<div>
+
+draft.html
+
+</div>
+
+<details>
+
+<summary>figures/</summary>
+
+<div>
+
+plot1.png
+
+</div>
+
+<div>
+
+plot2.png
+
+</div>
+
+</details>
+
+</details>
+
+<div>
+
+readme.qmd
+
+</div>
+
+<div>
+
+project.Rproj
+
+</div>
+
+</details>
+:::::::::::::
+::::::::::::::
+
+
+:::::::::::::::::::::
+
+## Create a folder structure
+
+using `here()` and `dir.create()`
+
+```{r}
+#| eval: false
+#| message: false
+#| label: base-folders
+
+# Create base folders
+dir.create(here("data"), recursive = TRUE)
+dir.create(here("code-alongs"), recursive = TRUE)
+dir.create(here("milestones"), recursive = TRUE)
+dir.create(here("project"), recursive = TRUE)
+```
+
+## Create sub-folders
+
+using `here()` and `dir.create()`
+
+```{r}
+#| eval: false
+#| message: false
+#| label: sub-folders
+
+# Create project sub-folders
+dir.create(here("project", "data"), recursive = TRUE)
+dir.create(here("project", "scripts"), recursive = TRUE)
+dir.create(here("project", "outputs"), recursive = TRUE)
+
+```
+
+## Check your work
+
+report a list of folders and or files in the R-project folders and
+sub-folder.
+
+```{r}
+#| eval: false
+#| message: false
+#| label: list-files
+
+# Your SOC6302 class folder
+list.files(path = here())
+
+# Your "Project" sub-folder
+list.files(path = here("project"))
+
+```
+
+
+

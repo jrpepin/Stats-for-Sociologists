@@ -125,7 +125,7 @@ variables we'll analyze.
 ```{r}
 #| message: false
 #| label: my-data
-#| code-line-numbers: "1-9|11-19|21-25"
+#| code-line-numbers: "1-9|11-19|21-22"
 
 # Categorical Variables
 my_cat <- gss_all |>
@@ -341,7 +341,6 @@ get_regression_table(model_02)
 ```{r}
 #| label: summaries-01-review
 
-model_01 <- lm(formula = childs ~ year, data = my_data)
 get_regression_summaries(model_01)
 
 ```
@@ -353,7 +352,6 @@ get_regression_summaries(model_01)
 ```{r}
 #| label: summaries-02
 
-model_02 <- lm(formula = childs ~ year + educ, data = my_data)
 get_regression_summaries(model_02)
 
 ```
@@ -557,7 +555,7 @@ preds |>
 # Plot using ggplot2
 preds |>
   ggplot(aes(x = educ, y = Mean, color = sex)) +
-    geom_line(size = 1.2) +
+    geom_line(linewidth = 1.2) +
     labs(
       title = "Predicted Weekly Work Hours by Education and Gender",
       x = "Education Level",
@@ -698,7 +696,7 @@ preds <- estimate_means(model, by = c("educ", "pol_group"))
 # Plot using ggplot2
 preds |>
   ggplot(aes(x = educ, y = Mean, color = pol_group)) +
-    geom_line(size = 1.2) +
+    geom_line(linewidth = 1.2) +
     labs(
       title = "Predicted Daily TV Hours by Education and Political Identity",
       x = "Education Level",

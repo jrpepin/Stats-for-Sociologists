@@ -1,0 +1,472 @@
+---
+title: "Code-along 09"
+author: "FirstName LastName"
+editor: visual
+execute:
+  error: true
+format: pdf # or replace 'pdf' with 'typst'
+---
+
+# Setup
+
+## Packages
+
+Load the standard packages and new package `modelbased`.
+
+```{r}
+#| message: false
+#| label: load
+
+# install.packages("marginaleffects") # needed for modelbased
+# install.packages("modelbased")
+
+library(tidyverse) 
+library(haven) # not core tidyverse
+library(gssr)
+library(gssrdoc)
+library(summarytools)
+library(gtsummary) 
+library(moderndive)
+library(modelbased)
+```
+
+## Load your data
+
+```{r}
+#| label: gssdata
+
+# Load all gss
+data(gss_all)
+
+```
+
+Make a df with only the (pretty) categorical and continuous variables
+we'll analyze.
+
+```{r}
+#| label: my-data
+
+# Categorical Variables
+my_cat <- gss_all |>
+  select(id, year, polviews, sex, marital) |>
+  zap_missing() |>
+  mutate(
+    polviews = as_factor(polviews),
+    sex = as_factor(sex),
+    marital = as_factor(marital)) |> 
+  droplevels()
+
+# Continuous Variables
+my_con <- gss_all |>
+  select(id, year, tvhours, age, educ, hrs1, realrinc, childs) |>
+  mutate(
+    age = as.numeric(age),
+    educ = as.numeric(educ),
+    hrs1 = as.numeric(hrs1),
+    realrinc = as.numeric(realrinc),
+    childs = as.numeric(childs))
+
+# Combine the two dataframes
+my_data <- full_join(my_cat, my_con, by = c("year", "id")) # match by 2 vars
+
+```
+
+# Two continuous variables
+
+> ***Have the average number of children changed over time?***
+
+```{r}
+#| label: plot-01
+#| message: false
+
+# Create scatterplot with a regression line
+my_data |>
+  group_by(year) |>
+  summarize(avg = mean(childs, na.rm = TRUE)) |>
+  ggplot(aes(x = year, y = avg)) +
+  geom_point(color = "#18BC9C", size = 3) +
+  geom_smooth(method = "lm", se = FALSE, color = "#3498DB") +
+  labs(
+    title = "Scatterplot of Average Number of Children",
+    x = "Year",
+    y = "Average number of children") +
+  theme_minimal()
+```
+
+**Pearson's Correlation (R)**
+
+```{r}
+#| label: cor.test
+
+cor.test(
+  ~ childs + year,
+  data = my_data,
+  method = "pearson",
+  na.action = na.omit)
+```
+
+**Simple Regression**
+
+```{r}
+#| label: regress-01
+
+model_01 <- lm(formula = childs ~ year, data = my_data)
+get_regression_table(model_01)
+
+```
+
+**PRE Measure**
+
+Square R
+
+```{r}
+#| label: r-squared
+
+my_test <-  cor.test(
+  ~ childs + year,
+  data = my_data,
+  method = "pearson",
+  na.action = na.omit
+)
+
+my_test$estimate^2
+
+```
+
+Get $r^2$
+
+```{r}
+#| label: get_regression_summaries
+
+model_01 <- lm(formula = childs ~ year, data = my_data)
+get_regression_summaries(model_01)
+```
+
+
+> ***Are the trends explained by increases in education?***
+
+```{r}
+#| label: plot-02
+#| message: false
+
+# Create scatterplot with regression line
+my_data |>
+  group_by(year) |>
+  summarize(avg = mean(educ, na.rm = TRUE)) |>
+  ggplot(aes(x = year, y = avg)) +
+  geom_point(color = "#18BC9C", size = 3) +
+  geom_smooth(method = "lm", se = FALSE, color = "#3498DB") +
+  labs(
+    title = "Scatterplot of Average Years of Education",
+    x = "Year",
+    y = "Average years of education"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+#| label: plot-03
+#| message: false
+
+# Create scatterplot with regression line
+my_data |>
+  group_by(educ) |>
+  summarize(avg = mean(childs, na.rm = TRUE)) |>
+  ggplot(aes(x = educ, y = avg)) +
+  geom_point(color = "#18BC9C", size = 3) +
+  geom_smooth(method = "lm", se = FALSE, color = "#3498DB") +
+  labs(
+    title = "Scatterplot of Average Number of Children",
+    x = "Average years of education",
+    y = "Average number of children"
+  ) +
+  theme_minimal()
+```
+
+## Multiple Regression
+
+```{r}
+#| label: regress-02
+
+model_02 <- lm(formula = childs ~ year + educ, data = my_data)
+get_regression_table(model_02)
+
+```
+
+**PRE Measure**
+
+```{r}
+#| label: summaries-02
+
+get_regression_summaries(model_02)
+
+```
+
+## `tbl_regression()`
+
+```{r}
+#| label: tbl_regression
+
+model_02 |>
+  tbl_regression(intercept = TRUE)  
+
+```
+
+```{r}
+#| label: tbl_regression-partial
+
+model_02 |>
+  tbl_regression(
+    intercept = TRUE) |>
+  modify_column_hide(conf.low) |>
+  modify_column_unhide(column = std.error) 
+
+```
+
+**OLS Regression predicting number of children by survey year and years
+of education**
+
+```{r}
+#| label: tbl_regression-full
+
+model_02 |>
+  tbl_regression(
+    intercept = TRUE) |>
+  modify_column_hide(conf.low) |>
+  modify_column_unhide(column = std.error) |>
+  remove_abbreviation() |>
+  add_significance_stars() |>
+  add_glance_table(include = c("r.squared", "nobs"))
+
+```
+
+# 1 continuous variable & 1 categorical variable
+
+> ***Are weekly hours worked related to education and gender?***
+
+```{r}
+#| label: regress-03
+
+model <- lm(hrs1 ~ educ + sex, data = my_data)
+
+get_regression_table(model)
+```
+
+```{r}
+#| label: regress-03-table
+
+model |>
+  tbl_regression(
+    intercept = TRUE) |>
+  modify_column_hide(conf.low) |>
+  modify_column_unhide(
+    column = std.error) |>
+  remove_abbreviation() |>
+  add_significance_stars() |>
+  add_glance_table(
+    include = c("r.squared", "nobs"))
+
+```
+
+**OLS Regression predicting weekly work hours by years of education and
+gender**
+
+```{r}
+#| label: dichotomous
+
+model |>
+  tbl_regression(
+    intercept = TRUE,
+    show_single_row = sex,
+    label = list(sex = "Women")) |>
+  modify_column_hide(conf.low) |>
+  modify_column_unhide(
+    column = std.error) |>
+  remove_abbreviation() |>
+  add_significance_stars() |>
+  add_glance_table(
+    include = c("r.squared", "nobs"))
+
+```
+
+## `estimate_means()`
+
+R calculates the mean values of every variable in the model except sex,
+and sets all of those variables equal to their means. Then (once again)
+it sets female = 0 in every observation, calculates predicted
+probabilities for each individual, and averages those.
+
+Then it goes back and resets female to 1 in every observation, again
+calculates predicted probabilities for each individual and outputs the
+average of those.
+
+Outputs can be interpreted as the predicted probabilities for women and
+men if they were all average in all other respects.
+
+```{r}
+#| label: estimate_means_margins
+
+# Get predicted values
+preds <- estimate_means(model, by = c("sex"))
+
+# Preview the new df
+preds |>
+  as_tibble() |> 
+  head()
+```
+
+```{r, eval = FALSE}
+#| label: estimate_means_code
+
+# Get predicted values
+preds <- estimate_means(model, by = c("educ", "sex"))
+
+# Preview the new df
+preds |>
+  as_tibble() |> 
+  head()
+```
+
+men with 0 years of education = $38.601 + .420_{educ}*0$\
+women with 0 years of education
+$38.601 + .420_{educ}*0 -6.576_{female}$\
+men with 2.222 years of education $38.601 + .420_{educ}*2.222$\
+women with 2.222 years of education
+$38.601 + .420_{educ}*2.222-6.576_{female}$
+
+**Visualize the predictions:**
+
+```{r}
+#| label: ggplot
+#| message: false
+
+# Get predicted values
+preds <- estimate_means(model, by =c("educ", "sex"))
+
+# Plot using ggplot2
+preds |>
+  ggplot(aes(x = educ, y = Mean, color = sex)) +
+    geom_line(linewidth = 1.2) +
+    labs(
+      title = "Predicted Weekly Work Hours by Education and Gender",
+      x = "Education Level",
+      y = "Predicted Weekly Work Hours",
+      color = " ") +
+    theme_minimal() +
+    theme(legend.position = "top")
+```
+
+> ***Are weekly hours worked related to education and marital status?***
+
+```{r}
+#| label: regress-04
+
+model <- lm(hrs1 ~ educ + marital, data = my_data)
+get_regression_table(model)
+
+```
+
+**Regression Predicting Weekly Work Hours by Years of Education and
+Marital Status**
+
+```{r}
+#| label: reference
+
+model |>
+  tbl_regression(
+    intercept = TRUE,
+    label = list(
+      marital = "Marital status (ref. = married)")) |>
+  remove_row_type(type = c("reference")) |>  
+  modify_column_hide(conf.low) |>
+  modify_column_unhide(
+    column = std.error) |>
+  remove_abbreviation() |>
+  add_significance_stars() |>
+  add_glance_table(
+    include = c("r.squared", "nobs"))
+
+```
+
+> ***Are daily TV hours related to education and political identity?***
+
+```{r}
+#| label: regress-05
+
+my_data <- my_data %>%
+  mutate(pol_group = case_when(
+    polviews %in% c("extremely liberal", "liberal", "slightly liberal") ~ "Liberal",
+    polviews == "moderate, middle of the road" ~ "Moderate",
+    polviews %in% c("slightly conservative", "conservative", "extremely conservative") ~ "Conservative",
+    TRUE ~ NA_character_))
+
+model <- lm(tvhours ~ educ + pol_group, data = my_data)
+
+get_regression_table(model)
+```
+
+## `relevel()`
+
+```{r}
+#| label: relevel
+
+# Relevel pol_group so "Moderate" is the reference
+my_data$pol_group <- relevel(factor(my_data$pol_group), 
+                            ref = "Moderate")
+
+model <- lm(tvhours ~ educ + pol_group, data = my_data)
+get_regression_table(model)
+```
+
+> ***Does the relationship between TV hours and education differ by
+> political identity?***
+
+```{r}
+#| label: regress-06
+
+model <- lm(tvhours ~ educ * pol_group, data = my_data)
+
+get_regression_table(model)
+```
+
+The coefficient for `educ` is \$-0.142 \$, meaning that for moderates
+(the reference group), each additional year of education is associated
+with -0.142 fewer tv hours per day.
+
+The coefficient for `pol_group: Conservative` is $-0.1$. This is the
+difference in the outcome between moderates and conservatives when
+education = 0. Conservatives watch -0.1 TV hours per day fewer than
+moderates when education is zero. Not statistically significantly
+different.
+
+The interaction term `educ:pol_groupConservative` is $-0.008$. It tells
+us whether the relationship between education and TV hours differs
+between moderates and conservatives It adjusts the slope of education
+for conservatives So for conservatives, the effect of education is:
+
+$-0.142 -0.008 = -0.15$
+
+This means that for conservatives, each additional unit of education is
+associated with only $-0.15$ fewer daily TV hours.
+
+**Visualize predictions:**
+
+```{r}
+#| label: ggplot-interaction
+#| message: false
+
+# Get predicted values
+preds <- estimate_means(model, by = c("educ", "pol_group"))
+
+# Plot using ggplot2
+preds |>
+  ggplot(aes(x = educ, y = Mean, color = pol_group)) +
+    geom_line(linewidth = 1.2) +
+    labs(
+      title = "Predicted Daily TV Hours by Education and Political Identity",
+      x = "Education Level",
+      y = "Predicted TV Hours",
+      color = "Political Identity") +
+    theme_minimal() +
+    theme(legend.position = "top")
+```

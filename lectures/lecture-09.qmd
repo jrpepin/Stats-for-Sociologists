@@ -51,7 +51,7 @@ scale_colour_discrete <- function(...) scale_color_manual(values = my_palette)
 # Agenda {data-menu-title="Agenda" background-image="images/calendar.png" background-size="100px" background-repeat="repeat"}
 
 -   Two continuous variables
--   One continuous & one categorcial
+-   One continuous & one categorical variable
 
 ::: notes
 
@@ -61,8 +61,8 @@ scale_colour_discrete <- function(...) scale_color_manual(values = my_palette)
 
 By the end of the lecture, you will be able to ...
 
--   xx
--   YY
+-   Use R to produce multivariate regression
+-   Use R to create publication ready regression tables (e.g., Table 02)
 
 # Code-along 09 {data-menu-title="Code-along" background-image="images/terminal.png"}
 
@@ -100,7 +100,7 @@ data(gss_all)
 
 ```
 
-## Variables {.sparse-slide}
+## Variables {.sparse-slide .smaller}
 
 -   `year` Survey year
 -   `tvhours` Hours per day watching tv
@@ -108,11 +108,12 @@ data(gss_all)
 -   `age` Age of respondent
 -   `educ` Respondents highest edu credit
 -   `hrs1` How many hours did you work last week
+-   `childs` How many children have you ever had?
 -   `polviews` Think of self as liberal or conservative
 -   `sex` Respondents sex
 -   `marital` R's marital status
 
-## Variable Management {.smaller}
+## {data-menu-title="Variable Management" .smaller}
 
 ::: task
 {{< fa check-double >}} Make a df with only the (pretty) categorical and continuous
@@ -123,7 +124,7 @@ variables we'll analyze.
 ```{r}
 #| message: false
 #| label: my-data
-#| code-line-numbers: "1-8|10-17|18-23"
+#| code-line-numbers: "1-9|11-18|20-24"
 
 # Categorical Variables
 my_cat <- gss_all |>
@@ -137,12 +138,13 @@ my_cat <- gss_all |>
 
 # Continuous Variables
 my_con <- gss_all |>
-  select(id, year, tvhours, age, educ, hrs1, realrinc) |>
+  select(id, year, tvhours, age, educ, hrs1, realrinc, childs) |>
   mutate(
     age = as.numeric(age),
     educ = as.numeric(educ),
     hrs1 = as.numeric(hrs1),
-    realrinc = as.numeric(realrinc))
+    realrinc = as.numeric(realrinc),
+    childs = as.numeric(childs))
 
 # Combine the two dataframes
 my_data <- full_join(my_cat, my_con, by = c("year", "id")) # match by 2 vars
@@ -154,75 +156,560 @@ my_data <- my_data |>
 
 # Two continuous variables {.theme-section}
 
-##
-model <- lm(formula = tvhours ~ year + hrs1, data = my_data)
-get_regression_table(model)
+##  {data-menu-title="Code Meets Question" .sparse-slide background-image="images/gears-solid-full.png" background-size="80px" background-repeat="repeat"}
 
-##
-model <- lm(formula = educ ~ year + hrs1, data = my_data)
-get_regression_table(model)
+::: task
+{{< fa lightbulb >}} Have the average number of children changed over time?
+:::
 
-##
-model <- lm(formula = realrinc ~ hrs1 + educ, data = my_data)
-get_regression_table(model)
+. . .
 
-## `tbl_regression()`
+```{r}
+#| label: plot-01
+#| code-line-numbers: "2-4|5-6|7|8-12"
+#| output-location: slide
+
+# Create scatterplot with a regression line
+gss_all |>
+  group_by(year) |>
+  summarize(avg = mean(childs, na.rm = TRUE)) |>
+  ggplot(aes(x = year, y = avg)) +
+  geom_point(color = "#18BC9C", size = 3) +
+  geom_smooth(method = "lm", se = FALSE, color = "#3498DB") +
+  labs(
+    title = "Scatterplot of Average Number of Children",
+    x = "Year",
+    y = "Average number of children") +
+  theme_minimal(20)
+```
+
+::: notes
+assumed to be a count, but can be modeled with OLS if treated as continuous
+:::
+
+
+## Pearson's Correlation (R) {.sparse-slide}
+
+```{r}
+#| label: cor.test
+
+cor.test(
+  ~ childs + year,
+  data = my_data,
+  method = "pearson",
+  na.action = na.omit)
+```
+
+::: notes  
+[**r ranges from -1 to +1**]{style="color: #18bc9c"}  
+
+-1: 	perfect negative correlation  
+ 0: 	no relationship  
+ 1: 	perfect positive correlation  
+  
+  
+[**Strength of relationship**]{style="color: #18bc9c"}  
+
+Strong:     Over 0.6  
+Moderate:   0.3 to 0.5  
+Weak:       0.1 to 0.2  
+Very weak:  Below 0.1  
+:::
+
+## Simple Regression {.sparse-slide}
+
+```{r}
+#| label: regress-01
+#| output-location: fragment
+
+model_01 <- lm(formula = childs ~ year, data = my_data)
+get_regression_table(model_01)
+
+```
+
+::: notes
+note the test statistics are the same.
+:::
+
+## PRE Measure {.sparse-slide .smaller}
+
+[**Square R**]{style="color: #18BC9C"}  
+
+```{r}
+#| label: r-squared
+#| output-location: column
+
+my_test <-  cor.test(
+  ~ childs + year,
+  data = my_data,
+  method = "pearson",
+  na.action = na.omit
+)
+
+my_test$estimate^2
+
+
+```
+
+<br>
+
+. . .
+
+[**Get $r^2$**]{style="color: #18BC9C"}  
+
+```{r}
+#| label: get_regression_summaries
+
+model_01 <- lm(formula = childs ~ year, data = my_data)
+get_regression_summaries(model_01)
+
+```
+
+
+##  {data-menu-title="Code Meets Question" .sparse-slide background-image="images/gears-solid-full.png" background-size="80px" background-repeat="repeat"}
+
+::: task
+{{< fa lightbulb >}} Are the trends explained by increases in education?
+:::
+
+```{r}
+#| label: plot-02
+#| output-location: slide
+
+# Create scatterplot with regression line
+gss_all |>
+  group_by(year) |>
+  summarize(avg = mean(educ, na.rm = TRUE)) |>
+  ggplot(aes(x = year, y = avg)) +
+  geom_point(color = "#18BC9C", size = 3) +
+  geom_smooth(method = "lm", se = FALSE, color = "#3498DB") +
+  labs(
+    title = "Scatterplot of Average Years of Education",
+    x = "Year",
+    y = "Average years of education"
+  ) +
+  theme_minimal(20)
+```
+
+##  {data-menu-title="Scatterplot: Number of children & education"}
+
+```{r}
+#| label: plot-03
+#| output-location: slide
+
+# Create scatterplot with regression line
+gss_all |>
+  group_by(educ) |>
+  summarize(avg = mean(childs, na.rm = TRUE)) |>
+  ggplot(aes(x = educ, y = avg)) +
+  geom_point(color = "#18BC9C", size = 3) +
+  geom_smooth(method = "lm", se = FALSE, color = "#3498DB") +
+  labs(
+    title = "Scatterplot of Average Number of Children",
+    x = "Average years of education",
+    y = "Average number of children"
+  ) +
+  theme_minimal(20)
+```
+
+
+##  {data-menu-title="Multiple Regression" .sparse-slide}
+
+```{r}
+#| label: regress-01-review
+
+model_01 <- lm(formula = childs ~ year, data = my_data)
+get_regression_table(model_01)
+
+```
+
+<br>
+
+. . . 
+
+```{r}
+#| label: regress-02
+#| output-location: fragment
+
+model_02 <- lm(formula = childs ~ year + educ, data = my_data)
+get_regression_table(model_02)
+
+```
+
+
+## Change in PRE Measure {.sparse-slide} 
+
+```{r}
+#| label: summaries-01-review
+
+model_01 <- lm(formula = childs ~ year, data = my_data)
+get_regression_summaries(model_01)
+
+```
+
+<br>
+
+. . .
+
+```{r}
+#| label: summaries-02
+
+model_02 <- lm(formula = childs ~ year + educ, data = my_data)
+get_regression_summaries(model_02)
+
+```
+
+
+## `tbl_regression()` {.sparse-slide}
+
+OLS Regression predicting number of children by survey year and years of education
+
+```{r}
+#| label: tbl_regression
+#| output-location: fragment
+
+model_02 |>
+  tbl_regression(intercept = TRUE) 
+
+```
+
+## `tbl_regression()` {.sparse-slide}
+
+OLS Regression predicting number of children by survey year and years of education
+
+```{r}
+#| label: tbl_regression-partial
+#| output-location: fragment
+#| code-line-numbers: "4-5"
+
+model_02 |>
+  tbl_regression(
+    intercept = TRUE) |>
+  modify_column_hide(conf.low) |>
+  modify_column_unhide(column = std.error) 
+
+```
+
+## `tbl_regression()` {.sparse-slide}
+
+OLS Regression predicting number of children by survey year and years of education
 
 ```{r}
 #| label: tbl_regression-full
+#| output-location: fragment
+#| code-line-numbers: "6-8"
 
-model <- lm(formula = realrinc ~ hrs1 + educ, data = my_data)
-
-model |>
+model_02 |>
   tbl_regression(
     intercept = TRUE) |>
   modify_column_hide(conf.low) |>
   modify_column_unhide(column = std.error) |>
   remove_abbreviation() |>
-  add_significance_stars() 
+  add_significance_stars() |>
+  add_glance_table(include = c("r.squared", "nobs"))
 
 ```
 
+
+
 # 1 continuous variable & 1 categorical variable  {.theme-section}
 
-##
-model <- lm(formula = hrs1 ~ educ + sex, data = my_data)
+##  {data-menu-title="Code Meets Question" .sparse-slide background-image="images/gears-solid-full.png" background-size="80px" background-repeat="repeat"}
+
+::: task
+{{< fa lightbulb >}} Are weekly hours worked related to education and gender?
+:::
+
+<br>
+
+. . .
+
+```{r}
+#| label: regress-03
+#| output-location: fragment
+
+model <- lm(hrs1 ~ educ + sex, data = my_data)
+
 get_regression_table(model)
+```
+
+## `tbl_regression()` {.sparse-slide}
+
+OLS Regression predicting weekly work hours by years of education and gender
+
+```{r}
+#| label: regress-03-table
+#| output-location: column-fragment
+
+model |>
+  tbl_regression(
+    intercept = TRUE) |>
+  modify_column_hide(conf.low) |>
+  modify_column_unhide(
+    column = std.error) |>
+  remove_abbreviation() |>
+  add_significance_stars() |>
+  add_glance_table(
+    include = c("r.squared", "nobs"))
+
+```
+
+## `tbl_regression()` {.sparse-slide}
+
+OLS Regression predicting weekly work hours by years of education and gender
 
 ```{r}
 #| label: dichotomous
-
-model <- lm(formula = hrs1 ~ educ + sex, data = my_data)
+#| output-location: column-fragment
+#| code-line-numbers: "2-5"
 
 model |>
   tbl_regression(
     intercept = TRUE,
     show_single_row = sex,
-    label = list(sex = "Women")
-  ) |>
+    label = list(sex = "Women")) |>
   modify_column_hide(conf.low) |>
-  modify_column_unhide(column = std.error) |>
+  modify_column_unhide(
+    column = std.error) |>
   remove_abbreviation() |>
-  add_significance_stars() 
+  add_significance_stars() |>
+  add_glance_table(
+    include = c("r.squared", "nobs"))
 
 ```
 
-##
-model <- lm(formula = hrs1 ~ educ + marital, data = my_data)
-get_regression_table(model)
+## `estimate_means()` {.sparse-slide}
 
-##
-model <- lm(formula = tvhours ~ polviews + educ, data = my_data)
-get_regression_table(model)
+```{r, eval = FALSE}
+#| label: estimate_means_code
 
-## Relevel polviews so "moderate" is the reference
+# Get predicted values
+preds <- estimate_means(model, by = c("educ", "sex"))
+
+# Preview the new df
+preds |>
+  as_tibble() |> 
+  head()
+```
+
+## `estimate_means()` {.sparse-slide .smaller}
+
+$39.1 + .426_{educ} -6.74_{female}$  
+
+<br>
+
+```{r, echo = FALSE}
+#| label: estimate_means_results
+
+# Get predicted values
+preds <- estimate_means(model, by = c("educ", "sex"))
+
+# Preview the new df
+preds |>
+  as_tibble() |> 
+  head()
+```
+
+<br>
+
+[men with 0 years of education = $39.1 + .426_{educ}*0$]{.fragment}  
+[women with 0 years of education $39.1 + .426_{educ}*0 -6.74_{female}$]{.fragment}   
+[men with 2.222 years of education $39.1 + .426_{educ}*2.222$]{.fragment}   
+[women with 2.222 years of education $39.1 + .426_{educ}*2.222-6.74_{female}$]{.fragment}  
+
+
+## `ggplot()`
 
 ```{r}
-my_data$polviews <- relevel(factor(my_data$polviews), ref = "moderate, middle of the road")
+#| label: ggplot
+#| output-location: slide
 
-model <- lm(formula = tvhours ~ polviews, data = my_data)
+# Plot using ggplot2
+preds |>
+  ggplot(aes(x = educ, y = Mean, color = sex)) +
+    geom_line(size = 1.2) +
+    labs(
+      title = "Predicted Weekly Work Hours by Education and Sex",
+      x = "Education Level",
+      y = "Predicted Weekly Work Hours",
+      color = "Sex",
+      fill = "Sex"
+    ) +
+    theme_minimal() +
+    theme(legend.position = "top")
+```
+
+##  {data-menu-title="Code Meets Question" .sparse-slide background-image="images/gears-solid-full.png" background-size="80px" background-repeat="repeat"}
+
+::: task
+{{< fa lightbulb >}} Are weekly hours worked related to education and marital status?
+:::
+
+<br>
+
+. . .
+
+```{r}
+#| label: regress-04
+#| output-location: fragment
+
+model <- lm(hrs1 ~ educ + marital, data = my_data)
+get_regression_table(model)
+
+```
+
+
+## { data-menu-title="`tbl_regression()`" .sparse-slide}
+
+Regression Predicting Weekly Work Hours by Years of Education and Marital Status
+
+```{r}
+#| label: reference
+#| output-location: column-fragment
+#| code-line-numbers: "2-6"
+
+model |>
+  tbl_regression(
+    intercept = TRUE,
+    label = list(
+      marital = "Marital status (ref. = married)")) |>
+  remove_row_type(type = c("reference")) |>  
+  modify_column_hide(conf.low) |>
+  modify_column_unhide(
+    column = std.error) |>
+  remove_abbreviation() |>
+  add_significance_stars() |>
+  add_glance_table(
+    include = c("r.squared", "nobs"))
+
+```
+
+##  {data-menu-title="Code Meets Question" .sparse-slide background-image="images/gears-solid-full.png" background-size="80px" background-repeat="repeat"}
+
+::: task
+{{< fa lightbulb >}} Are daily TV hours related to education and political identity?
+:::
+
+<br>
+
+. . .
+
+```{r}
+#| label: regress-05
+#| output-location: slide
+
+my_data <- my_data %>%
+  mutate(pol_group = case_when(
+    polviews %in% c("extremely liberal", "liberal", "slightly liberal") ~ "Liberal",
+    polviews == "moderate, middle of the road" ~ "Moderate",
+    polviews %in% c("slightly conservative", "conservative", "extremely conservative") ~ "Conservative",
+    TRUE ~ NA_character_))
+
+model <- lm(tvhours ~ educ + pol_group, data = my_data)
+
+get_regression_table(model)
+```
+
+## `relevel()` {.sparse-slide}
+
+```{r}
+#| label: relevel
+#| output-location: fragment
+
+# Relevel pol_group so "Moderate" is the reference
+my_data$pol_group <- relevel(factor(my_data$pol_group), 
+                            ref = "Moderate")
+
+model <- lm(tvhours ~ educ + pol_group, data = my_data)
 get_regression_table(model)
 ```
 
 
 
+##  {data-menu-title="Code Meets Question" .sparse-slide background-image="images/gears-solid-full.png" background-size="80px" background-repeat="repeat"}
+
+::: task
+{{< fa lightbulb >}} Does the relationship between TV hours and education differ by political identity?
+:::
+
+<br>
+
+. . .
+
+
+```{r}
+#| label: regress-06
+#| output-location: fragment
+
+model <- lm(tvhours ~ educ * pol_group, data = my_data)
+
+get_regression_table(model)
+```
+
+::: notes
+The coefficient for `educ` is $-0.123	$, meaning that for moderates (the reference group), each additional year of education is associated with -0.123 fewer tv hours per day.
+
+The coefficient for `pol_group: Conservative` is $-0.278$. This is the difference in the outcome between moderates and conservatives when education = 0. Conservatives watch -0.278 TV hours per day fewer than moderates when education is zero. Not statistically significantly different.
+
+The interaction term `educ:pol_groupConservative` is $0.007$. It tells us whether the relationship between education and TV hours differs between moderates and conservatives It adjusts the slope of education for conservatives So for conservatives, the effect of education is:
+
+$-0.123 + 0.007 = -0.116$
+
+This means that for conservatives, each additional unit of education is associated with only $-0.116$ fewer daily TV hours.
+:::
+
+## `ggplot()`
+
+```{r}
+#| label: ggplot-interaction
+#| output-location: slide
+
+# Get predicted values
+preds <- estimate_means(model, by = c("educ", "pol_group"))
+
+# Plot using ggplot2
+preds |>
+  ggplot(aes(x = educ, y = Mean, color = pol_group)) +
+    geom_line(size = 1.2) +
+    labs(
+      title = "Predicted Daily TV Hours by Education and Political Identity",
+      x = "Education Level",
+      y = "Predicted TV Hours",
+      color = "marital",
+      fill = "marital"
+    ) +
+    theme_minimal() +
+    theme(legend.position = "top")
+``` 
+
+# Think Like a Statistician {.sparse-slide background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
+
+## Think Like a Statistician {background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat" .sparse-slide}
+
+::: task
+{{< fa check-double >}} 1. Run and interpret a regression predicting `realrinc` with `hrs1` and `educ`
+:::
+
+<br>
+
+. . .
+
+```{r}
+model <- lm(realrinc ~ hrs1 + educ, data = my_data)
+get_regression_table(model)
+```
+
+## Think Like a Statistician {background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat" .sparse-slide}
+
+::: task
+{{< fa check-double >}} 1. Add `childs` to the regression. Interpret the output.
+::: 
+
+<br>
+
+. . .
+
+```{r}
+model <- lm(formula = realrinc ~ hrs1 + educ + childs, data = gss_all)
+get_regression_table(model)
+```

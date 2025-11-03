@@ -24,11 +24,12 @@ conflict_scout() # Identify the conflicts
 # custom-formatting
 
 ## Define color palette
-c_palette <- c(
+my_palette <- c(
   "#3498DB",
   "#E74C3C",
   "#18BC9C",
-  "#F39C12"
+  "#F39C12",
+  "#6610f2"
 )
 
 ## Flextbale formatting

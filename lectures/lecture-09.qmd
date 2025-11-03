@@ -61,8 +61,9 @@ scale_colour_discrete <- function(...) scale_color_manual(values = my_palette)
 
 By the end of the lecture, you will be able to ...
 
--   Use R to produce multivariate regression
--   Use R to create publication ready regression tables (e.g., Table 02)
+-   Use R to produce multivariate regression  
+-   Use R to create publication ready regression tables (e.g., Table 02)  
+-   Understand the concept of modelling, interpreting, and visualizing interaction effects and marginal predictions.  
 
 # Code-along 09 {data-menu-title="Code-along" background-image="images/terminal.png"}
 
@@ -124,7 +125,7 @@ variables we'll analyze.
 ```{r}
 #| message: false
 #| label: my-data
-#| code-line-numbers: "1-9|11-18|20-24"
+#| code-line-numbers: "1-9|11-19|21-25"
 
 # Categorical Variables
 my_cat <- gss_all |>
@@ -149,8 +150,6 @@ my_con <- gss_all |>
 # Combine the two dataframes
 my_data <- full_join(my_cat, my_con, by = c("year", "id")) # match by 2 vars
 
-my_data <- my_data |>
-  drop_na()
 ```
 
 
@@ -170,7 +169,7 @@ my_data <- my_data |>
 #| output-location: slide
 
 # Create scatterplot with a regression line
-gss_all |>
+my_data |>
   group_by(year) |>
   summarize(avg = mean(childs, na.rm = TRUE)) |>
   ggplot(aes(x = year, y = avg)) +
@@ -277,7 +276,7 @@ get_regression_summaries(model_01)
 #| output-location: slide
 
 # Create scatterplot with regression line
-gss_all |>
+my_data |>
   group_by(year) |>
   summarize(avg = mean(educ, na.rm = TRUE)) |>
   ggplot(aes(x = year, y = avg)) +
@@ -298,7 +297,7 @@ gss_all |>
 #| output-location: slide
 
 # Create scatterplot with regression line
-gss_all |>
+my_data |>
   group_by(educ) |>
   summarize(avg = mean(childs, na.rm = TRUE)) |>
   ggplot(aes(x = educ, y = avg)) +
@@ -369,9 +368,15 @@ OLS Regression predicting number of children by survey year and years of educati
 #| output-location: fragment
 
 model_02 |>
-  tbl_regression(intercept = TRUE) 
+  tbl_regression(intercept = TRUE)  
 
 ```
+
+::: notes
+model_02 |>
+  tbl_regression(intercept = TRUE, estimate_fun = ~ style_number(.x, digits = 4))  
+:::
+
 
 ## `tbl_regression()` {.sparse-slide}
 
@@ -480,6 +485,31 @@ model |>
 
 ## `estimate_means()` {.sparse-slide}
 
+```{r}
+#| label: estimate_means_margins
+#| output-location: fragment
+
+# Get predicted values
+preds <- estimate_means(model, by = c("sex"))
+
+# Preview the new df
+preds |>
+  as_tibble() |> 
+  head()
+```
+
+::: notes
+R calculates the mean values of every variable in the model except sex, and sets all of those variables equal to their means. Then (once again) it sets female = 0 in every observation, calculates predicted probabilities for each individual, and averages those.
+
+Then it goes back and resets female to 1 in every observation, again calculates predicted probabilities for each individual and outputs the average of those. 
+
+Outputs can be interpreted as the predicted probabilities for women and men if they were all average in all other respects. 
+
+:::
+
+
+## `estimate_means()` {.sparse-slide}
+
 ```{r, eval = FALSE}
 #| label: estimate_means_code
 
@@ -494,7 +524,7 @@ preds |>
 
 ## `estimate_means()` {.sparse-slide .smaller}
 
-$39.1 + .426_{educ} -6.74_{female}$  
+$38.601 + 0.420_{educ} -6.576_{female}$  
 
 <br>
 
@@ -512,13 +542,13 @@ preds |>
 
 <br>
 
-[men with 0 years of education = $39.1 + .426_{educ}*0$]{.fragment}  
-[women with 0 years of education $39.1 + .426_{educ}*0 -6.74_{female}$]{.fragment}   
-[men with 2.222 years of education $39.1 + .426_{educ}*2.222$]{.fragment}   
-[women with 2.222 years of education $39.1 + .426_{educ}*2.222-6.74_{female}$]{.fragment}  
+[men with 0 years of education = $38.601 + .420_{educ}*0$]{.fragment}  
+[women with 0 years of education $38.601 + .420_{educ}*0 -6.576_{female}$]{.fragment}   
+[men with 2.222 years of education $38.601 + .420_{educ}*2.222$]{.fragment}   
+[women with 2.222 years of education $38.601 + .420_{educ}*2.222-6.576_{female}$]{.fragment}  
 
 
-## `ggplot()`
+## { data-menu-title="`ggplot()`" .sparse-slide}
 
 ```{r}
 #| label: ggplot
@@ -529,13 +559,11 @@ preds |>
   ggplot(aes(x = educ, y = Mean, color = sex)) +
     geom_line(size = 1.2) +
     labs(
-      title = "Predicted Weekly Work Hours by Education and Sex",
+      title = "Predicted Weekly Work Hours by Education and Gender",
       x = "Education Level",
       y = "Predicted Weekly Work Hours",
-      color = "Sex",
-      fill = "Sex"
-    ) +
-    theme_minimal() +
+      color = " ") +
+    theme_minimal(20) +
     theme(legend.position = "top")
 ```
 
@@ -647,18 +675,18 @@ get_regression_table(model)
 ```
 
 ::: notes
-The coefficient for `educ` is $-0.123	$, meaning that for moderates (the reference group), each additional year of education is associated with -0.123 fewer tv hours per day.
+The coefficient for `educ` is $-0.142	$, meaning that for moderates (the reference group), each additional year of education is associated with -0.142 fewer tv hours per day.
 
-The coefficient for `pol_group: Conservative` is $-0.278$. This is the difference in the outcome between moderates and conservatives when education = 0. Conservatives watch -0.278 TV hours per day fewer than moderates when education is zero. Not statistically significantly different.
+The coefficient for `pol_group: Conservative` is $-0.1$. This is the difference in the outcome between moderates and conservatives when education = 0. Conservatives watch -0.1 TV hours per day fewer than moderates when education is zero. Not statistically significantly different.
 
-The interaction term `educ:pol_groupConservative` is $0.007$. It tells us whether the relationship between education and TV hours differs between moderates and conservatives It adjusts the slope of education for conservatives So for conservatives, the effect of education is:
+The interaction term `educ:pol_groupConservative` is $-0.008$. It tells us whether the relationship between education and TV hours differs between moderates and conservatives It adjusts the slope of education for conservatives So for conservatives, the effect of education is:
 
-$-0.123 + 0.007 = -0.116$
+$-0.142 -0.008 = -0.15$
 
-This means that for conservatives, each additional unit of education is associated with only $-0.116$ fewer daily TV hours.
+This means that for conservatives, each additional unit of education is associated with only $-0.15$ fewer daily TV hours.
 :::
 
-## `ggplot()`
+## { data-menu-title="`ggplot()`" .sparse-slide}
 
 ```{r}
 #| label: ggplot-interaction
@@ -675,10 +703,8 @@ preds |>
       title = "Predicted Daily TV Hours by Education and Political Identity",
       x = "Education Level",
       y = "Predicted TV Hours",
-      color = "marital",
-      fill = "marital"
-    ) +
-    theme_minimal() +
+      color = "Political Identity") +
+    theme_minimal(20) +
     theme(legend.position = "top")
 ``` 
 
@@ -702,7 +728,7 @@ get_regression_table(model)
 ## Think Like a Statistician {background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat" .sparse-slide}
 
 ::: task
-{{< fa check-double >}} 1. Add `childs` to the regression. Interpret the output.
+{{< fa check-double >}} 2. Add `childs` to the regression. Interpret the output.
 ::: 
 
 <br>
@@ -710,6 +736,21 @@ get_regression_table(model)
 . . .
 
 ```{r}
-model <- lm(formula = realrinc ~ hrs1 + educ + childs, data = gss_all)
+model <- lm(formula = realrinc ~ hrs1 + educ + childs, data = my_data)
+get_regression_table(model)
+```
+
+## Think Like a Statistician {background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat" .sparse-slide .smaller}
+
+::: task
+{{< fa check-double >}} 3. Add `marital` to the regression. Interpret the output.
+::: 
+
+<br>
+
+. . .
+
+```{r}
+model <- lm(formula = realrinc ~ hrs1 + educ + childs + marital, data = my_data)
 get_regression_table(model)
 ```

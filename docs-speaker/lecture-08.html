@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html lang="en"><head>
-<script src="lecture-08_files/libs/clipboard/clipboard.min.js"></script>
-<script src="lecture-08_files/libs/quarto-html/tabby.min.js"></script>
-<script src="lecture-08_files/libs/quarto-html/popper.min.js"></script>
-<script src="lecture-08_files/libs/quarto-html/tippy.umd.min.js"></script>
-<link href="lecture-08_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="lecture-08_files/libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="lecture-08_files/libs/quarto-html/quarto-syntax-highlighting-c1f63da3e08f13bc72dc17e92cfd001d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<link href="lecture-08_files/libs/quarto-contrib/fontawesome6-1.2.0/all.min.css" rel="stylesheet">
-<link href="lecture-08_files/libs/quarto-contrib/fontawesome6-1.2.0/latex-fontsize.css" rel="stylesheet"><meta charset="utf-8">
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-html/tabby.min.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-c1f63da3e08f13bc72dc17e92cfd001d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-contrib/fontawesome6-1.2.0/all.min.css" rel="stylesheet">
+<link href="site_libs/quarto-contrib/fontawesome6-1.2.0/latex-fontsize.css" rel="stylesheet"><meta charset="utf-8">
   <meta name="generator" content="quarto-1.7.32">
 
   <title>Bivariate Regression</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
-  <link rel="stylesheet" href="lecture-08_files/libs/revealjs/dist/reset.css">
-  <link rel="stylesheet" href="lecture-08_files/libs/revealjs/dist/reveal.css">
+  <link rel="stylesheet" href="site_libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="site_libs/revealjs/dist/reveal.css">
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
@@ -96,14 +96,14 @@
     code span.vs { color: #da4453; } /* VerbatimString */
     code span.wa { color: #da4453; } /* Warning */
   </style>
-  <link rel="stylesheet" href="lecture-08_files/libs/revealjs/dist/theme/quarto-a526d4595ac465cbbd124601ea9a87fb.css">
-  <link href="lecture-08_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
-  <link href="lecture-08_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
-  <link href="lecture-08_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
-  <link href="lecture-08_files/libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
-  <link href="lecture-08_files/libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
-  <link href="lecture-08_files/libs/revealjs/plugin/reveal-quiz/quiz.css" rel="stylesheet">
-  <link href="lecture-08_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <link rel="stylesheet" href="site_libs/revealjs/dist/theme/quarto-a526d4595ac465cbbd124601ea9a87fb.css">
+  <link href="site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="site_libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
+  <link href="site_libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
+  <link href="site_libs/revealjs/plugin/reveal-quiz/quiz.css" rel="stylesheet">
+  <link href="site_libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
   <style type="text/css">
     .reveal div.sourceCode {
       margin: 0;
@@ -273,14 +273,14 @@
 <h2>Packages</h2>
 <p>Load the standard packages &amp; new package <code>moderndrive</code></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a><span class="co"># install.packages(broom.helpers) # needed for moderndive</span></span>
-<span id="cb1-2"><a href=""></a><span class="co"># install.packages("moderndive")</span></span>
-<span id="cb1-3"><a href=""></a></span>
-<span id="cb1-4"><a href=""></a><span class="fu">library</span>(tidyverse) </span>
-<span id="cb1-5"><a href=""></a><span class="fu">library</span>(haven) <span class="co"># not core tidyverse</span></span>
-<span id="cb1-6"><a href=""></a><span class="fu">library</span>(summarytools)</span>
-<span id="cb1-7"><a href=""></a><span class="fu">library</span>(gtsummary) </span>
-<span id="cb1-8"><a href=""></a><span class="fu">library</span>(moderndive)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a><span class="co"># install.packages(broom.helpers) # needed for moderndive</span></span>
+<span id="cb1-2"><a></a><span class="co"># install.packages("moderndive")</span></span>
+<span id="cb1-3"><a></a></span>
+<span id="cb1-4"><a></a><span class="fu">library</span>(tidyverse) </span>
+<span id="cb1-5"><a></a><span class="fu">library</span>(haven) <span class="co"># not core tidyverse</span></span>
+<span id="cb1-6"><a></a><span class="fu">library</span>(summarytools)</span>
+<span id="cb1-7"><a></a><span class="fu">library</span>(gtsummary) </span>
+<span id="cb1-8"><a></a><span class="fu">library</span>(moderndive)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section></section>
 <section>
@@ -311,15 +311,15 @@ the % of students enrolled/eligible within the age range</p>
 <h2>Example df</h2>
 <div class="cell columns column-output-location">
 <div class="column">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href=""></a><span class="co"># Create columns</span></span>
-<span id="cb2-2"><a href=""></a>literacy <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">31.7</span>, <span class="fl">79.3</span>, <span class="fl">85.4</span>, <span class="fl">41.0</span>, <span class="fl">54.7</span>, <span class="fl">97.9</span>, <span class="fl">92.8</span>, <span class="fl">67.1</span>, <span class="fl">97.8</span>, <span class="fl">60.4</span>, <span class="fl">87.5</span>, <span class="fl">99.1</span>)</span>
-<span id="cb2-3"><a href=""></a>educ <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">3.74</span>, <span class="fl">10.4</span>, <span class="fl">20.4</span>, <span class="fl">4.46</span>, <span class="fl">9.53</span>, <span class="fl">78.6</span>, <span class="fl">31.5</span>, <span class="fl">16.2</span>, <span class="fl">65.8</span>, <span class="fl">10.3</span>, <span class="fl">30.8</span>, <span class="fl">40.1</span>)</span>
-<span id="cb2-4"><a href=""></a></span>
-<span id="cb2-5"><a href=""></a><span class="co"># Combine into a data frame</span></span>
-<span id="cb2-6"><a href=""></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(literacy, educ)</span>
-<span id="cb2-7"><a href=""></a></span>
-<span id="cb2-8"><a href=""></a><span class="co"># View the data frame</span></span>
-<span id="cb2-9"><a href=""></a><span class="fu">print</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a></a><span class="co"># Create columns</span></span>
+<span id="cb2-2"><a></a>literacy <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">31.7</span>, <span class="fl">79.3</span>, <span class="fl">85.4</span>, <span class="fl">41.0</span>, <span class="fl">54.7</span>, <span class="fl">97.9</span>, <span class="fl">92.8</span>, <span class="fl">67.1</span>, <span class="fl">97.8</span>, <span class="fl">60.4</span>, <span class="fl">87.5</span>, <span class="fl">99.1</span>)</span>
+<span id="cb2-3"><a></a>educ <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">3.74</span>, <span class="fl">10.4</span>, <span class="fl">20.4</span>, <span class="fl">4.46</span>, <span class="fl">9.53</span>, <span class="fl">78.6</span>, <span class="fl">31.5</span>, <span class="fl">16.2</span>, <span class="fl">65.8</span>, <span class="fl">10.3</span>, <span class="fl">30.8</span>, <span class="fl">40.1</span>)</span>
+<span id="cb2-4"><a></a></span>
+<span id="cb2-5"><a></a><span class="co"># Combine into a data frame</span></span>
+<span id="cb2-6"><a></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(literacy, educ)</span>
+<span id="cb2-7"><a></a></span>
+<span id="cb2-8"><a></a><span class="co"># View the data frame</span></span>
+<span id="cb2-9"><a></a><span class="fu">print</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div><div class="column">
 <div class="cell-output cell-output-stdout">
 <pre><code>   literacy  educ
@@ -342,8 +342,8 @@ the % of students enrolled/eligible within the age range</p>
 <h2><code>tidy_summary()</code></h2>
 <p><code>moderndive::tidy_summary()</code> returns commonly used summary statistics in a tidy format.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href=""></a>df <span class="sc">|&gt;</span></span>
-<span id="cb4-2"><a href=""></a>  <span class="fu">tidy_summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a></a>df <span class="sc">|&gt;</span></span>
+<span id="cb4-2"><a></a>  <span class="fu">tidy_summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell fragment">
 <div class="cell-output cell-output-stdout">
@@ -358,16 +358,16 @@ the % of students enrolled/eligible within the age range</p>
 <section id="section" class="slide level2" data-menu-title="Scatterplot">
 <h2></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href=""></a><span class="co"># Create scatterplot</span></span>
-<span id="cb6-2"><a href=""></a>df <span class="sc">|&gt;</span></span>
-<span id="cb6-3"><a href=""></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> literacy, <span class="at">y =</span> educ)) <span class="sc">+</span></span>
-<span id="cb6-4"><a href=""></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"#18BC9C"</span>, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb6-5"><a href=""></a>  <span class="fu">labs</span>(</span>
-<span id="cb6-6"><a href=""></a>    <span class="at">title =</span> <span class="st">"Scatterplot of Education vs Literacy"</span>,</span>
-<span id="cb6-7"><a href=""></a>    <span class="at">x =</span> <span class="st">"Literacy Rate (X)"</span>,</span>
-<span id="cb6-8"><a href=""></a>      <span class="at">y =</span> <span class="st">"College enrollment (Y)"</span></span>
-<span id="cb6-9"><a href=""></a>  ) <span class="sc">+</span></span>
-<span id="cb6-10"><a href=""></a>  <span class="fu">theme_minimal</span>(<span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a></a><span class="co"># Create scatterplot</span></span>
+<span id="cb6-2"><a></a>df <span class="sc">|&gt;</span></span>
+<span id="cb6-3"><a></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> literacy, <span class="at">y =</span> educ)) <span class="sc">+</span></span>
+<span id="cb6-4"><a></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"#18BC9C"</span>, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb6-5"><a></a>  <span class="fu">labs</span>(</span>
+<span id="cb6-6"><a></a>    <span class="at">title =</span> <span class="st">"Scatterplot of Education vs Literacy"</span>,</span>
+<span id="cb6-7"><a></a>    <span class="at">x =</span> <span class="st">"Literacy Rate (X)"</span>,</span>
+<span id="cb6-8"><a></a>      <span class="at">y =</span> <span class="st">"College enrollment (Y)"</span></span>
+<span id="cb6-9"><a></a>  ) <span class="sc">+</span></span>
+<span id="cb6-10"><a></a>  <span class="fu">theme_minimal</span>(<span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="lecture-08_files/figure-revealjs/scatterplot-1.png" width="960" class="r-stretch"></section>
@@ -383,17 +383,17 @@ the % of students enrolled/eligible within the age range</p>
 <section id="section-2" class="slide level2 sparse-slide" data-menu-title="Scatterplot + Regression line">
 <h2></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7" data-code-line-numbers="5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href=""></a><span class="co"># Create scatterplot with regression line</span></span>
-<span id="cb7-2"><a href=""></a>df <span class="sc">|&gt;</span></span>
-<span id="cb7-3"><a href=""></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> literacy, <span class="at">y =</span> educ)) <span class="sc">+</span></span>
-<span id="cb7-4"><a href=""></a>    <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"#18BC9C"</span>, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb7-5"><a href=""></a>    <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> <span class="st">"#3498DB"</span>) <span class="sc">+</span></span>
-<span id="cb7-6"><a href=""></a>    <span class="fu">labs</span>(</span>
-<span id="cb7-7"><a href=""></a>      <span class="at">title =</span> <span class="st">"Scatterplot of Education vs Literacy with Regression Line"</span>,</span>
-<span id="cb7-8"><a href=""></a>      <span class="at">x =</span> <span class="st">"Literacy Rate (%)"</span>,</span>
-<span id="cb7-9"><a href=""></a>      <span class="at">y =</span> <span class="st">"College enrollment (Y)"</span></span>
-<span id="cb7-10"><a href=""></a>    ) <span class="sc">+</span></span>
-<span id="cb7-11"><a href=""></a>    <span class="fu">theme_minimal</span>(<span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7" data-code-line-numbers="5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a></a><span class="co"># Create scatterplot with regression line</span></span>
+<span id="cb7-2"><a></a>df <span class="sc">|&gt;</span></span>
+<span id="cb7-3"><a></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> literacy, <span class="at">y =</span> educ)) <span class="sc">+</span></span>
+<span id="cb7-4"><a></a>    <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"#18BC9C"</span>, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb7-5"><a></a>    <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> <span class="st">"#3498DB"</span>) <span class="sc">+</span></span>
+<span id="cb7-6"><a></a>    <span class="fu">labs</span>(</span>
+<span id="cb7-7"><a></a>      <span class="at">title =</span> <span class="st">"Scatterplot of Education vs Literacy with Regression Line"</span>,</span>
+<span id="cb7-8"><a></a>      <span class="at">x =</span> <span class="st">"Literacy Rate (%)"</span>,</span>
+<span id="cb7-9"><a></a>      <span class="at">y =</span> <span class="st">"College enrollment (Y)"</span></span>
+<span id="cb7-10"><a></a>    ) <span class="sc">+</span></span>
+<span id="cb7-11"><a></a>    <span class="fu">theme_minimal</span>(<span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="lecture-08_files/figure-revealjs/scatterplot-ols-1.png" width="960" class="r-stretch"></section>
@@ -565,7 +565,7 @@ The statistical technique that produces the least-squares line Sometimes referre
 <section id="section-11" class="slide level2 sparse-slide" data-menu-title="OLS Regression">
 <h2></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href=""></a><span class="fu">lm</span>(educ <span class="sc">~</span> literacy, <span class="at">data =</span> df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a></a><span class="fu">lm</span>(educ <span class="sc">~</span> literacy, <span class="at">data =</span> df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -607,12 +607,12 @@ Coefficients:
 <div class="fragment">
 <div class="cell columns column-output-location">
 <div class="column">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href=""></a><span class="fu">cor.test</span>(</span>
-<span id="cb10-2"><a href=""></a>     <span class="sc">~</span> educ <span class="sc">+</span> literacy,</span>
-<span id="cb10-3"><a href=""></a>     <span class="at">data =</span> df,</span>
-<span id="cb10-4"><a href=""></a>     <span class="at">method =</span> <span class="st">"pearson"</span>,</span>
-<span id="cb10-5"><a href=""></a>     <span class="at">na.action =</span> na.omit</span>
-<span id="cb10-6"><a href=""></a> ) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a></a><span class="fu">cor.test</span>(</span>
+<span id="cb10-2"><a></a>     <span class="sc">~</span> educ <span class="sc">+</span> literacy,</span>
+<span id="cb10-3"><a></a>     <span class="at">data =</span> df,</span>
+<span id="cb10-4"><a></a>     <span class="at">method =</span> <span class="st">"pearson"</span>,</span>
+<span id="cb10-5"><a></a>     <span class="at">na.action =</span> na.omit</span>
+<span id="cb10-6"><a></a> ) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div><div class="column fragment">
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -646,9 +646,9 @@ sample estimates:
 <section id="get_regression_table" class="slide level2 sparse-slide">
 <h2><code>get_regression_table()</code></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href=""></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(educ <span class="sc">~</span> literacy, <span class="at">data =</span> df)</span>
-<span id="cb12-2"><a href=""></a></span>
-<span id="cb12-3"><a href=""></a><span class="fu">get_regression_table</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(educ <span class="sc">~</span> literacy, <span class="at">data =</span> df)</span>
+<span id="cb12-2"><a></a></span>
+<span id="cb12-3"><a></a><span class="fu">get_regression_table</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 7
   term      estimate std_error statistic p_value lower_ci upper_ci
@@ -701,15 +701,15 @@ sample estimates:
 <section id="add-a-categorical-variable" class="slide level2 sparse-slide">
 <h2>Add a categorical variable</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href=""></a><span class="co"># Use mutate and case_when to add the country_group column</span></span>
-<span id="cb14-2"><a href=""></a>df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
-<span id="cb14-3"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">country_group =</span> <span class="fu">case_when</span>(</span>
-<span id="cb14-4"><a href=""></a>    literacy <span class="sc">&lt;</span> <span class="dv">50</span> <span class="sc">~</span> <span class="st">"Low Literacy"</span>,</span>
-<span id="cb14-5"><a href=""></a>    literacy <span class="sc">&gt;=</span> <span class="dv">50</span> <span class="sc">&amp;</span> literacy <span class="sc">&lt;=</span> <span class="dv">80</span> <span class="sc">~</span> <span class="st">"Medium Literacy"</span>,</span>
-<span id="cb14-6"><a href=""></a>    literacy <span class="sc">&gt;</span> <span class="dv">80</span> <span class="sc">~</span> <span class="st">"High Literacy"</span></span>
-<span id="cb14-7"><a href=""></a>  ))</span>
-<span id="cb14-8"><a href=""></a></span>
-<span id="cb14-9"><a href=""></a><span class="fu">head</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a></a><span class="co"># Use mutate and case_when to add the country_group column</span></span>
+<span id="cb14-2"><a></a>df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb14-3"><a></a>  <span class="fu">mutate</span>(<span class="at">country_group =</span> <span class="fu">case_when</span>(</span>
+<span id="cb14-4"><a></a>    literacy <span class="sc">&lt;</span> <span class="dv">50</span> <span class="sc">~</span> <span class="st">"Low Literacy"</span>,</span>
+<span id="cb14-5"><a></a>    literacy <span class="sc">&gt;=</span> <span class="dv">50</span> <span class="sc">&amp;</span> literacy <span class="sc">&lt;=</span> <span class="dv">80</span> <span class="sc">~</span> <span class="st">"Medium Literacy"</span>,</span>
+<span id="cb14-6"><a></a>    literacy <span class="sc">&gt;</span> <span class="dv">80</span> <span class="sc">~</span> <span class="st">"High Literacy"</span></span>
+<span id="cb14-7"><a></a>  ))</span>
+<span id="cb14-8"><a></a></span>
+<span id="cb14-9"><a></a><span class="fu">head</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  literacy  educ   country_group
 1     31.7  3.74    Low Literacy
@@ -724,9 +724,9 @@ sample estimates:
 <section id="get_regression_table-1" class="slide level2 sparse-slide">
 <h2><code>get_regression_table()</code></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href=""></a>model_2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(educ <span class="sc">~</span> country_group, <span class="at">data =</span> df)</span>
-<span id="cb16-2"><a href=""></a></span>
-<span id="cb16-3"><a href=""></a><span class="fu">get_regression_table</span>(model_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a></a>model_2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(educ <span class="sc">~</span> country_group, <span class="at">data =</span> df)</span>
+<span id="cb16-2"><a></a></span>
+<span id="cb16-3"><a></a><span class="fu">get_regression_table</span>(model_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 7
   term                    estimate std_error statistic p_value lower_ci upper_ci
@@ -794,9 +794,9 @@ Errors of prediction made based on IV</p>
 <p><br></p>
 <div class="fragment">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href=""></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(educ <span class="sc">~</span> literacy, <span class="at">data =</span> df)</span>
-<span id="cb18-2"><a href=""></a></span>
-<span id="cb18-3"><a href=""></a><span class="fu">get_regression_points</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(educ <span class="sc">~</span> literacy, <span class="at">data =</span> df)</span>
+<span id="cb18-2"><a></a></span>
+<span id="cb18-3"><a></a><span class="fu">get_regression_points</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 12 × 5
       ID  educ literacy educ_hat residual
@@ -830,19 +830,19 @@ Errors of prediction made based on IV</p>
 <section id="r2-calculation" class="slide level2 sparse-slide">
 <h2><span class="math inline">\(R^2\)</span> calculation</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href=""></a>my_test <span class="ot">&lt;-</span> <span class="fu">cor.test</span>(</span>
-<span id="cb20-2"><a href=""></a>     <span class="sc">~</span> educ <span class="sc">+</span> literacy,</span>
-<span id="cb20-3"><a href=""></a>     <span class="at">data =</span> df,</span>
-<span id="cb20-4"><a href=""></a>     <span class="at">method =</span> <span class="st">"pearson"</span>,</span>
-<span id="cb20-5"><a href=""></a>     <span class="at">na.action =</span> na.omit</span>
-<span id="cb20-6"><a href=""></a> ) </span>
-<span id="cb20-7"><a href=""></a></span>
-<span id="cb20-8"><a href=""></a>my_test<span class="sc">$</span>estimate</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a></a>my_test <span class="ot">&lt;-</span> <span class="fu">cor.test</span>(</span>
+<span id="cb20-2"><a></a>     <span class="sc">~</span> educ <span class="sc">+</span> literacy,</span>
+<span id="cb20-3"><a></a>     <span class="at">data =</span> df,</span>
+<span id="cb20-4"><a></a>     <span class="at">method =</span> <span class="st">"pearson"</span>,</span>
+<span id="cb20-5"><a></a>     <span class="at">na.action =</span> na.omit</span>
+<span id="cb20-6"><a></a> ) </span>
+<span id="cb20-7"><a></a></span>
+<span id="cb20-8"><a></a>my_test<span class="sc">$</span>estimate</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>      cor 
 0.7800287 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href=""></a>(my_test<span class="sc">$</span>estimate)<span class="sc">^</span><span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a></a>(my_test<span class="sc">$</span>estimate)<span class="sc">^</span><span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>      cor 
 0.6084447 </code></pre>
@@ -857,9 +857,9 @@ Errors of prediction made based on IV</p>
 <p><br></p>
 <div class="fragment">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href=""></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(educ <span class="sc">~</span> literacy, <span class="at">data =</span> df)</span>
-<span id="cb24-2"><a href=""></a></span>
-<span id="cb24-3"><a href=""></a><span class="fu">get_regression_summaries</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(educ <span class="sc">~</span> literacy, <span class="at">data =</span> df)</span>
+<span id="cb24-2"><a></a></span>
+<span id="cb24-3"><a></a><span class="fu">get_regression_summaries</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 9
   r_squared adj_r_squared   mse  rmse sigma statistic p_value    df  nobs
@@ -893,6 +893,7 @@ Errors of prediction made based on IV</p>
 </div>
 
 
+
 </section></section>
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
@@ -902,21 +903,21 @@ Errors of prediction made based on IV</p>
 </div></div>
 
   <script>window.backupDefine = window.define; window.define = undefined;</script>
-  <script src="lecture-08_files/libs/revealjs/dist/reveal.js"></script>
+  <script src="site_libs/revealjs/dist/reveal.js"></script>
   <!-- reveal.js plugins -->
-  <script src="lecture-08_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
-  <script src="lecture-08_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
-  <script src="lecture-08_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
-  <script src="lecture-08_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
-  <script src="lecture-08_files/libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
-  <script src="lecture-08_files/libs/revealjs/plugin/reveal-quiz/quiz.js"></script>
-  <script src="lecture-08_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  <script src="site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="site_libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="site_libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="site_libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="site_libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
+  <script src="site_libs/revealjs/plugin/reveal-quiz/quiz.js"></script>
+  <script src="site_libs/revealjs/plugin/quarto-support/support.js"></script>
   
 
-  <script src="lecture-08_files/libs/revealjs/plugin/notes/notes.js"></script>
-  <script src="lecture-08_files/libs/revealjs/plugin/search/search.js"></script>
-  <script src="lecture-08_files/libs/revealjs/plugin/zoom/zoom.js"></script>
-  <script src="lecture-08_files/libs/revealjs/plugin/math/math.js"></script>
+  <script src="site_libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="site_libs/revealjs/plugin/search/search.js"></script>
+  <script src="site_libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="site_libs/revealjs/plugin/math/math.js"></script>
   <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
 
   <script>

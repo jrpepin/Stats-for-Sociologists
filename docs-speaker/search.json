@@ -1706,5 +1706,229 @@
     "title": "Bivariate Regression",
     "section": "Think Like a Statistician",
     "text": "Think Like a Statistician\n\n 1. Run and interpret a simple regression using your IPUMS data\n\n\n\n 2. Run and interpret a regression with a categorical IV and your DV using your IPUMS data"
+  },
+  {
+    "objectID": "lecture-09.html#packages",
+    "href": "lecture-09.html#packages",
+    "title": "OLS Regression II",
+    "section": "Packages",
+    "text": "Packages\nLoad the standard packages and new package modelbased.\n\n# install.packages(\"marginaleffects\") # needed for modelbased\n# install.packages(\"modelbased\")\n\nlibrary(tidyverse) \nlibrary(haven) # not core tidyverse\nlibrary(gssr)\nlibrary(gssrdoc)\nlibrary(summarytools)\nlibrary(gtsummary) \nlibrary(moderndive)\nlibrary(modelbased)"
+  },
+  {
+    "objectID": "lecture-09.html#load-your-data",
+    "href": "lecture-09.html#load-your-data",
+    "title": "OLS Regression II",
+    "section": "Load your data",
+    "text": "Load your data\n\n# Load all gss\ndata(gss_all)"
+  },
+  {
+    "objectID": "lecture-09.html#variables",
+    "href": "lecture-09.html#variables",
+    "title": "OLS Regression II",
+    "section": "Variables",
+    "text": "Variables\n\nyear Survey year\ntvhours Hours per day watching tv\nrealrinc R’s income in constant $\nage Age of respondent\neduc Respondents highest edu credit\nhrs1 How many hours did you work last week\nchilds How many children have you ever had?\npolviews Think of self as liberal or conservative\nsex Respondents sex\nmarital R’s marital status"
+  },
+  {
+    "objectID": "lecture-09.html#section",
+    "href": "lecture-09.html#section",
+    "title": "OLS Regression II",
+    "section": "",
+    "text": "Make a df with only the (pretty) categorical and continuous variables we’ll analyze.\n\n\n# Categorical Variables\nmy_cat &lt;- gss_all |&gt;\n  select(id, year, polviews, sex, marital) |&gt;\n  zap_missing() |&gt;\n  mutate(\n    polviews = as_factor(polviews),\n    sex = as_factor(sex),\n    marital = as_factor(marital)) |&gt; \n  droplevels()\n\n# Continuous Variables\nmy_con &lt;- gss_all |&gt;\n  select(id, year, tvhours, age, educ, hrs1, realrinc, childs) |&gt;\n  mutate(\n    age = as.numeric(age),\n    educ = as.numeric(educ),\n    hrs1 = as.numeric(hrs1),\n    realrinc = as.numeric(realrinc),\n    childs = as.numeric(childs))\n\n# Combine the two dataframes\nmy_data &lt;- full_join(my_cat, my_con, by = c(\"year\", \"id\")) # match by 2 vars"
+  },
+  {
+    "objectID": "lecture-09.html#section-1",
+    "href": "lecture-09.html#section-1",
+    "title": "OLS Regression II",
+    "section": "",
+    "text": "Have the average number of children changed over time?\n\n\n\n# Create scatterplot with a regression line\nmy_data |&gt;\n  group_by(year) |&gt;\n  summarize(avg = mean(childs, na.rm = TRUE)) |&gt;\n  ggplot(aes(x = year, y = avg)) +\n  geom_point(color = \"#18BC9C\", size = 3) +\n  geom_smooth(method = \"lm\", se = FALSE, color = \"#3498DB\") +\n  labs(\n    title = \"Scatterplot of Average Number of Children\",\n    x = \"Year\",\n    y = \"Average number of children\") +\n  theme_minimal(20)\n\n\n\nassumed to be a count, but can be modeled with OLS if treated as continuous"
+  },
+  {
+    "objectID": "lecture-09.html#pearsons-correlation-r",
+    "href": "lecture-09.html#pearsons-correlation-r",
+    "title": "OLS Regression II",
+    "section": "Pearson’s Correlation (R)",
+    "text": "Pearson’s Correlation (R)\n\ncor.test(\n  ~ childs + year,\n  data = my_data,\n  method = \"pearson\",\n  na.action = na.omit)\n\n\n    Pearson's product-moment correlation\n\ndata:  childs and year\nt = -18.896, df = 75405, p-value &lt; 2.2e-16\nalternative hypothesis: true correlation is not equal to 0\n95 percent confidence interval:\n -0.07575205 -0.06154441\nsample estimates:\n        cor \n-0.06865171 \n\n\n\nr ranges from -1 to +1\n-1: perfect negative correlation\n0: no relationship\n1: perfect positive correlation\nStrength of relationship\nStrong: Over 0.6\nModerate: 0.3 to 0.5\nWeak: 0.1 to 0.2\nVery weak: Below 0.1"
+  },
+  {
+    "objectID": "lecture-09.html#simple-regression",
+    "href": "lecture-09.html#simple-regression",
+    "title": "OLS Regression II",
+    "section": "Simple Regression",
+    "text": "Simple Regression\n\nmodel_01 &lt;- lm(formula = childs ~ year, data = my_data)\nget_regression_table(model_01)\n\n\n\n# A tibble: 2 × 7\n  term      estimate std_error statistic p_value lower_ci upper_ci\n  &lt;chr&gt;        &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;\n1 intercept   17.2       0.811      21.2       0   15.7     18.8  \n2 year        -0.008     0         -18.9       0   -0.008   -0.007\n\n\n\nnote the test statistics are the same."
+  },
+  {
+    "objectID": "lecture-09.html#pre-measure",
+    "href": "lecture-09.html#pre-measure",
+    "title": "OLS Regression II",
+    "section": "PRE Measure",
+    "text": "PRE Measure\nSquare R\n\n\nmy_test &lt;-  cor.test(\n  ~ childs + year,\n  data = my_data,\n  method = \"pearson\",\n  na.action = na.omit\n)\n\nmy_test$estimate^2\n\n\n        cor \n0.004713057 \n\n\n\n\nGet \\(r^2\\)\n\nmodel_01 &lt;- lm(formula = childs ~ year, data = my_data)\nget_regression_summaries(model_01)\n\n# A tibble: 1 × 9\n  r_squared adj_r_squared   mse  rmse sigma statistic p_value    df  nobs\n      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;\n1     0.005         0.005  3.07  1.75  1.75      357.       0     1 75407"
+  },
+  {
+    "objectID": "lecture-09.html#section-2",
+    "href": "lecture-09.html#section-2",
+    "title": "OLS Regression II",
+    "section": "",
+    "text": "Are the trends explained by increases in education?\n\n\n# Create scatterplot with regression line\nmy_data |&gt;\n  group_by(year) |&gt;\n  summarize(avg = mean(educ, na.rm = TRUE)) |&gt;\n  ggplot(aes(x = year, y = avg)) +\n  geom_point(color = \"#18BC9C\", size = 3) +\n  geom_smooth(method = \"lm\", se = FALSE, color = \"#3498DB\") +\n  labs(\n    title = \"Scatterplot of Average Years of Education\",\n    x = \"Year\",\n    y = \"Average years of education\"\n  ) +\n  theme_minimal(20)"
+  },
+  {
+    "objectID": "lecture-09.html#section-3",
+    "href": "lecture-09.html#section-3",
+    "title": "OLS Regression II",
+    "section": "",
+    "text": "# Create scatterplot with regression line\nmy_data |&gt;\n  group_by(educ) |&gt;\n  summarize(avg = mean(childs, na.rm = TRUE)) |&gt;\n  ggplot(aes(x = educ, y = avg)) +\n  geom_point(color = \"#18BC9C\", size = 3) +\n  geom_smooth(method = \"lm\", se = FALSE, color = \"#3498DB\") +\n  labs(\n    title = \"Scatterplot of Average Number of Children\",\n    x = \"Average years of education\",\n    y = \"Average number of children\"\n  ) +\n  theme_minimal(20)"
+  },
+  {
+    "objectID": "lecture-09.html#section-4",
+    "href": "lecture-09.html#section-4",
+    "title": "OLS Regression II",
+    "section": "",
+    "text": "model_01 &lt;- lm(formula = childs ~ year, data = my_data)\nget_regression_table(model_01)\n\n# A tibble: 2 × 7\n  term      estimate std_error statistic p_value lower_ci upper_ci\n  &lt;chr&gt;        &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;\n1 intercept   17.2       0.811      21.2       0   15.7     18.8  \n2 year        -0.008     0         -18.9       0   -0.008   -0.007\n\n\n\n\n\nmodel_02 &lt;- lm(formula = childs ~ year + educ, data = my_data)\nget_regression_table(model_02)\n\n\n\n# A tibble: 3 × 7\n  term      estimate std_error statistic p_value lower_ci upper_ci\n  &lt;chr&gt;        &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;\n1 intercept    5.26      0.813      6.47   0        3.66     6.85 \n2 year        -0.001     0         -2.00   0.045   -0.002    0    \n3 educ        -0.131     0.002    -64.5    0       -0.134   -0.127"
+  },
+  {
+    "objectID": "lecture-09.html#change-in-pre-measure",
+    "href": "lecture-09.html#change-in-pre-measure",
+    "title": "OLS Regression II",
+    "section": "Change in PRE Measure",
+    "text": "Change in PRE Measure\n\nget_regression_summaries(model_01)\n\n# A tibble: 1 × 9\n  r_squared adj_r_squared   mse  rmse sigma statistic p_value    df  nobs\n      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;\n1     0.005         0.005  3.07  1.75  1.75      357.       0     1 75407\n\n\n\n\n\nget_regression_summaries(model_02)\n\n# A tibble: 1 × 9\n  r_squared adj_r_squared   mse  rmse sigma statistic p_value    df  nobs\n      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;\n1     0.057         0.057  2.90  1.70  1.70     2266.       0     2 75166"
+  },
+  {
+    "objectID": "lecture-09.html#tbl_regression",
+    "href": "lecture-09.html#tbl_regression",
+    "title": "OLS Regression II",
+    "section": "tbl_regression()",
+    "text": "tbl_regression()\nOLS Regression predicting number of children by survey year and years of education\n\nmodel_02 |&gt;\n  tbl_regression(intercept = TRUE)  \n\n\n\n\n\n\n\n\n\nCharacteristic\nBeta\n95% CI\np-value\n\n\n\n\n(Intercept)\n5.3\n3.7, 6.9\n&lt;0.001\n\n\nGSS year for this respondent\n0.00\n0.00, 0.00\n0.045\n\n\neduc\n-0.13\n-0.13, -0.13\n&lt;0.001\n\n\n\nAbbreviation: CI = Confidence Interval\n\n\n\n\n\n\n\n\n\nmodel_02 |&gt; tbl_regression(intercept = TRUE, estimate_fun = ~ style_number(.x, digits = 4))"
+  },
+  {
+    "objectID": "lecture-09.html#tbl_regression-1",
+    "href": "lecture-09.html#tbl_regression-1",
+    "title": "OLS Regression II",
+    "section": "tbl_regression()",
+    "text": "tbl_regression()\nOLS Regression predicting number of children by survey year and years of education\n\nmodel_02 |&gt;\n  tbl_regression(\n    intercept = TRUE) |&gt;\n  modify_column_hide(conf.low) |&gt;\n  modify_column_unhide(column = std.error) \n\n\n\n\n\n\n\n\n\nCharacteristic\nBeta\nSE\np-value\n\n\n\n\n(Intercept)\n5.3\n0.813\n&lt;0.001\n\n\nGSS year for this respondent\n0.00\n0.000\n0.045\n\n\neduc\n-0.13\n0.002\n&lt;0.001\n\n\n\nAbbreviations: CI = Confidence Interval, SE = Standard Error"
+  },
+  {
+    "objectID": "lecture-09.html#tbl_regression-2",
+    "href": "lecture-09.html#tbl_regression-2",
+    "title": "OLS Regression II",
+    "section": "tbl_regression()",
+    "text": "tbl_regression()\nOLS Regression predicting number of children by survey year and years of education\n\nmodel_02 |&gt;\n  tbl_regression(\n    intercept = TRUE) |&gt;\n  modify_column_hide(conf.low) |&gt;\n  modify_column_unhide(column = std.error) |&gt;\n  remove_abbreviation() |&gt;\n  add_significance_stars() |&gt;\n  add_glance_table(include = c(\"r.squared\", \"nobs\"))\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nCharacteristic\nBeta1\nSE\n\n\n\n\n(Intercept)\n5.3***\n0.813\n\n\nGSS year for this respondent\n0.00*\n0.000\n\n\neduc\n-0.13***\n0.002\n\n\nR²\n0.057\n\n\n\n\nNo. Obs.\n75,166\n\n\n\n\n\n1 p&lt;0.05; p&lt;0.01; p&lt;0.001"
+  },
+  {
+    "objectID": "lecture-09.html#section-5",
+    "href": "lecture-09.html#section-5",
+    "title": "OLS Regression II",
+    "section": "",
+    "text": "Are weekly hours worked related to education and gender?\n\n\n\n\nmodel &lt;- lm(hrs1 ~ educ + sex, data = my_data)\n\nget_regression_table(model)\n\n\n\n# A tibble: 3 × 7\n  term        estimate std_error statistic p_value lower_ci upper_ci\n  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;\n1 intercept      38.6      0.32      121.        0   38.0     39.2  \n2 educ            0.42     0.022      18.7       0    0.376    0.464\n3 sex: female    -6.58     0.132     -49.9       0   -6.83    -6.32"
+  },
+  {
+    "objectID": "lecture-09.html#tbl_regression-3",
+    "href": "lecture-09.html#tbl_regression-3",
+    "title": "OLS Regression II",
+    "section": "tbl_regression()",
+    "text": "tbl_regression()\nOLS Regression predicting weekly work hours by years of education and gender\n\n\nmodel |&gt;\n  tbl_regression(\n    intercept = TRUE) |&gt;\n  modify_column_hide(conf.low) |&gt;\n  modify_column_unhide(\n    column = std.error) |&gt;\n  remove_abbreviation() |&gt;\n  add_significance_stars() |&gt;\n  add_glance_table(\n    include = c(\"r.squared\", \"nobs\"))\n\n\n\n\n\n\n\n\n\n\n\n\n\nCharacteristic\nBeta1\nSE\n\n\n\n\n(Intercept)\n39***\n0.320\n\n\neduc\n0.42***\n0.022\n\n\nsex\n\n\n\n\n\n\n    male\n—\n—\n\n\n    female\n-6.6***\n0.132\n\n\nR²\n0.061\n\n\n\n\nNo. Obs.\n43,167\n\n\n\n\n\n1 p&lt;0.05; p&lt;0.01; p&lt;0.001"
+  },
+  {
+    "objectID": "lecture-09.html#tbl_regression-4",
+    "href": "lecture-09.html#tbl_regression-4",
+    "title": "OLS Regression II",
+    "section": "tbl_regression()",
+    "text": "tbl_regression()\nOLS Regression predicting weekly work hours by years of education and gender\n\n\nmodel |&gt;\n  tbl_regression(\n    intercept = TRUE,\n    show_single_row = sex,\n    label = list(sex = \"Women\")) |&gt;\n  modify_column_hide(conf.low) |&gt;\n  modify_column_unhide(\n    column = std.error) |&gt;\n  remove_abbreviation() |&gt;\n  add_significance_stars() |&gt;\n  add_glance_table(\n    include = c(\"r.squared\", \"nobs\"))\n\n\n\n\n\n\n\n\n\n\n\n\n\nCharacteristic\nBeta1\nSE\n\n\n\n\n(Intercept)\n39***\n0.320\n\n\neduc\n0.42***\n0.022\n\n\nWomen\n-6.6***\n0.132\n\n\nR²\n0.061\n\n\n\n\nNo. Obs.\n43,167\n\n\n\n\n\n1 p&lt;0.05; p&lt;0.01; p&lt;0.001"
+  },
+  {
+    "objectID": "lecture-09.html#estimate_means",
+    "href": "lecture-09.html#estimate_means",
+    "title": "OLS Regression II",
+    "section": "estimate_means()",
+    "text": "estimate_means()\n\n# Get predicted values\npreds &lt;- estimate_means(model, by = c(\"sex\"))\n\n# Preview the new df\npreds |&gt;\n  as_tibble() |&gt; \n  head()\n\n\n\n# A tibble: 2 × 7\n  sex     Mean     SE CI_low CI_high     t    df\n  &lt;fct&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;\n1 male    44.4 0.0923   44.2    44.5  480. 43164\n2 female  37.8 0.0939   37.6    38.0  402. 43164\n\n\n\nR calculates the mean values of every variable in the model except sex, and sets all of those variables equal to their means. Then (once again) it sets female = 0 in every observation, calculates predicted probabilities for each individual, and averages those.\nThen it goes back and resets female to 1 in every observation, again calculates predicted probabilities for each individual and outputs the average of those.\nOutputs can be interpreted as the predicted probabilities for women and men if they were all average in all other respects."
+  },
+  {
+    "objectID": "lecture-09.html#estimate_means-1",
+    "href": "lecture-09.html#estimate_means-1",
+    "title": "OLS Regression II",
+    "section": "estimate_means()",
+    "text": "estimate_means()\n\n# Get predicted values\npreds &lt;- estimate_means(model, by = c(\"educ\", \"sex\"))\n\n# Preview the new df\npreds |&gt;\n  as_tibble() |&gt; \n  head()"
+  },
+  {
+    "objectID": "lecture-09.html#estimate_means-2",
+    "href": "lecture-09.html#estimate_means-2",
+    "title": "OLS Regression II",
+    "section": "estimate_means()",
+    "text": "estimate_means()\n\\(38.601 + 0.420_{educ} -6.576_{female}\\)\n\n\n\n# A tibble: 6 × 8\n   educ sex     Mean    SE CI_low CI_high     t    df\n  &lt;dbl&gt; &lt;fct&gt;  &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;\n1  0    male    38.6 0.320   38.0    39.2 121.  43164\n2  0    female  32.0 0.323   31.4    32.7  99.0 43164\n3  2.22 male    39.5 0.273   39.0    40.1 145.  43164\n4  2.22 female  33.0 0.276   32.4    33.5 119.  43164\n5  4.44 male    40.5 0.226   40.0    40.9 179.  43164\n6  4.44 female  33.9 0.230   33.4    34.3 148.  43164\n\n\n\nmen with 0 years of education = \\(38.601 + .420_{educ}*0\\)\nwomen with 0 years of education \\(38.601 + .420_{educ}*0 -6.576_{female}\\)\nmen with 2.222 years of education \\(38.601 + .420_{educ}*2.222\\)\nwomen with 2.222 years of education \\(38.601 + .420_{educ}*2.222-6.576_{female}\\)"
+  },
+  {
+    "objectID": "lecture-09.html#section-6",
+    "href": "lecture-09.html#section-6",
+    "title": "OLS Regression II",
+    "section": "",
+    "text": "# Plot using ggplot2\npreds |&gt;\n  ggplot(aes(x = educ, y = Mean, color = sex)) +\n    geom_line(linewidth = 1.2) +\n    labs(\n      title = \"Predicted Weekly Work Hours by Education and Gender\",\n      x = \"Education Level\",\n      y = \"Predicted Weekly Work Hours\",\n      color = \" \") +\n    theme_minimal(20) +\n    theme(legend.position = \"top\")"
+  },
+  {
+    "objectID": "lecture-09.html#section-7",
+    "href": "lecture-09.html#section-7",
+    "title": "OLS Regression II",
+    "section": "",
+    "text": "Are weekly hours worked related to education and marital status?\n\n\n\n\nmodel &lt;- lm(hrs1 ~ educ + marital, data = my_data)\nget_regression_table(model)\n\n\n\n# A tibble: 6 × 7\n  term                   estimate std_error statistic p_value lower_ci upper_ci\n  &lt;chr&gt;                     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;\n1 intercept                36.5       0.33    110.      0       35.9     37.1  \n2 educ                      0.378     0.023    16.4     0        0.333    0.424\n3 marital: widowed         -5.94      0.385   -15.4     0       -6.70    -5.19 \n4 marital: divorced         0.605     0.198     3.06    0.002    0.218    0.993\n5 marital: separated       -0.278     0.379    -0.733   0.464   -1.02     0.465\n6 marital: never married   -1.76      0.163   -10.8     0       -2.08    -1.44"
+  },
+  {
+    "objectID": "lecture-09.html#section-8",
+    "href": "lecture-09.html#section-8",
+    "title": "OLS Regression II",
+    "section": "",
+    "text": "Regression Predicting Weekly Work Hours by Years of Education and Marital Status\n\n\nmodel |&gt;\n  tbl_regression(\n    intercept = TRUE,\n    label = list(\n      marital = \"Marital status (ref. = married)\")) |&gt;\n  remove_row_type(type = c(\"reference\")) |&gt;  \n  modify_column_hide(conf.low) |&gt;\n  modify_column_unhide(\n    column = std.error) |&gt;\n  remove_abbreviation() |&gt;\n  add_significance_stars() |&gt;\n  add_glance_table(\n    include = c(\"r.squared\", \"nobs\"))\n\n\n\n\n\n\n\n\n\n\n\n\n\nCharacteristic\nBeta1\nSE\n\n\n\n\n(Intercept)\n37***\n0.330\n\n\neduc\n0.38***\n0.023\n\n\nMarital status (ref. = married)\n\n\n\n\n\n\n    widowed\n-5.9***\n0.385\n\n\n    divorced\n0.61**\n0.198\n\n\n    separated\n-0.28\n0.379\n\n\n    never married\n-1.8***\n0.163\n\n\nR²\n0.015\n\n\n\n\nNo. Obs.\n43,178\n\n\n\n\n\n1 p&lt;0.05; p&lt;0.01; p&lt;0.001"
+  },
+  {
+    "objectID": "lecture-09.html#section-9",
+    "href": "lecture-09.html#section-9",
+    "title": "OLS Regression II",
+    "section": "",
+    "text": "Are daily TV hours related to education and political identity?\n\n\n\n\nmy_data &lt;- my_data %&gt;%\n  mutate(pol_group = case_when(\n    polviews %in% c(\"extremely liberal\", \"liberal\", \"slightly liberal\") ~ \"Liberal\",\n    polviews == \"moderate, middle of the road\" ~ \"Moderate\",\n    polviews %in% c(\"slightly conservative\", \"conservative\", \"extremely conservative\") ~ \"Conservative\",\n    TRUE ~ NA_character_))\n\nmodel &lt;- lm(tvhours ~ educ + pol_group, data = my_data)\n\nget_regression_table(model)"
+  },
+  {
+    "objectID": "lecture-09.html#section-9-output",
+    "href": "lecture-09.html#section-9-output",
+    "title": "OLS Regression II",
+    "section": "",
+    "text": "# A tibble: 4 × 7\n  term                estimate std_error statistic p_value lower_ci upper_ci\n  &lt;chr&gt;                  &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;\n1 intercept              5.00      0.056     89.1        0    4.89     5.12 \n2 educ                  -0.159     0.004    -40.4        0   -0.166   -0.151\n3 pol_group: Liberal     0.157     0.031      5.15       0    0.097    0.217\n4 pol_group: Moderate    0.192     0.028      6.76       0    0.136    0.247"
+  },
+  {
+    "objectID": "lecture-09.html#relevel",
+    "href": "lecture-09.html#relevel",
+    "title": "OLS Regression II",
+    "section": "relevel()",
+    "text": "relevel()\n\n# Relevel pol_group so \"Moderate\" is the reference\nmy_data$pol_group &lt;- relevel(factor(my_data$pol_group), \n                            ref = \"Moderate\")\n\nmodel &lt;- lm(tvhours ~ educ + pol_group, data = my_data)\nget_regression_table(model)\n\n\n\n# A tibble: 4 × 7\n  term                    estimate std_error statistic p_value lower_ci upper_ci\n  &lt;chr&gt;                      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;\n1 intercept                  5.20      0.054     96.4     0       5.09     5.30 \n2 educ                      -0.159     0.004    -40.4     0      -0.166   -0.151\n3 pol_group: Conservative   -0.192     0.028     -6.76    0      -0.247   -0.136\n4 pol_group: Liberal        -0.035     0.03      -1.15    0.25   -0.093    0.024"
+  },
+  {
+    "objectID": "lecture-09.html#section-10",
+    "href": "lecture-09.html#section-10",
+    "title": "OLS Regression II",
+    "section": "",
+    "text": "Does the relationship between TV hours and education differ by political identity?\n\n\n\n\nmodel &lt;- lm(tvhours ~ educ * pol_group, data = my_data)\n\nget_regression_table(model)\n\n# A tibble: 6 × 7\n  term                    estimate std_error statistic p_value lower_ci upper_ci\n  &lt;chr&gt;                      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;\n1 intercept                  4.98      0.088    56.5     0        4.81     5.16 \n2 educ                      -0.142     0.007   -21.1     0       -0.155   -0.129\n3 pol_group: Conservative   -0.1       0.128    -0.781   0.435   -0.351    0.151\n4 pol_group: Liberal         0.553     0.132     4.20    0        0.295    0.811\n5 educ:pol_groupConserva…   -0.008     0.01     -0.787   0.431   -0.026    0.011\n6 educ:pol_groupLiberal     -0.044     0.01     -4.55    0       -0.063   -0.025\n\n\n\nThe coefficient for educ is $-0.142 $, meaning that for moderates (the reference group), each additional year of education is associated with -0.142 fewer tv hours per day.\nThe coefficient for pol_group: Conservative is \\(-0.1\\). This is the difference in the outcome between moderates and conservatives when education = 0. Conservatives watch -0.1 TV hours per day fewer than moderates when education is zero. Not statistically significantly different.\nThe interaction term educ:pol_groupConservative is \\(-0.008\\). It tells us whether the relationship between education and TV hours differs between moderates and conservatives It adjusts the slope of education for conservatives So for conservatives, the effect of education is:\n\\(-0.142 -0.008 = -0.15\\)\nThis means that for conservatives, each additional unit of education is associated with only \\(-0.15\\) fewer daily TV hours."
+  },
+  {
+    "objectID": "lecture-09.html#section-11",
+    "href": "lecture-09.html#section-11",
+    "title": "OLS Regression II",
+    "section": "",
+    "text": "# Get predicted values\npreds &lt;- estimate_means(model, by = c(\"educ\", \"pol_group\"))\n\n# Plot using ggplot2\npreds |&gt;\n  ggplot(aes(x = educ, y = Mean, color = pol_group)) +\n    geom_line(linewidth = 1.2) +\n    labs(\n      title = \"Predicted Daily TV Hours by Education and Political Identity\",\n      x = \"Education Level\",\n      y = \"Predicted TV Hours\",\n      color = \"Political Identity\") +\n    theme_minimal(20) +\n    theme(legend.position = \"top\")"
+  },
+  {
+    "objectID": "lecture-09.html#think-like-a-statistician-1",
+    "href": "lecture-09.html#think-like-a-statistician-1",
+    "title": "OLS Regression II",
+    "section": "Think Like a Statistician",
+    "text": "Think Like a Statistician\n\n 1. Run and interpret a regression predicting realrinc with hrs1 and educ\n\n\n\n\nmodel &lt;- lm(realrinc ~ hrs1 + educ, data = my_data)\nget_regression_table(model)\n\n# A tibble: 3 × 7\n  term      estimate std_error statistic p_value lower_ci upper_ci\n  &lt;chr&gt;        &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;\n1 intercept  -33065.     802.      -41.2       0  -34637.  -31494.\n2 hrs1          481.      10.5      45.6       0     460.     501.\n3 educ         2746.      50.4      54.5       0    2647.    2845."
+  },
+  {
+    "objectID": "lecture-09.html#think-like-a-statistician-2",
+    "href": "lecture-09.html#think-like-a-statistician-2",
+    "title": "OLS Regression II",
+    "section": "Think Like a Statistician",
+    "text": "Think Like a Statistician\n\n 2. Add childs to the regression. Interpret the output.\n\n\n\n\nmodel &lt;- lm(formula = realrinc ~ hrs1 + educ + childs, data = my_data)\nget_regression_table(model)\n\n# A tibble: 4 × 7\n  term      estimate std_error statistic p_value lower_ci upper_ci\n  &lt;chr&gt;        &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;\n1 intercept  -39248.     851.      -46.1       0  -40917.  -37580.\n2 hrs1          481.      10.5      45.8       0     460.     501.\n3 educ         2959.      51.2      57.8       0    2858.    3059.\n4 childs       1960.      93.9      20.9       0    1776.    2144."
+  },
+  {
+    "objectID": "lecture-09.html#think-like-a-statistician-3",
+    "href": "lecture-09.html#think-like-a-statistician-3",
+    "title": "OLS Regression II",
+    "section": "Think Like a Statistician",
+    "text": "Think Like a Statistician\n\n 3. Add marital to the regression. Interpret the output.\n\n\n\n\nmodel &lt;- lm(formula = realrinc ~ hrs1 + educ + childs + marital, data = my_data)\nget_regression_table(model)\n\n# A tibble: 8 × 7\n  term                   estimate std_error statistic p_value lower_ci upper_ci\n  &lt;chr&gt;                     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;\n1 intercept               -33122.     886.     -37.4        0  -34859.  -31385.\n2 hrs1                       468.      10.5     44.7        0     448.     489.\n3 educ                      2888.      51.0     56.6        0    2788.    2988.\n4 childs                    1021.     105.       9.76       0     816.    1226.\n5 marital: widowed         -4122.     826.      -4.99       0   -5740.   -2503.\n6 marital: divorced        -4029.     420.      -9.60       0   -4851.   -3206.\n7 marital: separated       -5769.     816.      -7.07       0   -7368.   -4171.\n8 marital: never married   -8792.     394.     -22.3        0   -9564.   -8020."
   }
 ]

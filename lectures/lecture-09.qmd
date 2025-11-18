@@ -167,10 +167,8 @@ my_data <- full_join(my_cat, my_con, by = c("year", "id")) # match by 2 vars
 
 . . .
 
-```{r}
+```{r, echo = FALSE}
 #| label: plot-01
-#| code-line-numbers: "2-4|5-6|7|8-12"
-#| output-location: slide
 
 # Create scatterplot with a regression line
 my_data |>
@@ -191,34 +189,6 @@ assumed to be a count, but can be modeled with OLS if treated as continuous
 :::
 
 
-## Pearson's Correlation (R) {.sparse-slide}
-
-```{r}
-#| label: cor.test
-
-cor.test(
-  ~ childs + year,
-  data = my_data,
-  method = "pearson",
-  na.action = na.omit)
-```
-
-::: notes  
-[**r ranges from -1 to +1**]{style="color: #18bc9c"}  
-
--1: 	perfect negative correlation  
- 0: 	no relationship  
- 1: 	perfect positive correlation  
-  
-  
-[**Strength of relationship**]{style="color: #18bc9c"}  
-
-Strong:     Over 0.6  
-Moderate:   0.3 to 0.5  
-Weak:       0.1 to 0.2  
-Very weak:  Below 0.1  
-:::
-
 ## Simple Regression {.sparse-slide}
 
 ```{r}
@@ -231,34 +201,14 @@ get_regression_table(model_01)
 ```
 
 ::: notes
-note the test statistics are the same.
+
 :::
 
 ## PRE Measure {.sparse-slide .smaller}
 
-[**Square R**]{style="color: #18BC9C"}  
-
-```{r}
-#| label: r-squared
-#| output-location: column
-
-my_test <-  cor.test(
-  ~ childs + year,
-  data = my_data,
-  method = "pearson",
-  na.action = na.omit
-)
-
-my_test$estimate^2
-
-
-```
+[**Get $r^2$**]{style="color: #18BC9C"}  
 
 <br>
-
-. . .
-
-[**Get $r^2$**]{style="color: #18BC9C"}  
 
 ```{r}
 #| label: get_regression_summaries
@@ -275,9 +225,8 @@ get_regression_summaries(model_01)
 {{< fa lightbulb >}} Are the trends explained by increases in education?
 :::
 
-```{r}
+```{r, echo = FALSE}
 #| label: plot-02
-#| output-location: slide
 
 # Create scatterplot with regression line
 my_data |>
@@ -296,9 +245,8 @@ my_data |>
 
 ##  {data-menu-title="Scatterplot: Number of children & education"}
 
-```{r}
+```{r, echo = FALSE}
 #| label: plot-03
-#| output-location: slide
 
 # Create scatterplot with regression line
 my_data |>

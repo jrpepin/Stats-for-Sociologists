@@ -1740,7 +1740,7 @@
     "href": "lecture-09.html#section-1",
     "title": "OLS Regression II",
     "section": "",
-    "text": "Have the average number of children changed over time?\n\n\n\n# Create scatterplot with a regression line\nmy_data |&gt;\n  group_by(year) |&gt;\n  summarize(avg = mean(childs, na.rm = TRUE)) |&gt;\n  ggplot(aes(x = year, y = avg)) +\n  geom_point(color = \"#18BC9C\", size = 3) +\n  geom_smooth(method = \"lm\", se = FALSE, color = \"#3498DB\") +\n  labs(\n    title = \"Scatterplot of Average Number of Children\",\n    x = \"Year\",\n    y = \"Average number of children\") +\n  theme_minimal(20)\n\n\n\nassumed to be a count, but can be modeled with OLS if treated as continuous"
+    "text": "Have the average number of children changed over time?\n\n\n\n\n\n\n\n\n\n\n\n\nassumed to be a count, but can be modeled with OLS if treated as continuous"
   },
   {
     "objectID": "lecture-09.html#pearsons-correlation-r",
@@ -1754,21 +1754,21 @@
     "href": "lecture-09.html#simple-regression",
     "title": "OLS Regression II",
     "section": "Simple Regression",
-    "text": "Simple Regression\n\nmodel_01 &lt;- lm(formula = childs ~ year, data = my_data)\nget_regression_table(model_01)\n\n\n\n# A tibble: 2 × 7\n  term      estimate std_error statistic p_value lower_ci upper_ci\n  &lt;chr&gt;        &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;\n1 intercept   17.2       0.811      21.2       0   15.7     18.8  \n2 year        -0.008     0         -18.9       0   -0.008   -0.007\n\n\n\nnote the test statistics are the same."
+    "text": "Simple Regression\n\nmodel_01 &lt;- lm(formula = childs ~ year, data = my_data)\nget_regression_table(model_01)\n\n\n\n# A tibble: 2 × 7\n  term      estimate std_error statistic p_value lower_ci upper_ci\n  &lt;chr&gt;        &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;\n1 intercept   17.2       0.811      21.2       0   15.7     18.8  \n2 year        -0.008     0         -18.9       0   -0.008   -0.007"
   },
   {
     "objectID": "lecture-09.html#pre-measure",
     "href": "lecture-09.html#pre-measure",
     "title": "OLS Regression II",
     "section": "PRE Measure",
-    "text": "PRE Measure\nSquare R\n\n\nmy_test &lt;-  cor.test(\n  ~ childs + year,\n  data = my_data,\n  method = \"pearson\",\n  na.action = na.omit\n)\n\nmy_test$estimate^2\n\n\n        cor \n0.004713057 \n\n\n\n\nGet \\(r^2\\)\n\nmodel_01 &lt;- lm(formula = childs ~ year, data = my_data)\nget_regression_summaries(model_01)\n\n# A tibble: 1 × 9\n  r_squared adj_r_squared   mse  rmse sigma statistic p_value    df  nobs\n      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;\n1     0.005         0.005  3.07  1.75  1.75      357.       0     1 75407"
+    "text": "PRE Measure\nGet \\(r^2\\)\n\n\nmodel_01 &lt;- lm(formula = childs ~ year, data = my_data)\nget_regression_summaries(model_01)\n\n# A tibble: 1 × 9\n  r_squared adj_r_squared   mse  rmse sigma statistic p_value    df  nobs\n      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;\n1     0.005         0.005  3.07  1.75  1.75      357.       0     1 75407"
   },
   {
     "objectID": "lecture-09.html#section-2",
     "href": "lecture-09.html#section-2",
     "title": "OLS Regression II",
     "section": "",
-    "text": "Are the trends explained by increases in education?\n\n\n# Create scatterplot with regression line\nmy_data |&gt;\n  group_by(year) |&gt;\n  summarize(avg = mean(educ, na.rm = TRUE)) |&gt;\n  ggplot(aes(x = year, y = avg)) +\n  geom_point(color = \"#18BC9C\", size = 3) +\n  geom_smooth(method = \"lm\", se = FALSE, color = \"#3498DB\") +\n  labs(\n    title = \"Scatterplot of Average Years of Education\",\n    x = \"Year\",\n    y = \"Average years of education\"\n  ) +\n  theme_minimal(20)"
+    "text": "Are the trends explained by increases in education?"
   },
   {
     "objectID": "lecture-09.html#section-3",

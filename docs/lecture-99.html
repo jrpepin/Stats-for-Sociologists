@@ -1,0 +1,1756 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="lecture-99_files/libs/clipboard/clipboard.min.js"></script>
+<script src="lecture-99_files/libs/quarto-html/tabby.min.js"></script>
+<script src="lecture-99_files/libs/quarto-html/popper.min.js"></script>
+<script src="lecture-99_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="lecture-99_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="lecture-99_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="lecture-99_files/libs/quarto-html/quarto-syntax-highlighting-ac1a48248070c8bfbae4244efd7728e4.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="lecture-99_files/libs/quarto-contrib/fontawesome6-1.2.0/all.min.css" rel="stylesheet">
+<link href="lecture-99_files/libs/quarto-contrib/fontawesome6-1.2.0/latex-fontsize.css" rel="stylesheet"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.8.26">
+
+  <title>Manipulating Dataframes</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="lecture-99_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="lecture-99_files/libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+      }
+    pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+    div.sourceCode
+      { color: #383a42;  }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #383a42; } /* Normal */
+    code span.al { color: #95da4c; background-color: #4d1f24; font-weight: bold; } /* Alert */
+    code span.an { color: #50a14f; } /* Annotation */
+    code span.at { color: #a626a4; } /* Attribute */
+    code span.bn { color: #986801; } /* BaseN */
+    code span.bu { color: #a626a4; } /* BuiltIn */
+    code span.cf { color: #a626a4; } /* ControlFlow */
+    code span.ch { color: #50a14f; } /* Char */
+    code span.cn { color: #986801; } /* Constant */
+    code span.co { color: #a0a1a7; font-style: italic; } /* Comment */
+    code span.cv { color: #e45649; font-style: italic; } /* CommentVar */
+    code span.do { color: #e45649; } /* Documentation */
+    code span.dt { color: #a626a4; } /* DataType */
+    code span.dv { color: #986801; } /* DecVal */
+    code span.er { color: #f44747; text-decoration: underline; } /* Error */
+    code span.ex { color: #4078f2; font-weight: bold; } /* Extension */
+    code span.fl { color: #986801; } /* Float */
+    code span.fu { color: #4078f2; } /* Function */
+    code span.im { color: #50a14f; } /* Import */
+    code span.in { color: #c45b00; } /* Information */
+    code span.kw { color: #a626a4; } /* Keyword */
+    code span.op { color: #a626a4; } /* Operator */
+    code span.ot { color: #27ae60; } /* Other */
+    code span.pp { color: #a626a4; } /* Preprocessor */
+    code span.re { color: #2980b9; background-color: #153042; } /* RegionMarker */
+    code span.sc { color: #0184bc; } /* SpecialChar */
+    code span.ss { color: #da4453; } /* SpecialString */
+    code span.st { color: #50a14f; } /* String */
+    code span.va { color: #e45649; } /* Variable */
+    code span.vs { color: #da4453; } /* VerbatimString */
+    code span.wa { color: #da4453; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="lecture-99_files/libs/revealjs/dist/theme/quarto-364fd963121a594f818dc82d366c140b.css">
+  <link href="lecture-99_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="lecture-99_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="lecture-99_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="lecture-99_files/libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
+  <link href="lecture-99_files/libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
+  <link href="lecture-99_files/libs/revealjs/plugin/reveal-quiz/quiz.css" rel="stylesheet">
+  <link href="lecture-99_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+  <script type="text/x-mathjax-config">
+
+    MathJax.Hub.Config({ TeX: { extensions: ["color.js"] }});
+
+  </script>
+
+    <script type="text/x-mathjax-config">
+
+      MathJax.Hub.Register.StartupHook("TeX color Ready", function() {
+
+        MathJax.Extension["TeX/color"].colors["mathBlack"]      = '#000000';
+
+        MathJax.Extension["TeX/color"].colors["mathOrange"]     = '#fd7e14';
+
+        MathJax.Extension["TeX/color"].colors["mathLightGreen"] = '#20c997';
+
+        MathJax.Extension["TeX/color"].colors["mathGreen"]      = '#18bc9c';
+
+        MathJax.Extension["TeX/color"].colors["mathYellow"]     = '#f39c12';
+
+        MathJax.Extension["TeX/color"].colors["mathBlue"]       = '#3498db';
+
+        MathJax.Extension["TeX/color"].colors["mathRed"]        = '#e74c3c';
+
+        MathJax.Extension["TeX/color"].colors["mathPurple"]     = '#6f42c1';
+
+        
+
+        
+
+        MathJax.Extension["TeX/color"].colors["IBMBlue"]        = '#648FFF';
+
+        MathJax.Extension["TeX/color"].colors["IBMPurple"]      = '#785EF0';
+
+        MathJax.Extension["TeX/color"].colors["IBMMagenta"]     = '#DC267F';
+
+        MathJax.Extension["TeX/color"].colors["IBMOrange"]      = '#FE6100';
+
+        MathJax.Extension["TeX/color"].colors["IBMYellow"]      = '#FFB000';
+
+      });
+
+    </script>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" data-background-image="images/08/test-hat.png" data-background-position="bottom center" data-background-size="250px" class="quarto-title-block center">
+  <h1 class="title">Manipulating Dataframes</h1>
+
+<div class="quarto-title-authors">
+</div>
+
+</section>
+<section id="agenda" class="title-slide slide level1 center" data-menu-title="Agenda" data-background-image="images/calendar.png" data-background-size="100px" data-background-repeat="repeat">
+<h1>Agenda</h1>
+<ul>
+<li>Manipulating Dataframes</li>
+<li>Joining Dataframes</li>
+<li>Reproducible Workflow</li>
+</ul>
+<aside class="notes">
+
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+
+<section id="learning-objectives" class="title-slide slide level1 center">
+<h1>Learning objectives</h1>
+<p>By the end of the lecture, you will be able to …</p>
+<ul>
+<li>Reshape data between wide and long formats</li>
+<li>Reorder columns and rows</li>
+<li>Combine and expand dataframes</li>
+</ul>
+</section>
+
+<section>
+<section id="code-along-99" class="title-slide slide level1 center" data-menu-title="Code-along" data-background-image="images/terminal.png">
+<h1>Code-along 99</h1>
+<p>Download and open <a href="" target="_blank">code-along-99.qmd</a></p>
+</section>
+<section id="packages" class="slide level2 sparse-slide">
+<h2>Packages</h2>
+<p>Install the <a href="https://cran.r-project.org/web/packages/summarytools/vignettes/introduction.html" target="_blank"><code>here()</code></a> package, available on CRAN.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a><span class="fu">install.packages</span>(<span class="st">"here"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><br></p>
+<p>Load the standard packages and our new <code>here()</code> package.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href=""></a><span class="fu">library</span>(here)</span>
+<span id="cb2-2"><a href=""></a><span class="fu">library</span>(tidyverse) </span>
+<span id="cb2-3"><a href=""></a><span class="fu">library</span>(haven) <span class="co"># not core tidyverse</span></span>
+<span id="cb2-4"><a href=""></a><span class="fu">library</span>(gssr)</span>
+<span id="cb2-5"><a href=""></a><span class="fu">library</span>(gssrdoc)</span>
+<span id="cb2-6"><a href=""></a><span class="fu">library</span>(summarytools)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="gss-panel-data-download" class="slide level2">
+<h2>GSS Panel Data: Download</h2>
+<p><a href="https://gss.norc.org/get-the-data/stata" class="uri" target="_blank">https://gss.norc.org/get-the-data/stata</a></p>
+<p><br></p>
+
+<img data-src="images/04/gss-panel.png" style="width:100.0%" class="r-stretch"><div class="callout callout-tip no-icon callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<p><strong><i class="fa-solid fa-hat-wizard" aria-label="hat-wizard"></i> Heads Up!</strong></p>
+</div>
+<div class="callout-content">
+<p>Save the <strong>unzipped</strong> file in your class <code>data</code> folder.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="gss-panel-data-load" class="slide level2 sparse-slide">
+<h2>GSS Panel Data: Load</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a><span class="fu">i_am</span>(<span class="st">"lectures/lecture-99.qmd"</span>)</span>
+<span id="cb3-2"><a href=""></a></span>
+<span id="cb3-3"><a href=""></a><span class="co"># Use here() to construct the file path</span></span>
+<span id="cb3-4"><a href=""></a>gss_panel.dta <span class="ot">&lt;-</span> <span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"GSS_2020_panel_stata_1a/gss2020panel_r1a.dta"</span>)</span>
+<span id="cb3-5"><a href=""></a></span>
+<span id="cb3-6"><a href=""></a><span class="co">#load the data using `haven::read_dta()`</span></span>
+<span id="cb3-7"><a href=""></a>data <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(gss_panel.dta)</span>
+<span id="cb3-8"><a href=""></a></span>
+<span id="cb3-9"><a href=""></a><span class="co"># Or, do both at the same time!</span></span>
+<span id="cb3-10"><a href=""></a><span class="co"># data &lt;- read_dta(here("data", "GSS_2020_panel_stata_1a/gss2020panel_r1a.dta"))</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="gss-2016-2020-panel-dataset" class="slide level2 sparse-slide">
+<h2>GSS 2016-2020 Panel Dataset</h2>
+<p>Study of former 2016 and 2018 GSS respondents were interviewed again in 2020</p>
+<ul>
+<li>Variables from 2016 (Wave 1a) have <span style="color: #e74c3c"><strong>_1a</strong></span> appended</li>
+<li>Variables from 2018 (Wave 1b) have <span style="color: #e74c3c"><strong>_1b</strong></span> appended</li>
+<li>Variables from 2020 (Wave 2) have <span style="color: #e74c3c"><strong>_2</strong></span> appended</li>
+</ul>
+</section>
+<section id="gss-2016-2020-panel-dataset-1" class="slide level2 sparse-slide">
+<h2>GSS 2016-2020 Panel Dataset</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 7
+     yearid year_1a year_1b year_2 age_1a    age_1b    age_2    
+      &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl+lbl&gt; &lt;dbl+lbl&gt; &lt;dbl+lbl&gt;
+ 1 20182183      NA    2018     NA NA(i)        52     NA(i)    
+ 2 20180711      NA    2018     NA NA(i)        19     NA(i)    
+ 3 20182189      NA    2018   2020 NA(i)        37        39    
+ 4 20160354    2016      NA     NA    56     NA(i)     NA(i)    
+ 5 20180452      NA    2018   2020 NA(i)        29        31    
+ 6 20181503      NA    2018   2020 NA(i)        58        60    
+ 7 20162744    2016      NA   2020    71     NA(i)        75    
+ 8 20160315    2016      NA   2020    69     NA(i)        73    
+ 9 20160170    2016      NA     NA    75     NA(i)     NA(i)    
+10 20161888    2016      NA     NA    71     NA(i)     NA(i)    </code></pre>
+</div>
+</div>
+</section></section>
+<section>
+<section id="manipulating-dataframes" class="title-slide slide level1 theme-section center">
+<h1>Manipulating Dataframes</h1>
+
+</section>
+<section id="selection-helpers" class="slide level2 smaller">
+<h2>Selection helpers</h2>
+<p>Match variables according to a given pattern.</p>
+<ul>
+<li><code>starts_with()</code>: Starts with an exact prefix.</li>
+<li><code>ends_with()</code>: Ends with an exact suffix.</li>
+<li><code>contains()</code>: Contains a literal string.</li>
+<li>…</li>
+</ul>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a>my_data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span></span>
+<span id="cb5-2"><a href=""></a>  <span class="fu">select</span>(yearid, wtssnr_2, </span>
+<span id="cb5-3"><a href=""></a>         <span class="fu">starts_with</span>(<span class="st">"age_"</span>), </span>
+<span id="cb5-4"><a href=""></a>         <span class="fu">starts_with</span>(<span class="st">"family16_"</span>),</span>
+<span id="cb5-5"><a href=""></a>         <span class="fu">starts_with</span>(<span class="st">"socfrend_"</span>),</span>
+<span id="cb5-6"><a href=""></a>         <span class="fu">starts_with</span>(<span class="st">"childs_"</span>)) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><br></p>
+<div class="fragment">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6" data-code-line-numbers="4|7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href=""></a><span class="co"># You can supply multiple prefixes or suffixes.</span></span>
+<span id="cb6-2"><a href=""></a>my_data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span></span>
+<span id="cb6-3"><a href=""></a>  <span class="fu">select</span>(yearid, wtssnr_2, </span>
+<span id="cb6-4"><a href=""></a>         <span class="fu">starts_with</span>(<span class="fu">c</span>(<span class="st">"age_"</span>, <span class="st">"family16_"</span>, <span class="st">"socfrend"</span>, <span class="st">"childs"</span>))</span>
+<span id="cb6-5"><a href=""></a>         )</span>
+<span id="cb6-6"><a href=""></a></span>
+<span id="cb6-7"><a href=""></a>my_data <span class="ot">&lt;-</span> <span class="fu">as_factor</span>(my_data) <span class="co"># Apply labels to data</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</section>
+<section id="reminder-tidy-data" class="slide level2">
+<h2>Reminder: Tidy data</h2>
+
+<img data-src="images/04/tidy-data.png" style="width:100.0%" class="r-stretch"></section>
+<section id="section" class="slide level2" data-menu-title="Not tidy data">
+<h2></h2>
+
+<img data-src="images/04/not-tidy.png" style="width:100.0%" class="r-stretch"><div class="fragment">
+<div style="color: #e74c3c; font-family: 'Shadows Into Light'">
+<p><strong>This data is NOT tidy!</strong><br>
+Some column names include values of a variable (survey year).</p>
+</div>
+</div>
+</section>
+<section id="section-1" class="slide level2" data-menu-title="Tidy data">
+<h2></h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 15,645 × 7
+     yearid wtssnr_2 panel age   family16                    socfrend     childs
+      &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt; &lt;fct&gt; &lt;fct&gt;                       &lt;fct&gt;        &lt;fct&gt; 
+ 1 20160001    1.44  1a    47    both own mother and father  several tim… 3     
+ 2 20160001    1.44  1b    &lt;NA&gt;  &lt;NA&gt;                        &lt;NA&gt;         &lt;NA&gt;  
+ 3 20160001    1.44  2     51    not available for this year several tim… 3     
+ 4 20160002    0.722 1a    61    both own mother and father  several tim… 0     
+ 5 20160002    0.722 1b    &lt;NA&gt;  &lt;NA&gt;                        &lt;NA&gt;         &lt;NA&gt;  
+ 6 20160002    0.722 2     65    not available for this year about once … 0     
+ 7 20160003   NA     1a    72    both own mother and father  &lt;NA&gt;         2     
+ 8 20160003   NA     1b    &lt;NA&gt;  &lt;NA&gt;                        &lt;NA&gt;         &lt;NA&gt;  
+ 9 20160003   NA     2     &lt;NA&gt;  iap                         &lt;NA&gt;         &lt;NA&gt;  
+10 20160004    2.89  1a    43    mother only                 once or twi… 4     
+# ℹ 15,635 more rows</code></pre>
+</div>
+</div>
+<p><br></p>
+<div style="color: #18bc9c; font-family: 'Shadows Into Light'">
+<p><strong>This data is tidy!</strong><br>
+Each variable in its own column, and each observation in its own row.</p>
+</div>
+</section>
+<section id="section-2" class="slide level2" data-menu-title="Wide vs Long">
+<h2></h2>
+
+<img data-src="images/04/wide-long.png" style="width:100.0%" class="r-stretch"></section>
+<section id="reshaping-data" class="slide level2">
+<h2>Reshaping data</h2>
+
+<img data-src="images/04/tidyr-pivoting.gif" class="r-stretch"></section>
+<section id="pivot_longer" class="slide level2">
+<h2><code>pivot_longer()</code></h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-6" data-code-line-numbers="2|3|4|5"><pre class="sourceCode numberSource r code-annotation-code number-lines code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-6-1"><a href="#annotated-cell-6-1"></a>my_data <span class="ot">&lt;-</span> my_data <span class="sc">|&gt;</span></span>
+<span id="annotated-cell-6-2"><a href="#annotated-cell-6-2"></a>  <span class="fu">pivot_longer</span>(</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="1">1</button><span id="annotated-cell-6-3" class="code-annotation-target"><a href="#annotated-cell-6-3"></a>    <span class="at">cols =</span> <span class="dv">3</span><span class="sc">:</span><span class="dv">14</span>,</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="2">2</button><span id="annotated-cell-6-4" class="code-annotation-target"><a href="#annotated-cell-6-4"></a>    <span class="at">names_to =</span> <span class="fu">c</span>(<span class="st">".value"</span>, <span class="st">"panel"</span>),</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="3">3</button><span id="annotated-cell-6-5" class="code-annotation-target"><a href="#annotated-cell-6-5"></a>    <span class="at">names_sep =</span> <span class="st">"_"</span>)</span>
+<span id="annotated-cell-6-6"><a href="#annotated-cell-6-6"></a>    </span>
+<span id="annotated-cell-6-7"><a href="#annotated-cell-6-7"></a><span class="fu">head</span>(my_data, <span class="at">n =</span> <span class="dv">5</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-annotation">
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-6" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-6" data-code-lines="3" data-code-annotation="1"><code>cols =</code> specifies which columns to pivot;</span>
+</dd>
+<dt data-target-cell="annotated-cell-6" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-6" data-code-lines="4" data-code-annotation="2"><code>names_to =</code> creates multiple value columns from the name parts and a new column that stores the identifier.</span>
+</dd>
+<dt data-target-cell="annotated-cell-6" data-target-annotation="3">3</dt>
+<dd>
+<span data-code-cell="annotated-cell-6" data-code-lines="5" data-code-annotation="3"><code>names_sep =</code> where to split the names into a variable (.value) and what to use as a key identifier</span>
+</dd>
+</dl>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 7
+    yearid wtssnr_2 panel age   family16                    socfrend      childs
+     &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt; &lt;fct&gt; &lt;fct&gt;                       &lt;fct&gt;         &lt;fct&gt; 
+1 20160001    1.44  1a    47    both own mother and father  several time… 3     
+2 20160001    1.44  1b    &lt;NA&gt;  &lt;NA&gt;                        &lt;NA&gt;          &lt;NA&gt;  
+3 20160001    1.44  2     51    not available for this year several time… 3     
+4 20160002    0.722 1a    61    both own mother and father  several time… 0     
+5 20160002    0.722 1b    &lt;NA&gt;  &lt;NA&gt;                        &lt;NA&gt;          &lt;NA&gt;  </code></pre>
+</div>
+</div>
+</section>
+<section id="pivot_wider" class="slide level2">
+<h2><code>pivot_wider()</code></h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-7" data-code-line-numbers="1|2|3|4"><pre class="sourceCode numberSource r code-annotation-code number-lines code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-7-1"><a href="#annotated-cell-7-1"></a>my_data <span class="sc">|&gt;</span> <span class="co"># not overwriting my_data</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="1">1</button><span id="annotated-cell-7-2" class="code-annotation-target"><a href="#annotated-cell-7-2"></a>  <span class="fu">pivot_wider</span>(</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="2">2</button><span id="annotated-cell-7-3" class="code-annotation-target"><a href="#annotated-cell-7-3"></a>    <span class="at">names_from =</span> panel,</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="3">3</button><span id="annotated-cell-7-4" class="code-annotation-target"><a href="#annotated-cell-7-4"></a>    <span class="at">values_from =</span> <span class="fu">c</span>(<span class="sc">-</span>yearid, <span class="sc">-</span>wtssnr_2))</span>
+<span id="annotated-cell-7-5"><a href="#annotated-cell-7-5"></a></span>
+<span id="annotated-cell-7-6"><a href="#annotated-cell-7-6"></a><span class="fu">head</span>(my_data, <span class="at">n =</span> <span class="dv">5</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-annotation">
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-7" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-7" data-code-lines="2" data-code-annotation="1">Increasing the number of columns and decreasing the number of rows</span>
+</dd>
+<dt data-target-cell="annotated-cell-7" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-7" data-code-lines="3" data-code-annotation="2">Which column to get the name of the output columns</span>
+</dd>
+<dt data-target-cell="annotated-cell-7" data-target-annotation="3">3</dt>
+<dd>
+<span data-code-cell="annotated-cell-7" data-code-lines="4" data-code-annotation="3">Which columns to exclude from the pivot</span>
+</dd>
+</dl>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5,215 × 17
+     yearid wtssnr_2 panel_1a panel_1b panel_2 age_1a age_1b age_2 family16_1a  
+      &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt;   &lt;fct&gt;  &lt;fct&gt;  &lt;fct&gt; &lt;fct&gt;        
+ 1 20160001    1.44  1a       1b       2       47     &lt;NA&gt;   51    both own mot…
+ 2 20160002    0.722 1a       1b       2       61     &lt;NA&gt;   65    both own mot…
+ 3 20160003   NA     1a       1b       2       72     &lt;NA&gt;   &lt;NA&gt;  both own mot…
+ 4 20160004    2.89  1a       1b       2       43     &lt;NA&gt;   47    mother only  
+ 5 20160005   NA     1a       1b       2       55     &lt;NA&gt;   &lt;NA&gt;  both own mot…
+ 6 20160006   NA     1a       1b       2       53     &lt;NA&gt;   &lt;NA&gt;  other        
+ 7 20160007   NA     1a       1b       2       50     &lt;NA&gt;   &lt;NA&gt;  both own mot…
+ 8 20160008    1.44  1a       1b       2       23     &lt;NA&gt;   27    both own mot…
+ 9 20160009    1.44  1a       1b       2       45     &lt;NA&gt;   49    both own mot…
+10 20160010   NA     1a       1b       2       71     &lt;NA&gt;   &lt;NA&gt;  both own mot…
+# ℹ 5,205 more rows
+# ℹ 8 more variables: family16_1b &lt;fct&gt;, family16_2 &lt;fct&gt;, socfrend_1a &lt;fct&gt;,
+#   socfrend_1b &lt;fct&gt;, socfrend_2 &lt;fct&gt;, childs_1a &lt;fct&gt;, childs_1b &lt;fct&gt;,
+#   childs_2 &lt;fct&gt;
+# A tibble: 5 × 7
+    yearid wtssnr_2 panel age   family16                    socfrend      childs
+     &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt; &lt;fct&gt; &lt;fct&gt;                       &lt;fct&gt;         &lt;fct&gt; 
+1 20160001    1.44  1a    47    both own mother and father  several time… 3     
+2 20160001    1.44  1b    &lt;NA&gt;  &lt;NA&gt;                        &lt;NA&gt;          &lt;NA&gt;  
+3 20160001    1.44  2     51    not available for this year several time… 3     
+4 20160002    0.722 1a    61    both own mother and father  several time… 0     
+5 20160002    0.722 1b    &lt;NA&gt;  &lt;NA&gt;                        &lt;NA&gt;          &lt;NA&gt;  </code></pre>
+</div>
+</div>
+</section>
+<section id="recode-the-reshaped-variable" class="slide level2">
+<h2>Recode the reshaped variable</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href=""></a>my_data <span class="ot">&lt;-</span> my_data <span class="sc">|&gt;</span></span>
+<span id="cb10-2"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">panel =</span> <span class="fu">case_when</span>(</span>
+<span id="cb10-3"><a href=""></a>         panel <span class="sc">==</span> <span class="st">"1a"</span> <span class="sc">~</span> <span class="dv">2016</span>,</span>
+<span id="cb10-4"><a href=""></a>         panel <span class="sc">==</span> <span class="st">"1b"</span> <span class="sc">~</span> <span class="dv">2018</span>,</span>
+<span id="cb10-5"><a href=""></a>         panel <span class="sc">==</span> <span class="st">"2"</span> <span class="sc">~</span> <span class="dv">2020</span>,</span>
+<span id="cb10-6"><a href=""></a>         <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA_integer_</span>))</span>
+<span id="cb10-7"><a href=""></a></span>
+<span id="cb10-8"><a href=""></a><span class="fu">head</span>(my_data, <span class="at">n =</span> <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 7
+    yearid wtssnr_2 panel age   family16                    socfrend      childs
+     &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt; &lt;fct&gt;                       &lt;fct&gt;         &lt;fct&gt; 
+1 20160001     1.44  2016 47    both own mother and father  several time… 3     
+2 20160001     1.44  2018 &lt;NA&gt;  &lt;NA&gt;                        &lt;NA&gt;          &lt;NA&gt;  
+3 20160001     1.44  2020 51    not available for this year several time… 3     </code></pre>
+</div>
+</div>
+<div class="fragment">
+<div class="callout callout-tip no-icon callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<p><strong><i class="fa-solid fa-hat-wizard" aria-label="hat-wizard"></i> Heads Up!</strong></p>
+</div>
+<div class="callout-content">
+<p><code>family16</code> is a time-invariant variable.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="relocate" class="slide level2 smaller">
+<h2><code>relocate()</code></h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href=""></a>my_data <span class="ot">&lt;-</span> my_data <span class="sc">|&gt;</span> </span>
+<span id="cb12-2"><a href=""></a>  <span class="fu">relocate</span>(panel)</span>
+<span id="cb12-3"><a href=""></a></span>
+<span id="cb12-4"><a href=""></a><span class="fu">head</span>(my_data, <span class="at">n =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 7
+  panel   yearid wtssnr_2 age   family16                   socfrend       childs
+  &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt; &lt;fct&gt; &lt;fct&gt;                      &lt;fct&gt;          &lt;fct&gt; 
+1  2016 20160001     1.44 47    both own mother and father several times… 3     
+2  2018 20160001     1.44 &lt;NA&gt;  &lt;NA&gt;                       &lt;NA&gt;           &lt;NA&gt;  </code></pre>
+</div>
+</div>
+<p><br></p>
+<div class="fragment">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href=""></a>my_data <span class="ot">&lt;-</span> my_data <span class="sc">|&gt;</span> </span>
+<span id="cb14-2"><a href=""></a>  <span class="fu">relocate</span>(panel, <span class="at">.after =</span> yearid)</span>
+<span id="cb14-3"><a href=""></a></span>
+<span id="cb14-4"><a href=""></a><span class="fu">head</span>(my_data, <span class="at">n =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 7
+    yearid panel wtssnr_2 age   family16                   socfrend       childs
+     &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt; &lt;fct&gt; &lt;fct&gt;                      &lt;fct&gt;          &lt;fct&gt; 
+1 20160001  2016     1.44 47    both own mother and father several times… 3     
+2 20160001  2018     1.44 &lt;NA&gt;  &lt;NA&gt;                       &lt;NA&gt;           &lt;NA&gt;  </code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="arrange" class="slide level2 smaller">
+<h2><code>arrange()</code></h2>
+<div class="cell columns column-output-location">
+<div class="column">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href=""></a>my_data <span class="sc">|&gt;</span> </span>
+<span id="cb16-2"><a href=""></a>  <span class="fu">arrange</span>(panel) <span class="sc">|&gt;</span></span>
+<span id="cb16-3"><a href=""></a>  <span class="fu">select</span>(yearid, panel, age) <span class="sc">|&gt;</span></span>
+<span id="cb16-4"><a href=""></a>  <span class="fu">head</span>(<span class="at">n =</span> <span class="dv">5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div><div class="column">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 3
+    yearid panel age  
+     &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt;
+1 20160001  2016 47   
+2 20160002  2016 61   
+3 20160003  2016 72   
+4 20160004  2016 43   
+5 20160005  2016 55   </code></pre>
+</div>
+</div></div>
+<p><br></p>
+<div class="fragment">
+<div class="cell columns column-output-location">
+<div class="column">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href=""></a>my_data <span class="sc">|&gt;</span> </span>
+<span id="cb18-2"><a href=""></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(panel)) <span class="sc">|&gt;</span></span>
+<span id="cb18-3"><a href=""></a>  <span class="fu">select</span>(yearid, panel, age) <span class="sc">|&gt;</span></span>
+<span id="cb18-4"><a href=""></a>  <span class="fu">head</span>(<span class="at">n =</span> <span class="dv">5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div><div class="column">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 3
+    yearid panel age  
+     &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt;
+1 20160001  2020 51   
+2 20160002  2020 65   
+3 20160003  2020 &lt;NA&gt; 
+4 20160004  2020 47   
+5 20160005  2020 &lt;NA&gt; </code></pre>
+</div>
+</div></div>
+</div>
+</section></section>
+<section>
+<section id="joining-dataframes" class="title-slide slide level1 theme-section center">
+<h1>Joining Dataframes</h1>
+
+</section>
+<section id="appending-v.s.-merging" class="slide level2 sparse-slide">
+<h2>appending v.s. merging</h2>
+<div class="callout callout-note no-icon callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<p><strong><i class="fa-solid fa-pen-to-square" aria-label="pen-to-square"></i> APPEND</strong></p>
+</div>
+<div class="callout-content">
+<p>add new observations (rows) to existing variables</p>
+</div>
+</div>
+</div>
+<p><br></p>
+<div class="callout callout-note no-icon callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<p><strong><i class="fa-solid fa-pen-to-square" aria-label="pen-to-square"></i> MERGE</strong></p>
+</div>
+<div class="callout-content">
+<p>add new variables (columns) to existing observations (many merge types)</p>
+</div>
+</div>
+</div>
+</section>
+<section id="appending-v.s.-merging-1" class="slide level2 sparse-slide">
+<h2>appending v.s. merging</h2>
+
+<img data-src="images/08/append-merge.png" style="width:100.0%" class="r-stretch"></section>
+<section id="example-datasets" class="slide level2 sparse-slide">
+<h2>Example datasets</h2>
+<div class="columns">
+<div class="column">
+<p><strong>dataframe 1</strong></p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>  coupleid  name age
+1        2  John  42
+2        1 Megan  36
+3        3   Bin  38</code></pre>
+</div>
+</div>
+</div><div class="column">
+<p><strong>dataframe 2</strong></p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>  coupleid    name age
+1        1     Sue  40
+2        3  Ye-jin  39
+3        2 Chrissy  35</code></pre>
+</div>
+</div>
+</div></div>
+<p><br></p>
+<p><strong>dataframe 3</strong></p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>  coupleid marstat numchild country
+1        3       1        1 S.Korea
+2        1       0        0      US
+3        4       1        2  Canada</code></pre>
+</div>
+</div>
+</section>
+<section id="append-data-with-bind_rows" class="slide level2 sparse-slide">
+<h2>append data with <code>bind_rows()</code></h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href=""></a>df_all <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(df_partner1, df_partner2)</span>
+<span id="cb23-2"><a href=""></a></span>
+<span id="cb23-3"><a href=""></a><span class="fu">tibble</span>(df_all)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 3
+  coupleid name      age
+     &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt;
+1        2 John       42
+2        1 Megan      36
+3        3 Bin        38
+4        1 Sue        40
+5        3 Ye-jin     39
+6        2 Chrissy    35</code></pre>
+</div>
+</div>
+</section>
+<section id="merge-data-with-joins" class="slide level2 sparse-slide">
+<h2>merge data with joins</h2>
+<p>add columns from <code>df1</code> to <code>df2</code>, matching observations based on the keys</p>
+<ul>
+<li><code>left_join()</code> keeps all observations in <code>df1</code>.</li>
+<li><code>right_join()</code> keeps all observations in <code>df2</code>.</li>
+<li><code>full_join()</code> keeps all observations in <code>df1</code> and <code>df2</code>.</li>
+<li><code>inner_join()</code> only keeps observations from <code>df1</code> that have a matching key in <code>df2</code></li>
+</ul>
+</section>
+<section id="left_join" class="slide level2 smaller">
+<h2><code>left_join()</code></h2>
+<div class="columns">
+<div class="column" style="width:35%;">
+<p><img data-src="images/08/left-join.gif"></p>
+</div><div class="column" style="width:65%;">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href=""></a>df_couples <span class="ot">&lt;-</span> <span class="fu">left_join</span>(df_partner1, df_family, <span class="at">by =</span> <span class="st">"coupleid"</span>)</span>
+<span id="cb25-2"><a href=""></a></span>
+<span id="cb25-3"><a href=""></a><span class="fu">tibble</span>(df_couples)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 6
+  coupleid name    age marstat numchild country
+     &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;  
+1        2 John     42      NA       NA &lt;NA&gt;   
+2        1 Megan    36       0        0 US     
+3        3 Bin      38       1        1 S.Korea</code></pre>
+</div>
+</div>
+</div></div>
+</section>
+<section id="right_join" class="slide level2 smaller">
+<h2><code>right_join()</code></h2>
+<div class="columns">
+<div class="column" style="width:35%;">
+<p><img data-src="images/08/right-join.gif"></p>
+</div><div class="column" style="width:65%;">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href=""></a>df_couples <span class="ot">&lt;-</span> <span class="fu">right_join</span>(df_partner1, df_family, <span class="at">by =</span> <span class="st">"coupleid"</span>)</span>
+<span id="cb27-2"><a href=""></a></span>
+<span id="cb27-3"><a href=""></a><span class="fu">tibble</span>(df_couples)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 6
+  coupleid name    age marstat numchild country
+     &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;  
+1        1 Megan    36       0        0 US     
+2        3 Bin      38       1        1 S.Korea
+3        4 &lt;NA&gt;     NA       1        2 Canada </code></pre>
+</div>
+</div>
+</div></div>
+</section>
+<section id="full_join" class="slide level2 smaller">
+<h2><code>full_join()</code></h2>
+<div class="columns">
+<div class="column" style="width:35%;">
+<p><img data-src="images/08/full-join.gif"></p>
+</div><div class="column" style="width:65%;">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href=""></a>df_couples <span class="ot">&lt;-</span> <span class="fu">full_join</span>(df_partner1, df_family, <span class="at">by =</span> <span class="st">"coupleid"</span>)</span>
+<span id="cb29-2"><a href=""></a></span>
+<span id="cb29-3"><a href=""></a><span class="fu">tibble</span>(df_couples)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 6
+  coupleid name    age marstat numchild country
+     &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;  
+1        2 John     42      NA       NA &lt;NA&gt;   
+2        1 Megan    36       0        0 US     
+3        3 Bin      38       1        1 S.Korea
+4        4 &lt;NA&gt;     NA       1        2 Canada </code></pre>
+</div>
+</div>
+</div></div>
+</section>
+<section id="inner_join" class="slide level2 smaller">
+<h2><code>inner_join()</code></h2>
+<div class="columns">
+<div class="column" style="width:35%;">
+<p><img data-src="images/08/inner-join.gif"></p>
+</div><div class="column" style="width:65%;">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href=""></a>df_couples <span class="ot">&lt;-</span> <span class="fu">inner_join</span>(df_partner1, df_family, <span class="at">by =</span> <span class="st">"coupleid"</span>)</span>
+<span id="cb31-2"><a href=""></a></span>
+<span id="cb31-3"><a href=""></a><span class="fu">tibble</span>(df_couples)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 6
+  coupleid name    age marstat numchild country
+     &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;  
+1        1 Megan    36       0        0 US     
+2        3 Bin      38       1        1 S.Korea</code></pre>
+</div>
+</div>
+</div></div>
+</section></section>
+<section>
+<section id="think-like-a-statistician" class="title-slide slide level1 center" data-background-image="images/lightbulb-solid.png" data-background-size="80px" data-background-repeat="repeat">
+<h1>Think Like a Statistician</h1>
+<p>Are married people above or below average in internet use or income? Does it vary by survey year?</p>
+<p><br></p>
+<p><span style="color: #F39C12; font-size: 175%; font-family: 'Shadows Into Light'"><i class="fa-regular fa-lightbulb" aria-label="lightbulb"></i> <strong>How do we find out?</strong></span></p>
+</section>
+<section id="section-3" class="slide level2" data-menu-title="Think Like a Statistician" data-background-image="images/lightbulb-solid.png" data-background-size="80px" data-background-repeat="repeat">
+<h2></h2>
+<p>Answering this research question takes a few steps. But, the first step is to create a dataframe with all the necessary information.</p>
+<p><span style="color: #F39C12; font-size: 150%; font-family: 'Shadows Into Light'"><i class="fa-regular fa-lightbulb" aria-label="lightbulb"></i> <strong>Can you reproduce this table?</strong></span></p>
+<p><br></p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 7
+    yearid panel marital       wwwhr     realrinc avg_www avg_inc
+     &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt;         &lt;dbl+lbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+1 20160001  2016 married          15      164382.    14.2  24929.
+2 20160001  2018 &lt;NA&gt;          NA(i)          NA     14.8  26103.
+3 20160001  2020 married          20      147659.    15.0  28222.
+4 20160002  2016 never married     5       25740     14.2  24929.
+5 20160002  2018 &lt;NA&gt;          NA(i)          NA     14.8  26103.
+6 20160002  2020 never married    10       23980     15.0  28222.</code></pre>
+</div>
+</div>
+</section>
+<section id="section-4" class="slide level2 smaller" data-menu-title="Your Data Take" data-background-image="images/lightbulb-solid.png" data-background-size="80px" data-background-repeat="repeat">
+<h2></h2>
+<div style="color: #f39c12; font-size: 175%; font-family: 'Shadows Into Light'">
+<p><i class="fa-regular fa-lightbulb" aria-label="lightbulb"></i> <strong>What’s your conclusion to our research question?</strong></p>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href=""></a><span class="co"># Income status</span></span>
+<span id="cb34-2"><a href=""></a><span class="fu">ctable</span>(think_married<span class="sc">$</span>income_status, think_married<span class="sc">$</span>panel, </span>
+<span id="cb34-3"><a href=""></a>  <span class="at">prop =</span> <span class="st">"c"</span>, </span>
+<span id="cb34-4"><a href=""></a>  <span class="at">format =</span> <span class="st">"p"</span>, </span>
+<span id="cb34-5"><a href=""></a>  <span class="at">useNA =</span> <span class="st">"no"</span>,</span>
+<span id="cb34-6"><a href=""></a>  <span class="at">headings =</span> <span class="cn">FALSE</span></span>
+<span id="cb34-7"><a href=""></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+--------------- ------- -------------- -------------- -------------- ---------------
+                  panel           2016           2018           2020           Total
+  income_status                                                                     
+  Above Average           328 ( 43.8%)   235 ( 38.3%)   247 ( 45.6%)    810 ( 42.5%)
+  Below Average           421 ( 56.2%)   379 ( 61.7%)   295 ( 54.4%)   1095 ( 57.5%)
+          Total           749 (100.0%)   614 (100.0%)   542 (100.0%)   1905 (100.0%)
+--------------- ------- -------------- -------------- -------------- ---------------</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href=""></a><span class="co"># Internet status</span></span>
+<span id="cb36-2"><a href=""></a><span class="fu">ctable</span>(think_married<span class="sc">$</span>internet_status, think_married<span class="sc">$</span>panel, </span>
+<span id="cb36-3"><a href=""></a>  <span class="at">prop =</span> <span class="st">"c"</span>, </span>
+<span id="cb36-4"><a href=""></a>  <span class="at">format =</span> <span class="st">"p"</span>, </span>
+<span id="cb36-5"><a href=""></a>  <span class="at">useNA =</span> <span class="st">"no"</span>,</span>
+<span id="cb36-6"><a href=""></a>  <span class="at">headings =</span> <span class="cn">FALSE</span></span>
+<span id="cb36-7"><a href=""></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+----------------- ------- -------------- -------------- -------------- ---------------
+                    panel           2016           2018           2020           Total
+  internet_status                                                                     
+    Above Average           207 ( 29.4%)   180 ( 29.4%)   165 ( 33.4%)    552 ( 30.5%)
+    Below Average           496 ( 70.6%)   433 ( 70.6%)   329 ( 66.6%)   1258 ( 69.5%)
+            Total           703 (100.0%)   613 (100.0%)   494 (100.0%)   1810 (100.0%)
+----------------- ------- -------------- -------------- -------------- ---------------</code></pre>
+</div>
+</div>
+</section></section>
+<section>
+<section id="reproducible-workflow" class="title-slide slide level1 theme-section center">
+<h1>Reproducible workflow</h1>
+
+</section>
+<section id="replication" class="slide level2">
+<h2>Replication</h2>
+<p><span style="color: #18BC9C"><strong>The guiding principle for workflow.</strong></span></p>
+<p>A workflow of data analysis is a process for managing all aspects of data analysis.</p>
+<p><br></p>
+<p>Planning, documenting, and organizing your work; cleaning the data; creating, renaming, and verifying variables; performing and presenting statistical analyses; producing replicable results; and archiving what you have done are all integral parts of your workflow.</p>
+
+<aside><div>
+<p>Source: (Long 2008)</p>
+</div></aside></section>
+<section id="steps-in-a-workflow" class="slide level2">
+<h2>Steps in a workflow</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 43%">
+<col style="width: 56%">
+</colgroup>
+<tbody>
+<tr class="odd">
+<td><strong>Set up</strong></td>
+<td>Systematic organization of the project and project files.</td>
+</tr>
+<tr class="even">
+<td><strong>Familiarize self with data</strong></td>
+<td>Skipping takes more time in the long run.</td>
+</tr>
+<tr class="odd">
+<td><strong>Process data</strong></td>
+<td>Takes the <span style="color: #e74c3c;"><strong>MOST</strong></span> time.</td>
+</tr>
+<tr class="even">
+<td><strong>Running analyses</strong></td>
+<td>What people <strong>THINK</strong> takes the most time.</td>
+</tr>
+<tr class="odd">
+<td><strong>Presenting results</strong></td>
+<td>What people (wrongly) think does not take time.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="filepaths" class="slide level2 smaller">
+<h2>Filepaths</h2>
+<p>A project-based workflow + <code>here()</code> avoids changing file paths.</p>
+<p><br></p>
+<div class="columns">
+<div class="column" style="width:60%;">
+<p><strong>ABSOLUTE FILE PATHS</strong></p>
+<p>Department of Sociology<br>
+Unit 17100, 17th Floor, Ontario Power Building<br>
+700 University Ave., Toronto, ON M5G 1Z5</p>
+<p><code>C:\Users\Pepin\GitHub\SOC6302\scripts</code></p>
+</div><div class="column" style="width:40%;">
+<p><strong>RELATIVE FILE PATHS</strong></p>
+<p>Take the left side elevators to the 17th floor.<br>
+Go through the double doors and a take a right.<br>
+First door on your left.</p>
+<p><code>here</code>(<span style="color: #18BC9C">scripts</span>)</p>
+</div></div>
+</section>
+<section id="file-names" class="slide level2">
+<h2>File names</h2>
+<p>should be:</p>
+<ul>
+<li>machine-readable</li>
+<li>human-readable</li>
+<li>play well with default-ordering</li>
+</ul>
+</section>
+<section id="project-structure" class="slide level2">
+<h2>Project structure</h2>
+<p>Let’s set up your project structure using the <code>here()</code> package.</p>
+
+<img data-src="https://raw.githubusercontent.com/allisonhorst/stats-illustrations/master/rstats-artwork/here.png" class="r-stretch"></section>
+<section id="here" class="slide level2 sparse-slide">
+<h2><code>here()</code></h2>
+<p>First, let’s establish our project directory</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href=""></a><span class="co"># shows the file path to the root of the project</span></span>
+<span id="cb38-2"><a href=""></a><span class="fu">here</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><br></p>
+<p>Next, we’ll create folders within our project.</p>
+</section>
+<section id="example-folder-structure" class="slide level2 smaller">
+<h2>Example folder structure</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<p><strong>SOC6302</strong></p>
+<div class="file-tree">
+<details open="">
+<summary>
+SOC6302/
+</summary>
+<details>
+<summary>
+data/
+</summary>
+<div>
+<p>gss7924-raw.rda</p>
+</div>
+<div>
+<p>gss7924-processed.Rdata/</p>
+</div>
+</details>
+<details>
+<summary>
+code-alongs/
+</summary>
+</details>
+<details>
+<summary>
+milestones/
+</summary>
+</details>
+<details>
+<summary>
+project/
+</summary>
+<details>
+<summary>
+data/
+</summary>
+</details>
+<details>
+<summary>
+scripts/
+</summary>
+</details>
+<details>
+<summary>
+outputs/
+</summary>
+</details>
+</details>
+<div>
+<p>readme.qmd</p>
+</div>
+<div>
+<p>SOC6302.Rproj</p>
+</div>
+</details>
+</div>
+</div><div class="column" style="width:60%;">
+<p><strong>Research Projects</strong></p>
+<div class="file-tree">
+<details open="">
+<summary>
+project/
+</summary>
+<details>
+<summary>
+data/
+</summary>
+<div>
+<p>gss7924-raw.rda</p>
+</div>
+<div>
+<p>gss7924-processed.Rdata/</p>
+</div>
+</details>
+<details>
+<summary>
+scripts/
+</summary>
+<div>
+<p>clean_data.R</p>
+</div>
+<div>
+<p>analyze_data.R</p>
+</div>
+<div>
+<p>draft.qmd</p>
+</div>
+</details>
+<details>
+<summary>
+outputs/
+</summary>
+<div>
+<p>draft.html</p>
+</div>
+<details>
+<summary>
+figures/
+</summary>
+<div>
+<p>plot1.png</p>
+</div>
+<div>
+<p>plot2.png</p>
+</div>
+</details>
+</details>
+<div>
+<p>readme.qmd</p>
+</div>
+<div>
+<p>project.Rproj</p>
+</div>
+</details>
+</div>
+</div></div>
+</section>
+<section id="create-a-folder-structure" class="slide level2">
+<h2>Create a folder structure</h2>
+<p>using <code>here()</code> and <code>dir.create()</code></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href=""></a><span class="co"># Create base folders</span></span>
+<span id="cb39-2"><a href=""></a><span class="fu">dir.create</span>(<span class="fu">here</span>(<span class="st">"data"</span>), <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb39-3"><a href=""></a><span class="fu">dir.create</span>(<span class="fu">here</span>(<span class="st">"code-alongs"</span>), <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb39-4"><a href=""></a><span class="fu">dir.create</span>(<span class="fu">here</span>(<span class="st">"milestones"</span>), <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb39-5"><a href=""></a><span class="fu">dir.create</span>(<span class="fu">here</span>(<span class="st">"project"</span>), <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="create-sub-folders" class="slide level2">
+<h2>Create sub-folders</h2>
+<p>using <code>here()</code> and <code>dir.create()</code></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href=""></a><span class="co"># Create project sub-folders</span></span>
+<span id="cb40-2"><a href=""></a><span class="fu">dir.create</span>(<span class="fu">here</span>(<span class="st">"project"</span>, <span class="st">"data"</span>), <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb40-3"><a href=""></a><span class="fu">dir.create</span>(<span class="fu">here</span>(<span class="st">"project"</span>, <span class="st">"scripts"</span>), <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb40-4"><a href=""></a><span class="fu">dir.create</span>(<span class="fu">here</span>(<span class="st">"project"</span>, <span class="st">"outputs"</span>), <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="check-your-work" class="slide level2">
+<h2>Check your work</h2>
+<p>report a list of folders and or files in the R-project folders and sub-folder.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href=""></a><span class="co"># Your SOC6302 class folder</span></span>
+<span id="cb41-2"><a href=""></a><span class="fu">list.files</span>(<span class="at">path =</span> <span class="fu">here</span>())</span>
+<span id="cb41-3"><a href=""></a></span>
+<span id="cb41-4"><a href=""></a><span class="co"># Your "Project" sub-folder</span></span>
+<span id="cb41-5"><a href=""></a><span class="fu">list.files</span>(<span class="at">path =</span> <span class="fu">here</span>(<span class="st">"project"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+
+
+</section></section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="lecture-99_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="lecture-99_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="lecture-99_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="lecture-99_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="lecture-99_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="lecture-99_files/libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
+  <script src="lecture-99_files/libs/revealjs/plugin/reveal-quiz/quiz.js"></script>
+  <script src="lecture-99_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="lecture-99_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="lecture-99_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="lecture-99_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="lecture-99_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': false,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"8\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'chalkboard': {"buttons":true},
+'quiz': {"checkKey":"c","resetKey":"q","shuffleKey":"t","allowNumberKeys":true,"disableOnCheck":false,"shuffleOptions":true,"defaultCorrect":"","defaultIncorrect":"","includeScore":false,"disableReset":false},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: true,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealChalkboard, RevealQuiz, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    
+
+    <script>
+
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+
+      // slide changes (different for each slide format).
+
+      (function () {
+
+        // dispatch for htmlwidgets
+
+        function fireSlideEnter() {
+
+          const event = window.document.createEvent("Event");
+
+          event.initEvent("slideenter", true, true);
+
+          window.document.dispatchEvent(event);
+
+        }
+
+    
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+
+          fireSlideEnter();
+
+    
+
+          // dispatch for shiny
+
+          if (window.jQuery) {
+
+            if (previousSlide) {
+
+              window.jQuery(previousSlide).trigger("hidden");
+
+            }
+
+            if (currentSlide) {
+
+              window.jQuery(currentSlide).trigger("shown");
+
+            }
+
+          }
+
+        }
+
+    
+
+        // hookup for slidy
+
+        if (window.w3c_slidy) {
+
+          window.w3c_slidy.add_observer(function (slide_num) {
+
+            // slide_num starts at position 1
+
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+
+          });
+
+        }
+
+    
+
+      })();
+
+    </script>
+
+    
+
+    <script id="quarto-html-after-body" type="application/javascript">
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
+          }
+          return false;
+        }
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "Copied!");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "Copied!");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
+          }
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+          const outerScaffold = trigger.parentElement.cloneNode(true);
+          const codeEl = outerScaffold.querySelector('code');
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+        }
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp('/' + window.location.host + '/');
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
+            }
+          }
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
+          }
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
+          }
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
+        }
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
+          });
+        }
+            let selectedAnnoteEl;
+            const selectorForAnnotation = ( cell, annotation) => {
+              let cellAttr = 'data-code-cell="' + cell + '"';
+              let lineAttr = 'data-code-annotation="' +  annotation + '"';
+              const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+              return selector;
+            }
+            const selectCodeLines = (annoteEl) => {
+              const doc = window.document;
+              const targetCell = annoteEl.getAttribute("data-target-cell");
+              const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+              const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+              const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+              const lineIds = lines.map((line) => {
+                return targetCell + "-" + line;
+              })
+              let top = null;
+              let height = null;
+              let parent = null;
+              if (lineIds.length > 0) {
+                  //compute the position of the single el (top and bottom and make a div)
+                  const el = window.document.getElementById(lineIds[0]);
+                  top = el.offsetTop;
+                  height = el.offsetHeight;
+                  parent = el.parentElement.parentElement;
+                if (lineIds.length > 1) {
+                  const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+                  const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+                  height = bottom - top;
+                }
+                if (top !== null && height !== null && parent !== null) {
+                  // cook up a div (if necessary) and position it 
+                  let div = window.document.getElementById("code-annotation-line-highlight");
+                  if (div === null) {
+                    div = window.document.createElement("div");
+                    div.setAttribute("id", "code-annotation-line-highlight");
+                    div.style.position = 'absolute';
+                    parent.appendChild(div);
+                  }
+                  div.style.top = top - 2 + "px";
+                  div.style.height = height + 4 + "px";
+                  div.style.left = 0;
+                  let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+                  if (gutterDiv === null) {
+                    gutterDiv = window.document.createElement("div");
+                    gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                    gutterDiv.style.position = 'absolute';
+                    const codeCell = window.document.getElementById(targetCell);
+                    const gutter = codeCell.querySelector('.code-annotation-gutter');
+                    gutter.appendChild(gutterDiv);
+                  }
+                  gutterDiv.style.top = top - 2 + "px";
+                  gutterDiv.style.height = height + 4 + "px";
+                }
+                selectedAnnoteEl = annoteEl;
+              }
+            };
+            const unselectCodeLines = () => {
+              const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+              elementsIds.forEach((elId) => {
+                const div = window.document.getElementById(elId);
+                if (div) {
+                  div.remove();
+                }
+              });
+              selectedAnnoteEl = undefined;
+            };
+              // Handle positioning of the toggle
+          window.addEventListener(
+            "resize",
+            throttle(() => {
+              elRect = undefined;
+              if (selectedAnnoteEl) {
+                selectCodeLines(selectedAnnoteEl);
+              }
+            }, 10)
+          );
+          function throttle(fn, ms) {
+          let throttle = false;
+          let timer;
+            return (...args) => {
+              if(!throttle) { // first call gets through
+                  fn.apply(this, args);
+                  throttle = true;
+              } else { // all the others get throttled
+                  if(timer) clearTimeout(timer); // cancel #2
+                  timer = setTimeout(() => {
+                    fn.apply(this, args);
+                    timer = throttle = false;
+                  }, ms);
+              }
+            };
+          }
+            const annoteTargets = window.document.querySelectorAll('.code-annotation-anchor');
+            for (let i=0; i<annoteTargets.length; i++) {
+              const annoteTarget = annoteTargets[i];
+              const targetCell = annoteTarget.getAttribute("data-target-cell");
+              const targetAnnotation = annoteTarget.getAttribute("data-target-annotation");
+              const contentFn = () => {
+                const content = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+                if (content) {
+                  const tipContent = content.cloneNode(true);
+                  tipContent.classList.add("code-annotation-tip-content");
+                  return tipContent.outerHTML;
+                }
+              }
+              const config = {
+                allowHTML: true,
+                content: contentFn,
+                onShow: (instance) => {
+                  selectCodeLines(instance.reference);
+                  instance.reference.classList.add('code-annotation-active');
+                  window.tippy.hideAll();
+                },
+                onHide: (instance) => {
+                  unselectCodeLines();
+                  instance.reference.classList.remove('code-annotation-active');
+                },
+                maxWidth: 300,
+                delay: [50, 0],
+                duration: [200, 0],
+                offset: [5, 10],
+                arrow: true,
+                appendTo: function(el) {
+                  return el.parentElement.parentElement.parentElement;
+                },
+                interactive: true,
+                interactiveBorder: 10,
+                theme: 'light-border',
+                placement: 'right',
+                popperOptions: {
+                  modifiers: [
+                  {
+                    name: 'flip',
+                    options: {
+                      flipVariations: false, // true by default
+                      allowedAutoPlacements: ['right'],
+                      fallbackPlacements: ['right', 'top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end', 'left'],
+                    },
+                  },
+                  {
+                    name: 'preventOverflow',
+                    options: {
+                      mainAxis: false,
+                      altAxis: false
+                    }
+                  }
+                  ]        
+                }      
+              };
+              window.tippy(annoteTarget, config); 
+            }
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
+    
+
+</body></html>

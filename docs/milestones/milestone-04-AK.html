@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.8.26">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -21,41 +21,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
@@ -67,14 +32,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <meta name="quarto:offset" content="../">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-991b1886d3c685c7aa2b62b80640c7af.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-1d4f84655f446305ac42a8f1abcf7405.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -144,169 +110,49 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="environment" class="level1">
-<h1>Environment</h1>
-<p>Update the YAML with your first and last name.</p>
-<p>Load the packages.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse) </span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven) </span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gssr)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gssrdoc)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(summarytools)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Rmisc) <span class="co"># load the new package</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gtsummary) <span class="co"># load the new package</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Load the GSS panel data</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use here() to construct the file path of the panel data</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>gss_panel.dta <span class="ot">&lt;-</span> <span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"GSS_2020_panel_stata_1a/gss2020panel_r1a.dta"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-error">
-<pre><code>Error in here("data", "GSS_2020_panel_stata_1a/gss2020panel_r1a.dta"): unused argument ("GSS_2020_panel_stata_1a/gss2020panel_r1a.dta")</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#load the panel data using `haven::read_dta()`</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>gss_panel <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(gss_panel.dta)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-error">
-<pre><code>Error: object 'gss_panel.dta' not found</code></pre>
-</div>
-</div>
-<p><em>Use the panel data for checkpoints 06-10.</em></p>
-<section id="checkpoint-06-code-for-within-person-change" class="level2">
-<h2 class="anchored" data-anchor-id="checkpoint-06-code-for-within-person-change">Checkpoint 06: Code for within-person change</h2>
-<p>Run the following code to produce the average within-person change between 2018 and 2020.</p>
-<p>It shows the average change from 2018 to 2020 in work and TV hours for each gender.</p>
-<p>Positive values mean an increase from 2018 to 2020; negative values mean a decrease.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>gss_panel <span class="sc">|&gt;</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(sex_2, hrs1_2, hrs1_1b, tvhours_2, tvhours_1b) <span class="sc">|&gt;</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>(sex_2) <span class="sc">|&gt;</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">work_change =</span> hrs1_2 <span class="sc">-</span> hrs1_1b,</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">tv_change =</span> tvhours_2 <span class="sc">-</span> tvhours_1b,</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="fu">as_factor</span>(sex_2)) <span class="sc">|&gt;</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_work_change =</span> <span class="fu">round</span>(<span class="fu">mean</span>(work_change, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">digits =</span> <span class="dv">2</span>),</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">sd_work_change =</span> <span class="fu">round</span>(<span class="fu">sd</span>(work_change, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">digits =</span> <span class="dv">2</span>),</span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_tv_change =</span> <span class="fu">round</span>(<span class="fu">mean</span>(tv_change, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">digits =</span> <span class="dv">2</span>),</span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">sd_tv_change =</span> <span class="fu">round</span>(<span class="fu">sd</span>(tv_change, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">digits =</span> <span class="dv">2</span>)</span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-error">
-<pre><code>Error: object 'gss_panel' not found</code></pre>
-</div>
-</div>
-<p><strong><em>Did the number of work hours increase or decrease from 2018 to 2020 for men? What about for women?</em></strong></p>
-<p><strong><em>Did the number of hours spent watching TV increase or decrease from 2018 to 2020 for men? What about for women?</em></strong></p>
-<p><strong><em>Was there a gender difference in the average within-person change between 2018 and 2020 for work hours? What about for tv hours?</em></strong></p>
+<section id="ipums-data" class="level1">
+<h1>IPUMS Data</h1>
+<p>To keep your Research Brief progress on track, you’ll complete short exercises that correspond with the new course material using your own dataset as part of your milestones.</p>
+<section id="data-import-cleaning" class="level2">
+<h2 class="anchored" data-anchor-id="data-import-cleaning">Data Import &amp; Cleaning</h2>
+<p><strong>Import your dataset and perform essential data cleaning steps.</strong></p>
+<p>This includes:</p>
+<ul>
+<li>Recoding and labeling categorical variables</li>
+<li>Handling missing values appropriately</li>
+<li>Identifying and addressing outliers</li>
+<li>Ensuring variables are in the correct format (e.g., factors, numeric)</li>
+</ul>
+<p>Document each change to your data clearly so your workflow is fully reproducible.</p>
 </section>
-<section id="checkpoint-07-reshape-panel-data-so-it-is-tidy" class="level2">
-<h2 class="anchored" data-anchor-id="checkpoint-07-reshape-panel-data-so-it-is-tidy">Checkpoint 07: Reshape panel data so it is tidy</h2>
-<p>Use <code>select()</code> and <code>pivot_longer()</code> to create tidy data.</p>
-<p>Add <code>relocate()</code> to put the variables in a logical order and <code>drop_na()</code> to remove rows with any missing data.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>my_gss_panel <span class="ot">&lt;-</span> gss_panel <span class="sc">|&gt;</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(yearid, sex_2,</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>         <span class="fu">starts_with</span>(<span class="st">"hrs1_"</span>),</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>         <span class="fu">starts_with</span>(<span class="st">"tvhours_"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_longer</span>(</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">cols =</span> <span class="fu">c</span>( <span class="sc">-</span>yearid, <span class="sc">-</span>sex_2),</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">names_to =</span> <span class="fu">c</span>(<span class="st">".value"</span>, <span class="st">"panel"</span>),</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">names_sep =</span> <span class="st">"_"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(panel, <span class="at">.after =</span> yearid) <span class="sc">|&gt;</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-error">
-<pre><code>Error: object 'gss_panel' not found</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(my_gss_panel)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-error">
-<pre><code>Error: object 'my_gss_panel' not found</code></pre>
-</div>
-</div>
+<section id="table-01" class="level2">
+<h2 class="anchored" data-anchor-id="table-01">Table 01</h2>
+<p><strong>Create a well-formatted and publication-ready Table 01 for your research project using the <code>tbl_summary()</code> function in R.</strong></p>
+<p>Your table should:</p>
+<ul>
+<li>Follow standard formatting guidelines and best practices for descriptive statistics tables</li>
+<li>Include a Total column summarizing all observations</li>
+<li>Be grouped by a key categorical variable relevant to your analysis</li>
+<li>Be based on variables that are appropriately cleaned, with missing values handled and outliers addressed prior to summarization</li>
+</ul>
+<p>Ensure clarity, consistency, and visual appeal in your table presentation.</p>
 </section>
-<section id="checkpoint-08-recode-panel-variables" class="level2">
-<h2 class="anchored" data-anchor-id="checkpoint-08-recode-panel-variables">Checkpoint 08: Recode panel variables</h2>
-<ol type="A">
-<li>Use <code>mutate()</code> and <code>case_when()</code> to re-code the <code>sex_2</code> variable so that “1” = man, “2” = woman. Use <code>TRUE ~ NA_character_</code> for missing values.</li>
-</ol>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>my_gss_panel <span class="ot">&lt;-</span> my_gss_panel <span class="sc">|&gt;</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sex =</span> <span class="fu">case_when</span>(</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>         sex_2 <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">"male"</span>,</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>         sex_2 <span class="sc">==</span> <span class="dv">2</span> <span class="sc">~</span> <span class="st">"female"</span>,</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>         <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA_character_</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-error">
-<pre><code>Error: object 'my_gss_panel' not found</code></pre>
-</div>
-</div>
-<ol start="2" type="A">
-<li>Use <code>mutate()</code> and <code>case_when()</code> to re-code the <code>panel</code> variable so that “1a” = 2016, “1b” = 2018, and “2” = 2020. Use <code>TRUE ~ NA_integer_</code> for missing values.</li>
-</ol>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>my_gss_panel <span class="ot">&lt;-</span> my_gss_panel <span class="sc">|&gt;</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">panel =</span> <span class="fu">case_when</span>(</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>         panel <span class="sc">==</span> <span class="st">"1a"</span> <span class="sc">~</span> <span class="dv">2016</span>,</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>         panel <span class="sc">==</span> <span class="st">"1b"</span> <span class="sc">~</span> <span class="dv">2018</span>,</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>         panel <span class="sc">==</span> <span class="st">"2"</span> <span class="sc">~</span> <span class="dv">2020</span>,</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>         <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA_integer_</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-error">
-<pre><code>Error: object 'my_gss_panel' not found</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(my_gss_panel)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-error">
-<pre><code>Error: object 'my_gss_panel' not found</code></pre>
-</div>
-</div>
-</section>
-<section id="checkpoint-09-create-a-summary-panel-table" class="level2">
-<h2 class="anchored" data-anchor-id="checkpoint-09-create-a-summary-panel-table">Checkpoint 09: Create a summary panel table</h2>
-<p>Use <code>group_by()</code> and <code>summarise()</code> to create a table showing the average work hours for men and women for each panel year.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>panel_summary <span class="ot">&lt;-</span> my_gss_panel <span class="sc">|&gt;</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(sex, panel) <span class="sc">|&gt;</span></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">count =</span> <span class="fu">n</span>(),</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_work =</span> <span class="fu">round</span>(<span class="fu">mean</span>(hrs1), <span class="at">digits =</span> <span class="dv">2</span>), </span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_tv =</span> <span class="fu">round</span>(<span class="fu">mean</span>(tvhours), <span class="at">digits =</span> <span class="dv">2</span>)</span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    ) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-error">
-<pre><code>Error: object 'my_gss_panel' not found</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>panel_summary</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-error">
-<pre><code>Error: object 'panel_summary' not found</code></pre>
-</div>
-</div>
-<p><strong><em>Do women differ in their average work and television hours from 2016, 2018, and 2020? What about men?</em></strong></p>
-</section>
-<section id="checkpoint-10-join-and-calculate-the-average-panel-differences-by-sex" class="level2">
-<h2 class="anchored" data-anchor-id="checkpoint-10-join-and-calculate-the-average-panel-differences-by-sex">Checkpoint 10: Join and calculate the average panel differences by sex</h2>
-<p>Use <code>full_join()</code> to merge the <code>gss24_summary</code> data and the <code>panel_summary</code> data, matching <em>by</em> the variable <code>sex</code>.</p>
-<p>Calculate the difference in average work and tv hours between 2016, 2018, 2020 and the 2024 average.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="do">## ADD YOUR CODE HERE TO JOIN THE DATA</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>my_data_all <span class="ot">&lt;-</span> <span class="fu">full_join</span>(gss24_summary, panel_summary, <span class="at">by =</span> <span class="st">"sex"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-error">
-<pre><code>Error: object 'gss24_summary' not found</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create change variables</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>my_data_all <span class="ot">&lt;-</span> my_data_all <span class="sc">|&gt;</span></span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">work_change =</span> avg_work_24 <span class="sc">-</span> avg_work,</span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">tv_change =</span> avg_tv_24 <span class="sc">-</span> avg_tv</span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">|&gt;</span></span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(sex, panel, count, </span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>         avg_work_24, avg_work, work_change,</span>
-<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>         avg_tv_24, avg_tv, tv_change</span>
-<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>         )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-error">
-<pre><code>Error: object 'my_data_all' not found</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>my_data_all</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-error">
-<pre><code>Error: object 'my_data_all' not found</code></pre>
-</div>
-</div>
-<p><strong><em>Speculate about whether there is evidence of a post-pandemic (2024) shift in work or TV time. Are the patterns the same or different for men and women?</em></strong></p>
+<section id="data-visual" class="level2">
+<h2 class="anchored" data-anchor-id="data-visual">Data Visual</h2>
+<p><strong>Use <code>ggplot2</code> to visually show the relationship between your dependent variable and 2 predictors:</strong></p>
+<ul>
+<li>One continuous variable</li>
+<li>One categorical variable</li>
+</ul>
+<p>You may choose to create a single plot that incorporates both predictors or produce two separate plots, each highlighting one predictor’s relationship with the DV.</p>
+<p>Your visualizations should:</p>
+<ul>
+<li>Follow best practices in data storytelling and plot design</li>
+<li>Include appropriate labels, scales, and color schemes</li>
+<li>Be clear, interpretable, and tailored to your research context</li>
+</ul>
+<p>Aim to communicate insights effectively and support your analytical narrative with compelling visuals.</p>
+<p><strong><em>NOTE: No checkpoints for this milestone.</em></strong></p>
 
 
 </section>
@@ -364,13 +210,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

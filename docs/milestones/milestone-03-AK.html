@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.8.26">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -67,14 +67,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <meta name="quarto:offset" content="../">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-991b1886d3c685c7aa2b62b80640c7af.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-1d4f84655f446305ac42a8f1abcf7405.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -149,18 +150,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Update the YAML with your first and last name.</p>
 <p>Load the packages.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse) </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse) </span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven) </span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gssr)</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gssrdoc)</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(summarytools)</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Rmisc) <span class="co"># load the new package</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gtsummary) <span class="co"># load the new package</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gtsummary) <span class="co"># load the new package</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Load the 2022 GSS data</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ADD YOUR CODE HERE TO LOAD THE GSS 2022 DATA </span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>gss22 <span class="ot">&lt;-</span> <span class="fu">gss_get_yr</span>(<span class="dv">2022</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ADD YOUR CODE HERE TO LOAD THE GSS 2022 DATA </span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>gss22 <span class="ot">&lt;-</span> <span class="fu">gss_get_yr</span>(<span class="dv">2022</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Fetching: https://gss.norc.org/documents/stata/2022_stata.zip</code></pre>
 </div>
@@ -183,11 +184,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Create a df named <code>my_data</code> with <code>meovrwrk</code>, <code>sex</code>, <code>marital</code>, <code>lifenow</code>, and <code>educ</code>. Then, use <code>drop_na()</code> to remove rows with missing data.</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>my_data <span class="ot">&lt;-</span> gss22 <span class="sc">|&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>my_data <span class="ot">&lt;-</span> gss22 <span class="sc">|&gt;</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(meovrwrk, sex, marital, lifenow, educ) <span class="sc">|&gt;</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>()</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(my_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(my_data)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 5
   meovrwrk                       sex        marital           lifenow   educ    
@@ -211,14 +212,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>0 if <code>meovrwrk</code> is equal to anything else</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>my_data <span class="ot">&lt;-</span> my_data <span class="sc">|&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>my_data <span class="ot">&lt;-</span> my_data <span class="sc">|&gt;</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">hurt_num =</span> <span class="fu">case_when</span>(</span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>      meovrwrk <span class="sc">%in%</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span> <span class="sc">~</span> <span class="dv">1</span>,</span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> <span class="dv">0</span> </span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    )) </span>
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(my_data<span class="sc">$</span>meovrwrk, my_data<span class="sc">$</span>hurt_num)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(my_data<span class="sc">$</span>meovrwrk, my_data<span class="sc">$</span>hurt_num) <span class="co"># check the recode</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   
       0   1
@@ -227,6 +228,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   3 408   0
   4 308   0
   5  74   0</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(my_data<span class="sc">$</span>hurt_num) <span class="co"># view counts</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+  0   1 
+790 658 </code></pre>
 </div>
 </div>
 <ol start="2" type="A">
@@ -237,14 +244,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>“College degree” if <code>educ</code> 16 or more</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>my_data <span class="ot">&lt;-</span> my_data <span class="sc">|&gt;</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">college =</span> <span class="fu">case_when</span>(</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>      educ <span class="sc">&lt;</span> <span class="dv">16</span> <span class="sc">~</span> <span class="st">"No college degree"</span>,</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>      educ <span class="sc">&gt;=</span> <span class="dv">16</span> <span class="sc">~</span> <span class="st">"College degree"</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  )) </span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(my_data<span class="sc">$</span>educ, my_data<span class="sc">$</span>college)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>my_data <span class="ot">&lt;-</span> my_data <span class="sc">|&gt;</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">college =</span> <span class="fu">case_when</span>(</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>      educ <span class="sc">&lt;</span> <span class="dv">16</span> <span class="sc">~</span> <span class="st">"No college degree"</span>,</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>      educ <span class="sc">&gt;=</span> <span class="dv">16</span> <span class="sc">~</span> <span class="st">"College degree"</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  )) </span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(my_data<span class="sc">$</span>educ, my_data<span class="sc">$</span>college)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    
      College degree No college degree
@@ -268,6 +275,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   19             37                 0
   20             77                 0</code></pre>
 </div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(my_data<span class="sc">$</span>college)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+   College degree No college degree 
+              638               810 </code></pre>
+</div>
 </div>
 <ol start="3" type="A">
 <li>Use <code>mutate()</code> and <code>case_when()</code> to add a new variable to <code>my_data</code> called <code>edu_category</code> that groups respondents as follows:</li>
@@ -279,23 +292,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <p><strong>BONUS: Then, use <code>factor()</code> to put the categories into a meaningful order</strong></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>my_data <span class="ot">&lt;-</span> my_data <span class="sc">|&gt;</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">edu_category =</span> <span class="fu">case_when</span>(</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>      educ <span class="sc">&lt;=</span> <span class="dv">12</span> <span class="sc">~</span> <span class="st">"High school or less"</span>,</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>      educ <span class="sc">&gt;=</span> <span class="dv">13</span> <span class="sc">&amp;</span> educ <span class="sc">&lt;=</span> <span class="dv">15</span> <span class="sc">~</span> <span class="st">"Some college"</span>,</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>      educ <span class="sc">&gt;=</span> <span class="dv">16</span>  <span class="sc">~</span> <span class="st">"College or more"</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  )) </span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert edu_category to an ordered factor</span></span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>my_data <span class="ot">&lt;-</span> my_data <span class="sc">|&gt;</span></span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">edu_category =</span> <span class="fu">factor</span>(</span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>      edu_category,</span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>      <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"High school or less"</span>, <span class="st">"Some college"</span>, <span class="st">"College or more"</span>)</span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>      ))</span>
-<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(my_data<span class="sc">$</span>educ, my_data<span class="sc">$</span>edu_category)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>my_data <span class="ot">&lt;-</span> my_data <span class="sc">|&gt;</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">edu_category =</span> <span class="fu">case_when</span>(</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>      educ <span class="sc">&lt;=</span> <span class="dv">12</span> <span class="sc">~</span> <span class="st">"High school or less"</span>,</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>      educ <span class="sc">&gt;=</span> <span class="dv">13</span> <span class="sc">&amp;</span> educ <span class="sc">&lt;=</span> <span class="dv">15</span> <span class="sc">~</span> <span class="st">"Some college"</span>,</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>      educ <span class="sc">&gt;=</span> <span class="dv">16</span>  <span class="sc">~</span> <span class="st">"College or more"</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  )) </span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert edu_category to an ordered factor</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>my_data <span class="ot">&lt;-</span> my_data <span class="sc">|&gt;</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">edu_category =</span> <span class="fu">factor</span>(</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>      edu_category,</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>      <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"High school or less"</span>, <span class="st">"Some college"</span>, <span class="st">"College or more"</span>)</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>      ))</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(my_data<span class="sc">$</span>educ, my_data<span class="sc">$</span>edu_category)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    
      High school or less Some college College or more
@@ -319,6 +332,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   19                   0            0              37
   20                   0            0              77</code></pre>
 </div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(my_data<span class="sc">$</span>edu_category)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+High school or less        Some college     College or more 
+                419                 391                 638 </code></pre>
+</div>
 </div>
 <p>D. Use <code>mutate()</code> and <code>case_when()</code> to add a new variable to <code>my_data</code> called <code>marstat</code> that groups respondents as follows:</p>
 <ul>
@@ -328,42 +347,48 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <p><strong>BONUS: Then, use <code>factor()</code> to put the categories into a meaningful order</strong></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>my_data <span class="ot">&lt;-</span> my_data <span class="sc">|&gt;</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">marstat =</span> <span class="fu">case_when</span>(</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>      marital <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">"Married"</span>,</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>      marital <span class="sc">==</span> <span class="dv">5</span> <span class="sc">~</span> <span class="st">"Single"</span>,</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>      marital <span class="sc">%in%</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">4</span>   <span class="sc">~</span> <span class="st">"Prev married"</span></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  )) </span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert edu_category to an ordered factor</span></span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>my_data <span class="ot">&lt;-</span> my_data <span class="sc">|&gt;</span></span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">marstat =</span> <span class="fu">factor</span>(</span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>      marstat,</span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>      <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Married"</span>, <span class="st">"Single"</span>, <span class="st">"Prev married"</span>)</span>
-<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>      ))</span>
-<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(my_data<span class="sc">$</span>marital, my_data<span class="sc">$</span>marstat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>my_data <span class="ot">&lt;-</span> my_data <span class="sc">|&gt;</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">marstat =</span> <span class="fu">case_when</span>(</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>      marital <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">"Married"</span>,</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>      marital <span class="sc">==</span> <span class="dv">5</span> <span class="sc">~</span> <span class="st">"Single"</span>,</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>      marital <span class="sc">%in%</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">4</span>   <span class="sc">~</span> <span class="st">"Prev married"</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  )) </span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert marstat to an ordered factor</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>my_data <span class="ot">&lt;-</span> my_data <span class="sc">|&gt;</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">marstat =</span> <span class="fu">factor</span>(</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>      marstat,</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>      <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Single"</span>, <span class="st">"Married"</span>, <span class="st">"Prev married"</span>)</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>      ))</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(my_data<span class="sc">$</span>marital, my_data<span class="sc">$</span>marstat)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   
-    Married Single Prev married
-  1     631      0            0
-  2       0      0           22
-  3       0      0          225
-  4       0      0           39
-  5       0    531            0</code></pre>
+    Single Married Prev married
+  1      0     631            0
+  2      0       0           22
+  3      0       0          225
+  4      0       0           39
+  5    531       0            0</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(my_data<span class="sc">$</span>marstat)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+      Single      Married Prev married 
+         531          631          286 </code></pre>
 </div>
 </div>
 <p>E. Use <code>zap_missing()</code>, <code>as_factor()</code>, and <code>droplevels()</code> to make <code>sex</code> and <code>meovrwkr</code> into clean factor variables.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>my_data<span class="sc">$</span>sex <span class="ot">&lt;-</span> <span class="fu">zap_missing</span>(my_data<span class="sc">$</span>sex)</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>my_data<span class="sc">$</span>sex <span class="ot">&lt;-</span> <span class="fu">as_factor</span>(my_data<span class="sc">$</span>sex)</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>my_data<span class="sc">$</span>sex <span class="ot">&lt;-</span> <span class="fu">droplevels</span>(my_data<span class="sc">$</span>sex)</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>my_data<span class="sc">$</span>meovrwrk <span class="ot">&lt;-</span> <span class="fu">zap_missing</span>(my_data<span class="sc">$</span>meovrwrk)</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>my_data<span class="sc">$</span>meovrwrk <span class="ot">&lt;-</span> <span class="fu">as_factor</span>(my_data<span class="sc">$</span>meovrwrk)</span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>my_data<span class="sc">$</span>meovrwrk <span class="ot">&lt;-</span> <span class="fu">droplevels</span>(my_data<span class="sc">$</span>meovrwrk)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>my_data<span class="sc">$</span>sex <span class="ot">&lt;-</span> <span class="fu">zap_missing</span>(my_data<span class="sc">$</span>sex)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>my_data<span class="sc">$</span>sex <span class="ot">&lt;-</span> <span class="fu">as_factor</span>(my_data<span class="sc">$</span>sex)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>my_data<span class="sc">$</span>sex <span class="ot">&lt;-</span> <span class="fu">droplevels</span>(my_data<span class="sc">$</span>sex)</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>my_data<span class="sc">$</span>meovrwrk <span class="ot">&lt;-</span> <span class="fu">zap_missing</span>(my_data<span class="sc">$</span>meovrwrk)</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>my_data<span class="sc">$</span>meovrwrk <span class="ot">&lt;-</span> <span class="fu">as_factor</span>(my_data<span class="sc">$</span>meovrwrk)</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>my_data<span class="sc">$</span>meovrwrk <span class="ot">&lt;-</span> <span class="fu">droplevels</span>(my_data<span class="sc">$</span>meovrwrk)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="checkpoint-03-create-and-interpret-confidence-interval" class="level2">
@@ -372,14 +397,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Calculate the mean and 95% confidence interval for <code>lifenow</code></li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>my_data <span class="sc">|&gt;</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_lifenow =</span> <span class="fu">mean</span>(lifenow),</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">sd_lifenow =</span> <span class="fu">sd</span>(lifenow),</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">lowCI_lifenow =</span> <span class="fu">CI</span>(lifenow, <span class="at">ci =</span> <span class="fl">0.95</span>)[<span class="st">'lower'</span>],</span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">hiCI_lifenow  =</span> <span class="fu">CI</span>(lifenow, <span class="at">ci =</span> <span class="fl">0.95</span>)[<span class="st">'upper'</span>]</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>my_data <span class="sc">|&gt;</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_lifenow =</span> <span class="fu">mean</span>(lifenow),</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">sd_lifenow =</span> <span class="fu">sd</span>(lifenow),</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">lowCI_lifenow =</span> <span class="fu">CI</span>(lifenow, <span class="at">ci =</span> <span class="fl">0.95</span>)[<span class="st">'lower'</span>],</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">hiCI_lifenow  =</span> <span class="fu">CI</span>(lifenow, <span class="at">ci =</span> <span class="fl">0.95</span>)[<span class="st">'upper'</span>]</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 5
       n mean_lifenow sd_lifenow lowCI_lifenow hiCI_lifenow
@@ -388,18 +413,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p><strong><em>Interpret your confidence interval (e.g., say in plain language what the CI is telling us).</em></strong></p>
+<p>The average life satisfaction score of 7.73 on a 0–10 scale, indicates generally high levels of satisfaction.</p>
+<p>There is a 95% probability that the true population mean falls between 7.64 and 7.81. Or: We are 95% confident the true average life satisfaction score is between 7.64 and 7.81. OR: Based on the sample, there is 95% certainty that the population average life sanctification is between 7.64 and 7.81.</p>
 <ol start="2" type="A">
 <li>Calculate the mean and 99% confidence interval for <code>lifenow</code></li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>my_data <span class="sc">|&gt;</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_lifenow =</span> <span class="fu">mean</span>(lifenow),</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">sd_lifenow =</span> <span class="fu">sd</span>(lifenow),</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">lowCI_lifenow =</span> <span class="fu">CI</span>(lifenow, <span class="at">ci =</span> <span class="fl">0.99</span>)[<span class="st">'lower'</span>],</span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">hiCI_lifenow  =</span> <span class="fu">CI</span>(lifenow, <span class="at">ci =</span> <span class="fl">0.99</span>)[<span class="st">'upper'</span>]</span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>my_data <span class="sc">|&gt;</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_lifenow =</span> <span class="fu">mean</span>(lifenow),</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">sd_lifenow =</span> <span class="fu">sd</span>(lifenow),</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">lowCI_lifenow =</span> <span class="fu">CI</span>(lifenow, <span class="at">ci =</span> <span class="fl">0.99</span>)[<span class="st">'lower'</span>],</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">hiCI_lifenow  =</span> <span class="fu">CI</span>(lifenow, <span class="at">ci =</span> <span class="fl">0.99</span>)[<span class="st">'upper'</span>]</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 5
       n mean_lifenow sd_lifenow lowCI_lifenow hiCI_lifenow
@@ -408,6 +435,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p><strong><em>How does the 95% confidence interval differ from the 99% confidence interval in terms of width and certainty?</em></strong></p>
+<p>A 99% confidence interval of 7.61 to 7.83 life satisfaction points offers greater certainty that the true population mean is captured, but it is less precise than the narrower 95% interval of 7.64 to 7.81. The 99% interval is 0.05 life satisfaction points wider, reflecting that increased confidence comes at the cost of precision, as the estimate becomes less specific.</p>
 </section>
 <section id="checkpoint-04-create-compare-and-interpret-confidence-intervals" class="level2">
 <h2 class="anchored" data-anchor-id="checkpoint-04-create-compare-and-interpret-confidence-intervals">Checkpoint 04: Create, compare and interpret confidence intervals</h2>
@@ -415,15 +443,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Calculate the mean and 95% confidence intervals for <code>lifenow</code> by <code>college</code></li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>my_data <span class="sc">|&gt;</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(college) <span class="sc">|&gt;</span></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(</span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean =</span> <span class="fu">mean</span>(lifenow),</span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">sd =</span> <span class="fu">sd</span>(lifenow),</span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">lowCI =</span> <span class="fu">CI</span>(lifenow, <span class="at">ci =</span> <span class="fl">0.95</span>)[<span class="st">'lower'</span>],</span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">hiCI  =</span> <span class="fu">CI</span>(lifenow, <span class="at">ci =</span> <span class="fl">0.95</span>)[<span class="st">'upper'</span>]</span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>my_data <span class="sc">|&gt;</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(college) <span class="sc">|&gt;</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean =</span> <span class="fu">mean</span>(lifenow),</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">sd =</span> <span class="fu">sd</span>(lifenow),</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">lowCI =</span> <span class="fu">CI</span>(lifenow, <span class="at">ci =</span> <span class="fl">0.95</span>)[<span class="st">'lower'</span>],</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">hiCI  =</span> <span class="fu">CI</span>(lifenow, <span class="at">ci =</span> <span class="fl">0.95</span>)[<span class="st">'upper'</span>]</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 6
   college               n  mean    sd lowCI  hiCI
@@ -433,17 +461,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p><strong><em>Do the confidence intervals for these two groups overlap? What does that imply about the statistical significance of their difference?</em></strong></p>
+<p>The non-overlapping 95% confidence intervals indicate a likely statistically significant difference in average life satisfaction, with college graduates reporting notably higher average life satisfaction (7.92) than those without a degree (7.56).</p>
 <p>B. Calculate the mean and 95% confidence intervals for <code>lifenow</code> by <code>edu_category</code></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>my_data <span class="sc">|&gt;</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(edu_category) <span class="sc">|&gt;</span></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean =</span> <span class="fu">mean</span>(lifenow),</span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">sd =</span> <span class="fu">sd</span>(lifenow),</span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">lowCI =</span> <span class="fu">CI</span>(lifenow, <span class="at">ci =</span> <span class="fl">0.95</span>)[<span class="st">'lower'</span>],</span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">hiCI  =</span> <span class="fu">CI</span>(lifenow, <span class="at">ci =</span> <span class="fl">0.95</span>)[<span class="st">'upper'</span>]</span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>my_data <span class="sc">|&gt;</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(edu_category) <span class="sc">|&gt;</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean =</span> <span class="fu">mean</span>(lifenow),</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">sd =</span> <span class="fu">sd</span>(lifenow),</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">lowCI =</span> <span class="fu">CI</span>(lifenow, <span class="at">ci =</span> <span class="fl">0.95</span>)[<span class="st">'lower'</span>],</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">hiCI  =</span> <span class="fu">CI</span>(lifenow, <span class="at">ci =</span> <span class="fl">0.95</span>)[<span class="st">'upper'</span>]</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 6
   edu_category            n  mean    sd lowCI  hiCI
@@ -454,48 +483,56 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p><strong><em>Do the confidence intervals for these three groups overlap? What does that imply about the statistical significance of their difference?</em></strong></p>
+<p>The 95% confidence intervals for high school or less (7.40–7.71) and some college (7.39–7.75) overlap substantially, suggesting no statistically significant difference in average life satisfaction between those two groups. However, the interval for college or more group (7.80–8.04) does not overlap with either of the other groups, indicating a statistically significant and meaningfully higher level of life satisfaction among those with a college degree or more.</p>
 </section>
 <section id="checkpoint-05-create-compare-and-interpret-confidence-intervals" class="level2">
 <h2 class="anchored" data-anchor-id="checkpoint-05-create-compare-and-interpret-confidence-intervals">Checkpoint 05: Create, compare and interpret confidence intervals</h2>
 <p>Calculate the mean and 95% confidence intervals for <code>hurt_num</code> by <code>marstat</code> &amp; <code>sex</code> (e.g, married women, married men, single women, single men, etc.)</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>my_data <span class="sc">|&gt;</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(marstat, <span class="fu">as_factor</span>(sex)) <span class="sc">|&gt;</span></span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(</span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean =</span> <span class="fu">mean</span>(hurt_num),</span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">sd =</span> <span class="fu">sd</span>(hurt_num),</span>
-<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">lowCI =</span> <span class="fu">CI</span>(hurt_num, <span class="at">ci =</span> <span class="fl">0.95</span>)[<span class="st">'lower'</span>],</span>
-<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">hiCI  =</span> <span class="fu">CI</span>(hurt_num, <span class="at">ci =</span> <span class="fl">0.95</span>)[<span class="st">'upper'</span>]</span>
-<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>my_data <span class="sc">|&gt;</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(marstat, <span class="fu">as_factor</span>(sex)) <span class="sc">|&gt;</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean =</span> <span class="fu">mean</span>(hurt_num),</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">sd =</span> <span class="fu">sd</span>(hurt_num),</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">lowCI =</span> <span class="fu">CI</span>(hurt_num, <span class="at">ci =</span> <span class="fl">0.95</span>)[<span class="st">'lower'</span>],</span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">hiCI  =</span> <span class="fu">CI</span>(hurt_num, <span class="at">ci =</span> <span class="fl">0.95</span>)[<span class="st">'upper'</span>]</span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>`summarise()` has grouped output by 'marstat'. You can override using the
-`.groups` argument.</code></pre>
+<pre><code>`summarise()` has regrouped the output.
+ℹ Summaries were computed grouped by marstat and as_factor(sex).
+ℹ Output is grouped by marstat.
+ℹ Use `summarise(.groups = "drop_last")` to silence this message.
+ℹ Use `summarise(.by = c(marstat, as_factor(sex)))` for per-operation grouping
+  (`?dplyr::dplyr_by`) instead.</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 7
 # Groups:   marstat [3]
   marstat      `as_factor(sex)`     n  mean    sd lowCI  hiCI
   &lt;fct&gt;        &lt;fct&gt;            &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-1 Married      male               350 0.563 0.497 0.511 0.615
-2 Married      female             281 0.349 0.477 0.293 0.405
-3 Single       male               240 0.496 0.501 0.432 0.560
-4 Single       female             291 0.419 0.494 0.362 0.476
+1 Single       male               240 0.496 0.501 0.432 0.560
+2 Single       female             291 0.419 0.494 0.362 0.476
+3 Married      male               350 0.563 0.497 0.511 0.615
+4 Married      female             281 0.349 0.477 0.293 0.405
 5 Prev married male               112 0.518 0.502 0.424 0.612
 6 Prev married female             174 0.368 0.484 0.295 0.440</code></pre>
 </div>
 </div>
 <p><strong><em>Assess whether gender differences within each marital status group are likely to be statistically meaningful.</em></strong></p>
+<p>Among singles and previously married individuals, the 95% confidence intervals for men and women overlap, indicating no statistically significant gender difference in beliefs about whether men hurt their families by overworking. In contrast, the married group shows non-overlapping intervals, suggesting a statistically significant difference between married men and married women on this issue.</p>
 </section>
 <section id="checkpoint-06-write-a-null-and-research-hypothesis" class="level2">
 <h2 class="anchored" data-anchor-id="checkpoint-06-write-a-null-and-research-hypothesis">Checkpoint 06: Write a null and research hypothesis</h2>
 <p><strong><em>Write a null and research hypothesis for the association between the variables <code>lifenow</code> and <code>college</code></em></strong></p>
+<p><strong>H0:</strong> There is no difference in average life satisfaction scores between people with a college education and those without.</p>
+<p><strong>H1:</strong> People with a college education have higher average life satisfaction scores than those without.</p>
 </section>
 <section id="checkpoint-07-produce-and-interpret-a-two-sample-t-test" class="level2">
 <h2 class="anchored" data-anchor-id="checkpoint-07-produce-and-interpret-a-two-sample-t-test">Checkpoint 07: Produce and interpret a two-sample t-test</h2>
 <p>Use <code>t.test()</code> to produce a two-sided t.test of the variables <code>lifenow</code> and <code>college</code></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(my_data<span class="sc">$</span>lifenow <span class="sc">~</span> my_data<span class="sc">$</span>college, <span class="at">alternative =</span> <span class="st">"two.sided"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(my_data<span class="sc">$</span>lifenow <span class="sc">~</span> my_data<span class="sc">$</span>college, <span class="at">alternative =</span> <span class="st">"two.sided"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Welch Two Sample t-test
@@ -511,35 +548,36 @@ sample estimates:
 </div>
 </div>
 <p><strong><em>Explain what the test reveals about the statistical differences in average life satisfaction between the two groups. What do the results suggest about the null and research hypotheses?</em></strong></p>
+<p>The t-test result (t = 4.2025, p &lt; .001) indicates a statistically significant difference in average life satisfaction between individuals with and without a college education. Therefore, we reject the null hypothesis.</p>
 </section>
 <section id="checkpoint-08-create-cross-tabs-with-chi-square-tests" class="level2">
 <h2 class="anchored" data-anchor-id="checkpoint-08-create-cross-tabs-with-chi-square-tests">Checkpoint 08: Create cross-tabs with chi-square tests</h2>
 <p>Use <code>tbl_cross()</code> and <code>add_p()</code> to create a cross-tab with a chi-square test for the variables <code>meovrwrk</code> and <code>college</code></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>my_data <span class="sc">|&gt;</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tbl_cross</span>(</span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">row =</span> meovrwrk,</span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">col =</span> college,</span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">percent =</span> <span class="st">"column"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_p</span>(<span class="at">source_note =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>my_data <span class="sc">|&gt;</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tbl_cross</span>(</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">row =</span> meovrwrk,</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">col =</span> college,</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">percent =</span> <span class="st">"column"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_p</span>(<span class="at">source_note =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div id="jcwkmehxlw" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#jcwkmehxlw table {
+<div id="lcwfekonwy" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#lcwfekonwy table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#jcwkmehxlw thead, #jcwkmehxlw tbody, #jcwkmehxlw tfoot, #jcwkmehxlw tr, #jcwkmehxlw td, #jcwkmehxlw th {
+#lcwfekonwy thead, #lcwfekonwy tbody, #lcwfekonwy tfoot, #lcwfekonwy tr, #lcwfekonwy td, #lcwfekonwy th {
   border-style: none;
 }
 
-#jcwkmehxlw p {
+#lcwfekonwy p {
   margin: 0;
   padding: 0;
 }
 
-#jcwkmehxlw .gt_table {
+#lcwfekonwy .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -565,12 +603,12 @@ sample estimates:
   border-left-color: #D3D3D3;
 }
 
-#jcwkmehxlw .gt_caption {
+#lcwfekonwy .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#jcwkmehxlw .gt_title {
+#lcwfekonwy .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -582,7 +620,7 @@ sample estimates:
   border-bottom-width: 0;
 }
 
-#jcwkmehxlw .gt_subtitle {
+#lcwfekonwy .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -594,7 +632,7 @@ sample estimates:
   border-top-width: 0;
 }
 
-#jcwkmehxlw .gt_heading {
+#lcwfekonwy .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -606,13 +644,13 @@ sample estimates:
   border-right-color: #D3D3D3;
 }
 
-#jcwkmehxlw .gt_bottom_border {
+#lcwfekonwy .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#jcwkmehxlw .gt_col_headings {
+#lcwfekonwy .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -627,7 +665,7 @@ sample estimates:
   border-right-color: #D3D3D3;
 }
 
-#jcwkmehxlw .gt_col_heading {
+#lcwfekonwy .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -647,7 +685,7 @@ sample estimates:
   overflow-x: hidden;
 }
 
-#jcwkmehxlw .gt_column_spanner_outer {
+#lcwfekonwy .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -659,15 +697,15 @@ sample estimates:
   padding-right: 4px;
 }
 
-#jcwkmehxlw .gt_column_spanner_outer:first-child {
+#lcwfekonwy .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#jcwkmehxlw .gt_column_spanner_outer:last-child {
+#lcwfekonwy .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#jcwkmehxlw .gt_column_spanner {
+#lcwfekonwy .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -679,11 +717,11 @@ sample estimates:
   width: 100%;
 }
 
-#jcwkmehxlw .gt_spanner_row {
+#lcwfekonwy .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#jcwkmehxlw .gt_group_heading {
+#lcwfekonwy .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -709,7 +747,7 @@ sample estimates:
   text-align: left;
 }
 
-#jcwkmehxlw .gt_empty_group_heading {
+#lcwfekonwy .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -724,15 +762,15 @@ sample estimates:
   vertical-align: middle;
 }
 
-#jcwkmehxlw .gt_from_md > :first-child {
+#lcwfekonwy .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#jcwkmehxlw .gt_from_md > :last-child {
+#lcwfekonwy .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#jcwkmehxlw .gt_row {
+#lcwfekonwy .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -751,7 +789,7 @@ sample estimates:
   overflow-x: hidden;
 }
 
-#jcwkmehxlw .gt_stub {
+#lcwfekonwy .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -764,7 +802,7 @@ sample estimates:
   padding-right: 5px;
 }
 
-#jcwkmehxlw .gt_stub_row_group {
+#lcwfekonwy .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -778,15 +816,15 @@ sample estimates:
   vertical-align: top;
 }
 
-#jcwkmehxlw .gt_row_group_first td {
+#lcwfekonwy .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#jcwkmehxlw .gt_row_group_first th {
+#lcwfekonwy .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#jcwkmehxlw .gt_summary_row {
+#lcwfekonwy .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -796,16 +834,16 @@ sample estimates:
   padding-right: 5px;
 }
 
-#jcwkmehxlw .gt_first_summary_row {
+#lcwfekonwy .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#jcwkmehxlw .gt_first_summary_row.thick {
+#lcwfekonwy .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#jcwkmehxlw .gt_last_summary_row {
+#lcwfekonwy .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -815,7 +853,7 @@ sample estimates:
   border-bottom-color: #D3D3D3;
 }
 
-#jcwkmehxlw .gt_grand_summary_row {
+#lcwfekonwy .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -825,7 +863,7 @@ sample estimates:
   padding-right: 5px;
 }
 
-#jcwkmehxlw .gt_first_grand_summary_row {
+#lcwfekonwy .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -835,7 +873,7 @@ sample estimates:
   border-top-color: #D3D3D3;
 }
 
-#jcwkmehxlw .gt_last_grand_summary_row_top {
+#lcwfekonwy .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -845,11 +883,11 @@ sample estimates:
   border-bottom-color: #D3D3D3;
 }
 
-#jcwkmehxlw .gt_striped {
+#lcwfekonwy .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#jcwkmehxlw .gt_table_body {
+#lcwfekonwy .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -858,7 +896,7 @@ sample estimates:
   border-bottom-color: #D3D3D3;
 }
 
-#jcwkmehxlw .gt_footnotes {
+#lcwfekonwy .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -872,7 +910,7 @@ sample estimates:
   border-right-color: #D3D3D3;
 }
 
-#jcwkmehxlw .gt_footnote {
+#lcwfekonwy .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -881,7 +919,7 @@ sample estimates:
   padding-right: 5px;
 }
 
-#jcwkmehxlw .gt_sourcenotes {
+#lcwfekonwy .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -895,7 +933,7 @@ sample estimates:
   border-right-color: #D3D3D3;
 }
 
-#jcwkmehxlw .gt_sourcenote {
+#lcwfekonwy .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -903,77 +941,77 @@ sample estimates:
   padding-right: 5px;
 }
 
-#jcwkmehxlw .gt_left {
+#lcwfekonwy .gt_left {
   text-align: left;
 }
 
-#jcwkmehxlw .gt_center {
+#lcwfekonwy .gt_center {
   text-align: center;
 }
 
-#jcwkmehxlw .gt_right {
+#lcwfekonwy .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#jcwkmehxlw .gt_font_normal {
+#lcwfekonwy .gt_font_normal {
   font-weight: normal;
 }
 
-#jcwkmehxlw .gt_font_bold {
+#lcwfekonwy .gt_font_bold {
   font-weight: bold;
 }
 
-#jcwkmehxlw .gt_font_italic {
+#lcwfekonwy .gt_font_italic {
   font-style: italic;
 }
 
-#jcwkmehxlw .gt_super {
+#lcwfekonwy .gt_super {
   font-size: 65%;
 }
 
-#jcwkmehxlw .gt_footnote_marks {
+#lcwfekonwy .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#jcwkmehxlw .gt_asterisk {
+#lcwfekonwy .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#jcwkmehxlw .gt_indent_1 {
+#lcwfekonwy .gt_indent_1 {
   text-indent: 5px;
 }
 
-#jcwkmehxlw .gt_indent_2 {
+#lcwfekonwy .gt_indent_2 {
   text-indent: 10px;
 }
 
-#jcwkmehxlw .gt_indent_3 {
+#lcwfekonwy .gt_indent_3 {
   text-indent: 15px;
 }
 
-#jcwkmehxlw .gt_indent_4 {
+#lcwfekonwy .gt_indent_4 {
   text-indent: 20px;
 }
 
-#jcwkmehxlw .gt_indent_5 {
+#lcwfekonwy .gt_indent_5 {
   text-indent: 25px;
 }
 
-#jcwkmehxlw .katex-display {
+#lcwfekonwy .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#jcwkmehxlw div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#lcwfekonwy div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
 
-<table class="gt_table caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
 <colgroup>
 <col style="width: 25%">
 <col style="width: 25%">
@@ -1039,8 +1077,8 @@ college
 <td class="gt_row gt_center" headers="stat_2">810 (100%)</td>
 <td class="gt_row gt_center" headers="stat_0">1,448 (100%)</td>
 </tr>
-</tbody><tfoot class="gt_sourcenotes">
-<tr class="odd">
+</tbody><tfoot>
+<tr class="gt_sourcenotes odd">
 <td colspan="4" class="gt_sourcenote">Pearson’s Chi-squared test, p=0.3</td>
 </tr>
 </tfoot>
@@ -1051,35 +1089,36 @@ college
 </div>
 </div>
 <p><strong><em>Is there a statistically significant difference in agreement that men hurt the family when they focus on work too much by college degree?</em></strong></p>
+<p>A chi-square test yielded a p-value of 0.3, indicating that the relationship between gender and agreement with whether men hurt the family when they overwork is not statistically significant. Therefore, we fail to reject the null hypothesis that college degree and agreement are independent.</p>
 </section>
 <section id="checkpoint-09-calculate-and-interpret-a-chi-square-test" class="level2">
 <h2 class="anchored" data-anchor-id="checkpoint-09-calculate-and-interpret-a-chi-square-test">Checkpoint 09: Calculate and interpret a chi-square test</h2>
 <p>Use <code>tbl_cross()</code> and <code>add_p()</code> to create a cross-tab with a chi-square test for the variables <code>meovrwrk</code> and <code>sex</code></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>my_data <span class="sc">|&gt;</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tbl_cross</span>(</span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">row =</span> meovrwrk,</span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">col =</span> sex,</span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">percent =</span> <span class="st">"column"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_p</span>(<span class="at">source_note =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>my_data <span class="sc">|&gt;</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tbl_cross</span>(</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">row =</span> meovrwrk,</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">col =</span> sex,</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">percent =</span> <span class="st">"column"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_p</span>(<span class="at">source_note =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div id="vgtkalcqxe" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#vgtkalcqxe table {
+<div id="bjymcrnizk" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#bjymcrnizk table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#vgtkalcqxe thead, #vgtkalcqxe tbody, #vgtkalcqxe tfoot, #vgtkalcqxe tr, #vgtkalcqxe td, #vgtkalcqxe th {
+#bjymcrnizk thead, #bjymcrnizk tbody, #bjymcrnizk tfoot, #bjymcrnizk tr, #bjymcrnizk td, #bjymcrnizk th {
   border-style: none;
 }
 
-#vgtkalcqxe p {
+#bjymcrnizk p {
   margin: 0;
   padding: 0;
 }
 
-#vgtkalcqxe .gt_table {
+#bjymcrnizk .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1105,12 +1144,12 @@ college
   border-left-color: #D3D3D3;
 }
 
-#vgtkalcqxe .gt_caption {
+#bjymcrnizk .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#vgtkalcqxe .gt_title {
+#bjymcrnizk .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1122,7 +1161,7 @@ college
   border-bottom-width: 0;
 }
 
-#vgtkalcqxe .gt_subtitle {
+#bjymcrnizk .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1134,7 +1173,7 @@ college
   border-top-width: 0;
 }
 
-#vgtkalcqxe .gt_heading {
+#bjymcrnizk .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1146,13 +1185,13 @@ college
   border-right-color: #D3D3D3;
 }
 
-#vgtkalcqxe .gt_bottom_border {
+#bjymcrnizk .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#vgtkalcqxe .gt_col_headings {
+#bjymcrnizk .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1167,7 +1206,7 @@ college
   border-right-color: #D3D3D3;
 }
 
-#vgtkalcqxe .gt_col_heading {
+#bjymcrnizk .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1187,7 +1226,7 @@ college
   overflow-x: hidden;
 }
 
-#vgtkalcqxe .gt_column_spanner_outer {
+#bjymcrnizk .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1199,15 +1238,15 @@ college
   padding-right: 4px;
 }
 
-#vgtkalcqxe .gt_column_spanner_outer:first-child {
+#bjymcrnizk .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#vgtkalcqxe .gt_column_spanner_outer:last-child {
+#bjymcrnizk .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#vgtkalcqxe .gt_column_spanner {
+#bjymcrnizk .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1219,11 +1258,11 @@ college
   width: 100%;
 }
 
-#vgtkalcqxe .gt_spanner_row {
+#bjymcrnizk .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#vgtkalcqxe .gt_group_heading {
+#bjymcrnizk .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1249,7 +1288,7 @@ college
   text-align: left;
 }
 
-#vgtkalcqxe .gt_empty_group_heading {
+#bjymcrnizk .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1264,15 +1303,15 @@ college
   vertical-align: middle;
 }
 
-#vgtkalcqxe .gt_from_md > :first-child {
+#bjymcrnizk .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#vgtkalcqxe .gt_from_md > :last-child {
+#bjymcrnizk .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#vgtkalcqxe .gt_row {
+#bjymcrnizk .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1291,7 +1330,7 @@ college
   overflow-x: hidden;
 }
 
-#vgtkalcqxe .gt_stub {
+#bjymcrnizk .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1304,7 +1343,7 @@ college
   padding-right: 5px;
 }
 
-#vgtkalcqxe .gt_stub_row_group {
+#bjymcrnizk .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1318,15 +1357,15 @@ college
   vertical-align: top;
 }
 
-#vgtkalcqxe .gt_row_group_first td {
+#bjymcrnizk .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#vgtkalcqxe .gt_row_group_first th {
+#bjymcrnizk .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#vgtkalcqxe .gt_summary_row {
+#bjymcrnizk .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1336,16 +1375,16 @@ college
   padding-right: 5px;
 }
 
-#vgtkalcqxe .gt_first_summary_row {
+#bjymcrnizk .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#vgtkalcqxe .gt_first_summary_row.thick {
+#bjymcrnizk .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#vgtkalcqxe .gt_last_summary_row {
+#bjymcrnizk .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1355,7 +1394,7 @@ college
   border-bottom-color: #D3D3D3;
 }
 
-#vgtkalcqxe .gt_grand_summary_row {
+#bjymcrnizk .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1365,7 +1404,7 @@ college
   padding-right: 5px;
 }
 
-#vgtkalcqxe .gt_first_grand_summary_row {
+#bjymcrnizk .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1375,7 +1414,7 @@ college
   border-top-color: #D3D3D3;
 }
 
-#vgtkalcqxe .gt_last_grand_summary_row_top {
+#bjymcrnizk .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1385,11 +1424,11 @@ college
   border-bottom-color: #D3D3D3;
 }
 
-#vgtkalcqxe .gt_striped {
+#bjymcrnizk .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#vgtkalcqxe .gt_table_body {
+#bjymcrnizk .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1398,7 +1437,7 @@ college
   border-bottom-color: #D3D3D3;
 }
 
-#vgtkalcqxe .gt_footnotes {
+#bjymcrnizk .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1412,7 +1451,7 @@ college
   border-right-color: #D3D3D3;
 }
 
-#vgtkalcqxe .gt_footnote {
+#bjymcrnizk .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1421,7 +1460,7 @@ college
   padding-right: 5px;
 }
 
-#vgtkalcqxe .gt_sourcenotes {
+#bjymcrnizk .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1435,7 +1474,7 @@ college
   border-right-color: #D3D3D3;
 }
 
-#vgtkalcqxe .gt_sourcenote {
+#bjymcrnizk .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1443,77 +1482,77 @@ college
   padding-right: 5px;
 }
 
-#vgtkalcqxe .gt_left {
+#bjymcrnizk .gt_left {
   text-align: left;
 }
 
-#vgtkalcqxe .gt_center {
+#bjymcrnizk .gt_center {
   text-align: center;
 }
 
-#vgtkalcqxe .gt_right {
+#bjymcrnizk .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#vgtkalcqxe .gt_font_normal {
+#bjymcrnizk .gt_font_normal {
   font-weight: normal;
 }
 
-#vgtkalcqxe .gt_font_bold {
+#bjymcrnizk .gt_font_bold {
   font-weight: bold;
 }
 
-#vgtkalcqxe .gt_font_italic {
+#bjymcrnizk .gt_font_italic {
   font-style: italic;
 }
 
-#vgtkalcqxe .gt_super {
+#bjymcrnizk .gt_super {
   font-size: 65%;
 }
 
-#vgtkalcqxe .gt_footnote_marks {
+#bjymcrnizk .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#vgtkalcqxe .gt_asterisk {
+#bjymcrnizk .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#vgtkalcqxe .gt_indent_1 {
+#bjymcrnizk .gt_indent_1 {
   text-indent: 5px;
 }
 
-#vgtkalcqxe .gt_indent_2 {
+#bjymcrnizk .gt_indent_2 {
   text-indent: 10px;
 }
 
-#vgtkalcqxe .gt_indent_3 {
+#bjymcrnizk .gt_indent_3 {
   text-indent: 15px;
 }
 
-#vgtkalcqxe .gt_indent_4 {
+#bjymcrnizk .gt_indent_4 {
   text-indent: 20px;
 }
 
-#vgtkalcqxe .gt_indent_5 {
+#bjymcrnizk .gt_indent_5 {
   text-indent: 25px;
 }
 
-#vgtkalcqxe .katex-display {
+#bjymcrnizk .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#vgtkalcqxe div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#bjymcrnizk div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
 
-<table class="gt_table caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
 <colgroup>
 <col style="width: 25%">
 <col style="width: 25%">
@@ -1579,8 +1618,8 @@ sex
 <td class="gt_row gt_center" headers="stat_2">746 (100%)</td>
 <td class="gt_row gt_center" headers="stat_0">1,448 (100%)</td>
 </tr>
-</tbody><tfoot class="gt_sourcenotes">
-<tr class="odd">
+</tbody><tfoot>
+<tr class="gt_sourcenotes odd">
 <td colspan="4" class="gt_sourcenote">Pearson’s Chi-squared test, p&lt;0.001</td>
 </tr>
 </tfoot>
@@ -1591,17 +1630,18 @@ sex
 </div>
 </div>
 <p><strong><em>Is there a statistically significant gender difference in agreement that men hurt the family when they focus on work too much?</em></strong></p>
+<p>A chi-square test yielded a p-value less than .001, so we reject the null hypothesis. There appears to be a statistically significant relationship between gender and agreement with the statement that men hurt the family when they overwork.</p>
 </section>
 <section id="checkpoint-10-produce-and-interpret-a-pearsons-correlation-coefficient-r" class="level2">
 <h2 class="anchored" data-anchor-id="checkpoint-10-produce-and-interpret-a-pearsons-correlation-coefficient-r">Checkpoint 10: Produce and interpret a Pearson’s Correlation Coefficient (R)</h2>
 <p>Use <code>cor.test()</code> to test the correlation between <code>lifenow</code> &amp; <code>educ</code></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor.test</span>(</span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="sc">~</span> lifenow <span class="sc">+</span> educ,</span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> my_data,</span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">"pearson"</span>,</span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">na.action =</span> na.omit</span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor.test</span>(</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="sc">~</span> lifenow <span class="sc">+</span> educ,</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> my_data,</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">"pearson"</span>,</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">na.action =</span> na.omit</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Pearson's product-moment correlation
@@ -1617,6 +1657,7 @@ sample estimates:
 </div>
 </div>
 <p><strong><em>Describe the strength and direction of any correlation between education and life state.</em></strong></p>
+<p>The Pearson correlation test reveals a statistically significant ( p &lt; .001) but weak positive relationship (r = 0.12) between education and life satisfaction, suggesting that higher education levels are modestly associated with greater life satisfaction.</p>
 </section>
 </section>
 <section id="ipums-data" class="level1">
@@ -1624,7 +1665,7 @@ sample estimates:
 <p>To keep your Research Brief progress on track, you’ll complete short exercises that correspond with the new course material using your own dataset as part of your milestones.</p>
 <ul>
 <li><p>Choose an interval-ratio (e.g, continuous or proportion) variable that you wish to consider as a <strong>dependent variable</strong> (DV).</p></li>
-<li><p>Create a summary table for this DV, including the total number of observations, mean, median, and mode.</p></li>
+<li><p>Create a summary table for this DV, including the total number of observations, mean, median, and sd.</p></li>
 <li><p>Pick or create a dichotomous variable (e.g., gender, two racial categories; two age categories; two countries; two years; etc.) in your dataset and create confidence intervals for each group for your DV. Compare and interpret the confidence intervals.</p></li>
 <li><p>Write a null and research hypothesis using these two variables.</p></li>
 <li><p>Conduct a two sample t-test (using <code>t.test()</code>) for your DV and dichotomous variable. Interpret your results. How do they relate to your hypotheses?</p></li>
@@ -1687,13 +1728,14 @@ sample estimates:
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

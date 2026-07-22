@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.8.26">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -66,14 +66,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <meta name="quarto:offset" content="../">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-991b1886d3c685c7aa2b62b80640c7af.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-1d4f84655f446305ac42a8f1abcf7405.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <link href="../site_libs/quarto-contrib/fontawesome6-1.2.0/all.min.css" rel="stylesheet">
 <link href="../site_libs/quarto-contrib/fontawesome6-1.2.0/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -175,15 +176,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="sparse-slide anchored" data-anchor-id="packages">Packages</h2>
 <p>Load the standard packages &amp; 1 new package: <code>gtsummary()</code></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Only need to install once per machine. </span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Only need to install once per machine. </span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("gtsummary")</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse) </span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven) <span class="co"># not core tidyverse</span></span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gssr)</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(summarytools)</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gtsummary) <span class="co"># load the new package</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gssrdoc)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(summarytools)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gtsummary) <span class="co"># load the new package</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="notes">
 <p>We’ll use <code>gtsummary()</code> to make pretty tables that include our statistical tests.</p>
@@ -192,20 +194,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="load-your-data" class="level2 sparse-slide">
 <h2 class="sparse-slide anchored" data-anchor-id="load-your-data">Load your data</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the data from the 2022 survey</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>gss22 <span class="ot">&lt;-</span> <span class="fu">gss_get_yr</span>(<span class="dv">2022</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the data from the 2022 survey</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>gss22 <span class="ot">&lt;-</span> <span class="fu">gss_get_yr</span>(<span class="dv">2022</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
-<section id="variables" class="level2 smaller">
-<h2 class="smaller anchored" data-anchor-id="variables">Variables</h2>
+<section id="variables" class="level2 sparse-slide">
+<h2 class="sparse-slide anchored" data-anchor-id="variables">Variables</h2>
 <ul>
-<li><code>fefam</code> Better for man to work, woman tend home</li>
-<li><code>race</code> What race do you consider yourself</li>
-<li><code>sex</code> Respondents sex</li>
 <li><code>lifenow</code> R’s rating of life overall now from 0-10</li>
 <li><code>age</code> Age of respondent</li>
 <li><code>educ</code> Respondents highest edu credit</li>
 <li><code>hrs1</code> how many hours did you work last week</li>
+<li><code>fefam</code> Better for man to work, woman tend home</li>
+<li><code>race</code> What race do you consider yourself</li>
+<li><code>sex</code> Respondents sex</li>
 </ul>
 </section>
 <section id="variable-management" class="level2 smaller">
@@ -214,7 +216,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><i class="fa-solid fa-check-double" aria-label="check-double"></i> Make a df with only the (pretty) categorical and continuous variables we’ll analyze.</p>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># Categorical Variables</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># Categorical Variables</span></span>
 <span id="cb4-2"><a href="#cb4-2"></a>my_cat <span class="ot">&lt;-</span> gss22 <span class="sc">|&gt;</span></span>
 <span id="cb4-3"><a href="#cb4-3"></a>  <span class="fu">select</span>(id, fefam, race, sex) <span class="sc">|&gt;</span></span>
 <span id="cb4-4"><a href="#cb4-4"></a>  <span class="fu">zap_missing</span>() <span class="sc">|&gt;</span></span>
@@ -223,7 +225,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-7"><a href="#cb4-7"></a></span>
 <span id="cb4-8"><a href="#cb4-8"></a><span class="co"># Continuous Variables</span></span>
 <span id="cb4-9"><a href="#cb4-9"></a>my_con <span class="ot">&lt;-</span> gss22 <span class="sc">|&gt;</span></span>
-<span id="cb4-10"><a href="#cb4-10"></a>  <span class="fu">select</span>(id,lifenow, age, educ, hrs1) <span class="sc">|&gt;</span></span>
+<span id="cb4-10"><a href="#cb4-10"></a>  <span class="fu">select</span>(id, lifenow, age, educ, hrs1) <span class="sc">|&gt;</span></span>
 <span id="cb4-11"><a href="#cb4-11"></a>  <span class="fu">mutate</span>(</span>
 <span id="cb4-12"><a href="#cb4-12"></a>    <span class="at">lifenow =</span> <span class="fu">as.numeric</span>(lifenow),</span>
 <span id="cb4-13"><a href="#cb4-13"></a>    <span class="at">age =</span> <span class="fu">as.numeric</span>(age),</span>
@@ -231,7 +233,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-15"><a href="#cb4-15"></a>    <span class="at">hrs1 =</span> <span class="fu">as.numeric</span>(hrs1))</span>
 <span id="cb4-16"><a href="#cb4-16"></a></span>
 <span id="cb4-17"><a href="#cb4-17"></a><span class="co"># Combine the two dataframes</span></span>
-<span id="cb4-18"><a href="#cb4-18"></a>my_data <span class="ot">&lt;-</span> <span class="fu">left_join</span>(my_cat, my_con, <span class="at">by =</span> <span class="st">"id"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-18"><a href="#cb4-18"></a>my_data <span class="ot">&lt;-</span> <span class="fu">left_join</span>(my_cat, my_con, <span class="at">by =</span> <span class="st">"id"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 </section>
@@ -241,26 +243,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="sparse-slide scrollable anchored" data-anchor-id="tbl_summary"><code>tbl_summary()</code></h2>
 <p>Calculates descriptive statistics for continuous, categorical, and dichotomous variables</p>
 <div class="cell" data-output-location="column-fragment">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>my_data <span class="sc">|&gt;</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tbl_summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>my_data <span class="sc">|&gt;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tbl_summary</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div id="fmfaxqorzb" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#fmfaxqorzb table {
+<div id="oynaobhifq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#oynaobhifq table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#fmfaxqorzb thead, #fmfaxqorzb tbody, #fmfaxqorzb tfoot, #fmfaxqorzb tr, #fmfaxqorzb td, #fmfaxqorzb th {
+#oynaobhifq thead, #oynaobhifq tbody, #oynaobhifq tfoot, #oynaobhifq tr, #oynaobhifq td, #oynaobhifq th {
   border-style: none;
 }
 
-#fmfaxqorzb p {
+#oynaobhifq p {
   margin: 0;
   padding: 0;
 }
 
-#fmfaxqorzb .gt_table {
+#oynaobhifq .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -286,12 +288,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-left-color: #D3D3D3;
 }
 
-#fmfaxqorzb .gt_caption {
+#oynaobhifq .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#fmfaxqorzb .gt_title {
+#oynaobhifq .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -303,7 +305,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-width: 0;
 }
 
-#fmfaxqorzb .gt_subtitle {
+#oynaobhifq .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -315,7 +317,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-width: 0;
 }
 
-#fmfaxqorzb .gt_heading {
+#oynaobhifq .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -327,13 +329,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#fmfaxqorzb .gt_bottom_border {
+#oynaobhifq .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#fmfaxqorzb .gt_col_headings {
+#oynaobhifq .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -348,7 +350,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#fmfaxqorzb .gt_col_heading {
+#oynaobhifq .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -368,7 +370,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#fmfaxqorzb .gt_column_spanner_outer {
+#oynaobhifq .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -380,15 +382,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 4px;
 }
 
-#fmfaxqorzb .gt_column_spanner_outer:first-child {
+#oynaobhifq .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#fmfaxqorzb .gt_column_spanner_outer:last-child {
+#oynaobhifq .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#fmfaxqorzb .gt_column_spanner {
+#oynaobhifq .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -400,11 +402,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   width: 100%;
 }
 
-#fmfaxqorzb .gt_spanner_row {
+#oynaobhifq .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#fmfaxqorzb .gt_group_heading {
+#oynaobhifq .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -430,7 +432,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   text-align: left;
 }
 
-#fmfaxqorzb .gt_empty_group_heading {
+#oynaobhifq .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -445,15 +447,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: middle;
 }
 
-#fmfaxqorzb .gt_from_md > :first-child {
+#oynaobhifq .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#fmfaxqorzb .gt_from_md > :last-child {
+#oynaobhifq .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#fmfaxqorzb .gt_row {
+#oynaobhifq .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -472,7 +474,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#fmfaxqorzb .gt_stub {
+#oynaobhifq .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -485,7 +487,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#fmfaxqorzb .gt_stub_row_group {
+#oynaobhifq .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -499,15 +501,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: top;
 }
 
-#fmfaxqorzb .gt_row_group_first td {
+#oynaobhifq .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#fmfaxqorzb .gt_row_group_first th {
+#oynaobhifq .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#fmfaxqorzb .gt_summary_row {
+#oynaobhifq .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -517,16 +519,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#fmfaxqorzb .gt_first_summary_row {
+#oynaobhifq .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#fmfaxqorzb .gt_first_summary_row.thick {
+#oynaobhifq .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#fmfaxqorzb .gt_last_summary_row {
+#oynaobhifq .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -536,7 +538,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#fmfaxqorzb .gt_grand_summary_row {
+#oynaobhifq .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -546,7 +548,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#fmfaxqorzb .gt_first_grand_summary_row {
+#oynaobhifq .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -556,7 +558,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-color: #D3D3D3;
 }
 
-#fmfaxqorzb .gt_last_grand_summary_row_top {
+#oynaobhifq .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -566,11 +568,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#fmfaxqorzb .gt_striped {
+#oynaobhifq .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#fmfaxqorzb .gt_table_body {
+#oynaobhifq .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -579,7 +581,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#fmfaxqorzb .gt_footnotes {
+#oynaobhifq .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -593,7 +595,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#fmfaxqorzb .gt_footnote {
+#oynaobhifq .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -602,7 +604,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#fmfaxqorzb .gt_sourcenotes {
+#oynaobhifq .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -616,7 +618,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#fmfaxqorzb .gt_sourcenote {
+#oynaobhifq .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -624,77 +626,77 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#fmfaxqorzb .gt_left {
+#oynaobhifq .gt_left {
   text-align: left;
 }
 
-#fmfaxqorzb .gt_center {
+#oynaobhifq .gt_center {
   text-align: center;
 }
 
-#fmfaxqorzb .gt_right {
+#oynaobhifq .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#fmfaxqorzb .gt_font_normal {
+#oynaobhifq .gt_font_normal {
   font-weight: normal;
 }
 
-#fmfaxqorzb .gt_font_bold {
+#oynaobhifq .gt_font_bold {
   font-weight: bold;
 }
 
-#fmfaxqorzb .gt_font_italic {
+#oynaobhifq .gt_font_italic {
   font-style: italic;
 }
 
-#fmfaxqorzb .gt_super {
+#oynaobhifq .gt_super {
   font-size: 65%;
 }
 
-#fmfaxqorzb .gt_footnote_marks {
+#oynaobhifq .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#fmfaxqorzb .gt_asterisk {
+#oynaobhifq .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#fmfaxqorzb .gt_indent_1 {
+#oynaobhifq .gt_indent_1 {
   text-indent: 5px;
 }
 
-#fmfaxqorzb .gt_indent_2 {
+#oynaobhifq .gt_indent_2 {
   text-indent: 10px;
 }
 
-#fmfaxqorzb .gt_indent_3 {
+#oynaobhifq .gt_indent_3 {
   text-indent: 15px;
 }
 
-#fmfaxqorzb .gt_indent_4 {
+#oynaobhifq .gt_indent_4 {
   text-indent: 20px;
 }
 
-#fmfaxqorzb .gt_indent_5 {
+#oynaobhifq .gt_indent_5 {
   text-indent: 25px;
 }
 
-#fmfaxqorzb .katex-display {
+#oynaobhifq .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#fmfaxqorzb div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#oynaobhifq div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
 
-<table class="gt_table caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
 <colgroup>
 <col style="width: 50%">
 <col style="width: 50%">
@@ -707,7 +709,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </thead>
 <tbody class="gt_table_body">
 <tr class="odd">
-<td class="gt_row gt_left" headers="label">respondent id number</td>
+<td class="gt_row gt_left" headers="label">Respondent ID number</td>
 <td class="gt_row gt_center" headers="stat_0">2,075 (1,038, 3,112)</td>
 </tr>
 <tr class="even">
@@ -805,8 +807,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Unknown</td>
 <td class="gt_row gt_center" headers="stat_0">1,829</td>
 </tr>
-</tbody><tfoot class="gt_footnotes">
-<tr class="odd">
+</tbody><tfoot>
+<tr class="gt_footnotes odd">
 <td colspan="2" class="gt_footnote"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span> Median (Q1, Q3); n (%)</td>
 </tr>
 </tfoot>
@@ -823,40 +825,40 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="section" class="level2 sparse-slide" data-menu-title="drop_na()">
 <h2 class="sparse-slide anchored" data-menu-title="drop_na()" data-anchor-id="section"></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>my_data <span class="sc">|&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>my_data <span class="sc">|&gt;</span></span>
 <span id="cb6-2"><a href="#cb6-2"></a>  <span class="fu">drop_na</span>() <span class="sc">|&gt;</span></span>
-<span id="cb6-3"><a href="#cb6-3"></a>  <span class="fu">tbl_summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-3"><a href="#cb6-3"></a>  <span class="fu">tbl_summary</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="section-1" class="level2 sparse-slide" data-menu-title="statistics">
 <h2 class="sparse-slide anchored" data-menu-title="statistics" data-anchor-id="section-1"></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>my_data <span class="sc">|&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>my_data <span class="sc">|&gt;</span></span>
 <span id="cb7-2"><a href="#cb7-2"></a>  <span class="fu">drop_na</span>() <span class="sc">|&gt;</span></span>
 <span id="cb7-3"><a href="#cb7-3"></a>  <span class="fu">tbl_summary</span>(</span>
 <span id="cb7-4"><a href="#cb7-4"></a>    <span class="at">statistic =</span> <span class="fu">list</span>(</span>
 <span id="cb7-5"><a href="#cb7-5"></a>      <span class="fu">all_continuous</span>() <span class="sc">~</span> <span class="st">"{mean} ({sd})"</span>,</span>
 <span id="cb7-6"><a href="#cb7-6"></a>      <span class="fu">all_categorical</span>() <span class="sc">~</span> <span class="st">"{p}"</span>)</span>
-<span id="cb7-7"><a href="#cb7-7"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-7"><a href="#cb7-7"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="section-2" class="level2 sparse-slide" data-menu-title="variables">
 <h2 class="sparse-slide anchored" data-menu-title="variables" data-anchor-id="section-2"></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>my_data <span class="sc">|&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>my_data <span class="sc">|&gt;</span></span>
 <span id="cb8-2"><a href="#cb8-2"></a>  <span class="fu">drop_na</span>() <span class="sc">|&gt;</span></span>
 <span id="cb8-3"><a href="#cb8-3"></a>  <span class="fu">select</span>(lifenow, race, sex, fefam, age, hrs1, educ) <span class="sc">|&gt;</span></span>
 <span id="cb8-4"><a href="#cb8-4"></a>  <span class="fu">tbl_summary</span>(</span>
 <span id="cb8-5"><a href="#cb8-5"></a>    <span class="at">statistic =</span> <span class="fu">list</span>(</span>
 <span id="cb8-6"><a href="#cb8-6"></a>      <span class="fu">all_continuous</span>() <span class="sc">~</span> <span class="st">"{mean} ({sd})"</span>,</span>
 <span id="cb8-7"><a href="#cb8-7"></a>      <span class="fu">all_categorical</span>() <span class="sc">~</span> <span class="st">"{p}"</span>)</span>
-<span id="cb8-8"><a href="#cb8-8"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-8"><a href="#cb8-8"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="section-3" class="level2 sparse-slide" data-menu-title="labels">
 <h2 class="sparse-slide anchored" data-menu-title="labels" data-anchor-id="section-3"></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>my_data <span class="sc">|&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>my_data <span class="sc">|&gt;</span></span>
 <span id="cb9-2"><a href="#cb9-2"></a>  <span class="fu">drop_na</span>() <span class="sc">|&gt;</span></span>
 <span id="cb9-3"><a href="#cb9-3"></a>  <span class="fu">select</span>(lifenow, race, sex, fefam, age, hrs1, educ) <span class="sc">|&gt;</span></span>
 <span id="cb9-4"><a href="#cb9-4"></a>  <span class="fu">tbl_summary</span>(</span>
@@ -871,13 +873,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb9-13"><a href="#cb9-13"></a>    <span class="at">statistic =</span> <span class="fu">list</span>(</span>
 <span id="cb9-14"><a href="#cb9-14"></a>      <span class="fu">all_continuous</span>() <span class="sc">~</span> <span class="st">"{mean} ({sd})"</span>,</span>
 <span id="cb9-15"><a href="#cb9-15"></a>      <span class="fu">all_categorical</span>() <span class="sc">~</span> <span class="st">"{p}"</span></span>
-<span id="cb9-16"><a href="#cb9-16"></a>    ))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-16"><a href="#cb9-16"></a>    ))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="section-4" class="level2 sparse-slide" data-menu-title="dichotomous">
 <h2 class="sparse-slide anchored" data-menu-title="dichotomous" data-anchor-id="section-4"></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>my_data <span class="sc">|&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>my_data <span class="sc">|&gt;</span></span>
 <span id="cb10-2"><a href="#cb10-2"></a>  <span class="fu">drop_na</span>() <span class="sc">|&gt;</span></span>
 <span id="cb10-3"><a href="#cb10-3"></a>  <span class="fu">select</span>(lifenow, race, sex, fefam, age, hrs1, educ) <span class="sc">|&gt;</span></span>
 <span id="cb10-4"><a href="#cb10-4"></a>  <span class="fu">tbl_summary</span>(</span>
@@ -894,13 +896,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb10-15"><a href="#cb10-15"></a>    <span class="at">statistic =</span> <span class="fu">list</span>(</span>
 <span id="cb10-16"><a href="#cb10-16"></a>      <span class="fu">all_continuous</span>() <span class="sc">~</span> <span class="st">"{mean} ({sd})"</span>,</span>
 <span id="cb10-17"><a href="#cb10-17"></a>      <span class="fu">all_categorical</span>() <span class="sc">~</span> <span class="st">"{p}"</span>),</span>
-<span id="cb10-18"><a href="#cb10-18"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-18"><a href="#cb10-18"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="section-5" class="level2 sparse-slide" data-menu-title="group">
 <h2 class="sparse-slide anchored" data-menu-title="group" data-anchor-id="section-5"></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>my_data <span class="sc">|&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>my_data <span class="sc">|&gt;</span></span>
 <span id="cb11-2"><a href="#cb11-2"></a>  <span class="fu">drop_na</span>() <span class="sc">|&gt;</span></span>
 <span id="cb11-3"><a href="#cb11-3"></a>  <span class="fu">select</span>(lifenow, race, sex, fefam, age, hrs1, educ) <span class="sc">|&gt;</span></span>
 <span id="cb11-4"><a href="#cb11-4"></a>  <span class="fu">tbl_summary</span>(</span>
@@ -917,13 +919,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb11-15"><a href="#cb11-15"></a>    <span class="at">statistic =</span> <span class="fu">list</span>(</span>
 <span id="cb11-16"><a href="#cb11-16"></a>      <span class="fu">all_continuous</span>() <span class="sc">~</span> <span class="st">"{mean} ({sd})"</span>,</span>
 <span id="cb11-17"><a href="#cb11-17"></a>      <span class="fu">all_categorical</span>() <span class="sc">~</span> <span class="st">"{p}"</span>)</span>
-<span id="cb11-18"><a href="#cb11-18"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-18"><a href="#cb11-18"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="section-6" class="level2 sparse-slide" data-menu-title="total">
 <h2 class="sparse-slide anchored" data-menu-title="total" data-anchor-id="section-6"></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>my_data <span class="sc">|&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>my_data <span class="sc">|&gt;</span></span>
 <span id="cb12-2"><a href="#cb12-2"></a>  <span class="fu">drop_na</span>() <span class="sc">|&gt;</span></span>
 <span id="cb12-3"><a href="#cb12-3"></a>  <span class="fu">select</span>(lifenow, race, sex, fefam, age, hrs1, educ) <span class="sc">|&gt;</span></span>
 <span id="cb12-4"><a href="#cb12-4"></a>  <span class="fu">tbl_summary</span>(</span>
@@ -940,13 +942,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb12-15"><a href="#cb12-15"></a>    <span class="at">statistic =</span> <span class="fu">list</span>(</span>
 <span id="cb12-16"><a href="#cb12-16"></a>      <span class="fu">all_continuous</span>() <span class="sc">~</span> <span class="st">"{mean} ({sd})"</span>,</span>
 <span id="cb12-17"><a href="#cb12-17"></a>      <span class="fu">all_categorical</span>() <span class="sc">~</span> <span class="st">"{p}"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb12-18"><a href="#cb12-18"></a>  <span class="fu">add_overall</span>()  <span class="co"># This adds the Total column</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb12-18"><a href="#cb12-18"></a>  <span class="fu">add_overall</span>()  <span class="co"># This adds the Total column</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="section-7" class="level2 sparse-slide" data-menu-title="sub-header">
 <h2 class="sparse-slide anchored" data-menu-title="sub-header" data-anchor-id="section-7"></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>my_data <span class="sc">|&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>my_data <span class="sc">|&gt;</span></span>
 <span id="cb13-2"><a href="#cb13-2"></a>  <span class="fu">drop_na</span>() <span class="sc">|&gt;</span></span>
 <span id="cb13-3"><a href="#cb13-3"></a>  <span class="fu">select</span>(lifenow, race, sex, fefam, age, hrs1, educ) <span class="sc">|&gt;</span></span>
 <span id="cb13-4"><a href="#cb13-4"></a>  <span class="fu">tbl_summary</span>(</span>
@@ -965,7 +967,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb13-17"><a href="#cb13-17"></a>      <span class="fu">all_categorical</span>() <span class="sc">~</span> <span class="st">"{p}"</span>)) <span class="sc">|&gt;</span></span>
 <span id="cb13-18"><a href="#cb13-18"></a>  <span class="fu">add_overall</span>()  <span class="sc">|&gt;</span></span>
 <span id="cb13-19"><a href="#cb13-19"></a>  <span class="fu">modify_header</span>(</span>
-<span id="cb13-20"><a href="#cb13-20"></a>    <span class="at">label =</span> <span class="st">'**Variable**'</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb13-20"><a href="#cb13-20"></a>    <span class="at">label =</span> <span class="st">'**Variable**'</span>) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="section-8" class="level2 sparse-slide" data-menu-title="two-lines">
@@ -974,7 +976,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Change YAML <code>output: pdf_document</code></p>
 </blockquote>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>my_data <span class="sc">|&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>my_data <span class="sc">|&gt;</span></span>
 <span id="cb14-2"><a href="#cb14-2"></a>  <span class="fu">drop_na</span>() <span class="sc">|&gt;</span></span>
 <span id="cb14-3"><a href="#cb14-3"></a>  <span class="fu">select</span>(lifenow, race, sex, fefam, age, hrs1, educ) <span class="sc">|&gt;</span></span>
 <span id="cb14-4"><a href="#cb14-4"></a>  <span class="fu">tbl_summary</span>(</span>
@@ -994,7 +996,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb14-18"><a href="#cb14-18"></a>  <span class="fu">add_overall</span>() <span class="sc">|&gt;</span></span>
 <span id="cb14-19"><a href="#cb14-19"></a>  <span class="fu">modify_header</span>(</span>
 <span id="cb14-20"><a href="#cb14-20"></a>    <span class="at">label =</span> <span class="st">'**Variable**'</span>) <span class="sc">|&gt;</span></span>
-<span id="cb14-21"><a href="#cb14-21"></a>  <span class="fu">as_flex_table</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb14-21"><a href="#cb14-21"></a>  <span class="fu">as_flex_table</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="title-notes" class="level2 sparse-slide">
@@ -1058,16 +1060,16 @@ requires another hour of lecture which we don’t have.</p>
 <h2 class="sparse-slide anchored" data-anchor-id="missing-data-solutions">Missing Data: Solutions</h2>
 <p>Listwise deletion</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>df_clean <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>df_clean <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><br></p>
 <p>. . .</p>
 <p>Imputation</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">var_A =</span> <span class="fu">if_else</span>(<span class="fu">is.na</span>(var_A), </span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>                         <span class="fu">mean</span>(var_A, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), var_A))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>                         <span class="fu">mean</span>(var_A, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), var_A))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="outliers" class="level2 sparse-slide" data-menu-title="Outliers: Problem">
@@ -1180,13 +1182,14 @@ requires another hour of lecture which we don’t have.</p>
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

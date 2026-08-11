@@ -1,0 +1,204 @@
+---
+title: "milestone-00"
+author: "FirstName LastName"
+format: html
+editor: visual
+---
+
+# Getting Started in RStudio & R
+
+*Instructions to the instructor:*
+
+- give general overview of RStudio
+
+- introduction to Quarto (have students open mileston-00.qmd)
+
+## Checkpoint 01
+
+In the `Console`, type:
+
+```         
+print("Hello, World!)
+```
+
+Now, click the green arrow below to "`Run Current Chunk`".
+
+```{r}
+print("Hello, World")
+```
+
+## Checkpoint 02
+
+Store the values in an object called `my_data`. Click the green arrow
+below to "`Run Current Chunk`".
+
+```{r}
+
+my_data <- c(48000, 52000, 45000, 50000, 53000, 
+             49000, 46000, 51000, 65000, 250000)
+
+```
+
+```{r}
+
+my_data
+
+```
+
+Use the `mean()` function. Click the green arrow below to
+"`Run Current Chunk`".
+
+```{r}
+
+mean(my_data)
+
+```
+
+*Replace this text with your interpretation of the mean*
+
+## Checkpoint 03
+
+Replace the `mean` function with the `median` function below.
+
+```{r}
+
+mean(my_data)
+
+```
+
+*Replace this text with your interpretation of the median.*
+
+## Checkpoint 04
+
+Install your first package using the function `install.packages()`.
+Click the green arrow below to "`Run Current Chunk`".
+
+```{r}
+#| eval: false
+#| message: false
+#| label: install-carData
+
+install.packages("carData")
+```
+
+## Checkpoint 05
+
+Load the package into the environment using the `library()` function.
+Run the code chunk below.
+
+```{r}
+
+library("carData")
+
+```
+
+See a list of the data-sets available in the carData package. Run the
+code chunk below.
+
+```{r}
+
+data(package = "carData")
+
+```
+
+## Checkpoint 06
+
+Load the `Salaries` data professors' salaries into the `R Environment`.
+Run the code chunk below.
+
+```{r}
+
+data("Salaries")
+
+```
+
+Take a look at the data by clicking on the `Salaries` object in the
+`R Environment`.
+
+How many professors are in this dataset? How many variables? What are
+the variable names?
+
+## Checkpoint 07
+
+Calculate and interpret the mean salary for professors in this dataset.
+
+```{r}
+
+mean(Salaries$salary)
+
+```
+
+Calculate the median salary for professors in this dataset. What does
+the difference between the mean and median suggest about the data?
+
+```{r}
+
+median(Salaries$salary)
+
+```
+
+What's the average number of years since receiving a PhD for professors
+in this sample? What's the average years of service? (*Notice there is
+one line per function.*)
+
+```{r}
+
+mean(Salaries$yrs.since.phd)
+mean(Salaries$yrs.service)
+
+```
+
+## Checkpoint 08
+
+On average, how much more money do the men make compared with women?
+
+```{r}
+
+tapply(Salaries$salary, Salaries$sex, mean)
+
+```
+
+Which discipline earns the most money, on average?
+
+```{r}
+
+tapply(Salaries$salary, Salaries$discipline, mean)
+
+```
+
+## Checkpoint 09
+
+What's the modal rank for these professors?
+
+```{r}
+
+table(Salaries$rank)
+
+```
+
+## Checkpoint 10
+
+```{r}
+
+summary(Salaries)
+
+```
+
+# Bonus Rounds
+
+1.  Choose any of the other available data sets from the `carData`
+    package and use the functions you've learned to say something
+    interesting about the data. Suggested data sets: `SLID` and
+    `Migration`.
+
+    *Add multiple lines of code to a code chunk or add code chunks as
+    necessary.*
+
+```{r}
+
+
+
+```
+
+2.  Click the `Render` button above this quarto document and view the
+    output.

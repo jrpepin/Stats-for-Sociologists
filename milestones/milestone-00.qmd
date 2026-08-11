@@ -7,20 +7,6 @@ editor: visual
 
 # Getting Started in RStudio & R
 
-*Instructions to the instructor:*
-
-- give general overview of RStudio
-
-- introduction to Quarto (have students open mileston-00.qmd)
-
-  - write text vs code chunks.
-
-  - running a code chunk (arrow vs Run)
-
-  - Visual versus source
-
-- instruct students to add their own notes to this document as they go.
-
 ## Checkpoint 01
 
 In the `Console`, type:
@@ -82,7 +68,7 @@ mean(my_data)
 
 ```
 
-The average Canadian income for this sample is \$70,900.
+*Replace this text with your interpretation of the mean.*
 
 ## Checkpoint 03
 
@@ -90,11 +76,11 @@ Replace the `mean` function with the `median` function below.
 
 ```{r}
 
-median(my_data)
+mean(my_data)
 
 ```
 
-The median Canadian income for this sample is \$50,500.
+*Replace this text with your interpretation of the median.*
 
 ## Checkpoint 04
 
@@ -146,16 +132,6 @@ Take a look at the data by clicking on the `Salaries` object in the
 How many professors are in this dataset? How many variables? What are
 the variable names?
 
-Instructor comments: Look at number of observations in the
-`Global Environment`:
-
-- 397 obs. (1 person per row)
-
-- 6 variables
-
-- `names(Salaries)`: "rank" "discipline" "yrs.since.phd" "yrs.service"
-  "sex" "salary"
-
 ## Checkpoint 07
 
 Calculate and interpret the mean salary for professors in this dataset.
@@ -166,7 +142,7 @@ mean(Salaries$salary)
 
 ```
 
-On average, professors in this sample earn \$113,707.
+*Replace this text with your interpretation of the mean.*
 
 Calculate the median salary for professors in this dataset.
 
@@ -179,10 +155,6 @@ median(Salaries$salary)
 *What does the difference between the mean and median suggest about the
 data?*
 
-The mean is greater than the median, which suggests there are some
-professors who make substantially more (outliers) than typical
-professors.
-
 What's the average number of years since receiving a PhD for professors
 in this sample? What's the average years of service? (*Notice there is
 one line per function.*)
@@ -194,23 +166,15 @@ mean(Salaries$yrs.service)
 
 ```
 
-The average years since PhD is 22 years, whereas the average years of
-service is 18 years. This suggests a gap between graduating and the time
-of first position as a professor.
-
 ## Checkpoint 08
 
 On average, how much more money do the men make compared with women?
-
-*Instructor: Demonstrate using the `Console` to do the subtraction.*
 
 ```{r}
 
 tapply(Salaries$salary, Salaries$sex, mean)
 
 ```
-
-On average, men make about \$14,000 more than women faculty.
 
 Which discipline earns the most money, on average?
 
@@ -219,8 +183,6 @@ Which discipline earns the most money, on average?
 tapply(Salaries$salary, Salaries$discipline, mean)
 
 ```
-
-Discipline B earns \$9,480 more than Discipline A, on average.
 
 ## Checkpoint 09
 
@@ -231,8 +193,6 @@ What's the modal rank for these professors?
 table(Salaries$rank)
 
 ```
-
-The modal rank is Professor, consisting of 266 faculty in this sample.
 
 ## Checkpoint 10
 
@@ -245,8 +205,7 @@ summary(Salaries)
 
 ```
 
-*Why do some variables have different statistics than the others?* Some
-variables are categorical whereas other are continuous (integer).
+*Why do some variables have different statistics than the others?*
 
 # Bonus Rounds
 

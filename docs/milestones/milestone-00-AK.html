@@ -148,13 +148,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><em>Instructions to the instructor:</em></p>
 <ul>
 <li><p>give general overview of RStudio</p></li>
-<li><p>introduction to Quarto (have students open mileston-00.qmd)</p></li>
+<li><p>introduction to Quarto (have students open mileston-00.qmd)</p>
+<ul>
+<li><p>write text vs code chunks.</p></li>
+<li><p>running a code chunk (arrow vs Run)</p></li>
+<li><p>Visual versus source</p></li>
+</ul></li>
+<li><p>instruct students to add their own notes to this document as they go.</p></li>
 </ul>
 <section id="checkpoint-01" class="level2">
 <h2 class="anchored" data-anchor-id="checkpoint-01">Checkpoint 01</h2>
 <p>In the <code>Console</code>, type:</p>
 <pre><code>print("Hello, World!)</code></pre>
-<p>Now, click the green arrow below to “<code>Run Current Chunk</code>”.</p>
+<p>Now, click the green arrow below to <code>Run Current Chunk</code>.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"Hello, World"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -164,40 +170,93 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="checkpoint-02" class="level2">
 <h2 class="anchored" data-anchor-id="checkpoint-02">Checkpoint 02</h2>
-<p>Store the values in an object called <code>my_data</code>. Click the green arrow below to “<code>Run Current Chunk</code>”.</p>
+<p>Pretend the following values are annual incomes for 10 families.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Family ID</th>
+<th style="text-align: left;">Annual Income (CAD)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">F01</td>
+<td style="text-align: left;">$48,000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">F02</td>
+<td style="text-align: left;">$52,000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">F03</td>
+<td style="text-align: left;">$45,000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">F04</td>
+<td style="text-align: left;">$50,000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">F05</td>
+<td style="text-align: left;">$53,000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">F06</td>
+<td style="text-align: left;">$49,000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">F07</td>
+<td style="text-align: left;">$46,000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">F08</td>
+<td style="text-align: left;">$51,000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">F09</td>
+<td style="text-align: left;">$65,000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">F10</td>
+<td style="text-align: left;">$250,000</td>
+</tr>
+</tbody>
+</table>
+<p><span style="color: $gray-300; font-size: 80%"><em>Source: Totally fake data</em></span></p>
+<p>Store the values in an object called <code>my_data</code>. Click the green arrow below to <code>Run Current Chunk</code>.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>my_data <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">48000</span>, <span class="dv">52000</span>, <span class="dv">45000</span>, <span class="dv">50000</span>, <span class="dv">53000</span>, </span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>             <span class="dv">49000</span>, <span class="dv">46000</span>, <span class="dv">51000</span>, <span class="dv">65000</span>, <span class="dv">250000</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<p>View your new data object. Click the green arrow below to <code>Run Current Chunk</code>.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>my_data</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1]  48000  52000  45000  50000  53000  49000  46000  51000  65000 250000</code></pre>
 </div>
 </div>
-<p>Use the <code>mean()</code> function. Click the green arrow below to “<code>Run Current Chunk</code>”.</p>
+<p>Use the <code>mean()</code> function. Click the green arrow below to <code>Run Current Chunk</code>.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(my_data)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 70900</code></pre>
 </div>
 </div>
-<p><em>Replace this text with your interpretation of the mean</em></p>
+<p>The average Canadian income for this sample is $70,900.</p>
 </section>
 <section id="checkpoint-03" class="level2">
 <h2 class="anchored" data-anchor-id="checkpoint-03">Checkpoint 03</h2>
 <p>Replace the <code>mean</code> function with the <code>median</code> function below.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(my_data)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">median</span>(my_data)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 70900</code></pre>
+<pre><code>[1] 50500</code></pre>
 </div>
 </div>
-<p><em>Replace this text with your interpretation of the median.</em></p>
+<p>The median Canadian income for this sample is $50,500.</p>
 </section>
 <section id="checkpoint-04" class="level2">
 <h2 class="anchored" data-anchor-id="checkpoint-04">Checkpoint 04</h2>
-<p>Install your first package using the function <code>install.packages()</code>. Click the green arrow below to “<code>Run Current Chunk</code>”.</p>
+<p>Install your first package using the function <code>install.packages()</code>. Click the green arrow below to <code>Run Current Chunk</code>.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"carData"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -215,12 +274,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="checkpoint-06" class="level2">
 <h2 class="anchored" data-anchor-id="checkpoint-06">Checkpoint 06</h2>
-<p>Load the <code>Salaries</code> data professors’ salaries into the <code>R Environment</code>. Run the code chunk below.</p>
+<p>Load the <code>Salaries</code> data which contains information on professors’ salaries into the <code>R Environment</code>. Run the code chunk below.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"Salaries"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Take a look at the data by clicking on the <code>Salaries</code> object in the <code>R Environment</code>.</p>
 <p>How many professors are in this dataset? How many variables? What are the variable names?</p>
+<p>Instructor comments: Look at number of observations in the <code>Global Environment</code>:</p>
+<ul>
+<li><p>397 obs. (1 person per row)</p></li>
+<li><p>6 variables</p></li>
+<li><p><code>names(Salaries)</code>: “rank” “discipline” “yrs.since.phd” “yrs.service” “sex” “salary”</p></li>
+</ul>
 </section>
 <section id="checkpoint-07" class="level2">
 <h2 class="anchored" data-anchor-id="checkpoint-07">Checkpoint 07</h2>
@@ -231,13 +296,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>[1] 113706.5</code></pre>
 </div>
 </div>
-<p>Calculate the median salary for professors in this dataset. What does the difference between the mean and median suggest about the data?</p>
+<p>On average, professors in this sample earn $113,707.</p>
+<p>Calculate the median salary for professors in this dataset.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">median</span>(Salaries<span class="sc">$</span>salary)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 107300</code></pre>
 </div>
 </div>
+<p><em>What does the difference between the mean and median suggest about the data?</em></p>
+<p>The mean is greater than the median, which suggests there are some professors who make substantially more (outliers) than typical professors.</p>
 <p>What’s the average number of years since receiving a PhD for professors in this sample? What’s the average years of service? (<em>Notice there is one line per function.</em>)</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(Salaries<span class="sc">$</span>yrs.since.phd)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -249,10 +317,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>[1] 17.61461</code></pre>
 </div>
 </div>
+<p>The average years since PhD is 22 years, whereas the average years of service is 18 years. This suggests a gap between graduating and the time of first position as a professor.</p>
 </section>
 <section id="checkpoint-08" class="level2">
 <h2 class="anchored" data-anchor-id="checkpoint-08">Checkpoint 08</h2>
 <p>On average, how much more money do the men make compared with women?</p>
+<p><em>Instructor: Demonstrate using the <code>Console</code> to do the subtraction.</em></p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tapply</span>(Salaries<span class="sc">$</span>salary, Salaries<span class="sc">$</span>sex, mean)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -260,6 +330,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 101002.4 115090.4 </code></pre>
 </div>
 </div>
+<p>On average, men make about $14,000 more than women faculty.</p>
 <p>Which discipline earns the most money, on average?</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tapply</span>(Salaries<span class="sc">$</span>salary, Salaries<span class="sc">$</span>discipline, mean)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -268,6 +339,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 108548.4 118028.7 </code></pre>
 </div>
 </div>
+<p>Discipline B earns $9,480 more than Discipline A, on average.</p>
 </section>
 <section id="checkpoint-09" class="level2">
 <h2 class="anchored" data-anchor-id="checkpoint-09">Checkpoint 09</h2>
@@ -280,9 +352,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
        67        64       266 </code></pre>
 </div>
 </div>
+<p>The modal rank is Professor, consisting of 266 faculty in this sample.</p>
 </section>
 <section id="checkpoint-10" class="level2">
 <h2 class="anchored" data-anchor-id="checkpoint-10">Checkpoint 10</h2>
+<p>Use the <code>summary()</code> function to see more than one descriptive statistic at a time.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(Salaries)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -302,16 +376,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  Max.   :231545  </code></pre>
 </div>
 </div>
+<p><em>Why do some variables have different statistics than the others?</em> Some variables are categorical whereas other are continuous (integer).</p>
 </section>
 </section>
 <section id="bonus-rounds" class="level1">
 <h1>Bonus Rounds</h1>
 <ol type="1">
-<li>Choose any of the other available data sets from the <code>carData</code> package and use the functions you’ve learned to say something interesting about the data. Suggested data sets: <code>SLID</code> and <code>Migration</code>.</li>
+<li><p>Choose any of the other available data sets from the <code>carData</code> package and use the functions you’ve learned to say something interesting about the data. Suggested data sets: <code>SLID</code> and <code>Migration</code>.</p>
+<p><em>Add multiple lines of code to a code chunk or add code chunks as necessary.</em></p></li>
 </ol>
-<p>Add multiple lines of code to a code chunk or add code chunks as necessary.</p>
 <ol start="2" type="1">
-<li>Click the <code>Render</code> button above this quarto document and</li>
+<li>Replace the author name at the top of the document with your name (keep quotation marks). Then, click the <code>Render</code> button above this quarto document and view the output.</li>
 </ol>
 
 

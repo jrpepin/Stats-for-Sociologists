@@ -43,6 +43,16 @@ knitr::opts_chunk$set(echo = FALSE,
                       warning = FALSE, 
                       messages = FALSE)
 
+# hidding error when rendering
+orig_freq <- summarytools::freq
+
+freq <- function(...) {
+  tryCatch(
+    orig_freq(...),
+    error = function(e) NULL
+  )
+}
+
 ```
 
 <link href="https://fonts.googleapis.com/css2?family=Shadows+Into+Light&display=swap" rel="stylesheet">
@@ -770,12 +780,11 @@ grade_this_code()
 ```
 
 <br />
-
-::: {.column style="color: #E74C3C; font-size: 150%; font-family: 'Shadows Into Light'"}
-Most families in this sample earn between \$45K–53K, but one high-income
-household pushes the average far above what’s typical: **\$70,900**
-:::
-
+  
+[Most families in this sample earn between \$45K–53K, but one high-income
+household pushes the average far above what’s typical: **\$70,900**]{.shadows-text style="color: #F39C12;"}  
+  
+  
 Does this seem like an accurate representation of the typical annual
 income of these families? Only one family earns more than our average,
 whereas the rest of the sample earns significantly less than that.
@@ -973,55 +982,61 @@ to find the median in a frequency table [3 minutes].
 Half of all observations are always below the median and the other half
 are always above the median.
 
-**Percentage distribution of opinion on whether the demands of your job
-interfere with your family life?**
+To find the median using a frequency table, you locate the value or category where the cumulative percentage first reaches or exceeds 50%. Here's an example: 
+
+**Percentage distribution of opinion on whether the demands of job
+interferes with family life**
 
 ```{r}
 #| message: false
 #| label: wkvsfam
 #| echo: false
-#| eval: false
  
-gss_all$wkvsfam <- as_factor(zap_missing(gss_all$wkvsfam))
+gss_all$wkvsfam <- gss_all$wkvsfam |>
+  haven::zap_missing() |>
+  haven::as_factor() |>
+  forcats::fct_rev()
 
 # Create frequency & proportions table
-tab <- gss_all %>%
-  filter(year == 2022, !is.na(wkvsfam)) %>%
-  group_by(wkvsfam) %>%
-  summarise(n = n(), .groups = "drop") %>%
+tab <- gss_all |>
+  filter(year == 2022, !is.na(wkvsfam)) |>
+  group_by(wkvsfam) |>
+  summarise(n = n(), .groups = "drop") |>
   mutate(
     percent = round(100 * n / sum(n), 0),
     cum_percent = round(cumsum(percent), 0)
-  ) %>%
+  ) |>
   ungroup()
 
 # Add totals row
-tab_totals <- tab %>%
-  summarise(across(c(n, percent), sum, na.rm = TRUE)) %>%
+tab_totals <- tab |>
+  summarise(across(c(n, percent), sum, na.rm = TRUE)) |>
   mutate(wkvsfam = "Total")
 
 # Combine with original table
 tab_with_totals <- bind_rows(tab, tab_totals)
 
 ## Pretty table
-tab_with_totals %>%
-  flextable() %>%
-  style_flextable() %>%
+tab_with_totals |>
+  flextable() |>
+  style_flextable() |>
   set_header_labels(
     n = "n", percent = "%",
     cum_percent = "cumulative %"
-  ) %>%
-  color(color = "#e74c3c", i = 3, j = 4)
+  ) |>
+  color(color = "#e74c3c", i = 2, j = 4)
 
-# [*Source: U.S. General Social Survey 2022*]{style="color: $gray-300; font-size: 80%"}
 ```
 
-![](images/table01.png "Table 01. How often do the demands of your job interfere with your family life?"){width="100%"}
+[*Source: U.S. General Social Survey 2022*]{style="color: $gray-300; font-size: 80%"}
 
 [**Survey question**: *How often do the demands of your job interfere
 with your family life?*]{style="font-size: 80%"}
 
 <br>
+
+["`Rarely`" is the median, because half of the data lie below it and half lie above it.]{.shadows-text style="color: #F39C12;"}
+
 
 ------------------------------------------------------------------------
 
@@ -1032,9 +1047,12 @@ median in a histogram [\~3 minutes].
 
 <br>
 
-Could you find the median in this historgram?
+Could you say in regular words what is the median in this historgram?
 
 ```{r}
+#| message: false
+#| label: agekdbrn_hist
+#| echo: false
 
 my_data <- gss_all |>
   select(agekdbrn, year) |>
@@ -1068,6 +1086,8 @@ my_data |>
 was born?*]{style="font-size: 80%"}
 
 <br>
+
+[The median age at which people had their first child is 24 years old. This means that half of the people had their first child before age 24, and the other half had their first child at age 24 or older.]{.shadows-text style="color: #F39C12;"}
 
 ### Mode
 
@@ -1126,7 +1146,9 @@ the value that occurs the most.
 #### Finding the mode in a table
 
 The mode can also be identified in a table. The mode is the category
-with the greatest frequency or the largest percentage.
+with the greatest frequency or the largest percentage.  
+
+<br> 
 
 **Percentage distribution of opinion on whether people are helpful or
 look out for themselves**
@@ -1135,18 +1157,21 @@ look out for themselves**
 #| message: false
 #| label: mode
 #| echo: false
-#| eval: false
 
 freq(gss24$helpful, report.nas = FALSE, headings = FALSE) 
 ```
 
-![](images/table02.png "Table 02. People helpful or looking out for selves"){width="100%"}
+[*Source: U.S. General Social Survey 2024*]{style="color: $gray-300; font-size: 80%"}
 
 [**Survey question**: *Would you say that most of the time people try to
 be helpful, or that they are mostly just looking out for
 themselves?*]{style="font-size: 80%"}
 
-<br> <br>
+<br> 
+
+[The mode is "`looking out for themselves`," because it was the response chosen by the greatest percentage of people in the survey.]{.shadows-text style="color: #F39C12;"}
+
+<br>
 
 ------------------------------------------------------------------------
 
@@ -1180,6 +1205,8 @@ freq(gss_all$fairearn, report.nas = FALSE)
 ```{r mode01-check}
 grade_this_code()
 ```
+
+[*Source: U.S. General Social Survey 1976-2024*]{style="color: $gray-300; font-size: 80%"}
 
 [**Survey question**: *How fair is what you earn on your job in
 comparison to others doing the same type of work you

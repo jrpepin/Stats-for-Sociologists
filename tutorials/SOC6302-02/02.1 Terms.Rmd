@@ -36,6 +36,17 @@ gss_all <- readRDS("data/gss_all.rds")
 gss24 <- readRDS("data/gss24.rds")
 
 knitr::opts_chunk$set(echo = TRUE)
+
+# hidding error when rendering
+orig_freq <- summarytools::freq
+
+freq <- function(...) {
+  tryCatch(
+    orig_freq(...),
+    error = function(e) NULL
+  )
+  
+}
 ```
 
 <link href="https://fonts.googleapis.com/css2?family=Shadows+Into+Light&display=swap" rel="stylesheet">
@@ -497,8 +508,6 @@ as the total number of cases (i.e., sum of all frequencies).
 
 <br>
 
-**Table 01. Attitudes about sex before marriage**
-
 ```{r}
 #| label: table01
 #| echo: false
@@ -521,8 +530,8 @@ total_row <- freq_premarsx|>
 table_premarsx <- rbind(freq_premarsx, total_row)
 
 # Render the table
-table_premarsx %>%
-  flextable() %>%
+table_premarsx |>
+  flextable() |>
   style_flextable()
 
 # [Source: U.S. General Social Survey, 2024]{style="color: #grey80; font-size: 80%"}
@@ -554,20 +563,21 @@ all*"?
 We start by looking at the frequency table that shows men and women's
 number of responses for each category.
 
-**Table 02. Attitudes about sex before marriage by gender**
 
 ```{r}
 #| label: table02
-#| echo: false
+#| include: false
+
+# **Table 02. Attitudes about sex before marriage by gender**
 
 gss_all$premarsx <- as_factor(zap_missing(gss_all$premarsx))
 gss_all$sex <- as_factor(zap_missing(gss_all$sex))
 
-freq_premarsx <- gss_all %>%
-  select(sex, premarsx) %>%
-  filter(!is.na(premarsx), !is.na(sex)) %>%
-  group_by(sex) %>%
-  count(premarsx) %>%
+freq_premarsx <- gss_all |>
+  select(sex, premarsx) |>
+  filter(!is.na(premarsx), !is.na(sex)) |>
+  group_by(sex) |>
+  count(premarsx) |>
   pivot_wider(
     names_from = sex,
     values_from = n,
@@ -575,9 +585,9 @@ freq_premarsx <- gss_all %>%
   )
 
 # create total row
-total_row <- freq_premarsx %>%
-  summarise(across(where(is.numeric), sum)) %>%
-  mutate(premarsx = "Total") %>%
+total_row <- freq_premarsx |>
+  summarise(across(where(is.numeric), sum)) |>
+  mutate(premarsx = "Total") |>
   select(names(freq_premarsx)) # ensure column order matches
 
 # combine
@@ -587,16 +597,20 @@ table_premarsx <- rbind(freq_premarsx, total_row)
 n_rows <- nrow(table_premarsx) # fixing transparency
 
 # Render the table
-table_premarsx %>%
-  flextable() %>%
-  style_flextable() %>%
+table_premarsx |>
+  flextable() |>
+  style_flextable() |>
   # Manually add zebra stripes with solid colors w/o transparency
-  bg(i = seq(1, n_rows, by = 2), bg = "white", part = "body") %>%
+  bg(i = seq(1, n_rows, by = 2), bg = "white", part = "body") |>
   bg(i = seq(2, n_rows, by = 2), bg = "#F2F2F2", part = "body")
+
+# [Source: U.S. General Social Survey,
+# 1972-2024]{style="color: #grey80; font-size: 80%"}
 ```
 
-[Source: U.S. General Social Survey,
-1972-2024]{style="color: #grey80; font-size: 80%"}
+
+
+![](images/table02.png "Table 02. People helpful or looking out for selves"){width="100%"}
 
 <br>
 
@@ -686,39 +700,39 @@ we can display these numbers in a **frequency table**.
 gss_all$premarsx <- droplevels(gss_all$premarsx)
 
 # Create frequency & proportions table
-tab <- gss_all %>%
-  filter(!is.na(premarsx), !is.na(sex)) %>%
-  group_by(sex, premarsx) %>%
-  summarise(n = n(), .groups = "drop") %>%
-  group_by(sex) %>%
-  mutate(percent = round(100 * n / sum(n), 0)) %>%
-  ungroup() %>%
+tab <- gss_all |>
+  filter(!is.na(premarsx), !is.na(sex)) |>
+  group_by(sex, premarsx) |>
+  summarise(n = n(), .groups = "drop") |>
+  group_by(sex) |>
+  mutate(percent = round(100 * n / sum(n), 0)) |>
+  ungroup() |>
   pivot_wider(
     names_from = sex, values_from = c(n, percent)
   )
 
 # Add totals row
-tab_totals <- tab %>%
-  summarise(across(where(is.numeric), \(x) sum(x, na.rm = TRUE))) %>%
+tab_totals <- tab |>
+  summarise(across(where(is.numeric), \(x) sum(x, na.rm = TRUE))) |>
   mutate(premarsx = "Total")
 
 # Combine with original table
 tab_with_totals <- bind_rows(tab, tab_totals)
 
 ## Pretty table
-tab_with_totals %>%
-  select(premarsx, n_male, percent_male, n_female, percent_female) %>%
-  flextable() %>%
-  style_flextable() %>%
+tab_with_totals |>
+  select(premarsx, n_male, percent_male, n_female, percent_female) |>
+  flextable() |>
+  style_flextable() |>
   set_header_labels(
     n_male = "n", percent_male = "%",
     n_female = "n", percent_female = "%"
-  ) %>%
+  ) |>
   add_header_row(
     values = c("", "Men", "Women"),
     colwidths = c(1, 2, 2)
-  ) %>%
-  align(j = c(2, 3, 4, 5), align = "center", part = "all") %>%
+  ) |>
+  align(j = c(2, 3, 4, 5), align = "center", part = "all") |>
   color(color = "#3498DB", i = 1, j = 3) |>
   color(color = "#3498DB", i = 2, j = 3) |>
   color(color = "#3498DB", i = 3, j = 3) |>
@@ -850,41 +864,41 @@ gss24$premarsx <- droplevels(gss24$premarsx)
 gss24$sex <- droplevels(gss24$sex)
 
 # Create frequency & proportions table
-tab <- gss24 %>%
-  filter(!is.na(premarsx)) %>%
-  group_by(premarsx) %>%
-  summarise(n = n(), .groups = "drop") %>%
+tab <- gss24 |>
+  filter(!is.na(premarsx)) |>
+  group_by(premarsx) |>
+  summarise(n = n(), .groups = "drop") |>
   mutate(
     percent = round(100 * n / sum(n), 0),
     cum_percent = round(cumsum(percent), 0)
-  ) %>%
+  ) |>
   ungroup()
 
 # Add totals row
-tab_totals <- tab %>%
-  summarise(across(where(is.numeric), \(x) sum(x, na.rm = TRUE))) %>%
+tab_totals <- tab |>
+  summarise(across(where(is.numeric), \(x) sum(x, na.rm = TRUE))) |>
   mutate(premarsx = "Total")
 
 # Combine with original table
 tab_with_totals <- bind_rows(tab, tab_totals)
 
 ## Pretty table
-tab_with_totals %>%
-  flextable() %>%
-  style_flextable() %>%
+tab_with_totals |>
+  flextable() |>
+  style_flextable() |>
   set_header_labels(
     n = "n", percent = "%",
     cum_percent = "cumulative %"
-  ) %>%
-  color(color = "#18bc9c", i = 1, j = 3) %>%
-  color(color = "#fd7e14", i = 2, j = 3) %>%
+  ) |>
+  color(color = "#18bc9c", i = 1, j = 3) |>
+  color(color = "#fd7e14", i = 2, j = 3) |>
   color(color = "#e74c3c", i = 2, j = 4)
 ```
 
 [Source: U.S. General Social Survey,
 2024]{style="color: #grey80; font-size: 80%"}
 
-${\color{mathGreen} 17} + {\color{mathOrange} 6} = {\color{mathRed} 23\%}$
+${\color{mathGreen} 17} + {\color{mathOrange} 7} = {\color{mathRed} 24\%}$
 
 ### Rates
 
@@ -1669,7 +1683,7 @@ divorce_data <- as_tibble(read_csv(url, skip = 4,
   )
 
 kable(divorce_data) |>
-  kable_styling(bootstrap_options = "striped", full_width = F, position = "left") %>%
+  kable_styling(bootstrap_options = "striped", full_width = F, position = "left") |>
   row_spec(0, color = "white", background = "#18BC9C")
 ```
 

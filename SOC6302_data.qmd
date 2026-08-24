@@ -49,18 +49,18 @@ gss22 <- gss_get_yr(2022)
 # 01.1 Intro
 
 **frequency:** `premarsx` **mean:** fake data\
-**median:** ~~`wkvsfam`~~; `agekdbrn` (histogram);\
-**mode:** ~~`helpful`~~, ~~`fairern`~~;\
+**median:** `wkvsfam`; `agekdbrn` (histogram);\
+**mode:** `helpful`; `fairern`;\
 
 ```{r}
 # GSS_ALL
 gss_all |>
-  select(premarsx, sex) |>
+  select(wkvsfam, agekdbrn, year, fairearn) |>
   saveRDS(file = "tutorials/SOC6302-01/data/gss_all.rds")
 
 # GSS24
 gss24 |>
-  select(premarsx, sex) |>
+  select(helpful) |>
   saveRDS(file = "tutorials/SOC6302-01/data/gss24.rds")
 ```
 
@@ -74,12 +74,14 @@ gss24 |>
 
 # 02.1 Descriptive Statistics
 
+**Distribution Tables:** `premarsx`; `sex`
+
 **distribution shape:** `agekdbrn`;
 
 ```{r}
 ## GSS_ALL
 gss_all |>
-  select(year, agekdbrn, premarsx, sex) |>
+  select(agekdbrn, premarsx, sex) |>
   saveRDS(file = "tutorials/SOC6302-02/data/gss_all.rds")
 
 ## GSS24

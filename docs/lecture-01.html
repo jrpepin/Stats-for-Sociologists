@@ -6,10 +6,10 @@
 <script src="lecture-01_files/libs/quarto-html/tippy.umd.min.js"></script>
 <link href="lecture-01_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="lecture-01_files/libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="lecture-01_files/libs/quarto-html/quarto-syntax-highlighting-c1f63da3e08f13bc72dc17e92cfd001d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="lecture-01_files/libs/quarto-html/quarto-syntax-highlighting-eec68b17241c1efd3eae2de50d816e3e.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <link href="lecture-01_files/libs/quarto-contrib/fontawesome6-1.2.0/all.min.css" rel="stylesheet">
 <link href="lecture-01_files/libs/quarto-contrib/fontawesome6-1.2.0/latex-fontsize.css" rel="stylesheet"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.7.32">
+  <meta name="generator" content="quarto-1.10.18">
 
   <title>R workflow</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -18,10 +18,16 @@
   <link rel="stylesheet" href="lecture-01_files/libs/revealjs/dist/reset.css">
   <link rel="stylesheet" href="lecture-01_files/libs/revealjs/dist/reveal.css">
   <style>
-    code{white-space: pre-wrap;}
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
     span.smallcaps{font-variant: small-caps;}
-    div.columns{display: flex; gap: min(4vw, 1.5em);}
-    div.column{flex: auto; overflow-x: auto;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
     ul.task-list li input[type="checkbox"] {
@@ -96,7 +102,7 @@
     code span.vs { color: #da4453; } /* VerbatimString */
     code span.wa { color: #da4453; } /* Warning */
   </style>
-  <link rel="stylesheet" href="lecture-01_files/libs/revealjs/dist/theme/quarto-a526d4595ac465cbbd124601ea9a87fb.css">
+  <link rel="stylesheet" href="lecture-01_files/libs/revealjs/dist/theme/quarto-0a3be1628df9e61b8582fc9b7ed8a9d4.css">
   <link href="lecture-01_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="lecture-01_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="lecture-01_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -644,14 +650,14 @@ Source pane: best for documenting.</p>
 <p><strong>You’ll install each package (1X per system):</strong></p>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a><span class="fu">install.packages</span>(<span class="st">"tidyverse"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="" aria-label="1"></a><span class="fu">install.packages</span>(<span class="st">"tidyverse"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><br></p>
 <div style="font-size: 70%">
 <p><strong>You’ll load each package (every time you use it):</strong></p>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href=""></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="" aria-label="1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <aside class="notes">
 <p>What’s the difference between installing and loading a package? Why is this annoying workflow a “feature”?</p>
@@ -679,7 +685,7 @@ Source pane: best for documenting.</p>
 </div>
 <p><br></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a><span class="fu">install.packages</span>(<span class="st">"tidyverse"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="" aria-label="1"></a><span class="fu">install.packages</span>(<span class="st">"tidyverse"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="mini-tasks-1" class="slide level2" data-menu-title="Install `tinytex()`">
@@ -694,12 +700,12 @@ Source pane: best for documenting.</p>
 </div>
 <p><br></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href=""></a><span class="fu">install.packages</span>(<span class="st">'tinytex'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="" aria-label="1"></a><span class="fu">install.packages</span>(<span class="st">'tinytex'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><br></p>
 <div class="fragment">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a>tinytex<span class="sc">::</span><span class="fu">install_tinytex</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="" aria-label="1"></a>tinytex<span class="sc">::</span><span class="fu">install_tinytex</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </section>
@@ -709,9 +715,9 @@ Source pane: best for documenting.</p>
 <p><i class="fa-solid fa-check-double" aria-label="check-double"></i> Install the <code>gssr()</code> package, NOT on CRAN.</p>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href=""></a><span class="co"># Install 'gssr' from 'ropensci' universe</span></span>
-<span id="cb6-2"><a href=""></a><span class="fu">install.packages</span>(<span class="st">'gssr'</span>, <span class="at">repos =</span></span>
-<span id="cb6-3"><a href=""></a>  <span class="fu">c</span>(<span class="st">'https://kjhealy.r-universe.dev'</span>, <span class="st">'https://cloud.r-project.org'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="" aria-label="1"></a><span class="co"># Install 'gssr' from 'ropensci' universe</span></span>
+<span id="cb6-2"><a href="" aria-label="2"></a><span class="fu">install.packages</span>(<span class="st">'gssr'</span>, <span class="at">repos =</span></span>
+<span id="cb6-3"><a href="" aria-label="3"></a>  <span class="fu">c</span>(<span class="st">'https://kjhealy.r-universe.dev'</span>, <span class="st">'https://cloud.r-project.org'</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><br></p>
 <div class="fragment">
@@ -719,9 +725,9 @@ Source pane: best for documenting.</p>
 <p><i class="fa-solid fa-check-double" aria-label="check-double"></i> Install the <code>gssrdoc()</code> package, NOT on CRAN.</p>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href=""></a><span class="co"># Install 'gssrdoc' from 'ropensci' universe</span></span>
-<span id="cb7-2"><a href=""></a><span class="fu">install.packages</span>(<span class="st">'gssrdoc'</span>, <span class="at">repos =</span></span>
-<span id="cb7-3"><a href=""></a>  <span class="fu">c</span>(<span class="st">'https://kjhealy.r-universe.dev'</span>, <span class="st">'https://cloud.r-project.org'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="" aria-label="1"></a><span class="co"># Install 'gssrdoc' from 'ropensci' universe</span></span>
+<span id="cb7-2"><a href="" aria-label="2"></a><span class="fu">install.packages</span>(<span class="st">'gssrdoc'</span>, <span class="at">repos =</span></span>
+<span id="cb7-3"><a href="" aria-label="3"></a>  <span class="fu">c</span>(<span class="st">'https://kjhealy.r-universe.dev'</span>, <span class="st">'https://cloud.r-project.org'</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </section>
@@ -735,9 +741,9 @@ Source pane: best for documenting.</p>
 </div>
 <p><br></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href=""></a><span class="fu">library</span>(tidyverse) <span class="co"># for data wrangling</span></span>
-<span id="cb8-2"><a href=""></a><span class="fu">library</span>(gssr) <span class="co"># U.S. General Social Survey data</span></span>
-<span id="cb8-3"><a href=""></a><span class="fu">library</span>(gssrdoc) <span class="co"># GSS documentation</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="" aria-label="1"></a><span class="fu">library</span>(tidyverse) <span class="co"># for data wrangling</span></span>
+<span id="cb8-2"><a href="" aria-label="2"></a><span class="fu">library</span>(gssr) <span class="co"># U.S. General Social Survey data</span></span>
+<span id="cb8-3"><a href="" aria-label="3"></a><span class="fu">library</span>(gssrdoc) <span class="co"># GSS documentation</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="environment" class="slide level2">
@@ -747,12 +753,12 @@ Source pane: best for documenting.</p>
 </div>
 <p><br></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href=""></a><span class="co"># software documentation</span></span>
-<span id="cb9-2"><a href=""></a><span class="fu">sessionInfo</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="" aria-label="1"></a><span class="co"># software documentation</span></span>
+<span id="cb9-2"><a href="" aria-label="2"></a><span class="fu">sessionInfo</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>R version 4.5.1 (2025-06-13 ucrt)
+<pre><code>R version 4.6.1 (2026-06-24 ucrt)
 Platform: x86_64-w64-mingw32/x64
-Running under: Windows 11 x64 (build 26100)
+Running under: Windows 11 x64 (build 26200)
 
 Matrix products: default
   LAPACK version 3.12.1
@@ -769,36 +775,36 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] gssrdoc_0.7.0      conflicted_1.2.0   summarytools_1.1.4 flextable_0.9.7   
- [5] kableExtra_1.4.0   labelled_2.14.1    haven_2.5.5        gssr_0.7          
- [9] lubridate_1.9.4    forcats_1.0.0      stringr_1.5.1      dplyr_1.1.4       
-[13] purrr_1.0.4        readr_2.1.5        tidyr_1.3.1        tibble_3.3.0      
-[17] ggplot2_3.5.2      tidyverse_2.0.0   
+ [1] gssrdoc_0.9        conflicted_1.2.0   summarytools_1.1.5 flextable_0.10.0  
+ [5] kableExtra_1.4.1   labelled_2.16.0    haven_2.5.5        gssr_0.9          
+ [9] lubridate_1.9.5    forcats_1.0.1      stringr_1.6.0      dplyr_1.2.1       
+[13] purrr_1.2.2        readr_2.2.0        tidyr_1.3.2        tibble_3.3.1      
+[17] ggplot2_4.0.3      tidyverse_2.0.0   
 
 loaded via a namespace (and not attached):
- [1] gtable_0.3.6            xfun_0.52               tzdb_0.5.0             
- [4] vctrs_0.6.5             tools_4.5.1             generics_0.1.4         
- [7] curl_6.3.0              pacman_0.5.1            pkgconfig_2.0.3        
-[10] data.table_1.17.6       checkmate_2.3.2         pryr_0.1.6             
-[13] RColorBrewer_1.1-3      uuid_1.2-1              lifecycle_1.0.4        
-[16] compiler_4.5.1          farver_2.1.2            rapportools_1.2        
-[19] textshaping_1.0.1       codetools_0.2-20        fontquiver_0.2.1       
-[22] fontLiberation_0.1.0    htmltools_0.5.8.1       yaml_2.3.10            
-[25] pillar_1.11.0           MASS_7.3-65             openssl_2.3.3          
-[28] cachem_1.1.0            magick_2.8.7            fontBitstreamVera_0.1.1
-[31] tidyselect_1.2.1        zip_2.3.3               digest_0.6.37          
-[34] stringi_1.8.7           reshape2_1.4.4          pander_0.6.6           
-[37] fastmap_1.2.0           grid_4.5.1              cli_3.6.5              
-[40] magrittr_2.0.3          base64enc_0.1-3         withr_3.0.2            
-[43] backports_1.5.0         gdtools_0.4.1           scales_1.4.0           
-[46] timechange_0.3.0        rmarkdown_2.29          officer_0.6.7          
-[49] matrixStats_1.5.0       askpass_1.2.1           ragg_1.4.0             
-[52] hms_1.1.3               memoise_2.0.1           evaluate_1.0.4         
-[55] knitr_1.50              tcltk_4.5.1             viridisLite_0.4.2      
-[58] rlang_1.1.6             Rcpp_1.0.14             glue_1.8.0             
-[61] xml2_1.3.8              svglite_2.1.3           rstudioapi_0.17.1      
-[64] jsonlite_2.0.0          plyr_1.8.9              R6_2.6.1               
-[67] systemfonts_1.2.3       fs_1.6.6               </code></pre>
+ [1] gtable_0.3.6            xfun_0.60               tzdb_0.5.0             
+ [4] vctrs_0.7.3             tools_4.6.1             generics_0.1.4         
+ [7] curl_7.1.0              pacman_0.5.1            pkgconfig_2.0.3        
+[10] checkmate_2.3.4         data.table_1.18.4       RColorBrewer_1.1-3     
+[13] S7_0.2.2                uuid_1.2-2              lifecycle_1.0.5        
+[16] compiler_4.6.1          farver_2.1.2            rapportools_1.2        
+[19] textshaping_1.0.5       fontquiver_0.2.1        fontLiberation_0.1.0   
+[22] htmltools_0.5.9         yaml_2.3.12             pillar_1.11.1          
+[25] MASS_7.3-66             openssl_2.4.2           cachem_1.1.0           
+[28] magick_2.9.1            fontBitstreamVera_0.1.1 tidyselect_1.2.1       
+[31] zip_3.0.2               digest_0.6.39           stringi_1.8.9          
+[34] reshape2_1.4.5          pander_0.6.6            fastmap_1.2.0          
+[37] grid_4.6.1              cli_3.6.6               magrittr_2.0.5         
+[40] base64enc_0.1-6         patchwork_1.3.2         withr_3.0.3            
+[43] backports_1.5.1         gdtools_0.5.1           scales_1.4.0           
+[46] timechange_0.4.0        rmarkdown_2.31          officer_0.7.6          
+[49] matrixStats_1.5.0       otel_0.2.0              askpass_1.2.1          
+[52] ragg_1.5.2              hms_1.1.4               memoise_2.0.1          
+[55] evaluate_1.0.5          knitr_1.51              tcltk_4.6.1            
+[58] viridisLite_0.4.3       rlang_1.3.0             Rcpp_1.1.2             
+[61] glue_1.8.1              xml2_1.6.0              svglite_2.2.2          
+[64] rstudioapi_0.19.0       jsonlite_2.0.0          plyr_1.8.9             
+[67] R6_2.6.1                systemfonts_1.3.2       fs_2.1.0               </code></pre>
 </div>
 </div>
 </section>
@@ -830,15 +836,15 @@ loaded via a namespace (and not attached):
 <p><strong>Run the code chunk in your code-along.</strong></p>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href=""></a><span class="co"># Load the data (will appear in your Global Environment pane)</span></span>
-<span id="cb11-2"><a href=""></a>gss24 <span class="ot">&lt;-</span> <span class="fu">gss_get_yr</span>(<span class="dv">2024</span>)</span>
-<span id="cb11-3"><a href=""></a></span>
-<span id="cb11-4"><a href=""></a><span class="co"># Preview the data named gss24</span></span>
-<span id="cb11-5"><a href=""></a>gss24</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="" aria-label="1"></a><span class="co"># Load the data (will appear in your Global Environment pane)</span></span>
+<span id="cb11-2"><a href="" aria-label="2"></a>gss24 <span class="ot">&lt;-</span> <span class="fu">gss_get_yr</span>(<span class="dv">2024</span>)</span>
+<span id="cb11-3"><a href="" aria-label="3"></a></span>
+<span id="cb11-4"><a href="" aria-label="4"></a><span class="co"># Preview the data named gss24</span></span>
+<span id="cb11-5"><a href="" aria-label="5"></a>gss24</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell fragment">
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 3,309 × 813
+<pre><code># A tibble: 3,986 × 989
    year       id wrkstat hrs1        hrs2        evwork      wrkslf  occ10      
    &lt;dbl+l&gt; &lt;dbl&gt; &lt;dbl+l&gt; &lt;dbl+lbl&gt;   &lt;dbl+lbl&gt;   &lt;dbl+lbl&gt;   &lt;dbl+l&gt; &lt;dbl+lbl&gt;  
  1 2024        1 1 [wor…    43       NA(i) [iap] NA(i) [iap] 2 [som…   230 [edu…
@@ -851,8 +857,8 @@ loaded via a namespace (and not attached):
  8 2024        8 6 [in … NA(i) [iap] NA(i) [iap]     1 [yes] 2 [som…  3600 [nur…
  9 2024        9 1 [wor…    50       NA(i) [iap] NA(i) [iap] 2 [som… NA(n) [no …
 10 2024       10 4 [une… NA(i) [iap] NA(i) [iap] NA(i) [iap] 2 [som…  5620 [sto…
-# ℹ 3,299 more rows
-# ℹ 805 more variables: prestg10 &lt;dbl+lbl&gt;, prestg105plus &lt;dbl+lbl&gt;,
+# ℹ 3,976 more rows
+# ℹ 981 more variables: prestg10 &lt;dbl+lbl&gt;, prestg105plus &lt;dbl+lbl&gt;,
 #   indus10 &lt;dbl+lbl&gt;, marital &lt;dbl+lbl&gt;, martype &lt;dbl+lbl&gt;, divorce &lt;dbl+lbl&gt;,
 #   widowed &lt;dbl+lbl&gt;, spwrksta &lt;dbl+lbl&gt;, sphrs1 &lt;dbl+lbl&gt;, sphrs2 &lt;dbl+lbl&gt;,
 #   spevwork &lt;dbl+lbl&gt;, cowrksta &lt;dbl+lbl&gt;, cowrkslf &lt;dbl+lbl&gt;,
@@ -1053,11 +1059,11 @@ iap – missing. Values: the numeric and response category key (1 = strongly agr
 <p>You can access the variables (i.e., columns) using the <code>$</code> operator, as shown using the <code>table()</code> function. The variable names are case sensitive.</p>
 <p><br></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href=""></a><span class="fu">table</span>(gss24<span class="sc">$</span>meovrwrk)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="" aria-label="1"></a><span class="fu">table</span>(gss24<span class="sc">$</span>meovrwrk)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
   1   2   3   4   5 
-195 787 611 481  89 </code></pre>
+238 938 797 534 108 </code></pre>
 </div>
 </div>
 <div class="task">
@@ -1071,12 +1077,12 @@ iap – missing. Values: the numeric and response category key (1 = strongly agr
 </div>
 <p><br></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href=""></a><span class="co"># Replace meovrwrk with fefam</span></span>
-<span id="cb16-2"><a href=""></a><span class="fu">table</span>(gss24<span class="sc">$</span>meovrwrk)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="" aria-label="1"></a><span class="co"># Replace meovrwrk with fefam</span></span>
+<span id="cb16-2"><a href="" aria-label="2"></a><span class="fu">table</span>(gss24<span class="sc">$</span>meovrwrk)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
   1   2   3   4   5 
-195 787 611 481  89 </code></pre>
+238 938 797 534 108 </code></pre>
 </div>
 </div>
 <div class="fragment">
@@ -1320,7 +1326,7 @@ iap – missing. Values: the numeric and response category key (1 = strongly agr
         margin: 0.1,
 
         math: {
-          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js',
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js',
           config: 'TeX-AMS_HTML-full',
           tex2jax: {
             inlineMath: [['\\(','\\)']],
@@ -1470,13 +1476,14 @@ iap – missing. Values: the numeric and response category key (1 = strongly agr
           e.clearSelection();
         }
         const getTextToCopy = function(trigger) {
-            const codeEl = trigger.previousElementSibling.cloneNode(true);
-            for (const childEl of codeEl.children) {
-              if (isCodeAnnotation(childEl)) {
-                childEl.remove();
-              }
+          const outerScaffold = trigger.parentElement.cloneNode(true);
+          const codeEl = outerScaffold.querySelector('code');
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
             }
-            return codeEl.innerText;
+          }
+          return codeEl.innerText;
         }
         const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
           text: getTextToCopy

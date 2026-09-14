@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Presenting Data</title>
+<title>Bivariate Regression</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -105,6 +105,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -123,7 +152,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Presenting Data</h1>
+<h1 class="title">Bivariate Regression</h1>
 </div>
 
 
@@ -150,23 +179,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="agenda" class="level1" data-menu-title="Agenda" data-background-image="images/calendar.png" data-background-size="100px" data-background-repeat="repeat">
 <h1 data-menu-title="Agenda" data-background-image="images/calendar.png" data-background-size="100px" data-background-repeat="repeat">Agenda</h1>
 <ul>
-<li>Table 01</li>
-<li>Data Quality Essentials</li>
+<li>Simple regression</li>
+<li>Categorical IV</li>
+<li><span class="math inline">\(R^2\)</span></li>
 </ul>
-<div class="notes">
-<ul>
-<li>forcats (reorder factor levels)</li>
-<li>missing data?</li>
-<li><strong>outliers</strong> – data viz &amp; tables</li>
-</ul>
-</div>
 </section>
 <section id="learning-objectives" class="level1">
 <h1>Learning objectives</h1>
 <p>By the end of the lecture, you will be able to …</p>
 <ul>
-<li>Use <code>tbl_summary()</code> to create a descriptive summary table</li>
-<li>Detect and address missing values and outliers</li>
+<li>Use R to produce bivariate regression</li>
+<li>Use R to produce <span class="math inline">\(R^2\)</span></li>
 </ul>
 </section>
 <section id="code-along-07" class="level1" data-menu-title="Code-along" data-background-image="images/terminal.png">
@@ -174,956 +197,623 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Download and open <a href="https://www.dropbox.com/scl/fi/v8424d20a8rogis1fdk0l/code-along-07.qmd?rlkey=t8x0w3uhe5za9yxwobncspv2b&amp;dl=1" target="_blank">code-along-07.qmd</a></p>
 <section id="packages" class="level2 sparse-slide">
 <h2 class="sparse-slide anchored" data-anchor-id="packages">Packages</h2>
-<p>Load the standard packages &amp; 1 new package: <code>gtsummary()</code></p>
+<p>Load the standard packages &amp; new package <code>moderndive</code></p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Only need to install once per machine. </span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("gtsummary")</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages(broom.helpers) # needed for moderndive</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("moderndive")</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse) </span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven) <span class="co"># not core tidyverse</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gssr)</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gssrdoc)</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(summarytools)</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gtsummary) <span class="co"># load the new package</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse) </span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven) <span class="co"># not core tidyverse</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(summarytools)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gtsummary) </span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(moderndive)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+</section>
+<section id="simple-regression" class="level1 theme-section">
+<h1 class="theme-section">Simple Regression</h1>
+<section id="simple-regression-1" class="level2 sparse-slide">
+<h2 class="sparse-slide anchored" data-anchor-id="simple-regression-1">Simple Regression</h2>
+<p>Regression and correlation are ways to identify whether two interval-ratio variables are statistically dependent</p>
+<p><br></p>
+<blockquote class="blockquote">
+<p>as the value of one variable changes, the other also tends to change</p>
+</blockquote>
+</section>
+<section id="code-meets-question" class="level2 sparse-slide" data-background-image="images/gears-solid-full.png" data-background-size="80px" data-background-repeat="repeat">
+<h2 class="sparse-slide anchored" data-background-image="images/gears-solid-full.png" data-background-size="80px" data-background-repeat="repeat" data-anchor-id="code-meets-question">Code Meets Question</h2>
+<div class="task">
+<p><i class="fa-solid fa-lightbulb" aria-label="lightbulb"></i> What is the relationship between literacy rate and rate of tertiary education?</p>
+</div>
+<p><br></p>
+<p><span style="color: #18BC9C"><strong>literacy rate</strong></span><br>
+% of adult population that is literate</p>
+<p><span style="color: #18BC9C"><strong>rate of tertiary education</strong></span><br>
+the % of students enrolled/eligible within the age range</p>
+</section>
+<section id="example-df" class="level2">
+<h2 class="anchored" data-anchor-id="example-df">Example df</h2>
+<div class="cell" data-output-location="column">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create columns</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>literacy <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">31.7</span>, <span class="fl">79.3</span>, <span class="fl">85.4</span>, <span class="fl">41.0</span>, <span class="fl">54.7</span>, <span class="fl">97.9</span>, <span class="fl">92.8</span>, <span class="fl">67.1</span>, <span class="fl">97.8</span>, <span class="fl">60.4</span>, <span class="fl">87.5</span>, <span class="fl">99.1</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>educ <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">3.74</span>, <span class="fl">10.4</span>, <span class="fl">20.4</span>, <span class="fl">4.46</span>, <span class="fl">9.53</span>, <span class="fl">78.6</span>, <span class="fl">31.5</span>, <span class="fl">16.2</span>, <span class="fl">65.8</span>, <span class="fl">10.3</span>, <span class="fl">30.8</span>, <span class="fl">40.1</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine into a data frame</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(literacy, educ)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co"># View the data frame</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   literacy  educ
+1      31.7  3.74
+2      79.3 10.40
+3      85.4 20.40
+4      41.0  4.46
+5      54.7  9.53
+6      97.9 78.60
+7      92.8 31.50
+8      67.1 16.20
+9      97.8 65.80
+10     60.4 10.30
+11     87.5 30.80
+12     99.1 40.10</code></pre>
+</div>
+</div>
+</section>
+<section id="tidy_summary" class="level2 sparse-slide">
+<h2 class="sparse-slide anchored" data-anchor-id="tidy_summary"><code>tidy_summary()</code></h2>
+<p><code>moderndive::tidy_summary()</code> returns commonly used summary statistics in a tidy format.</p>
+<p><br></p>
+<div class="cell" data-output-location="fragment">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">|&gt;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tidy_summary</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 11
+  column       n group type      min    Q1  mean median    Q3   max    sd
+  &lt;chr&gt;    &lt;int&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1 literacy    12 &lt;NA&gt;  numeric 31.7   59.0  74.6   82.4  94.0  99.1  23.2
+2 educ        12 &lt;NA&gt;  numeric  3.74  10.1  26.8   18.3  33.6  78.6  24.2</code></pre>
+</div>
+</div>
+</section>
+<section id="section" class="level2" data-menu-title="Scatterplot">
+<h2 data-menu-title="Scatterplot" class="anchored" data-anchor-id="section"></h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create scatterplot</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>df <span class="sc">|&gt;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> literacy, <span class="at">y =</span> educ)) <span class="sc">+</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"#18BC9C"</span>, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Scatterplot of Education vs Literacy"</span>,</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Literacy Rate (X)"</span>,</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> <span class="st">"College enrollment (Y)"</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="dv">20</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="lecture-07_files/figure-html/scatterplot-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="section-1" class="level2 sparse-slide" data-menu-title="Relationships">
+<h2 class="sparse-slide anchored" data-menu-title="Relationships" data-anchor-id="section-1"></h2>
+<p><span style="color: #18BC9C"><strong>Linear relationship</strong></span></p>
+<p>When two interval-ratio level variables are related to one another we can approximate the relationship by drawing a straight line through the center of the observations on the scatterplot.</p>
+<p><br></p>
+<div style="color: #e74c3c; font-family: 'Shadows Into Light'">
+<p>A bivariate regression analysis finds the best possible line to summarize the observed relationship between X and Y</p>
+</div>
+</section>
+<section id="section-2" class="level2 sparse-slide" data-menu-title="Scatterplot + Regression line">
+<h2 class="sparse-slide anchored" data-menu-title="Scatterplot + Regression line" data-anchor-id="section-2"></h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="co"># Create scatterplot with regression line</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a>df <span class="sc">|&gt;</span></span>
+<span id="cb8-3"><a href="#cb8-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> literacy, <span class="at">y =</span> educ)) <span class="sc">+</span></span>
+<span id="cb8-4"><a href="#cb8-4"></a>    <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"#18BC9C"</span>, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a>    <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> <span class="st">"#3498DB"</span>) <span class="sc">+</span></span>
+<span id="cb8-6"><a href="#cb8-6"></a>    <span class="fu">labs</span>(</span>
+<span id="cb8-7"><a href="#cb8-7"></a>      <span class="at">title =</span> <span class="st">"Scatterplot of Education vs Literacy with Regression Line"</span>,</span>
+<span id="cb8-8"><a href="#cb8-8"></a>      <span class="at">x =</span> <span class="st">"Literacy Rate (X)"</span>,</span>
+<span id="cb8-9"><a href="#cb8-9"></a>      <span class="at">y =</span> <span class="st">"College enrollment (Y)"</span></span>
+<span id="cb8-10"><a href="#cb8-10"></a>    ) <span class="sc">+</span></span>
+<span id="cb8-11"><a href="#cb8-11"></a>    <span class="fu">theme_minimal</span>(<span class="dv">20</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="lecture-07_files/figure-html/scatterplot-ols-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="section-3" class="level2" data-menu-title="Regression equation">
+<h2 data-menu-title="Regression equation" class="anchored" data-anchor-id="section-3"></h2>
+<div style="font-size: 150%; color: #e74c3c">
+<p><span class="math inline">\(\hat{y} = a + bX\)</span></p>
+</div>
+<p><br></p>
+<p><span class="math inline">\(\hat{y}\)</span> = the predicted score on the dependent variable</p>
+<p><span class="math inline">\(X\)</span> = the score on the independent variable</p>
+<p><span class="math inline">\(a\)</span> = the Y-intercept, or the point where the line crosses the Y-axis (<span class="math inline">\(a\)</span> is the value of <span class="math inline">\(Y\)</span> when <span class="math inline">\(X\)</span> is equal to 0).</p>
+<p><span class="math inline">\(b\)</span> = the slope of the regression line, or the change in <span class="math inline">\(Y\)</span> for each unit of change in <span class="math inline">\(X\)</span>.</p>
+</section>
+<section id="section-4" class="level2" data-menu-title="Regression relationship">
+<h2 data-menu-title="Regression relationship" class="anchored" data-anchor-id="section-4"></h2>
+<div style="font-size: 150%; color: #e74c3c">
+<p><span class="math inline">\(\hat{y} = a + bX\)</span></p>
+</div>
+<p><br></p>
+<p><span style="color: #18bc9c">Positive relationship</span><br>
+When <span class="math inline">\(b\)</span> is positive, then when <span class="math inline">\(X\)</span> increases, <span class="math inline">\(\hat{y}\)</span> increases</p>
+<p><br></p>
+<p><span style="color: #18bc9c">Negative relationship</span><br>
+When <span class="math inline">\(b\)</span> is negative, then when <span class="math inline">\(X\)</span> increases, <span class="math inline">\(\hat{y}\)</span> decreases</p>
+</section>
+<section id="section-5" class="level2" data-menu-title="Best fitting line">
+<h2 data-menu-title="Best fitting line" class="anchored" data-anchor-id="section-5"></h2>
+<div class="cell">
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+ℹ Please use `linewidth` instead.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="lecture-07_files/figure-html/scatterplot-lines-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
 </div>
 <div class="notes">
-<p>We’ll use <code>gtsummary()</code> to make pretty tables that include our statistical tests.</p>
+<p>With relationships that are imperfect, we must fit the best available line to represent the data.</p>
+<p>ASK: Would <span class="math inline">\(b\)</span> be positive or negative? What about <span class="math inline">\(a\)</span>?</p>
 </div>
 </section>
-<section id="load-your-data" class="level2 sparse-slide">
-<h2 class="sparse-slide anchored" data-anchor-id="load-your-data">Load your data</h2>
+<section id="section-6" class="level2" data-menu-title="Regression relationship">
+<h2 data-menu-title="Regression relationship" class="anchored" data-anchor-id="section-6"></h2>
+<div style="font-size: 150%; color: #e74c3c">
+<p><span class="math inline">\(\hat{y} = a + bX\)</span></p>
+</div>
+<p><br></p>
+<p>Regression finds the best fitting line that goes through the data with the least distance (error) between all points and the line.</p>
+<p><br></p>
+<div style="color: #3498DB; font-family: 'Shadows Into Light'">
+<p>AKA the “least squares line” referring to the least amount of squared error.</p>
+</div>
+<div class="notes">
+<p><span class="math inline">\(\hat{y}\)</span> is the predicted value of the dependent variable, based on a given value of the independent variable.</p>
+</div>
+</section>
+<section id="residual-error-e" class="level2 sparse-slide">
+<h2 class="sparse-slide anchored" data-anchor-id="residual-error-e">Residual = error (<span class="math inline">\(e\)</span>)</h2>
+<p>Calculated based on the difference between <span class="math inline">\(Y\)</span> and <span class="math inline">\(\hat{y}\)</span></p>
+<p><br></p>
+<p><span class="math inline">\(Y\)</span> = observed value of <span class="math inline">\(Y\)</span> for given value of <span class="math inline">\(X\)</span></p>
+<p><br></p>
+<p><span class="math inline">\(\hat{y}\)</span> = predicted value of <span class="math inline">\(Y\)</span> for given value of <span class="math inline">\(X\)</span></p>
+</section>
+<section id="section-7" class="level2" data-menu-title="Scatterplot">
+<h2 data-menu-title="Scatterplot" class="anchored" data-anchor-id="section-7"></h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the data from the 2022 survey</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>gss22 <span class="ot">&lt;-</span> <span class="fu">gss_get_yr</span>(<span class="dv">2022</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
 </div>
-</section>
-<section id="variables" class="level2 sparse-slide">
-<h2 class="sparse-slide anchored" data-anchor-id="variables">Variables</h2>
-<ul>
-<li><code>lifenow</code> R’s rating of life overall now from 0-10</li>
-<li><code>age</code> Age of respondent</li>
-<li><code>educ</code> Respondents highest edu credit</li>
-<li><code>hrs1</code> how many hours did you work last week</li>
-<li><code>fefam</code> Better for man to work, woman tend home</li>
-<li><code>race</code> What race do you consider yourself</li>
-<li><code>sex</code> Respondents sex</li>
-</ul>
-</section>
-<section id="variable-management" class="level2 smaller">
-<h2 class="smaller anchored" data-anchor-id="variable-management">Variable Management</h2>
-<div class="task">
-<p><i class="fa-solid fa-check-double" aria-label="check-double"></i> Make a df with only the (pretty) categorical and continuous variables we’ll analyze.</p>
-</div>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># Categorical Variables</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a>my_cat <span class="ot">&lt;-</span> gss22 <span class="sc">|&gt;</span></span>
-<span id="cb4-3"><a href="#cb4-3"></a>  <span class="fu">select</span>(id, fefam, race, sex) <span class="sc">|&gt;</span></span>
-<span id="cb4-4"><a href="#cb4-4"></a>  <span class="fu">zap_missing</span>() <span class="sc">|&gt;</span></span>
-<span id="cb4-5"><a href="#cb4-5"></a>  <span class="fu">as_factor</span>() <span class="sc">|&gt;</span></span>
-<span id="cb4-6"><a href="#cb4-6"></a>  <span class="fu">droplevels</span>()</span>
-<span id="cb4-7"><a href="#cb4-7"></a></span>
-<span id="cb4-8"><a href="#cb4-8"></a><span class="co"># Continuous Variables</span></span>
-<span id="cb4-9"><a href="#cb4-9"></a>my_con <span class="ot">&lt;-</span> gss22 <span class="sc">|&gt;</span></span>
-<span id="cb4-10"><a href="#cb4-10"></a>  <span class="fu">select</span>(id, lifenow, age, educ, hrs1) <span class="sc">|&gt;</span></span>
-<span id="cb4-11"><a href="#cb4-11"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb4-12"><a href="#cb4-12"></a>    <span class="at">lifenow =</span> <span class="fu">as.numeric</span>(lifenow),</span>
-<span id="cb4-13"><a href="#cb4-13"></a>    <span class="at">age =</span> <span class="fu">as.numeric</span>(age),</span>
-<span id="cb4-14"><a href="#cb4-14"></a>    <span class="at">educ =</span> <span class="fu">as.numeric</span>(educ),</span>
-<span id="cb4-15"><a href="#cb4-15"></a>    <span class="at">hrs1 =</span> <span class="fu">as.numeric</span>(hrs1))</span>
-<span id="cb4-16"><a href="#cb4-16"></a></span>
-<span id="cb4-17"><a href="#cb4-17"></a><span class="co"># Combine the two dataframes</span></span>
-<span id="cb4-18"><a href="#cb4-18"></a>my_data <span class="ot">&lt;-</span> <span class="fu">left_join</span>(my_cat, my_con, <span class="at">by =</span> <span class="st">"id"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</section>
-</section>
-<section id="table-01" class="level1 theme-section">
-<h1 class="theme-section">Table 01</h1>
-<section id="tbl_summary" class="level2 sparse-slide scrollable">
-<h2 class="sparse-slide scrollable anchored" data-anchor-id="tbl_summary"><code>tbl_summary()</code></h2>
-<p>Calculates descriptive statistics for continuous, categorical, and dichotomous variables</p>
-<div class="cell" data-output-location="column-fragment">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>my_data <span class="sc">|&gt;</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tbl_summary</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div id="oynaobhifq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#oynaobhifq table {
-  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-#oynaobhifq thead, #oynaobhifq tbody, #oynaobhifq tfoot, #oynaobhifq tr, #oynaobhifq td, #oynaobhifq th {
-  border-style: none;
-}
-
-#oynaobhifq p {
-  margin: 0;
-  padding: 0;
-}
-
-#oynaobhifq .gt_table {
-  display: table;
-  border-collapse: collapse;
-  line-height: normal;
-  margin-left: auto;
-  margin-right: auto;
-  color: #333333;
-  font-size: 16px;
-  font-weight: normal;
-  font-style: normal;
-  background-color: #FFFFFF;
-  width: auto;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #A8A8A8;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #A8A8A8;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-}
-
-#oynaobhifq .gt_caption {
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
-
-#oynaobhifq .gt_title {
-  color: #333333;
-  font-size: 125%;
-  font-weight: initial;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-color: #FFFFFF;
-  border-bottom-width: 0;
-}
-
-#oynaobhifq .gt_subtitle {
-  color: #333333;
-  font-size: 85%;
-  font-weight: initial;
-  padding-top: 3px;
-  padding-bottom: 5px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-color: #FFFFFF;
-  border-top-width: 0;
-}
-
-#oynaobhifq .gt_heading {
-  background-color: #FFFFFF;
-  text-align: center;
-  border-bottom-color: #FFFFFF;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#oynaobhifq .gt_bottom_border {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#oynaobhifq .gt_col_headings {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#oynaobhifq .gt_col_heading {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 6px;
-  padding-left: 5px;
-  padding-right: 5px;
-  overflow-x: hidden;
-}
-
-#oynaobhifq .gt_column_spanner_outer {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  padding-top: 0;
-  padding-bottom: 0;
-  padding-left: 4px;
-  padding-right: 4px;
-}
-
-#oynaobhifq .gt_column_spanner_outer:first-child {
-  padding-left: 0;
-}
-
-#oynaobhifq .gt_column_spanner_outer:last-child {
-  padding-right: 0;
-}
-
-#oynaobhifq .gt_column_spanner {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  overflow-x: hidden;
-  display: inline-block;
-  width: 100%;
-}
-
-#oynaobhifq .gt_spanner_row {
-  border-bottom-style: hidden;
-}
-
-#oynaobhifq .gt_group_heading {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  text-align: left;
-}
-
-#oynaobhifq .gt_empty_group_heading {
-  padding: 0.5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: middle;
-}
-
-#oynaobhifq .gt_from_md > :first-child {
-  margin-top: 0;
-}
-
-#oynaobhifq .gt_from_md > :last-child {
-  margin-bottom: 0;
-}
-
-#oynaobhifq .gt_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  margin: 10px;
-  border-top-style: solid;
-  border-top-width: 1px;
-  border-top-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  overflow-x: hidden;
-}
-
-#oynaobhifq .gt_stub {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#oynaobhifq .gt_stub_row_group {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 5px;
-  padding-right: 5px;
-  vertical-align: top;
-}
-
-#oynaobhifq .gt_row_group_first td {
-  border-top-width: 2px;
-}
-
-#oynaobhifq .gt_row_group_first th {
-  border-top-width: 2px;
-}
-
-#oynaobhifq .gt_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#oynaobhifq .gt_first_summary_row {
-  border-top-style: solid;
-  border-top-color: #D3D3D3;
-}
-
-#oynaobhifq .gt_first_summary_row.thick {
-  border-top-width: 2px;
-}
-
-#oynaobhifq .gt_last_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#oynaobhifq .gt_grand_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#oynaobhifq .gt_first_grand_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-style: double;
-  border-top-width: 6px;
-  border-top-color: #D3D3D3;
-}
-
-#oynaobhifq .gt_last_grand_summary_row_top {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: double;
-  border-bottom-width: 6px;
-  border-bottom-color: #D3D3D3;
-}
-
-#oynaobhifq .gt_striped {
-  background-color: rgba(128, 128, 128, 0.05);
-}
-
-#oynaobhifq .gt_table_body {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#oynaobhifq .gt_footnotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#oynaobhifq .gt_footnote {
-  margin: 0px;
-  font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#oynaobhifq .gt_sourcenotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#oynaobhifq .gt_sourcenote {
-  font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#oynaobhifq .gt_left {
-  text-align: left;
-}
-
-#oynaobhifq .gt_center {
-  text-align: center;
-}
-
-#oynaobhifq .gt_right {
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-}
-
-#oynaobhifq .gt_font_normal {
-  font-weight: normal;
-}
-
-#oynaobhifq .gt_font_bold {
-  font-weight: bold;
-}
-
-#oynaobhifq .gt_font_italic {
-  font-style: italic;
-}
-
-#oynaobhifq .gt_super {
-  font-size: 65%;
-}
-
-#oynaobhifq .gt_footnote_marks {
-  font-size: 75%;
-  vertical-align: 0.4em;
-  position: initial;
-}
-
-#oynaobhifq .gt_asterisk {
-  font-size: 100%;
-  vertical-align: 0;
-}
-
-#oynaobhifq .gt_indent_1 {
-  text-indent: 5px;
-}
-
-#oynaobhifq .gt_indent_2 {
-  text-indent: 10px;
-}
-
-#oynaobhifq .gt_indent_3 {
-  text-indent: 15px;
-}
-
-#oynaobhifq .gt_indent_4 {
-  text-indent: 20px;
-}
-
-#oynaobhifq .gt_indent_5 {
-  text-indent: 25px;
-}
-
-#oynaobhifq .katex-display {
-  display: inline-flex !important;
-  margin-bottom: 0.75em !important;
-}
-
-#oynaobhifq div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
-  height: 0px !important;
-}
-</style>
-
-<table class="gt_table caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
+<div>
+<figure class="figure">
+<p><img src="lecture-07_files/figure-html/scatterplot-point-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="section-8" class="level2" data-menu-title="Scatterplot">
+<h2 data-menu-title="Scatterplot" class="anchored" data-anchor-id="section-8"></h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="lecture-07_files/figure-html/scatterplot-predicted-point-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="section-9" class="level2" data-menu-title="Scatterplot">
+<h2 data-menu-title="Scatterplot" class="anchored" data-anchor-id="section-9"></h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="lecture-07_files/figure-html/residual-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="residual-table" class="level2 sparse-slide">
+<h2 class="sparse-slide anchored" data-anchor-id="residual-table">Residual table</h2>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
 <thead>
-<tr class="gt_col_headings header">
-<th id="label" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col"><strong>Characteristic</strong></th>
-<th id="stat_0" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col"><strong>N = 4,149</strong><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span></th>
+<tr class="header">
+<th style="text-align: right;">literacy</th>
+<th style="text-align: right;">educ</th>
+<th style="text-align: right;">educ_hat</th>
+<th style="text-align: right;">residual</th>
 </tr>
 </thead>
-<tbody class="gt_table_body">
+<tbody>
 <tr class="odd">
-<td class="gt_row gt_left" headers="label">Respondent ID number</td>
-<td class="gt_row gt_center" headers="stat_0">2,075 (1,038, 3,112)</td>
+<td style="text-align: right;">31.7</td>
+<td style="text-align: right;">3.74</td>
+<td style="text-align: right;">-7.995</td>
+<td style="text-align: right;">11.735</td>
 </tr>
 <tr class="even">
-<td class="gt_row gt_left" headers="label">fefam</td>
-<td class="gt_row gt_center" headers="stat_0"><br>
-</td>
+<td style="text-align: right;">79.3</td>
+<td style="text-align: right;">10.40</td>
+<td style="text-align: right;">30.671</td>
+<td style="text-align: right;">-20.271</td>
 </tr>
 <tr class="odd">
-<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;strongly agree</td>
-<td class="gt_row gt_center" headers="stat_0">171 (6.3%)</td>
+<td style="text-align: right;">85.4</td>
+<td style="text-align: right;">20.40</td>
+<td style="text-align: right;">35.626</td>
+<td style="text-align: right;">-15.226</td>
 </tr>
 <tr class="even">
-<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;agree</td>
-<td class="gt_row gt_center" headers="stat_0">516 (19%)</td>
+<td style="text-align: right;">41.0</td>
+<td style="text-align: right;">4.46</td>
+<td style="text-align: right;">-0.440</td>
+<td style="text-align: right;">4.900</td>
 </tr>
 <tr class="odd">
-<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;disagree</td>
-<td class="gt_row gt_center" headers="stat_0">1,182 (43%)</td>
+<td style="text-align: right;">54.7</td>
+<td style="text-align: right;">9.53</td>
+<td style="text-align: right;">10.688</td>
+<td style="text-align: right;">-1.158</td>
 </tr>
 <tr class="even">
-<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;strongly disagree</td>
-<td class="gt_row gt_center" headers="stat_0">866 (32%)</td>
+<td style="text-align: right;">97.9</td>
+<td style="text-align: right;">78.60</td>
+<td style="text-align: right;">45.780</td>
+<td style="text-align: right;">32.820</td>
 </tr>
-<tr class="odd">
-<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Unknown</td>
-<td class="gt_row gt_center" headers="stat_0">1,414</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" headers="label">race</td>
-<td class="gt_row gt_center" headers="stat_0"><br>
-</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;white</td>
-<td class="gt_row gt_center" headers="stat_0">2,651 (65%)</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;black</td>
-<td class="gt_row gt_center" headers="stat_0">775 (19%)</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;other</td>
-<td class="gt_row gt_center" headers="stat_0">659 (16%)</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Unknown</td>
-<td class="gt_row gt_center" headers="stat_0">64</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" headers="label">sex</td>
-<td class="gt_row gt_center" headers="stat_0"><br>
-</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;male</td>
-<td class="gt_row gt_center" headers="stat_0">1,910 (46%)</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;female</td>
-<td class="gt_row gt_center" headers="stat_0">2,216 (54%)</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Unknown</td>
-<td class="gt_row gt_center" headers="stat_0">23</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" headers="label">lifenow</td>
-<td class="gt_row gt_center" headers="stat_0">8.00 (7.00, 9.00)</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Unknown</td>
-<td class="gt_row gt_center" headers="stat_0">2,001</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" headers="label">age</td>
-<td class="gt_row gt_center" headers="stat_0">47 (33, 63)</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Unknown</td>
-<td class="gt_row gt_center" headers="stat_0">256</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" headers="label">educ</td>
-<td class="gt_row gt_center" headers="stat_0">14.00 (12.00, 16.00)</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Unknown</td>
-<td class="gt_row gt_center" headers="stat_0">29</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" headers="label">hrs1</td>
-<td class="gt_row gt_center" headers="stat_0">40 (36, 45)</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Unknown</td>
-<td class="gt_row gt_center" headers="stat_0">1,829</td>
-</tr>
-</tbody><tfoot>
-<tr class="gt_footnotes odd">
-<td colspan="2" class="gt_footnote"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span> Median (Q1, Q3); n (%)</td>
-</tr>
-</tfoot>
-
+</tbody>
 </table>
-
 </div>
-</div>
-</div>
-<div class="notes">
-<p>code-along-07 TASK: Write narrative about what each code chunk is doing!</p>
 </div>
 </section>
-<section id="section" class="level2 sparse-slide" data-menu-title="drop_na()">
-<h2 class="sparse-slide anchored" data-menu-title="drop_na()" data-anchor-id="section"></h2>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>my_data <span class="sc">|&gt;</span></span>
-<span id="cb6-2"><a href="#cb6-2"></a>  <span class="fu">drop_na</span>() <span class="sc">|&gt;</span></span>
-<span id="cb6-3"><a href="#cb6-3"></a>  <span class="fu">tbl_summary</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="ols-regression" class="level2 sparse-slide">
+<h2 class="sparse-slide anchored" data-anchor-id="ols-regression">OLS Regression</h2>
+<div style="font-size: 150%; color: #e74c3c">
+<p><span class="math inline">\(\hat{y} = a + bX\)</span></p>
 </div>
+<p><br></p>
+<p><span style="color: #18BC9C"><strong>Least-squares line</strong></span><br>
+The line where the residual sum of squares is at a minimum</p>
+<p><br></p>
+<p><span style="color: #18BC9C"><strong>Ordinary least-squares (OLS) regression</strong></span><br>
+The statistical technique that produces the least-squares line Sometimes referred to as linear regression</p>
 </section>
-<section id="section-1" class="level2 sparse-slide" data-menu-title="statistics">
-<h2 class="sparse-slide anchored" data-menu-title="statistics" data-anchor-id="section-1"></h2>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>my_data <span class="sc">|&gt;</span></span>
-<span id="cb7-2"><a href="#cb7-2"></a>  <span class="fu">drop_na</span>() <span class="sc">|&gt;</span></span>
-<span id="cb7-3"><a href="#cb7-3"></a>  <span class="fu">tbl_summary</span>(</span>
-<span id="cb7-4"><a href="#cb7-4"></a>    <span class="at">statistic =</span> <span class="fu">list</span>(</span>
-<span id="cb7-5"><a href="#cb7-5"></a>      <span class="fu">all_continuous</span>() <span class="sc">~</span> <span class="st">"{mean} ({sd})"</span>,</span>
-<span id="cb7-6"><a href="#cb7-6"></a>      <span class="fu">all_categorical</span>() <span class="sc">~</span> <span class="st">"{p}"</span>)</span>
-<span id="cb7-7"><a href="#cb7-7"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="section-10" class="level2 sparse-slide" data-menu-title="OLS Regression">
+<h2 class="sparse-slide anchored" data-menu-title="OLS Regression" data-anchor-id="section-10"></h2>
+<div style="font-size: 150%; color: #e74c3c">
+<p><span class="math inline">\(\hat{y} = a + bX\)</span></p>
 </div>
-</section>
-<section id="section-2" class="level2 sparse-slide" data-menu-title="variables">
-<h2 class="sparse-slide anchored" data-menu-title="variables" data-anchor-id="section-2"></h2>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>my_data <span class="sc">|&gt;</span></span>
-<span id="cb8-2"><a href="#cb8-2"></a>  <span class="fu">drop_na</span>() <span class="sc">|&gt;</span></span>
-<span id="cb8-3"><a href="#cb8-3"></a>  <span class="fu">select</span>(lifenow, race, sex, fefam, age, hrs1, educ) <span class="sc">|&gt;</span></span>
-<span id="cb8-4"><a href="#cb8-4"></a>  <span class="fu">tbl_summary</span>(</span>
-<span id="cb8-5"><a href="#cb8-5"></a>    <span class="at">statistic =</span> <span class="fu">list</span>(</span>
-<span id="cb8-6"><a href="#cb8-6"></a>      <span class="fu">all_continuous</span>() <span class="sc">~</span> <span class="st">"{mean} ({sd})"</span>,</span>
-<span id="cb8-7"><a href="#cb8-7"></a>      <span class="fu">all_categorical</span>() <span class="sc">~</span> <span class="st">"{p}"</span>)</span>
-<span id="cb8-8"><a href="#cb8-8"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</section>
-<section id="section-3" class="level2 sparse-slide" data-menu-title="labels">
-<h2 class="sparse-slide anchored" data-menu-title="labels" data-anchor-id="section-3"></h2>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>my_data <span class="sc">|&gt;</span></span>
-<span id="cb9-2"><a href="#cb9-2"></a>  <span class="fu">drop_na</span>() <span class="sc">|&gt;</span></span>
-<span id="cb9-3"><a href="#cb9-3"></a>  <span class="fu">select</span>(lifenow, race, sex, fefam, age, hrs1, educ) <span class="sc">|&gt;</span></span>
-<span id="cb9-4"><a href="#cb9-4"></a>  <span class="fu">tbl_summary</span>(</span>
-<span id="cb9-5"><a href="#cb9-5"></a>    <span class="at">label =</span> <span class="fu">list</span>(</span>
-<span id="cb9-6"><a href="#cb9-6"></a>      race     <span class="sc">~</span> <span class="st">"Race"</span>,</span>
-<span id="cb9-7"><a href="#cb9-7"></a>      sex      <span class="sc">~</span> <span class="st">"Gender"</span>,</span>
-<span id="cb9-8"><a href="#cb9-8"></a>      fefam    <span class="sc">~</span> <span class="st">"Better for man to work, woman tend home"</span>,</span>
-<span id="cb9-9"><a href="#cb9-9"></a>      lifenow  <span class="sc">~</span> <span class="st">"Life satisfaction (0-10)"</span>,</span>
-<span id="cb9-10"><a href="#cb9-10"></a>      age      <span class="sc">~</span> <span class="st">"Age"</span>,</span>
-<span id="cb9-11"><a href="#cb9-11"></a>      hrs1     <span class="sc">~</span> <span class="st">"Number of hours worked last week"</span>,</span>
-<span id="cb9-12"><a href="#cb9-12"></a>      educ     <span class="sc">~</span> <span class="st">"Years of education"</span>),</span>
-<span id="cb9-13"><a href="#cb9-13"></a>    <span class="at">statistic =</span> <span class="fu">list</span>(</span>
-<span id="cb9-14"><a href="#cb9-14"></a>      <span class="fu">all_continuous</span>() <span class="sc">~</span> <span class="st">"{mean} ({sd})"</span>,</span>
-<span id="cb9-15"><a href="#cb9-15"></a>      <span class="fu">all_categorical</span>() <span class="sc">~</span> <span class="st">"{p}"</span></span>
-<span id="cb9-16"><a href="#cb9-16"></a>    ))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</section>
-<section id="section-4" class="level2 sparse-slide" data-menu-title="dichotomous">
-<h2 class="sparse-slide anchored" data-menu-title="dichotomous" data-anchor-id="section-4"></h2>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>my_data <span class="sc">|&gt;</span></span>
-<span id="cb10-2"><a href="#cb10-2"></a>  <span class="fu">drop_na</span>() <span class="sc">|&gt;</span></span>
-<span id="cb10-3"><a href="#cb10-3"></a>  <span class="fu">select</span>(lifenow, race, sex, fefam, age, hrs1, educ) <span class="sc">|&gt;</span></span>
-<span id="cb10-4"><a href="#cb10-4"></a>  <span class="fu">tbl_summary</span>(</span>
-<span id="cb10-5"><a href="#cb10-5"></a>    <span class="at">label =</span> <span class="fu">list</span>(</span>
-<span id="cb10-6"><a href="#cb10-6"></a>      race     <span class="sc">~</span> <span class="st">"Race"</span>,</span>
-<span id="cb10-7"><a href="#cb10-7"></a>      sex      <span class="sc">~</span> <span class="st">"Women"</span>,</span>
-<span id="cb10-8"><a href="#cb10-8"></a>      fefam    <span class="sc">~</span> <span class="st">"Better for man to work, woman tend home"</span>,</span>
-<span id="cb10-9"><a href="#cb10-9"></a>      lifenow  <span class="sc">~</span> <span class="st">"Life satisfaction (0-10)"</span>,</span>
-<span id="cb10-10"><a href="#cb10-10"></a>      age      <span class="sc">~</span> <span class="st">"Age"</span>,</span>
-<span id="cb10-11"><a href="#cb10-11"></a>      hrs1     <span class="sc">~</span> <span class="st">"Number of hours worked last week"</span>,</span>
-<span id="cb10-12"><a href="#cb10-12"></a>      educ     <span class="sc">~</span> <span class="st">"Years of education"</span>),</span>
-<span id="cb10-13"><a href="#cb10-13"></a>     <span class="at">type  =</span> <span class="fu">list</span>(sex  <span class="sc">~</span> <span class="st">"dichotomous"</span>),</span>
-<span id="cb10-14"><a href="#cb10-14"></a>     <span class="at">value =</span> <span class="fu">list</span>(<span class="at">sex  =</span> <span class="st">"female"</span>),  </span>
-<span id="cb10-15"><a href="#cb10-15"></a>    <span class="at">statistic =</span> <span class="fu">list</span>(</span>
-<span id="cb10-16"><a href="#cb10-16"></a>      <span class="fu">all_continuous</span>() <span class="sc">~</span> <span class="st">"{mean} ({sd})"</span>,</span>
-<span id="cb10-17"><a href="#cb10-17"></a>      <span class="fu">all_categorical</span>() <span class="sc">~</span> <span class="st">"{p}"</span>),</span>
-<span id="cb10-18"><a href="#cb10-18"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</section>
-<section id="section-5" class="level2 sparse-slide" data-menu-title="group">
-<h2 class="sparse-slide anchored" data-menu-title="group" data-anchor-id="section-5"></h2>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>my_data <span class="sc">|&gt;</span></span>
-<span id="cb11-2"><a href="#cb11-2"></a>  <span class="fu">drop_na</span>() <span class="sc">|&gt;</span></span>
-<span id="cb11-3"><a href="#cb11-3"></a>  <span class="fu">select</span>(lifenow, race, sex, fefam, age, hrs1, educ) <span class="sc">|&gt;</span></span>
-<span id="cb11-4"><a href="#cb11-4"></a>  <span class="fu">tbl_summary</span>(</span>
-<span id="cb11-5"><a href="#cb11-5"></a>    <span class="at">by =</span> race,  </span>
-<span id="cb11-6"><a href="#cb11-6"></a>    <span class="at">label =</span> <span class="fu">list</span>(</span>
-<span id="cb11-7"><a href="#cb11-7"></a>      sex      <span class="sc">~</span> <span class="st">"Women"</span>,</span>
-<span id="cb11-8"><a href="#cb11-8"></a>      fefam    <span class="sc">~</span> <span class="st">"Better for man to work, woman tend home"</span>,</span>
-<span id="cb11-9"><a href="#cb11-9"></a>      lifenow  <span class="sc">~</span> <span class="st">"Life satisfaction (0-10)"</span>,</span>
-<span id="cb11-10"><a href="#cb11-10"></a>      age      <span class="sc">~</span> <span class="st">"Age"</span>,</span>
-<span id="cb11-11"><a href="#cb11-11"></a>      hrs1     <span class="sc">~</span> <span class="st">"Number of hours worked last week"</span>,</span>
-<span id="cb11-12"><a href="#cb11-12"></a>      educ     <span class="sc">~</span> <span class="st">"Years of education"</span>),</span>
-<span id="cb11-13"><a href="#cb11-13"></a>    <span class="at">type =</span> <span class="fu">list</span>(sex <span class="sc">~</span> <span class="st">"dichotomous"</span>),</span>
-<span id="cb11-14"><a href="#cb11-14"></a>    <span class="at">value =</span> <span class="fu">list</span>(<span class="at">sex =</span> <span class="st">"female"</span>),  </span>
-<span id="cb11-15"><a href="#cb11-15"></a>    <span class="at">statistic =</span> <span class="fu">list</span>(</span>
-<span id="cb11-16"><a href="#cb11-16"></a>      <span class="fu">all_continuous</span>() <span class="sc">~</span> <span class="st">"{mean} ({sd})"</span>,</span>
-<span id="cb11-17"><a href="#cb11-17"></a>      <span class="fu">all_categorical</span>() <span class="sc">~</span> <span class="st">"{p}"</span>)</span>
-<span id="cb11-18"><a href="#cb11-18"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</section>
-<section id="section-6" class="level2 sparse-slide" data-menu-title="total">
-<h2 class="sparse-slide anchored" data-menu-title="total" data-anchor-id="section-6"></h2>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>my_data <span class="sc">|&gt;</span></span>
-<span id="cb12-2"><a href="#cb12-2"></a>  <span class="fu">drop_na</span>() <span class="sc">|&gt;</span></span>
-<span id="cb12-3"><a href="#cb12-3"></a>  <span class="fu">select</span>(lifenow, race, sex, fefam, age, hrs1, educ) <span class="sc">|&gt;</span></span>
-<span id="cb12-4"><a href="#cb12-4"></a>  <span class="fu">tbl_summary</span>(</span>
-<span id="cb12-5"><a href="#cb12-5"></a>    <span class="at">by =</span> race,</span>
-<span id="cb12-6"><a href="#cb12-6"></a>    <span class="at">label =</span> <span class="fu">list</span>(</span>
-<span id="cb12-7"><a href="#cb12-7"></a>      sex      <span class="sc">~</span> <span class="st">"Women"</span>,</span>
-<span id="cb12-8"><a href="#cb12-8"></a>      fefam    <span class="sc">~</span> <span class="st">"Better for man to work, woman tend home"</span>,</span>
-<span id="cb12-9"><a href="#cb12-9"></a>      lifenow  <span class="sc">~</span> <span class="st">"Life satisfaction (0–10)"</span>,</span>
-<span id="cb12-10"><a href="#cb12-10"></a>      age      <span class="sc">~</span> <span class="st">"Age"</span>,</span>
-<span id="cb12-11"><a href="#cb12-11"></a>      hrs1     <span class="sc">~</span> <span class="st">"Number of hours worked last week"</span>,</span>
-<span id="cb12-12"><a href="#cb12-12"></a>      educ     <span class="sc">~</span> <span class="st">"Years of education"</span>),</span>
-<span id="cb12-13"><a href="#cb12-13"></a>    <span class="at">type =</span> <span class="fu">list</span>(sex <span class="sc">~</span> <span class="st">"dichotomous"</span>),</span>
-<span id="cb12-14"><a href="#cb12-14"></a>    <span class="at">value =</span> <span class="fu">list</span>(<span class="at">sex =</span> <span class="st">"female"</span>),  </span>
-<span id="cb12-15"><a href="#cb12-15"></a>    <span class="at">statistic =</span> <span class="fu">list</span>(</span>
-<span id="cb12-16"><a href="#cb12-16"></a>      <span class="fu">all_continuous</span>() <span class="sc">~</span> <span class="st">"{mean} ({sd})"</span>,</span>
-<span id="cb12-17"><a href="#cb12-17"></a>      <span class="fu">all_categorical</span>() <span class="sc">~</span> <span class="st">"{p}"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb12-18"><a href="#cb12-18"></a>  <span class="fu">add_overall</span>()  <span class="co"># This adds the Total column</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</section>
-<section id="section-7" class="level2 sparse-slide" data-menu-title="sub-header">
-<h2 class="sparse-slide anchored" data-menu-title="sub-header" data-anchor-id="section-7"></h2>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>my_data <span class="sc">|&gt;</span></span>
-<span id="cb13-2"><a href="#cb13-2"></a>  <span class="fu">drop_na</span>() <span class="sc">|&gt;</span></span>
-<span id="cb13-3"><a href="#cb13-3"></a>  <span class="fu">select</span>(lifenow, race, sex, fefam, age, hrs1, educ) <span class="sc">|&gt;</span></span>
-<span id="cb13-4"><a href="#cb13-4"></a>  <span class="fu">tbl_summary</span>(</span>
-<span id="cb13-5"><a href="#cb13-5"></a>    <span class="at">by =</span> race,</span>
-<span id="cb13-6"><a href="#cb13-6"></a>    <span class="at">label =</span> <span class="fu">list</span>(</span>
-<span id="cb13-7"><a href="#cb13-7"></a>      sex      <span class="sc">~</span> <span class="st">"Women"</span>,</span>
-<span id="cb13-8"><a href="#cb13-8"></a>      fefam    <span class="sc">~</span> <span class="st">"Better for man to work, woman tend home"</span>,</span>
-<span id="cb13-9"><a href="#cb13-9"></a>      lifenow  <span class="sc">~</span> <span class="st">"Life satisfaction (0–10)"</span>,</span>
-<span id="cb13-10"><a href="#cb13-10"></a>      age      <span class="sc">~</span> <span class="st">"Age"</span>,</span>
-<span id="cb13-11"><a href="#cb13-11"></a>      hrs1     <span class="sc">~</span> <span class="st">"Number of hours worked last week"</span>,</span>
-<span id="cb13-12"><a href="#cb13-12"></a>      educ     <span class="sc">~</span> <span class="st">"Years of education"</span>),</span>
-<span id="cb13-13"><a href="#cb13-13"></a>    <span class="at">type =</span> <span class="fu">list</span>(sex <span class="sc">~</span> <span class="st">"dichotomous"</span>),</span>
-<span id="cb13-14"><a href="#cb13-14"></a>    <span class="at">value =</span> <span class="fu">list</span>(<span class="at">sex =</span> <span class="st">"female"</span>),  </span>
-<span id="cb13-15"><a href="#cb13-15"></a>    <span class="at">statistic =</span> <span class="fu">list</span>(</span>
-<span id="cb13-16"><a href="#cb13-16"></a>      <span class="fu">all_continuous</span>() <span class="sc">~</span> <span class="st">"{mean} ({sd})"</span>,</span>
-<span id="cb13-17"><a href="#cb13-17"></a>      <span class="fu">all_categorical</span>() <span class="sc">~</span> <span class="st">"{p}"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb13-18"><a href="#cb13-18"></a>  <span class="fu">add_overall</span>()  <span class="sc">|&gt;</span></span>
-<span id="cb13-19"><a href="#cb13-19"></a>  <span class="fu">modify_header</span>(</span>
-<span id="cb13-20"><a href="#cb13-20"></a>    <span class="at">label =</span> <span class="st">'**Variable**'</span>) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</section>
-<section id="section-8" class="level2 sparse-slide" data-menu-title="two-lines">
-<h2 class="sparse-slide anchored" data-menu-title="two-lines" data-anchor-id="section-8"></h2>
-<blockquote class="blockquote">
-<p>Change YAML <code>output: pdf_document</code></p>
-</blockquote>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>my_data <span class="sc">|&gt;</span></span>
-<span id="cb14-2"><a href="#cb14-2"></a>  <span class="fu">drop_na</span>() <span class="sc">|&gt;</span></span>
-<span id="cb14-3"><a href="#cb14-3"></a>  <span class="fu">select</span>(lifenow, race, sex, fefam, age, hrs1, educ) <span class="sc">|&gt;</span></span>
-<span id="cb14-4"><a href="#cb14-4"></a>  <span class="fu">tbl_summary</span>(</span>
-<span id="cb14-5"><a href="#cb14-5"></a>    <span class="at">by =</span> race,</span>
-<span id="cb14-6"><a href="#cb14-6"></a>    <span class="at">label =</span> <span class="fu">list</span>(</span>
-<span id="cb14-7"><a href="#cb14-7"></a>      sex      <span class="sc">~</span> <span class="st">"Women"</span>,</span>
-<span id="cb14-8"><a href="#cb14-8"></a>      fefam    <span class="sc">~</span> <span class="st">"Better for man to work, </span><span class="sc">\n</span><span class="st">woman tend home"</span>,</span>
-<span id="cb14-9"><a href="#cb14-9"></a>      lifenow  <span class="sc">~</span> <span class="st">"Life satisfaction (0–10)"</span>,</span>
-<span id="cb14-10"><a href="#cb14-10"></a>      age      <span class="sc">~</span> <span class="st">"Age"</span>,</span>
-<span id="cb14-11"><a href="#cb14-11"></a>      hrs1     <span class="sc">~</span> <span class="st">"Number of hours </span><span class="sc">\n</span><span class="st">worked last week"</span>,</span>
-<span id="cb14-12"><a href="#cb14-12"></a>      educ     <span class="sc">~</span> <span class="st">"Years of education"</span>),</span>
-<span id="cb14-13"><a href="#cb14-13"></a>    <span class="at">type =</span> <span class="fu">list</span>(sex <span class="sc">~</span> <span class="st">"dichotomous"</span>),</span>
-<span id="cb14-14"><a href="#cb14-14"></a>    <span class="at">value =</span> <span class="fu">list</span>(<span class="at">sex =</span> <span class="st">"female"</span>),  </span>
-<span id="cb14-15"><a href="#cb14-15"></a>    <span class="at">statistic =</span> <span class="fu">list</span>(</span>
-<span id="cb14-16"><a href="#cb14-16"></a>      <span class="fu">all_continuous</span>() <span class="sc">~</span> <span class="st">"{mean} ({sd})"</span>,</span>
-<span id="cb14-17"><a href="#cb14-17"></a>      <span class="fu">all_categorical</span>() <span class="sc">~</span> <span class="st">"{p}"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb14-18"><a href="#cb14-18"></a>  <span class="fu">add_overall</span>() <span class="sc">|&gt;</span></span>
-<span id="cb14-19"><a href="#cb14-19"></a>  <span class="fu">modify_header</span>(</span>
-<span id="cb14-20"><a href="#cb14-20"></a>    <span class="at">label =</span> <span class="st">'**Variable**'</span>) <span class="sc">|&gt;</span></span>
-<span id="cb14-21"><a href="#cb14-21"></a>  <span class="fu">as_flex_table</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</section>
-<section id="title-notes" class="level2 sparse-slide">
-<h2 class="sparse-slide anchored" data-anchor-id="title-notes">Title &amp; Notes</h2>
+<p><br></p>
+<p>Calculus demonstrates the formula for <span class="math inline">\(b\)</span> and <span class="math inline">\(a\)</span> will result in a regression line that minimizes the sum of squares.</p>
+<p><br></p>
 <div class="task">
-<p><i class="fa-solid fa-check-double" aria-label="check-double"></i> Add a title and footnotes to your Quarto document</p>
-</div>
-<p><br></p>
-<p>Title:<br>
-&gt; <strong>Table 01. Unweighted Descriptive Statistics by Race</strong></p>
-<p><br></p>
-<p>Footnotes:<br>
-&gt; <em>Notes: Unweighted data from the 2022 U.S. General Social Survey</em></p>
-</section>
-</section>
-<section id="data-quality-essentials" class="level1 theme-section">
-<h1 class="theme-section">Data Quality Essentials</h1>
-<section id="missing-data" class="level2 sparse-slide" data-menu-title="Missing Data: Problem">
-<h2 class="sparse-slide anchored" data-menu-title="Missing Data: Problem" data-anchor-id="missing-data">Missing Data:</h2>
-<p><span style="color: #E74C3C; font-size: 200%; font-family: 'Shadows Into Light'"><strong>Problem</strong></span></p>
-<ul>
-<li>Reduces sample size (and thus, statistical power)</li>
-<li>Potential bias (and thus, non-representativeness)</li>
-</ul>
-<div class="notes">
-<p>missing for lots of reasons, some of which can be addressed.<br>
-requires another hour of lecture which we don’t have.</p>
+<p><i class="fa-solid fa-check-double" aria-label="check-double"></i> Run a regression model.</p>
 </div>
 </section>
-<section id="missing-data-1" class="level2 sparse-slide" data-menu-title="Missing Data: Detection">
-<h2 class="sparse-slide anchored" data-menu-title="Missing Data: Detection" data-anchor-id="missing-data-1">Missing Data:</h2>
-<p><span style="color: #F39C12; font-size: 200%; font-family: 'Shadows Into Light'"><strong>Detection</strong></span></p>
-<ul>
-<li>descriptive statistics of each variable</li>
-<li>Ns change across regression models</li>
-<li>ggplot2 warning: “Removed X rows containing missing values”.</li>
-</ul>
-</section>
-<section id="missing-data-2" class="level2 sparse-slide" data-menu-title="Missing Data: Solutions">
-<h2 class="sparse-slide anchored" data-menu-title="Missing Data: Solutions" data-anchor-id="missing-data-2">Missing Data:</h2>
-<p><span style="color: #18BC9C; font-size: 200%; font-family: 'Shadows Into Light'"><strong>Solutions</strong></span></p>
-<ul>
-<li>drop or change variable(s)</li>
-<li>treat missing as a category</li>
-<li>recode values</li>
-<li>listwise deletion</li>
-<li>imputation</li>
-</ul>
-<div class="notes">
-<ul>
-<li>mutate: missing as category<br>
-</li>
-<li>logical skip – recode<br>
-</li>
-<li>listwise deletion – what we’ve been doing<br>
-</li>
-</ul>
-</div>
-</section>
-<section id="missing-data-solutions" class="level2 sparse-slide">
-<h2 class="sparse-slide anchored" data-anchor-id="missing-data-solutions">Missing Data: Solutions</h2>
-<p>Listwise deletion</p>
+<section id="section-11" class="level2 sparse-slide" data-menu-title="OLS Regression">
+<h2 class="sparse-slide anchored" data-menu-title="OLS Regression" data-anchor-id="section-11"></h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>df_clean <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(educ <span class="sc">~</span> literacy, <span class="at">data =</span> df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = educ ~ literacy, data = df)
+
+Coefficients:
+(Intercept)     literacy  
+   -33.7449       0.8123  </code></pre>
+</div>
 </div>
 <p><br></p>
 <p>. . .</p>
-<p>Imputation</p>
+<div style="font-size: 80%; color: #e74c3c">
+<p><span class="math inline">\(\hat{y} = -33.75 + .81X\)</span></p>
+</div>
+</section>
+<section id="section-12" class="level2 sparse-slide" data-menu-title="Interpretation">
+<h2 class="sparse-slide anchored" data-menu-title="Interpretation" data-anchor-id="section-12"></h2>
+<div style="font-size: 80%; color: #e74c3c">
+<p><span class="math inline">\(\hat{y} = -33.75 + .81X\)</span></p>
+</div>
+<p><br></p>
+<p>When the literacy rate in a country is 0, the college enrollment rate is predicted to be -33.57 (<span class="math inline">\(a\)</span>)</p>
+<p><br></p>
+<p>For every one unit increase in the literacy rate, the college enrollment rate is expected to rise by 0.81 (<span class="math inline">\(b\)</span>)</p>
+<p>. . .</p>
+<div class="task">
+<p><i class="fa-solid fa-lightbulb" aria-label="lightbulb"></i> Is this statistically significant?</p>
+</div>
+</section>
+<section id="cor.test" class="level2 sparse-slide">
+<h2 class="sparse-slide anchored" data-anchor-id="cor.test"><code>cor.test()</code></h2>
+<div class="task">
+<p><i class="fa-solid fa-check-double" aria-label="check-double"></i> Run and interpret the correlation for <code>educ</code> and <code>literacy</code>.</p>
+</div>
+<p><br></p>
+<p>. . .</p>
+<div class="cell" data-output-location="column-fragment">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor.test</span>(</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>     <span class="sc">~</span> educ <span class="sc">+</span> literacy,</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">data =</span> df,</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">method =</span> <span class="st">"pearson"</span>,</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">na.action =</span> na.omit</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a> ) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Pearson's product-moment correlation
+
+data:  educ and literacy
+t = 3.942, df = 10, p-value = 0.002766
+alternative hypothesis: true correlation is not equal to 0
+95 percent confidence interval:
+ 0.3731885 0.9352545
+sample estimates:
+      cor 
+0.7800287 </code></pre>
+</div>
+</div>
+<div class="notes">
+<p>There is a strong, positive association between the literacy rate and enrollment in tertiary education among nations.</p>
+</div>
+</section>
+<section id="get_regression_table" class="level2 sparse-slide">
+<h2 class="sparse-slide anchored" data-anchor-id="get_regression_table"><code>get_regression_table()</code></h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">var_A =</span> <span class="fu">if_else</span>(<span class="fu">is.na</span>(var_A), </span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>                         <span class="fu">mean</span>(var_A, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), var_A))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(educ <span class="sc">~</span> literacy, <span class="at">data =</span> df)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="fu">get_regression_table</span>(model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 7
+  term      estimate std_error statistic p_value lower_ci upper_ci
+  &lt;chr&gt;        &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+1 intercept  -33.7      16.0       -2.10   0.062  -69.5       1.98
+2 literacy     0.812     0.206      3.94   0.003    0.353     1.27</code></pre>
 </div>
-</section>
-<section id="outliers" class="level2 sparse-slide" data-menu-title="Outliers: Problem">
-<h2 class="sparse-slide anchored" data-menu-title="Outliers: Problem" data-anchor-id="outliers">Outliers:</h2>
-<p><span style="color: #E74C3C; font-size: 200%; font-family: 'Shadows Into Light'"><strong>Problem</strong></span></p>
-<ul>
-<li>conclusions may be inaccurate or unreliable</li>
-<li>may mask patterns or inflate summary statistics</li>
-<li>can skew scales in figures</li>
-</ul>
+</div>
+<p><br></p>
+<div style="font-size: 80%">
+<p><span style="color: #18BC9C"><strong>statistic</strong></span> Test whether the coefficient is different from 0. Get the t-values by dividing the estimate by its standard error.</p>
+<p><span style="color: #18BC9C"><strong>p-value</strong></span> Two-tail p-values for the test statistic</p>
+</div>
 <div class="notes">
-<p>makes replication unlikely</p>
+<p>The p value is the same for correlation and simple regression.</p>
 </div>
 </section>
-<section id="outliers-1" class="level2 sparse-slide" data-menu-title="Outliers: Solutions">
-<h2 class="sparse-slide anchored" data-menu-title="Outliers: Solutions" data-anchor-id="outliers-1">Outliers:</h2>
-<p><span style="color: #18BC9C; font-size: 200%; font-family: 'Shadows Into Light'"><strong>Solutions</strong></span></p>
-<ul>
-<li>descriptive statistics of each variable</li>
-<li>scatterplots</li>
-</ul>
+<section id="prediction" class="level2 sparse-slide">
+<h2 class="sparse-slide anchored" data-anchor-id="prediction">Prediction</h2>
+<div style="font-size: 100%; color: #e74c3c">
+<p><span class="math inline">\(\hat{y} = -33.75 + .81X\)</span></p>
+</div>
+<p><br></p>
+<p>A regression equation can also be used to create predicted Y values for each value of X</p>
+<p><br></p>
+<p>If X = 60, <span class="math inline">\(Y\)</span> is predicted to be:</p>
+<p><span class="math inline">\(\hat{y} = -33.75 + .81(60)\)</span><br>
+<span class="math inline">\(\hat{y} = -33.75 + 48.6\)</span><br>
+<span class="math inline">\(\hat{y} = 15.03\)</span></p>
+</section>
+<section id="section-13" class="level2 sparse-slide" data-menu-title="Prediction">
+<h2 class="sparse-slide anchored" data-menu-title="Prediction" data-anchor-id="section-13"></h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="lecture-07_files/figure-html/prediction-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="categorical-iv" class="level1 theme-section">
+<h1 class="theme-section">Categorical IV</h1>
+<section id="add-a-categorical-variable" class="level2 sparse-slide">
+<h2 class="sparse-slide anchored" data-anchor-id="add-a-categorical-variable">Add a categorical variable</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use mutate and case_when to add the country_group column</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">country_group =</span> <span class="fu">case_when</span>(</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    literacy <span class="sc">&lt;</span> <span class="dv">50</span> <span class="sc">~</span> <span class="st">"Low Literacy"</span>,</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    literacy <span class="sc">&gt;=</span> <span class="dv">50</span> <span class="sc">&amp;</span> literacy <span class="sc">&lt;=</span> <span class="dv">80</span> <span class="sc">~</span> <span class="st">"Medium Literacy"</span>,</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    literacy <span class="sc">&gt;</span> <span class="dv">80</span> <span class="sc">~</span> <span class="st">"High Literacy"</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  ))</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  literacy  educ   country_group
+1     31.7  3.74    Low Literacy
+2     79.3 10.40 Medium Literacy
+3     85.4 20.40   High Literacy
+4     41.0  4.46    Low Literacy
+5     54.7  9.53 Medium Literacy
+6     97.9 78.60   High Literacy</code></pre>
+</div>
+</div>
+</section>
+<section id="get_regression_table-1" class="level2 sparse-slide">
+<h2 class="sparse-slide anchored" data-anchor-id="get_regression_table-1"><code>get_regression_table()</code></h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>model_2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(educ <span class="sc">~</span> country_group, <span class="at">data =</span> df)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="fu">get_regression_table</span>(model_2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 7
+  term                    estimate std_error statistic p_value lower_ci upper_ci
+  &lt;chr&gt;                      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+1 intercept                   44.5      6.94      6.42   0         28.8    60.2 
+2 country_group-Low Lite…    -40.4     13.9      -2.91   0.017    -71.8    -9.03
+3 country_group-Medium L…    -32.9     11.0      -3      0.015    -57.8    -8.10</code></pre>
+</div>
+</div>
 <div class="notes">
-<ul>
-<li>are the values believable?<br>
-</li>
-<li>IQR (Interquartile Range): Identifies values outside the typical spread.<br>
-</li>
-</ul>
+<p>What does the intercept mean? Which group has the smallest proportion of college enrolles? Is it statistically significantly different (than what group?)? What proportion is enrolled in college in low literacy countries? medium literacy?</p>
 </div>
 </section>
-<section id="outliers-2" class="level2 sparse-slide" data-menu-title="Outliers: Solutions">
-<h2 class="sparse-slide anchored" data-menu-title="Outliers: Solutions" data-anchor-id="outliers-2">Outliers:</h2>
-<p><span style="color: #18BC9C; font-size: 200%; font-family: 'Shadows Into Light'"><strong>Solutions</strong></span></p>
-<ul>
-<li>correct or remove errors</li>
-<li>cap or transform: limit their influence</li>
-<li>transparent reporting (drop or keep)</li>
-</ul>
+</section>
+<section id="r2" class="level1 theme-section">
+<h1 class="theme-section"><span class="math inline">\(R^2\)</span></h1>
+<section id="proportional-reduction-of-error" class="level2 sparse-slide">
+<h2 class="sparse-slide anchored" data-anchor-id="proportional-reduction-of-error">Proportional Reduction of Error</h2>
+<p>The better a least-squares line is, the better it can predict an outcome with the least amount of error</p>
+<p><br></p>
+<p><span class="math inline">\(r^2\)</span> is a <strong>p</strong>roportional <strong>r</strong>eduction of <strong>e</strong>rror (PRE) measure</p>
+<p><br></p>
+<p><span class="math inline">\(PRE = \frac{E1 - E2}{E1}\)</span></p>
+<p><br></p>
+<p>It tells us how well the regression model fits the data</p>
+</section>
+<section id="section-14" class="level2 sparse-slide smaller" data-menu-title="PRE Equation">
+<h2 class="sparse-slide smaller anchored" data-menu-title="PRE Equation" data-anchor-id="section-14"></h2>
+<p><span class="math inline">\(PRE = \frac{E1 - E2}{E1}\)</span></p>
+<p><br></p>
+<div class="columns smaller">
+<div class="column">
+<p><strong>E1</strong><br>
+Errors of prediction made when IV is ignored</p>
+<p><br></p>
+<p>Equivalent to the sum of errors we would have if we guessed that every Y was equal to the mean of Y</p>
+<p><br></p>
+<p><span style="color: #3498db; font-family: 'Shadows Into Light'">aka Sum of Squares Total (SST)</span></p>
+</div><div class="column">
+<p><strong>E2</strong><br>
+Errors of prediction made based on IV</p>
+<p><br></p>
+<p>Equivalent to the sum of errors we would have if we used our least squares line to predict Y</p>
+<p><br></p>
+<p><span style="color: #3498db; font-family: 'Shadows Into Light'">aka Sum of Squared Errors (SSE)</span></p>
+</div>
+</div>
+</section>
+<section id="section-15" class="level2 sparse-slide" data-menu-title="`get_regression_points()`">
+<h2 class="sparse-slide anchored" data-menu-title="`get_regression_points()`" data-anchor-id="section-15"></h2>
+<div class="task">
+<p><i class="fa-solid fa-check-double" aria-label="check-double"></i> Use <code>get_regression_points()</code> to see the residuals.</p>
+</div>
+<p><br></p>
+<p>. . .</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(educ <span class="sc">~</span> literacy, <span class="at">data =</span> df)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="fu">get_regression_points</span>(model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 12 × 5
+      ID  educ literacy educ_hat residual
+   &lt;int&gt; &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+ 1     1  3.74     31.7    -8.00    11.7 
+ 2     2 10.4      79.3    30.7    -20.3 
+ 3     3 20.4      85.4    35.6    -15.2 
+ 4     4  4.46     41      -0.44     4.9 
+ 5     5  9.53     54.7    10.7     -1.16
+ 6     6 78.6      97.9    45.8     32.8 
+ 7     7 31.5      92.8    41.6    -10.1 
+ 8     8 16.2      67.1    20.8     -4.56
+ 9     9 65.8      97.8    45.7     20.1 
+10    10 10.3      60.4    15.3     -5.02
+11    11 30.8      87.5    37.3     -6.53
+12    12 40.1      99.1    46.8     -6.65</code></pre>
+</div>
+</div>
+</section>
+<section id="section-16" class="level2 sparse-slide" data-menu-title="$R^2$ interpretation">
+<h2 class="sparse-slide anchored" data-menu-title="$R^2$ interpretation" data-anchor-id="section-16"></h2>
+<p><span class="math inline">\(R^2\)</span> ranges from 0 to 1.0</p>
+<p><br></p>
+<p><strong>1.0</strong> = Our independent variable accounts for all the variation that we find in the dependent variable (it predicts the dependent variable perfectly).</p>
+<p><br></p>
+<p><strong>0.0</strong> = Our independent variable does not improve our ability to predict the dependent variable.</p>
+<p><br></p>
+<p><span style="color: #3498db; font-size: 100%; font-family: 'Shadows Into Light'">In the social sciences, a high <span class="math inline">\(R^2\)</span> is rare!</span></p>
+</section>
+<section id="r2-calculation" class="level2 sparse-slide">
+<h2 class="sparse-slide anchored" data-anchor-id="r2-calculation"><span class="math inline">\(R^2\)</span> calculation</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>my_test <span class="ot">&lt;-</span> <span class="fu">cor.test</span>(</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>     <span class="sc">~</span> educ <span class="sc">+</span> literacy,</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">data =</span> df,</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">method =</span> <span class="st">"pearson"</span>,</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">na.action =</span> na.omit</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a> ) </span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>my_test<span class="sc">$</span>estimate</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      cor 
+0.7800287 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>(my_test<span class="sc">$</span>estimate)<span class="sc">^</span><span class="dv">2</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      cor 
+0.6084447 </code></pre>
+</div>
+</div>
+</section>
+<section id="section-17" class="level2 sparse-slide" data-menu-title="`get_regression_summaries()`">
+<h2 class="sparse-slide anchored" data-menu-title="`get_regression_summaries()`" data-anchor-id="section-17"></h2>
+<div class="task">
+<p><i class="fa-solid fa-check-double" aria-label="check-double"></i> Use <code>get_regression_summaries()</code> to see <span class="math inline">\(R^2\)</span>.</p>
+</div>
+<p><br></p>
+<p>. . .</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(educ <span class="sc">~</span> literacy, <span class="at">data =</span> df)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="fu">get_regression_summaries</span>(model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 9
+  r_squared adj_r_squared   mse  rmse sigma statistic p_value    df  nobs
+      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1     0.608         0.569  210.  14.5  15.9      15.5   0.003     1    12</code></pre>
+</div>
+</div>
+<p><br></p>
+<p><span class="math inline">\(R^2\)</span> shows the amount of variance of the DV is explained by IV(s).</p>
+</section>
+<section id="r2-interpretation" class="level2 sparse-slide">
+<h2 class="sparse-slide anchored" data-anchor-id="r2-interpretation"><span class="math inline">\(R^2\)</span> interpretation</h2>
+<p>An <span class="math inline">\(R^2\)</span> of <span class="math inline">\(0.61\)</span> means that knowing the literacy rate of a country reduces our error in predicting college enrollment by <span style="color: #18bc9c"><strong>61%</strong></span>.</p>
+<p><br></p>
+<p>The national literacy rate explains <span style="color: #18bc9c"><strong>61%</strong></span> of variation in college enrollment.</p>
 </section>
 </section>
 <section id="think-like-a-statistician" class="level1 sparse-slide" data-background-image="images/lightbulb-solid.png" data-background-size="80px" data-background-repeat="repeat">
 <h1 class="sparse-slide" data-background-image="images/lightbulb-solid.png" data-background-size="80px" data-background-repeat="repeat">Think Like a Statistician</h1>
-<section id="think-like-a-statistician-1" class="level2" data-background-image="images/lightbulb-solid.png" data-background-size="80px" data-background-repeat="repeat">
-<h2 data-background-image="images/lightbulb-solid.png" data-background-size="80px" data-background-repeat="repeat" class="anchored" data-anchor-id="think-like-a-statistician-1">Think Like a Statistician</h2>
+<section id="think-like-a-statistician-1" class="level2 sparse-slide" data-background-image="images/lightbulb-solid.png" data-background-size="80px" data-background-repeat="repeat">
+<h2 class="sparse-slide anchored" data-background-image="images/lightbulb-solid.png" data-background-size="80px" data-background-repeat="repeat" data-anchor-id="think-like-a-statistician-1">Think Like a Statistician</h2>
 <div class="task">
-<p><i class="fa-solid fa-check-double" aria-label="check-double"></i> 1. Create Table 01 for your research project</p>
+<p><i class="fa-solid fa-check-double" aria-label="check-double"></i> 1. Run and interpret a simple regression using your IPUMS data</p>
 </div>
 <p><br></p>
 <div class="task">
-<p><i class="fa-solid fa-check-double" aria-label="check-double"></i> 2. Create a scatterplot with your DV &amp; 1 IV</p>
-</div>
-<p><br></p>
-<div class="task">
-<p><i class="fa-solid fa-check-double" aria-label="check-double"></i> 3. Create a bargraph with your DV &amp; 1 IV</p>
+<p><i class="fa-solid fa-check-double" aria-label="check-double"></i> 2. Run and interpret a regression with a categorical IV and your DV using your IPUMS data</p>
 </div>
 
 

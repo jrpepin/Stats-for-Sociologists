@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.8.26">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -66,14 +66,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <meta name="quarto:offset" content="../">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-991b1886d3c685c7aa2b62b80640c7af.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-1d4f84655f446305ac42a8f1abcf7405.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <link href="../site_libs/quarto-contrib/fontawesome6-1.2.0/all.min.css" rel="stylesheet">
 <link href="../site_libs/quarto-contrib/fontawesome6-1.2.0/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -151,6 +152,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ul>
 <li>R &amp; RStudio Workflow</li>
 <li>Quarto</li>
+<li>Coding Basics</li>
 <li>Getting Started</li>
 </ul>
 </section>
@@ -160,6 +162,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ul>
 <li>setup a workflow using R and RStudio<br>
 </li>
+<li>use R to conduct basic calculations/comparisons</li>
 <li>familiarize yourself with a dataset using R and RStudio<br>
 </li>
 <li>create a reproducible report using Quarto<br>
@@ -245,7 +248,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<i class="fa-solid fa-hat-wizard" aria-label="hat-wizard"></i> Heads Up!
+<span class="screen-reader-only">Tip</span><i class="fa-solid fa-hat-wizard" aria-label="hat-wizard"></i> Heads Up!
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -449,6 +452,305 @@ Source pane: best for documenting.</p>
 <p>There’s no command in the R console to save scripts or Quarto files— you use the editor’s <span style="color: #3498DB">File</span> &gt; <span style="color: #3498DB">Save As</span> or Ctrl+S.</p>
 </section>
 </section>
+<section id="coding-basics" class="level1 theme-section page-columns page-full">
+<h1 class="theme-section">Coding Basics</h1>
+<section id="coding-basics-1" class="level2 smaller page-columns page-full">
+<h2 class="smaller anchored" data-anchor-id="coding-basics-1">Coding basics</h2>
+<div class="columns">
+<div class="column">
+<p>You can use R to do basic math calculations</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">+</span> <span class="dv">2</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> <span class="sc">*</span> <span class="dv">5</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 10</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>(<span class="dv">1</span> <span class="sc">+</span> <span class="dv">2</span>) <span class="sc">/</span> <span class="dv">2</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.5</code></pre>
+</div>
+</div>
+</div><div class="column fragment">
+<p>You can create new objects with the assignment operator <code>&lt;-</code></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">3</span> <span class="sc">*</span> <span class="dv">4</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>x</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 12</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="columns">
+<div class="column fragment">
+<p>You can (and should) make comments in your code</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># R will ignore any text after # for that line</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>primes <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">11</span>, <span class="dv">13</span>) <span class="co"># create vector of prime numbers</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>primes</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]  2  3  5  7 11 13</code></pre>
+</div>
+</div>
+</div><div class="column fragment">
+<p>Object names must start with a letter and can only contain letters, numbers, _, and .</p>
+<pre><code>i_use_snake_case
+otherPeopleUseCamelCase
+some.people.use.periods
+And_aFew.People_RENOUNCEconvention</code></pre>
+</div>
+</div>
+
+<div class="no-row-height column-margin column-container"><div class="margin-aside">
+<p>Source: <a href="https://r4ds.hadley.nz/workflow-basics.html" target="_blank">R for Data Science</a></p>
+</div></div></section>
+<section id="coding-basics-demo" class="level2">
+<h2 class="anchored" data-anchor-id="coding-basics-demo">Coding basics: demo</h2>
+<div class="columns">
+<div class="column">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="dv">7</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>addition <span class="ot">&lt;-</span> a <span class="sc">+</span> b</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>subtraction <span class="ot">&lt;-</span> a <span class="sc">-</span> b</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>multiplication <span class="ot">&lt;-</span> a <span class="sc">*</span> b</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>division <span class="ot">&lt;-</span> a <span class="sc">/</span> b</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>exponentiation <span class="ot">&lt;-</span> a<span class="sc">^</span><span class="dv">2</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div><div class="column fragment">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>a</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 7</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>b</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>addition</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 10</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>subtraction</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>multiplication</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 21</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>division</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2.333333</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>exponentiation</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 49</code></pre>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="operators-in-r" class="level2">
+<h2 class="anchored" data-anchor-id="operators-in-r">Operators in R</h2>
+<p><a href="https://www.geeksforgeeks.org/r-language/r-operators/" target="_blank">Operators in R</a> are symbols directing R to perform various kinds of mathematical, logical, and decision operations. A few of the key ones to know before we get started:</p>
+<p><br></p>
+<p><strong>Assignment operators</strong> assign values to variables:<br>
+<span style="color: #3498DB"><strong>&lt;-, -&gt;, =</strong></span></p>
+<p><strong>Comparison operators</strong> test equality or inequality:<br>
+<span style="color: #3498DB"><strong>==, !=, &gt;, &gt;=, &lt;, &lt;=</strong></span></p>
+<p><strong>Logical operators</strong> indicate “and”, “or”, and “not”:<br>
+<span style="color: #3498DB"><strong>&amp;, |, !</strong></span></p>
+</section>
+<section id="comparison-operators" class="level2">
+<h2 class="anchored" data-anchor-id="comparison-operators">Comparison operators</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 75%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">operator</th>
+<th style="text-align: left;">definition</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>&lt;</code></td>
+<td style="text-align: left;"><span class="fragment">is less than?</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>&lt;=</code></td>
+<td style="text-align: left;"><span class="fragment">is less than or equal to?</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>&gt;</code></td>
+<td style="text-align: left;"><span class="fragment">is greater than?</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>&gt;=</code></td>
+<td style="text-align: left;"><span class="fragment">is greater than or equal to?</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>==</code></td>
+<td style="text-align: left;"><span class="fragment">is exactly equal to?</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>!=</code></td>
+<td style="text-align: left;"><span class="fragment">is not equal to?</span></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="comparison-operators-cont" class="level2 smaller page-columns page-full">
+<h2 class="smaller anchored" data-anchor-id="comparison-operators-cont">Comparison operators (cont)</h2>
+<div class="columns">
+<div class="column fragment">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">5</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>equal <span class="ot">&lt;-</span> x <span class="sc">==</span> y</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>not_equal <span class="ot">&lt;-</span> x <span class="sc">!=</span> y</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>less_than <span class="ot">&lt;-</span> x <span class="sc">&lt;</span> y</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>more_than <span class="ot">&lt;-</span> x <span class="sc">&gt;</span> y</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>less_than_or_equal_to <span class="ot">&lt;-</span> x <span class="sc">&lt;=</span> y</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>more_than_or_equal_to <span class="ot">&lt;-</span> x <span class="sc">&gt;=</span> y</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div><div class="column fragment">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>x</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 5</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>y</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>equal</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>not_equal</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>less_than</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>more_than</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>less_than_or_equal_to</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>more_than_or_equal_to</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+</div>
+</div>
+</div>
+
+<div class="no-row-height column-margin column-container"><div class="margin-aside">
+<p>Source: <a href="https://www.ionos.ca/digitalguide/websites/web-development/r-operators/" target="_blank">IONOS editorial team</a></p>
+</div></div></section>
+<section id="logical-operators" class="level2">
+<h2 class="anchored" data-anchor-id="logical-operators">Logical operators</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 75%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">operator</th>
+<th style="text-align: left;">definition</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>x &amp; y</code></td>
+<td style="text-align: left;"><span class="fragment">is x AND y?</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>x | y</code></td>
+<td style="text-align: left;"><span class="fragment">is x OR y?</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>is.na(x)</code></td>
+<td style="text-align: left;"><span class="fragment">is x NA?</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>!is.na(x)</code></td>
+<td style="text-align: left;"><span class="fragment">is x not NA?</span></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="logical-operators-cont" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="logical-operators-cont">Logical operators (cont)</h2>
+<div class="columns">
+<div class="column fragment">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="cn">TRUE</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="cn">FALSE</span></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>and_operator <span class="ot">&lt;-</span> x <span class="sc">&amp;</span> y</span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>or_operator <span class="ot">&lt;-</span> x <span class="sc">|</span> y</span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>not_operator <span class="ot">&lt;-</span> <span class="sc">!</span>x</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div><div class="column fragment">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>and_operator</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>or_operator</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>not_operator</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE</code></pre>
+</div>
+</div>
+</div>
+</div>
+
+<div class="no-row-height column-margin column-container"><div class="margin-aside">
+<p>Source: <a href="https://www.ionos.ca/digitalguide/websites/web-development/r-operators/" target="_blank">IONOS editorial team</a></p>
+</div></div></section>
+<section id="mini-task-5" class="level2" data-menu-title="Assignment operators">
+<h2 data-menu-title="Assignment operators" class="anchored" data-anchor-id="mini-task-5">Mini-task</h2>
+<div class="task">
+<p><i class="fa-solid fa-check-double" aria-label="check-double"></i> Make a tiny data frame and save it.</p>
+</div>
+<p><br></p>
+<div class="cell" data-output-location="fragment">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>), <span class="at">y =</span> <span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>, <span class="st">"c"</span>))</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>df <span class="co"># look at df</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 2
+      x y    
+  &lt;dbl&gt; &lt;chr&gt;
+1     1 a    
+2     2 a    
+3     3 b    
+4     4 c    
+5     5 c    </code></pre>
+</div>
+</div>
+</section>
+</section>
 <section id="getting-started" class="level1 theme-section">
 <h1 class="theme-section">Getting Started</h1>
 <section id="comprehensive-r-archive-network-cran" class="level2 sparse-slide">
@@ -463,7 +765,7 @@ Source pane: best for documenting.</p>
 <p><strong>You’ll install each package (1X per system):</strong></p>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"tidyverse"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"tidyverse"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: package 'tidyverse' is in use and will not be installed</code></pre>
 </div>
@@ -473,14 +775,14 @@ Source pane: best for documenting.</p>
 <p><strong>You’ll load each package (every time you use it):</strong></p>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="notes">
 <p>What’s the difference between installing and loading a package? Why is this annoying workflow a “feature”?</p>
 </div>
 </section>
-<section id="mini-task-5" class="level2" data-menu-title="Install `tidyverse()`">
-<h2 data-menu-title="Install `tidyverse()`" class="anchored" data-anchor-id="mini-task-5">Mini-task</h2>
+<section id="mini-task-6" class="level2" data-menu-title="Install `tidyverse()`">
+<h2 data-menu-title="Install `tidyverse()`" class="anchored" data-anchor-id="mini-task-6">Mini-task</h2>
 <div class="task">
 <p><i class="fa-solid fa-check-double" aria-label="check-double"></i> Install the <code>tidyverse()</code> package, available on CRAN.</p>
 </div>
@@ -491,7 +793,7 @@ Source pane: best for documenting.</p>
 </div>
 <p><br></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"tidyverse"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"tidyverse"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="mini-tasks-1" class="level2" data-menu-title="Install `tinytex()`">
@@ -506,12 +808,12 @@ Source pane: best for documenting.</p>
 </div>
 <p><br></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">'tinytex'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">'tinytex'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><br></p>
 <p>. . .</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>tinytex<span class="sc">::</span><span class="fu">install_tinytex</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>tinytex<span class="sc">::</span><span class="fu">install_tinytex</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="mini-tasks-2" class="level2" data-menu-title="Install `gssr()` and `gssrdoc()`">
@@ -520,9 +822,9 @@ Source pane: best for documenting.</p>
 <p><i class="fa-solid fa-check-double" aria-label="check-double"></i> Install the <code>gssr()</code> package, NOT on CRAN.</p>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install 'gssr' from 'ropensci' universe</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">'gssr'</span>, <span class="at">repos =</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">'https://kjhealy.r-universe.dev'</span>, <span class="st">'https://cloud.r-project.org'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install 'gssr' from 'ropensci' universe</span></span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">'gssr'</span>, <span class="at">repos =</span></span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">'https://kjhealy.r-universe.dev'</span>, <span class="st">'https://cloud.r-project.org'</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><br></p>
 <p>. . .</p>
@@ -530,13 +832,13 @@ Source pane: best for documenting.</p>
 <p><i class="fa-solid fa-check-double" aria-label="check-double"></i> Install the <code>gssrdoc()</code> package, NOT on CRAN.</p>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install 'gssrdoc' from 'ropensci' universe</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">'gssrdoc'</span>, <span class="at">repos =</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">'https://kjhealy.r-universe.dev'</span>, <span class="st">'https://cloud.r-project.org'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install 'gssrdoc' from 'ropensci' universe</span></span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">'gssrdoc'</span>, <span class="at">repos =</span></span>
+<span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">'https://kjhealy.r-universe.dev'</span>, <span class="st">'https://cloud.r-project.org'</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
-<section id="mini-task-6" class="level2 sparse-slide" data-menu-title="Load the packages">
-<h2 class="sparse-slide anchored" data-menu-title="Load the packages" data-anchor-id="mini-task-6">Mini-task</h2>
+<section id="mini-task-7" class="level2 sparse-slide" data-menu-title="Load the packages">
+<h2 class="sparse-slide anchored" data-menu-title="Load the packages" data-anchor-id="mini-task-7">Mini-task</h2>
 <div class="task">
 <p><i class="fa-solid fa-check-double" aria-label="check-double"></i> Load the packages.</p>
 </div>
@@ -545,9 +847,9 @@ Source pane: best for documenting.</p>
 </div>
 <p><br></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse) <span class="co"># for data wrangling</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gssr) <span class="co"># U.S. General Social Survey data</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gssrdoc) <span class="co"># GSS documentation</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse) <span class="co"># for data wrangling</span></span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gssr) <span class="co"># U.S. General Social Survey data</span></span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gssrdoc) <span class="co"># GSS documentation</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="environment" class="level2">
@@ -557,10 +859,10 @@ Source pane: best for documenting.</p>
 </div>
 <p><br></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># software documentation</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="co"># software documentation</span></span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>R version 4.5.1 (2025-06-13 ucrt)
+<pre><code>R version 4.6.1 (2026-06-24 ucrt)
 Platform: x86_64-w64-mingw32/x64
 Running under: Windows 11 x64 (build 26200)
 
@@ -579,36 +881,37 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] gssrdoc_0.7.0      conflicted_1.2.0   summarytools_1.1.4 flextable_0.9.9   
- [5] kableExtra_1.4.0   labelled_2.14.1    haven_2.5.5        gssr_0.7          
- [9] lubridate_1.9.4    forcats_1.0.0      stringr_1.5.1      dplyr_1.1.4       
-[13] purrr_1.1.0        readr_2.1.5        tidyr_1.3.1        tibble_3.3.0      
-[17] ggplot2_3.5.2      tidyverse_2.0.0   
+ [1] gssrdoc_0.7.0      conflicted_1.2.0   summarytools_1.1.5 flextable_0.10.0  
+ [5] kableExtra_1.4.1   labelled_2.16.0    haven_2.5.5        gssr_0.7          
+ [9] lubridate_1.9.5    forcats_1.0.1      stringr_1.6.0      dplyr_1.2.1       
+[13] purrr_1.2.2        readr_2.2.0        tidyr_1.3.2        tibble_3.3.1      
+[17] ggplot2_4.0.3      tidyverse_2.0.0   
 
 loaded via a namespace (and not attached):
- [1] gtable_0.3.6            xfun_0.52               htmlwidgets_1.6.4      
- [4] tzdb_0.5.0              vctrs_0.6.5             tools_4.5.1            
- [7] generics_0.1.4          curl_6.4.0              pacman_0.5.1           
-[10] pkgconfig_2.0.3         checkmate_2.3.2         data.table_1.17.8      
-[13] pryr_0.1.6              RColorBrewer_1.1-3      uuid_1.2-1             
-[16] lifecycle_1.0.4         compiler_4.5.1          farver_2.1.2           
-[19] rapportools_1.2         textshaping_1.0.1       codetools_0.2-20       
-[22] fontquiver_0.2.1        fontLiberation_0.1.0    htmltools_0.5.8.1      
-[25] yaml_2.3.10             pillar_1.11.0           MASS_7.3-65            
-[28] openssl_2.3.3           cachem_1.1.0            magick_2.8.7           
-[31] fontBitstreamVera_0.1.1 tidyselect_1.2.1        zip_2.3.3              
-[34] digest_0.6.37           stringi_1.8.7           reshape2_1.4.4         
-[37] pander_0.6.6            fastmap_1.2.0           grid_4.5.1             
-[40] cli_3.6.5               magrittr_2.0.3          base64enc_0.1-3        
-[43] withr_3.0.2             backports_1.5.0         gdtools_0.4.2          
-[46] scales_1.4.0            timechange_0.3.0        rmarkdown_2.29         
-[49] officer_0.6.10          matrixStats_1.5.0       askpass_1.2.1          
-[52] ragg_1.4.0              hms_1.1.3               memoise_2.0.1          
-[55] evaluate_1.0.4          knitr_1.50              tcltk_4.5.1            
-[58] viridisLite_0.4.2       rlang_1.1.6             Rcpp_1.1.0             
-[61] glue_1.8.0              xml2_1.3.8              svglite_2.2.1          
-[64] rstudioapi_0.17.1       jsonlite_2.0.0          plyr_1.8.9             
-[67] R6_2.6.1                systemfonts_1.2.3       fs_1.6.6               </code></pre>
+ [1] gtable_0.3.6            xfun_0.60               htmlwidgets_1.6.4      
+ [4] tzdb_0.5.0              vctrs_0.7.3             tools_4.6.1            
+ [7] generics_0.1.4          curl_7.1.0              pacman_0.5.1           
+[10] pkgconfig_2.0.3         checkmate_2.3.4         data.table_1.18.4      
+[13] RColorBrewer_1.1-3      S7_0.2.2                uuid_1.2-2             
+[16] lifecycle_1.0.5         compiler_4.6.1          farver_2.1.2           
+[19] rapportools_1.2         textshaping_1.0.5       fontquiver_0.2.1       
+[22] fontLiberation_0.1.0    htmltools_0.5.9         yaml_2.3.12            
+[25] pillar_1.11.1           MASS_7.3-65             openssl_2.4.2          
+[28] cachem_1.1.0            magick_2.9.1            fontBitstreamVera_0.1.1
+[31] tidyselect_1.2.1        zip_3.0.2               digest_0.6.39          
+[34] stringi_1.8.9           reshape2_1.4.5          pander_0.6.6           
+[37] fastmap_1.2.0           grid_4.6.1              cli_3.6.6              
+[40] magrittr_2.0.5          base64enc_0.1-6         patchwork_1.3.2        
+[43] utf8_1.2.6              withr_3.0.3             backports_1.5.1        
+[46] gdtools_0.5.1           scales_1.4.0            timechange_0.4.0       
+[49] rmarkdown_2.31          officer_0.7.6           matrixStats_1.5.0      
+[52] otel_0.2.0              askpass_1.2.1           ragg_1.5.2             
+[55] hms_1.1.4               memoise_2.0.1           evaluate_1.0.5         
+[58] knitr_1.51              tcltk_4.6.1             viridisLite_0.4.3      
+[61] rlang_1.2.0             Rcpp_1.1.2              glue_1.8.1             
+[64] xml2_1.6.0              svglite_2.2.2           rstudioapi_0.19.0      
+[67] jsonlite_2.0.0          plyr_1.8.9              R6_2.6.1               
+[70] systemfonts_1.3.2       fs_2.1.0               </code></pre>
 </div>
 </div>
 </section>
@@ -631,15 +934,15 @@ loaded via a namespace (and not attached):
 <p><strong>Run the code chunk in your code-along.</strong></p>
 </div>
 <div class="cell" data-output-location="fragment">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the data (will appear in your Global Environment pane)</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>gss24 <span class="ot">&lt;-</span> <span class="fu">gss_get_yr</span>(<span class="dv">2024</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the data (will appear in your Global Environment pane)</span></span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a>gss24 <span class="ot">&lt;-</span> <span class="fu">gss_get_yr</span>(<span class="dv">2024</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Fetching: https://gss.norc.org/documents/stata/2024_stata.zip</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Preview the data named gss24</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>gss24</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Preview the data named gss24</span></span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>gss24</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 3,309 × 813
+<pre><code># A tibble: 3,986 × 989
    year       id wrkstat hrs1        hrs2        evwork      wrkslf  occ10      
    &lt;dbl+l&gt; &lt;dbl&gt; &lt;dbl+l&gt; &lt;dbl+lbl&gt;   &lt;dbl+lbl&gt;   &lt;dbl+lbl&gt;   &lt;dbl+l&gt; &lt;dbl+lbl&gt;  
  1 2024        1 1 [wor…    43       NA(i) [iap] NA(i) [iap] 2 [som…   230 [edu…
@@ -652,8 +955,8 @@ loaded via a namespace (and not attached):
  8 2024        8 6 [in … NA(i) [iap] NA(i) [iap]     1 [yes] 2 [som…  3600 [nur…
  9 2024        9 1 [wor…    50       NA(i) [iap] NA(i) [iap] 2 [som… NA(n) [no …
 10 2024       10 4 [une… NA(i) [iap] NA(i) [iap] NA(i) [iap] 2 [som…  5620 [sto…
-# ℹ 3,299 more rows
-# ℹ 805 more variables: prestg10 &lt;dbl+lbl&gt;, prestg105plus &lt;dbl+lbl&gt;,
+# ℹ 3,976 more rows
+# ℹ 981 more variables: prestg10 &lt;dbl+lbl&gt;, prestg105plus &lt;dbl+lbl&gt;,
 #   indus10 &lt;dbl+lbl&gt;, marital &lt;dbl+lbl&gt;, martype &lt;dbl+lbl&gt;, divorce &lt;dbl+lbl&gt;,
 #   widowed &lt;dbl+lbl&gt;, spwrksta &lt;dbl+lbl&gt;, sphrs1 &lt;dbl+lbl&gt;, sphrs2 &lt;dbl+lbl&gt;,
 #   spevwork &lt;dbl+lbl&gt;, cowrksta &lt;dbl+lbl&gt;, cowrkslf &lt;dbl+lbl&gt;,
@@ -699,7 +1002,7 @@ type <code>?varname</code> at the console.</p>
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<i class="fa-solid fa-hat-wizard" aria-label="hat-wizard"></i> Heads Up!
+<span class="screen-reader-only">Tip</span><i class="fa-solid fa-hat-wizard" aria-label="hat-wizard"></i> Heads Up!
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -821,11 +1124,11 @@ iap – missing. Values: the numeric and response category key (1 = strongly agr
 <p>You can access the variables (i.e., columns) using the <code>$</code> operator, as shown using the <code>table()</code> function. The variable names are case sensitive.</p>
 <p><br></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(gss24<span class="sc">$</span>meovrwrk)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(gss24<span class="sc">$</span>meovrwrk)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
   1   2   3   4   5 
-195 787 611 481  89 </code></pre>
+238 938 797 534 108 </code></pre>
 </div>
 </div>
 <div class="task">
@@ -839,12 +1142,12 @@ iap – missing. Values: the numeric and response category key (1 = strongly agr
 </div>
 <p><br></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Replace meovrwrk with fefam</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(gss24<span class="sc">$</span>meovrwrk)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Replace meovrwrk with fefam</span></span>
+<span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(gss24<span class="sc">$</span>meovrwrk)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
   1   2   3   4   5 
-195 787 611 481  89 </code></pre>
+238 938 797 534 108 </code></pre>
 </div>
 </div>
 <p>. . .</p>
@@ -862,7 +1165,7 @@ iap – missing. Values: the numeric and response category key (1 = strongly agr
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<i class="fa-solid fa-hat-wizard" aria-label="hat-wizard"></i> Heads Up!
+<span class="screen-reader-only">Tip</span><i class="fa-solid fa-hat-wizard" aria-label="hat-wizard"></i> Heads Up!
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -941,13 +1244,14 @@ iap – missing. Values: the numeric and response category key (1 = strongly agr
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

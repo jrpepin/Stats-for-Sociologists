@@ -76,6 +76,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap-1d4f84655f446305ac42a8f1abcf7405.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/quarto-contrib/fontawesome6-1.2.0/all.min.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/fontawesome6-1.2.0/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -149,436 +151,284 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>Setup</h1>
 <section id="packages" class="level2">
 <h2 class="anchored" data-anchor-id="packages">Packages</h2>
-<p>Load the standard packages.</p>
+<p>Install the <a href="https://cran.r-project.org/web/packages/Rmisc/refman/Rmisc.html"><code>Rmisc()</code></a> package, available on CRAN.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse) </span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven) <span class="co"># not core tidyverse</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gssr)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gssrdoc) <span class="co"># load the GSS codebook</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(summarytools)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"Rmisc"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Load the standard packages and our new <code>Rmisc()</code> package.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven) <span class="co"># not core tidyverse</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gssr)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gssrdoc) <span class="co"># load the GSS codebook</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(summarytools)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Rmisc) <span class="co"># load the new package</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="load-your-data" class="level2">
 <h2 class="anchored" data-anchor-id="load-your-data">Load your data</h2>
+<p>Get the data from the 2022 survey</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the data all survey years</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(gss_all)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ADD YOUR CODE HERE</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Create a dataset named <code>my_data</code> with the variables <code>wwwhr</code>, <code>postlife</code>, <code>childs</code>, &amp; <code>sex</code> with no missing data</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ADD YOUR CODE HERE</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 </section>
-<section id="dplyr-ii" class="level1">
-<h1>dplyr II</h1>
-<section id="select" class="level2">
-<h2 class="anchored" data-anchor-id="select"><code>select()</code></h2>
-<p>Use <code>select()</code> to choose columns in a dataframe.<br>
-</p>
+<section id="confidence-intervals" class="level1">
+<h1>Confidence Intervals</h1>
+<section id="summarise-with-equation" class="level2">
+<h2 class="anchored" data-anchor-id="summarise-with-equation"><code>summarise()</code> with equation</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>my_data <span class="ot">&lt;-</span> gss_all <span class="sc">|&gt;</span> </span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(year, agekdbrn, childs, hrs1) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</section>
-<section id="head-tail" class="level2">
-<h2 class="anchored" data-anchor-id="head-tail"><code>head()</code> &amp; <code>tail()</code></h2>
-<p><code>head()</code> looks at the first few column names and <strong>first</strong> few rows of your df.<br>
-<code>tail()</code> looks at the first few column names and <strong>last</strong> few rows of your df.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># look at the first rows &amp; columns of the data frame</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(my_data)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 4
-  year      agekdbrn    childs    hrs1       
-  &lt;dbl+lbl&gt; &lt;dbl+lbl&gt;   &lt;dbl+lbl&gt; &lt;dbl+lbl&gt;  
-1 1972      NA(i) [iap] 0         NA(i) [iap]
-2 1972      NA(i) [iap] 5         NA(i) [iap]
-3 1972      NA(i) [iap] 4         NA(i) [iap]
-4 1972      NA(i) [iap] 0         NA(i) [iap]
-5 1972      NA(i) [iap] 2         NA(i) [iap]
-6 1972      NA(i) [iap] 0         NA(i) [iap]</code></pre>
-</div>
-</div>
-<p><strong>Use <code>tail()</code> to look at the last few rows of <code>my_data</code></strong></p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ADD YOUR CODE HERE</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p><strong>Create a dataframe with the variables <code>year</code>, <code>agekdbrn</code>, <code>childs</code>, and <code>hrs1</code>, including only respondents from the year 2022 who have no missing values in any of these variables.</strong></p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>my_data <span class="ot">&lt;-</span> gss_all <span class="sc">|&gt;</span> </span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ADD YOUR CODE HERE</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(my_data) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</section>
-<section id="mutate" class="level2">
-<h2 class="anchored" data-anchor-id="mutate"><code>mutate()</code></h2>
-<p>Use <code>mutate()</code> to add new columns or change existing ones.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use mutate to create a new variable: annual_hrs1</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>my_data <span class="ot">&lt;-</span> my_data <span class="sc">|&gt;</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">annual_hrs1 =</span> hrs1 <span class="sc">*</span> <span class="dv">52</span>)</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(my_data)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 5
-  year      agekdbrn    childs    hrs1        annual_hrs1
-  &lt;dbl+lbl&gt; &lt;dbl+lbl&gt;   &lt;dbl+lbl&gt; &lt;dbl+lbl&gt;         &lt;dbl&gt;
-1 1972      NA(i) [iap] 0         NA(i) [iap]          NA
-2 1972      NA(i) [iap] 5         NA(i) [iap]          NA
-3 1972      NA(i) [iap] 4         NA(i) [iap]          NA
-4 1972      NA(i) [iap] 0         NA(i) [iap]          NA
-5 1972      NA(i) [iap] 2         NA(i) [iap]          NA
-6 1972      NA(i) [iap] 0         NA(i) [iap]          NA</code></pre>
-</div>
-</div>
-<p><strong>Use <code>mutate()</code>, <code>mean()</code>, and <code>sd()</code> to create a column with Z scores for <code>hrs1</code></strong></p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>my_data <span class="ot">&lt;-</span> my_data <span class="sc">|&gt;</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ADD YOUR CODE HERE</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(my_data) <span class="co"># Check your work</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</section>
-<section id="mutate-logical-variables" class="level2">
-<h2 class="anchored" data-anchor-id="mutate-logical-variables"><code>mutate()</code> &amp; logical variables</h2>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>my_data <span class="ot">&lt;-</span> my_data <span class="sc">|&gt;</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">teen_parent =</span> (agekdbrn <span class="sc">&lt;</span> <span class="dv">18</span>) <span class="sc">*</span> <span class="dv">1</span>) </span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(my_data)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 6
-  year      agekdbrn    childs    hrs1        annual_hrs1 teen_parent
-  &lt;dbl+lbl&gt; &lt;dbl+lbl&gt;   &lt;dbl+lbl&gt; &lt;dbl+lbl&gt;         &lt;dbl&gt;       &lt;dbl&gt;
-1 1972      NA(i) [iap] 0         NA(i) [iap]          NA          NA
-2 1972      NA(i) [iap] 5         NA(i) [iap]          NA          NA
-3 1972      NA(i) [iap] 4         NA(i) [iap]          NA          NA
-4 1972      NA(i) [iap] 0         NA(i) [iap]          NA          NA
-5 1972      NA(i) [iap] 2         NA(i) [iap]          NA          NA
-6 1972      NA(i) [iap] 0         NA(i) [iap]          NA          NA</code></pre>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>wwwhr_sum <span class="ot">&lt;-</span> my_data <span class="sc">|&gt;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_wwwhr =</span> <span class="fu">mean</span>(wwwhr),</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">sd_wwwhr =</span> <span class="fu">sd</span>(wwwhr),</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">se_wwwhr =</span> sd_wwwhr <span class="sc">/</span> <span class="fu">sqrt</span>(n),</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">ci_lower =</span> mean_wwwhr <span class="sc">-</span> (<span class="fl">1.96</span> <span class="sc">*</span> se_wwwhr),</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">ci_upper =</span> mean_wwwhr <span class="sc">+</span> (<span class="fl">1.96</span> <span class="sc">*</span> se_wwwhr)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error:
+! object 'my_data' not found</code></pre>
 </div>
 </div>
 </section>
 <section id="code-meets-question" class="level2">
 <h2 class="anchored" data-anchor-id="code-meets-question">Code Meets Question</h2>
-<p><strong>What proportion of new parents were teenagers (e.g., under 18 years old)?</strong></p>
+<p>What can we infer about the population mean based on this confidence interval?</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>my_data <span class="sc">|&gt;</span> </span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">proportion =</span> <span class="fu">mean</span>(teen_parent)) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 1 × 1
-  proportion
-       &lt;dbl&gt;
-1         NA</code></pre>
-</div>
-</div>
-<p><strong>Use <code>mutate()</code> and <code>summarise()</code> to determine what proportion of new parents were older than 40 years old.</strong></p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ADD YOUR CODE HERE</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</section>
-<section id="mutate-with-case_when" class="level2">
-<h2 class="anchored" data-anchor-id="mutate-with-case_when"><code>mutate()</code> with <code>case_when()</code></h2>
-<p>Use <code>case_when()</code> inside <code>mutate()</code> to create values based on conditions.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>my_data <span class="ot">&lt;-</span>  my_data <span class="sc">|&gt;</span>  </span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Use mutate to create a new variable: childs_3cat</span></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">childs_3cat =</span> <span class="fu">case_when</span>(</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    childs <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">"1 kid"</span>,</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    childs <span class="sc">==</span> <span class="dv">2</span> <span class="sc">~</span> <span class="st">"2 kids"</span>,</span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    childs <span class="sc">&gt;=</span> <span class="dv">3</span> <span class="sc">~</span> <span class="st">"3+ kids"</span>,</span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA_character_</span>)</span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  ) </span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Always double check your work!</span></span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(my_data<span class="sc">$</span>childs, my_data<span class="sc">$</span>childs_3cat)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>   
-    1 kid 2 kids 3+ kids
-  0     0      0       0
-  1 11979      0       0
-  2     0  18989       0
-  3     0      0   11671
-  4     0      0    5996
-  5     0      0    2669
-  6     0      0    1381
-  7     0      0     734
-  8     0      0    1032</code></pre>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>wwwhr_sum</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error:
+! object 'wwwhr_sum' not found</code></pre>
 </div>
 </div>
 </section>
-<section id="code-meets-question-1" class="level2">
-<h2 class="anchored" data-anchor-id="code-meets-question-1">Code Meets Question</h2>
-<p><strong>What proportion of new parents had their first child in their teens, 20s, 30s, or after age 40?</strong></p>
+<section id="summarise-ci" class="level2">
+<h2 class="anchored" data-anchor-id="summarise-ci"><code>summarise()</code> + <code>CI()</code></h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>my_data <span class="ot">&lt;-</span>  my_data <span class="sc">|&gt;</span>  </span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">age_groups =</span> <span class="fu">case_when</span>(</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># ADD YOUR CODE HERE</span></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  ))</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>my_data <span class="sc">|&gt;</span></span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">freq</span>(age_groups, <span class="at">report.nas =</span> <span class="cn">FALSE</span>, <span class="at">headings =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>wwwhr_ci <span class="ot">&lt;-</span> my_data <span class="sc">|&gt;</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_wwwhr =</span> <span class="fu">mean</span>(wwwhr),</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">sd_wwwhr =</span> <span class="fu">sd</span>(wwwhr),</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">lowCI_wwwhr =</span> Rmisc<span class="sc">::</span><span class="fu">CI</span>(wwwhr)[<span class="st">'lower'</span>],</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">hiCI_wwwhr  =</span> Rmisc<span class="sc">::</span><span class="fu">CI</span>(wwwhr)[<span class="st">'upper'</span>]</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error:
+! object 'my_data' not found</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>wwwhr_ci</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error:
+! object 'wwwhr_ci' not found</code></pre>
+</div>
+</div>
+</section>
+<section id="summarise-ci-1" class="level2">
+<h2 class="anchored" data-anchor-id="summarise-ci-1"><code>summarise()</code> + <code>CI()</code></h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>wwwhr_ci99 <span class="ot">&lt;-</span> my_data <span class="sc">|&gt;</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_wwwhr =</span> <span class="fu">mean</span>(wwwhr),</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">sd_wwwhr =</span> <span class="fu">sd</span>(wwwhr),</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">lowCI_wwwhr =</span> <span class="fu">CI</span>(wwwhr, <span class="at">ci =</span> <span class="fl">0.99</span>)[<span class="st">'lower'</span>],</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">hiCI_wwwhr  =</span> <span class="fu">CI</span>(wwwhr, <span class="at">ci =</span> <span class="fl">0.99</span>)[<span class="st">'upper'</span>]</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error:
+! object 'my_data' not found</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>wwwhr_ci99</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error:
+! object 'wwwhr_ci99' not found</code></pre>
+</div>
+</div>
+<div class="task">
+<p><i class="fa-solid fa-lightbulb" aria-label="lightbulb"></i> <strong>How does a 95% confidence interval differ from a 99% confidence interval in terms of width and certainty?</strong></p>
+</div>
+</section>
+<section id="cis-wrong-with-proportions" class="level2">
+<h2 class="anchored" data-anchor-id="cis-wrong-with-proportions">CIs (wrong) with proportions</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>my_data <span class="sc">|&gt;</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_ghosts =</span> <span class="fu">mean</span>(postlife),</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">sd_ghosts =</span> <span class="fu">sd</span>(postlife),</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">lowCI_ghosts =</span> <span class="fu">CI</span>(postlife, <span class="at">ci =</span> <span class="fl">0.99</span>)[<span class="st">'lower'</span>],</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">hiCI_ghosts  =</span> <span class="fu">CI</span>(postlife, <span class="at">ci =</span> <span class="fl">0.99</span>)[<span class="st">'upper'</span>]</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error:
+! object 'my_data' not found</code></pre>
+</div>
+</div>
+</section>
+<section id="cis-correct-with-proportions" class="level2">
+<h2 class="anchored" data-anchor-id="cis-correct-with-proportions">CIs (correct) with proportions</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use logic to recode (yes: 1 = 1; no: 2 = 0)</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>my_data<span class="sc">$</span>ghosts <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(my_data<span class="sc">$</span>postlife <span class="sc">==</span> <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error:
+! object 'my_data' not found</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>my_data <span class="sc">|&gt;</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_ghosts =</span> <span class="fu">mean</span>(ghosts),</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">sd_ghosts =</span> <span class="fu">sd</span>(ghosts),</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">lowCI_ghosts =</span> <span class="fu">CI</span>(ghosts, <span class="at">ci =</span> <span class="fl">0.99</span>)[<span class="st">'lower'</span>],</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">hiCI_ghosts  =</span> <span class="fu">CI</span>(ghosts, <span class="at">ci =</span> <span class="fl">0.99</span>)[<span class="st">'upper'</span>]</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error:
+! object 'my_data' not found</code></pre>
+</div>
+</div>
+</section>
+<section id="comparing-cis" class="level2">
+<h2 class="anchored" data-anchor-id="comparing-cis">Comparing CIs</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>my_data<span class="sc">$</span>sex <span class="ot">&lt;-</span> <span class="fu">zap_missing</span>(my_data<span class="sc">$</span>sex) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error:
+! object 'my_data' not found</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>my_data<span class="sc">$</span>sex <span class="ot">&lt;-</span> <span class="fu">as_factor</span>(my_data<span class="sc">$</span>sex)   </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error:
+! object 'my_data' not found</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>my_data<span class="sc">$</span>sex <span class="ot">&lt;-</span> <span class="fu">droplevels</span>(my_data<span class="sc">$</span>sex)  </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error:
+! object 'my_data' not found</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>df_ghosts <span class="ot">&lt;-</span> my_data <span class="sc">|&gt;</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(sex) <span class="sc">|&gt;</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean =</span> <span class="fu">mean</span>(ghosts),</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">sd =</span> <span class="fu">sd</span>(ghosts),</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">lower =</span> <span class="fu">CI</span>(ghosts, <span class="at">ci =</span> <span class="fl">0.95</span>)[<span class="st">'lower'</span>],</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">upper  =</span> <span class="fu">CI</span>(ghosts, <span class="at">ci =</span> <span class="fl">0.95</span>)[<span class="st">'upper'</span>]</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error:
+! object 'my_data' not found</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>df_ghosts</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error:
+! object 'df_ghosts' not found</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a>df_wwwhr <span class="ot">&lt;-</span> my_data <span class="sc">|&gt;</span></span>
+<span id="cb33-2"><a href="#cb33-2"></a>  <span class="fu">group_by</span>(sex) <span class="sc">|&gt;</span></span>
+<span id="cb33-3"><a href="#cb33-3"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(</span>
+<span id="cb33-4"><a href="#cb33-4"></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb33-5"><a href="#cb33-5"></a>    <span class="at">mean =</span> <span class="fu">mean</span>(wwwhr),</span>
+<span id="cb33-6"><a href="#cb33-6"></a>    <span class="at">sd =</span> <span class="fu">sd</span>(wwwhr),</span>
+<span id="cb33-7"><a href="#cb33-7"></a>    <span class="at">lower =</span> <span class="fu">CI</span>(wwwhr, <span class="at">ci =</span> <span class="fl">0.95</span>)[<span class="st">'lower'</span>],</span>
+<span id="cb33-8"><a href="#cb33-8"></a>    <span class="at">upper  =</span> <span class="fu">CI</span>(wwwhr, <span class="at">ci =</span> <span class="fl">0.95</span>)[<span class="st">'upper'</span>]</span>
+<span id="cb33-9"><a href="#cb33-9"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error:
+! object 'my_data' not found</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a>df_wwwhr</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error:
+! object 'df_wwwhr' not found</code></pre>
+</div>
 </div>
 </section>
 </section>
-<section id="overwriting-data" class="level1">
-<h1>Overwriting data</h1>
-<section id="overwriting-assignment-operators" class="level2">
-<h2 class="anchored" data-anchor-id="overwriting-assignment-operators">Overwriting &amp; assignment operators</h2>
-<p>Let’s make a tiny data frame to use as an example:</p>
+<section id="hypothesis-testing" class="level1">
+<h1>Hypothesis Testing</h1>
+<section id="one-sample-t.test-for-means" class="level2">
+<h2 class="anchored" data-anchor-id="one-sample-t.test-for-means">One sample <code>t.test()</code> for means</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">x =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>), </span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">y =</span> <span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>, <span class="st">"c"</span>)</span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>      )</span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>df</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 5 × 2
-      x y    
-  &lt;dbl&gt; &lt;chr&gt;
-1     1 a    
-2     2 a    
-3     3 b    
-4     4 c    
-5     5 c    </code></pre>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(my_data<span class="sc">$</span>childs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error:
+! object 'my_data' not found</code></pre>
 </div>
 </div>
 <blockquote class="blockquote">
-<p><strong>Do something and show me</strong></p>
+<p><strong>H0 = 0 by default</strong></p>
 </blockquote>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">|&gt;</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">x =</span> x <span class="sc">*</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 5 × 2
-      x y    
-  &lt;dbl&gt; &lt;chr&gt;
-1     2 a    
-2     4 a    
-3     6 b    
-4     8 c    
-5    10 c    </code></pre>
-</div>
-</div>
-<blockquote class="blockquote">
-<p><strong>Do something, save result, overwriting original</strong></p>
-</blockquote>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>), </span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> <span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>, <span class="st">"c"</span>)</span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
-<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">x =</span> x <span class="sc">*</span> <span class="dv">2</span>)</span>
-<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>df</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 5 × 2
-      x y    
-  &lt;dbl&gt; &lt;chr&gt;
-1     2 a    
-2     4 a    
-3     6 b    
-4     8 c    
-5    10 c    </code></pre>
-</div>
-</div>
-<blockquote class="blockquote">
-<p><strong>Do something, save result, <em>not</em> overwriting original</strong></p>
-</blockquote>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>), </span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> <span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>, <span class="st">"c"</span>)</span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>df_new <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">x =</span> x <span class="sc">*</span> <span class="dv">2</span>)</span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>df</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 5 × 2
-      x y    
-  &lt;dbl&gt; &lt;chr&gt;
-1     1 a    
-2     2 a    
-3     3 b    
-4     4 c    
-5     5 c    </code></pre>
-</div>
-</div>
-<blockquote class="blockquote">
-<p><strong>Do something, save result, overwriting original <span style="color: #E74C3C">when you shouldn’t</span></strong></p>
-</blockquote>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>), </span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> <span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>, <span class="st">"c"</span>)</span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(y) <span class="sc">|&gt;</span></span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean_x =</span> <span class="fu">mean</span>(x)</span>
-<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>            )</span>
-<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>df</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 3 × 2
-  y     mean_x
-  &lt;chr&gt;  &lt;dbl&gt;
-1 a        1.5
-2 b        3  
-3 c        4.5</code></pre>
-</div>
-</div>
-<blockquote class="blockquote">
-<p><strong>Do something, save result, <span style="color: #18BC9C">not</span> overwriting original <span style="color: #18BC9C">when you shouldn’t</span></strong></p>
-</blockquote>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>), </span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> <span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>, <span class="st">"c"</span>)</span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>df_summary <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(y) <span class="sc">|&gt;</span></span>
-<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean_x =</span> <span class="fu">mean</span>(x)</span>
-<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>            )</span>
-<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>df</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 5 × 2
-      x y    
-  &lt;dbl&gt; &lt;chr&gt;
-1     1 a    
-2     2 a    
-3     3 b    
-4     4 c    
-5     5 c    </code></pre>
-</div>
-</div>
-<blockquote class="blockquote">
-<p><strong>Do something, save result, overwriting original</strong> <span style="color: #18BC9C"><strong><em>data frame</em></strong></span></p>
-</blockquote>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>), </span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> <span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>, <span class="st">"c"</span>)</span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
-<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">z =</span> x <span class="sc">+</span> <span class="dv">2</span>)</span>
-<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>df</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 5 × 3
-      x y         z
-  &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt;
-1     1 a         3
-2     2 a         4
-3     3 b         5
-4     4 c         6
-5     5 c         7</code></pre>
-</div>
-</div>
-<blockquote class="blockquote">
-<p><strong>Do something, save result, overwriting original</strong> <span style="color: #f39c12"><strong><em>column</em></strong></span></p>
-</blockquote>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>), </span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> <span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>, <span class="st">"c"</span>)</span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
-<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">x =</span> x <span class="sc">+</span> <span class="dv">2</span>)</span>
-<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>df</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 5 × 2
-      x y    
-  &lt;dbl&gt; &lt;chr&gt;
-1     3 a    
-2     4 a    
-3     5 b    
-4     6 c    
-5     7 c    </code></pre>
-</div>
-</div>
-<blockquote class="blockquote">
-<p><strong>Do something and show me</strong></p>
-</blockquote>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>gss_all <span class="sc">|&gt;</span>  </span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(year, agekdbrn) <span class="sc">|&gt;</span> </span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2022</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>()  <span class="sc">|&gt;</span></span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">age_groups =</span> <span class="fu">case_when</span>(</span>
-<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>    agekdbrn <span class="sc">&lt;</span> <span class="dv">18</span> <span class="sc">~</span> <span class="st">"&lt;18"</span>,</span>
-<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>    agekdbrn <span class="sc">&gt;=</span> <span class="dv">18</span> <span class="sc">&amp;</span> agekdbrn <span class="sc">&lt;=</span> <span class="dv">29</span> <span class="sc">~</span> <span class="st">"18–29"</span>,</span>
-<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>    agekdbrn <span class="sc">&gt;=</span> <span class="dv">30</span> <span class="sc">&amp;</span> agekdbrn <span class="sc">&lt;=</span> <span class="dv">39</span> <span class="sc">~</span> <span class="st">"30–39"</span>,</span>
-<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>    agekdbrn <span class="sc">&gt;=</span> <span class="dv">40</span> <span class="sc">~</span> <span class="st">"40+"</span>,</span>
-<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA_character_</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(age_groups) <span class="sc">|&gt;</span>  </span>
-<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">count =</span> <span class="fu">n</span>(),</span>
-<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">proportion =</span> <span class="fu">round</span>(count <span class="sc">/</span> <span class="fu">sum</span>(count), <span class="dv">3</span>)</span>
-<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<blockquote class="blockquote">
-<p><strong>Do something, save result, not overwriting original.</strong></p>
-</blockquote>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Do something</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>gss_all <span class="ot">&lt;-</span>  gss_all <span class="sc">|&gt;</span>  </span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">age_groups =</span> <span class="fu">case_when</span>(</span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>    agekdbrn <span class="sc">&lt;</span> <span class="dv">18</span> <span class="sc">~</span> <span class="st">"&lt;18"</span>,</span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>    agekdbrn <span class="sc">&gt;=</span> <span class="dv">18</span> <span class="sc">&amp;</span> agekdbrn <span class="sc">&lt;=</span> <span class="dv">29</span> <span class="sc">~</span> <span class="st">"18–29"</span>,</span>
-<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>    agekdbrn <span class="sc">&gt;=</span> <span class="dv">30</span> <span class="sc">&amp;</span> agekdbrn <span class="sc">&lt;=</span> <span class="dv">39</span> <span class="sc">~</span> <span class="st">"30–39"</span>,</span>
-<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>    agekdbrn <span class="sc">&gt;=</span> <span class="dv">40</span> <span class="sc">~</span> <span class="st">"40+"</span>,</span>
-<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA_character_</span>)</span>
-<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>  ) </span>
-<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Now show me</span></span>
-<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>gss_all <span class="sc">|&gt;</span></span>
-<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(year, age_groups) <span class="sc">|&gt;</span> </span>
-<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2022</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>()  <span class="sc">|&gt;</span></span>
-<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(age_groups) <span class="sc">|&gt;</span>  </span>
-<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb36-18"><a href="#cb36-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">count =</span> <span class="fu">n</span>(),</span>
-<span id="cb36-19"><a href="#cb36-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">proportion =</span> <span class="fu">round</span>(count <span class="sc">/</span> <span class="fu">sum</span>(count), <span class="dv">3</span>)</span>
-<span id="cb36-20"><a href="#cb36-20" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
 </section>
-<section id="overwriting-raw-data" class="level2">
-<h2 class="anchored" data-anchor-id="overwriting-raw-data">Overwriting &amp; raw data</h2>
-<p><span style="color: #E74C3C; font-size: 175%; font-family: 'Shadows Into Light'">Never overwrite your raw data set!</span></p>
-<p>Always save transformed data as a new object, which should remain untouched for reference and reproducibility.</p>
-</section>
-<section id="write_rds-read_rds" class="level2">
-<h2 class="anchored" data-anchor-id="write_rds-read_rds"><code>write_rds()</code> &amp; <code>read_rds()</code></h2>
-<p><code>write_rds()</code> saves an R object to a file<br>
-<code>read_rds()</code> loads an R object from a .rds file</p>
+<section id="one-sample-t.test-for-means-1" class="level2">
+<h2 class="anchored" data-anchor-id="one-sample-t.test-for-means-1">One sample <code>t.test()</code> for means</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_rds</span>(my_data, <span class="st">"my_data_file.rds"</span>) </span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="fu">read_rds</span>(<span class="st">"my_data_file.rds"</span>) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(my_data<span class="sc">$</span>childs, <span class="at">mu=</span><span class="dv">2</span>, <span class="at">alternative=</span><span class="st">"less"</span>) <span class="co"># Ho: mu=2</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error:
+! object 'my_data' not found</code></pre>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>H0 = 2; one-tail test</strong></p>
+</blockquote>
+</section>
+<section id="two-sample-t.test-in-action" class="level2">
+<h2 class="anchored" data-anchor-id="two-sample-t.test-in-action">two sample <code>t.test()</code> in action</h2>
+<p>Are the proportions of men and women who believe in ghosts statistically significantly different?</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(my_data<span class="sc">$</span>ghosts <span class="sc">~</span> my_data<span class="sc">$</span>sex, <span class="at">alternative =</span> <span class="st">"two.sided"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error:
+! object 'my_data' not found</code></pre>
+</div>
+</div>
+<p>Assuming an α level of .05, what do you conclude?</p>
+</section>
+<section id="aside-paired-t.test" class="level2">
+<h2 class="anchored" data-anchor-id="aside-paired-t.test">Aside: paired <code>t.test()</code></h2>
+<p><strong>Independent group t-test</strong><br>
+Do two subsamples have the same mean?</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(my_data<span class="sc">$</span>ghosts <span class="sc">~</span> my_data<span class="sc">$</span>sex, <span class="at">alternative =</span> <span class="st">"two.sided"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error:
+! object 'my_data' not found</code></pre>
+</div>
+</div>
+<p><strong>Paired t-test</strong><br>
+Do two variables have the same mean?</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(<span class="fu">Pair</span>(hrs1_2018, hrs1_2020) <span class="sc">~</span> <span class="dv">1</span>, <span class="at">data =</span> gss_panel)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 </section>
 <section id="think-like-a-statistician" class="level1">
 <h1>Think Like a Statistician</h1>
-<p>In 2024, how did the average amount of television watched differ between married people and those who were never married? And how did it compare to people who were widowed, divorced, or separated?</p>
-<p><em>How do we find out?</em></p>
+<p>(<em>Use the 2022 GSS dataset.</em>)</p>
+<p><strong>Do women have more years of education (<code>educ</code>) than men, on average?</strong></p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ADD YOUR CODE HERE</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR CODE HERE</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<section id="your-data-take" class="level2">
-<h2 class="anchored" data-anchor-id="your-data-take">Your Data Take</h2>
-<p><strong>What’s your conclusion to our research question?</strong></p>
+<p><strong>Are the proportions of men &amp; women who support abortion for any reason (<code>abany</code>) statistically different?</strong></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR CODE HERE</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>Do fewer men than women support gun laws (<code>gunlaw</code>)?</strong></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR CODE HERE</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->

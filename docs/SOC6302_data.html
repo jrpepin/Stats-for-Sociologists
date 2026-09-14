@@ -193,26 +193,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="intro" class="level1">
 <h1>01.1 Intro</h1>
-<section id="lecture-01" class="level2">
-<h2 class="anchored" data-anchor-id="lecture-01">Lecture 01</h2>
-</section>
-</section>
-<section id="terms" class="level1">
-<h1>02.1 Terms</h1>
-<p><strong>frequency:</strong> <code>premarsx</code></p>
+<p><strong>frequency:</strong> <code>premarsx</code> <strong>mean:</strong> fake data<br>
+<strong>median:</strong> <code>wkvsfam</code>; <code>agekdbrn</code> (histogram);<br>
+<strong>mode:</strong> <code>helpful</code>; <code>fairern</code>;<br>
+</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># GSS_ALL</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>gss_all <span class="sc">|&gt;</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(premarsx, sex) <span class="sc">|&gt;</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">saveRDS</span>(<span class="at">file =</span> <span class="st">"tutorials/SOC6302-02/data/gss_all.rds"</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(wkvsfam, agekdbrn, year, fairearn) <span class="sc">|&gt;</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">saveRDS</span>(<span class="at">file =</span> <span class="st">"tutorials/SOC6302-01/data/gss_all.rds"</span>)</span>
 <span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co"># GSS24</span></span>
 <span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>gss24 <span class="sc">|&gt;</span></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(premarsx, sex, fefam) <span class="sc">|&gt;</span></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">saveRDS</span>(<span class="at">file =</span> <span class="st">"tutorials/SOC6302-02/data/gss24.rds"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(helpful) <span class="sc">|&gt;</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">saveRDS</span>(<span class="at">file =</span> <span class="st">"tutorials/SOC6302-01/data/gss24.rds"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<section id="lecture-02" class="level2">
-<h2 class="anchored" data-anchor-id="lecture-02">Lecture 02</h2>
+<section id="lecture-01" class="level2">
+<h2 class="anchored" data-anchor-id="lecture-01">Lecture 01</h2>
 <p><strong>haven labelled:</strong> <code>premarsx</code>; <code>sex</code><br>
 <strong>frequency:</strong> <code>premarsx</code>;<br>
 <strong>crosstab:</strong> <code>premarsx</code>;</p>
@@ -221,25 +218,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="milestone-01" class="level1">
 <h1>Milestone 01</h1>
 </section>
-<section id="descriptives" class="level1">
-<h1>03.1 Descriptives</h1>
-<p><strong>mean:</strong> fake data<br>
-<strong>median:</strong> <code>wkvsfam</code>; <code>agekdbrn</code> (histogram);<br>
-<strong>mode:</strong> <code>helpful;</code> <code>fairern</code>;<br>
-<strong>distribution shape:</strong> <code>agekdbrn</code>;</p>
+<section id="descriptive-statistics" class="level1">
+<h1>02.1 Descriptive Statistics</h1>
+<p><strong>Distribution Tables:</strong> <code>premarsx</code>; <code>sex</code></p>
+<p><strong>distribution shape:</strong> <code>agekdbrn</code>;</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="do">## GSS_ALL</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>gss_all <span class="sc">|&gt;</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(year, wkvsfam, agekdbrn, fairearn) <span class="sc">|&gt;</span></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">saveRDS</span>(<span class="at">file =</span> <span class="st">"tutorials/SOC6302-03/data/gss_all.rds"</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(agekdbrn, premarsx, sex) <span class="sc">|&gt;</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">saveRDS</span>(<span class="at">file =</span> <span class="st">"tutorials/SOC6302-02/data/gss_all.rds"</span>)</span>
 <span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="do">## GSS24</span></span>
 <span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>gss24 <span class="sc">|&gt;</span></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(helpful, premarsx) <span class="sc">|&gt;</span></span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">saveRDS</span>(<span class="at">file =</span> <span class="st">"tutorials/SOC6302-03/data/gss24.rds"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(premarsx, sex) <span class="sc">|&gt;</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">saveRDS</span>(<span class="at">file =</span> <span class="st">"tutorials/SOC6302-02/data/gss24.rds"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<section id="lecture-03" class="level2">
-<h2 class="anchored" data-anchor-id="lecture-03">Lecture 03</h2>
+<section id="lecture-02" class="level2">
+<h2 class="anchored" data-anchor-id="lecture-02">Lecture 02</h2>
 <p><strong>dplyr():</strong> <code>agekdbrn</code>;</p>
 <p><strong>mode:</strong> <code>childs</code></p>
 <p><strong>median:</strong> <code>hrs1</code>; <code>childs</code></p>

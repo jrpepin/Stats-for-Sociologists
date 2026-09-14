@@ -199,7 +199,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code># A tibble: 1 × 4
    freq median_hrs1 mean_hrs1 sd_hrs1
   &lt;int&gt;       &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
-1  1768          40      39.4    13.9</code></pre>
+1  2201          40      39.3    13.6</code></pre>
 </div>
 </div>
 <p><strong><em>Is the median value for <code>hrs1</code> consistent with the mean? Speculate what might explain any differences.</em></strong></p>
@@ -207,8 +207,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><strong>Interpret the mean and standard deviation for <code>hrs1</code>.</strong></p>
 <p>On average, Americans work slightly less than a standard full-time schedule of 40 hours per week (39 hours). The standard deviation of 14 hours indicates 68% of respondents report between 25.6 and and 53 weekly work hours. This is a substantial amount of variation, as some people work significantly fewer or more hours per week. This likely reflects a mix of part-time, full-time, and overtime work patterns.</p>
 </section>
-<section id="checkpoint-03-summarize-dailty-tv-hours-tvhours" class="level2">
-<h2 class="anchored" data-anchor-id="checkpoint-03-summarize-dailty-tv-hours-tvhours">Checkpoint 03: Summarize dailty tv hours (<code>tvhours</code>)</h2>
+<section id="checkpoint-03-summarize-daily-tv-hours-tvhours" class="level2">
+<h2 class="anchored" data-anchor-id="checkpoint-03-summarize-daily-tv-hours-tvhours">Checkpoint 03: Summarize daily tv hours (<code>tvhours</code>)</h2>
 <p>Use <code>drop_na()</code> and <code>summarize()</code> to create a table showing the frequency, median, mean, and sd of <strong><code>tvhours</code></strong>.</p>
 <p><strong>BONUS</strong>: use <code>round()</code> to indicate keeping 2 decimal places.</p>
 <div class="cell">
@@ -224,7 +224,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code># A tibble: 1 × 4
    freq median_tv mean_tv sd_tv
   &lt;int&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;
-1  2152         2     3.3   3.3</code></pre>
+1  2590       2.5    3.36  3.37</code></pre>
 </div>
 </div>
 <p><strong><em>Is the median value for <code>tvhours</code> consistent with the mean? Speculate what might explain any differences.</em></strong></p>
@@ -247,8 +247,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code># A tibble: 2 × 3
   sex     mean    sd
   &lt;fct&gt;  &lt;dbl&gt; &lt;dbl&gt;
-1 male    3.21  3.24
-2 female  3.38  3.35</code></pre>
+1 male    3.27  3.39
+2 female  3.43  3.37</code></pre>
 </div>
 </div>
 <p><strong>How did the mean and standard deviation of daily tv hours differ between men and women and what do these differences suggest about gender-based variability in tv viewing patterns?</strong></p>
@@ -321,7 +321,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Full-time Part-time 
-      872       260 </code></pre>
+     1093       315 </code></pre>
 </div>
 </div>
 <ol start="2" type="A">
@@ -346,13 +346,13 @@ Full-time Part-time
 <div class="cell-output cell-output-stdout">
 <pre><code>   
     Conservative Liberal Moderate
-  1            0      61        0
-  2            0     158        0
-  3            0     131        0
-  4            0       0      414
-  5          139       0        0
-  6          179       0        0
-  7           50       0        0</code></pre>
+  1            0      76        0
+  2            0     203        0
+  3            0     181        0
+  4            0       0      525
+  5          160       0        0
+  6          202       0        0
+  7           61       0        0</code></pre>
 </div>
 </div>
 </section>
@@ -373,8 +373,8 @@ Full-time Part-time
 <pre><code># A tibble: 2 × 5
   work_category count mean_tvhours median_tvhours sd_tvhours
   &lt;chr&gt;         &lt;int&gt;        &lt;dbl&gt;          &lt;dbl&gt;      &lt;dbl&gt;
-1 Full-time       872         2.55              2       2.45
-2 Part-time       260         2.77              2       2.69</code></pre>
+1 Full-time      1093         2.65              2       2.66
+2 Part-time       315         2.97              2       2.96</code></pre>
 </div>
 </div>
 <p><strong><em>Which work-hours group reported the most daily tv hours in 2024? Was there a lot or a little variability in tv hours?</em></strong></p>
@@ -401,9 +401,9 @@ Full-time Part-time
 <pre><code># A tibble: 3 × 5
   pol3cat      count mean_hrs1 median_hrs1 sd_hrs1
   &lt;chr&gt;        &lt;int&gt;     &lt;dbl&gt;       &lt;dbl&gt;   &lt;dbl&gt;
-1 Conservative   368      39.9          40    14.7
-2 Liberal        350      38.4          40    13.4
-3 Moderate       414      39.4          40    13.8</code></pre>
+1 Conservative   423      39.9          40    14.7
+2 Liberal        460      38.5          40    13.0
+3 Moderate       525      39.2          40    13.4</code></pre>
 </div>
 </div>
 <p><strong>Which political group reported the most work hours in 2024? Was there a lot or a little variability in work hours?</strong></p>
@@ -426,9 +426,9 @@ Full-time Part-time
 <pre><code># A tibble: 3 × 5
   pol3cat      count mean_tv median_tv sd_tv
   &lt;chr&gt;        &lt;int&gt;   &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;
-1 Conservative   368    2.56         2  2.71
-2 Liberal        350    2.47         2  2.3 
-3 Moderate       414    2.75         2  2.49</code></pre>
+1 Conservative   423    2.55         2  2.67
+2 Liberal        460    2.66         2  2.68
+3 Moderate       525    2.92         2  2.82</code></pre>
 </div>
 </div>
 <p><strong>Which political group watched the most television in 2024? Was there a lot or a little variability in television hours?</strong></p>
@@ -450,8 +450,8 @@ Full-time Part-time
 <pre><code># A tibble: 2 × 3
   sex    avg_work_24 avg_tv_24
   &lt;fct&gt;        &lt;dbl&gt;     &lt;dbl&gt;
-1 male          41.7      2.53
-2 female        37.0      2.67</code></pre>
+1 male          41.5      2.63
+2 female        37.0      2.82</code></pre>
 </div>
 </div>
 <p><strong><em>Did men or women report more average work hours in 2024? What about TV hours?</em></strong></p>
@@ -470,8 +470,8 @@ Full-time Part-time
 <pre><code># A tibble: 2 × 2
   sex    proportion
   &lt;fct&gt;       &lt;dbl&gt;
-1 male        0.644
-2 female      0.756</code></pre>
+1 male        0.662
+2 female      0.760</code></pre>
 </div>
 </div>
 <p>About 64% of men worked 40 hours or less than per week in 2024.</p>

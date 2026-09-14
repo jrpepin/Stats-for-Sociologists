@@ -54,6 +54,7 @@ scale_colour_discrete <- function(...) scale_color_manual(values = my_palette)
 
 -   R & RStudio Workflow
 -   Quarto
+-   Coding Basics
 -   Getting Started
 
 
@@ -62,6 +63,7 @@ scale_colour_discrete <- function(...) scale_color_manual(values = my_palette)
 By the end of the lecture, you will be able to ...
 
 -   setup a workflow using R and RStudio\
+-   use R to conduct basic calculations/comparisons
 -   familiarize yourself with a dataset using R and RStudio\
 -   create a reproducible report using Quarto\
 
@@ -388,6 +390,246 @@ code-along-01.qmd](https://www.dropbox.com/scl/fi/dwa4lo3twg3tclza8jcm7/code-alo
 There's no command in the R console to save scripts or Quarto files— you
 use the editor's [File]{style="color: #3498DB"} \> [Save
 As]{style="color: #3498DB"} or Ctrl+S.
+
+# Coding Basics {.theme-section}
+
+## Coding basics {.smaller}
+
+::::: columns
+
+::: {.column}
+You can use R to do basic math calculations
+
+```{r}
+#| label: arithmetic
+
+1 + 2
+2 * 5
+(1 + 2) / 2
+```
+:::
+
+::: {.column .fragment}
+
+You can create new objects with the assignment operator `<-`
+```{r}
+#| label: assign
+
+x <- 3 * 4
+x
+```
+:::
+
+:::::
+
+::::: columns
+
+::: {.column .fragment}
+You can (and should) make comments in your code
+```{r}
+#| label: comments
+
+# R will ignore any text after # for that line
+
+primes <- c(2, 3, 5, 7, 11, 13) # create vector of prime numbers
+primes
+```
+:::
+
+::: {.column .fragment}
+Object names must start with a letter and can only contain letters, numbers, _, and .
+
+    i_use_snake_case
+    otherPeopleUseCamelCase
+    some.people.use.periods
+    And_aFew.People_RENOUNCEconvention
+
+:::
+
+:::::
+
+::: aside
+Source: [R for Data Science](https://r4ds.hadley.nz/workflow-basics.html)
+:::
+
+## Coding basics: demo
+
+::::: columns
+
+::: {.column}
+
+```{r}
+#| label: basics
+
+a <- 7
+b <- 3
+addition <- a + b
+subtraction <- a - b
+multiplication <- a * b
+division <- a / b
+exponentiation <- a^2
+```
+
+:::
+
+::: {.column .fragment}
+
+
+```{r}
+#| label: basics-results
+
+a
+b
+addition
+subtraction
+multiplication
+division
+exponentiation
+```
+
+:::
+
+::::
+
+
+## Operators in R
+
+[Operators in R](https://www.geeksforgeeks.org/r-language/r-operators/) are 
+symbols directing R to perform various kinds of mathematical, logical, and 
+decision operations. A few of the key ones to know before we get started:  
+
+<br>
+
+**Assignment operators** assign values to variables:  
+[**<-,  ->,  =**]{style="color: #3498DB"}  
+
+**Comparison operators** test equality or inequality:  
+[**==, !=, >, >=, <, <=**]{style="color: #3498DB"}  
+  
+**Logical operators** indicate "and", "or", and "not":  
+[**&,  |,  !**]{style="color: #3498DB"}  
+  
+
+## Comparison operators 
+
+| operator | definition                                |
+|:---------|:------------------------------------------|
+| `<`      | [is less than?]{.fragment}                |
+| `<=`     | [is less than or equal to?]{.fragment}    |
+| `>`      | [is greater than?]{.fragment}             |
+| `>=`     | [is greater than or equal to?]{.fragment} |
+| `==`     | [is exactly equal to?]{.fragment}         |
+| `!=`     | [is not equal to?]{.fragment}             |
+
+: {tbl-colwidths="\[25,75\]"}
+
+
+## Comparison operators (cont) {.smaller}
+
+::::: columns
+
+::: {.column .fragment}
+```{r}
+#| label: compare
+
+x <- 5
+y <- 3
+equal <- x == y
+not_equal <- x != y
+less_than <- x < y
+more_than <- x > y
+less_than_or_equal_to <- x <= y
+more_than_or_equal_to <- x >= y
+```
+:::
+
+::: {.column .fragment}
+```{r}
+#| label: compare-output
+
+x
+y
+equal
+not_equal
+less_than
+more_than
+less_than_or_equal_to
+more_than_or_equal_to
+```
+:::
+
+:::::
+
+::: aside
+Source: [IONOS editorial team](https://www.ionos.ca/digitalguide/websites/web-development/r-operators/)
+:::
+
+## Logical operators 
+
+| operator      | definition                                                            |
+|:--------------|:----------------------------------------------------------------------|
+| `x & y`       | [is x AND y?]{.fragment}                                              |
+| `x | y`       | [is x OR y?]{.fragment}                                               |
+| `is.na(x)`    | [is x NA?]{.fragment}                                                 |
+| `!is.na(x)`   | [is x not NA?]{.fragment}                                             |
+
+: {tbl-colwidths="\[25,75\]"}
+
+
+
+## Logical operators (cont)
+
+::::: columns
+
+::: {.column .fragment}
+```{r}
+#| label: logical
+
+x <- TRUE
+y <- FALSE
+
+and_operator <- x & y
+or_operator <- x | y
+not_operator <- !x
+```
+:::
+
+::: {.column .fragment}
+```{r}
+#| label: logical-output
+
+and_operator
+or_operator
+not_operator
+```
+:::
+
+:::::
+
+::: aside
+Source: [IONOS editorial team](https://www.ionos.ca/digitalguide/websites/web-development/r-operators/)
+:::
+
+
+## Mini-task {data-menu-title="Assignment operators"}
+
+::: task
+{{< fa check-double >}} Make a tiny data frame and save it.
+:::
+
+<br>
+
+
+```{r}
+#| label: tibble
+#| output-location: fragment
+
+df <- tibble(x = c(1, 2, 3, 4, 5), y = c("a", "a", "b", "c", "c"))
+
+df # look at df
+```
+
+
 
 # Getting Started {.theme-section}
 

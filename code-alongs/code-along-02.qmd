@@ -7,13 +7,18 @@ execute:
 format: pdf # or replace 'pdf' with 'typst'
 ---
 
-# Packages
 
-## Install Packages
+# Setup
 
-This chunk will not run (on purpose!) when rendered because `eval: false`.
+## Install new package
 
-**Install the [`summarytools`](https://cran.r-project.org/web/packages/summarytools/vignettes/introduction.html) package, available on CRAN.** **Click the green arrow icon to run the following code chunk.**
+This chunk will not run (on purpose!) when rendered because
+`eval: false`.
+
+**Install the
+[`summarytools`](https://cran.r-project.org/web/packages/summarytools/vignettes/introduction.html)
+package, available on CRAN.** **Click the green arrow icon to run the
+following code chunk.**
 
 ```{r}
 #| eval: false
@@ -47,145 +52,38 @@ library(summarytools)
 # Get the data only for the 2024 survey respondents
 gss24 <- gss_get_yr(2024)
 
+# Get the data all survey years
+data(gss_all)
+
 ```
 
-# Coding Basics
-
-You can use R to do basic math calculations
+Use the `gss_which_years()` function to identify the survey years a variable appeared.
 
 ```{r}
-#| label: arithmetic 
+#| label: which-years
 
-1 + 2
-2 * 5
-(1 + 2) / 2
-```
-
-You can create new objects with the assignment operator \<-
-
-```{r}
-#| label: assign 
-
-x <- 3 * 4
-x
-```
-
-You can (and should) make comments in your code
-
-```{r}
-#| label: comments 
-
-# R will ignore any text after # for that line
-
-primes <- c(2, 3, 5, 7, 11, 13) # create vector of prime numbers
-primes
+gss_which_years(gss_all, meovrwrk)
 
 ```
 
-Object names must start with a letter and can only contain letters, numbers, \_, and .
+**Which survey years did the variable `childs` appear?**
 
-```         
-i_use_snake_case
-otherPeopleUseCamelCase
-some.people.use.periods
-And_aFew.People_RENOUNCEconvention
+```{r, eval=FALSE}
+#| label: which-years-mini-task
+
+# REPLACE THE BLANK LINE WITH THE NAME OF THE VARIABLE
+
+gss_which_years(gss_all, ________)
+
 ```
 
-**Demo:**
-
-```{r}
-#| label: basics
-
-a <- 7 
-b <- 3 
-addition <- a + b 
-subtraction <- a - b 
-multiplication <- a * b 
-division <- a / b 
-exponentiation <- a^2
-```
-
-```{r}
-#| label: basics-results
-
-a  
-b 
-addition 
-subtraction 
-multiplication 
-division 
-exponentiation 
-```
-
-## Operators in R
-
-[Operators in R](https://www.geeksforgeeks.org/r-language/r-operators/) are symbols directing R to perform various kinds of mathematical, logical, and decision operations.
-
-## Comparison operators
-
-```{r}
-#| label: compare
-
-x <- 5 
-y <- 3 
-equal <- x == y 
-not_equal <- x != y 
-less_than <- x < y 
-more_than <- x > y 
-less_than_or_equal_to <- x <= y 
-more_than_or_equal_to <- x >= y
-```
-
-```{r}
-#| label: compare-output
-
-x 
-y  
-equal 
-not_equal 
-less_than 
-more_than 
-less_than_or_equal_to 
-more_than_or_equal_to 
-```
-
-## Logical operators
-
-```{r}
-#| label: logical
-
-x <- TRUE 
-y <- FALSE 
-
-and_operator <- x & y 
-or_operator <- x | y 
-not_operator <- !x
-```
-
-```{r}
-#| label: logical-output
-
-and_operator 
-or_operator
-not_operator
-```
-
-## Assignment operators
-
-Make a tiny data frame and save it.
-
-```{r}
-#| label: tibble
-
-df <- tibble(x = c(1, 2, 3, 4, 5), y = c("a", "a", "b", "c", "c"))
-df
-```
 
 # Variable Types
 
 ## Data types in R
 
-A property is assigned to objects that determines how generic functions operate with it.
+A property is assigned to objects that determines how generic functions
+operate with it.
 
 **logical** - Boolean values `TRUE` and `FALSE`
 
@@ -206,13 +104,15 @@ class("Sociology")
 class(2L)
 ```
 
-**numeric** - default type if values are numbers or if the values contain decimals.
+**numeric** - default type if values are numbers or if the values
+contain decimals.
 
 ```{r}
 class(2.5)
 ```
 
-**factors** consist of character data with a fixed and known set of possible values
+**factors** consist of character data with a fixed and known set of
+possible values
 
 ```{r}
 #| label: factors01
@@ -243,7 +143,8 @@ levels(opinion)
 
 ## Converting between types
 
-Use a function: `as.logical()`, `as.numeric()`, `as.integer()`, or `as.character()`.
+Use a function: `as.logical()`, `as.numeric()`, `as.integer()`, or
+`as.character()`.
 
 Create a numeric variable.
 
@@ -267,7 +168,8 @@ class(y)
 
 ## Haven labelled
 
-When you import data into R from software like SPSS, Stata, or SAS, you might notice a special class called `haven_labelled`.
+When you import data into R from software like SPSS, Stata, or SAS, you
+might notice a special class called `haven_labelled`.
 
 ```{r}
 #| label: labelled
@@ -294,7 +196,9 @@ print_labels(gss24$premarsx)
 
 ```
 
-You can use [`as_factor`](https://haven.tidyverse.org/reference/as_factor.html) to see the value labels of the variable `premarsx`.
+You can use
+[`as_factor`](https://haven.tidyverse.org/reference/as_factor.html) to
+see the value labels of the variable `premarsx`.
 
 ```{r, eval=FALSE}
 #| label: label02_premarsx
@@ -341,7 +245,8 @@ gss24$________ <- __________(gss24$________)
 table(gss24$________)
 ```
 
-Now, use `zap_missing()`, `as_factor()`, and `droplevels()` to do the same for the `sex` variable.
+Now, use `zap_missing()`, `as_factor()`, and `droplevels()` to do the
+same for the `sex` variable.
 
 Then, use `table()` to see your results.
 
@@ -372,7 +277,8 @@ Make a pretty frequency table for the variable `premarsx`.
 ```
 
 Using `report.nas = FALSE` suppresses the missing data.\
-The `headings = FALSE` parameter suppresses the heading section. Do the same for `premarsx`.
+The `headings = FALSE` parameter suppresses the heading section. Do the
+same for `premarsx`.
 
 ```{r}
 #| label: freq03
@@ -382,7 +288,8 @@ freq(gss24$sex, report.nas = FALSE, headings = FALSE)
 # ADD YOUR CODE HERE
 ```
 
-Use these options with the `freq()` function for the variable `premarsx`.
+Use these options with the `freq()` function for the variable
+`premarsx`.
 
 ```{r}
 #| label: freq04
@@ -393,7 +300,9 @@ Use these options with the `freq()` function for the variable `premarsx`.
 
 ## Cross-tabs
 
-We've been using the `table()` function with one variable at a time, but it also let's you create a frequency table (**crosstab**) with two variables.
+We've been using the `table()` function with one variable at a time, but
+it also let's you create a frequency table (**crosstab**) with two
+variables.
 
 ```{r}
 #| label: crosstab01
@@ -426,6 +335,243 @@ ctable(gss24$premarsx, gss24$sex,
 
 Based on your table:
 
--   ***\[your answer here\]*** percentage of respondents believe sex before marriage is 'almost always wrong'?
+- ***\[your answer here\]*** percentage of respondents believe sex
+  before marriage is 'almost always wrong'?
 
--   A greater percentage of ***\[men or women\]*** think sex before marriage is 'not wrong at all'.
+- A greater percentage of ***\[men or women\]*** think sex before
+  marriage is 'not wrong at all'.
+
+# Data Management I
+
+## The pipe `|>`
+
+The pipe operator passes what comes before it into the function that comes after it as the first argument in that function.
+
+```{r}
+sum(1, 2)
+```
+
+```{r}
+1 |> 
+  sum(2)
+```
+
+## `dplyr()` in action
+
+Create a frequency table for `childs` variable.
+
+```{r}
+#| label: freq-tb
+
+gss_all$childs <- zap_missing(gss_all$childs) 
+gss_all$childs <- as_factor(gss_all$childs)   
+gss_all$childs <- droplevels(gss_all$childs)  
+
+gss_all |> 
+  freq(childs, report.nas = FALSE) |> 
+  tb() 
+
+```
+
+**Use a `|>` & `gss_which_years()` to find out which survey years the variable `agekdbrn` appears.**
+
+```{r, eval=FALSE}
+#| label: which-years-pipe
+
+# ADD YOUR CODE HERE
+
+```
+
+## `filter()` & `drop_na()` {.sparse-slide}
+
+Use `filter()` to keep rows that meet a condition.\
+Use `drop_na()` to remove rows with missing (NA) values.
+
+```{r}
+#| label: pipe01
+
+gss_all |>
+  filter(year == 2022) |>
+  drop_na(sex, agekdbrn) |>
+  count(sex)
+
+```
+
+<<<<<<< HEAD
+**Limit the dataframe to only the 2024 respondents without missing data for `sex`, `hrs1`, and `childs`. How many men and women are left?**
+=======
+**Limit the dataframe to only the 2024 respondents without missing data
+for `sex`, `hrs1`, and `childs`. How many men and women are left?**
+>>>>>>> origin/main
+
+```{r, eval=FALSE}
+#| label: pipe01-mini-task
+
+gss_all |>
+  filter(year == 2022)  # CHANGE THE YEAR TO 2024 & ADD A PIPE OPERATOR 
+  drop_na() |> # ADD THE VARIABLES INSIDE drop_na()
+  count(sex)
+
+```
+
+# Summary Statistics
+
+## Median & Mean w base R
+
+```{r}
+#| label: median
+
+# Using base R
+median(gss_all$agekdbrn, na.rm=TRUE) 
+```
+
+Note: `na.rm` is a logical evaluating to `TRUE` or `FALSE` indicating whether `NA` values should be stripped before the computation proceeds.
+
+```{r}
+#| label: mean
+
+mean(gss_all$agekdbrn, na.rm=TRUE)
+```
+
+```{r}
+#| label: summary
+
+# show me summary statistics
+summary(gss_all$agekdbrn)
+```
+
+**Find the mean and median for the variable: `hrs1`.**
+
+```{r, eval=FALSE}
+#| label: summary-mini-task
+
+# REPLACE THE BLANK LINES WITH THE DATA FRAME NAME & VARIABLE NAME
+median(______________, na.rm=TRUE)
+mean(______________, na.rm=TRUE)
+
+# USE summary() TO SHOW SUMMARY STATISTICS
+
+
+```
+
+## `summarise()` {.sparse-slide}
+
+Use functions inside `summarise()` to create summary variables.
+
+```{r}
+#| label: pipe02-a
+
+gss_all |>  
+  drop_na(agekdbrn) |>
+   summarise(
+    avg = mean(agekdbrn)
+    ) 
+    
+```
+
+## Median & Mean with `dplyr` {.sparse-slide}
+
+Use [dplyr grammar]() to find the frequency, mean, and median.
+
+Add lots of summary variables using functions inside `summarise()`.
+
+1.  Use `n()` function to create a count variable (no variable in parentheses)
+2.  Use `mean()` function on a variable
+3.  Use `median()` function on a variable
+
+```{r}
+#| label: pipe02-b
+
+gss_all |>  
+  drop_na(agekdbrn) |> 
+  summarise(
+    freq = n(), 
+    med = median(agekdbrn),
+    avg = mean(agekdbrn)
+    ) 
+
+```
+
+**Use `dplyr` grammar to find the frequency, mean, and median for the variable: `hrs1`.**
+
+```{r, eval=FALSE}
+#| label: pipe02-mini-task
+
+gss_all |>  
+  drop_na(hrs1) |>
+  summarise(
+   # ADD TO THE PIPE HERE WITH YOUR CODE HERE
+)
+```
+
+## `group_by()` and `summarize()` {.sparse-slide}
+
+A common pipeline is `group_by()` and then `summarize()` to calculate summary statistics for each group:
+
+Use `group_by()` to organize your data into groups based on one or more variables.\
+Use `summarize()` to compute statistics like total, mean, or median for each group.\
+<br>
+
+1.  Start with the `gss_all` data frame:
+2.  Remove any observations with missing data for our key variables
+3.  Do the next steps separately for each group in the variable
+4.  Creates a new data frame with one row for each combination of grouping variables
+
+```{r}
+#| label: pipe03
+
+gss_all |>  
+  drop_na(sex, agekdbrn) |> 
+  group_by(sex) |> 
+  summarise(avg = mean(agekdbrn)) 
+
+```
+
+**Compare the average and median work hours (`hrs`) for U.S. men and women.**
+
+```{r, eval=FALSE}
+#| label: pipe03-mini-task
+#| code-line-numbers: "1-3|4|5-7"
+#| output-location: column-fragment
+
+gss_all |>  
+  drop_na(sex, hrs1) |> 
+   # ADD TO THE PIPE HERE WITH YOUR CODE HERE
+
+```
+
+## `summarize()` + variability measures {.sparse-slide}
+
+```{r}
+#| label: summarize
+
+gss_all |>  
+  drop_na(agekdbrn, sex)  |>
+  group_by(as_factor(sex)) |>  
+  summarise(
+    freq = n(),
+    min = min(agekdbrn),
+    median = median(agekdbrn),
+    max = max(agekdbrn),
+    mean = round(mean(agekdbrn), digits = 2), 
+    sd = sd(agekdbrn)
+    ) 
+
+```
+
+# Think Like a Statistician
+
+**How did the mean and standard deviation of weekly work hours differ between men and women in 2024, and what do these differences suggest about gender-based variability in labor patterns.**
+
+*How do we find out?*
+
+```{r}
+#| label: think-output
+
+# ADD YOUR CODE HERE
+
+```
+
+## Your Data Take
+
+**What's your conclusion to our initial research question?**

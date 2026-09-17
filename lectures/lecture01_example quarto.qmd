@@ -1,0 +1,96 @@
+---
+title: "Simple Quarto Demo"
+author: "Joanna"
+format: html
+---
+
+# Introduction
+
+This document demonstrates some basic R functionality using Quarto.
+
+## Create Variables
+
+```{r}
+#| label: objects
+name <- "Joanna"
+x <- 1:10
+y <- x^2
+```
+
+## Display Output
+
+The following code prints a greeting.
+
+```{r}
+print(paste("Hello,", name))
+```
+
+## Create a Data Frame
+
+```{r}
+demo_data <- data.frame(
+  Number = x,
+  Square = y
+)
+
+demo_data
+```
+
+Notice that Quarto automatically displays the data frame as a table in
+the rendered document.
+
+## Basic Calculations
+
+```{r}
+sum(y)
+mean(x)
+```
+
+## Create a Plot
+
+```{r}
+plot(
+  x, y,
+  type = "b",
+  col = "orange",
+  pch = 19,
+  main = "Squares of Numbers",
+  xlab = "Number",
+  ylab = "Square"
+)
+```
+
+The plot appears directly in the rendered document.
+
+## Getting Help in R
+
+When working interactively in RStudio, try these commands in the
+**Console**:
+
+``` r
+?mean
+help(plot)
+```
+
+These commands open the corresponding help pages in the **Help** pane.
+
+## Try These in the Console
+
+The following examples are meant to be typed directly into the Console
+rather than included in the document:
+
+``` r
+2 + 2
+sqrt(25)
+mean(x)
+```
+
+## What This Demonstrates
+
+- **Script/Source Pane**: The Quarto document itself
+- **Console Pane**: Running code and trying commands interactively
+- **Environment Pane**: Objects such as `name`, `x`, `y`, and
+  `demo_data`
+- **Plots Pane**: Generated plots
+- **Help Pane**: Documentation opened with `?mean`
+- **Viewer Pane**: Rendered Quarto HTML document

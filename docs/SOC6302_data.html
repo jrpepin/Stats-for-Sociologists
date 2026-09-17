@@ -243,18 +243,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 </section>
 <section id="sampling" class="level1">
-<h1>04.1 Sampling</h1>
+<h1>03.1 Sampling</h1>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># GSS_ALL</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>gss_all <span class="sc">|&gt;</span></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(year, agekdbrn) <span class="sc">|&gt;</span></span>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">|&gt;</span></span>
 <span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">subset</span>(year <span class="sc">==</span> <span class="dv">2022</span>) <span class="sc">|&gt;</span></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">saveRDS</span>(<span class="at">file =</span> <span class="st">"tutorials/SOC6302-04/data/gss_all.rds"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">saveRDS</span>(<span class="at">file =</span> <span class="st">"tutorials/SOC6302-03/data/gss_all.rds"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><strong>simulation:</strong> <code>agekdbrn</code></p>
-<section id="lecture-04" class="level2">
-<h2 class="anchored" data-anchor-id="lecture-04">Lecture 04</h2>
+<section id="lecture-03" class="level2">
+<h2 class="anchored" data-anchor-id="lecture-03">Lecture 03</h2>
 <p><code>select()</code> &amp; <code>mutate()</code>:</p>
 <ul>
 <li><code>year</code>:</li>
@@ -275,15 +275,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 </section>
 <section id="uncertainty" class="level1">
-<h1>05.1 Uncertainty</h1>
+<h1>04.1 Uncertainty</h1>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="do">## GSS24</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>gss24 <span class="sc">|&gt;</span></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(tvhours, sex) <span class="sc">|&gt;</span></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">saveRDS</span>(<span class="at">file =</span> <span class="st">"tutorials/SOC6302-05/data/gss24.rds"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">saveRDS</span>(<span class="at">file =</span> <span class="st">"tutorials/SOC6302-04/data/gss24.rds"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<section id="lecture-05" class="level2">
-<h2 class="anchored" data-anchor-id="lecture-05">Lecture 05</h2>
+<section id="lecture-04" class="level2">
+<h2 class="anchored" data-anchor-id="lecture-04">Lecture 04</h2>
 <ul>
 <li><code>wwwhr</code> Not counting e-mail, about how many minutes or hours per week do you use the Web?</li>
 </ul>
@@ -304,7 +304,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 </section>
 <section id="associations" class="level1">
-<h1>06.1 Associations</h1>
+<h1>05.1 Associations</h1>
 <p>chi2 = fake data (gender and walk alone at night)</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="do">## GSS22</span></span>
@@ -312,10 +312,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">subset</span>(year <span class="sc">==</span> <span class="dv">2022</span>) <span class="sc">|&gt;</span></span>
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(height, weight) <span class="sc">|&gt;</span></span>
 <span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">|&gt;</span></span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">saveRDS</span>(<span class="at">file =</span> <span class="st">"tutorials/SOC6302-06/data/gss22.rds"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">saveRDS</span>(<span class="at">file =</span> <span class="st">"tutorials/SOC6302-05/data/gss22.rds"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<section id="lecture-06" class="level2">
-<h2 class="anchored" data-anchor-id="lecture-06">Lecture 06</h2>
+<section id="lecture-05" class="level2">
+<h2 class="anchored" data-anchor-id="lecture-05">Lecture 05</h2>
 <ul>
 <li><code>fefam</code> Better for man to work, woman tend home</li>
 <li><code>postlife</code> Belief in life after death<br>
@@ -347,17 +347,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 </section>
 <section id="description" class="level1">
-<h1>07.1 Description</h1>
+<h1>06.1 Description</h1>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="do">## GSS22</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>gss_all <span class="sc">|&gt;</span></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">subset</span>(year <span class="sc">==</span> <span class="dv">2022</span>) <span class="sc">|&gt;</span></span>
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(lifenow, age, fefam, hrs1, race, sex, educ) <span class="sc">|&gt;</span></span>
 <span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">|&gt;</span></span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">saveRDS</span>(<span class="at">file =</span> <span class="st">"tutorials/SOC6302-07/data/gss22.rds"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">saveRDS</span>(<span class="at">file =</span> <span class="st">"tutorials/SOC6302-06/data/gss22.rds"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<section id="lecture-07" class="level2">
-<h2 class="anchored" data-anchor-id="lecture-07">Lecture 07</h2>
+<section id="lecture-06" class="level2">
+<h2 class="anchored" data-anchor-id="lecture-06">Lecture 06</h2>
 <ul>
 <li><code>fefam</code> Better for man to work, woman tend home</li>
 <li><code>race</code> What race do you consider yourself</li>
@@ -370,28 +370,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 </section>
 <section id="regression" class="level1">
-<h1>08.1 Regression</h1>
+<h1>07.1 Regression</h1>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="do">## GSS22</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>gss_all <span class="sc">|&gt;</span></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">subset</span>(year <span class="sc">==</span> <span class="dv">2022</span>) <span class="sc">|&gt;</span></span>
 <span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(height, weight, realinc, lifenow, sex, marital) <span class="sc">|&gt;</span></span>
 <span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">|&gt;</span></span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">saveRDS</span>(<span class="at">file =</span> <span class="st">"tutorials/SOC6302-08/data/gss22.rds"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">saveRDS</span>(<span class="at">file =</span> <span class="st">"tutorials/SOC6302-07/data/gss22.rds"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="regression-1" class="level1">
-<h1>09.1 Regression</h1>
+<h1>08.1 Regression</h1>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="do">## GSS24</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>gss_all <span class="sc">|&gt;</span></span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">subset</span>(year <span class="sc">==</span> <span class="dv">2024</span>) <span class="sc">|&gt;</span></span>
 <span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(tvhours, hrs1, educ, age, childs, sex, marital, polviews) <span class="sc">|&gt;</span></span>
 <span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">|&gt;</span></span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">saveRDS</span>(<span class="at">file =</span> <span class="st">"tutorials/SOC6302-09/data/gss24.rds"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">saveRDS</span>(<span class="at">file =</span> <span class="st">"tutorials/SOC6302-08/data/gss24.rds"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<section id="lecture-09" class="level2">
-<h2 class="anchored" data-anchor-id="lecture-09">Lecture 09</h2>
+<section id="lecture-08" class="level2">
+<h2 class="anchored" data-anchor-id="lecture-08">Lecture 08</h2>
 <ul>
 <li><code>year</code> Survey year</li>
 <li><code>tvhours</code> Hours per day watching tv</li>

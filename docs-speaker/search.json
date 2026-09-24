@@ -620,7 +620,7 @@
     "href": "lecture-02.html#mini-task-2",
     "title": "Data Management I",
     "section": "Mini-task",
-    "text": "Mini-task\n\n Load the 2024 GSS data.\n\n\n\n# Get the data only for the 2024 survey respondents\ngss24 &lt;- gss_get_yr(2024)\n\n# Get the data all survey years\ndata(gss_all)\n\n\nWhy did we need to use library() before we loaded the GSS data?"
+    "text": "Mini-task\n\n Load the 2024 GSS data & all survey waves.\n\n\n\n# Get the data only for the 2024 survey respondents\ngss24 &lt;- gss_get_yr(2024)\n\n# Get the data all survey years\ndata(gss_all)\n\n\nWhy did we need to use library() before we loaded the GSS data?"
   },
   {
     "objectID": "lecture-02.html#coding-basics-1",
@@ -690,7 +690,7 @@
     "href": "lecture-02.html#data-class-variable-type",
     "title": "Data Management I",
     "section": "Data class + variable type",
-    "text": "Data class + variable type"
+    "text": "Data class + variable type\n\n\nStatistical variable types describe the meaning of the data (e.g., nominal = categories, continuous = measurements).\nR variable types describe how the data is stored in memory (factor, numeric, character, etc.)."
   },
   {
     "objectID": "lecture-02.html#class",
@@ -704,7 +704,7 @@
     "href": "lecture-02.html#factor",
     "title": "Data Management I",
     "section": "Factor",
-    "text": "Factor\nfactors consist of character data with a fixed and known set of possible values\n\n\nopinion &lt;- factor(c(\"like\", \"dislike\", \"dislike\", \"hate\", \"dislike\", \"hate\"))\nclass(opinion)\n\n[1] \"factor\"\n\n\n\n\n\n# By default, the levels are sorted alphabetically.\nlevels(opinion)\n\n[1] \"dislike\" \"hate\"    \"like\""
+    "text": "Factor\nfactors consist of character data with a fixed and known set of possible values\n\n\nopinion &lt;- factor(c(\"like\", \"dislike\", \"dislike\", \"hate\", \"dislike\", \"hate\"))\nclass(opinion)\n\n[1] \"factor\"\n\n\n\n\n\n# By default, the levels are sorted alphabetically.\nlevels(opinion)\n\n[1] \"dislike\" \"hate\"    \"like\"   \n\n\n\nc() means to combine"
   },
   {
     "objectID": "lecture-02.html#factor-order",
@@ -732,7 +732,7 @@
     "href": "lecture-02.html#haven-labelled-cont.",
     "title": "Data Management I",
     "section": "Haven labelled cont.",
-    "text": "Haven labelled cont.\nIt makes data easier to understand without needing a separate codebook.\n\n1attr(gss24$premarsx, \"label\")\n2print_labels(gss24$premarsx)\n\n\n1\n\nA description of the variable\n\n2\n\nView the label attached to each numeric value\n\n\n\n\n\n\n[1] \"Sex before marriage\"\n\nLabels:\n value                         label\n     1                  always wrong\n     2           almost always wrong\n     3          wrong only sometimes\n     4              not wrong at all\n     5                         other\n NA(d)                    don't know\n NA(i)                           iap\n NA(j)            I don't have a job\n NA(m)                   dk, na, iap\n NA(n)                     no answer\n NA(p)                 not imputable\n NA(r)                       refused\n NA(s)                skipped on web\n NA(u)                    uncodeable\n NA(x) not available in this release\n NA(y)    not available in this year\n NA(z)                  see codebook\n\n\n\nThe column itself might have a variable label (a description like “Gender of respondent”)\nThe column contains values (numbers)\nEach value may have a label attached (like “Male” for 1, “Female” for 2)"
+    "text": "Haven labelled cont.\nIt makes data easier to understand without needing a separate codebook.\n\n1attr(gss24$premarsx, \"label\")\n2print_labels(gss24$premarsx)\n\n\n1\n\nA description of the variable\n\n2\n\nView the label attached to each numeric value\n\n\n\n\n\n\n[1] \"Sex before marriage\"\n\nLabels:\n value                         label\n     1                  always wrong\n     2           almost always wrong\n     3          wrong only sometimes\n     4              not wrong at all\n     5                         other\n NA(d)                    don't know\n NA(i)                           iap\n NA(j)            I don't have a job\n NA(m)                   dk, na, iap\n NA(n)                     no answer\n NA(p)                 not imputable\n NA(r)                       refused\n NA(s)                skipped on web\n NA(u)                    uncodeable\n NA(x) not available in this release\n NA(y)    not available in this year\n NA(z)                  see codebook\n\n\n\nThe column itself might have a variable label (a description like “Gender of respondent”) &lt;click&gt;\nThe column contains values (numbers)\nEach value may have a label attached (like “Male” for 1, “Female” for 2)"
   },
   {
     "objectID": "lecture-02.html#section",
@@ -802,7 +802,7 @@
     "href": "lecture-02.html#pretty-cross-tabs-with-ctable",
     "title": "Data Management I",
     "section": "Pretty cross-tabs with ctable()",
-    "text": "Pretty cross-tabs with ctable()\nUse summarytools::ctable instead!\n\n\n1ctable(gss24$premarsx, gss24$sex,\n2  prop = \"c\",\n3  format = \"p\",\n  useNA = \"no\"\n4)\n\n\n1\n\nChange from table() to ctable().\n\n2\n\nThe “c” gives column %; “r” would give row %.\n\n3\n\nThis adds the % symbols to the table.\n\n4\n\nExclude the missing levels from the table.\n\n\n\n\n\n\nCross-Tabulation, Column Proportions  \npremarsx * sex  \nData Frame: gss24  \n\n---------------------- ----- --------------- --------------- ---------------\n                         sex            male          female           Total\n              premarsx                                                      \n          always wrong          180 ( 15.8%)    256 ( 18.2%)    436 ( 17.1%)\n   almost always wrong           71 (  6.2%)     98 (  7.0%)    169 (  6.6%)\n  wrong only sometimes          155 ( 13.6%)    161 ( 11.5%)    316 ( 12.4%)\n      not wrong at all          734 ( 64.4%)    891 ( 63.4%)   1625 ( 63.8%)\n                 Total         1140 (100.0%)   1406 (100.0%)   2546 (100.0%)\n---------------------- ----- --------------- --------------- ---------------\n\n\n\nAdd to your code-along:\n1. X percentage of respondents believe sex before marriage is ‘almost always wrong’?\n2. A greater percentage of X think sex before marriage is ‘not wrong at all’."
+    "text": "Pretty cross-tabs with ctable()\nUse summarytools::ctable instead!\n\n\n1ctable(gss24$premarsx, gss24$sex,\n2  prop = \"c\",\n3  format = \"p\",\n4  useNA = \"no\"\n) \n\n\n1\n\nChange from table() to ctable().\n\n2\n\nThe “c” gives column %; “r” would give row %.\n\n3\n\nThis adds the % symbols to the table.\n\n4\n\nExclude the missing levels from the table.\n\n\n\n\n\n\nCross-Tabulation, Column Proportions  \npremarsx * sex  \nData Frame: gss24  \n\n---------------------- ----- --------------- --------------- ---------------\n                         sex            male          female           Total\n              premarsx                                                      \n          always wrong          180 ( 15.8%)    256 ( 18.2%)    436 ( 17.1%)\n   almost always wrong           71 (  6.2%)     98 (  7.0%)    169 (  6.6%)\n  wrong only sometimes          155 ( 13.6%)    161 ( 11.5%)    316 ( 12.4%)\n      not wrong at all          734 ( 64.4%)    891 ( 63.4%)   1625 ( 63.8%)\n                 Total         1140 (100.0%)   1406 (100.0%)   2546 (100.0%)\n---------------------- ----- --------------- --------------- ---------------\n\n\n\nAdd to your code-along:\n1. X percentage of respondents believe sex before marriage is ‘almost always wrong’?\n2. A greater percentage of X think sex before marriage is ‘not wrong at all’."
   },
   {
     "objectID": "lecture-02.html#section-1",

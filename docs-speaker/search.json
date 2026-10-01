@@ -2287,5 +2287,82 @@
     "title": "Data Management II",
     "section": "",
     "text": "Use select(), filter(), mutate(), group_by(), & summarise()\n\n\n\n Can you reproduce this table?\n\n\n\n# A tibble: 3 × 5\n  mar_cat       count  mean median    sd\n  &lt;chr&gt;         &lt;int&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;\n1 Married         892  2.8       2  2.44\n2 Never married   687  3.5       2  3.78\n3 Widow/div/sep   565  3.87      3  3.73\n\n\n\n\n\ntvhours: Hours per day watching tv\nmarital: Are you currently – married, widowed, divorced, separated, or have you never been married?"
+  },
+  {
+    "objectID": "lecture-03.html#replication",
+    "href": "lecture-03.html#replication",
+    "title": "Data Management II",
+    "section": "Replication",
+    "text": "Replication\nThe guiding principle for workflow.\nA workflow of data analysis is a process for managing all aspects of data analysis.\n\nPlanning, documenting, and organizing your work; cleaning the data; creating, renaming, and verifying variables; performing and presenting statistical analyses; producing replicable results; and archiving what you have done are all integral parts of your workflow.\n\n\nSource: (Long 2008)"
+  },
+  {
+    "objectID": "lecture-03.html#steps-in-a-workflow",
+    "href": "lecture-03.html#steps-in-a-workflow",
+    "title": "Data Management II",
+    "section": "Steps in a workflow",
+    "text": "Steps in a workflow\n\n\n\n\n\n\n\nSet up\nSystematic organization of the project and project files.\n\n\nFamiliarize self with data\nSkipping takes more time in the long run.\n\n\nProcess data\nTakes the MOST time.\n\n\nRunning analyses\nWhat people THINK takes the most time.\n\n\nPresenting results\nWhat people (wrongly) think does not take time."
+  },
+  {
+    "objectID": "lecture-03.html#filepaths",
+    "href": "lecture-03.html#filepaths",
+    "title": "Data Management II",
+    "section": "Filepaths",
+    "text": "Filepaths\nA project-based workflow + here() avoids changing file paths.\n\n\n\nABSOLUTE FILE PATHS\nDepartment of Sociology\nUnit 17100, 17th Floor, Ontario Power Building\n700 University Ave., Toronto, ON M5G 1Z5\nC:\\Users\\Pepin\\GitHub\\SOC6302\\scripts\n\nRELATIVE FILE PATHS\nTake the left side elevators to the 17th floor.\nGo through the double doors and a take a right.\nFirst door on your left.\nhere(scripts)"
+  },
+  {
+    "objectID": "lecture-03.html#file-names",
+    "href": "lecture-03.html#file-names",
+    "title": "Data Management II",
+    "section": "File names",
+    "text": "File names\nshould be:\n\nmachine-readable\nhuman-readable\nplay well with default-ordering"
+  },
+  {
+    "objectID": "lecture-03.html#project-structure",
+    "href": "lecture-03.html#project-structure",
+    "title": "Data Management II",
+    "section": "Project structure",
+    "text": "Project structure\nLet’s set up your project structure using the here() package."
+  },
+  {
+    "objectID": "lecture-03.html#here",
+    "href": "lecture-03.html#here",
+    "title": "Data Management II",
+    "section": "here()",
+    "text": "here()\nInstall the here() package, available on CRAN.\n\ninstall.packages(\"here\")\n\nlibrary(here)"
+  },
+  {
+    "objectID": "lecture-03.html#here-1",
+    "href": "lecture-03.html#here-1",
+    "title": "Data Management II",
+    "section": "here()",
+    "text": "here()\nFirst, let’s establish our project directory\n\n# shows the file path to the root of the project\nhere()\n\n\nNext, we’ll create folders within our project."
+  },
+  {
+    "objectID": "lecture-03.html#example-folder-structure",
+    "href": "lecture-03.html#example-folder-structure",
+    "title": "Data Management II",
+    "section": "Example folder structure",
+    "text": "Example folder structure\n\n\nSOC6302\n\n\n\nSOC6302/\n\n\n\ndata/\n\n\ngss7924-raw.rda\n\n\ngss7924-processed.Rdata/\n\n\n\n\ncode-alongs/\n\n\n\n\nmilestones/\n\n\n\n\nproject/\n\n\n\ndata/\n\n\n\n\nscripts/\n\n\n\n\noutputs/\n\n\n\n\nreadme.qmd\n\n\nSOC6302.Rproj\n\n\n\n\nResearch Projects\n\n\n\nproject/\n\n\n\ndata/\n\n\ngss7924-raw.rda\n\n\ngss7924-processed.Rdata/\n\n\n\n\nscripts/\n\n\nclean_data.R\n\n\nanalyze_data.R\n\n\ndraft.qmd\n\n\n\n\noutputs/\n\n\ndraft.html\n\n\n\nfigures/\n\n\nplot1.png\n\n\nplot2.png\n\n\n\n\nreadme.qmd\n\n\nproject.Rproj"
+  },
+  {
+    "objectID": "lecture-03.html#create-a-folder-structure",
+    "href": "lecture-03.html#create-a-folder-structure",
+    "title": "Data Management II",
+    "section": "Create a folder structure",
+    "text": "Create a folder structure\nusing here() and dir.create()\n\n# Create base folders\ndir.create(here(\"data\"), recursive = TRUE)\ndir.create(here(\"code-alongs\"), recursive = TRUE)\ndir.create(here(\"milestones\"), recursive = TRUE)\ndir.create(here(\"project\"), recursive = TRUE)"
+  },
+  {
+    "objectID": "lecture-03.html#create-sub-folders",
+    "href": "lecture-03.html#create-sub-folders",
+    "title": "Data Management II",
+    "section": "Create sub-folders",
+    "text": "Create sub-folders\nusing here() and dir.create()\n\n# Create project sub-folders\ndir.create(here(\"project\", \"data\"), recursive = TRUE)\ndir.create(here(\"project\", \"scripts\"), recursive = TRUE)\ndir.create(here(\"project\", \"outputs\"), recursive = TRUE)"
+  },
+  {
+    "objectID": "lecture-03.html#check-your-work",
+    "href": "lecture-03.html#check-your-work",
+    "title": "Data Management II",
+    "section": "Check your work",
+    "text": "Check your work\nreport a list of folders and or files in the R-project folders and sub-folder.\n\n# Your SOC6302 class folder\nlist.files(path = here())\n\n# Your \"Project\" sub-folder\nlist.files(path = here(\"project\"))"
   }
 ]

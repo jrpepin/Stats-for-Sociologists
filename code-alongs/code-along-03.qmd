@@ -410,3 +410,77 @@ to people who were widowed, divorced, or separated?
 ## Your Data Take
 
 **What's your conclusion to our research question?**
+
+# `here()`
+
+```{r}
+#| message: false
+#| label: here-install
+#| eval: false
+
+install.packages("here")
+
+library(here)
+```
+
+First, let's establish our project directory
+
+```{r}
+#| eval: false
+#| message: false
+#| label: here
+
+# shows the file path to the root of the project
+here()
+
+```
+
+**Create a folder structure**
+
+using `here()` and `dir.create()`
+
+```{r}
+#| eval: false
+#| message: false
+#| label: base-folders
+
+# Create base folders
+dir.create(here("data"), recursive = TRUE)
+dir.create(here("code-alongs"), recursive = TRUE)
+dir.create(here("milestones"), recursive = TRUE)
+dir.create(here("project"), recursive = TRUE)
+```
+
+**Create sub-folders**
+
+using `here()` and `dir.create()`
+
+```{r}
+#| eval: false
+#| message: false
+#| label: sub-folders
+
+# Create project sub-folders
+dir.create(here("project", "data"), recursive = TRUE)
+dir.create(here("project", "scripts"), recursive = TRUE)
+dir.create(here("project", "outputs"), recursive = TRUE)
+
+```
+
+**Check your work**
+
+report a list of folders and or files in the R-project folders and
+sub-folder.
+
+```{r}
+#| eval: false
+#| message: false
+#| label: list-files
+
+# Your SOC6302 class folder
+list.files(path = here())
+
+# Your "Project" sub-folder
+list.files(path = here("project"))
+
+```

@@ -6,10 +6,10 @@
 <script src="lecture-04_files/libs/quarto-html/tippy.umd.min.js"></script>
 <link href="lecture-04_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="lecture-04_files/libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="lecture-04_files/libs/quarto-html/quarto-syntax-highlighting-ac1a48248070c8bfbae4244efd7728e4.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="lecture-04_files/libs/quarto-html/quarto-syntax-highlighting-eec68b17241c1efd3eae2de50d816e3e.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <link href="lecture-04_files/libs/quarto-contrib/fontawesome6-1.2.0/all.min.css" rel="stylesheet">
 <link href="lecture-04_files/libs/quarto-contrib/fontawesome6-1.2.0/latex-fontsize.css" rel="stylesheet"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.8.26">
+  <meta name="generator" content="quarto-1.10.18">
 
   <title>Statistical Tests I</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -18,10 +18,16 @@
   <link rel="stylesheet" href="lecture-04_files/libs/revealjs/dist/reset.css">
   <link rel="stylesheet" href="lecture-04_files/libs/revealjs/dist/reveal.css">
   <style>
-    code{white-space: pre-wrap;}
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
     span.smallcaps{font-variant: small-caps;}
-    div.columns{display: flex; gap: min(4vw, 1.5em);}
-    div.column{flex: auto; overflow-x: auto;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
     ul.task-list li input[type="checkbox"] {
@@ -96,7 +102,7 @@
     code span.vs { color: #da4453; } /* VerbatimString */
     code span.wa { color: #da4453; } /* Warning */
   </style>
-  <link rel="stylesheet" href="lecture-04_files/libs/revealjs/dist/theme/quarto-364fd963121a594f818dc82d366c140b.css">
+  <link rel="stylesheet" href="lecture-04_files/libs/revealjs/dist/theme/quarto-0a3be1628df9e61b8582fc9b7ed8a9d4.css">
   <link href="lecture-04_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="lecture-04_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="lecture-04_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -239,7 +245,7 @@
   <div class="reveal">
     <div class="slides">
 
-<section id="title-slide" data-background-image="images/05/detective.png" data-background-position="bottom center" data-background-size="250px" class="quarto-title-block center">
+<section id="title-slide" data-background-image="images/04/normal.png" data-background-position="bottom center" data-background-size="250px" class="quarto-title-block center">
   <h1 class="title">Statistical Tests I</h1>
 
 <div class="quarto-title-authors">
@@ -299,7 +305,7 @@
 </div>
 <p><br></p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a><span class="fu">install.packages</span>(<span class="st">"Rmisc"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="" aria-label="1"></a><span class="fu">install.packages</span>(<span class="st">"Rmisc"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <aside class="notes">
 <p><span style="color: #6f42c1">What does this mean in your code-along: “This chunk will not run (on purpose!) when rendered because eval: false.”?</span></p>
@@ -325,12 +331,12 @@
 </div>
 <p><br></p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href=""></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb2-2"><a href=""></a><span class="fu">library</span>(haven) <span class="co"># not core tidyverse</span></span>
-<span id="cb2-3"><a href=""></a><span class="fu">library</span>(gssr)</span>
-<span id="cb2-4"><a href=""></a><span class="fu">library</span>(gssrdoc) <span class="co"># load the GSS codebook</span></span>
-<span id="cb2-5"><a href=""></a><span class="fu">library</span>(summarytools)</span>
-<span id="cb2-6"><a href=""></a><span class="fu">library</span>(Rmisc) <span class="co"># load the new package</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="" aria-label="1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb2-2"><a href="" aria-label="2"></a><span class="fu">library</span>(haven) <span class="co"># not core tidyverse</span></span>
+<span id="cb2-3"><a href="" aria-label="3"></a><span class="fu">library</span>(gssr)</span>
+<span id="cb2-4"><a href="" aria-label="4"></a><span class="fu">library</span>(gssrdoc) <span class="co"># load the GSS codebook</span></span>
+<span id="cb2-5"><a href="" aria-label="5"></a><span class="fu">library</span>(summarytools)</span>
+<span id="cb2-6"><a href="" aria-label="6"></a><span class="fu">library</span>(Rmisc) <span class="co"># load the new package</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <aside class="notes">
 <p><code>haven()</code> was installed with tidyverse; but it doesn’t load automatically</p>
@@ -354,8 +360,8 @@
 <p><br></p>
 <div class="fragment">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a><span class="co"># Get the data from the 2022 survey</span></span>
-<span id="cb3-2"><a href=""></a>gss22 <span class="ot">&lt;-</span> <span class="fu">gss_get_yr</span>(<span class="dv">2022</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="" aria-label="1"></a><span class="co"># Get the data from the 2022 survey</span></span>
+<span id="cb3-2"><a href="" aria-label="2"></a>gss22 <span class="ot">&lt;-</span> <span class="fu">gss_get_yr</span>(<span class="dv">2022</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </section>
@@ -378,10 +384,10 @@
 <p><br></p>
 <div class="fragment">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href=""></a><span class="co"># Create a new df</span></span>
-<span id="cb4-2"><a href=""></a>my_data <span class="ot">&lt;-</span>gss22 <span class="sc">|&gt;</span></span>
-<span id="cb4-3"><a href=""></a>  <span class="fu">select</span>(wwwhr, postlife, childs, sex) <span class="sc">|&gt;</span></span>
-<span id="cb4-4"><a href=""></a>  <span class="fu">drop_na</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="" aria-label="1"></a><span class="co"># Create a new df</span></span>
+<span id="cb4-2"><a href="" aria-label="2"></a>my_data <span class="ot">&lt;-</span>gss22 <span class="sc">|&gt;</span></span>
+<span id="cb4-3"><a href="" aria-label="3"></a>  <span class="fu">select</span>(wwwhr, postlife, childs, sex) <span class="sc">|&gt;</span></span>
+<span id="cb4-4"><a href="" aria-label="4"></a>  <span class="fu">drop_na</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </section></section>
@@ -393,12 +399,12 @@
 <section id="review-summarise" class="slide level2 sparse-slide">
 <h2>Review: <code>summarise()</code></h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a>my_data <span class="sc">|&gt;</span></span>
-<span id="cb5-2"><a href=""></a>  <span class="fu">summarise</span>(</span>
-<span id="cb5-3"><a href=""></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
-<span id="cb5-4"><a href=""></a>    <span class="at">mean =</span> <span class="fu">mean</span>(wwwhr),</span>
-<span id="cb5-5"><a href=""></a>    <span class="at">sd =</span> <span class="fu">sd</span>(wwwhr)</span>
-<span id="cb5-6"><a href=""></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="" aria-label="1"></a>my_data <span class="sc">|&gt;</span></span>
+<span id="cb5-2"><a href="" aria-label="2"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb5-3"><a href="" aria-label="3"></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb5-4"><a href="" aria-label="4"></a>    <span class="at">mean =</span> <span class="fu">mean</span>(wwwhr),</span>
+<span id="cb5-5"><a href="" aria-label="5"></a>    <span class="at">sd =</span> <span class="fu">sd</span>(wwwhr)</span>
+<span id="cb5-6"><a href="" aria-label="6"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell fragment">
 <div class="cell-output cell-output-stdout">
@@ -426,15 +432,15 @@
 <section id="summarise-with-equation" class="slide level2">
 <h2><code>summarise()</code> with equation</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7" data-code-line-numbers="1-5|6|7|8-9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href=""></a>wwwhr_sum <span class="ot">&lt;-</span> my_data <span class="sc">|&gt;</span></span>
-<span id="cb7-2"><a href=""></a>  <span class="fu">summarise</span>(</span>
-<span id="cb7-3"><a href=""></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
-<span id="cb7-4"><a href=""></a>    <span class="at">mean_wwwhr =</span> <span class="fu">mean</span>(wwwhr),</span>
-<span id="cb7-5"><a href=""></a>    <span class="at">sd_wwwhr =</span> <span class="fu">sd</span>(wwwhr),</span>
-<span id="cb7-6"><a href=""></a>    <span class="at">se_wwwhr =</span> sd_wwwhr <span class="sc">/</span> <span class="fu">sqrt</span>(n),</span>
-<span id="cb7-7"><a href=""></a>    <span class="at">ci_lower =</span> mean_wwwhr <span class="sc">-</span> (<span class="fl">1.96</span> <span class="sc">*</span> se_wwwhr),</span>
-<span id="cb7-8"><a href=""></a>    <span class="at">ci_upper =</span> mean_wwwhr <span class="sc">+</span> (<span class="fl">1.96</span> <span class="sc">*</span> se_wwwhr)</span>
-<span id="cb7-9"><a href=""></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7" data-code-line-numbers="1-5|6|7|8-9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="" aria-label="1"></a>wwwhr_sum <span class="ot">&lt;-</span> my_data <span class="sc">|&gt;</span></span>
+<span id="cb7-2"><a href="" aria-label="2"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb7-3"><a href="" aria-label="3"></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb7-4"><a href="" aria-label="4"></a>    <span class="at">mean_wwwhr =</span> <span class="fu">mean</span>(wwwhr),</span>
+<span id="cb7-5"><a href="" aria-label="5"></a>    <span class="at">sd_wwwhr =</span> <span class="fu">sd</span>(wwwhr),</span>
+<span id="cb7-6"><a href="" aria-label="6"></a>    <span class="at">se_wwwhr =</span> sd_wwwhr <span class="sc">/</span> <span class="fu">sqrt</span>(n),</span>
+<span id="cb7-7"><a href="" aria-label="7"></a>    <span class="at">ci_lower =</span> mean_wwwhr <span class="sc">-</span> (<span class="fl">1.96</span> <span class="sc">*</span> se_wwwhr),</span>
+<span id="cb7-8"><a href="" aria-label="8"></a>    <span class="at">ci_upper =</span> mean_wwwhr <span class="sc">+</span> (<span class="fl">1.96</span> <span class="sc">*</span> se_wwwhr)</span>
+<span id="cb7-9"><a href="" aria-label="9"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="code-meets-question" class="slide level2 sparse-slide" data-background-image="images/gears-solid-full.png" data-background-size="80px" data-background-repeat="repeat">
@@ -444,7 +450,7 @@
 </div>
 <p><br></p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href=""></a>wwwhr_sum</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="" aria-label="1"></a>wwwhr_sum</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 6
       n mean_wwwhr sd_wwwhr se_wwwhr ci_lower ci_upper
@@ -456,16 +462,16 @@
 <section id="summarise-ci" class="slide level2 sparse-slide">
 <h2><code>summarise()</code> + <code>CI()</code></h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10" data-code-line-numbers="6-7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href=""></a>wwwhr_ci <span class="ot">&lt;-</span> my_data <span class="sc">|&gt;</span></span>
-<span id="cb10-2"><a href=""></a>  <span class="fu">summarise</span>(</span>
-<span id="cb10-3"><a href=""></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
-<span id="cb10-4"><a href=""></a>    <span class="at">mean_wwwhr =</span> <span class="fu">mean</span>(wwwhr),</span>
-<span id="cb10-5"><a href=""></a>    <span class="at">sd_wwwhr =</span> <span class="fu">sd</span>(wwwhr),</span>
-<span id="cb10-6"><a href=""></a>    <span class="at">lowCI_wwwhr =</span> Rmisc<span class="sc">::</span><span class="fu">CI</span>(wwwhr)[<span class="st">'lower'</span>],</span>
-<span id="cb10-7"><a href=""></a>    <span class="at">hiCI_wwwhr  =</span> Rmisc<span class="sc">::</span><span class="fu">CI</span>(wwwhr)[<span class="st">'upper'</span>]</span>
-<span id="cb10-8"><a href=""></a>    )</span>
-<span id="cb10-9"><a href=""></a></span>
-<span id="cb10-10"><a href=""></a>wwwhr_ci</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10" data-code-line-numbers="6-7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="" aria-label="1"></a>wwwhr_ci <span class="ot">&lt;-</span> my_data <span class="sc">|&gt;</span></span>
+<span id="cb10-2"><a href="" aria-label="2"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb10-3"><a href="" aria-label="3"></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb10-4"><a href="" aria-label="4"></a>    <span class="at">mean_wwwhr =</span> <span class="fu">mean</span>(wwwhr),</span>
+<span id="cb10-5"><a href="" aria-label="5"></a>    <span class="at">sd_wwwhr =</span> <span class="fu">sd</span>(wwwhr),</span>
+<span id="cb10-6"><a href="" aria-label="6"></a>    <span class="at">lowCI_wwwhr =</span> Rmisc<span class="sc">::</span><span class="fu">CI</span>(wwwhr)[<span class="st">'lower'</span>],</span>
+<span id="cb10-7"><a href="" aria-label="7"></a>    <span class="at">hiCI_wwwhr  =</span> Rmisc<span class="sc">::</span><span class="fu">CI</span>(wwwhr)[<span class="st">'upper'</span>]</span>
+<span id="cb10-8"><a href="" aria-label="8"></a>    )</span>
+<span id="cb10-9"><a href="" aria-label="9"></a></span>
+<span id="cb10-10"><a href="" aria-label="10"></a>wwwhr_ci</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell fragment">
 <div class="cell-output cell-output-stdout">
@@ -480,7 +486,7 @@
 <p><strong>Neat! But how confident are we?</strong></p>
 </div>
 <aside class="notes">
-<p>That’s really interesting, but don’t we need to know our confidence level? Otherwise, how do we interpret the interval? What is the probability that the average number of hours people spend on the internet per week is between 14.17 hours and 15.62 hours?</p>
+<p>That’s really interesting, but don’t we need to know our confidence level? Otherwise, how do we interpret the interval? What is the probability that the average number of hours people spend on the internet per week is between 16.25 hours and 19.06 hours?</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -497,16 +503,16 @@
 <section id="summarise-ci-1" class="slide level2 sparse-slide">
 <h2><code>summarise()</code> + <code>CI()</code></h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12" data-code-line-numbers="6-7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href=""></a>wwwhr_ci99 <span class="ot">&lt;-</span> my_data <span class="sc">|&gt;</span></span>
-<span id="cb12-2"><a href=""></a>  <span class="fu">summarise</span>(</span>
-<span id="cb12-3"><a href=""></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
-<span id="cb12-4"><a href=""></a>    <span class="at">mean_wwwhr =</span> <span class="fu">mean</span>(wwwhr),</span>
-<span id="cb12-5"><a href=""></a>    <span class="at">sd_wwwhr =</span> <span class="fu">sd</span>(wwwhr),</span>
-<span id="cb12-6"><a href=""></a>    <span class="at">lowCI_wwwhr =</span> <span class="fu">CI</span>(wwwhr, <span class="at">ci =</span> <span class="fl">0.99</span>)[<span class="st">'lower'</span>],</span>
-<span id="cb12-7"><a href=""></a>    <span class="at">hiCI_wwwhr  =</span> <span class="fu">CI</span>(wwwhr, <span class="at">ci =</span> <span class="fl">0.99</span>)[<span class="st">'upper'</span>]</span>
-<span id="cb12-8"><a href=""></a>    )</span>
-<span id="cb12-9"><a href=""></a></span>
-<span id="cb12-10"><a href=""></a>wwwhr_ci99</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12" data-code-line-numbers="6-7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="" aria-label="1"></a>wwwhr_ci99 <span class="ot">&lt;-</span> my_data <span class="sc">|&gt;</span></span>
+<span id="cb12-2"><a href="" aria-label="2"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb12-3"><a href="" aria-label="3"></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb12-4"><a href="" aria-label="4"></a>    <span class="at">mean_wwwhr =</span> <span class="fu">mean</span>(wwwhr),</span>
+<span id="cb12-5"><a href="" aria-label="5"></a>    <span class="at">sd_wwwhr =</span> <span class="fu">sd</span>(wwwhr),</span>
+<span id="cb12-6"><a href="" aria-label="6"></a>    <span class="at">lowCI_wwwhr =</span> <span class="fu">CI</span>(wwwhr, <span class="at">ci =</span> <span class="fl">0.99</span>)[<span class="st">'lower'</span>],</span>
+<span id="cb12-7"><a href="" aria-label="7"></a>    <span class="at">hiCI_wwwhr  =</span> <span class="fu">CI</span>(wwwhr, <span class="at">ci =</span> <span class="fl">0.99</span>)[<span class="st">'upper'</span>]</span>
+<span id="cb12-8"><a href="" aria-label="8"></a>    )</span>
+<span id="cb12-9"><a href="" aria-label="9"></a></span>
+<span id="cb12-10"><a href="" aria-label="10"></a>wwwhr_ci99</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell fragment">
 <div class="cell-output cell-output-stdout">
@@ -536,7 +542,7 @@
 <div class="column">
 <p><strong>95% confidence intervals</strong></p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href=""></a>wwwhr_ci</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="" aria-label="1"></a>wwwhr_ci</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 5
       n mean_wwwhr sd_wwwhr lowCI_wwwhr hiCI_wwwhr
@@ -547,7 +553,7 @@
 </div><div class="column">
 <p><strong>99% confidence intervals</strong></p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href=""></a>wwwhr_ci99</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="" aria-label="1"></a>wwwhr_ci99</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 5
       n mean_wwwhr sd_wwwhr lowCI_wwwhr hiCI_wwwhr
@@ -564,14 +570,14 @@
 <section id="cis-wrong-with-proportions" class="slide level2">
 <h2>CIs (wrong) with proportions</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href=""></a>my_data <span class="sc">|&gt;</span></span>
-<span id="cb18-2"><a href=""></a>  <span class="fu">summarise</span>(</span>
-<span id="cb18-3"><a href=""></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
-<span id="cb18-4"><a href=""></a>    <span class="at">mean_ghosts =</span> <span class="fu">mean</span>(postlife),</span>
-<span id="cb18-5"><a href=""></a>    <span class="at">sd_ghosts =</span> <span class="fu">sd</span>(postlife),</span>
-<span id="cb18-6"><a href=""></a>    <span class="at">lowCI_ghosts =</span> <span class="fu">CI</span>(postlife, <span class="at">ci =</span> <span class="fl">0.99</span>)[<span class="st">'lower'</span>],</span>
-<span id="cb18-7"><a href=""></a>    <span class="at">hiCI_ghosts  =</span> <span class="fu">CI</span>(postlife, <span class="at">ci =</span> <span class="fl">0.99</span>)[<span class="st">'upper'</span>]</span>
-<span id="cb18-8"><a href=""></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="" aria-label="1"></a>my_data <span class="sc">|&gt;</span></span>
+<span id="cb18-2"><a href="" aria-label="2"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb18-3"><a href="" aria-label="3"></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb18-4"><a href="" aria-label="4"></a>    <span class="at">mean_ghosts =</span> <span class="fu">mean</span>(postlife),</span>
+<span id="cb18-5"><a href="" aria-label="5"></a>    <span class="at">sd_ghosts =</span> <span class="fu">sd</span>(postlife),</span>
+<span id="cb18-6"><a href="" aria-label="6"></a>    <span class="at">lowCI_ghosts =</span> <span class="fu">CI</span>(postlife, <span class="at">ci =</span> <span class="fl">0.99</span>)[<span class="st">'lower'</span>],</span>
+<span id="cb18-7"><a href="" aria-label="7"></a>    <span class="at">hiCI_ghosts  =</span> <span class="fu">CI</span>(postlife, <span class="at">ci =</span> <span class="fl">0.99</span>)[<span class="st">'upper'</span>]</span>
+<span id="cb18-8"><a href="" aria-label="8"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell fragment">
 <div class="cell-output cell-output-stdout">
@@ -590,17 +596,17 @@
 <section id="cis-correct-with-proportions" class="slide level2">
 <h2>CIs (correct) with proportions</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href=""></a><span class="co"># Use logic to recode (yes: 1 = 1; no: 2 = 0)</span></span>
-<span id="cb20-2"><a href=""></a>my_data<span class="sc">$</span>ghosts <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(my_data<span class="sc">$</span>postlife <span class="sc">==</span> <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>)</span>
-<span id="cb20-3"><a href=""></a>  </span>
-<span id="cb20-4"><a href=""></a>my_data <span class="sc">|&gt;</span></span>
-<span id="cb20-5"><a href=""></a>  <span class="fu">summarise</span>(</span>
-<span id="cb20-6"><a href=""></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
-<span id="cb20-7"><a href=""></a>    <span class="at">mean_ghosts =</span> <span class="fu">mean</span>(ghosts),</span>
-<span id="cb20-8"><a href=""></a>    <span class="at">sd_ghosts =</span> <span class="fu">sd</span>(ghosts),</span>
-<span id="cb20-9"><a href=""></a>    <span class="at">lowCI_ghosts =</span> <span class="fu">CI</span>(ghosts, <span class="at">ci =</span> <span class="fl">0.99</span>)[<span class="st">'lower'</span>],</span>
-<span id="cb20-10"><a href=""></a>    <span class="at">hiCI_ghosts  =</span> <span class="fu">CI</span>(ghosts, <span class="at">ci =</span> <span class="fl">0.99</span>)[<span class="st">'upper'</span>]</span>
-<span id="cb20-11"><a href=""></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="" aria-label="1"></a><span class="co"># Use logic to recode (yes: 1 = 1; no: 2 = 0)</span></span>
+<span id="cb20-2"><a href="" aria-label="2"></a>my_data<span class="sc">$</span>ghosts <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(my_data<span class="sc">$</span>postlife <span class="sc">==</span> <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>)</span>
+<span id="cb20-3"><a href="" aria-label="3"></a>  </span>
+<span id="cb20-4"><a href="" aria-label="4"></a>my_data <span class="sc">|&gt;</span></span>
+<span id="cb20-5"><a href="" aria-label="5"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb20-6"><a href="" aria-label="6"></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb20-7"><a href="" aria-label="7"></a>    <span class="at">mean_ghosts =</span> <span class="fu">mean</span>(ghosts),</span>
+<span id="cb20-8"><a href="" aria-label="8"></a>    <span class="at">sd_ghosts =</span> <span class="fu">sd</span>(ghosts),</span>
+<span id="cb20-9"><a href="" aria-label="9"></a>    <span class="at">lowCI_ghosts =</span> <span class="fu">CI</span>(ghosts, <span class="at">ci =</span> <span class="fl">0.99</span>)[<span class="st">'lower'</span>],</span>
+<span id="cb20-10"><a href="" aria-label="10"></a>    <span class="at">hiCI_ghosts  =</span> <span class="fu">CI</span>(ghosts, <span class="at">ci =</span> <span class="fl">0.99</span>)[<span class="st">'upper'</span>]</span>
+<span id="cb20-11"><a href="" aria-label="11"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell fragment">
 <div class="cell-output cell-output-stdout">
@@ -618,24 +624,24 @@
 <div class="tab-content">
 <div id="tabset-2-1">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22" data-code-line-numbers="1-3|5-6|7-13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href=""></a>my_data<span class="sc">$</span>sex <span class="ot">&lt;-</span> <span class="fu">zap_missing</span>(my_data<span class="sc">$</span>sex) </span>
-<span id="cb22-2"><a href=""></a>my_data<span class="sc">$</span>sex <span class="ot">&lt;-</span> <span class="fu">as_factor</span>(my_data<span class="sc">$</span>sex)   </span>
-<span id="cb22-3"><a href=""></a>my_data<span class="sc">$</span>sex <span class="ot">&lt;-</span> <span class="fu">droplevels</span>(my_data<span class="sc">$</span>sex)  </span>
-<span id="cb22-4"><a href=""></a></span>
-<span id="cb22-5"><a href=""></a>df_ghosts <span class="ot">&lt;-</span> my_data <span class="sc">|&gt;</span></span>
-<span id="cb22-6"><a href=""></a>  <span class="fu">group_by</span>(sex) <span class="sc">|&gt;</span></span>
-<span id="cb22-7"><a href=""></a>  <span class="fu">summarise</span>(</span>
-<span id="cb22-8"><a href=""></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
-<span id="cb22-9"><a href=""></a>    <span class="at">mean =</span> <span class="fu">mean</span>(ghosts),</span>
-<span id="cb22-10"><a href=""></a>    <span class="at">sd =</span> <span class="fu">sd</span>(ghosts),</span>
-<span id="cb22-11"><a href=""></a>    <span class="at">lower =</span> <span class="fu">CI</span>(ghosts, <span class="at">ci =</span> <span class="fl">0.95</span>)[<span class="st">'lower'</span>],</span>
-<span id="cb22-12"><a href=""></a>    <span class="at">upper  =</span> <span class="fu">CI</span>(ghosts, <span class="at">ci =</span> <span class="fl">0.95</span>)[<span class="st">'upper'</span>]</span>
-<span id="cb22-13"><a href=""></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22" data-code-line-numbers="1-3|5-6|7-13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="" aria-label="1"></a>my_data<span class="sc">$</span>sex <span class="ot">&lt;-</span> <span class="fu">zap_missing</span>(my_data<span class="sc">$</span>sex) </span>
+<span id="cb22-2"><a href="" aria-label="2"></a>my_data<span class="sc">$</span>sex <span class="ot">&lt;-</span> <span class="fu">as_factor</span>(my_data<span class="sc">$</span>sex)   </span>
+<span id="cb22-3"><a href="" aria-label="3"></a>my_data<span class="sc">$</span>sex <span class="ot">&lt;-</span> <span class="fu">droplevels</span>(my_data<span class="sc">$</span>sex)  </span>
+<span id="cb22-4"><a href="" aria-label="4"></a></span>
+<span id="cb22-5"><a href="" aria-label="5"></a>df_ghosts <span class="ot">&lt;-</span> my_data <span class="sc">|&gt;</span></span>
+<span id="cb22-6"><a href="" aria-label="6"></a>  <span class="fu">group_by</span>(sex) <span class="sc">|&gt;</span></span>
+<span id="cb22-7"><a href="" aria-label="7"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb22-8"><a href="" aria-label="8"></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb22-9"><a href="" aria-label="9"></a>    <span class="at">mean =</span> <span class="fu">mean</span>(ghosts),</span>
+<span id="cb22-10"><a href="" aria-label="10"></a>    <span class="at">sd =</span> <span class="fu">sd</span>(ghosts),</span>
+<span id="cb22-11"><a href="" aria-label="11"></a>    <span class="at">lower =</span> <span class="fu">CI</span>(ghosts, <span class="at">ci =</span> <span class="fl">0.95</span>)[<span class="st">'lower'</span>],</span>
+<span id="cb22-12"><a href="" aria-label="12"></a>    <span class="at">upper =</span> <span class="fu">CI</span>(ghosts, <span class="at">ci =</span> <span class="fl">0.95</span>)[<span class="st">'upper'</span>]</span>
+<span id="cb22-13"><a href="" aria-label="13"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 <div id="tabset-2-2">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href=""></a>df_ghosts</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="" aria-label="1"></a>df_ghosts</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 6
   sex        n  mean    sd lower upper
@@ -666,20 +672,20 @@
 <div class="tab-content">
 <div id="tabset-3-1">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25" data-code-line-numbers="1-2|3-9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href=""></a>df_wwwhr <span class="ot">&lt;-</span> my_data <span class="sc">|&gt;</span></span>
-<span id="cb25-2"><a href=""></a>  <span class="fu">group_by</span>(sex) <span class="sc">|&gt;</span></span>
-<span id="cb25-3"><a href=""></a>  <span class="fu">summarise</span>(</span>
-<span id="cb25-4"><a href=""></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
-<span id="cb25-5"><a href=""></a>    <span class="at">mean =</span> <span class="fu">mean</span>(wwwhr),</span>
-<span id="cb25-6"><a href=""></a>    <span class="at">sd =</span> <span class="fu">sd</span>(wwwhr),</span>
-<span id="cb25-7"><a href=""></a>    <span class="at">lower =</span> <span class="fu">CI</span>(wwwhr, <span class="at">ci =</span> <span class="fl">0.95</span>)[<span class="st">'lower'</span>],</span>
-<span id="cb25-8"><a href=""></a>    <span class="at">upper  =</span> <span class="fu">CI</span>(wwwhr, <span class="at">ci =</span> <span class="fl">0.95</span>)[<span class="st">'upper'</span>]</span>
-<span id="cb25-9"><a href=""></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25" data-code-line-numbers="1-2|3-9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="" aria-label="1"></a>df_wwwhr <span class="ot">&lt;-</span> my_data <span class="sc">|&gt;</span></span>
+<span id="cb25-2"><a href="" aria-label="2"></a>  <span class="fu">group_by</span>(sex) <span class="sc">|&gt;</span></span>
+<span id="cb25-3"><a href="" aria-label="3"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb25-4"><a href="" aria-label="4"></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb25-5"><a href="" aria-label="5"></a>    <span class="at">mean =</span> <span class="fu">mean</span>(wwwhr),</span>
+<span id="cb25-6"><a href="" aria-label="6"></a>    <span class="at">sd =</span> <span class="fu">sd</span>(wwwhr),</span>
+<span id="cb25-7"><a href="" aria-label="7"></a>    <span class="at">lower =</span> <span class="fu">CI</span>(wwwhr, <span class="at">ci =</span> <span class="fl">0.95</span>)[<span class="st">'lower'</span>],</span>
+<span id="cb25-8"><a href="" aria-label="8"></a>    <span class="at">upper  =</span> <span class="fu">CI</span>(wwwhr, <span class="at">ci =</span> <span class="fl">0.95</span>)[<span class="st">'upper'</span>]</span>
+<span id="cb25-9"><a href="" aria-label="9"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 <div id="tabset-3-2">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href=""></a>df_wwwhr</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="" aria-label="1"></a>df_wwwhr</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 6
   sex        n  mean    sd lower upper
@@ -755,12 +761,12 @@
 <section id="review-summary-statistics" class="slide level2">
 <h2>Review: Summary Statistics</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href=""></a>my_data <span class="sc">|&gt;</span></span>
-<span id="cb28-2"><a href=""></a>  <span class="fu">summarise</span>(</span>
-<span id="cb28-3"><a href=""></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
-<span id="cb28-4"><a href=""></a>    <span class="at">mean =</span> <span class="fu">mean</span>(childs),</span>
-<span id="cb28-5"><a href=""></a>    <span class="at">median =</span> <span class="fu">median</span>(childs),</span>
-<span id="cb28-6"><a href=""></a>    <span class="at">sd =</span> <span class="fu">sd</span>(childs))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="" aria-label="1"></a>my_data <span class="sc">|&gt;</span></span>
+<span id="cb28-2"><a href="" aria-label="2"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb28-3"><a href="" aria-label="3"></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb28-4"><a href="" aria-label="4"></a>    <span class="at">mean =</span> <span class="fu">mean</span>(childs),</span>
+<span id="cb28-5"><a href="" aria-label="5"></a>    <span class="at">median =</span> <span class="fu">median</span>(childs),</span>
+<span id="cb28-6"><a href="" aria-label="6"></a>    <span class="at">sd =</span> <span class="fu">sd</span>(childs))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell fragment">
 <div class="cell-output cell-output-stdout">
@@ -779,16 +785,16 @@
 <section id="review-cis" class="slide level2">
 <h2>Review: CIs</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30" data-code-line-numbers="7-11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href=""></a>my_data <span class="sc">|&gt;</span></span>
-<span id="cb30-2"><a href=""></a>  <span class="fu">summarise</span>(</span>
-<span id="cb30-3"><a href=""></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
-<span id="cb30-4"><a href=""></a>    <span class="at">mean =</span> <span class="fu">mean</span>(childs),</span>
-<span id="cb30-5"><a href=""></a>    <span class="at">median =</span> <span class="fu">median</span>(childs),</span>
-<span id="cb30-6"><a href=""></a>    <span class="at">sd =</span> <span class="fu">sd</span>(childs),</span>
-<span id="cb30-7"><a href=""></a>    <span class="at">se =</span> sd <span class="sc">/</span> <span class="fu">sqrt</span>(n),</span>
-<span id="cb30-8"><a href=""></a>    <span class="at">lower =</span> <span class="fu">CI</span>(childs, <span class="at">ci =</span> <span class="fl">0.99</span>)[<span class="st">'lower'</span>],</span>
-<span id="cb30-9"><a href=""></a>    <span class="at">upper  =</span> <span class="fu">CI</span>(childs, <span class="at">ci =</span> <span class="fl">0.99</span>)[<span class="st">'upper'</span>]</span>
-<span id="cb30-10"><a href=""></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30" data-code-line-numbers="7-11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="" aria-label="1"></a>my_data <span class="sc">|&gt;</span></span>
+<span id="cb30-2"><a href="" aria-label="2"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb30-3"><a href="" aria-label="3"></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb30-4"><a href="" aria-label="4"></a>    <span class="at">mean =</span> <span class="fu">mean</span>(childs),</span>
+<span id="cb30-5"><a href="" aria-label="5"></a>    <span class="at">median =</span> <span class="fu">median</span>(childs),</span>
+<span id="cb30-6"><a href="" aria-label="6"></a>    <span class="at">sd =</span> <span class="fu">sd</span>(childs),</span>
+<span id="cb30-7"><a href="" aria-label="7"></a>    <span class="at">se =</span> sd <span class="sc">/</span> <span class="fu">sqrt</span>(n),</span>
+<span id="cb30-8"><a href="" aria-label="8"></a>    <span class="at">lower =</span> <span class="fu">CI</span>(childs, <span class="at">ci =</span> <span class="fl">0.99</span>)[<span class="st">'lower'</span>],</span>
+<span id="cb30-9"><a href="" aria-label="9"></a>    <span class="at">upper  =</span> <span class="fu">CI</span>(childs, <span class="at">ci =</span> <span class="fl">0.99</span>)[<span class="st">'upper'</span>]</span>
+<span id="cb30-10"><a href="" aria-label="10"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell fragment">
 <div class="cell-output cell-output-stdout">
@@ -807,7 +813,7 @@
 <section id="one-sample-t.test-for-means" class="slide level2">
 <h2>One sample <code>t.test()</code> for means</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href=""></a><span class="fu">t.test</span>(my_data<span class="sc">$</span>childs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="" aria-label="1"></a><span class="fu">t.test</span>(my_data<span class="sc">$</span>childs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell fragment">
 <div class="cell-output cell-output-stdout">
@@ -833,7 +839,7 @@ mean of x
 <section id="one-sample-t.test-for-means-1" class="slide level2">
 <h2>One sample <code>t.test()</code> for means</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href=""></a><span class="fu">t.test</span>(my_data<span class="sc">$</span>childs, <span class="at">mu=</span><span class="dv">2</span>, <span class="at">alternative=</span><span class="st">"less"</span>) <span class="co"># Ho: mu=2</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="" aria-label="1"></a><span class="fu">t.test</span>(my_data<span class="sc">$</span>childs, <span class="at">mu=</span><span class="dv">2</span>, <span class="at">alternative=</span><span class="st">"less"</span>) <span class="co"># Ho: mu=2</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     One Sample t-test
@@ -857,7 +863,7 @@ mean of x
 <section id="section-3" class="slide level2 quiz-question" data-menu-title="Knowledge Check" data-background-image="images/clipboard-question.png" data-background-size="100px" data-background-repeat="repeat">
 <h2></h2>
 <div style="color: #F39C12">
-<p><i class="fa-solid fa-clipboard-question" aria-label="clipboard-question"></i> Assuming an α level of .05, should you reject the null hypothesis?</p>
+<p><i class="fa-solid fa-clipboard-question" aria-label="clipboard-question"></i> Assuming an α level of .01, should you reject the null hypothesis?</p>
 </div>
 <ul>
 <li><span data-explanation="😲 The p-value is less than 𝛼.">No, because the 𝛼 level of .01 is greater than the p-value (&lt; .000).</span></li>
@@ -883,7 +889,7 @@ mean of x
 </div>
 <div class="fragment">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href=""></a><span class="fu">t.test</span>(my_data<span class="sc">$</span>ghosts <span class="sc">~</span> my_data<span class="sc">$</span>sex, <span class="at">alternative =</span> <span class="st">"two.sided"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="" aria-label="1"></a><span class="fu">t.test</span>(my_data<span class="sc">$</span>ghosts <span class="sc">~</span> my_data<span class="sc">$</span>sex, <span class="at">alternative =</span> <span class="st">"two.sided"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell fragment">
 <div class="cell-output cell-output-stdout">
@@ -918,14 +924,14 @@ sample estimates:
 <p><strong>Independent group t-test</strong><br>
 <span style="color: #F39C12; font-family: 'Shadows Into Light'">Do two subsamples have the same mean?</span></p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href=""></a><span class="fu">t.test</span>(my_data<span class="sc">$</span>ghosts <span class="sc">~</span> my_data<span class="sc">$</span>sex, <span class="at">alternative =</span> <span class="st">"two.sided"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="" aria-label="1"></a><span class="fu">t.test</span>(my_data<span class="sc">$</span>ghosts <span class="sc">~</span> my_data<span class="sc">$</span>sex, <span class="at">alternative =</span> <span class="st">"two.sided"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><br></p>
 <div class="fragment">
 <p><strong>Paired t-test</strong><br>
 <span style="color: #F39C12; font-family: 'Shadows Into Light'">Do two variables have the same mean?</span></p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href=""></a><span class="fu">t.test</span>(<span class="fu">Pair</span>(hrs1_2018, hrs1_2020) <span class="sc">~</span> <span class="dv">1</span>, <span class="at">data =</span> gss_panel)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="" aria-label="1"></a><span class="fu">t.test</span>(<span class="fu">Pair</span>(hrs1_2018, hrs1_2020) <span class="sc">~</span> <span class="dv">1</span>, <span class="at">data =</span> gss_panel)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </section></section>

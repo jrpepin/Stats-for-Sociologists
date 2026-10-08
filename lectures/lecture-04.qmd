@@ -201,6 +201,15 @@ my_data |>
 
 ```
 
+::: notes
+68% of people would be expected to spend between???
+  
+17.7−22.3=−4.6  
+17.7+22.3=40.0  
+  
+Is that a lot or a little variation?  
+:::
+
 ##  {data-menu-title="CIs equation"}
 
 ::: panel-tabset
@@ -359,6 +368,15 @@ my_data |>
 
 ::: {style="color: #e74c3c; font-family: 'Shadows Into Light'"}
 **This doesn't work because the values aren't coded 0 and 1.**
+:::
+
+::: aside
+`postlife` Do you believe there is a life after death?
+:::
+
+::: notes
+table(my_data$postlife)  
+table(as_factor(my_data$postlife))  
 :::
 
 ## CIs (correct) with proportions
@@ -863,3 +881,173 @@ t.test(gss22$gunlaw ~ gss22$sex, alternative = "two.sided")
 
 ```
 :::
+
+
+# Joining Dataframes (if time allows...) {.theme-section}
+
+## appending v.s. merging {.sparse-slide}
+
+::: {.callout-note icon="false"}
+## {{< fa pen-to-square >}} APPEND
+
+add new observations (rows) to existing variables
+:::
+
+<br>
+
+::: {.callout-note icon="false"}
+## {{< fa pen-to-square >}} MERGE
+
+add new variables (columns) to existing observations (many merge types)
+:::
+
+## appending v.s. merging {.sparse-slide}
+
+![](images/99/append-merge.png){width="100%"}
+
+## Example datasets {.sparse-slide}
+
+::::: columns
+::: column
+**dataframe 1**
+
+```{r}
+#| label: df1
+#| echo: false
+
+# Create the example dataframes
+df_partner1 <- data.frame(
+  coupleid = c(2, 1, 3),
+  name = c("John", "Megan", "Bin"),
+  age = c(42, 36, 38)
+)
+
+df_partner1
+```
+:::
+
+::: column
+**dataframe 2**
+
+```{r}
+#| label: df2
+#| echo: false
+
+df_partner2 <- data.frame(
+  coupleid = c(1, 3, 2),
+  name = c("Sue", "Ye-jin", "Chrissy"),
+  age = c(40, 39, 35)
+)
+df_partner2
+```
+:::
+:::::
+
+<br>
+
+**dataframe 3**
+
+```{r}
+#| label: df3
+#| echo: false
+
+df_family <- data.frame(
+  coupleid = c(3, 1, 4),
+  marstat = c(1, 0, 1),
+  numchild = c(1, 0, 2),
+  country = c("S.Korea", "US", "Canada")
+)
+df_family
+```
+
+## append data with `bind_rows()` {.sparse-slide}
+
+```{r}
+#| label: append
+
+df_all <- bind_rows(df_partner1, df_partner2)
+
+tibble(df_all)
+```
+
+## merge data with joins {.sparse-slide}
+
+add columns from `df1` to `df2`, matching observations based on the keys
+
+-   `left_join()` keeps all observations in `df1`.
+-   `right_join()` keeps all observations in `df2`.
+-   `full_join()` keeps all observations in `df1` and `df2`.
+-   `inner_join()` only keeps observations from `df1` that have a
+    matching key in `df2`
+
+## `left_join()` {.smaller}
+
+::::: columns
+::: {.column width="35%"}
+![](images/99/left-join.gif)
+:::
+
+::: {.column width="65%"}
+```{r}
+#| label: left-join
+
+df_couples <- left_join(df_partner1, df_family, by = "coupleid")
+
+tibble(df_couples)
+```
+:::
+:::::
+
+## `right_join()` {.smaller}
+
+::::: columns
+::: {.column width="35%"}
+![](images/99/right-join.gif)
+:::
+
+::: {.column width="65%"}
+```{r}
+#| label: right-join
+
+df_couples <- right_join(df_partner1, df_family, by = "coupleid")
+
+tibble(df_couples)
+```
+:::
+:::::
+
+## `full_join()` {.smaller}
+
+::::: columns
+::: {.column width="35%"}
+![](images/99/full-join.gif)
+:::
+
+::: {.column width="65%"}
+```{r}
+#| label: full-join
+
+df_couples <- full_join(df_partner1, df_family, by = "coupleid")
+
+tibble(df_couples)
+```
+:::
+:::::
+
+## `inner_join()` {.smaller}
+
+::::: columns
+::: {.column width="35%"}
+![](images/99/inner-join.gif)
+:::
+
+::: {.column width="65%"}
+```{r}
+#| label: inner-join
+
+df_couples <- inner_join(df_partner1, df_family, by = "coupleid")
+
+tibble(df_couples)
+```
+:::
+:::::

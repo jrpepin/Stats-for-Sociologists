@@ -2377,7 +2377,7 @@
     "href": "lecture-04.html#review-summarise",
     "title": "Statistical Tests I",
     "section": "Review: summarise()",
-    "text": "Review: summarise()\n\nmy_data |&gt;\n  summarise(\n    n = n(),\n    mean = mean(wwwhr),\n    sd = sd(wwwhr)\n    )\n\n\n\n# A tibble: 1 × 3\n      n  mean    sd\n  &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;\n1   970  17.7  22.3"
+    "text": "Review: summarise()\n\nmy_data |&gt;\n  summarise(\n    n = n(),\n    mean = mean(wwwhr),\n    sd = sd(wwwhr)\n    )\n\n\n\n# A tibble: 1 × 3\n      n  mean    sd\n  &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;\n1   970  17.7  22.3\n\n\n\n68% of people would be expected to spend between???\n17.7−22.3=−4.6\n17.7+22.3=40.0\nIs that a lot or a little variation?"
   },
   {
     "objectID": "lecture-04.html#summarise-with-equation",
@@ -2412,7 +2412,7 @@
     "href": "lecture-04.html#cis-wrong-with-proportions",
     "title": "Statistical Tests I",
     "section": "CIs (wrong) with proportions",
-    "text": "CIs (wrong) with proportions\n\nmy_data |&gt;\n  summarise(\n    n = n(),\n    mean_ghosts = mean(postlife),\n    sd_ghosts = sd(postlife),\n    lowCI_ghosts = CI(postlife, ci = 0.99)['lower'],\n    hiCI_ghosts  = CI(postlife, ci = 0.99)['upper']\n    )\n\n\n\n# A tibble: 1 × 5\n      n mean_ghosts sd_ghosts lowCI_ghosts hiCI_ghosts\n  &lt;int&gt;       &lt;dbl&gt;     &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt;\n1   970        1.19     0.389         1.15        1.22\n\n\n\n\nThis doesn’t work because the values aren’t coded 0 and 1."
+    "text": "CIs (wrong) with proportions\n\nmy_data |&gt;\n  summarise(\n    n = n(),\n    mean_ghosts = mean(postlife),\n    sd_ghosts = sd(postlife),\n    lowCI_ghosts = CI(postlife, ci = 0.99)['lower'],\n    hiCI_ghosts  = CI(postlife, ci = 0.99)['upper']\n    )\n\n\n\n# A tibble: 1 × 5\n      n mean_ghosts sd_ghosts lowCI_ghosts hiCI_ghosts\n  &lt;int&gt;       &lt;dbl&gt;     &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt;\n1   970        1.19     0.389         1.15        1.22\n\n\n\n\nThis doesn’t work because the values aren’t coded 0 and 1.\n\n\n\ntable(my_data\\(postlife)\ntable(as_factor(my_data\\)postlife))\n\n\n\npostlife Do you believe there is a life after death?"
   },
   {
     "objectID": "lecture-04.html#cis-correct-with-proportions",
@@ -2504,5 +2504,68 @@
     "title": "Statistical Tests I",
     "section": "Think Like a Statistician",
     "text": "Think Like a Statistician\n\neducabanygunlaw\n\n\n\n\n\n    Welch Two Sample t-test\n\ndata:  gss22$educ by gss22$sex\nt = -0.38076, df = 4035.7, p-value = 0.3517\nalternative hypothesis: true difference in means between group 1 and group 2 is less than 0\n95 percent confidence interval:\n      -Inf 0.1144853\nsample estimates:\nmean in group 1 mean in group 2 \n       14.14338        14.17786 \n\n\n\n\n\n\n\n    Welch Two Sample t-test\n\ndata:  gss22$abany by gss22$sex\nt = -1.0701, df = 1317.7, p-value = 0.2848\nalternative hypothesis: true difference in means between group 1 and group 2 is not equal to 0\n95 percent confidence interval:\n -0.08169512  0.02402811\nsample estimates:\nmean in group 1 mean in group 2 \n      0.5786164       0.6074499 \n\n\n\n\n\n\n\n    Welch Two Sample t-test\n\ndata:  gss22$gunlaw by gss22$sex\nt = -8.9698, df = 2476.6, p-value &lt; 2.2e-16\nalternative hypothesis: true difference in means between group 1 and group 2 is not equal to 0\n95 percent confidence interval:\n -0.1872801 -0.1200856\nsample estimates:\nmean in group 1 mean in group 2 \n      0.6450593       0.7987421"
+  },
+  {
+    "objectID": "lecture-04.html#appending-v.s.-merging",
+    "href": "lecture-04.html#appending-v.s.-merging",
+    "title": "Statistical Tests I",
+    "section": "appending v.s. merging",
+    "text": "appending v.s. merging\n\n\n\n APPEND\n\n\nadd new observations (rows) to existing variables\n\n\n\n\n\n\n\n MERGE\n\n\nadd new variables (columns) to existing observations (many merge types)"
+  },
+  {
+    "objectID": "lecture-04.html#appending-v.s.-merging-1",
+    "href": "lecture-04.html#appending-v.s.-merging-1",
+    "title": "Statistical Tests I",
+    "section": "appending v.s. merging",
+    "text": "appending v.s. merging"
+  },
+  {
+    "objectID": "lecture-04.html#example-datasets",
+    "href": "lecture-04.html#example-datasets",
+    "title": "Statistical Tests I",
+    "section": "Example datasets",
+    "text": "Example datasets\n\n\ndataframe 1\n\n\n  coupleid  name age\n1        2  John  42\n2        1 Megan  36\n3        3   Bin  38\n\n\n\ndataframe 2\n\n\n  coupleid    name age\n1        1     Sue  40\n2        3  Ye-jin  39\n3        2 Chrissy  35\n\n\n\n\ndataframe 3\n\n\n  coupleid marstat numchild country\n1        3       1        1 S.Korea\n2        1       0        0      US\n3        4       1        2  Canada"
+  },
+  {
+    "objectID": "lecture-04.html#append-data-with-bind_rows",
+    "href": "lecture-04.html#append-data-with-bind_rows",
+    "title": "Statistical Tests I",
+    "section": "append data with bind_rows()",
+    "text": "append data with bind_rows()\n\ndf_all &lt;- bind_rows(df_partner1, df_partner2)\n\ntibble(df_all)\n\n# A tibble: 6 × 3\n  coupleid name      age\n     &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt;\n1        2 John       42\n2        1 Megan      36\n3        3 Bin        38\n4        1 Sue        40\n5        3 Ye-jin     39\n6        2 Chrissy    35"
+  },
+  {
+    "objectID": "lecture-04.html#merge-data-with-joins",
+    "href": "lecture-04.html#merge-data-with-joins",
+    "title": "Statistical Tests I",
+    "section": "merge data with joins",
+    "text": "merge data with joins\nadd columns from df1 to df2, matching observations based on the keys\n\nleft_join() keeps all observations in df1.\nright_join() keeps all observations in df2.\nfull_join() keeps all observations in df1 and df2.\ninner_join() only keeps observations from df1 that have a matching key in df2"
+  },
+  {
+    "objectID": "lecture-04.html#left_join",
+    "href": "lecture-04.html#left_join",
+    "title": "Statistical Tests I",
+    "section": "left_join()",
+    "text": "left_join()\n\n\n\n\n\ndf_couples &lt;- left_join(df_partner1, df_family, by = \"coupleid\")\n\ntibble(df_couples)\n\n# A tibble: 3 × 6\n  coupleid name    age marstat numchild country\n     &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;  \n1        2 John     42      NA       NA &lt;NA&gt;   \n2        1 Megan    36       0        0 US     \n3        3 Bin      38       1        1 S.Korea"
+  },
+  {
+    "objectID": "lecture-04.html#right_join",
+    "href": "lecture-04.html#right_join",
+    "title": "Statistical Tests I",
+    "section": "right_join()",
+    "text": "right_join()\n\n\n\n\n\ndf_couples &lt;- right_join(df_partner1, df_family, by = \"coupleid\")\n\ntibble(df_couples)\n\n# A tibble: 3 × 6\n  coupleid name    age marstat numchild country\n     &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;  \n1        1 Megan    36       0        0 US     \n2        3 Bin      38       1        1 S.Korea\n3        4 &lt;NA&gt;     NA       1        2 Canada"
+  },
+  {
+    "objectID": "lecture-04.html#full_join",
+    "href": "lecture-04.html#full_join",
+    "title": "Statistical Tests I",
+    "section": "full_join()",
+    "text": "full_join()\n\n\n\n\n\ndf_couples &lt;- full_join(df_partner1, df_family, by = \"coupleid\")\n\ntibble(df_couples)\n\n# A tibble: 4 × 6\n  coupleid name    age marstat numchild country\n     &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;  \n1        2 John     42      NA       NA &lt;NA&gt;   \n2        1 Megan    36       0        0 US     \n3        3 Bin      38       1        1 S.Korea\n4        4 &lt;NA&gt;     NA       1        2 Canada"
+  },
+  {
+    "objectID": "lecture-04.html#inner_join",
+    "href": "lecture-04.html#inner_join",
+    "title": "Statistical Tests I",
+    "section": "inner_join()",
+    "text": "inner_join()\n\n\n\n\n\ndf_couples &lt;- inner_join(df_partner1, df_family, by = \"coupleid\")\n\ntibble(df_couples)\n\n# A tibble: 2 × 6\n  coupleid name    age marstat numchild country\n     &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;  \n1        1 Megan    36       0        0 US     \n2        3 Bin      38       1        1 S.Korea"
   }
 ]

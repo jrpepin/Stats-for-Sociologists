@@ -401,23 +401,23 @@
   {
     "objectID": "lecture-03.html#packages",
     "href": "lecture-03.html#packages",
-    "title": "Data Management I",
+    "title": "Data Management II",
     "section": "Packages",
-    "text": "Packages\nLoad the standard packages.\n\nlibrary(tidyverse) \nlibrary(haven) # not core tidyverse\nlibrary(gssr)\nlibrary(gssrdoc) # load the GSS codebook\nlibrary(summarytools)"
+    "text": "Packages\nLoad the standard packages.\n\nlibrary(tidyverse)\nlibrary(haven) # not core tidyverse\nlibrary(gssr)\nlibrary(gssrdoc) # load the GSS codebook\nlibrary(summarytools)"
   },
   {
     "objectID": "lecture-03.html#load-your-data",
     "href": "lecture-03.html#load-your-data",
-    "title": "Data Management I",
+    "title": "Data Management II",
     "section": "Load your data",
     "text": "Load your data\n\n# Get the data all survey years\ndata(gss_all)"
   },
   {
     "objectID": "lecture-03.html#section",
     "href": "lecture-03.html#section",
-    "title": "Data Management I",
+    "title": "Data Management II",
     "section": "",
-    "text": "Use the gss_which_years() function to identify the survey years a variable appeared.\n\n\ngss_which_years(gss_all, meovrwrk)\n\n# A tibble: 35 × 2\n   year      meovrwrk\n   &lt;dbl+lbl&gt; &lt;lgl&gt;   \n 1 1972      FALSE   \n 2 1973      FALSE   \n 3 1974      FALSE   \n 4 1975      FALSE   \n 5 1976      FALSE   \n 6 1977      FALSE   \n 7 1978      FALSE   \n 8 1980      FALSE   \n 9 1982      FALSE   \n10 1983      FALSE   \n# ℹ 25 more rows\n\n\n\n\n\n\n Heads Up!\n\n\nIf run in the console, to see all rows, wrap the code in the print() command: print(gss_which_years(gss_all, meovrwrk), n = 40)"
+    "text": "Suppose you run the following and then you inspect df.\n\nWill the x variable have values 1, 2, 3, 4, 5 or 2, 4, 6, 8, 10?\n\n\n\n\n\ndf |&gt;\n  mutate(x = x * 2)\n\n# A tibble: 5 × 2\n      x y    \n  &lt;dbl&gt; &lt;chr&gt;\n1     2 a    \n2     4 a    \n3     6 b    \n4     8 c    \n5    10 c    \n\n\n\n\ndf\n\n# A tibble: 5 × 2\n      x y    \n  &lt;dbl&gt; &lt;chr&gt;\n1     1 a    \n2     2 a    \n3     3 b    \n4     4 c    \n5     5 c    \n\n\n\n\n\nDo something and show me"
   },
   {
     "objectID": "lecture-03.html#tidying-data",
@@ -499,9 +499,9 @@
   {
     "objectID": "lecture-03.html#mutate-with-case_when",
     "href": "lecture-03.html#mutate-with-case_when",
-    "title": "Data Management I",
+    "title": "Data Management II",
     "section": "mutate() with case_when()",
-    "text": "mutate() with case_when()\nUse case_when() inside mutate() to create values based on conditions.\n\n\n What proportion of new parents had their first child as teenagers, in their 20s, 30s, or after age 40?\n\n\n\ngss_all &lt;-  gss_all |&gt;  \n  mutate(age_groups = case_when(\n    agekdbrn &lt; 18 ~ \"&lt;18\",\n    agekdbrn &gt;= 18 & agekdbrn &lt;= 29 ~ \"18–29\",\n    agekdbrn &gt;= 30 & agekdbrn &lt;= 39 ~ \"30–39\",\n    agekdbrn &gt;= 40 ~ \"40+\",\n    TRUE ~ NA_character_)\n  ) \n\ngss_all |&gt;\n  filter(year == 2022) |&gt;\n  freq(age_groups, report.nas = FALSE, headings = FALSE)\n\n\n\n              Freq        %   % Cum.\n----------- ------ -------- --------\n        &lt;18    186     7.73     7.73\n      18–29   1704    70.82    78.55\n      30–39    463    19.24    97.80\n        40+     53     2.20   100.00\n      Total   2406   100.00   100.00"
+    "text": "mutate() with case_when()\nUse case_when() inside mutate() to create values based on conditions.\n\n\n\nmy_data &lt;- my_data |&gt;\n  # Use mutate to create a new variable: childs_3cat\n  mutate(childs_3cat = case_when(\n    childs == 1 ~ \"1 kid\",\n    childs == 2 ~ \"2 kids\",\n    childs &gt;= 3 ~ \"3+ kids\",\n    TRUE ~ NA_character_\n  ))\n\n# Always double check your work!\ntable(my_data$childs, my_data$childs_3cat)"
   },
   {
     "objectID": "lecture-03.html#overwriting-data",
@@ -597,30 +597,30 @@
   {
     "objectID": "lecture-03.html#your-data-take",
     "href": "lecture-03.html#your-data-take",
-    "title": "Data Management I",
+    "title": "Data Management II",
     "section": "Your Data Take",
     "text": "Your Data Take\n\n\n What’s your conclusion to our research question?"
   },
   {
     "objectID": "lecture-02.html#mini-task",
     "href": "lecture-02.html#mini-task",
-    "title": "Introduction to Data",
+    "title": "Data Management I",
     "section": "Mini-task",
-    "text": "Mini-task\n\n Install the summarytools() package, available on CRAN.\n\n\n\nRun the code chunk in your code-along.\nOR: Copy and paste the code into your Console pane. Then hit “Enter”.\n\n\n\ninstall.packages(\"summarytools\")"
+    "text": "Mini-task\n\n Install the summarytools() package, available on CRAN.\n\n\n\nRun the code chunk in your code-along.\nOR: Copy and paste the code into your Console pane. Then hit “Enter”.\n\n\n\ninstall.packages(\"summarytools\")\n\n\nWhat does this mean in your code-along: “This chunk will not run (on purpose!) when rendered because eval: false.”?"
   },
   {
     "objectID": "lecture-02.html#mini-task-1",
     "href": "lecture-02.html#mini-task-1",
-    "title": "Introduction to Data",
+    "title": "Data Management I",
     "section": "Mini-task",
     "text": "Mini-task\n\n Load the standard packages and our new summarytools() package.\n\n\n\nlibrary(tidyverse)\nlibrary(haven) # not core tidyverse\nlibrary(gssr)\nlibrary(gssrdoc) # load the GSS codebook\nlibrary(summarytools)\n\n\nhaven() was installed with tidyverse; but it doesn’t load automatically"
   },
   {
     "objectID": "lecture-02.html#mini-task-2",
     "href": "lecture-02.html#mini-task-2",
-    "title": "Introduction to Data",
+    "title": "Data Management I",
     "section": "Mini-task",
-    "text": "Mini-task\n\n Load the 2024 GSS data.\n\n\n\n# Get the data only for the 2024 survey respondents\ngss24 &lt;- gss_get_yr(2024)\n\n\nWhy did we need to use library() before we loaded the GSS data?"
+    "text": "Mini-task\n\n Load the 2024 GSS data & all survey waves.\n\n\n\n# Get the data only for the 2024 survey respondents\ngss24 &lt;- gss_get_yr(2024)\n\n# Get the data all survey years\ndata(gss_all)\n\n\nWhy did we need to use library() before we loaded the GSS data?"
   },
   {
     "objectID": "lecture-02.html#coding-basics-1",
@@ -674,156 +674,156 @@
   {
     "objectID": "lecture-02.html#mini-task-3",
     "href": "lecture-02.html#mini-task-3",
-    "title": "Introduction to Data",
+    "title": "Data Management I",
     "section": "Mini-task",
-    "text": "Mini-task\n\n Make a tiny data frame and save it.\n\n\n\ndf &lt;- tibble(x = c(1, 2, 3, 4, 5), y = c(\"a\", \"a\", \"b\", \"c\", \"c\"))\n\ndf # look at df\n\n\n\n# A tibble: 5 × 2\n      x y    \n  &lt;dbl&gt; &lt;chr&gt;\n1     1 a    \n2     2 a    \n3     3 b    \n4     4 c    \n5     5 c"
+    "text": "Mini-task\n\n Which survey years did the variable childs appear?\n\n\n\n\ngss_which_years(gss_all, childs)\n\n# A tibble: 35 × 2\n   year      childs\n   &lt;dbl+lbl&gt; &lt;lgl&gt; \n 1 1972      TRUE  \n 2 1973      TRUE  \n 3 1974      TRUE  \n 4 1975      TRUE  \n 5 1976      TRUE  \n 6 1977      TRUE  \n 7 1978      TRUE  \n 8 1980      TRUE  \n 9 1982      TRUE  \n10 1983      TRUE  \n# ℹ 25 more rows"
   },
   {
     "objectID": "lecture-02.html#data-types-in-r",
     "href": "lecture-02.html#data-types-in-r",
-    "title": "Introduction to Data",
+    "title": "Data Management I",
     "section": "Data types in R",
     "text": "Data types in R\nA property is assigned to objects that determines how generic functions operate with it.\nCommon ‘types’ or ‘classes’ of variables:\n\nlogical\ncharacter\ninteger\nnumeric\nand more, but we won’t be focusing on those"
   },
   {
     "objectID": "lecture-02.html#data-class-variable-type",
     "href": "lecture-02.html#data-class-variable-type",
-    "title": "Introduction to Data",
+    "title": "Data Management I",
     "section": "Data class + variable type",
-    "text": "Data class + variable type"
+    "text": "Data class + variable type\n\n\nStatistical variable types describe the meaning of the data (e.g., nominal = categories, continuous = measurements).\nR variable types describe how the data is stored in memory (factor, numeric, character, etc.)."
   },
   {
     "objectID": "lecture-02.html#class",
     "href": "lecture-02.html#class",
-    "title": "Introduction to Data",
+    "title": "Data Management I",
     "section": "class()",
     "text": "class()\n\n\nlogical - Boolean values TRUE and FALSE\n\n\nclass(TRUE)\n\n[1] \"logical\"\n\n\n\ncharacter - character strings\n \n\nclass(\"Sociology\")\n\n[1] \"character\"\n\n\n\n\n\n\nInteger - numeric data without decimals\n(indicated with an L).\n\nclass(2L)\n\n[1] \"integer\"\n\n\n\n\nnumeric - default type if values are numbers or if the values contain decimals.\n\nclass(2.5)\n\n[1] \"numeric\""
   },
   {
     "objectID": "lecture-02.html#factor",
     "href": "lecture-02.html#factor",
-    "title": "Introduction to Data",
+    "title": "Data Management I",
     "section": "Factor",
-    "text": "Factor\nfactors consist of character data with a fixed and known set of possible values\n\n\nopinion &lt;- factor(c(\"like\", \"dislike\", \"dislike\", \"hate\", \"dislike\", \"hate\"))\nclass(opinion)\n\n[1] \"factor\"\n\n\n\n\n\n# By default, the levels are sorted alphabetically.\nlevels(opinion)\n\n[1] \"dislike\" \"hate\"    \"like\""
+    "text": "Factor\nfactors consist of character data with a fixed and known set of possible values\n\n\nopinion &lt;- factor(c(\"like\", \"dislike\", \"dislike\", \"hate\", \"dislike\", \"hate\"))\nclass(opinion)\n\n[1] \"factor\"\n\n\n\n\n\n# By default, the levels are sorted alphabetically.\nlevels(opinion)\n\n[1] \"dislike\" \"hate\"    \"like\"   \n\n\n\nc() means to combine"
   },
   {
     "objectID": "lecture-02.html#factor-order",
     "href": "lecture-02.html#factor-order",
-    "title": "Introduction to Data",
+    "title": "Data Management I",
     "section": "Factor order",
     "text": "Factor order\n\n# Reorder the levels with the argument `levels` in the `factor()` function\nopinion &lt;- factor(opinion, levels = c(\"hate\", \"dislike\", \"like\"))\nlevels(opinion)\n\n[1] \"hate\"    \"dislike\" \"like\"   \n\n\n\n\n\n# If the order has meaning (like rankings), you can make it an ordered factor\nopinion &lt;- factor(opinion, levels = c(\"hate\", \"dislike\", \"like\"), ordered = TRUE)\nlevels(opinion)\n\n[1] \"hate\"    \"dislike\" \"like\""
   },
   {
     "objectID": "lecture-02.html#converting-between-types",
     "href": "lecture-02.html#converting-between-types",
-    "title": "Introduction to Data",
+    "title": "Data Management I",
     "section": "Converting between types",
     "text": "Converting between types\nUse a function: as.logical(), as.numeric(), as.integer(), or as.character().\n\n\n\nCreate a numeric variable.\n\nx &lt;- 1:3\nx\n\n[1] 1 2 3\n\nclass(x)\n\n[1] \"integer\"\n\n\n\n\n\n\n Heads Up!\n\n\nThe : (colon) means ‘through.’\n\n\n\n\nChange it to a character variable.\n\ny &lt;- as.character(x)\ny\n\n[1] \"1\" \"2\" \"3\"\n\nclass(y)\n\n[1] \"character\"\n\n\n\n\n\n\n Heads Up!\n\n\nNotice the quotation marks around the values."
   },
   {
     "objectID": "lecture-02.html#haven-labelled",
     "href": "lecture-02.html#haven-labelled",
-    "title": "Introduction to Data",
+    "title": "Data Management I",
     "section": "Haven labelled",
-    "text": "Haven labelled\nWhen you import data into R from software like SPSS, Stata, or SAS, you might notice a special class called haven_labelled.\n\n\n\n\nclass(gss24$premarsx)\n\n\n\n[1] \"haven_labelled\" \"vctrs_vctr\"     \"double\"        \n\n\n\n\ntable(gss24$premarsx)\n\n\n\n\n   1    2    3    4 \n 357  122  258 1378"
+    "text": "Haven labelled\nWhen you import data into R from software like SPSS, Stata, or SAS, you might notice a special class called haven_labelled.\n\n\n\n\nclass(gss24$premarsx)\n\n\n\n[1] \"haven_labelled\" \"vctrs_vctr\"     \"double\"        \n\n\n\n\ntable(gss24$premarsx)\n\n\n\n\n   1    2    3    4 \n 438  172  317 1633"
   },
   {
     "objectID": "lecture-02.html#haven-labelled-cont.",
     "href": "lecture-02.html#haven-labelled-cont.",
-    "title": "Introduction to Data",
+    "title": "Data Management I",
     "section": "Haven labelled cont.",
-    "text": "Haven labelled cont.\nIt makes data easier to understand without needing a separate codebook.\n\n1attr(gss24$premarsx, \"label\")\n2print_labels(gss24$premarsx)\n\n\n1\n\nA description of the variable\n\n2\n\nView the label attached to each numeric value\n\n\n\n\n\n\n[1] \"Sex before marriage\"\n\nLabels:\n value                         label\n     1                  always wrong\n     2           almost always wrong\n     3          wrong only sometimes\n     4              not wrong at all\n     5                         other\n NA(d)                    don't know\n NA(i)                           iap\n NA(j)            I don't have a job\n NA(m)                   dk, na, iap\n NA(n)                     no answer\n NA(p)                 not imputable\n NA(r)                       refused\n NA(s)                skipped on web\n NA(u)                    uncodeable\n NA(x) not available in this release\n NA(y)    not available in this year\n NA(z)                  see codebook\n\n\n\nThe column itself might have a variable label (a description like “Gender of respondent”)\nThe column contains values (numbers)\nEach value may have a label attached (like “Male” for 1, “Female” for 2)"
+    "text": "Haven labelled cont.\nIt makes data easier to understand without needing a separate codebook.\n\n1attr(gss24$premarsx, \"label\")\n2print_labels(gss24$premarsx)\n\n\n1\n\nA description of the variable\n\n2\n\nView the label attached to each numeric value\n\n\n\n\n\n\n[1] \"Sex before marriage\"\n\nLabels:\n value                         label\n     1                  always wrong\n     2           almost always wrong\n     3          wrong only sometimes\n     4              not wrong at all\n     5                         other\n NA(d)                    don't know\n NA(i)                           iap\n NA(j)            I don't have a job\n NA(m)                   dk, na, iap\n NA(n)                     no answer\n NA(p)                 not imputable\n NA(r)                       refused\n NA(s)                skipped on web\n NA(u)                    uncodeable\n NA(x) not available in this release\n NA(y)    not available in this year\n NA(z)                  see codebook\n\n\n\nThe column itself might have a variable label (a description like “Gender of respondent”) &lt;click&gt;\nThe column contains values (numbers)\nEach value may have a label attached (like “Male” for 1, “Female” for 2)"
   },
   {
     "objectID": "lecture-02.html#section",
     "href": "lecture-02.html#section",
-    "title": "Introduction to Data",
+    "title": "Data Management I",
     "section": "",
-    "text": "You can use as_factor to see the value labels of the variable premarsx.\n\nMini-taskwith as_factor()without as_factor()\n\n\n\n Use as_factor() inside the table() function for the variable premarsx\n\n\n\n\ntable(as_factor(gss24$premarsx), useNA = \"ifany\")\n\n\n                 always wrong           almost always wrong \n                          357                           122 \n         wrong only sometimes              not wrong at all \n                          258                          1378 \n                        other                           iap \n                            0                          1126 \n                   don't know            I don't have a job \n                           50                             0 \n                  dk, na, iap                     no answer \n                            0                             6 \n                not imputable                       refused \n                            0                             0 \n               skipped on web                    uncodeable \n                           12                             0 \nnot available in this release    not available in this year \n                            0                             0 \n                 see codebook \n                            0 \n\n\n\n\n\ntable(gss24$premarsx, useNA = \"ifany\")\n\n\n   1    2    3    4 &lt;NA&gt; \n 357  122  258 1378 1194 \n\n\n\n\n\n\nIn the code-along, REPLACE THE BLANK LINE WITH THE NAME OF THE VARIABLE\nWhat would happen if we didn’t include as_factor() within table()?"
+    "text": "Use the gss_which_years() function to identify the survey years a variable appeared.\n\n\ngss_which_years(gss_all, meovrwrk)\n\n# A tibble: 35 × 2\n   year      meovrwrk\n   &lt;dbl+lbl&gt; &lt;lgl&gt;   \n 1 1972      FALSE   \n 2 1973      FALSE   \n 3 1974      FALSE   \n 4 1975      FALSE   \n 5 1976      FALSE   \n 6 1977      FALSE   \n 7 1978      FALSE   \n 8 1980      FALSE   \n 9 1982      FALSE   \n10 1983      FALSE   \n# ℹ 25 more rows\n\n\n\n\n\n\n Heads Up!\n\n\nIf run in the console, to see all rows, wrap the code in the print() command: print(gss_which_years(gss_all, meovrwrk), n = 40)"
   },
   {
     "objectID": "lecture-02.html#convert-labels-to-factors",
     "href": "lecture-02.html#convert-labels-to-factors",
-    "title": "Introduction to Data",
+    "title": "Data Management I",
     "section": "Convert labels to factors",
-    "text": "Convert labels to factors\n\nzap_missing()as_factor()droplevels()\n\n\n\n 1. Use zap_missing() to get rid of all the ‘missing’ (NA) levels\n\n\n\n\ngss24$premarsx &lt;- zap_missing(gss24$premarsx)\ntable(as_factor(gss24$premarsx), useNA = \"ifany\") # see the results\n\n\n        always wrong  almost always wrong wrong only sometimes \n                 357                  122                  258 \n    not wrong at all                other                 &lt;NA&gt; \n                1378                    0                 1194 \n\n\n\n\n\n\n 2. Use as_factor() to apply the labels instead of numeric values\n\n\n\n\ngss24$premarsx &lt;- as_factor(gss24$premarsx) # replace the values with labels\ntable(gss24$premarsx, useNA = \"ifany\") # notice we didn't need to wrap the variable in as_factor\n\n\n        always wrong  almost always wrong wrong only sometimes \n                 357                  122                  258 \n    not wrong at all                other                 &lt;NA&gt; \n                1378                    0                 1194 \n\n\n\n\n\n\n 3. Use droplevels() to get rid of the empty levels in premarsx.\n\n\n\n\ngss24$premarsx &lt;- droplevels(gss24$premarsx)\ntable(gss24$premarsx)\n\n\n        always wrong  almost always wrong wrong only sometimes \n                 357                  122                  258 \n    not wrong at all \n                1378 \n\n\n\n\n\n\n\n\nREPLACE THE BLANK LINES WITH THE NAME OF THE VARIABLE\n\nREPLACE THE BLANK LINE WITH THE FUNCTION as_factor()\n\nREPLACE THE BLANK LINES WITH THE droplevels() function & the NAME OF THE VARIABLE"
+    "text": "Convert labels to factors\n\nzap_missing()as_factor()droplevels()\n\n\n\n 1. Use zap_missing() to get rid of all the ‘missing’ (NA) levels\n\n\n\n\ngss24$premarsx &lt;- zap_missing(gss24$premarsx)\ntable(as_factor(gss24$premarsx), useNA = \"ifany\") # see the results\n\n\n        always wrong  almost always wrong wrong only sometimes \n                 438                  172                  317 \n    not wrong at all                other                 &lt;NA&gt; \n                1633                    0                 1426 \n\n\n\n\n\n\n 2. Use as_factor() to apply the labels instead of numeric values\n\n\n\n\ngss24$premarsx &lt;- as_factor(gss24$premarsx) # replace the values with labels\ntable(gss24$premarsx, useNA = \"ifany\") # notice we didn't need to wrap the variable in as_factor\n\n\n        always wrong  almost always wrong wrong only sometimes \n                 438                  172                  317 \n    not wrong at all                other                 &lt;NA&gt; \n                1633                    0                 1426 \n\n\n\n\n\n\n 3. Use droplevels() to get rid of the empty levels in premarsx.\n\n\n\n\ngss24$premarsx &lt;- droplevels(gss24$premarsx)\ntable(gss24$premarsx)\n\n\n        always wrong  almost always wrong wrong only sometimes \n                 438                  172                  317 \n    not wrong at all \n                1633 \n\n\n\n\n\n\n\n\nREPLACE THE BLANK LINES WITH THE NAME OF THE VARIABLE\n\nREPLACE THE BLANK LINE WITH THE FUNCTION as_factor()\n\nREPLACE THE BLANK LINES WITH THE droplevels() function & the NAME OF THE VARIABLE"
   },
   {
     "objectID": "lecture-02.html#mini-task-5",
     "href": "lecture-02.html#mini-task-5",
-    "title": "Introduction to Data",
+    "title": "Data Management I",
     "section": "Mini-task",
-    "text": "Mini-task\n\n Use zap_missing(), as_factor(), & droplevels() on the variable sex.\n\n\n\n\n1gss24$sex &lt;- zap_missing(gss24$sex)\n2gss24$sex &lt;- as_factor(gss24$sex)\n3gss24$sex &lt;- droplevels(gss24$sex)\n\ntable(gss24$sex)\n\n\n1\n\nGet rid of all the ‘missing’ (NA) levels.\n\n2\n\nReplace the values with labels.\n\n3\n\nGet rid of the empty levels (if any).\n\n\n\n\n\n  male female \n  1467   1823 \n\n\n\nuse zap_missing(), as_factor(), and droplevels() to do the same for the sex variable."
+    "text": "Mini-task\n\n Use zap_missing(), as_factor(), & droplevels() on the variable sex.\n\n\n\n\n1gss24$sex &lt;- zap_missing(gss24$sex)\n2gss24$sex &lt;- as_factor(gss24$sex)\n3gss24$sex &lt;- droplevels(gss24$sex)\n\ntable(gss24$sex)\n\n\n1\n\nGet rid of all the ‘missing’ (NA) levels.\n\n2\n\nReplace the values with labels.\n\n3\n\nGet rid of the empty levels (if any).\n\n\n\n\n\n  male female \n  1787   2169 \n\n\n\nuse zap_missing(), as_factor(), and droplevels() to do the same for the sex variable."
   },
   {
     "objectID": "lecture-02.html#relative-frequency-table",
     "href": "lecture-02.html#relative-frequency-table",
-    "title": "Introduction to Data",
+    "title": "Data Management I",
     "section": "Relative frequency table",
-    "text": "Relative frequency table\nLet’s try functions from the summarytools() package to get univariate (1 variable) and bivariate (2 variables) descriptive statistics.\n\nfreq() creates table of the counts for a variable.\n\nfreq(gss24$sex)\n\n\n\nFrequencies  \ngss24$sex  \nType: Factor  \n\n               Freq   % Valid   % Valid Cum.   % Total   % Total Cum.\n------------ ------ --------- -------------- --------- --------------\n        male   1467     44.59          44.59     44.33          44.33\n      female   1823     55.41         100.00     55.09          99.43\n        &lt;NA&gt;     19                               0.57         100.00\n       Total   3309    100.00         100.00    100.00         100.00\n\n\n\nTo use the freq() function, what did we need to do first? AK: Load the summarytools() package."
+    "text": "Relative frequency table\nLet’s try functions from the summarytools() package to get univariate (1 variable) and bivariate (2 variables) descriptive statistics.\n\nfreq() creates table of the counts for a variable.\n\nfreq(gss24$sex)\n\n\n\nFrequencies  \ngss24$sex  \nType: Factor  \n\n               Freq   % Valid   % Valid Cum.   % Total   % Total Cum.\n------------ ------ --------- -------------- --------- --------------\n        male   1787     45.17          45.17     44.83          44.83\n      female   2169     54.83         100.00     54.42          99.25\n        &lt;NA&gt;     30                               0.75         100.00\n       Total   3986    100.00         100.00    100.00         100.00\n\n\n\nTo use the freq() function, what did we need to do first? AK: Load the summarytools() package."
   },
   {
     "objectID": "lecture-02.html#mini-task-6",
     "href": "lecture-02.html#mini-task-6",
-    "title": "Introduction to Data",
+    "title": "Data Management I",
     "section": "Mini-task",
-    "text": "Mini-task\n\n Use freq() on the variable premarsx\n\n\n\n\nfreq(gss24$premarsx)\n\nFrequencies  \ngss24$premarsx  \nType: Factor  \n\n                             Freq   % Valid   % Valid Cum.   % Total   % Total Cum.\n-------------------------- ------ --------- -------------- --------- --------------\n              always wrong    357     16.88          16.88     10.79          10.79\n       almost always wrong    122      5.77          22.65      3.69          14.48\n      wrong only sometimes    258     12.20          34.85      7.80          22.27\n          not wrong at all   1378     65.15         100.00     41.64          63.92\n                      &lt;NA&gt;   1194                              36.08         100.00\n                     Total   3309    100.00         100.00    100.00         100.00"
+    "text": "Mini-task\n\n Use freq() on the variable premarsx\n\n\n\n\nfreq(gss24$premarsx)\n\nFrequencies  \ngss24$premarsx  \nType: Factor  \n\n                             Freq   % Valid   % Valid Cum.   % Total   % Total Cum.\n-------------------------- ------ --------- -------------- --------- --------------\n              always wrong    438     17.11          17.11     10.99          10.99\n       almost always wrong    172      6.72          23.83      4.32          15.30\n      wrong only sometimes    317     12.38          36.21      7.95          23.26\n          not wrong at all   1633     63.79         100.00     40.97          64.22\n                      &lt;NA&gt;   1426                              35.78         100.00\n                     Total   3986    100.00         100.00    100.00         100.00"
   },
   {
     "objectID": "lecture-02.html#pretty-tables",
     "href": "lecture-02.html#pretty-tables",
-    "title": "Introduction to Data",
+    "title": "Data Management I",
     "section": "Pretty tables",
-    "text": "Pretty tables\nOne of summarytools main purposes is to help clean and prepare data for further analysis. But sometimes we don’t care about the missing values.\n\nUsing report.nas = FALSE suppresses the missing data.\nThe headings = FALSE parameter suppresses the heading section.\n\n\nfreq(gss24$sex, report.nas = FALSE, headings = FALSE)\n\n\n\n\n               Freq        %   % Cum.\n------------ ------ -------- --------\n        male   1467    44.59    44.59\n      female   1823    55.41   100.00\n       Total   3290   100.00   100.00"
+    "text": "Pretty tables\nOne of summarytools main purposes is to help clean and prepare data for further analysis. But sometimes we don’t care about the missing values.\n\nUsing report.nas = FALSE suppresses the missing data.\nThe headings = FALSE parameter suppresses the heading section.\n\n\nfreq(gss24$sex, report.nas = FALSE, headings = FALSE)\n\n\n\n\n               Freq        %   % Cum.\n------------ ------ -------- --------\n        male   1787    45.17    45.17\n      female   2169    54.83   100.00\n       Total   3956   100.00   100.00"
   },
   {
     "objectID": "lecture-02.html#mini-task-7",
     "href": "lecture-02.html#mini-task-7",
-    "title": "Introduction to Data",
+    "title": "Data Management I",
     "section": "Mini-task",
-    "text": "Mini-task\n\n Make a pretty frequency table for the variable premarsx.\n\n\n\n\nfreq(gss24$premarsx, report.nas = FALSE, headings = FALSE)\n\n\n                             Freq        %   % Cum.\n-------------------------- ------ -------- --------\n              always wrong    357    16.88    16.88\n       almost always wrong    122     5.77    22.65\n      wrong only sometimes    258    12.20    34.85\n          not wrong at all   1378    65.15   100.00\n                     Total   2115   100.00   100.00"
+    "text": "Mini-task\n\n Make a pretty frequency table for the variable premarsx.\n\n\n\n\nfreq(gss24$premarsx, report.nas = FALSE, headings = FALSE)\n\n\n                             Freq        %   % Cum.\n-------------------------- ------ -------- --------\n              always wrong    438    17.11    17.11\n       almost always wrong    172     6.72    23.83\n      wrong only sometimes    317    12.38    36.21\n          not wrong at all   1633    63.79   100.00\n                     Total   2560   100.00   100.00"
   },
   {
     "objectID": "lecture-02.html#cross-tabs",
     "href": "lecture-02.html#cross-tabs",
-    "title": "Introduction to Data",
+    "title": "Data Management I",
     "section": "Cross-tabs",
-    "text": "Cross-tabs\nWe’ve been using the table() function with one variable at a time, but it also let’s you create a frequency table (crosstab) with two variables.\n\n\n# 1st variable is the rows, 2nd variable is the columns.\ntable(gss24$premarsx, gss24$sex)\n\n\n\n                      \n                       male female\n  always wrong          146    209\n  almost always wrong    44     77\n  wrong only sometimes  127    130\n  not wrong at all      616    758\n\n\n\n\nBut it’s missing the column percentages…"
+    "text": "Cross-tabs\nWe’ve been using the table() function with one variable at a time, but it also let’s you create a frequency table (crosstab) with two variables.\n\n\n# 1st variable is the rows, 2nd variable is the columns.\ntable(gss24$premarsx, gss24$sex)\n\n\n\n                      \n                       male female\n  always wrong          180    256\n  almost always wrong    71     98\n  wrong only sometimes  155    161\n  not wrong at all      734    891\n\n\n\n\nBut it’s missing the column percentages…"
   },
   {
     "objectID": "lecture-02.html#relative-frequency-by-group",
     "href": "lecture-02.html#relative-frequency-by-group",
-    "title": "Introduction to Data",
+    "title": "Data Management I",
     "section": "Relative frequency by group",
-    "text": "Relative frequency by group\nTo run freq() by group, pair it with the stby() function.\n\nstby(gss24$premarsx, gss24$sex, freq)\n\n\n\nFrequencies  \ngss24$premarsx  \nType: Factor  \nGroup: sex = male  \n\n                             Freq   % Valid   % Valid Cum.   % Total   % Total Cum.\n-------------------------- ------ --------- -------------- --------- --------------\n              always wrong    146     15.65          15.65      9.95           9.95\n       almost always wrong     44      4.72          20.36      3.00          12.95\n      wrong only sometimes    127     13.61          33.98      8.66          21.61\n          not wrong at all    616     66.02         100.00     41.99          63.60\n                      &lt;NA&gt;    534                              36.40         100.00\n                     Total   1467    100.00         100.00    100.00         100.00\n\nGroup: sex = female  \n\n                             Freq   % Valid   % Valid Cum.   % Total   % Total Cum.\n-------------------------- ------ --------- -------------- --------- --------------\n              always wrong    209     17.80          17.80     11.46          11.46\n       almost always wrong     77      6.56          24.36      4.22          15.69\n      wrong only sometimes    130     11.07          35.43      7.13          22.82\n          not wrong at all    758     64.57         100.00     41.58          64.40\n                      &lt;NA&gt;    649                              35.60         100.00\n                     Total   1823    100.00         100.00    100.00         100.00\n\n\n\n\nThis is hard to read and we don’t need the cumulative frequencies.\n\nstby() lets us obtain grouped statistics with summarytools functions"
+    "text": "Relative frequency by group\nTo run freq() by group, pair it with the stby() function.\n\nstby(gss24$premarsx, gss24$sex, freq)\n\n\n\nFrequencies  \ngss24$premarsx  \nType: Factor  \nGroup: sex = male  \n\n                             Freq   % Valid   % Valid Cum.   % Total   % Total Cum.\n-------------------------- ------ --------- -------------- --------- --------------\n              always wrong    180     15.79          15.79     10.07          10.07\n       almost always wrong     71      6.23          22.02      3.97          14.05\n      wrong only sometimes    155     13.60          35.61      8.67          22.72\n          not wrong at all    734     64.39         100.00     41.07          63.79\n                      &lt;NA&gt;    647                              36.21         100.00\n                     Total   1787    100.00         100.00    100.00         100.00\n\nGroup: sex = female  \n\n                             Freq   % Valid   % Valid Cum.   % Total   % Total Cum.\n-------------------------- ------ --------- -------------- --------- --------------\n              always wrong    256     18.21          18.21     11.80          11.80\n       almost always wrong     98      6.97          25.18      4.52          16.32\n      wrong only sometimes    161     11.45          36.63      7.42          23.74\n          not wrong at all    891     63.37         100.00     41.08          64.82\n                      &lt;NA&gt;    763                              35.18         100.00\n                     Total   2169    100.00         100.00    100.00         100.00\n\n\n\n\nThis is hard to read and we don’t need the cumulative frequencies.\n\nstby() lets us obtain grouped statistics with summarytools functions"
   },
   {
     "objectID": "lecture-02.html#pretty-cross-tabs-with-ctable",
     "href": "lecture-02.html#pretty-cross-tabs-with-ctable",
-    "title": "Introduction to Data",
+    "title": "Data Management I",
     "section": "Pretty cross-tabs with ctable()",
-    "text": "Pretty cross-tabs with ctable()\nUse summarytools::ctable instead!\n\n\n1ctable(gss24$premarsx, gss24$sex,\n2  prop = \"c\",\n3  format = \"p\",\n  useNA = \"no\"\n4)\n\n\n1\n\nChange from table() to ctable().\n\n2\n\nThe “c” gives column %; “r” would give row %.\n\n3\n\nThis adds the % symbols to the table.\n\n4\n\nExclude the missing levels from the table.\n\n\n\n\n\n\nCross-Tabulation, Column Proportions  \npremarsx * sex  \nData Frame: gss24  \n\n---------------------- ----- -------------- --------------- ---------------\n                         sex           male          female           Total\n              premarsx                                                     \n          always wrong         146 ( 15.6%)    209 ( 17.8%)    355 ( 16.8%)\n   almost always wrong          44 (  4.7%)     77 (  6.6%)    121 (  5.7%)\n  wrong only sometimes         127 ( 13.6%)    130 ( 11.1%)    257 ( 12.2%)\n      not wrong at all         616 ( 66.0%)    758 ( 64.6%)   1374 ( 65.2%)\n                 Total         933 (100.0%)   1174 (100.0%)   2107 (100.0%)\n---------------------- ----- -------------- --------------- ---------------\n\n\n\nAdd to your code-along: 1. X percentage of respondents believe sex before marriage is ‘almost always wrong’?\n2. A greater percentage of X think sex before marriage is ‘not wrong at all’."
+    "text": "Pretty cross-tabs with ctable()\nUse summarytools::ctable instead!\n\n\n1ctable(gss24$premarsx, gss24$sex,\n2  prop = \"c\",\n3  format = \"p\",\n4  useNA = \"no\"\n) \n\n\n1\n\nChange from table() to ctable().\n\n2\n\nThe “c” gives column %; “r” would give row %.\n\n3\n\nThis adds the % symbols to the table.\n\n4\n\nExclude the missing levels from the table.\n\n\n\n\n\n\nCross-Tabulation, Column Proportions  \npremarsx * sex  \nData Frame: gss24  \n\n---------------------- ----- --------------- --------------- ---------------\n                         sex            male          female           Total\n              premarsx                                                      \n          always wrong          180 ( 15.8%)    256 ( 18.2%)    436 ( 17.1%)\n   almost always wrong           71 (  6.2%)     98 (  7.0%)    169 (  6.6%)\n  wrong only sometimes          155 ( 13.6%)    161 ( 11.5%)    316 ( 12.4%)\n      not wrong at all          734 ( 64.4%)    891 ( 63.4%)   1625 ( 63.8%)\n                 Total         1140 (100.0%)   1406 (100.0%)   2546 (100.0%)\n---------------------- ----- --------------- --------------- ---------------\n\n\n\nAdd to your code-along:\n1. X percentage of respondents believe sex before marriage is ‘almost always wrong’?\n2. A greater percentage of X think sex before marriage is ‘not wrong at all’."
   },
   {
     "objectID": "lecture-02.html#section-1",
     "href": "lecture-02.html#section-1",
-    "title": "Introduction to Data",
+    "title": "Data Management I",
     "section": "",
-    "text": "Based on your table, what percentage of respondents believe sex before marriage is ‘almost always wrong’?\n\n\n5.7\n16.8\n121\n12.2"
+    "text": "You can use as_factor to see the value labels of the variable premarsx.\n\nMini-taskwith as_factor()without as_factor()\n\n\n\n Use as_factor() inside the table() function for the variable premarsx\n\n\n\n\ntable(as_factor(gss24$premarsx), useNA = \"ifany\")\n\n\n                 always wrong           almost always wrong \n                          438                           172 \n         wrong only sometimes              not wrong at all \n                          317                          1633 \n                        other                           iap \n                            0                          1351 \n                   don't know            I don't have a job \n                           50                             0 \n                  dk, na, iap                     no answer \n                            0                             6 \n                not imputable                       refused \n                            0                             0 \n               skipped on web                    uncodeable \n                           19                             0 \nnot available in this release    not available in this year \n                            0                             0 \n                 see codebook \n                            0 \n\n\n\n\n\ntable(gss24$premarsx, useNA = \"ifany\")\n\n\n   1    2    3    4 &lt;NA&gt; \n 438  172  317 1633 1426 \n\n\n\n\n\n\nIn the code-along, REPLACE THE BLANK LINE WITH THE NAME OF THE VARIABLE\nWhat would happen if we didn’t include as_factor() within table()?"
   },
   {
     "objectID": "lecture-02.html#section-2",
     "href": "lecture-02.html#section-2",
-    "title": "Introduction to Data",
+    "title": "Data Management I",
     "section": "",
-    "text": "Based on your table, do a greater percentage of men or women think sex before marriage is ‘not wrong at all’?\n\n\nMen\nWomen"
+    "text": "Based on your table, what percentage of respondents believe sex before marriage is ‘almost always wrong’?\n\n\n5.7\n16.8\n121\n12.2"
   },
   {
     "objectID": "lecture-03.html#mini-task",
     "href": "lecture-03.html#mini-task",
-    "title": "Data Management I",
+    "title": "Data Management II",
     "section": "Mini-task",
-    "text": "Mini-task\n\n Which survey years did the variable childs appear?\n\n\n\n\ngss_which_years(gss_all, childs)\n\n# A tibble: 35 × 2\n   year      childs\n   &lt;dbl+lbl&gt; &lt;lgl&gt; \n 1 1972      TRUE  \n 2 1973      TRUE  \n 3 1974      TRUE  \n 4 1975      TRUE  \n 5 1976      TRUE  \n 6 1977      TRUE  \n 7 1978      TRUE  \n 8 1980      TRUE  \n 9 1982      TRUE  \n10 1983      TRUE  \n# ℹ 25 more rows"
+    "text": "Mini-task\n\n Use tail() to look at the last few rows of my_data\n\n\n\n\n# look at the first rows & LAST columns of the data frame\ntail(my_data)\n\n# A tibble: 6 × 4\n  year      agekdbrn                              childs    hrs1       \n  &lt;dbl+lbl&gt; &lt;dbl+lbl&gt;                             &lt;dbl+lbl&gt; &lt;dbl+lbl&gt;  \n1 2024      NA(x) [not available in this release] 2         NA(i) [iap]\n2 2024      NA(x) [not available in this release] 3            15      \n3 2024      NA(x) [not available in this release] 4            18      \n4 2024      NA(x) [not available in this release] 3         NA(i) [iap]\n5 2024      NA(x) [not available in this release] 3            37      \n6 2024      NA(x) [not available in this release] 2         NA(i) [iap]"
   },
   {
     "objectID": "lecture-03.html#dplyr-in-action-output",
@@ -835,9 +835,9 @@
   {
     "objectID": "lecture-03.html#mini-task-1",
     "href": "lecture-03.html#mini-task-1",
-    "title": "Data Management I",
+    "title": "Data Management II",
     "section": "Mini-task",
-    "text": "Mini-task\n\n Use a |&gt; & gss_which_years() to find out which survey years the variable agekdbrn appears.\n\n\n\n\ngss_all |&gt;\n  gss_which_years(agekdbrn)\n\n\n# A tibble: 35 × 2\n   year      agekdbrn\n   &lt;dbl+lbl&gt; &lt;lgl&gt;   \n 1 1972      FALSE   \n 2 1973      FALSE   \n 3 1974      FALSE   \n 4 1975      FALSE   \n 5 1976      FALSE   \n 6 1977      FALSE   \n 7 1978      FALSE   \n 8 1980      FALSE   \n 9 1982      FALSE   \n10 1983      FALSE   \n# ℹ 25 more rows\n\n\n\nDemo in console:\ngss_all |&gt; gss_which_years(agekdbrn) |&gt; print(n = 40)"
+    "text": "Mini-task\n\n Create a dataframe with the variables year, agekdbrn, childs, and hrs1, including only respondents from the year 2022 who have no missing values in any of these variables.\n\n\n\n\nmy_data &lt;- gss_all |&gt;\n  select(year, agekdbrn, childs, hrs1) |&gt;\n  filter(year == 2022) |&gt;\n1  drop_na()\n\nhead(my_data)\n\n\n1\n\nNo need to list all variables inside drop_na()\n\n\n\n\n\n\nASK:"
   },
   {
     "objectID": "lecture-03.html#filter-drop_na",
@@ -849,9 +849,9 @@
   {
     "objectID": "lecture-03.html#mini-task-2",
     "href": "lecture-03.html#mini-task-2",
-    "title": "Data Management I",
+    "title": "Data Management II",
     "section": "Mini-task",
-    "text": "Mini-task\n\n Limit the dataframe to only the 2024 respondents without missing data for sex, hrs1, and childs. How many men and women are left?\n\n\n\n\ngss_all |&gt; \n  filter(year == 2024) |&gt; \n  drop_na(sex, hrs1, childs) |&gt;\n  count(sex)\n\n\n# A tibble: 2 × 2\n  sex            n\n  &lt;dbl+lbl&gt;  &lt;int&gt;\n1 1 [male]     859\n2 2 [female]   888\n\n\n\nASK: Why are the numbers different than the table before?"
+    "text": "Mini-task\n\n Use mutate(), mean(), and sd() to create a column with Z scores for hrs1\n\n\n\n\nmy_data &lt;- my_data |&gt;\n  # Create Z-score for annual_hours\n  mutate(z_hrs1 = (hrs1 - mean(hrs1)) /\n    sd(hrs1))\n\nhead(my_data) # Check your work\n\n\n\nDo you remember the formula for calculating a Z score?"
   },
   {
     "objectID": "lecture-03.html#median-mean-w-base-r",
@@ -863,9 +863,9 @@
   {
     "objectID": "lecture-03.html#mini-task-3",
     "href": "lecture-03.html#mini-task-3",
-    "title": "Data Management I",
+    "title": "Data Management II",
     "section": "Mini-task",
-    "text": "Mini-task\n\n Find the mean and median for the variable: hrs1.\n\n\n\n# separately\nmedian(gss_all$hrs1, na.rm=TRUE)\nmean(gss_all$hrs1, na.rm=TRUE)\n\n# together\nsummary(gss_all$hrs1)\n\n\n\n[1] 40\n[1] 41.11279\n   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's \n   0.00   37.00   40.00   41.11   48.00   89.00   32371"
+    "text": "Mini-task\n\n Use mutate() and summarise() to determine what proportion of new parents were older than 40 years old.\n\n\n\n\nmy_data |&gt;\n  mutate(older_parent = (agekdbrn &gt; 40) * 1) |&gt;\n  summarise(proportion = mean(older_parent))\n\n\n\n# A tibble: 1 × 1\n  proportion\n       &lt;dbl&gt;\n1     0.0192\n\n\n\nASK: Tell me what this means in a sentence."
   },
   {
     "objectID": "lecture-03.html#median-mean-with-dplyr",
@@ -926,16 +926,16 @@
   {
     "objectID": "lecture-04.html#mini-task",
     "href": "lecture-04.html#mini-task",
-    "title": "Statistical Tests I",
+    "title": "Data Management II",
     "section": "Mini-task",
-    "text": "Mini-task\n\n Install the Rmisc() package, available on CRAN.\n\n\n\nRun the code chunk in your code-along.\nOR: Copy and paste the code into your Console pane. Then hit “Enter”.\n\n\n\ninstall.packages(\"Rmisc\")\n\n\nWhat does this mean in your code-along: “This chunk will not run (on purpose!) when rendered because eval: false.”?\n\n\n\nWe’ll use Rmisc() to calculate confidence intervals with summarize()."
+    "text": "Mini-task\n\n Use tail() to look at the last few rows of my_data\n\n\n\n\n# look at the first rows & LAST columns of the data frame\ntail(my_data)\n\n# A tibble: 6 × 4\n  year      agekdbrn                              childs    hrs1       \n  &lt;dbl+lbl&gt; &lt;dbl+lbl&gt;                             &lt;dbl+lbl&gt; &lt;dbl+lbl&gt;  \n1 2024      NA(x) [not available in this release] 2         NA(i) [iap]\n2 2024      NA(x) [not available in this release] 3            15      \n3 2024      NA(x) [not available in this release] 4            18      \n4 2024      NA(x) [not available in this release] 3         NA(i) [iap]\n5 2024      NA(x) [not available in this release] 3            37      \n6 2024      NA(x) [not available in this release] 2         NA(i) [iap]"
   },
   {
     "objectID": "lecture-04.html#mini-task-1",
     "href": "lecture-04.html#mini-task-1",
-    "title": "Statistical Tests I",
+    "title": "Data Management II",
     "section": "Mini-task",
-    "text": "Mini-task\n\n Load the standard packages and our new Rmisc() package.\n\n\n\nlibrary(tidyverse)\nlibrary(haven) # not core tidyverse\nlibrary(gssr)\nlibrary(gssrdoc) # load the GSS codebook\nlibrary(summarytools)\nlibrary(Rmisc) # load the new package\n\n\nhaven() was installed with tidyverse; but it doesn’t load automatically"
+    "text": "Mini-task\n\n Create a dataframe with the variables year, agekdbrn, childs, and hrs1, including only respondents from the year 2022 who have no missing values in any of these variables.\n\n\n\n\nmy_data &lt;- gss_all |&gt;\n  select(year, agekdbrn, childs, hrs1) |&gt;\n  filter(year == 2022) |&gt;\n1  drop_na()\n\nhead(my_data)\n\n\n1\n\nNo need to list all variables inside drop_na()\n\n\n\n\n\n\nASK:"
   },
   {
     "objectID": "lecture-04.html#mini-task-1-output",
@@ -954,9 +954,9 @@
   {
     "objectID": "lecture-04.html#mini-task-2",
     "href": "lecture-04.html#mini-task-2",
-    "title": "Statistical Tests I",
+    "title": "Data Management II",
     "section": "Mini-task",
-    "text": "Mini-task\n\n Load the 2022 GSS data.\n\n\n\n\n# Get the data from the 2022 survey\ngss22 &lt;- gss_get_yr(2022)"
+    "text": "Mini-task\n\n Use mutate(), mean(), and sd() to create a column with Z scores for hrs1\n\n\n\n\nmy_data &lt;- my_data |&gt;\n  # Create Z-score for annual_hours\n  mutate(z_hrs1 = (hrs1 - mean(hrs1)) /\n    sd(hrs1))\n\nhead(my_data) # Check your work"
   },
   {
     "objectID": "lecture-04.html#mini-task-2-output",
@@ -975,16 +975,16 @@
   {
     "objectID": "lecture-04.html#code-meets-question",
     "href": "lecture-04.html#code-meets-question",
-    "title": "Statistical Tests I",
+    "title": "Data Management II",
     "section": "Code Meets Question",
-    "text": "Code Meets Question\n\n What can we infer about the population mean based on this confidence interval?\n\n\n\nwwwhr_sum\n\n# A tibble: 1 × 6\n      n mean_wwwhr sd_wwwhr se_wwwhr ci_lower ci_upper\n  &lt;int&gt;      &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;\n1   970       17.7     22.3    0.716     16.3     19.1"
+    "text": "Code Meets Question\n\n What proportion of new parents were teenagers (e.g., under 18 years old)?\n\n\n\n\nmy_data |&gt;\n1  summarise(proportion = mean(teen_parent))\n\n\n1\n\nMean of the variable, which equals the proportion of 1s\n\n\n\n\n\n\n# A tibble: 1 × 1\n  proportion\n       &lt;dbl&gt;\n1     0.0696\n\n\n\n\nASK: Tell me what this number means in a sentence.\n\n\n\n\nagekdbrn: How old were you when your first child was born?"
   },
   {
     "objectID": "lecture-04.html#mini-task-3",
     "href": "lecture-04.html#mini-task-3",
-    "title": "Statistical Tests I",
+    "title": "Data Management II",
     "section": "Mini-task",
-    "text": "Mini-task\n\n Create a dataset named my_data with the variables wwwhr, postlife, childs, & sex with no missing data\n\n\n\n\n# Create a new df\nmy_data &lt;-gss22 |&gt;\n  select(wwwhr, postlife, childs, sex) |&gt;\n  drop_na()"
+    "text": "Mini-task\n\n Use mutate() and summarise() to determine what proportion of new parents were older than 40 years old.\n\n\n\n\nmy_data |&gt;\n  mutate(older_parent = (agekdbrn &gt; 40) * 1) |&gt;\n  summarise(proportion = mean(older_parent))\n\n\n\n# A tibble: 1 × 1\n  proportion\n       &lt;dbl&gt;\n1     0.0192\n\n\n\nASK: Tell me what this means in a sentence."
   },
   {
     "objectID": "lecture-04.html#mutate-with-case_when",
@@ -1024,44 +1024,44 @@
   {
     "objectID": "lecture-04.html#section",
     "href": "lecture-04.html#section",
-    "title": "Statistical Tests I",
+    "title": "Data Management II",
     "section": "",
-    "text": "CISE"
+    "text": "Suppose you run the following and then you inspect df.\n\nWill the x variable have values 1, 2, 3, 4, 5 or 2, 4, 6, 8, 10?\n\n\n\n\n\ndf |&gt;\n  mutate(x = x * 2)\n\n# A tibble: 5 × 2\n      x y    \n  &lt;dbl&gt; &lt;chr&gt;\n1     2 a    \n2     4 a    \n3     6 b    \n4     8 c    \n5    10 c    \n\n\n\n\ndf\n\n# A tibble: 5 × 2\n      x y    \n  &lt;dbl&gt; &lt;chr&gt;\n1     1 a    \n2     2 a    \n3     3 b    \n4     4 c    \n5     5 c    \n\n\n\n\n\nDo something and show me"
   },
   {
     "objectID": "lecture-04.html#section-1",
     "href": "lecture-04.html#section-1",
-    "title": "Statistical Tests I",
+    "title": "Data Management II",
     "section": "",
-    "text": "Which of these equations represents your research hypothesis?\n\n\nH1: µ ≠ 2\nH1: µ = 2\nH1: µ &lt; 2\nH1: µ &gt; 2"
+    "text": "Suppose you run the following and then you inspect df.\n\nWill the x variable have values 1, 2, 3, 4, 5 or 2, 4, 6, 8, 10?\n\n\n\n\n\ndf &lt;- df |&gt;\n  mutate(x = x * 2)\n\n\n\ndf\n\n# A tibble: 5 × 2\n      x y    \n  &lt;dbl&gt; &lt;chr&gt;\n1     2 a    \n2     4 a    \n3     6 b    \n4     8 c    \n5    10 c    \n\n\n\n\n\nDo something, save result, overwriting original"
   },
   {
     "objectID": "lecture-04.html#section-2",
     "href": "lecture-04.html#section-2",
-    "title": "Statistical Tests I",
+    "title": "Data Management II",
     "section": "",
-    "text": "Which of these equations represents your null hypothesis?\n\n\nH0: µ ≠ 2\nH0: µ = 2\nH0: µ &lt; 2\nH0: µ &gt; 2"
+    "text": "Do something, save result, overwriting original\n\n\ndf &lt;- tibble(\n  x = c(1, 2, 3, 4, 5),\n  y = c(\"a\", \"a\", \"b\", \"c\", \"c\")\n)\ndf &lt;- df |&gt;\n  mutate(x = x * 2)\ndf\n\n\n\n# A tibble: 5 × 2\n      x y    \n  &lt;dbl&gt; &lt;chr&gt;\n1     2 a    \n2     4 a    \n3     6 b    \n4     8 c    \n5    10 c    \n\n\n\n\nDo something, save result, not overwriting original\n\n\ndf &lt;- tibble(\n  x = c(1, 2, 3, 4, 5),\n  y = c(\"a\", \"a\", \"b\", \"c\", \"c\")\n)\ndf_new &lt;- df |&gt;\n  mutate(x = x * 2)\ndf\n\n\n\n# A tibble: 5 × 2\n      x y    \n  &lt;dbl&gt; &lt;chr&gt;\n1     1 a    \n2     2 a    \n3     3 b    \n4     4 c    \n5     5 c"
   },
   {
     "objectID": "lecture-04.html#section-3",
     "href": "lecture-04.html#section-3",
-    "title": "Statistical Tests I",
+    "title": "Data Management II",
     "section": "",
-    "text": "Assuming an α level of .01, should you reject the null hypothesis?\n\n\nNo, because the 𝛼 level of .01 is greater than the p-value (&lt; .000).\nNo, because the p-value (&lt; .000) is less than the 𝛼 level of .01.\nYes, because the p-value (&lt; .000) is less than the 𝛼 level of .01."
+    "text": "Do something, save result, overwriting original when you shouldn’t\n\n\ndf &lt;- tibble(\n  x = c(1, 2, 3, 4, 5),\n  y = c(\"a\", \"a\", \"b\", \"c\", \"c\")\n)\ndf &lt;- df |&gt;\n  group_by(y) |&gt;\n  summarize(mean_x = mean(x))\ndf\n\n# A tibble: 3 × 2\n  y     mean_x\n  &lt;chr&gt;  &lt;dbl&gt;\n1 a        1.5\n2 b        3  \n3 c        4.5\n\n\n\n\nDo something, save result, not overwriting original when you shouldn’t\n\n\ndf &lt;- tibble(\n  x = c(1, 2, 3, 4, 5),\n  y = c(\"a\", \"a\", \"b\", \"c\", \"c\")\n)\ndf_summary &lt;- df |&gt;\n  group_by(y) |&gt;\n  summarize(mean_x = mean(x))\ndf\n\n# A tibble: 5 × 2\n      x y    \n  &lt;dbl&gt; &lt;chr&gt;\n1     1 a    \n2     2 a    \n3     3 b    \n4     4 c    \n5     5 c"
   },
   {
     "objectID": "lecture-04.html#section-4",
     "href": "lecture-04.html#section-4",
-    "title": "Statistical Tests I",
+    "title": "Data Management II",
     "section": "",
-    "text": "Which of these statements best summarizes your conclusion?\n\n\nOur evidence proves that people have fewer than two children, on average.\nPeople, on average, have two children.\nOn average, the number of children people have is statistically significantly lower than two."
+    "text": "Do something, save result, overwriting original\ndata frame\n\n\ndf &lt;- tibble(\n  x = c(1, 2, 3, 4, 5),\n  y = c(\"a\", \"a\", \"b\", \"c\", \"c\")\n)\ndf &lt;- df |&gt;\n  mutate(z = x + 2)\ndf\n\n# A tibble: 5 × 3\n      x y         z\n  &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt;\n1     1 a         3\n2     2 a         4\n3     3 b         5\n4     4 c         6\n5     5 c         7\n\n\n\n\nDo something, save result, overwriting original\ncolumn\n\n\ndf &lt;- tibble(\n  x = c(1, 2, 3, 4, 5),\n  y = c(\"a\", \"a\", \"b\", \"c\", \"c\")\n)\ndf &lt;- df |&gt;\n  mutate(x = x + 2)\ndf\n\n# A tibble: 5 × 2\n      x y    \n  &lt;dbl&gt; &lt;chr&gt;\n1     3 a    \n2     4 a    \n3     5 b    \n4     6 c    \n5     7 c"
   },
   {
     "objectID": "lecture-04.html#section-5",
     "href": "lecture-04.html#section-5",
-    "title": "Statistical Tests I",
+    "title": "Data Management II",
     "section": "",
-    "text": "Assuming an α level of .05, what do you conclude?\n\n\nThere is no statistically significant difference between men and women in belief in ghosts.\nMen are significantly more likely than women to believe in ghosts (p &lt; .05).\nWomen are significantly more likely than men to believe in ghosts (p &lt; .05)."
+    "text": "Do something and show me\n\n\ngss_all |&gt;\n  select(year, agekdbrn) |&gt;\n  filter(year == 2022) |&gt;\n  drop_na() |&gt;\n  mutate(age_groups = case_when(\n    agekdbrn &lt; 18 ~ \"&lt;18\",\n    agekdbrn &gt;= 18 & agekdbrn &lt;= 29 ~ \"18–29\",\n    agekdbrn &gt;= 30 & agekdbrn &lt;= 39 ~ \"30–39\",\n    agekdbrn &gt;= 40 ~ \"40+\",\n    TRUE ~ NA_character_\n  )) |&gt;\n  group_by(age_groups) |&gt;\n  summarise(\n    count = n(),\n    proportion = round(count / sum(count), 3)\n  )\n\n\n\nDo something, save result, not overwriting original.\n\n\n# Do something\ngss_all &lt;- gss_all |&gt;\n  mutate(age_groups = case_when(\n    agekdbrn &lt; 18 ~ \"&lt;18\",\n    agekdbrn &gt;= 18 & agekdbrn &lt;= 29 ~ \"18–29\",\n    agekdbrn &gt;= 30 & agekdbrn &lt;= 39 ~ \"30–39\",\n    agekdbrn &gt;= 40 ~ \"40+\",\n    TRUE ~ NA_character_\n  ))\n\n# Now show me\ngss_all |&gt;\n  select(year, age_groups) |&gt;\n  filter(year == 2022) |&gt;\n  drop_na() |&gt;\n  group_by(age_groups) |&gt;\n  summarise(\n    count = n(),\n    proportion = round(count / sum(count), 3)\n  )"
   },
   {
     "objectID": "lecture-04.html#overwriting-raw-data",
@@ -1995,143 +1995,374 @@
     "text": "Mini-task\n\n Load the packages.\n\n\nRun the code chunk in your code-along.\n\n\n\nlibrary(tidyverse) # for data wrangling\nlibrary(gssr) # U.S. General Social Survey data\nlibrary(gssrdoc) # GSS documentation"
   },
   {
-    "objectID": "lecture-04.html#variables",
-    "href": "lecture-04.html#variables",
-    "title": "Statistical Tests I",
-    "section": "Variables",
-    "text": "Variables\n\nwwwhr Not counting e-mail, about how many minutes or hours per week do you use the Web?\n\npostlife Do you believe there is a life after death?\n\nchilds How many children have you ever had?\nsex Respondent’s sex"
+    "objectID": "lecture-02.html#section-3",
+    "href": "lecture-02.html#section-3",
+    "title": "Data Management I",
+    "section": "",
+    "text": "Based on your table, do a greater percentage of men or women think sex before marriage is ‘not wrong at all’?\n\n\nMen\nWomen"
   },
   {
-    "objectID": "lecture-04.html#review-summarise",
-    "href": "lecture-04.html#review-summarise",
-    "title": "Statistical Tests I",
-    "section": "Review: summarise()",
-    "text": "Review: summarise()\n\nmy_data |&gt;\n  summarise(\n    n = n(),\n    mean = mean(wwwhr),\n    sd = sd(wwwhr)\n    )\n\n\n\n# A tibble: 1 × 3\n      n  mean    sd\n  &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;\n1   970  17.7  22.3"
+    "objectID": "lecture-02.html#tidying-data",
+    "href": "lecture-02.html#tidying-data",
+    "title": "Data Management I",
+    "section": "Tidying Data",
+    "text": "Tidying Data\n\nMost tasks related to data analysis are not glorious or fancy.\n\n\nA lot of time is dedicated to whipping a dataset into the shape needed to be able to analyze it.\n\nThis task has different names “data cleaning,” “data management,” “data manipulation,” “data wrangling,” “data transformation.”\n\n\nSource: Jasper Dag Tjaden"
   },
   {
-    "objectID": "lecture-04.html#summarise-with-equation",
-    "href": "lecture-04.html#summarise-with-equation",
-    "title": "Statistical Tests I",
-    "section": "summarise() with equation",
-    "text": "summarise() with equation\n\nwwwhr_sum &lt;- my_data |&gt;\n  summarise(\n    n = n(),\n    mean_wwwhr = mean(wwwhr),\n    sd_wwwhr = sd(wwwhr),\n    se_wwwhr = sd_wwwhr / sqrt(n),\n    ci_lower = mean_wwwhr - (1.96 * se_wwwhr),\n    ci_upper = mean_wwwhr + (1.96 * se_wwwhr)\n    )"
+    "objectID": "lecture-02.html#dplyr-package",
+    "href": "lecture-02.html#dplyr-package",
+    "title": "Data Management I",
+    "section": "dplyr package",
+    "text": "dplyr package\nThe dplyr package provides a complete set of functions that help you solve the most common data manipulation challenges:\n\nfiltering observations based on their values\nextracting observations based on their values or positions\nsampling observations based on a specific number or fraction of rows\nsorting observations based on one or several variables\nselecting variables based on their names or positions\nrenaming variables\nadding new variables based on existing ones\nsummarizing observations or variables to a single descriptive measure\nperforming any operation by grouping\n\n\n\nSource: Antoine Soetewey"
   },
   {
-    "objectID": "lecture-04.html#summarise-ci",
-    "href": "lecture-04.html#summarise-ci",
-    "title": "Statistical Tests I",
-    "section": "summarise() + CI()",
-    "text": "summarise() + CI()\n\nwwwhr_ci &lt;- my_data |&gt;\n  summarise(\n    n = n(),\n    mean_wwwhr = mean(wwwhr),\n    sd_wwwhr = sd(wwwhr),\n    lowCI_wwwhr = Rmisc::CI(wwwhr)['lower'],\n    hiCI_wwwhr  = Rmisc::CI(wwwhr)['upper']\n    )\n\nwwwhr_ci\n\n\n\n# A tibble: 1 × 5\n      n mean_wwwhr sd_wwwhr lowCI_wwwhr hiCI_wwwhr\n  &lt;int&gt;      &lt;dbl&gt;    &lt;dbl&gt;       &lt;dbl&gt;      &lt;dbl&gt;\n1   970       17.7     22.3        16.3       19.1\n\n\n\n\nNeat! But how confident are we?\n\n\nThat’s really interesting, but don’t we need to know our confidence level? Otherwise, how do we interpret the interval? What is the probability that the average number of hours people spend on the internet per week is between 16.25 hours and 19.06 hours?"
+    "objectID": "lecture-02.html#functionargument",
+    "href": "lecture-02.html#functionargument",
+    "title": "Data Management I",
+    "section": "function(argument)",
+    "text": "function(argument)\nFunctions are (most often) verbs, followed by what they will be applied to in parentheses:\n\n\ndo_this(to_this)\ndo_that(to_this, to_that, with_those)\n\n\ndplyr verbs (functions) will allow you to solve the vast majority of your data manipulation challenges.\n\n\nSource: Dr. Mine Çetinkaya-Rundel"
   },
   {
-    "objectID": "lecture-04.html#summarise-ci-1",
-    "href": "lecture-04.html#summarise-ci-1",
-    "title": "Statistical Tests I",
-    "section": "summarise() + CI()",
-    "text": "summarise() + CI()\n\nwwwhr_ci99 &lt;- my_data |&gt;\n  summarise(\n    n = n(),\n    mean_wwwhr = mean(wwwhr),\n    sd_wwwhr = sd(wwwhr),\n    lowCI_wwwhr = CI(wwwhr, ci = 0.99)['lower'],\n    hiCI_wwwhr  = CI(wwwhr, ci = 0.99)['upper']\n    )\n\nwwwhr_ci99\n\n\n\n# A tibble: 1 × 5\n      n mean_wwwhr sd_wwwhr lowCI_wwwhr hiCI_wwwhr\n  &lt;int&gt;      &lt;dbl&gt;    &lt;dbl&gt;       &lt;dbl&gt;      &lt;dbl&gt;\n1   970       17.7     22.3        15.8       19.5\n\n\n\nThe default confidence level of the CI() function is 95%. Let’s change our code to see what the confidence interval looks like if we wanted to be 99% confident that the true population average number of hours on the internet was within our confidence interval."
+    "objectID": "lecture-02.html#dplyr-basics",
+    "href": "lecture-02.html#dplyr-basics",
+    "title": "Data Management I",
+    "section": "dplyr basics",
+    "text": "dplyr basics\nThey are organized into four groups based on what they operate on: rows, columns, groups, or tables.\n\nThe verbs all have in common:\n\n\nThe first argument is always a data frame.\nThe subsequent arguments typically describe which columns to operate on using the variable names (without quotes).\nThe output is always a new data frame.\n\n\n\n\nSource: R for Data Science"
   },
   {
-    "objectID": "lecture-04.html#cis-percision",
-    "href": "lecture-04.html#cis-percision",
-    "title": "Statistical Tests I",
-    "section": "CIs & percision",
-    "text": "CIs & percision\n\n\n95% confidence intervals\n\nwwwhr_ci\n\n# A tibble: 1 × 5\n      n mean_wwwhr sd_wwwhr lowCI_wwwhr hiCI_wwwhr\n  &lt;int&gt;      &lt;dbl&gt;    &lt;dbl&gt;       &lt;dbl&gt;      &lt;dbl&gt;\n1   970       17.7     22.3        16.3       19.1\n\n\n\n99% confidence intervals\n\nwwwhr_ci99\n\n# A tibble: 1 × 5\n      n mean_wwwhr sd_wwwhr lowCI_wwwhr hiCI_wwwhr\n  &lt;int&gt;      &lt;dbl&gt;    &lt;dbl&gt;       &lt;dbl&gt;      &lt;dbl&gt;\n1   970       17.7     22.3        15.8       19.5\n\n\n\n\n\n How does a 95% confidence interval differ from a 99% confidence interval in terms of width and certainty?"
+    "objectID": "lecture-02.html#the-pipe",
+    "href": "lecture-02.html#the-pipe",
+    "title": "Data Management I",
+    "section": "The pipe |>",
+    "text": "The pipe |&gt;\nThe pipe operator passes what comes before it into the function that comes after it as the first argument.\n\n\nsum(1, 2)\n\n[1] 3\n\n\n\n\n\n1 |&gt; \n  sum(2)\n\n[1] 3"
   },
   {
-    "objectID": "lecture-04.html#cis-wrong-with-proportions",
-    "href": "lecture-04.html#cis-wrong-with-proportions",
-    "title": "Statistical Tests I",
-    "section": "CIs (wrong) with proportions",
-    "text": "CIs (wrong) with proportions\n\nmy_data |&gt;\n  summarise(\n    n = n(),\n    mean_ghosts = mean(postlife),\n    sd_ghosts = sd(postlife),\n    lowCI_ghosts = CI(postlife, ci = 0.99)['lower'],\n    hiCI_ghosts  = CI(postlife, ci = 0.99)['upper']\n    )\n\n\n\n# A tibble: 1 × 5\n      n mean_ghosts sd_ghosts lowCI_ghosts hiCI_ghosts\n  &lt;int&gt;       &lt;dbl&gt;     &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt;\n1   970        1.19     0.389         1.15        1.22\n\n\n\n\nThis doesn’t work because the values aren’t coded 0 and 1."
+    "objectID": "lecture-02.html#dplyr-in-action",
+    "href": "lecture-02.html#dplyr-in-action",
+    "title": "Data Management I",
+    "section": "dplyr() in action",
+    "text": "dplyr() in action\nCreate a frequency table for childs variable.\n\ngss_all$childs &lt;- zap_missing(gss_all$childs) \ngss_all$childs &lt;- as_factor(gss_all$childs)   \ngss_all$childs &lt;- droplevels(gss_all$childs)  \n\n1gss_all |&gt;\n2  freq(childs, report.nas = FALSE) |&gt;\n3  tb()\n\n\n1\n\nUse dplyr grammar, starting with the name of the df and a pipe\n\n2\n\nUse the freq() function as usual\n\n3\n\nAdd the tb() function to turn the table into a tibble\n\n\n\n\n\n\n\nWhat’s the mode?\nWhat’s the mode of parents (childs !=0)\n\n\nHow many children have you ever had? Please count all that were born alive at any time (including any you had from a previous marriage)."
   },
   {
-    "objectID": "lecture-04.html#cis-correct-with-proportions",
-    "href": "lecture-04.html#cis-correct-with-proportions",
-    "title": "Statistical Tests I",
-    "section": "CIs (correct) with proportions",
-    "text": "CIs (correct) with proportions\n\n# Use logic to recode (yes: 1 = 1; no: 2 = 0)\nmy_data$ghosts &lt;- ifelse(my_data$postlife == 1, 1, 0)\n  \nmy_data |&gt;\n  summarise(\n    n = n(),\n    mean_ghosts = mean(ghosts),\n    sd_ghosts = sd(ghosts),\n    lowCI_ghosts = CI(ghosts, ci = 0.99)['lower'],\n    hiCI_ghosts  = CI(ghosts, ci = 0.99)['upper']\n    )\n\n\n\n# A tibble: 1 × 5\n      n mean_ghosts sd_ghosts lowCI_ghosts hiCI_ghosts\n  &lt;int&gt;       &lt;dbl&gt;     &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt;\n1   970       0.814     0.389        0.782       0.847"
+    "objectID": "lecture-02.html#dplyr-in-action-output",
+    "href": "lecture-02.html#dplyr-in-action-output",
+    "title": "Data Management I",
+    "section": "dplyr() in action",
+    "text": "dplyr() in action\n\n# A tibble: 9 × 4\n  childs     freq    pct pct_cum\n  &lt;fct&gt;     &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;\n1 0         20956 27.8      27.8\n2 1         11979 15.9      43.7\n3 2         18989 25.2      68.9\n4 3         11671 15.5      84.3\n5 4          5996  7.95     92.3\n6 5          2669  3.54     95.8\n7 6          1381  1.83     97.7\n8 7           734  0.973    98.6\n9 8 or more  1032  1.37    100"
   },
   {
-    "objectID": "lecture-04.html#comparing-cis",
-    "href": "lecture-04.html#comparing-cis",
-    "title": "Statistical Tests I",
-    "section": "Comparing CIs",
-    "text": "Comparing CIs\n\nCodeTablePlot\n\n\n\nmy_data$sex &lt;- zap_missing(my_data$sex) \nmy_data$sex &lt;- as_factor(my_data$sex)   \nmy_data$sex &lt;- droplevels(my_data$sex)  \n\ndf_ghosts &lt;- my_data |&gt;\n  group_by(sex) |&gt;\n  summarise(\n    n = n(),\n    mean = mean(ghosts),\n    sd = sd(ghosts),\n    lower = CI(ghosts, ci = 0.95)['lower'],\n    upper = CI(ghosts, ci = 0.95)['upper']\n    )\n\n\n\n\ndf_ghosts\n\n# A tibble: 2 × 6\n  sex        n  mean    sd lower upper\n  &lt;fct&gt;  &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;\n1 male     472 0.773 0.419 0.735 0.811\n2 female   498 0.853 0.354 0.822 0.885"
+    "objectID": "lecture-02.html#mini-task-8",
+    "href": "lecture-02.html#mini-task-8",
+    "title": "Data Management I",
+    "section": "Mini-task",
+    "text": "Mini-task\n\n Use a |&gt; & gss_which_years() to find out which survey years the variable agekdbrn appears.\n\n\n\n\ngss_all |&gt;\n  gss_which_years(agekdbrn)\n\n\n# A tibble: 35 × 2\n   year      agekdbrn\n   &lt;dbl+lbl&gt; &lt;lgl&gt;   \n 1 1972      FALSE   \n 2 1973      FALSE   \n 3 1974      FALSE   \n 4 1975      FALSE   \n 5 1976      FALSE   \n 6 1977      FALSE   \n 7 1978      FALSE   \n 8 1980      FALSE   \n 9 1982      FALSE   \n10 1983      FALSE   \n# ℹ 25 more rows\n\n\n\nDemo in console:\ngss_all |&gt; gss_which_years(agekdbrn) |&gt; print(n = 40)"
   },
   {
-    "objectID": "lecture-04.html#comparing-cis-1",
-    "href": "lecture-04.html#comparing-cis-1",
-    "title": "Statistical Tests I",
-    "section": "Comparing CIs",
-    "text": "Comparing CIs\n\nCodeTablePlot\n\n\n\ndf_wwwhr &lt;- my_data |&gt;\n  group_by(sex) |&gt;\n  summarise(\n    n = n(),\n    mean = mean(wwwhr),\n    sd = sd(wwwhr),\n    lower = CI(wwwhr, ci = 0.95)['lower'],\n    upper  = CI(wwwhr, ci = 0.95)['upper']\n    )\n\n\n\n\ndf_wwwhr\n\n# A tibble: 2 × 6\n  sex        n  mean    sd lower upper\n  &lt;fct&gt;  &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;\n1 male     472  16.2  19.8  14.4  17.9\n2 female   498  19.1  24.4  16.9  21.2"
+    "objectID": "lecture-02.html#dplyr-style",
+    "href": "lecture-02.html#dplyr-style",
+    "title": "Data Management I",
+    "section": "dplyr style",
+    "text": "dplyr style\nIn data transformation pipelines, always use a\n\nspace before |&gt;\nline break after |&gt;\nindent the next line of code\n\n\nWe’ll talk about data visualization pipes later…\n\n\n\n\n Heads Up!\n\n\n|&gt; (native pipe operator) and %&gt;% (magrittr package) behave identically for simple cases. More info."
   },
   {
-    "objectID": "lecture-04.html#t.test",
-    "href": "lecture-04.html#t.test",
-    "title": "Statistical Tests I",
-    "section": "t.test()",
-    "text": "t.test()\nPerforms one and two sample t-tests. To use this function, we’ll need to specify a few things:\n\nvariable of interest\nmu (H0): a number indicating the true value of the mean\nalternative hypothesis (H1): “two.sided”, “greater”, or “less”"
+    "objectID": "lecture-02.html#dplyr-grammar",
+    "href": "lecture-02.html#dplyr-grammar",
+    "title": "Data Management I",
+    "section": "dplyr grammar",
+    "text": "dplyr grammar\nWhat’s the advantage of dplyr grammar? We can sequence data manipulation!\n\n\n\ngss_all |&gt; \n  filter(year == 2022) |&gt;\n  drop_na(sex, agekdbrn) |&gt;\n  group_by(sex) |&gt;\n  summarize(avg = mean(agekdbrn))\n\n\n# A tibble: 2 × 2\n  sex          avg\n  &lt;dbl+lbl&gt;  &lt;dbl&gt;\n1 1 [male]    26.3\n2 2 [female]  23.7"
   },
   {
-    "objectID": "lecture-04.html#t.test-in-action",
-    "href": "lecture-04.html#t.test-in-action",
-    "title": "Statistical Tests I",
-    "section": "t.test() in action",
-    "text": "t.test() in action\nIn your family sociology course you learned that fertility rates have been dropping.\nYou used to think that people had 2 children, on average. But, now you suspect that people are having fewer than 2 children.\n\n\n\n How do you test your hypothesis?"
+    "objectID": "lecture-02.html#filter-drop_na",
+    "href": "lecture-02.html#filter-drop_na",
+    "title": "Data Management I",
+    "section": "filter() & drop_na()",
+    "text": "filter() & drop_na()\nUse filter() to keep rows that meet a condition.\nUse drop_na() to remove rows with missing (NA) values.\n\n\n\n1gss_all |&gt;\n2  filter(year == 2022) |&gt;\n3  drop_na(sex, agekdbrn)|&gt;\n4  count(sex)\n\n\n1\n\nStart with the gss_all data frame:\n\n2\n\nKeep only the respondents from the 2022 survey\n\n3\n\nRemove any observations with missing data for our key variables\n\n4\n\nTally how many complete entries remain for each gender\n\n\n\n\n# A tibble: 2 × 2\n  sex            n\n  &lt;dbl+lbl&gt;  &lt;int&gt;\n1 1 [male]    1031\n2 2 [female]  1363\n\n\n\n\nAlways start with df.\n\nTell me what this is doing.\n\nThis row?\n\nThis row? What’s different about this row? (no pipe at end!)"
   },
   {
-    "objectID": "lecture-04.html#review-summary-statistics",
-    "href": "lecture-04.html#review-summary-statistics",
-    "title": "Statistical Tests I",
-    "section": "Review: Summary Statistics",
-    "text": "Review: Summary Statistics\n\nmy_data |&gt;\n  summarise(\n    n = n(),\n    mean = mean(childs),\n    median = median(childs),\n    sd = sd(childs))\n\n\n\n# A tibble: 1 × 4\n      n  mean median    sd\n  &lt;int&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;\n1   970  1.79      2  1.64\n\n\n\n\nIs the difference between our sample mean and 2 statistically significant or could we have gotten this mean simply by chance (sample variation)?"
+    "objectID": "lecture-02.html#mini-task-9",
+    "href": "lecture-02.html#mini-task-9",
+    "title": "Data Management I",
+    "section": "Mini-task",
+    "text": "Mini-task\n\n Limit the dataframe to only the 2024 respondents without missing data for sex, hrs1, and childs. How many men and women are left?\n\n\n\n\ngss_all |&gt; \n  filter(year == 2024) |&gt; \n  drop_na(sex, hrs1, childs) |&gt;\n  count(sex)\n\n\n# A tibble: 2 × 2\n  sex            n\n  &lt;dbl+lbl&gt;  &lt;int&gt;\n1 1 [male]     859\n2 2 [female]   888\n\n\n\nASK: Why are the numbers different than the table before?"
   },
   {
-    "objectID": "lecture-04.html#review-cis",
-    "href": "lecture-04.html#review-cis",
-    "title": "Statistical Tests I",
-    "section": "Review: CIs",
-    "text": "Review: CIs\n\nmy_data |&gt;\n  summarise(\n    n = n(),\n    mean = mean(childs),\n    median = median(childs),\n    sd = sd(childs),\n    se = sd / sqrt(n),\n    lower = CI(childs, ci = 0.99)['lower'],\n    upper  = CI(childs, ci = 0.99)['upper']\n    )\n\n\n\n# A tibble: 1 × 7\n      n  mean median    sd     se lower upper\n  &lt;int&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;\n1   970  1.79      2  1.64 0.0526  1.66  1.93\n\n\n\n\nDoes the confidence interval overlap with 2? What does that tell you?"
+    "objectID": "lecture-02.html#median-mean-w-base-r",
+    "href": "lecture-02.html#median-mean-w-base-r",
+    "title": "Data Management I",
+    "section": "Median & Mean w base R",
+    "text": "Median & Mean w base R\n\n\n# Using base R\n1median(gss_all$agekdbrn, na.rm=TRUE)\n\n\n\n1\n\nna.rm is a logical evaluating to TRUE or FALSE indicating whether NA values should be stripped before the computation proceeds.\n\n\n\n\n[1] 23\n\n\n\n\n\nmean(gss_all$agekdbrn, na.rm=TRUE)\n\n\n[1] 24.14491\n\n\n\n\n# show me summary statistics\nsummary(gss_all$agekdbrn)\n\n\n\n   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.     NAs \n   9.00   20.00   23.00   24.14   28.00   97.00   46832 \n\n\n\n\nQuestion 14. How old were you when your first child was born?"
   },
   {
-    "objectID": "lecture-04.html#one-sample-t.test-for-means",
-    "href": "lecture-04.html#one-sample-t.test-for-means",
-    "title": "Statistical Tests I",
-    "section": "One sample t.test() for means",
-    "text": "One sample t.test() for means\n\nt.test(my_data$childs)\n\n\n\n\n    One Sample t-test\n\ndata:  my_data$childs\nt = 34.102, df = 969, p-value &lt; 2.2e-16\nalternative hypothesis: true mean is not equal to 0\n95 percent confidence interval:\n 1.690587 1.897041\nsample estimates:\nmean of x \n 1.793814 \n\n\n\n\nH0 = 0 by default"
+    "objectID": "lecture-02.html#mini-task-10",
+    "href": "lecture-02.html#mini-task-10",
+    "title": "Data Management I",
+    "section": "Mini-task",
+    "text": "Mini-task\n\n Find the mean and median for the variable: hrs1.\n\n\n\n# separately\nmedian(gss_all$hrs1, na.rm=TRUE)\nmean(gss_all$hrs1, na.rm=TRUE)\n\n# together\nsummary(gss_all$hrs1)\n\n\n\n[1] 40\n[1] 41.11279\n   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.     NAs \n   0.00   37.00   40.00   41.11   48.00   89.00   32371 \n\n\n\n\n\nQuestion 1a. If working, full or part time: how many hours did you work last week, at all jobs?"
   },
   {
-    "objectID": "lecture-04.html#one-sample-t.test-for-means-1",
-    "href": "lecture-04.html#one-sample-t.test-for-means-1",
-    "title": "Statistical Tests I",
-    "section": "One sample t.test() for means",
-    "text": "One sample t.test() for means\n\nt.test(my_data$childs, mu=2, alternative=\"less\") # Ho: mu=2\n\n\n    One Sample t-test\n\ndata:  my_data$childs\nt = -3.9197, df = 969, p-value = 4.744e-05\nalternative hypothesis: true mean is less than 2\n95 percent confidence interval:\n    -Inf 1.88042\nsample estimates:\nmean of x \n 1.793814 \n\n\n\n\nH0 = 2; one-tail test"
+    "objectID": "lecture-02.html#summarize",
+    "href": "lecture-02.html#summarize",
+    "title": "Data Management I",
+    "section": "summarize()",
+    "text": "summarize()\nUse functions inside summarize() to create summary variables.\n\n\n\ngss_all |&gt;  \n  drop_na(agekdbrn) |&gt;\n   summarize(\n    avg = mean(agekdbrn)\n    ) \n\n\n# A tibble: 1 × 1\n    avg\n  &lt;dbl&gt;\n1  24.1"
   },
   {
-    "objectID": "lecture-04.html#two-sample-t.test-in-action",
-    "href": "lecture-04.html#two-sample-t.test-in-action",
-    "title": "Statistical Tests I",
-    "section": "two sample t.test() in action",
-    "text": "two sample t.test() in action\n\n Are the proportions of men and women who believe in ghosts statistically significantly different?\n\n\n\nt.test(my_data$ghosts ~ my_data$sex, alternative = \"two.sided\")\n\n\n\n\n    Welch Two Sample t-test\n\ndata:  my_data$ghosts by my_data$sex\nt = -3.2072, df = 923.29, p-value = 0.001387\nalternative hypothesis: true difference in means between group male and group female is not equal to 0\n95 percent confidence interval:\n -0.1291289 -0.0310882\nsample estimates:\n  mean in group male mean in group female \n           0.7733051            0.8534137"
+    "objectID": "lecture-02.html#median-mean-with-dplyr",
+    "href": "lecture-02.html#median-mean-with-dplyr",
+    "title": "Data Management I",
+    "section": "Median & Mean with dplyr",
+    "text": "Median & Mean with dplyr\nUse dplyr grammar to find the frequency, mean, and median.\n\nAdd lots of summary variables using functions inside summarize().\n\n\n\ngss_all |&gt;  \n  drop_na(agekdbrn) |&gt; \n  summarize(\n1    freq = n(),\n2    med = median(agekdbrn),\n3    avg = mean(agekdbrn)\n    ) \n\n\n\n1\n\nUse n() function to create a count variable (no variable in parentheses)\n\n2\n\nUse median() function on a variable\n\n3\n\nUse mean() function on a variable\n\n\n\n\n# A tibble: 1 × 3\n   freq   med   avg\n  &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;\n1 28867    23  24.1"
   },
   {
-    "objectID": "lecture-04.html#aside-paired-t.test",
-    "href": "lecture-04.html#aside-paired-t.test",
-    "title": "Statistical Tests I",
-    "section": "Aside: paired t.test()",
-    "text": "Aside: paired t.test()\nIndependent group t-test\nDo two subsamples have the same mean?\n\nt.test(my_data$ghosts ~ my_data$sex, alternative = \"two.sided\")\n\n\n\nPaired t-test\nDo two variables have the same mean?\n\nt.test(Pair(hrs1_2018, hrs1_2020) ~ 1, data = gss_panel)"
+    "objectID": "lecture-02.html#mini-task-11",
+    "href": "lecture-02.html#mini-task-11",
+    "title": "Data Management I",
+    "section": "Mini-task",
+    "text": "Mini-task\n\n Use dplyr grammar to find the frequency, mean, and median for the variable: hrs1.\n\n\n\n\ngss_all |&gt;  \n  drop_na(hrs1) |&gt;\n   summarize(\n    freq = n(),\n    med = median(hrs1),\n    avg = mean(hrs1)\n    ) \n\n\n# A tibble: 1 × 3\n   freq   med   avg\n  &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;\n1 43328    40  41.1"
   },
   {
-    "objectID": "lecture-04.html#think-like-a-statistician-1",
-    "href": "lecture-04.html#think-like-a-statistician-1",
-    "title": "Statistical Tests I",
+    "objectID": "lecture-02.html#group_by-and-summarize",
+    "href": "lecture-02.html#group_by-and-summarize",
+    "title": "Data Management I",
+    "section": "group_by() and summarize()",
+    "text": "group_by() and summarize()\nUse group_by() to organize your data into groups based on one or more variables.\nUse summarize() to compute statistics like total, mean, or median for each group.\n\n\n\n\n1gss_all |&gt;\n2  drop_na(sex, agekdbrn) |&gt;\n3  group_by(sex) |&gt;\n4  summarize(avg = mean(agekdbrn))\n\n\n\n1\n\nStart with the gss_all data frame:\n\n2\n\nRemove any observations with missing data for our key variables\n\n3\n\nDo the next steps separately for each group in the variable\n\n4\n\nCreates a new data frame with one row for each combination of grouping variables\n\n\n\n\n# A tibble: 2 × 2\n  sex          avg\n  &lt;dbl+lbl&gt;  &lt;dbl&gt;\n1 1 [male]    25.7\n2 2 [female]  23.0\n\n\n\nA common pipeline is group_by() and then summarize() to calculate summary statistics for each group:"
+  },
+  {
+    "objectID": "lecture-02.html#mini-task-12",
+    "href": "lecture-02.html#mini-task-12",
+    "title": "Data Management I",
+    "section": "Mini-task",
+    "text": "Mini-task\n\n Compare the median and average work hours (hrs1) for U.S. men and women.\n\n\n\n\ngss_all |&gt;  \n  drop_na(sex, hrs1) |&gt; \n  group_by(sex) |&gt; \n  summarize(\n    med = median(hrs1),\n    avg = mean(hrs1)\n    ) \n\n\n# A tibble: 2 × 3\n  sex          med   avg\n  &lt;dbl+lbl&gt;  &lt;dbl&gt; &lt;dbl&gt;\n1 1 [male]      40  44.3\n2 2 [female]    40  37.8"
+  },
+  {
+    "objectID": "lecture-02.html#summarize-variability-measures",
+    "href": "lecture-02.html#summarize-variability-measures",
+    "title": "Data Management I",
+    "section": "summarize() + variability measures",
+    "text": "summarize() + variability measures\n\ngss_all |&gt;  \n  drop_na(agekdbrn, sex)  |&gt;\n  group_by(as_factor(sex)) |&gt;  \n  summarize(\n    freq = n(),\n    min = min(agekdbrn),\n    median = median(agekdbrn),\n    max = max(agekdbrn),\n    mean = round(mean(agekdbrn), digits = 2), \n    sd = sd(agekdbrn)\n    ) \n\n\n\n# A tibble: 2 × 7\n  `as_factor(sex)`  freq min       median max        mean    sd\n  &lt;fct&gt;            &lt;int&gt; &lt;dbl+lbl&gt;  &lt;dbl&gt; &lt;dbl+lbl&gt; &lt;dbl&gt; &lt;dbl&gt;\n1 male             11790 9             25 65         25.7  5.85\n2 female           17009 9             22 57         23.0  5.30"
+  },
+  {
+    "objectID": "lecture-02.html#think-like-a-statistician-1",
+    "href": "lecture-02.html#think-like-a-statistician-1",
+    "title": "Data Management I",
     "section": "Think Like a Statistician",
-    "text": "Think Like a Statistician\n Do women have more years of education (educ) than men, on average?\n\n\n Are the proportions of men & women who support abortion for any reason (abany) statistically different?\n\n\n\n Do fewer men than women support gun laws (gunlaw)?\n\n\n\nUse the 2022 GSS dataset"
+    "text": "Think Like a Statistician\n\n Can you produce this table?\n\n\n\n# A tibble: 2 × 3\n  `as_factor(sex)`  mean    sd\n  &lt;fct&gt;            &lt;dbl&gt; &lt;dbl&gt;\n1 male              41.7  13.7\n2 female            37.3  13.7"
   },
   {
-    "objectID": "lecture-04.html#think-like-a-statistician-2",
-    "href": "lecture-04.html#think-like-a-statistician-2",
-    "title": "Statistical Tests I",
-    "section": "Think Like a Statistician",
-    "text": "Think Like a Statistician\n\neducabanygunlaw\n\n\n\n\n\n    Welch Two Sample t-test\n\ndata:  gss22$educ by gss22$sex\nt = -0.38076, df = 4035.7, p-value = 0.3517\nalternative hypothesis: true difference in means between group 1 and group 2 is less than 0\n95 percent confidence interval:\n      -Inf 0.1144853\nsample estimates:\nmean in group 1 mean in group 2 \n       14.14338        14.17786 \n\n\n\n\n\n\n\n    Welch Two Sample t-test\n\ndata:  gss22$abany by gss22$sex\nt = -1.0701, df = 1317.7, p-value = 0.2848\nalternative hypothesis: true difference in means between group 1 and group 2 is not equal to 0\n95 percent confidence interval:\n -0.08169512  0.02402811\nsample estimates:\nmean in group 1 mean in group 2 \n      0.5786164       0.6074499 \n\n\n\n\n\n\n\n    Welch Two Sample t-test\n\ndata:  gss22$gunlaw by gss22$sex\nt = -8.9698, df = 2476.6, p-value &lt; 2.2e-16\nalternative hypothesis: true difference in means between group 1 and group 2 is not equal to 0\n95 percent confidence interval:\n -0.1872801 -0.1200856\nsample estimates:\nmean in group 1 mean in group 2 \n      0.6450593       0.7987421"
+    "objectID": "lecture-02.html#your-data-take",
+    "href": "lecture-02.html#your-data-take",
+    "title": "Data Management I",
+    "section": "Your Data Take",
+    "text": "Your Data Take\n\n\n What’s your conclusion to our research question?"
+  },
+  {
+    "objectID": "lecture-03.html#select",
+    "href": "lecture-03.html#select",
+    "title": "Data Management II",
+    "section": "select()",
+    "text": "select()\nUse select() to choose columns in a dataframe.\n\n\n\n\n1my_data &lt;- gss_all |&gt;\n2  select(year, agekdbrn, childs, hrs1)\n\n\n1\n\nSave a new data frame\n\n2\n\nKeep only the listed variables"
+  },
+  {
+    "objectID": "lecture-03.html#head-tail",
+    "href": "lecture-03.html#head-tail",
+    "title": "Data Management II",
+    "section": "head() & tail()",
+    "text": "head() & tail()\nhead() looks at the first few column names and first few rows of your df.\ntail() looks at the first few column names and last few rows of your df.\n\n\n\n# look at the first rows & columns of the data frame\nhead(my_data)\n\n# A tibble: 6 × 4\n  year      agekdbrn    childs    hrs1       \n  &lt;dbl+lbl&gt; &lt;dbl+lbl&gt;   &lt;dbl+lbl&gt; &lt;dbl+lbl&gt;  \n1 1972      NA(i) [iap] 0         NA(i) [iap]\n2 1972      NA(i) [iap] 5         NA(i) [iap]\n3 1972      NA(i) [iap] 4         NA(i) [iap]\n4 1972      NA(i) [iap] 0         NA(i) [iap]\n5 1972      NA(i) [iap] 2         NA(i) [iap]\n6 1972      NA(i) [iap] 0         NA(i) [iap]"
+  },
+  {
+    "objectID": "lecture-03.html#mini-task-1-output",
+    "href": "lecture-03.html#mini-task-1-output",
+    "title": "Data Management II",
+    "section": "Mini-task",
+    "text": "Mini-task\n\n# A tibble: 6 × 4\n  year      agekdbrn  childs    hrs1     \n  &lt;dbl+lbl&gt; &lt;dbl+lbl&gt; &lt;dbl+lbl&gt; &lt;dbl+lbl&gt;\n1 2022      27        1         40       \n2 2022      27        1         52       \n3 2022      28        1         31       \n4 2022      24        2         40       \n5 2022      21        2         10       \n6 2022      25        7         20"
+  },
+  {
+    "objectID": "lecture-03.html#mutate",
+    "href": "lecture-03.html#mutate",
+    "title": "Data Management II",
+    "section": "mutate()",
+    "text": "mutate()\nUse mutate() to add new columns or change existing ones.\n\n\n\n# Use mutate to create a new variable: annual_hrs1\nmy_data &lt;- my_data |&gt;\n  mutate(annual_hrs1 = hrs1 * 52)\n\nhead(my_data)\n\n\n\n# A tibble: 6 × 5\n  year      agekdbrn  childs    hrs1      annual_hrs1\n  &lt;dbl+lbl&gt; &lt;dbl+lbl&gt; &lt;dbl+lbl&gt; &lt;dbl+lbl&gt;       &lt;dbl&gt;\n1 2022      27        1         40               2080\n2 2022      27        1         52               2704\n3 2022      28        1         31               1612\n4 2022      24        2         40               2080\n5 2022      21        2         10                520\n6 2022      25        7         20               1040"
+  },
+  {
+    "objectID": "lecture-03.html#mini-task-2-output",
+    "href": "lecture-03.html#mini-task-2-output",
+    "title": "Data Management II",
+    "section": "Mini-task",
+    "text": "Mini-task\n\n# A tibble: 6 × 6\n  year      agekdbrn  childs    hrs1      annual_hrs1   z_hrs1\n  &lt;dbl+lbl&gt; &lt;dbl+lbl&gt; &lt;dbl+lbl&gt; &lt;dbl+lbl&gt;       &lt;dbl&gt;    &lt;dbl&gt;\n1 2022      27        1         40               2080 -0.00756\n2 2022      27        1         52               2704  0.820  \n3 2022      28        1         31               1612 -0.628  \n4 2022      24        2         40               2080 -0.00756\n5 2022      21        2         10                520 -2.08   \n6 2022      25        7         20               1040 -1.39"
+  },
+  {
+    "objectID": "lecture-03.html#mutate-logical-variables",
+    "href": "lecture-03.html#mutate-logical-variables",
+    "title": "Data Management II",
+    "section": "mutate() & logical variables",
+    "text": "mutate() & logical variables\n\nmy_data &lt;- my_data |&gt;\n1  mutate(teen_parent = (agekdbrn &lt; 18) * 1)\n\nhead(my_data)\n\n\n1\n\nReturns a logical vector (TRUE, FALSE, or NA) and * 1 converts it to numeric\n\n\n\n\n\n\n# A tibble: 6 × 7\n  year      agekdbrn  childs    hrs1      annual_hrs1   z_hrs1 teen_parent\n  &lt;dbl+lbl&gt; &lt;dbl+lbl&gt; &lt;dbl+lbl&gt; &lt;dbl+lbl&gt;       &lt;dbl&gt;    &lt;dbl&gt;       &lt;dbl&gt;\n1 2022      27        1         40               2080 -0.00756           0\n2 2022      27        1         52               2704  0.820             0\n3 2022      28        1         31               1612 -0.628             0\n4 2022      24        2         40               2080 -0.00756           0\n5 2022      21        2         10                520 -2.08              0\n6 2022      25        7         20               1040 -1.39              0\n\n\n\n\nagekdbrn: How old were you when your first child was born?"
+  },
+  {
+    "objectID": "lecture-03.html#code-meets-question",
+    "href": "lecture-03.html#code-meets-question",
+    "title": "Data Management II",
+    "section": "Code Meets Question",
+    "text": "Code Meets Question\n\n What proportion of new parents were teenagers (e.g., under 18 years old)?\n\n\n\n\nmy_data |&gt;\n1  summarise(proportion = mean(teen_parent))\n\n\n1\n\nMean of the variable, which equals the proportion of 1s\n\n\n\n\n\n\n# A tibble: 1 × 1\n  proportion\n       &lt;dbl&gt;\n1     0.0696\n\n\n\n\nASK: Tell me what this number means in a sentence.\n\n\n\n\nagekdbrn: How old were you when your first child was born?"
+  },
+  {
+    "objectID": "lecture-03.html#mutate-with-case_when-output",
+    "href": "lecture-03.html#mutate-with-case_when-output",
+    "title": "Data Management II",
+    "section": "mutate() with case_when()",
+    "text": "mutate() with case_when()\n\n   \n    1 kid 2 kids 3+ kids\n  1   320      0       0\n  2     0    497       0\n  3     0      0     251\n  4     0      0     101\n  5     0      0      44\n  6     0      0      16\n  7     0      0       6\n  8     0      0      15"
+  },
+  {
+    "objectID": "lecture-03.html#code-meets-question-1",
+    "href": "lecture-03.html#code-meets-question-1",
+    "title": "Data Management II",
+    "section": "Code Meets Question",
+    "text": "Code Meets Question\n\n What proportion of new parents had their first child in their teens, 20s, 30s, or after age 40?\n\n\n\n\nmy_data &lt;- my_data |&gt;\n  mutate(age_groups = case_when(\n    agekdbrn &lt; 18 ~ \"&lt;18\",\n    agekdbrn &gt;= 18 & agekdbrn &lt;= 29 ~ \"18–29\",\n    agekdbrn &gt;= 30 & agekdbrn &lt;= 39 ~ \"30–39\",\n    agekdbrn &gt;= 40 ~ \"40+\",\n    TRUE ~ NA_character_\n  ))\n\nmy_data |&gt;\n  freq(age_groups, report.nas = FALSE, headings = FALSE)\n\n\n\nASK: Tell me what this output means in a sentence."
+  },
+  {
+    "objectID": "lecture-03.html#code-meets-question-1-output",
+    "href": "lecture-03.html#code-meets-question-1-output",
+    "title": "Data Management II",
+    "section": "Code Meets Question",
+    "text": "Code Meets Question\n\n\n              Freq        %   % Cum.\n----------- ------ -------- --------\n        &lt;18     87     6.96     6.96\n      18–29    840    67.20    74.16\n      30–39    291    23.28    97.44\n        40+     32     2.56   100.00\n      Total   1250   100.00   100.00"
+  },
+  {
+    "objectID": "lecture-03.html#overwriting-assignment-operators",
+    "href": "lecture-03.html#overwriting-assignment-operators",
+    "title": "Data Management II",
+    "section": "Overwriting & assignment operators",
+    "text": "Overwriting & assignment operators\n\n\n\n Heads Up!\n\n\nOverwriting datasets and variables can be intentional or unintentional.\n\n\n\n\nLet’s make a tiny data frame to use as an example:\n\n\ndf &lt;- tibble(\n  x = c(1, 2, 3, 4, 5),\n  y = c(\"a\", \"a\", \"b\", \"c\", \"c\")\n)\n\ndf\n\n\n# A tibble: 5 × 2\n      x y    \n  &lt;dbl&gt; &lt;chr&gt;\n1     1 a    \n2     2 a    \n3     3 b    \n4     4 c    \n5     5 c"
+  },
+  {
+    "objectID": "lecture-03.html#section-1",
+    "href": "lecture-03.html#section-1",
+    "title": "Data Management II",
+    "section": "",
+    "text": "Suppose you run the following and then you inspect df.\n\nWill the x variable have values 1, 2, 3, 4, 5 or 2, 4, 6, 8, 10?\n\n\n\n\n\ndf &lt;- df |&gt;\n  mutate(x = x * 2)\n\n\n\ndf\n\n# A tibble: 5 × 2\n      x y    \n  &lt;dbl&gt; &lt;chr&gt;\n1     2 a    \n2     4 a    \n3     6 b    \n4     8 c    \n5    10 c    \n\n\n\n\n\nDo something, save result, overwriting original"
+  },
+  {
+    "objectID": "lecture-03.html#section-2",
+    "href": "lecture-03.html#section-2",
+    "title": "Data Management II",
+    "section": "",
+    "text": "Do something, save result, overwriting original\n\n\ndf &lt;- tibble(\n  x = c(1, 2, 3, 4, 5),\n  y = c(\"a\", \"a\", \"b\", \"c\", \"c\")\n)\ndf &lt;- df |&gt;\n  mutate(x = x * 2)\ndf\n\n\n\n# A tibble: 5 × 2\n      x y    \n  &lt;dbl&gt; &lt;chr&gt;\n1     2 a    \n2     4 a    \n3     6 b    \n4     8 c    \n5    10 c    \n\n\n\n\nDo something, save result, not overwriting original\n\n\ndf &lt;- tibble(\n  x = c(1, 2, 3, 4, 5),\n  y = c(\"a\", \"a\", \"b\", \"c\", \"c\")\n)\ndf_new &lt;- df |&gt;\n  mutate(x = x * 2)\ndf\n\n\n\n# A tibble: 5 × 2\n      x y    \n  &lt;dbl&gt; &lt;chr&gt;\n1     1 a    \n2     2 a    \n3     3 b    \n4     4 c    \n5     5 c"
+  },
+  {
+    "objectID": "lecture-03.html#section-3",
+    "href": "lecture-03.html#section-3",
+    "title": "Data Management II",
+    "section": "",
+    "text": "Do something, save result, overwriting original when you shouldn’t\n\n\ndf &lt;- tibble(\n  x = c(1, 2, 3, 4, 5),\n  y = c(\"a\", \"a\", \"b\", \"c\", \"c\")\n)\ndf &lt;- df |&gt;\n  group_by(y) |&gt;\n  summarize(mean_x = mean(x))\ndf\n\n# A tibble: 3 × 2\n  y     mean_x\n  &lt;chr&gt;  &lt;dbl&gt;\n1 a        1.5\n2 b        3  \n3 c        4.5\n\n\n\n\nDo something, save result, not overwriting original when you shouldn’t\n\n\ndf &lt;- tibble(\n  x = c(1, 2, 3, 4, 5),\n  y = c(\"a\", \"a\", \"b\", \"c\", \"c\")\n)\ndf_summary &lt;- df |&gt;\n  group_by(y) |&gt;\n  summarize(mean_x = mean(x))\ndf\n\n# A tibble: 5 × 2\n      x y    \n  &lt;dbl&gt; &lt;chr&gt;\n1     1 a    \n2     2 a    \n3     3 b    \n4     4 c    \n5     5 c"
+  },
+  {
+    "objectID": "lecture-03.html#section-4",
+    "href": "lecture-03.html#section-4",
+    "title": "Data Management II",
+    "section": "",
+    "text": "Do something, save result, overwriting original\ndata frame\n\n\ndf &lt;- tibble(\n  x = c(1, 2, 3, 4, 5),\n  y = c(\"a\", \"a\", \"b\", \"c\", \"c\")\n)\ndf &lt;- df |&gt;\n  mutate(z = x + 2)\ndf\n\n# A tibble: 5 × 3\n      x y         z\n  &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt;\n1     1 a         3\n2     2 a         4\n3     3 b         5\n4     4 c         6\n5     5 c         7\n\n\n\n\nDo something, save result, overwriting original\ncolumn\n\n\ndf &lt;- tibble(\n  x = c(1, 2, 3, 4, 5),\n  y = c(\"a\", \"a\", \"b\", \"c\", \"c\")\n)\ndf &lt;- df |&gt;\n  mutate(x = x + 2)\ndf\n\n# A tibble: 5 × 2\n      x y    \n  &lt;dbl&gt; &lt;chr&gt;\n1     3 a    \n2     4 a    \n3     5 b    \n4     6 c    \n5     7 c"
+  },
+  {
+    "objectID": "lecture-03.html#section-5",
+    "href": "lecture-03.html#section-5",
+    "title": "Data Management II",
+    "section": "",
+    "text": "Do something and show me\n\n\ngss_all |&gt;\n  select(year, agekdbrn) |&gt;\n  filter(year == 2022) |&gt;\n  drop_na() |&gt;\n  mutate(age_groups = case_when(\n    agekdbrn &lt; 18 ~ \"&lt;18\",\n    agekdbrn &gt;= 18 & agekdbrn &lt;= 29 ~ \"18–29\",\n    agekdbrn &gt;= 30 & agekdbrn &lt;= 39 ~ \"30–39\",\n    agekdbrn &gt;= 40 ~ \"40+\",\n    TRUE ~ NA_character_\n  )) |&gt;\n  group_by(age_groups) |&gt;\n  summarise(\n    count = n(),\n    proportion = round(count / sum(count), 3)\n  )\n\n\n\nDo something, save result, not overwriting original.\n\n\n# Do something\ngss_all &lt;- gss_all |&gt;\n  mutate(age_groups = case_when(\n    agekdbrn &lt; 18 ~ \"&lt;18\",\n    agekdbrn &gt;= 18 & agekdbrn &lt;= 29 ~ \"18–29\",\n    agekdbrn &gt;= 30 & agekdbrn &lt;= 39 ~ \"30–39\",\n    agekdbrn &gt;= 40 ~ \"40+\",\n    TRUE ~ NA_character_\n  ))\n\n# Now show me\ngss_all |&gt;\n  select(year, age_groups) |&gt;\n  filter(year == 2022) |&gt;\n  drop_na() |&gt;\n  group_by(age_groups) |&gt;\n  summarise(\n    count = n(),\n    proportion = round(count / sum(count), 3)\n  )"
+  },
+  {
+    "objectID": "lecture-03.html#overwriting-raw-data",
+    "href": "lecture-03.html#overwriting-raw-data",
+    "title": "Data Management II",
+    "section": "Overwriting & raw data",
+    "text": "Overwriting & raw data\nNever overwrite your raw dataset!\n\n\n\n\n Heads Up!\n\n\nAlways save transformed data as a new object, which should remain untouched for reference and reproducibility."
+  },
+  {
+    "objectID": "lecture-03.html#write_rds-read_rds",
+    "href": "lecture-03.html#write_rds-read_rds",
+    "title": "Data Management II",
+    "section": "write_rds() & read_rds()",
+    "text": "write_rds() & read_rds()\nwrite_rds() saves an R object to a file\nread_rds() loads an R object from a .rds file\n\n\n\n1write_rds(my_data, \"my_data_file.rds\")\n\n2read_rds(\"my_data_file.rds\")\n\n\n1\n\nSaves your df in current working directory\n\n2\n\nOpens your df if in current working directory"
+  },
+  {
+    "objectID": "lecture-03.html#section-6",
+    "href": "lecture-03.html#section-6",
+    "title": "Data Management II",
+    "section": "",
+    "text": "Use select(), filter(), mutate(), group_by(), & summarise()\n\n\n\n Can you reproduce this table?\n\n\n\n# A tibble: 3 × 5\n  mar_cat       count  mean median    sd\n  &lt;chr&gt;         &lt;int&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;\n1 Married         892  2.8       2  2.44\n2 Never married   687  3.5       2  3.78\n3 Widow/div/sep   565  3.87      3  3.73\n\n\n\n\n\ntvhours: Hours per day watching tv\nmarital: Are you currently – married, widowed, divorced, separated, or have you never been married?"
+  },
+  {
+    "objectID": "lecture-03.html#replication",
+    "href": "lecture-03.html#replication",
+    "title": "Data Management II",
+    "section": "Replication",
+    "text": "Replication\nThe guiding principle for workflow.\nA workflow of data analysis is a process for managing all aspects of data analysis.\n\nPlanning, documenting, and organizing your work; cleaning the data; creating, renaming, and verifying variables; performing and presenting statistical analyses; producing replicable results; and archiving what you have done are all integral parts of your workflow.\n\n\nSource: (Long 2008)"
+  },
+  {
+    "objectID": "lecture-03.html#steps-in-a-workflow",
+    "href": "lecture-03.html#steps-in-a-workflow",
+    "title": "Data Management II",
+    "section": "Steps in a workflow",
+    "text": "Steps in a workflow\n\n\n\n\n\n\n\nSet up\nSystematic organization of the project and project files.\n\n\nFamiliarize self with data\nSkipping takes more time in the long run.\n\n\nProcess data\nTakes the MOST time.\n\n\nRunning analyses\nWhat people THINK takes the most time.\n\n\nPresenting results\nWhat people (wrongly) think does not take time."
+  },
+  {
+    "objectID": "lecture-03.html#filepaths",
+    "href": "lecture-03.html#filepaths",
+    "title": "Data Management II",
+    "section": "Filepaths",
+    "text": "Filepaths\nA project-based workflow + here() avoids changing file paths.\n\n\n\nABSOLUTE FILE PATHS\nDepartment of Sociology\nUnit 17100, 17th Floor, Ontario Power Building\n700 University Ave., Toronto, ON M5G 1Z5\nC:\\Users\\Pepin\\GitHub\\SOC6302\\scripts\n\nRELATIVE FILE PATHS\nTake the left side elevators to the 17th floor.\nGo through the double doors and a take a right.\nFirst door on your left.\nhere(scripts)"
+  },
+  {
+    "objectID": "lecture-03.html#file-names",
+    "href": "lecture-03.html#file-names",
+    "title": "Data Management II",
+    "section": "File names",
+    "text": "File names\nshould be:\n\nmachine-readable\nhuman-readable\nplay well with default-ordering"
+  },
+  {
+    "objectID": "lecture-03.html#project-structure",
+    "href": "lecture-03.html#project-structure",
+    "title": "Data Management II",
+    "section": "Project structure",
+    "text": "Project structure\nLet’s set up your project structure using the here() package."
+  },
+  {
+    "objectID": "lecture-03.html#here",
+    "href": "lecture-03.html#here",
+    "title": "Data Management II",
+    "section": "here()",
+    "text": "here()\nInstall the here() package, available on CRAN.\n\ninstall.packages(\"here\")\n\nlibrary(here)"
+  },
+  {
+    "objectID": "lecture-03.html#here-1",
+    "href": "lecture-03.html#here-1",
+    "title": "Data Management II",
+    "section": "here()",
+    "text": "here()\nFirst, let’s establish our project directory\n\n# shows the file path to the root of the project\nhere()\n\n\nNext, we’ll create folders within our project."
+  },
+  {
+    "objectID": "lecture-03.html#example-folder-structure",
+    "href": "lecture-03.html#example-folder-structure",
+    "title": "Data Management II",
+    "section": "Example folder structure",
+    "text": "Example folder structure\n\n\nSOC6302\n\n\n\nSOC6302/\n\n\n\ndata/\n\n\ngss7924-raw.rda\n\n\ngss7924-processed.Rdata/\n\n\n\n\ncode-alongs/\n\n\n\n\nmilestones/\n\n\n\n\nproject/\n\n\n\ndata/\n\n\n\n\nscripts/\n\n\n\n\noutputs/\n\n\n\n\nreadme.qmd\n\n\nSOC6302.Rproj\n\n\n\n\nResearch Projects\n\n\n\nproject/\n\n\n\ndata/\n\n\ngss7924-raw.rda\n\n\ngss7924-processed.Rdata/\n\n\n\n\nscripts/\n\n\nclean_data.R\n\n\nanalyze_data.R\n\n\ndraft.qmd\n\n\n\n\noutputs/\n\n\ndraft.html\n\n\n\nfigures/\n\n\nplot1.png\n\n\nplot2.png\n\n\n\n\nreadme.qmd\n\n\nproject.Rproj"
+  },
+  {
+    "objectID": "lecture-03.html#create-a-folder-structure",
+    "href": "lecture-03.html#create-a-folder-structure",
+    "title": "Data Management II",
+    "section": "Create a folder structure",
+    "text": "Create a folder structure\nusing here() and dir.create()\n\n# Create base folders\ndir.create(here(\"data\"), recursive = TRUE)\ndir.create(here(\"code-alongs\"), recursive = TRUE)\ndir.create(here(\"milestones\"), recursive = TRUE)\ndir.create(here(\"project\"), recursive = TRUE)"
+  },
+  {
+    "objectID": "lecture-03.html#create-sub-folders",
+    "href": "lecture-03.html#create-sub-folders",
+    "title": "Data Management II",
+    "section": "Create sub-folders",
+    "text": "Create sub-folders\nusing here() and dir.create()\n\n# Create project sub-folders\ndir.create(here(\"project\", \"data\"), recursive = TRUE)\ndir.create(here(\"project\", \"scripts\"), recursive = TRUE)\ndir.create(here(\"project\", \"outputs\"), recursive = TRUE)"
+  },
+  {
+    "objectID": "lecture-03.html#check-your-work",
+    "href": "lecture-03.html#check-your-work",
+    "title": "Data Management II",
+    "section": "Check your work",
+    "text": "Check your work\nreport a list of folders and or files in the R-project folders and sub-folder.\n\n# Your SOC6302 class folder\nlist.files(path = here())\n\n# Your \"Project\" sub-folder\nlist.files(path = here(\"project\"))"
   }
 ]

@@ -130,7 +130,7 @@ library(summarytools)
 ## Mini-task {data-menu-title="Load your data"}
 
 ::: task
-{{< fa check-double >}} Load the 2024 GSS data.
+{{< fa check-double >}} Load the 2024 GSS data & all survey waves.
 :::
 
 <br>
@@ -213,6 +213,11 @@ Common 'types' or 'classes' of variables:
 
 ![](images/02/var_type.png){width="100%"}
 
+::: notes
+Statistical variable types describe the meaning of the data (e.g., nominal = categories, continuous = measurements).  
+R variable types describe how the data is stored in memory (factor, numeric, character, etc.).  
+:::
+
 ## `class()` {.smaller}
 
 ::::: columns
@@ -286,6 +291,11 @@ class(opinion)
 # By default, the levels are sorted alphabetically.
 levels(opinion)
 ```
+
+::: notes
+`c()` means to combine
+:::
+
 
 ## Factor order {.sparse-slide}
 
@@ -407,7 +417,7 @@ print_labels(gss24$premarsx) # <2>
 
 ::: notes
 The column itself might have a variable label (a description like "Gender of respondent")
-
+[**\<click\>**]{style="color: #E74C3C;"}\
 The column contains values (numbers)
 
 Each value may have a label attached (like "Male" for 1, "Female" for 2)
@@ -680,10 +690,10 @@ Use `summarytools::ctable` instead!
 #| output-location: fragment
 
 ctable(gss24$premarsx, gss24$sex, # <1>
-  prop = "c", # <2>
+  prop = "c",   # <2>
   format = "p", # <3>
-  useNA = "no"
-) # <4>
+  useNA = "no"  # <4>
+) 
 ```
 
 1.  Change from `table()` to `ctable()`.
@@ -692,7 +702,7 @@ ctable(gss24$premarsx, gss24$sex, # <1>
 4.  Exclude the missing levels from the table.
 
 ::: notes
-Add to your code-along: 
+Add to your code-along:  
 1. [*X* percentage of respondents believe sex before marriage is 'almost always wrong'?]{style="color: #6f42c1"}  
 2. [A greater percentage of *X* think sex before marriage is 'not wrong at all'.]{style="color: #6f42c1"}
 :::
@@ -1024,8 +1034,7 @@ summary(gss_all$agekdbrn)
 ```
 
 ::: aside
-Question 1a. If working, full or part time: how many hours did you work
-last week, at all jobs?
+Question 14. How old were you when your first child was born?
 :::
 
 ## Mini-task {.sparse-slide}
@@ -1049,6 +1058,11 @@ mean(gss_all$hrs1, na.rm=TRUE)
 # together
 summary(gss_all$hrs1)
 ```
+
+::: aside
+Question 1a. If working, full or part time: how many hours did you work
+last week, at all jobs?
+:::
 
 ## `summarize()` {.sparse-slide}
 

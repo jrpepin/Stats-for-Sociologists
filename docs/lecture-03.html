@@ -492,6 +492,19 @@
 <span id="cb10-6"><a href="" aria-label="6"></a><span class="fu">head</span>(my_data) <span class="co"># Check your work</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 
+<aside class="notes">
+<p><em>Do you remember the formula for calculating a Z score?</em></p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </div>
 </section>
 <section id="mini-task-2-output" class="slide level2 sparse-slide output-location-slide"><h2>Mini-task</h2><div class="cell output-location-slide">
@@ -1109,6 +1122,256 @@
 <p><br></p>
 <div style="color: #f39c12; font-size: 175%; font-family: 'Shadows Into Light'">
 <p><i class="fa-regular fa-lightbulb" aria-label="lightbulb"></i> <strong>What’s your conclusion to our research question?</strong></p>
+</div>
+</section></section>
+<section>
+<section id="reproducible-workflow" class="title-slide slide level1 theme-section center">
+<h1>Reproducible workflow</h1>
+<p><em>If time allows</em></p>
+</section>
+<section id="replication" class="slide level2">
+<h2>Replication</h2>
+<p><span style="color: #18BC9C"><strong>The guiding principle for workflow.</strong></span></p>
+<p>A workflow of data analysis is a process for managing all aspects of data analysis.</p>
+<p><br></p>
+<p>Planning, documenting, and organizing your work; cleaning the data; creating, renaming, and verifying variables; performing and presenting statistical analyses; producing replicable results; and archiving what you have done are all integral parts of your workflow.</p>
+
+<aside><div>
+<p>Source: (Long 2008)</p>
+</div></aside></section>
+<section id="steps-in-a-workflow" class="slide level2">
+<h2>Steps in a workflow</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 43%">
+<col style="width: 56%">
+</colgroup>
+<tbody>
+<tr class="odd">
+<td><strong>Set up</strong></td>
+<td>Systematic organization of the project and project files.</td>
+</tr>
+<tr class="even">
+<td><strong>Familiarize self with data</strong></td>
+<td>Skipping takes more time in the long run.</td>
+</tr>
+<tr class="odd">
+<td><strong>Process data</strong></td>
+<td>Takes the <span style="color: #e74c3c;"><strong>MOST</strong></span> time.</td>
+</tr>
+<tr class="even">
+<td><strong>Running analyses</strong></td>
+<td>What people <strong>THINK</strong> takes the most time.</td>
+</tr>
+<tr class="odd">
+<td><strong>Presenting results</strong></td>
+<td>What people (wrongly) think does not take time.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="filepaths" class="slide level2 smaller">
+<h2>Filepaths</h2>
+<p>A project-based workflow + <code>here()</code> avoids changing file paths.</p>
+<p><br></p>
+<div class="columns">
+<div class="column" style="width:60%;">
+<p><strong>ABSOLUTE FILE PATHS</strong></p>
+<p>Department of Sociology<br>
+Unit 17100, 17th Floor, Ontario Power Building<br>
+700 University Ave., Toronto, ON M5G 1Z5</p>
+<p><code>C:\Users\Pepin\GitHub\SOC6302\scripts</code></p>
+</div><div class="column" style="width:40%;">
+<p><strong>RELATIVE FILE PATHS</strong></p>
+<p>Take the left side elevators to the 17th floor.<br>
+Go through the double doors and a take a right.<br>
+First door on your left.</p>
+<p><code>here</code>(<span style="color: #18BC9C">scripts</span>)</p>
+</div></div>
+</section>
+<section id="file-names" class="slide level2">
+<h2>File names</h2>
+<p>should be:</p>
+<ul>
+<li>machine-readable</li>
+<li>human-readable</li>
+<li>play well with default-ordering</li>
+</ul>
+</section>
+<section id="project-structure" class="slide level2">
+<h2>Project structure</h2>
+<p>Let’s set up your project structure using the <code>here()</code> package.</p>
+
+<img data-src="https://raw.githubusercontent.com/allisonhorst/stats-illustrations/master/rstats-artwork/here.png" class="r-stretch"></section>
+<section id="here" class="slide level2 sparse-slide">
+<h2><code>here()</code></h2>
+<p>Install the <a href="https://cran.r-project.org/web/packages/summarytools/vignettes/introduction.html" target="_blank"><code>here()</code></a> package, available on CRAN.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href=""></a><span class="fu">install.packages</span>(<span class="st">"here"</span>)</span>
+<span id="cb43-2"><a href=""></a></span>
+<span id="cb43-3"><a href=""></a><span class="fu">library</span>(here)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="here-1" class="slide level2 sparse-slide">
+<h2><code>here()</code></h2>
+<p>First, let’s establish our project directory</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href=""></a><span class="co"># shows the file path to the root of the project</span></span>
+<span id="cb44-2"><a href=""></a><span class="fu">here</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><br></p>
+<p>Next, we’ll create folders within our project.</p>
+</section>
+<section id="example-folder-structure" class="slide level2 smaller">
+<h2>Example folder structure</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<p><strong>SOC6302</strong></p>
+<div class="file-tree">
+<details open="">
+<summary>
+SOC6302/
+</summary>
+<details>
+<summary>
+data/
+</summary>
+<div>
+<p>gss7924-raw.rda</p>
+</div>
+<div>
+<p>gss7924-processed.Rdata/</p>
+</div>
+</details>
+<details>
+<summary>
+code-alongs/
+</summary>
+</details>
+<details>
+<summary>
+milestones/
+</summary>
+</details>
+<details>
+<summary>
+project/
+</summary>
+<details>
+<summary>
+data/
+</summary>
+</details>
+<details>
+<summary>
+scripts/
+</summary>
+</details>
+<details>
+<summary>
+outputs/
+</summary>
+</details>
+</details>
+<div>
+<p>readme.qmd</p>
+</div>
+<div>
+<p>SOC6302.Rproj</p>
+</div>
+</details>
+</div>
+</div><div class="column" style="width:60%;">
+<p><strong>Research Projects</strong></p>
+<div class="file-tree">
+<details open="">
+<summary>
+project/
+</summary>
+<details>
+<summary>
+data/
+</summary>
+<div>
+<p>gss7924-raw.rda</p>
+</div>
+<div>
+<p>gss7924-processed.Rdata/</p>
+</div>
+</details>
+<details>
+<summary>
+scripts/
+</summary>
+<div>
+<p>clean_data.R</p>
+</div>
+<div>
+<p>analyze_data.R</p>
+</div>
+<div>
+<p>draft.qmd</p>
+</div>
+</details>
+<details>
+<summary>
+outputs/
+</summary>
+<div>
+<p>draft.html</p>
+</div>
+<details>
+<summary>
+figures/
+</summary>
+<div>
+<p>plot1.png</p>
+</div>
+<div>
+<p>plot2.png</p>
+</div>
+</details>
+</details>
+<div>
+<p>readme.qmd</p>
+</div>
+<div>
+<p>project.Rproj</p>
+</div>
+</details>
+</div>
+</div></div>
+</section>
+<section id="create-a-folder-structure" class="slide level2">
+<h2>Create a folder structure</h2>
+<p>using <code>here()</code> and <code>dir.create()</code></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href=""></a><span class="co"># Create base folders</span></span>
+<span id="cb45-2"><a href=""></a><span class="fu">dir.create</span>(<span class="fu">here</span>(<span class="st">"data"</span>), <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb45-3"><a href=""></a><span class="fu">dir.create</span>(<span class="fu">here</span>(<span class="st">"code-alongs"</span>), <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb45-4"><a href=""></a><span class="fu">dir.create</span>(<span class="fu">here</span>(<span class="st">"milestones"</span>), <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb45-5"><a href=""></a><span class="fu">dir.create</span>(<span class="fu">here</span>(<span class="st">"project"</span>), <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="create-sub-folders" class="slide level2">
+<h2>Create sub-folders</h2>
+<p>using <code>here()</code> and <code>dir.create()</code></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href=""></a><span class="co"># Create project sub-folders</span></span>
+<span id="cb46-2"><a href=""></a><span class="fu">dir.create</span>(<span class="fu">here</span>(<span class="st">"project"</span>, <span class="st">"data"</span>), <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb46-3"><a href=""></a><span class="fu">dir.create</span>(<span class="fu">here</span>(<span class="st">"project"</span>, <span class="st">"scripts"</span>), <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb46-4"><a href=""></a><span class="fu">dir.create</span>(<span class="fu">here</span>(<span class="st">"project"</span>, <span class="st">"outputs"</span>), <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="check-your-work" class="slide level2">
+<h2>Check your work</h2>
+<p>report a list of folders and or files in the R-project folders and sub-folder.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href=""></a><span class="co"># Your SOC6302 class folder</span></span>
+<span id="cb47-2"><a href=""></a><span class="fu">list.files</span>(<span class="at">path =</span> <span class="fu">here</span>())</span>
+<span id="cb47-3"><a href=""></a></span>
+<span id="cb47-4"><a href=""></a><span class="co"># Your "Project" sub-folder</span></span>
+<span id="cb47-5"><a href=""></a><span class="fu">list.files</span>(<span class="at">path =</span> <span class="fu">here</span>(<span class="st">"project"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 
 

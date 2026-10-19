@@ -26,7 +26,7 @@ myexam <- list(c(
   here("midterm", "week01", "library.Rmd"),
   here("midterm", "week01", "package.Rmd"),
 # Week 02
-  here("midterm", "week02", "percentage.Rmd"),
+#  here("midterm", "week02", "percentage.Rmd"),              ## too easy
   here("midterm", "week02", "type.Rmd"),
   here("midterm", "week02", "relative-freq.Rmd"),
   here("midterm", "week02", "median-table.Rmd"),
@@ -70,7 +70,8 @@ myexam <- list(c(
   here("midterm", "week05", "cor.test.Rmd"),
   here("midterm", "week05", "tbl_cross.Rmd"),
   here("midterm", "week05", "test-type01.Rmd"),
-  here("midterm", "week05", "test-type02.Rmd")
+  here("midterm", "week05", "test-type02.Rmd"),
+  here("midterm", "week05", "merge.Rmd")
 ))
 
 ## Number of available questions
@@ -81,7 +82,7 @@ n_questions <- length(myexam[[1]])
 ## Create exams
 exams2pdf(myexam, 
   n = 1, # number of exam versions
-  nsamp = n_questions, # number of exam questions -- remove for nonrandomization
+  nsamp = n_questions, # , # number of exam questions 50 for nonrandomization
   name = "midterm_", 
   dir = here("docs", "midterm"),
   template="midterm/myexam2",

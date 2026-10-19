@@ -18,60 +18,59 @@ conflicted::conflicts_prefer(dplyr::mutate)
 myexam <- list(c(
 # Week 01
   here("midterm", "week01", "wheelan-point.Rmd"),
-  here("midterm", "week02", "gandy.Rmd"),
+  here("midterm", "week01", "gandy.Rmd"),
   here("midterm", "week01", "panes.Rmd"),
   here("midterm", "week01", "rproj.Rmd"),
   here("midterm", "week01", "quarto.Rmd"),
+  here("midterm", "week01", "install.Rmd"),
+  here("midterm", "week01", "library.Rmd"),
+  here("midterm", "week01", "package.Rmd"),
 # Week 02
-  here("midterm", "week02", "install.Rmd"),
-  here("midterm", "week02", "library.Rmd"),
-  here("midterm", "week02", "package.Rmd"),
   here("midterm", "week02", "percentage.Rmd"),
   here("midterm", "week02", "type.Rmd"),
-  here("midterm", "week02", "operator.Rmd"),
   here("midterm", "week02", "relative-freq.Rmd"),
+  here("midterm", "week02", "median-table.Rmd"),
+  here("midterm", "week02", "sd.Rmd"),
+  here("midterm", "week02", "sd-zero.Rmd"),
+  here("midterm", "week02", "skew.Rmd"),
+  here("midterm", "week02", "pipes-01.Rmd"),
+  here("midterm", "week02", "drop_na.Rmd"),
+  here("midterm", "week02", "code-01.Rmd"),
+  here("midterm", "week02", "summarize.Rmd"),
 # Week 03
-  here("midterm", "week03", "median-table.Rmd"),
-  here("midterm", "week03", "sd.Rmd"),
-  here("midterm", "week03", "sd-zero.Rmd"),
-  here("midterm", "week03", "skew.Rmd"),
-  here("midterm", "week03", "pipes-01.Rmd"),
+  here("midterm", "week03", "wheelen-CLT.Rmd"),
+  here("midterm", "week03", "operator.Rmd"),
   here("midterm", "week03", "pipes-02.Rmd"),
-  here("midterm", "week03", "drop_na.Rmd"),
-  here("midterm", "week03", "code-01.Rmd"),
-  here("midterm", "week03", "summarize.Rmd"),
+  here("midterm", "week03", "z-score.Rmd"),
+  here("midterm", "week03", "z-score-02.Rmd"),
+  here("midterm", "week03", "z-score-proportion.Rmd"),
+  here("midterm", "week03", "sixty-eight.Rmd"),
+  here("midterm", "week03", "sixty-eight-01.Rmd"),
+  here("midterm", "week03", "mutate.Rmd"),
+  here("midterm", "week03", "case_when.Rmd"),
 # Week 04
-  here("midterm", "week04", "wheelen-CLT.Rmd"),
-  here("midterm", "week04", "z-score.Rmd"),
-  here("midterm", "week04", "z-score-02.Rmd"),
-  here("midterm", "week04", "z-score-proportion.Rmd"),
-  here("midterm", "week04", "sixty-eight.Rmd"),
-  here("midterm", "week04", "sixty-eight-01.Rmd"),
-  here("midterm", "week04", "mutate.Rmd"),
-  here("midterm", "week04", "case_when.Rmd"),
+  here("midterm", "week04", "wheelen-polling.Rmd"),
+  here("midterm", "week04", "wheelen-inference.Rmd"),
+  here("midterm", "week04", "sample-size.Rmd"),
+  here("midterm", "week04", "ghosts.Rmd"),
+  here("midterm", "week04", "hrsrelax.Rmd"),
+  here("midterm", "week04", "p-value.Rmd"),
+  here("midterm", "week04", "false-neg.Rmd"),
+  here("midterm", "week04", "hypotheses.Rmd"),
+  here("midterm", "week04", "ttest.Rmd"),
+  here("midterm", "week04", "ttest-tv.Rmd"),
+  here("midterm", "week04", "double-colon.Rmd"),
 # Week 05
-  here("midterm", "week05", "wheelen-polling.Rmd"),
-  here("midterm", "week05", "wheelen-inference.Rmd"),
-  here("midterm", "week05", "sample-size.Rmd"),
-  here("midterm", "week05", "ghosts.Rmd"),
-  here("midterm", "week05", "hrsrelax.Rmd"),
-  here("midterm", "week05", "p-value.Rmd"),
-  here("midterm", "week05", "false-neg.Rmd"),
-  here("midterm", "week05", "hypotheses.Rmd"),
-  here("midterm", "week05", "ttest.Rmd"),
-  here("midterm", "week05", "ttest-tv.Rmd"),
-  here("midterm", "week05", "double-colon.Rmd"),
-# Week 06
-  here("midterm", "week06", "ASA.Rmd"),
-  here("midterm", "week06", "cohen.Rmd"),
-  here("midterm", "week06", "chi-square.Rmd"),
-  here("midterm", "week06", "chi-square-formula.Rmd"),
-  here("midterm", "week06", "chi-square-output.Rmd"),
-  here("midterm", "week06", "r-relationship.Rmd"),
-  here("midterm", "week06", "cor.test.Rmd"),
-  here("midterm", "week06", "tbl_cross.Rmd"),
-  here("midterm", "week06", "test-type01.Rmd"),
-  here("midterm", "week06", "test-type02.Rmd")
+  here("midterm", "week05", "ASA.Rmd"),
+  here("midterm", "week05", "cohen.Rmd"),
+  here("midterm", "week05", "chi-square.Rmd"),
+  here("midterm", "week05", "chi-square-formula.Rmd"),
+  here("midterm", "week05", "chi-square-output.Rmd"),
+  here("midterm", "week05", "r-relationship.Rmd"),
+  here("midterm", "week05", "cor.test.Rmd"),
+  here("midterm", "week05", "tbl_cross.Rmd"),
+  here("midterm", "week05", "test-type01.Rmd"),
+  here("midterm", "week05", "test-type02.Rmd")
 ))
 
 ## Number of available questions
@@ -80,12 +79,12 @@ n_questions <- length(myexam[[1]])
 # Create exam versions ---------------------------------------------------------
 
 ## Create exams
-exams2pdf(  myexam, 
+exams2pdf(myexam, 
   n = 1, # number of exam versions
-  nsamp = n_questions, # number of exam questions
+  nsamp = n_questions, # number of exam questions -- remove for nonrandomization
   name = "midterm_", 
   dir = here("docs", "midterm"),
-  template="myexam2",
+  template="midterm/myexam2",
   title = NULL, # merge with own title page later
   verbose = TRUE
   )

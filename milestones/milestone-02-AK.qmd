@@ -220,7 +220,8 @@ my_data <- my_data |>
     pol3cat = case_when(
       polviews >= 1 & polviews <= 3 ~ "Liberal",
       polviews == 4 ~ "Moderate",
-      polviews >= 5 & polviews <= 7 ~ "Conservative"
+      polviews >= 5 & polviews <= 7 ~ "Conservative",
+      TRUE ~ NA_character_
   )) 
 
 table(my_data$polviews, my_data$pol3cat)

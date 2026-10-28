@@ -72,7 +72,7 @@ my_data <- full_join(my_cat, my_con, by = c("year", "id")) # match by 2 vars
 
 ```
 
-# Two continuous variables
+# Simple Regression
 
 > ***Have the average number of children changed over time?***
 
@@ -94,19 +94,7 @@ my_data |>
   theme_minimal()
 ```
 
-**Pearson's Correlation (R)**
-
-```{r}
-#| label: cor.test
-
-cor.test(
-  ~ childs + year,
-  data = my_data,
-  method = "pearson",
-  na.action = na.omit)
-```
-
-**Simple Regression**
+Two continuous variables
 
 ```{r}
 #| label: regress-01
@@ -116,32 +104,57 @@ moderndive::get_regression_table(model_01)
 
 ```
 
-**PRE Measure**
+## **Proportional Reduction of Error**
 
-Square R
-
-```{r}
-#| label: r-squared
-
-my_test <-  cor.test(
-  ~ childs + year,
-  data = my_data,
-  method = "pearson",
-  na.action = na.omit
-)
-
-my_test$estimate^2
-
-```
-
-Get $r^2$
+Use `get_regression_points()` to see the residuals.
 
 ```{r}
-#| label: get_regression_summaries
+#| label: get_regression_points
 
 model_01 <- lm(formula = childs ~ year, data = my_data)
+
+moderndive::get_regression_points(model_01) |>
+  dplyr::slice_sample(n = 10) # preview a random sample
+
+```
+
+**Pearson's Correlation (R)**
+
+```{r}
+#| label: cor.test
+
+my_test <- cor.test(
+     ~ childs + year,
+     data = my_data,
+     method = "pearson",
+     na.action = na.omit
+ ) 
+```
+
+R & R\^2
+
+```{r}
+#| label: r-squared-02
+
+# R
+round(my_test$estimate, 3)
+
+# R^2
+round((my_test$estimate)^2, 3)
+
+```
+
+Use `get_regression_summaries()` to see $R^2$.
+
+```{r}
+#| label: get-regression-summ
+
+model_01 <- lm(formula = childs ~ year, data = my_data)
+
 moderndive::get_regression_summaries(model_01)
 ```
+
+# Multiple Regression
 
 > ***Are the trends explained by increases in education?***
 
@@ -182,8 +195,6 @@ my_data |>
   ) +
   theme_minimal()
 ```
-
-## Multiple Regression
 
 ```{r}
 #| label: regress-02

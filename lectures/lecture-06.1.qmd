@@ -3,6 +3,7 @@ title: "Presenting Data"
 format:
   revealjs:
     multiplex: false
+    embed-resources: true
     controls: true
     theme: [default, custom.scss]
     highlight-style: atom-one
@@ -11,7 +12,6 @@ format:
     slide-number: c
     math: mathjax
     code-annotations: hover
-    chalkboard: true
     title-slide-attributes:
       data-background-image: "images/06/test-hat.png"
       data-background-size: 300px
@@ -173,8 +173,8 @@ code-along-07 TASK: Write narrative about what each code chunk is doing!
 
 ```{r}
 #| label: drop_na
-#| eval: false
 #| code-line-numbers: "2"
+#| output-location: column-fragment
 
 my_data |>
   drop_na() |>
@@ -186,8 +186,8 @@ my_data |>
 
 ```{r}
 #| label: statistics
-#| eval: false
 #| code-line-numbers: "5-6"
+#| output-location: column-fragment
 
 my_data |>
   drop_na() |>
@@ -203,8 +203,8 @@ my_data |>
 
 ```{r}
 #| label: variables
-#| eval: false
 #| code-line-numbers: "3"
+#| output-location: column-fragment
 
 my_data |>
   drop_na() |>
@@ -222,8 +222,8 @@ my_data |>
 
 ```{r}
 #| label: labels
-#| eval: false
 #| code-line-numbers: "5-12"
+#| output-location: column-fragment
 
 my_data |>
   drop_na() |>
@@ -249,8 +249,8 @@ my_data |>
 
 ```{r}
 #| label: dichotomous
-#| eval: false
 #| code-line-numbers: "13-14"
+#| output-location: column-fragment
 
 my_data |>
   drop_na() |>
@@ -277,8 +277,8 @@ my_data |>
 
 ```{r}
 #| label: group
-#| eval: false
 #| code-line-numbers: "5"
+#| output-location: column-fragment
 
 my_data |>
   drop_na() |>
@@ -305,8 +305,8 @@ my_data |>
 
 ```{r}
 #| label: total
-#| eval: false
 #| code-line-numbers: "18"
+#| output-location: column-fragment
 
 my_data |>
   drop_na() |>
@@ -333,8 +333,8 @@ my_data |>
 
 ```{r}
 #| label: sub-header
-#| eval: false
 #| code-line-numbers: "19-20"
+#| output-location: column-fragment
 
 my_data |>
   drop_na() |>
@@ -367,8 +367,8 @@ my_data |>
 
 ```{r}
 #| label: two-lines
-#| eval: false
 #| code-line-numbers: "8, 11, 21"
+#| output-location: column-fragment
 
 my_data |>
   drop_na() |>
@@ -488,9 +488,9 @@ df <- df |>
 makes replication unlikely
 :::
 
-## Outliers: {data-menu-title="Outliers: Solutions" .sparse-slide}
+## Outliers: {data-menu-title="Outliers: Detection" .sparse-slide}
 
-[**Solutions**]{style="color: #18BC9C; font-size: 200%; font-family: 'Shadows Into Light'"}
+[**Detection**]{style="color: #F39C12; font-size: 200%; font-family: 'Shadows Into Light'"}
 
 -   descriptive statistics of each variable
 -   scatterplots
@@ -509,22 +509,63 @@ makes replication unlikely
 -   cap or transform: limit their influence
 -   transparent reporting (drop or keep)
 
+## Sample Selection: {data-menu-title="Sample Selection: Problem" .sparse-slide}
+
+[**Problem**]{style="color: #E74C3C; font-size: 200%; font-family: 'Shadows Into Light'"}
+
+-   including cases that cannot experience the outcome
+-   selecting on the dependent variable
+-   no meaningful reference group
+
+::: notes 
+Examples:  
+  
+Predicting childcare use? Think about whether non-parents belong in the sample.  
+Studying effects of divorce? Don't only include divorced people.  
+Studying employment? Need both employed and unemployed respondents.  
+:::
+
+
+## Sample Selection: {data-menu-title="Sample Selection: Detection" .sparse-slide}
+
+[**Detection**]{style="color: #F39C12; font-size: 200%; font-family: 'Shadows Into Light'"}
+
+-   unrealistic descriptive statistics
+-   unexpectedly large sample loss
+-   ask: could everyone experience the outcome?
+-   ask: who is the comparison group?
+
+::: notes 
+Examples:  
+
+Childcare use: restricting to parents is sensible.  
+Employment status: restricting to employed people is not, because you've removed the people you're trying to compare them to.  
+Union membership: restricting to union members eliminates the reference group.  
+Divorce: restricting to divorced people removes the variation in the outcome. 
+**between groups vs within groups**  
+:::
+
+## Sample Selection: {data-menu-title="Sample Selection: Solutions" .sparse-slide}
+
+[**Solutions**]{style="color: #18BC9C; font-size: 200%; font-family: 'Shadows Into Light'"}
+
+-   filter to only relevant cases  
+-   report exclusions transparently  
+-   keep an appropriate reference group  
+-   align the sample with the research question  
+
 # Think Like a Statistician {.sparse-slide background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
 
 ## Think Like a Statistician {background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
 
 ::: task
-{{< fa check-double >}} 1. Create Table 01 for your research project
+{{< fa check-double >}} 1. Complete the IPUMS section of Milestone 03.  
 :::
 
 <br>
 
 ::: task
-{{< fa check-double >}} 2. Create a scatterplot with your DV & 1 IV
+{{< fa check-double >}} 2. Create Table 01 using your IPUMS variables.  
 :::
 
-<br>
 
-::: task
-{{< fa check-double >}} 3. Create a bargraph with your DV & 1 IV
-:::

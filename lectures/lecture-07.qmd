@@ -1,17 +1,17 @@
 ---
-title: "Bivariate Regression"
+title: "OLS Regression II"
 format:
   revealjs:
     math: katex
     theme: [default, custom.scss]
     multiplex: false
+    embed-resources: true
     controls: true
     highlight-style: atom-one
     slide-number: c
     code-annotations: hover
-    chalkboard: true
     title-slide-attributes:
-      data-background-image: "images/07/polaroid.png"
+      data-background-image: "images/08/scatcart.png"
       data-background-size: 250px
       data-background-position: bottom center
 revealjs-plugins:
@@ -46,414 +46,226 @@ scale_colour_discrete <- function(...) scale_color_manual(values = my_palette)
 # https://egallic.fr/Recherche/aide-memoire/quarto_equation_colors.html#colors-in-equations-with-revealjs
 ```
 
-
 # Agenda {data-menu-title="Agenda" background-image="images/calendar.png" background-size="100px" background-repeat="repeat"}
 
--   Simple regression 
--   Categorical IV
--   $R^2$
+-   Two continuous variables
+-   One continuous & one categorical variable
 
+::: notes
+
+:::
 
 # Learning objectives
 
 By the end of the lecture, you will be able to ...
 
--   Use R to produce bivariate regression
--   Use R to produce $R^2$
+-   Use R to produce multivariate regression  
+-   Use R to create publication ready regression tables (e.g., Table 02)  
+-   Understand the concept of modelling, interpreting, and visualizing interaction effects and marginal predictions.  
 
-# Code-along 07 {data-menu-title="Code-along" background-image="images/terminal.png"}
+# Code-along 08 {data-menu-title="Code-along" background-image="images/terminal.png"}
 
-Download and open [code-along-07.qmd](https://www.dropbox.com/scl/fi/v8424d20a8rogis1fdk0l/code-along-07.qmd?rlkey=t8x0w3uhe5za9yxwobncspv2b&dl=1)
+Download and open [code-along-08.qmd](https://www.dropbox.com/scl/fi/uxioqp8yuij2ykiufa7ef/code-along-08.qmd?rlkey=bjgtsjr800sgjdlb9cn1424o2&dl=1)
 
 ## Packages {.sparse-slide}
 
-Load the standard packages & new package `moderndive`
+Load the standard packages and new package `modelbased`.
 
 ```{r}
 #| message: false
 #| label: load
 
-# install.packages(broom.helpers) # needed for moderndive
-# install.packages("moderndive")
+# install.packages("marginaleffects") # needed for modelbased
+# install.packages("modelbased")
 
 library(tidyverse) 
 library(haven) # not core tidyverse
+library(gssr)
+library(gssrdoc)
 library(summarytools)
 library(gtsummary) 
 library(moderndive)
+library(modelbased)
 ```
 
-# Simple Regression {.theme-section}
+## Load your data {.sparse-slide}
 
-## Simple Regression  {.sparse-slide}
+```{r}
+#| message: false
+#| label: gssdata
 
-Regression and correlation are ways to identify whether two interval-ratio variables are statistically dependent 
+# Load all gss
+data(gss_all)
 
-<br>
+```
 
-> as the value of one variable changes, the other also tends to change
+## Variables {.sparse-slide .smaller}
 
-## Code Meets Question {.sparse-slide background-image="images/gears-solid-full.png" background-size="80px" background-repeat="repeat"}
+-   `year` Survey year
+-   `tvhours` Hours per day watching tv
+-   `realrinc` R's income in constant $
+-   `age` Age of respondent
+-   `educ` Respondents highest edu credit
+-   `hrs1` How many hours did you work last week
+-   `childs` How many children have you ever had?
+-   `polviews` Think of self as liberal or conservative
+-   `sex` Respondents sex
+-   `marital` R's marital status
+
+## {data-menu-title="Variable Management" .smaller}
 
 ::: task
-{{< fa lightbulb >}} What is the relationship between literacy rate and rate of tertiary education?
+{{< fa check-double >}} Make a df with only the (pretty) categorical and continuous
+variables we'll analyze.
 :::
 
-<br>
-
-[**literacy rate**]{style="color: #18BC9C"}  
-% of adult population that is literate
-
-[**rate of tertiary education**]{style="color: #18BC9C"}  
-the % of students enrolled/eligible within the age range
-
-## Example df
 
 ```{r}
-#| label: df
-#| output-location: column
+#| message: false
+#| label: my-data
+#| code-line-numbers: "1-9|11-19|21-22"
 
-# Create columns
-literacy <- c(31.7, 79.3, 85.4, 41.0, 54.7, 97.9, 92.8, 67.1, 97.8, 60.4, 87.5, 99.1)
-educ <- c(3.74, 10.4, 20.4, 4.46, 9.53, 78.6, 31.5, 16.2, 65.8, 10.3, 30.8, 40.1)
+# Categorical Variables
+my_cat <- gss_all |>
+  select(id, year, polviews, sex, marital) |>
+  zap_missing() |>
+  mutate(
+    polviews = as_factor(polviews),
+    sex = as_factor(sex),
+    marital = as_factor(marital)) |> 
+  droplevels()
 
-# Combine into a data frame
-df <- data.frame(literacy, educ)
+# Continuous Variables
+my_con <- gss_all |>
+  select(id, year, tvhours, age, educ, hrs1, realrinc, childs) |>
+  mutate(
+    age = as.numeric(age),
+    educ = as.numeric(educ),
+    hrs1 = as.numeric(hrs1),
+    realrinc = as.numeric(realrinc),
+    childs = as.numeric(childs))
 
-# View the data frame
-print(df)
+# Combine the two dataframes
+my_data <- full_join(my_cat, my_con, by = c("year", "id")) # match by 2 vars
 
 ```
 
-## `tidy_summary()` {.sparse-slide}
 
-`moderndive::tidy_summary()` returns commonly used summary statistics in a tidy format.  
+# Two continuous variables {.theme-section}
 
-<br>
+##  {data-menu-title="Code Meets Question" .sparse-slide background-image="images/gears-solid-full.png" background-size="80px" background-repeat="repeat"}
 
-```{r}
-#| label: tidy-summary
-#| output-location: fragment
-
-df |>
-  tidy_summary()
-
-```
-
-##  {data-menu-title="Scatterplot"}
-
-```{r}
-#| label: scatterplot
-
-# Create scatterplot
-df |>
-  ggplot(aes(x = literacy, y = educ)) +
-  geom_point(color = "#18BC9C", size = 3) +
-  labs(
-    title = "Scatterplot of Education vs Literacy",
-    x = "Literacy Rate (X)",
-      y = "College enrollment (Y)"
-  ) +
-  theme_minimal(20)
-```
-
-##  {data-menu-title="Relationships" .sparse-slide}
-
-[**Linear relationship**]{style="color: #18BC9C"}  
-
-When two interval-ratio level variables are related to one another we can approximate the relationship by drawing a straight line through the center of the observations on the scatterplot.  
-
-<br>
-
-::: {style="color: #e74c3c; font-family: 'Shadows Into Light'"}
-A bivariate regression analysis finds the best possible line to summarize the observed relationship between X and Y
+::: task
+{{< fa lightbulb >}} Have the average number of children changed over time?
 :::
 
-## {data-menu-title="Scatterplot + Regression line" .sparse-slide}
-
-```{r}
-#| label: scatterplot-ols
-#| code-line-numbers: "5"
-
-# Create scatterplot with regression line
-df |>
-  ggplot(aes(x = literacy, y = educ)) +
-    geom_point(color = "#18BC9C", size = 3) +
-    geom_smooth(method = "lm", se = FALSE, color = "#3498DB") +
-    labs(
-      title = "Scatterplot of Education vs Literacy with Regression Line",
-      x = "Literacy Rate (X)",
-      y = "College enrollment (Y)"
-    ) +
-    theme_minimal(20)
-
-```
-
-## {data-menu-title="Regression equation"}
-
-::: {style="font-size: 150%; color: #e74c3c"}
-$\hat{y} = a + bX$
-:::
-
-<br>
-
-$\hat{y}$ = the predicted score on the dependent variable
-
-$X$ = the score on the independent variable
-
-$a$ = the Y-intercept, or the point where the line crosses the Y-axis ($a$ is the value of $Y$ when $X$ is equal to 0).
-
-$b$ = the slope of the regression line, or the change in $Y$ for each unit of change in $X$.
-
-## {data-menu-title="Regression relationship"}
-
-::: {style="font-size: 150%; color: #e74c3c"}
-$\hat{y} = a + bX$
-:::
-
-<br>
-
-[Positive relationship]{style="color: #18bc9c"}  
-When $b$ is positive, then when $X$ increases, $\hat{y}$ increases
-
-<br>
-
-[Negative relationship]{style="color: #18bc9c"}  
-When $b$ is negative, then when $X$ increases, $\hat{y}$ decreases
-
-## {data-menu-title="Best fitting line"}
+. . .
 
 ```{r, echo = FALSE}
-#| label: scatterplot-lines
+#| label: plot-01
 
-# Create scatterplot with regression line
-df |>
-  ggplot( aes(x = literacy, y = educ)) +
-    geom_point(color = "#18BC9C", size = 3) +
-    geom_smooth(method = "lm", se = FALSE, color = "#3498DB") +
-  # Plausible but incorrect lines
-    geom_abline(intercept = -20, slope = 0.9, color = "#E74C3C", linetype = "dashed", size = 1.2) +
-    geom_abline(intercept = -10, slope = 0.4, color = "#F39C12", linetype = "dotted", size = 1.2) +
-    geom_abline(intercept = -15, slope = 0.7, color = "#9B59B6", linetype = "twodash", size = 1.2) +
+# Create scatterplot with a regression line
+my_data |>
+  group_by(year) |>
+  summarize(avg = mean(childs, na.rm = TRUE)) |>
+  ggplot(aes(x = year, y = avg)) +
+  geom_point(color = "#18BC9C", size = 3) +
+  geom_smooth(method = "lm", se = FALSE, color = "#3498DB") +
   labs(
-    title = "Scatterplot of Education vs Literacy with Regression Line",
-    x = "Literacy Rate (X)",
-      y = "College enrollment (Y)"
-  ) +
+    title = "Scatterplot of Average Number of Children",
+    x = "Year",
+    y = "Average number of children") +
   theme_minimal(20)
-
 ```
 
 ::: notes
-With relationships that are imperfect, we must fit the best available line to represent the data.
-
-ASK: Would $b$ be positive or negative? What about $a$?
-:::
-
-## {data-menu-title="Regression relationship"}
-
-::: {style="font-size: 150%; color: #e74c3c"}
-$\hat{y} = a + bX$
-:::
-
-<br>
-
-Regression finds the best fitting line that goes through the data with the least distance (error) between all points and the line.
-
-<br>
-
-::: {style="color: #3498DB; font-family: 'Shadows Into Light'"}
-AKA the “least squares line” referring to the least amount of squared error.
-:::
-
-::: notes
-$\hat{y}$ is the predicted value of the dependent variable, based on a given value of the independent variable.
-:::
-
-## Residual = error ($e$) {.sparse-slide}
-
-Calculated based on the difference between $Y$ and $\hat{y}$
-
-<br>
-
-$Y$ = observed value of $Y$ for given value of $X$  
-
-<br>
-
-$\hat{y}$ = predicted value of $Y$ for given value of $X$ 
-
-
-## {data-menu-title="Scatterplot"}
-
-```{r, echo=FALSE}
-#| label: scatterplot-point
-
-# Generate circle coordinates inline
-theta <- seq(0, 2 * pi, length.out = 100)
-circle_df <- data.frame(
-  x = 79.3 + 2 * cos(theta),
-  y = 10.4 + 4 * sin(theta)
-)
-
-# Create scatterplot with regression line
-ggplot(df, aes(x = literacy, y = educ)) +
-  geom_point(color = "#18BC9C", size = 3) +
-  geom_smooth(method = "lm", se = FALSE, color = "#3498DB") +
-# Add circle using path
-  geom_path(data = circle_df, aes(x = x, y = y), color = "black", linewidth = 1.2) +
-   # Add text label
-  annotate("text", x = 79.3, y = 3, label = "X = 79.3, Y = 10.4", color = "black", size = 6) +
-  labs(
-    title = "Scatterplot of Education vs Literacy",
-    x = "Literacy Rate (X)",
-    y = "College enrollment (Y)"
-  ) +
-  theme_minimal(20)
-
-```
-
-
-## {data-menu-title="Scatterplot"}
-
-```{r, echo=FALSE}
-#| label: scatterplot-predicted-point
-#| message: false
-
-# Define the new point
-new_point <- data.frame(literacy = 79.3, educ = 30.67)
-
-# Generate circle coordinates inline
-theta <- seq(0, 2 * pi, length.out = 100)
-circle_df <- data.frame(
-  x = 79.3 + 2 * cos(theta),
-  y = 10.4 + 4 * sin(theta)
-)
-
-# Create scatterplot with regression line
-ggplot(df, aes(x = literacy, y = educ)) +
-  geom_point(color = "#18BC9C", size = 3) +
-  geom_smooth(method = "lm", se = FALSE, color = "#3498DB") +
-# Add circle using path
-  geom_path(data = circle_df, aes(x = x, y = y), color = "#18BC9C", linewidth = 1.2) +
-   # Add text label
-  annotate("text", x = 79.3, y = 3, label = "X = 79.3, Y = 10.4", color = "#18BC9C", size = 6) +
-  # Add the new point
-  geom_point(data = new_point, aes(x = literacy, y = educ), 
-             color = "#E74C3C", size = 4, shape = 16) +
-annotate("text", x = 79.3, y = 45,
-         label = expression("X = 79.3, " * hat(y) * " = 30.67"),
-         color = "#E74C3C", size = 6) +
-  labs(
-    title = "Scatterplot of Education vs Literacy",
-    x = "Literacy Rate (X)",
-    y = "College enrollment (Y)"
-  ) +
-  theme_minimal(20)
-
-```
-
-## {data-menu-title="Scatterplot"}
-
-```{r, echo=FALSE}
-#| label: residual
-#| message: false
-
-# Define the new point
-new_point <- data.frame(literacy = 79.3, educ = 30.67)
-
-# Generate circle coordinates inline
-theta <- seq(0, 2 * pi, length.out = 100)
-circle_df <- data.frame(
-  x = 79.3 + 2 * cos(theta),
-  y = 10.4 + 4 * sin(theta)
-)
-
-# Create scatterplot with regression line
-ggplot(df, aes(x = literacy, y = educ)) +
-  geom_point(color = "#18BC9C", size = 3) +
-  geom_smooth(method = "lm", se = FALSE, color = "#3498DB") +
-# Add circle using path
-geom_path(data = circle_df, aes(x = x, y = y), color = "#18BC9C", linewidth = 1.2) +
-# Add text label
-annotate("text", x = 79.3, y = 3, label = "X = 79.3, Y = 10.4", color = "#18BC9C", size = 6) +
-# Add the new point
-geom_point(data = new_point, aes(x = literacy, y = educ), 
-           color = "#E74C3C", size = 4, shape = 16) +
-annotate("text", x = 79.3, y = 45,
-         label = expression("X = 79.3, " * hat(y) * " = 30.67"),
-         color = "#E74C3C", size = 6) +
-# Add a segment between the two points
-annotate("segment",
-         x = 79.3, y = 10.4,
-         xend = 79.3, yend = 30.67,
-         color = "black", linewidth = 1.2) +
-  labs(
-    title = "Scatterplot of Education vs Literacy",
-    x = "Literacy Rate (X)",
-    y = "College enrollment (Y)"
-  ) +
-  theme_minimal(20)
-
-```
-
-
-## Residual table {.sparse-slide}
-
-```{r, echo=FALSE}
-#| label: show-residuals
-#| message: false
-
-model <- lm(educ ~ literacy, data = df)
-
-model_points <- get_regression_points(model)
-
-model_points |>
-  select(literacy, educ, educ_hat, residual) |>
-  head() |>
-  kable()
-```
-
-## OLS Regression {.sparse-slide} 
-
-::: {style="font-size: 150%; color: #e74c3c"}
-$\hat{y} = a + bX$
-:::
-
-<br>
-
-[**Least-squares line**]{style="color: #18BC9C"}  
-The line where the residual sum of squares is at a minimum
-
-<br>
-
-[**Ordinary least-squares (OLS) regression**]{style="color: #18BC9C"}  
-The statistical technique that produces the least-squares line
-Sometimes referred to as linear regression
-
-## {data-menu-title="OLS Regression" .sparse-slide}
-
-::: {style="font-size: 150%; color: #e74c3c"}
-$\hat{y} = a + bX$
-:::
-
-<br>
-
-Calculus demonstrates the formula for $b$ and $a$ will result in a regression line that minimizes the sum of squares.  
-
-<br>
-
-::: task
-{{< fa check-double >}} Run a regression model.
+assumed to be a count, but can be modeled with OLS if treated as continuous
 :::
 
 
-## {data-menu-title="OLS Regression" .sparse-slide}
+## Simple Regression {.sparse-slide}
 
 ```{r}
-#| label: regression
-#| message: false
+#| label: regress-01
+#| output-location: fragment
 
-lm(educ ~ literacy, data = df)
+model_01 <- lm(formula = childs ~ year, data = my_data)
+get_regression_table(model_01)
+
+```
+
+::: notes
+
+:::
+
+## PRE Measure {.sparse-slide}
+
+[**Get $r^2$**]{style="color: #18BC9C"}  
+
+<br>
+
+```{r}
+#| label: get_regression_summaries
+#| output-location: fragment
+
+model_01 <- lm(formula = childs ~ year, data = my_data)
+get_regression_summaries(model_01)
+
+```
+
+
+##  {data-menu-title="Code Meets Question" .sparse-slide background-image="images/gears-solid-full.png" background-size="80px" background-repeat="repeat"}
+
+::: task
+{{< fa lightbulb >}} Are the trends explained by increases in education?
+:::
+
+```{r, echo = FALSE}
+#| label: plot-02
+
+# Create scatterplot with regression line
+my_data |>
+  group_by(year) |>
+  summarize(avg = mean(educ, na.rm = TRUE)) |>
+  ggplot(aes(x = year, y = avg)) +
+  geom_point(color = "#18BC9C", size = 3) +
+  geom_smooth(method = "lm", se = FALSE, color = "#3498DB") +
+  labs(
+    title = "Scatterplot of Average Years of Education",
+    x = "Year",
+    y = "Average years of education"
+  ) +
+  theme_minimal(20)
+```
+
+##  {data-menu-title="Scatterplot: Number of children & education"}
+
+```{r, echo = FALSE}
+#| label: plot-03
+
+# Create scatterplot with regression line
+my_data |>
+  group_by(educ) |>
+  summarize(avg = mean(childs, na.rm = TRUE)) |>
+  ggplot(aes(x = educ, y = avg)) +
+  geom_point(color = "#18BC9C", size = 3) +
+  geom_smooth(method = "lm", se = FALSE, color = "#3498DB") +
+  labs(
+    title = "Scatterplot of Average Number of Children",
+    x = "Average years of education",
+    y = "Average number of children"
+  ) +
+  theme_minimal(20)
+```
+
+
+##  {data-menu-title="Multiple Regression" .sparse-slide}
+
+```{r}
+#| label: regress-01-review
+
+model_01 <- lm(formula = childs ~ year, data = my_data)
+get_regression_table(model_01)
 
 ```
 
@@ -461,228 +273,298 @@ lm(educ ~ literacy, data = df)
 
 . . . 
 
-::: {style="font-size: 80%; color: #e74c3c"}
-$\hat{y} = -33.75 + .81X$
-:::
+```{r}
+#| label: regress-02
+#| output-location: fragment
 
-## {data-menu-title="Interpretation" .sparse-slide}
-
-::: {style="font-size: 80%; color: #e74c3c"}
-$\hat{y} = -33.75 + .81X$
-:::
-
-<br>
-
-When the literacy rate in a country is 0, the college enrollment rate is predicted to be -33.57 ($a$) 
-
-<br>
-
-For every one unit increase in the literacy rate, the college enrollment rate is expected to rise by 0.81 ($b$) 
-
-. . .
-
-::: task
-{{< fa lightbulb >}} Is this statistically significant?
-:::
-
-
-## `cor.test()` {.sparse-slide}
-
-::: task
-{{< fa check-double >}} Run and interpret the correlation for `educ` and `literacy`.
-:::
-
-<br>
-
-. . .
-
-```{r,}
-#| label: cor.test
-#| message: false
-#| output-location: column-fragment
-
-cor.test(
-     ~ educ + literacy,
-     data = df,
-     method = "pearson",
-     na.action = na.omit
- ) 
+model_02 <- lm(formula = childs ~ year + educ, data = my_data)
+get_regression_table(model_02)
 
 ```
 
 
+## Change in PRE Measure {.sparse-slide} 
+
+```{r}
+#| label: summaries-01-review
+
+get_regression_summaries(model_01)
+
+```
+
+<br>
+
+. . .
+
+```{r}
+#| label: summaries-02
+
+get_regression_summaries(model_02)
+
+```
+
+
+## `tbl_regression()` {.sparse-slide}
+
+OLS Regression predicting number of children by survey year and years of education
+
+```{r}
+#| label: tbl_regression
+#| output-location: fragment
+
+model_02 |>
+  tbl_regression(intercept = TRUE)  
+
+```
+
 ::: notes
-There is a strong, positive association between the literacy rate and enrollment in tertiary education among nations.
+model_02 |>
+  tbl_regression(intercept = TRUE, estimate_fun = ~ style_number(.x, digits = 4))  
+:::
+
+
+## `tbl_regression()` {.sparse-slide}
+
+OLS Regression predicting number of children by survey year and years of education
+
+```{r}
+#| label: tbl_regression-partial
+#| output-location: fragment
+#| code-line-numbers: "4-5"
+
+model_02 |>
+  tbl_regression(
+    intercept = TRUE) |>
+  modify_column_hide(conf.low) |>
+  modify_column_unhide(column = std.error) 
+
+```
+
+## `tbl_regression()` {.sparse-slide}
+
+OLS Regression predicting number of children by survey year and years of education
+
+```{r}
+#| label: tbl_regression-full
+#| output-location: fragment
+#| code-line-numbers: "6-8"
+
+model_02 |>
+  tbl_regression(
+    intercept = TRUE) |>
+  modify_column_hide(conf.low) |>
+  modify_column_unhide(column = std.error) |>
+  remove_abbreviation() |>
+  add_significance_stars() |>
+  add_glance_table(include = c("r.squared", "nobs"))
+
+```
+
+
+
+# 1 continuous variable & 1 categorical variable  {.theme-section}
+
+##  {data-menu-title="Code Meets Question" .sparse-slide background-image="images/gears-solid-full.png" background-size="80px" background-repeat="repeat"}
+
+::: task
+{{< fa lightbulb >}} Are weekly hours worked related to education and gender?
+:::
+
+<br>
+
+. . .
+
+```{r}
+#| label: regress-03
+#| output-location: fragment
+
+model <- lm(hrs1 ~ educ + sex, data = my_data)
+
+get_regression_table(model)
+```
+
+## `tbl_regression()` {.sparse-slide}
+
+OLS Regression predicting weekly work hours by years of education and gender
+
+```{r}
+#| label: regress-03-table
+#| output-location: column-fragment
+
+model |>
+  tbl_regression(
+    intercept = TRUE) |>
+  modify_column_hide(conf.low) |>
+  modify_column_unhide(
+    column = std.error) |>
+  remove_abbreviation() |>
+  add_significance_stars() |>
+  add_glance_table(
+    include = c("r.squared", "nobs"))
+
+```
+
+## `tbl_regression()` {.sparse-slide}
+
+OLS Regression predicting weekly work hours by years of education and gender
+
+```{r}
+#| label: dichotomous
+#| output-location: column-fragment
+#| code-line-numbers: "2-5"
+
+model |>
+  tbl_regression(
+    intercept = TRUE,
+    show_single_row = sex,
+    label = list(sex = "Women")) |>
+  modify_column_hide(conf.low) |>
+  modify_column_unhide(
+    column = std.error) |>
+  remove_abbreviation() |>
+  add_significance_stars() |>
+  add_glance_table(
+    include = c("r.squared", "nobs"))
+
+```
+
+## `estimate_means()` {.sparse-slide}
+
+```{r}
+#| label: estimate_means_margins
+#| output-location: fragment
+
+# Get predicted values
+preds <- estimate_means(model, by = c("sex"))
+
+# Preview the new df
+preds |>
+  as_tibble() |> 
+  head()
+```
+
+::: notes
+R calculates the mean values of every variable in the model except sex, and sets all of those variables equal to their means. Then (once again) it sets female = 0 in every observation, calculates predicted probabilities for each individual, and averages those.
+
+Then it goes back and resets female to 1 in every observation, again calculates predicted probabilities for each individual and outputs the average of those. 
+
+Outputs can be interpreted as the predicted probabilities for women and men if they were all average in all other respects. 
 
 :::
 
 
-## `get_regression_table()` {.sparse-slide}
+## `estimate_means()` {.sparse-slide}
+
+```{r, eval = FALSE}
+#| label: estimate_means_code
+
+# Get predicted values
+preds <- estimate_means(model, by = c("educ", "sex"))
+
+# Preview the new df
+preds |>
+  as_tibble() |> 
+  head()
+```
+
+## `estimate_means()` {.sparse-slide .smaller}
+
+$\color{#18bc9c}{38.601} + \color{#fd7e14}{0.420}_{educ} - \color{#e74c3c}{6.576}_{female}$
+
+<br>
+
+```{r, echo = FALSE}
+#| label: estimate_means_results
+
+# Get predicted values
+preds <- estimate_means(model, by = c("educ", "sex"))
+
+# Preview the new df
+preds |>
+  as_tibble() |> 
+  head()
+```
+
+<br>
+
+[men with 0 years of education = 
+$\color{#18bc9c}{38.601}  + \color{#fd7e14}{0.420}_{educ}*0$]{.fragment}  
+[women with 0 years of education 
+$\color{#18bc9c}{38.601}  + \color{#fd7e14}{0.420}_{educ}*0 -\color{#e74c3c}{6.576}_{female}$]{.fragment}   
+[men with 2.222 years of education 
+$\color{#18bc9c}{38.601}  + \color{#fd7e14}{0.420}_{educ}*2.222$]{.fragment}   
+[women with 2.222 years of education 
+$\color{#18bc9c}{38.601}  + \color{#fd7e14}{0.420}_{educ}*2.222-\color{#e74c3c}{6.576}_{female}$]{.fragment}  
+
+
+## { data-menu-title="`ggplot()`" .sparse-slide}
 
 ```{r}
-#| label: regress-table
+#| label: ggplot
+#| output-location: slide
 
-model <- lm(educ ~ literacy, data = df)
+# Plot using ggplot2
+preds |>
+  ggplot(aes(x = educ, y = Mean, color = sex)) +
+    geom_line(linewidth = 1.2) +
+    labs(
+      title = "Predicted Weekly Work Hours by Education and Gender",
+      x = "Education Level",
+      y = "Predicted Weekly Work Hours",
+      color = " ") +
+    theme_minimal(20) +
+    theme(legend.position = "top")
+```
 
+##  {data-menu-title="Code Meets Question" .sparse-slide background-image="images/gears-solid-full.png" background-size="80px" background-repeat="repeat"}
+
+::: task
+{{< fa lightbulb >}} Are weekly hours worked related to education and marital status?
+:::
+
+<br>
+
+. . .
+
+```{r}
+#| label: regress-04
+#| output-location: fragment
+
+model <- lm(hrs1 ~ educ + marital, data = my_data)
 get_regression_table(model)
 
 ```
 
-<br>
 
-::: {style="font-size: 80%"}
-[**statistic**]{style="color: #18BC9C"} Test whether the coefficient is different from 0. Get the t-values by dividing the estimate by its standard error.  
-  
-[**p-value**]{style="color: #18BC9C"} Two-tail p-values for the test statistic  
-:::
+## { data-menu-title="`tbl_regression()`" .sparse-slide}
 
-::: notes
-The p value is the same for correlation and simple regression. 
-:::
-
-
-## Prediction {.sparse-slide}
-
-::: {style="font-size: 100%; color: #e74c3c"}
-$\hat{y} = -33.75 + .81X$
-:::
-
-<br>  
-
-A regression equation can also be used to create predicted Y values for each value of X  
-
-<br>
-
-If X = 60, $Y$ is predicted to be:
-
-$\hat{y} = -33.75 + .81(60)$  
-$\hat{y} = -33.75 + 48.6$  
-$\hat{y} = 15.03$  
-
-## {data-menu-title="Prediction" .sparse-slide}
-
-```{r, echo=FALSE}
-#| label: prediction
-#| message: false
-
-# Define the new point
-new_point <- data.frame(literacy = 60, educ = 15.03)
-
-# Create scatterplot with regression line
-ggplot(df, aes(x = literacy, y = educ)) +
-  geom_point(color = "#18BC9C", size = 3) +
-  geom_smooth(method = "lm", se = FALSE, color = "#3498DB") +
-# Add the new point
-geom_point(data = new_point, aes(x = literacy, y = educ), 
-           color = "#E74C3C", size = 4, shape = 18) +
-# Add text label
-annotate("text", x = 50, y = 20,
-         label = expression("X = 60, " * hat(y) * " = 15.03"),
-         color = "#E74C3C", size = 5) +
-  labs(
-    title = "Scatterplot of Education vs Literacy",
-    x = "Literacy Rate (X)",
-    y = "College enrollment (Y)"
-  ) +
-  theme_minimal(20)
-
-```
-
-# Categorical IV {.theme-section}
-
-## Add a categorical variable {.sparse-slide}
+Regression Predicting Weekly Work Hours by Years of Education and Marital Status
 
 ```{r}
-#| label: cat-var
+#| label: reference
+#| output-location: column-fragment
+#| code-line-numbers: "2-6"
 
-# Use mutate and case_when to add the country_group column
-df <- df %>%
-  mutate(country_group = case_when(
-    literacy < 50 ~ "Low Literacy",
-    literacy >= 50 & literacy <= 80 ~ "Medium Literacy",
-    literacy > 80 ~ "High Literacy"
-  ))
-
-head(df)
+model |>
+  tbl_regression(
+    intercept = TRUE,
+    label = list(
+      marital = "Marital status (ref. = married)")) |>
+  remove_row_type(type = c("reference")) |>  
+  modify_column_hide(conf.low) |>
+  modify_column_unhide(
+    column = std.error) |>
+  remove_abbreviation() |>
+  add_significance_stars() |>
+  add_glance_table(
+    include = c("r.squared", "nobs"))
 
 ```
 
-## `get_regression_table()` {.sparse-slide}
-
-```{r}
-#| label: lm-2
-
-model_2 <- lm(educ ~ country_group, data = df)
-
-get_regression_table(model_2)
-```
-
-::: notes
-What does the intercept mean? Which group has the smallest proportion of college enrolles? Is it statistically significantly different (than what group?)? What proportion is enrolled in college in low literacy countries? medium literacy? 
-:::
-
-
-# $R^2$ {.theme-section}
-
-## Proportional Reduction of Error {.sparse-slide}
-
-The better a least-squares line is, the better it can predict an outcome with the least amount of error
-
-<br>
-
-$r^2$ is a **p**roportional **r**eduction of **e**rror (PRE) measure
-
-<br>
-
-$PRE = \frac{E1 - E2}{E1}$
-
-<br>
-
-It tells us how well the regression model fits the data  
-
-## {data-menu-title="PRE Equation" .sparse-slide .smaller}
-
-$PRE = \frac{E1 - E2}{E1}$
-
-<br>
-
-:::: {.columns .smaller}
-
-::: {.column}
-
-**E1**  
-Errors of prediction made when IV is ignored  
-
-<br>
-
-Equivalent to the sum of errors we would have if we guessed that every Y was equal to the mean of Y  
-
-<br>
-
-
-[aka Sum of Squares Total (SST)]{style="color: #3498db; font-family: 'Shadows Into Light'"}  
-:::
-
-::: {.column}
-**E2**  
-Errors of prediction made based on IV  
-
-<br>
-
-Equivalent to the sum of errors we would have if we used our least squares line to predict Y  
-
-<br>
-
-[aka Sum of Squared Errors (SSE)]{style="color: #3498db; font-family: 'Shadows Into Light'"}    
-:::
-
-::::
-
-
-## {data-menu-title="`get_regression_points()`" .sparse-slide}
+##  {data-menu-title="Code Meets Question" .sparse-slide background-image="images/gears-solid-full.png" background-size="80px" background-repeat="repeat"}
 
 ::: task
-{{< fa check-double >}} Use `get_regression_points()` to see the residuals.
+{{< fa lightbulb >}} Are daily TV hours related to education and political identity?
 :::
 
 <br>
@@ -690,92 +572,133 @@ Equivalent to the sum of errors we would have if we used our least squares line 
 . . .
 
 ```{r}
-#| label: get_regression_points
-#| message: false
+#| label: regress-05
+#| output-location: slide
 
-model <- lm(educ ~ literacy, data = df)
+my_data <- my_data %>%
+  mutate(pol_group = case_when(
+    polviews %in% c("extremely liberal", "liberal", "slightly liberal") ~ "Liberal",
+    polviews == "moderate, middle of the road" ~ "Moderate",
+    polviews %in% c("slightly conservative", "conservative", "extremely conservative") ~ "Conservative",
+    TRUE ~ NA_character_))
 
-get_regression_points(model)
+model <- lm(tvhours ~ educ + pol_group, data = my_data)
 
+get_regression_table(model)
 ```
 
-
-## {data-menu-title="$R^2$ interpretation" .sparse-slide}  
-
-$R^2$ ranges from 0 to 1.0
-
-<br>
-
-**1.0** = Our independent variable accounts for all the variation that we find in the dependent variable (it predicts the dependent variable perfectly).  
-
-<br>
-
-**0.0** = Our independent variable does not improve our ability to predict the dependent variable.
-
-<br>
-
-[In the social sciences, a high $R^2$ is rare!]{style="color: #3498db; font-size: 100%; font-family: 'Shadows Into Light'"}
-
-
-## $R^2$ calculation {.sparse-slide }
+## `relevel()` {.sparse-slide}
 
 ```{r}
-#| label: r-squared
-#| message: false
+#| label: relevel
+#| output-location: fragment
 
-my_test <- cor.test(
-     ~ educ + literacy,
-     data = df,
-     method = "pearson",
-     na.action = na.omit
- ) 
+# Relevel pol_group so "Moderate" is the reference
+my_data$pol_group <- relevel(factor(my_data$pol_group), 
+                            ref = "Moderate")
 
-my_test$estimate
-(my_test$estimate)^2
-
+model <- lm(tvhours ~ educ + pol_group, data = my_data)
+get_regression_table(model)
 ```
 
-## {data-menu-title="`get_regression_summaries()`" .sparse-slide}  
+
+
+##  {data-menu-title="Code Meets Question" .sparse-slide background-image="images/gears-solid-full.png" background-size="80px" background-repeat="repeat"}
 
 ::: task
-{{< fa check-double >}} Use `get_regression_summaries()` to see $R^2$.
+{{< fa lightbulb >}} Does the relationship between TV hours and education differ by political identity?
 :::
 
 <br>
 
 . . .
 
+
 ```{r}
-#| label: get-regression-summ
+#| label: regress-06
 
-model <- lm(educ ~ literacy, data = df)
+model <- lm(tvhours ~ educ * pol_group, data = my_data)
 
-get_regression_summaries(model)
+get_regression_table(model)
 ```
 
-<br> 
+::: notes
+The coefficient for `educ` is $-0.142	$, meaning that for moderates (the reference group), each additional year of education is associated with -0.142 fewer tv hours per day.
 
-$R^2$ shows the amount of variance of the DV is explained by IV(s).
+The coefficient for `pol_group: Conservative` is $-0.1$. This is the difference in the outcome between moderates and conservatives when education = 0. Conservatives watch -0.1 TV hours per day fewer than moderates when education is zero. Not statistically significantly different.
 
-## $R^2$ interpretation {.sparse-slide}
+The interaction term `educ:pol_groupConservative` is $-0.008$. It tells us whether the relationship between education and TV hours differs between moderates and conservatives It adjusts the slope of education for conservatives So for conservatives, the effect of education is:
 
-An $R^2$ of $0.61$ means that knowing the literacy rate of a country reduces our error in predicting college enrollment by [**61%**]{style="color: #18bc9c"}.  
+$-0.142 -0.008 = -0.15$
 
-<br>
+This means that for conservatives, each additional unit of education is associated with only $-0.15$ fewer daily TV hours.
+:::
 
-The national literacy rate explains [**61%**]{style="color: #18bc9c"} of variation in college enrollment.
+## { data-menu-title="`ggplot()`" .sparse-slide}
 
+```{r}
+#| label: ggplot-interaction
+#| output-location: slide
+
+# Get predicted values
+preds <- estimate_means(model, by = c("educ", "pol_group"))
+
+# Plot using ggplot2
+preds |>
+  ggplot(aes(x = educ, y = Mean, color = pol_group)) +
+    geom_line(linewidth = 1.2) +
+    labs(
+      title = "Predicted Daily TV Hours by Education and Political Identity",
+      x = "Education Level",
+      y = "Predicted TV Hours",
+      color = "Political Identity") +
+    theme_minimal(20) +
+    theme(legend.position = "top")
+``` 
 
 # Think Like a Statistician {.sparse-slide background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
 
 ## Think Like a Statistician {background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat" .sparse-slide}
 
 ::: task
-{{< fa check-double >}} 1. Run and interpret a simple regression using your IPUMS data
+{{< fa check-double >}} 1. Run and interpret a regression predicting `realrinc` with `hrs1` and `educ`
 :::
 
 <br>
 
+. . .
+
+```{r}
+model <- lm(realrinc ~ hrs1 + educ, data = my_data)
+get_regression_table(model)
+```
+
+## Think Like a Statistician {background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat" .sparse-slide}
+
 ::: task
-{{< fa check-double >}} 2. Run and interpret a regression with a categorical IV and your DV using your IPUMS data
-:::
+{{< fa check-double >}} 2. Add `childs` to the regression. Interpret the output.
+::: 
+
+<br>
+
+. . .
+
+```{r}
+model <- lm(formula = realrinc ~ hrs1 + educ + childs, data = my_data)
+get_regression_table(model)
+```
+
+## Think Like a Statistician {background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat" .sparse-slide .smaller}
+
+::: task
+{{< fa check-double >}} 3. Add `marital` to the regression. Interpret the output.
+::: 
+
+<br>
+
+. . .
+
+```{r}
+model <- lm(formula = realrinc ~ hrs1 + educ + childs + marital, data = my_data)
+get_regression_table(model)
+```

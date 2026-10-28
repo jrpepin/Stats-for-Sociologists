@@ -1,5 +1,5 @@
 ---
-title: "Bivariate Regression"
+title: "Visualizing Bivariate Relationships"
 format:
   revealjs:
     math: katex
@@ -49,9 +49,8 @@ scale_colour_discrete <- function(...) scale_color_manual(values = my_palette)
 
 # Agenda {data-menu-title="Agenda" background-image="images/calendar.png" background-size="100px" background-repeat="repeat"}
 
--   Simple regression 
+-   Simple bivariate regression 
 -   Categorical IV
--   $R^2$
 
 
 # Learning objectives
@@ -59,9 +58,11 @@ scale_colour_discrete <- function(...) scale_color_manual(values = my_palette)
 By the end of the lecture, you will be able to ...
 
 -   Use R to produce bivariate regression
--   Use R to produce $R^2$
+-   Create visualizations that communicate bivariate relationships
+-   Visualize and interpret differences across categories
 
-# Code-along 07 {data-menu-title="Code-along" background-image="images/terminal.png"}
+
+# Code-along 06.1 {data-menu-title="Code-along" background-image="images/terminal.png"}
 
 Download and open [code-along-07.qmd](https://www.dropbox.com/scl/fi/v8424d20a8rogis1fdk0l/code-along-07.qmd?rlkey=t8x0w3uhe5za9yxwobncspv2b&dl=1)
 
@@ -80,7 +81,8 @@ library(tidyverse)
 library(haven) # not core tidyverse
 library(summarytools)
 library(gtsummary) 
-library(moderndive)
+
+# do not load moderndive(), use it specifically 
 ```
 
 # Simple Regression {.theme-section}
@@ -136,7 +138,7 @@ print(df)
 #| output-location: fragment
 
 df |>
-  tidy_summary()
+  moderndive::tidy_summary()
 
 ```
 
@@ -152,7 +154,7 @@ df |>
   labs(
     title = "Scatterplot of Education vs Literacy",
     x = "Literacy Rate (X)",
-      y = "College enrollment (Y)"
+    y = "College enrollment (Y)"
   ) +
   theme_minimal(20)
 ```
@@ -405,7 +407,7 @@ annotate("segment",
 
 model <- lm(educ ~ literacy, data = df)
 
-model_points <- get_regression_points(model)
+model_points <- moderndive::get_regression_points(model)
 
 model_points |>
   select(literacy, educ, educ_hat, residual) |>
@@ -524,7 +526,7 @@ There is a strong, positive association between the literacy rate and enrollment
 
 model <- lm(educ ~ literacy, data = df)
 
-get_regression_table(model)
+moderndive::get_regression_table(model)
 
 ```
 
@@ -588,24 +590,80 @@ annotate("text", x = 50, y = 20,
 
 ```
 
+## Visualizing uncertainty
+
+```{r, echo=FALSE}
+#| label: scatterplot-ci
+#| message: false
+
+# Create scatterplot with regression line
+ggplot(df, aes(x = literacy, y = educ)) +
+  geom_point(color = "#18BC9C", size = 3) +
+  geom_smooth(method = "lm", se = TRUE, color = "#3498DB") +
+  labs(
+    title = "Scatterplot of Education vs Literacy",
+    x = "Literacy Rate (X)",
+    y = "College enrollment (Y)"
+  ) +
+  theme_minimal(20)
+
+```
+
 # Categorical IV {.theme-section}
 
-## Add a categorical variable {.sparse-slide}
+## Create a categorical variable {.sparse-slide}
 
 ```{r}
 #| label: cat-var
+#| output-location: slide
 
 # Use mutate and case_when to add the country_group column
-df <- df %>%
-  mutate(country_group = case_when(
-    literacy < 50 ~ "Low Literacy",
-    literacy >= 50 & literacy <= 80 ~ "Medium Literacy",
-    literacy > 80 ~ "High Literacy"
-  ))
+df <- df |>
+  mutate(
+    # create the variable
+    country_group = case_when(
+      literacy < 50 ~ "Low Literacy",
+      literacy >= 50 & literacy <= 80 ~ "Medium Literacy",
+      literacy > 80 ~ "High Literacy"),
+    # put the categories in a specific order
+    country_group = factor(
+      country_group,
+      levels = c(
+        "Low Literacy",
+        "Medium Literacy",
+        "High Literacy"))
+    )
+
 
 head(df)
 
 ```
+
+
+##  {data-menu-title="Bar plot"}
+
+```{r}
+#| label: barplot
+#| output-location: slide
+
+df |>
+  group_by(country_group) |>
+  summarize(
+    mean_educ = mean(educ)) |>
+  ggplot(
+    aes(
+      x = country_group,
+      y = mean_educ,
+      fill = country_group)) +
+  geom_col(show.legend = FALSE) +
+  labs(
+    title = "Average College Enrollment by Literacy Group",
+    x = "Literacy Group",
+    y = "Enrollment (%)") +
+  theme_minimal(20)
+
+```
+
 
 ## `get_regression_table()` {.sparse-slide}
 
@@ -614,161 +672,52 @@ head(df)
 
 model_2 <- lm(educ ~ country_group, data = df)
 
-get_regression_table(model_2)
+moderndive::get_regression_table(model_2)
 ```
 
 ::: notes
 What does the intercept mean? Which group has the smallest proportion of college enrolles? Is it statistically significantly different (than what group?)? What proportion is enrolled in college in low literacy countries? medium literacy? 
 :::
 
+## Visualizing uncertainty
 
-# $R^2$ {.theme-section}
+```{r} 
+#| label: barplot-se
+#| output-location: slide
+#| code-line-numbers: "4-8, 15-20"
 
-## Proportional Reduction of Error {.sparse-slide}
-
-The better a least-squares line is, the better it can predict an outcome with the least amount of error
-
-<br>
-
-$r^2$ is a **p**roportional **r**eduction of **e**rror (PRE) measure
-
-<br>
-
-$PRE = \frac{E1 - E2}{E1}$
-
-<br>
-
-It tells us how well the regression model fits the data  
-
-## {data-menu-title="PRE Equation" .sparse-slide .smaller}
-
-$PRE = \frac{E1 - E2}{E1}$
-
-<br>
-
-:::: {.columns .smaller}
-
-::: {.column}
-
-**E1**  
-Errors of prediction made when IV is ignored  
-
-<br>
-
-Equivalent to the sum of errors we would have if we guessed that every Y was equal to the mean of Y  
-
-<br>
-
-
-[aka Sum of Squares Total (SST)]{style="color: #3498db; font-family: 'Shadows Into Light'"}  
-:::
-
-::: {.column}
-**E2**  
-Errors of prediction made based on IV  
-
-<br>
-
-Equivalent to the sum of errors we would have if we used our least squares line to predict Y  
-
-<br>
-
-[aka Sum of Squared Errors (SSE)]{style="color: #3498db; font-family: 'Shadows Into Light'"}    
-:::
-
-::::
-
-
-## {data-menu-title="`get_regression_points()`" .sparse-slide}
-
-::: task
-{{< fa check-double >}} Use `get_regression_points()` to see the residuals.
-:::
-
-<br>
-
-. . .
-
-```{r}
-#| label: get_regression_points
-#| message: false
-
-model <- lm(educ ~ literacy, data = df)
-
-get_regression_points(model)
-
+df |>
+  group_by(country_group) |>
+  summarize(
+    mean_educ = mean(educ),
+    se = sd(educ) / sqrt(n()),
+    lower = mean_educ - 1.96 * se,
+    upper = mean_educ + 1.96 * se,
+    .groups = "drop") |>
+  ggplot(
+    aes(
+      x = country_group,
+      y = mean_educ,
+      fill = country_group)) +
+  geom_col(show.legend = FALSE) +
+  geom_errorbar(
+    aes(
+      ymin = lower,
+      ymax = upper),
+    width = .15,
+    linewidth = 1) +
+  labs(
+    title = "Average College Enrollment by Literacy Group",
+    x = "Literacy Group",
+    y = "Enrollment (%)") +
+  theme_minimal(20)
 ```
-
-
-## {data-menu-title="$R^2$ interpretation" .sparse-slide}  
-
-$R^2$ ranges from 0 to 1.0
-
-<br>
-
-**1.0** = Our independent variable accounts for all the variation that we find in the dependent variable (it predicts the dependent variable perfectly).  
-
-<br>
-
-**0.0** = Our independent variable does not improve our ability to predict the dependent variable.
-
-<br>
-
-[In the social sciences, a high $R^2$ is rare!]{style="color: #3498db; font-size: 100%; font-family: 'Shadows Into Light'"}
-
-
-## $R^2$ calculation {.sparse-slide }
-
-```{r}
-#| label: r-squared
-#| message: false
-
-my_test <- cor.test(
-     ~ educ + literacy,
-     data = df,
-     method = "pearson",
-     na.action = na.omit
- ) 
-
-my_test$estimate
-(my_test$estimate)^2
-
-```
-
-## {data-menu-title="`get_regression_summaries()`" .sparse-slide}  
-
-::: task
-{{< fa check-double >}} Use `get_regression_summaries()` to see $R^2$.
-:::
-
-<br>
-
-. . .
-
-```{r}
-#| label: get-regression-summ
-
-model <- lm(educ ~ literacy, data = df)
-
-get_regression_summaries(model)
-```
-
-<br> 
-
-$R^2$ shows the amount of variance of the DV is explained by IV(s).
-
-## $R^2$ interpretation {.sparse-slide}
-
-An $R^2$ of $0.61$ means that knowing the literacy rate of a country reduces our error in predicting college enrollment by [**61%**]{style="color: #18bc9c"}.  
-
-<br>
-
-The national literacy rate explains [**61%**]{style="color: #18bc9c"} of variation in college enrollment.
-
 
 # Think Like a Statistician {.sparse-slide background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
 
 ## Think Like a Statistician {background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat" .sparse-slide}
+
+:::: {style="font-size: 80%"}
 
 ::: task
 {{< fa check-double >}} 1. Run and interpret a simple regression using your IPUMS data
@@ -777,11 +726,13 @@ The national literacy rate explains [**61%**]{style="color: #18bc9c"} of variati
 <br>
 
 ::: task
-{{< fa check-double >}} 2. Run and interpret a regression with a categorical IV and your DV using your IPUMS data
+{{< fa check-double >}} 2. Run and interpret a regression with a categorical IV using your IPUMS data
 :::
 
 <br>
 
 ::: task
-{{< fa check-double >}} 3. Create a bargraph with your DV & 1 IV
+{{< fa check-double >}} 3. Use ggplot() to communicate relationship between your DV and one IV. Use your regression results to support your interpretation.
 :::
+
+::::

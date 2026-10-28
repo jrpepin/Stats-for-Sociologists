@@ -1,5 +1,5 @@
 ---
-title: "OLS Regression II"
+title: "OLS Regression I"
 format:
   revealjs:
     math: katex
@@ -61,9 +61,10 @@ By the end of the lecture, you will be able to ...
 
 -   Use R to produce multivariate regression  
 -   Use R to create publication ready regression tables (e.g., Table 02)  
+-   Use R to produce $R^2$ and interpret it
 -   Understand the concept of modelling, interpreting, and visualizing interaction effects and marginal predictions.  
 
-# Code-along 08 {data-menu-title="Code-along" background-image="images/terminal.png"}
+# Code-along 07 {data-menu-title="Code-along" background-image="images/terminal.png"}
 
 Download and open [code-along-08.qmd](https://www.dropbox.com/scl/fi/uxioqp8yuij2ykiufa7ef/code-along-08.qmd?rlkey=bjgtsjr800sgjdlb9cn1424o2&dl=1)
 
@@ -84,8 +85,10 @@ library(gssr)
 library(gssrdoc)
 library(summarytools)
 library(gtsummary) 
-library(moderndive)
 library(modelbased)
+
+# do not load moderndive(), use it specifically 
+
 ```
 
 ## Load your data {.sparse-slide}
@@ -190,7 +193,7 @@ assumed to be a count, but can be modeled with OLS if treated as continuous
 #| output-location: fragment
 
 model_01 <- lm(formula = childs ~ year, data = my_data)
-get_regression_table(model_01)
+moderndive::get_regression_table(model_01)
 
 ```
 
@@ -198,20 +201,166 @@ get_regression_table(model_01)
 
 :::
 
-## PRE Measure {.sparse-slide}
+## Proportional Reduction of Error {.sparse-slide}
 
-[**Get $r^2$**]{style="color: #18BC9C"}  
+The better a least-squares line is, the better it can predict an outcome with the least amount of error
 
 <br>
 
+$r^2$ is a **p**roportional **r**eduction of **e**rror (PRE) measure
+
+<br>
+
+$PRE = \frac{E1 - E2}{E1}$
+
+<br>
+
+It tells us how well the regression model fits the data  
+
+## {data-menu-title="PRE Equation" .sparse-slide .smaller}
+
+$PRE = \frac{E1 - E2}{E1}$
+
+<br>
+
+:::: {.columns .smaller}
+
+::: {.column}
+
+**E1**  
+Errors of prediction made when IV is ignored  
+
+<br>
+
+Equivalent to the sum of errors we would have if we guessed that every Y was equal to the mean of Y  
+
+<br>
+
+
+[aka Sum of Squares Total (SST)]{style="color: #3498db; font-family: 'Shadows Into Light'"}  
+:::
+
+::: {.column}
+**E2**  
+Errors of prediction made based on IV  
+
+<br>
+
+Equivalent to the sum of errors we would have if we used our least squares line to predict Y  
+
+<br>
+
+[aka Sum of Squared Errors (SSE)]{style="color: #3498db; font-family: 'Shadows Into Light'"}    
+:::
+
+::::
+
+
+## {data-menu-title="`get_regression_points()`" .sparse-slide}
+
+::: task
+{{< fa check-double >}} Use `get_regression_points()` to see the residuals.
+:::
+
+<br>
+
+. . .
+
 ```{r}
-#| label: get_regression_summaries
-#| output-location: fragment
+#| label: get_regression_points
+#| message: false
 
 model_01 <- lm(formula = childs ~ year, data = my_data)
-get_regression_summaries(model_01)
+
+moderndive::get_regression_points(model_01) |>
+  dplyr::slice_sample(n = 10) # preview a random sample
 
 ```
+
+
+## {data-menu-title="$R^2$ interpretation" .sparse-slide}  
+
+$R^2$ ranges from 0 to 1.0
+
+<br>
+
+**1.0** = Our independent variable accounts for all the variation that we find in the dependent variable (it predicts the dependent variable perfectly).  
+
+<br>
+
+**0.0** = Our independent variable does not improve our ability to predict the dependent variable.
+
+<br>
+
+[In the social sciences, a high $R^2$ is rare!]{style="color: #3498db; font-size: 100%; font-family: 'Shadows Into Light'"}
+
+
+## $R^2$ calculation {.sparse-slide }
+
+```{r}
+#| label: r-squared-01
+#| message: false
+
+my_test <- cor.test(
+     ~ childs + year,
+     data = my_data,
+     method = "pearson",
+     na.action = na.omit
+ ) 
+
+```
+  
+. . .
+
+R  
+```{r}
+#| label: r-squared-02
+#| message: false
+
+round(my_test$estimate, 3)
+
+```
+  
+. . .
+
+$R^2$  
+```{r}
+#| label: r-squared-03
+#| message: false
+
+round((my_test$estimate)^2, 3)
+
+```
+
+## {data-menu-title="`get_regression_summaries()`" .sparse-slide}  
+
+::: task
+{{< fa check-double >}} Use `get_regression_summaries()` to see $R^2$.
+:::
+
+<br>
+
+. . .
+
+```{r}
+#| label: get-regression-summ
+
+model_01 <- lm(formula = childs ~ year, data = my_data)
+
+moderndive::get_regression_summaries(model_01)
+```
+
+<br> 
+
+$R^2$ shows the amount of variance of the DV explained by the IV(s).
+
+## $R^2$ interpretation {.sparse-slide}
+
+An $R^2$ of $0.61$ means that knowing the literacy rate of a country reduces our error in predicting college enrollment by [**61%**]{style="color: #18bc9c"}.  
+
+<br>
+
+The national literacy rate explains [**61%**]{style="color: #18bc9c"} of variation in college enrollment.
 
 
 ##  {data-menu-title="Code Meets Question" .sparse-slide background-image="images/gears-solid-full.png" background-size="80px" background-repeat="repeat"}
@@ -265,7 +414,7 @@ my_data |>
 #| label: regress-01-review
 
 model_01 <- lm(formula = childs ~ year, data = my_data)
-get_regression_table(model_01)
+moderndive::get_regression_table(model_01)
 
 ```
 
@@ -278,7 +427,7 @@ get_regression_table(model_01)
 #| output-location: fragment
 
 model_02 <- lm(formula = childs ~ year + educ, data = my_data)
-get_regression_table(model_02)
+moderndive::get_regression_table(model_02)
 
 ```
 
@@ -288,7 +437,7 @@ get_regression_table(model_02)
 ```{r}
 #| label: summaries-01-review
 
-get_regression_summaries(model_01)
+moderndive::get_regression_summaries(model_01)
 
 ```
 
@@ -299,7 +448,7 @@ get_regression_summaries(model_01)
 ```{r}
 #| label: summaries-02
 
-get_regression_summaries(model_02)
+moderndive::get_regression_summaries(model_02)
 
 ```
 
@@ -380,7 +529,7 @@ model_02 |>
 
 model <- lm(hrs1 ~ educ + sex, data = my_data)
 
-get_regression_table(model)
+moderndive::get_regression_table(model)
 ```
 
 ## `tbl_regression()` {.sparse-slide}
@@ -531,7 +680,7 @@ preds |>
 #| output-location: fragment
 
 model <- lm(hrs1 ~ educ + marital, data = my_data)
-get_regression_table(model)
+moderndive::get_regression_table(model)
 
 ```
 
@@ -584,7 +733,7 @@ my_data <- my_data %>%
 
 model <- lm(tvhours ~ educ + pol_group, data = my_data)
 
-get_regression_table(model)
+moderndive::get_regression_table(model)
 ```
 
 ## `relevel()` {.sparse-slide}
@@ -598,7 +747,7 @@ my_data$pol_group <- relevel(factor(my_data$pol_group),
                             ref = "Moderate")
 
 model <- lm(tvhours ~ educ + pol_group, data = my_data)
-get_regression_table(model)
+moderndive::get_regression_table(model)
 ```
 
 
@@ -619,7 +768,7 @@ get_regression_table(model)
 
 model <- lm(tvhours ~ educ * pol_group, data = my_data)
 
-get_regression_table(model)
+moderndive::get_regression_table(model)
 ```
 
 ::: notes
@@ -670,7 +819,7 @@ preds |>
 
 ```{r}
 model <- lm(realrinc ~ hrs1 + educ, data = my_data)
-get_regression_table(model)
+moderndive::get_regression_table(model)
 ```
 
 ## Think Like a Statistician {background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat" .sparse-slide}
@@ -685,7 +834,7 @@ get_regression_table(model)
 
 ```{r}
 model <- lm(formula = realrinc ~ hrs1 + educ + childs, data = my_data)
-get_regression_table(model)
+moderndive::get_regression_table(model)
 ```
 
 ## Think Like a Statistician {background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat" .sparse-slide .smaller}
@@ -700,5 +849,5 @@ get_regression_table(model)
 
 ```{r}
 model <- lm(formula = realrinc ~ hrs1 + educ + childs + marital, data = my_data)
-get_regression_table(model)
+moderndive::get_regression_table(model)
 ```

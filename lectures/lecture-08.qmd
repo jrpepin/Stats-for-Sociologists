@@ -1,0 +1,150 @@
+---
+title: "OLS Regression II"
+format:
+  revealjs:
+    math: katex
+    theme: [default, custom.scss]
+    multiplex: false
+    embed-resources: true
+    controls: true
+    highlight-style: atom-one
+    slide-number: c
+    code-annotations: hover
+    title-slide-attributes:
+      data-background-image: "images/08/scatcart.png"
+      data-background-size: 250px
+      data-background-position: bottom center
+revealjs-plugins:
+  - quiz
+filters:
+    - openlinksinnewpage
+editor: 
+  markdown: 
+    wrap: 72
+execute: 
+  echo: true
+---
+
+```{r echo=FALSE}
+
+#| label: setup
+#| message: false
+#| include: false
+
+## Load packages, custom functions, and styles
+source("custom-setup-styles.R")
+
+knitr::opts_knit$set(digits = 2)
+
+# Set global theme with base font size 20
+theme_set(theme_minimal(base_size = 20))
+
+# Override default discrete color and fill scales
+scale_colour_discrete <- function(...) scale_color_manual(values = my_palette)
+
+# Color in math equations
+# https://egallic.fr/Recherche/aide-memoire/quarto_equation_colors.html#colors-in-equations-with-revealjs
+```
+
+# Agenda {data-menu-title="Agenda" background-image="images/calendar.png" background-size="100px" background-repeat="repeat"}
+
+-   xx
+-   yy
+
+::: notes
+
+:::
+
+# Learning objectives
+
+By the end of the lecture, you will be able to ...
+
+-   Understand the concept of modelling, interpreting, and visualizing interaction effects and marginal predictions.  
+
+# Code-along 08 {data-menu-title="Code-along" background-image="images/terminal.png"}
+
+Download and open [code-along-08.qmd]()
+
+## Packages {.sparse-slide}
+
+Load the standard packages and new package `modelbased`.
+
+```{r}
+#| message: false
+#| label: load
+
+# install.packages("marginaleffects") # needed for modelbased
+# install.packages("modelbased")
+
+library(tidyverse) 
+library(haven) # not core tidyverse
+library(gssr)
+library(gssrdoc)
+library(summarytools)
+library(gtsummary) 
+library(modelbased)
+
+# do not load moderndive(), use it specifically 
+
+```
+
+## Load your data {.sparse-slide}
+
+```{r}
+#| message: false
+#| label: gssdata
+
+# Load all gss
+data(gss_all)
+
+```
+
+## Variables {.sparse-slide .smaller}
+
+-   `year` Survey year
+-   `tvhours` Hours per day watching tv
+-   `realrinc` R's income in constant $
+-   `age` Age of respondent
+-   `educ` Respondents highest edu credit
+-   `hrs1` How many hours did you work last week
+-   `childs` How many children have you ever had?
+-   `polviews` Think of self as liberal or conservative
+-   `sex` Respondents sex
+-   `marital` R's marital status
+
+## {data-menu-title="Variable Management" .smaller}
+
+::: task
+{{< fa check-double >}} Make a df with only the (pretty) categorical and continuous
+variables we'll analyze.
+:::
+
+
+```{r}
+#| message: false
+#| label: my-data
+
+# Categorical Variables
+my_cat <- gss_all |>
+  select(id, year, polviews, sex, marital) |>
+  zap_missing() |>
+  mutate(
+    polviews = as_factor(polviews),
+    sex = as_factor(sex),
+    marital = as_factor(marital)) |> 
+  droplevels()
+
+# Continuous Variables
+my_con <- gss_all |>
+  select(id, year, tvhours, age, educ, hrs1, realrinc, childs) |>
+  mutate(
+    age = as.numeric(age),
+    educ = as.numeric(educ),
+    hrs1 = as.numeric(hrs1),
+    realrinc = as.numeric(realrinc),
+    childs = as.numeric(childs))
+
+# Combine the two dataframes
+my_data <- full_join(my_cat, my_con, by = c("year", "id")) # match by 2 vars
+
+```

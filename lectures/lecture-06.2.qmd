@@ -146,6 +146,8 @@ df |>
 
 ```{r}
 #| label: scatterplot
+#| code-line-numbers: "3,4"
+#| output-location: slide
 
 # Create scatterplot
 df |>
@@ -159,8 +161,21 @@ df |>
   theme_minimal(20)
 ```
 
+
+<br>  
+
+::: {.callout-tip icon="false"}
+## {{< fa hat-wizard >}} Heads Up!
+
+This would also work:  
+`ggplot(df, aes(x = literacy, y = educ))`
+:::
+
+
+
 ::: notes
-college enrollment **depends** on the literacy rate (IV)
+college enrollment **depends** on the literacy rate (IV)  
+note the `+` instead of the `|>`  
 :::
 
 
@@ -416,6 +431,7 @@ model <- lm(educ ~ literacy, data = df)
 model_points <- moderndive::get_regression_points(model)
 
 model_points |>
+  arrange(literacy) |>
   select(literacy, educ, educ_hat, residual) |>
   head() |>
   kable()
@@ -435,8 +451,8 @@ The line where the residual sum of squares is at a minimum
 <br>
 
 [**Ordinary least-squares (OLS) regression**]{style="color: #18BC9C"}  
-The statistical technique that produces the least-squares line
-Sometimes referred to as linear regression
+The statistical technique that produces the least-squares line.  
+*Often just referred to as linear regression*  
 
 ## {data-menu-title="OLS Regression" .sparse-slide}
 
@@ -481,11 +497,11 @@ $\hat{y} = -33.75 + .81X$
 
 <br>
 
-When the literacy rate in a country is 0, the college enrollment rate is predicted to be -33.57 ($a$) 
+When the literacy rate in a country is [**0**]{style="color: #F39C12"}, the college enrollment rate is predicted to be -33.57 ($a$) 
 
 <br>
 
-For every one unit increase in the literacy rate, the college enrollment rate is expected to rise by 0.81 ($b$) 
+[**For every one unit increase**]{style="color: #F39C12"} in the literacy rate, the college enrollment rate is expected to rise by 0.81 ($b$) 
 
 . . .
 
@@ -662,6 +678,7 @@ head(df)
 ```{r}
 #| label: barplot
 #| output-location: slide
+#| code-line-numbers: "2-4|5-9|10"
 
 df |>
   group_by(country_group) |>
@@ -701,7 +718,7 @@ What does the intercept mean? Which group has the smallest proportion of college
 ```{r} 
 #| label: barplot-se
 #| output-location: slide
-#| code-line-numbers: "4-8, 15-20"
+#| code-line-numbers: "4-8|15-20"
 
 df |>
   group_by(country_group) |>

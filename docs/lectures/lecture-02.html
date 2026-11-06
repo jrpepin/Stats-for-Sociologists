@@ -204,7 +204,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="mini-task-2" class="level2" data-menu-title="Load your data">
 <h2 data-menu-title="Load your data" class="anchored" data-anchor-id="mini-task-2">Mini-task</h2>
 <div class="task">
-<p><i class="fa-solid fa-check-double" aria-label="check-double"></i> Load the 2024 GSS data.</p>
+<p><i class="fa-solid fa-check-double" aria-label="check-double"></i> Load the 2024 GSS data &amp; all survey waves.</p>
 </div>
 <p><br></p>
 <div class="cell">
@@ -301,6 +301,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="data-class-variable-type" class="level2">
 <h2 class="anchored" data-anchor-id="data-class-variable-type">Data class + variable type</h2>
 <p><img src="images/02/var_type.png" class="img-fluid" style="width:100.0%"></p>
+<div class="notes">
+<p>Statistical variable types describe the meaning of the data (e.g., nominal = categories, continuous = measurements).<br>
+R variable types describe how the data is stored in memory (factor, numeric, character, etc.).</p>
+</div>
 </section>
 <section id="class" class="level2 smaller">
 <h2 class="smaller anchored" data-anchor-id="class"><code>class()</code></h2>
@@ -367,6 +371,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "dislike" "hate"    "like"   </code></pre>
 </div>
+</div>
+<div class="notes">
+<p><code>c()</code> means to combine</p>
 </div>
 </section>
 <section id="factor-order" class="level2 sparse-slide">
@@ -519,8 +526,8 @@ Labels:
 </div>
 </div>
 <div class="notes">
-<p>The column itself might have a variable label (a description like “Gender of respondent”)</p>
-<p>The column contains values (numbers)</p>
+<p>The column itself might have a variable label (a description like “Gender of respondent”) <span style="color: #E74C3C;"><strong>&lt;click&gt;</strong></span><br>
+The column contains values (numbers)</p>
 <p>Each value may have a label attached (like “Male” for 1, “Female” for 2)</p>
 </div>
 </section>
@@ -856,8 +863,8 @@ Group: sex = female
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-18"><pre class="sourceCode numberSource r code-annotation-code number-lines code-with-copy code-annotated"><code class="sourceCode r"><a class="code-annotation-anchor" data-target-cell="annotated-cell-18" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-18-1" class="code-annotation-target"><a href="#annotated-cell-18-1"></a><span class="fu">ctable</span>(gss24<span class="sc">$</span>premarsx, gss24<span class="sc">$</span>sex,</span>
 <a class="code-annotation-anchor" data-target-cell="annotated-cell-18" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-18-2" class="code-annotation-target"><a href="#annotated-cell-18-2"></a>  <span class="at">prop =</span> <span class="st">"c"</span>,</span>
 <a class="code-annotation-anchor" data-target-cell="annotated-cell-18" data-target-annotation="3" onclick="event.preventDefault();">3</a><span id="annotated-cell-18-3" class="code-annotation-target"><a href="#annotated-cell-18-3"></a>  <span class="at">format =</span> <span class="st">"p"</span>,</span>
-<span id="annotated-cell-18-4"><a href="#annotated-cell-18-4"></a>  <span class="at">useNA =</span> <span class="st">"no"</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-18" data-target-annotation="4" onclick="event.preventDefault();">4</a><span id="annotated-cell-18-5" class="code-annotation-target"><a href="#annotated-cell-18-5"></a>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-18" data-target-annotation="4" onclick="event.preventDefault();">4</a><span id="annotated-cell-18-4" class="code-annotation-target"><a href="#annotated-cell-18-4"></a>  <span class="at">useNA =</span> <span class="st">"no"</span></span>
+<span id="annotated-cell-18-5"><a href="#annotated-cell-18-5"></a>) </span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-annotation">
 <dl class="code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-18" data-target-annotation="1">1</dt>
@@ -874,7 +881,7 @@ Group: sex = female
 </dd>
 <dt data-target-cell="annotated-cell-18" data-target-annotation="4">4</dt>
 <dd>
-<span data-code-cell="annotated-cell-18" data-code-lines="5" data-code-annotation="4">Exclude the missing levels from the table.</span>
+<span data-code-cell="annotated-cell-18" data-code-lines="4" data-code-annotation="4">Exclude the missing levels from the table.</span>
 </dd>
 </dl>
 </div>
@@ -895,7 +902,8 @@ Data Frame: gss24
 </div>
 </div>
 <div class="notes">
-<p>Add to your code-along: 1. <span style="color: #6f42c1"><em>X</em> percentage of respondents believe sex before marriage is ‘almost always wrong’?</span><br>
+<p>Add to your code-along:<br>
+1. <span style="color: #6f42c1"><em>X</em> percentage of respondents believe sex before marriage is ‘almost always wrong’?</span><br>
 2. <span style="color: #6f42c1">A greater percentage of <em>X</em> think sex before marriage is ‘not wrong at all’.</span></p>
 </div>
 </section>
@@ -1245,9 +1253,9 @@ Use <code>drop_na()</code> to remove rows with missing (NA) values.</p>
 </div>
 
 <div class="no-row-height column-margin column-container"><div class="margin-aside">
-<p>Question 1a. If working, full or part time: how many hours did you work last week, at all jobs?</p>
+<p>Question 14. How old were you when your first child was born?</p>
 </div></div></section>
-<section id="mini-task-10" class="level2 sparse-slide">
+<section id="mini-task-10" class="level2 sparse-slide page-columns page-full">
 <h2 class="sparse-slide anchored" data-anchor-id="mini-task-10">Mini-task</h2>
 <div class="task">
 <p><i class="fa-solid fa-check-double" aria-label="check-double"></i> Find the mean and median for the variable: <code>hrs1</code>.</p>
@@ -1267,7 +1275,10 @@ Use <code>drop_na()</code> to remove rows with missing (NA) values.</p>
    0.00   37.00   40.00   41.11   48.00   89.00   32371 </code></pre>
 </div>
 </div>
-</section>
+
+<div class="no-row-height column-margin column-container"><div class="margin-aside">
+<p>Question 1a. If working, full or part time: how many hours did you work last week, at all jobs?</p>
+</div></div></section>
 <section id="summarize" class="level2 sparse-slide">
 <h2 class="sparse-slide anchored" data-anchor-id="summarize"><code>summarize()</code></h2>
 <p>Use functions inside <code>summarize()</code> to create summary variables.</p>

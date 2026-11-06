@@ -105,6 +105,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -251,7 +280,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </section>
 </section>
-<section id="confidence-intervals" class="level1 theme-section">
+<section id="confidence-intervals" class="level1 theme-section page-columns page-full">
 <h1 class="theme-section">Confidence Intervals</h1>
 <section id="review-summarise" class="level2 sparse-slide">
 <h2 class="sparse-slide anchored" data-anchor-id="review-summarise">Review: <code>summarise()</code></h2>
@@ -268,6 +297,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;
 1   970  17.7  22.3</code></pre>
 </div>
+</div>
+<div class="notes">
+<p>68% of people would be expected to spend between???</p>
+<p>17.7−22.3=−4.6<br>
+17.7+22.3=40.0</p>
+<p>Is that a lot or a little variation?</p>
 </div>
 </section>
 <section id="section" class="level2" data-menu-title="CIs equation">
@@ -339,7 +374,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><strong>Neat! But how confident are we?</strong></p>
 </div>
 <div class="notes">
-<p>That’s really interesting, but don’t we need to know our confidence level? Otherwise, how do we interpret the interval? What is the probability that the average number of hours people spend on the internet per week is between 14.17 hours and 15.62 hours?</p>
+<p>That’s really interesting, but don’t we need to know our confidence level? Otherwise, how do we interpret the interval? What is the probability that the average number of hours people spend on the internet per week is between 16.25 hours and 19.06 hours?</p>
 </div>
 </section>
 <section id="summarise-ci-1" class="level2 sparse-slide">
@@ -398,7 +433,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><i class="fa-solid fa-lightbulb" aria-label="lightbulb"></i> <strong>How does a 95% confidence interval differ from a 99% confidence interval in terms of width and certainty?</strong></p>
 </div>
 </section>
-<section id="cis-wrong-with-proportions" class="level2">
+<section id="cis-wrong-with-proportions" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="cis-wrong-with-proportions">CIs (wrong) with proportions</h2>
 <div class="cell" data-output-location="fragment">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>my_data <span class="sc">|&gt;</span></span>
@@ -419,6 +454,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>. . .</p>
 <div style="color: #e74c3c; font-family: 'Shadows Into Light'">
 <p><strong>This doesn’t work because the values aren’t coded 0 and 1.</strong></p>
+</div>
+
+<div class="no-row-height column-margin column-container"><div class="margin-aside">
+<p><code>postlife</code> Do you believe there is a life after death?</p>
+</div></div><div class="notes">
+<p>table(my_data<span class="math inline">\(postlife)
+table(as_factor(my_data\)</span>postlife))</p>
 </div>
 </section>
 <section id="cis-correct-with-proportions" class="level2">
@@ -461,7 +503,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb23-9"><a href="#cb23-9"></a>    <span class="at">mean =</span> <span class="fu">mean</span>(ghosts),</span>
 <span id="cb23-10"><a href="#cb23-10"></a>    <span class="at">sd =</span> <span class="fu">sd</span>(ghosts),</span>
 <span id="cb23-11"><a href="#cb23-11"></a>    <span class="at">lower =</span> <span class="fu">CI</span>(ghosts, <span class="at">ci =</span> <span class="fl">0.95</span>)[<span class="st">'lower'</span>],</span>
-<span id="cb23-12"><a href="#cb23-12"></a>    <span class="at">upper  =</span> <span class="fu">CI</span>(ghosts, <span class="at">ci =</span> <span class="fl">0.95</span>)[<span class="st">'upper'</span>]</span>
+<span id="cb23-12"><a href="#cb23-12"></a>    <span class="at">upper =</span> <span class="fu">CI</span>(ghosts, <span class="at">ci =</span> <span class="fl">0.95</span>)[<span class="st">'upper'</span>]</span>
 <span id="cb23-13"><a href="#cb23-13"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
@@ -680,7 +722,7 @@ mean of x
 <section id="section-3" class="level2 quiz-question" data-menu-title="Knowledge Check" data-background-image="images/clipboard-question.png" data-background-size="100px" data-background-repeat="repeat">
 <h2 class="quiz-question anchored" data-menu-title="Knowledge Check" data-background-image="images/clipboard-question.png" data-background-size="100px" data-background-repeat="repeat" data-anchor-id="section-3"></h2>
 <div style="color: #F39C12">
-<p><i class="fa-solid fa-clipboard-question" aria-label="clipboard-question"></i> Assuming an α level of .05, should you reject the null hypothesis?</p>
+<p><i class="fa-solid fa-clipboard-question" aria-label="clipboard-question"></i> Assuming an α level of .01, should you reject the null hypothesis?</p>
 </div>
 <ul>
 <li><span data-explanation="😲 The p-value is less than 𝛼.">No, because the 𝛼 level of .01 is greater than the p-value (&lt; .000).</span></li>
@@ -818,6 +860,196 @@ sample estimates:
 mean in group 1 mean in group 2 
       0.6450593       0.7987421 </code></pre>
 </div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="joining-dataframes-if-time-allows" class="level1 theme-section">
+<h1 class="theme-section">Joining Dataframes (if time allows…)</h1>
+<section id="appending-v.s.-merging" class="level2 sparse-slide">
+<h2 class="sparse-slide anchored" data-anchor-id="appending-v.s.-merging">appending v.s. merging</h2>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span><i class="fa-solid fa-pen-to-square" aria-label="pen-to-square"></i> APPEND
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>add new observations (rows) to existing variables</p>
+</div>
+</div>
+<p><br></p>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span><i class="fa-solid fa-pen-to-square" aria-label="pen-to-square"></i> MERGE
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>add new variables (columns) to existing observations (many merge types)</p>
+</div>
+</div>
+</section>
+<section id="appending-v.s.-merging-1" class="level2 sparse-slide">
+<h2 class="sparse-slide anchored" data-anchor-id="appending-v.s.-merging-1">appending v.s. merging</h2>
+<p><img src="images/99/append-merge.png" class="img-fluid" style="width:100.0%"></p>
+</section>
+<section id="example-datasets" class="level2 sparse-slide">
+<h2 class="sparse-slide anchored" data-anchor-id="example-datasets">Example datasets</h2>
+<div class="columns">
+<div class="column">
+<p><strong>dataframe 1</strong></p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>  coupleid  name age
+1        2  John  42
+2        1 Megan  36
+3        3   Bin  38</code></pre>
+</div>
+</div>
+</div><div class="column">
+<p><strong>dataframe 2</strong></p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>  coupleid    name age
+1        1     Sue  40
+2        3  Ye-jin  39
+3        2 Chrissy  35</code></pre>
+</div>
+</div>
+</div>
+</div>
+<p><br></p>
+<p><strong>dataframe 3</strong></p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>  coupleid marstat numchild country
+1        3       1        1 S.Korea
+2        1       0        0      US
+3        4       1        2  Canada</code></pre>
+</div>
+</div>
+</section>
+<section id="append-data-with-bind_rows" class="level2 sparse-slide">
+<h2 class="sparse-slide anchored" data-anchor-id="append-data-with-bind_rows">append data with <code>bind_rows()</code></h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>df_all <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(df_partner1, df_partner2)</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(df_all)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 3
+  coupleid name      age
+     &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt;
+1        2 John       42
+2        1 Megan      36
+3        3 Bin        38
+4        1 Sue        40
+5        3 Ye-jin     39
+6        2 Chrissy    35</code></pre>
+</div>
+</div>
+</section>
+<section id="merge-data-with-joins" class="level2 sparse-slide">
+<h2 class="sparse-slide anchored" data-anchor-id="merge-data-with-joins">merge data with joins</h2>
+<p>add columns from <code>df1</code> to <code>df2</code>, matching observations based on the keys</p>
+<ul>
+<li><code>left_join()</code> keeps all observations in <code>df1</code>.</li>
+<li><code>right_join()</code> keeps all observations in <code>df2</code>.</li>
+<li><code>full_join()</code> keeps all observations in <code>df1</code> and <code>df2</code>.</li>
+<li><code>inner_join()</code> only keeps observations from <code>df1</code> that have a matching key in <code>df2</code></li>
+</ul>
+</section>
+<section id="left_join" class="level2 smaller">
+<h2 class="smaller anchored" data-anchor-id="left_join"><code>left_join()</code></h2>
+<div class="columns">
+<div class="column" style="width:35%;">
+<p><img src="images/99/left-join.gif" class="img-fluid"></p>
+</div><div class="column" style="width:65%;">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>df_couples <span class="ot">&lt;-</span> <span class="fu">left_join</span>(df_partner1, df_family, <span class="at">by =</span> <span class="st">"coupleid"</span>)</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(df_couples)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 6
+  coupleid name    age marstat numchild country
+     &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;  
+1        2 John     42      NA       NA &lt;NA&gt;   
+2        1 Megan    36       0        0 US     
+3        3 Bin      38       1        1 S.Korea</code></pre>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="right_join" class="level2 smaller">
+<h2 class="smaller anchored" data-anchor-id="right_join"><code>right_join()</code></h2>
+<div class="columns">
+<div class="column" style="width:35%;">
+<p><img src="images/99/right-join.gif" class="img-fluid"></p>
+</div><div class="column" style="width:65%;">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>df_couples <span class="ot">&lt;-</span> <span class="fu">right_join</span>(df_partner1, df_family, <span class="at">by =</span> <span class="st">"coupleid"</span>)</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(df_couples)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 6
+  coupleid name    age marstat numchild country
+     &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;  
+1        1 Megan    36       0        0 US     
+2        3 Bin      38       1        1 S.Korea
+3        4 &lt;NA&gt;     NA       1        2 Canada </code></pre>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="full_join" class="level2 smaller">
+<h2 class="smaller anchored" data-anchor-id="full_join"><code>full_join()</code></h2>
+<div class="columns">
+<div class="column" style="width:35%;">
+<p><img src="images/99/full-join.gif" class="img-fluid"></p>
+</div><div class="column" style="width:65%;">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>df_couples <span class="ot">&lt;-</span> <span class="fu">full_join</span>(df_partner1, df_family, <span class="at">by =</span> <span class="st">"coupleid"</span>)</span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(df_couples)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 6
+  coupleid name    age marstat numchild country
+     &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;  
+1        2 John     42      NA       NA &lt;NA&gt;   
+2        1 Megan    36       0        0 US     
+3        3 Bin      38       1        1 S.Korea
+4        4 &lt;NA&gt;     NA       1        2 Canada </code></pre>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="inner_join" class="level2 smaller">
+<h2 class="smaller anchored" data-anchor-id="inner_join"><code>inner_join()</code></h2>
+<div class="columns">
+<div class="column" style="width:35%;">
+<p><img src="images/99/inner-join.gif" class="img-fluid"></p>
+</div><div class="column" style="width:65%;">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>df_couples <span class="ot">&lt;-</span> <span class="fu">inner_join</span>(df_partner1, df_family, <span class="at">by =</span> <span class="st">"coupleid"</span>)</span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(df_couples)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 6
+  coupleid name    age marstat numchild country
+     &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;  
+1        1 Megan    36       0        0 US     
+2        3 Bin      38       1        1 S.Korea</code></pre>
 </div>
 </div>
 </div>

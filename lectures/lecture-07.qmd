@@ -11,7 +11,7 @@ format:
     slide-number: c
     code-annotations: hover
     title-slide-attributes:
-      data-background-image: "images/08/scatcart.png"
+      data-background-image: "images/07/scatcart.png"
       data-background-size: 250px
       data-background-position: bottom center
 revealjs-plugins:
@@ -257,7 +257,7 @@ Equivalent to the sum of errors we would have if we used our least squares line 
 ## {data-menu-title="`get_regression_points()`" .sparse-slide}
 
 ::: task
-{{< fa check-double >}} Use `get_regression_points()` to see the residuals.
+{{< fa check-double >}} Use `get_regression_points()` to see E2.
 :::
 
 <br>
@@ -267,24 +267,32 @@ Equivalent to the sum of errors we would have if we used our least squares line 
 ```{r}
 #| label: get_regression_points
 #| message: false
+#| output-location: fragment
 
 model_01 <- lm(formula = childs ~ year, data = my_data)
 
 moderndive::get_regression_points(model_01) |>
-  dplyr::slice_sample(n = 10) # preview a random sample
+  dplyr::slice_sample(n = 5)  |>  # preview a random sample
+  select(ID, year, childs, childs_hat, residual)
+
+```
+
+## See E1 & E2 {.sparse-slide}
+
+```{r}
+#| label: get_errors
+#| message: false
+#| output-location: fragment
 
 moderndive::get_regression_points(model_01) |>
   dplyr::mutate(
     mean_pred = mean(childs),
     E1 = (childs - mean_pred),
-    E2 = residual
-  ) |>
-  dplyr::slice_sample(n = 10) |>
+    E2 = residual) |>
+  dplyr::slice_sample(n = 5) |>
   select(ID, year, childs,  mean_pred, childs_hat, E1, E2)
 
-
 ```
-
 
 ## {data-menu-title="$R^2$ interpretation" .sparse-slide}  
 
@@ -360,15 +368,22 @@ moderndive::get_regression_summaries(model_01)
 
 <br> 
 
+::: {style="color: #18BC9C; font-size: 70%; font-family: 'Shadows Into Light'"}
 $R^2$ shows the amount of variance of the DV explained by the IV(s).
+:::
 
 ## $R^2$ interpretation {.sparse-slide}
 
-An $R^2$ of $0.61$ means that knowing the literacy rate of a country reduces our error in predicting college enrollment by [**61%**]{style="color: #18bc9c"}.  
+An $R^2$ of $0.005$ means that knowing the survey year reduces our error in predicting average number of children by [**.5%**]{style="color: #18bc9c"} compared with not using survey year at all.  
 
 <br>
 
-The national literacy rate explains [**61%**]{style="color: #18bc9c"} of variation in college enrollment.
+The survey year explains [**.5%**]{style="color: #18bc9c"} of variation in average number of children.
+
+
+::: notes
+The slope could be strongly negative and highly significant, indicating a clear decline in fertility over time. But if there is still a lot of variation around that trend, the R^2 can remain quite small.
+:::
 
 
 ##  {data-menu-title="Code Meets Question" .sparse-slide background-image="images/gears-solid-full.png" background-size="80px" background-repeat="repeat"}
@@ -439,6 +454,12 @@ moderndive::get_regression_table(model_02)
 
 ```
 
+::: notes
+[Holding survey year constant]/[After accounting for survey year], a one-year increase in average years of education is associated with a 0.131 decrease in the average number of children, on average.  
+  
+The model predicts an average of 5.26 children for a population with 0 years of education in year 0. (mathematical starting point)  
+:::
+
 
 ## Change in PRE Measure {.sparse-slide} 
 
@@ -460,6 +481,10 @@ moderndive::get_regression_summaries(model_02)
 
 ```
 
+
+::: notes
+Did the R^2 improve?  
+:::
 
 ## `tbl_regression()` {.sparse-slide}
 
@@ -499,7 +524,9 @@ model_02 |>
 
 ## `tbl_regression()` {.sparse-slide}
 
+::: {.smaller}
 OLS Regression predicting number of children by survey year and years of education
+:::
 
 ```{r}
 #| label: tbl_regression-full
@@ -539,6 +566,11 @@ model <- lm(hrs1 ~ educ + sex, data = my_data)
 
 moderndive::get_regression_table(model)
 ```
+
+. . .  
+
+![](images/07/regex01.png){fig-align="center" width="50%"}
+
 
 ## `tbl_regression()` {.sparse-slide}
 
@@ -585,93 +617,6 @@ model |>
 
 ```
 
-## `estimate_means()` {.sparse-slide}
-
-```{r}
-#| label: estimate_means_margins
-#| output-location: fragment
-
-# Get predicted values
-preds <- estimate_means(model, by = c("sex"))
-
-# Preview the new df
-preds |>
-  as_tibble() |> 
-  head()
-```
-
-::: notes
-R calculates the mean values of every variable in the model except sex, and sets all of those variables equal to their means. Then (once again) it sets female = 0 in every observation, calculates predicted probabilities for each individual, and averages those.
-
-Then it goes back and resets female to 1 in every observation, again calculates predicted probabilities for each individual and outputs the average of those. 
-
-Outputs can be interpreted as the predicted probabilities for women and men if they were all average in all other respects. 
-
-:::
-
-
-## `estimate_means()` {.sparse-slide}
-
-```{r, eval = FALSE}
-#| label: estimate_means_code
-
-# Get predicted values
-preds <- estimate_means(model, by = c("educ", "sex"))
-
-# Preview the new df
-preds |>
-  as_tibble() |> 
-  head()
-```
-
-## `estimate_means()` {.sparse-slide .smaller}
-
-$\color{#18bc9c}{38.601} + \color{#fd7e14}{0.420}_{educ} - \color{#e74c3c}{6.576}_{female}$
-
-<br>
-
-```{r, echo = FALSE}
-#| label: estimate_means_results
-
-# Get predicted values
-preds <- estimate_means(model, by = c("educ", "sex"))
-
-# Preview the new df
-preds |>
-  as_tibble() |> 
-  head()
-```
-
-<br>
-
-[men with 0 years of education = 
-$\color{#18bc9c}{38.601}  + \color{#fd7e14}{0.420}_{educ}*0$]{.fragment}  
-[women with 0 years of education 
-$\color{#18bc9c}{38.601}  + \color{#fd7e14}{0.420}_{educ}*0 -\color{#e74c3c}{6.576}_{female}$]{.fragment}   
-[men with 2.222 years of education 
-$\color{#18bc9c}{38.601}  + \color{#fd7e14}{0.420}_{educ}*2.222$]{.fragment}   
-[women with 2.222 years of education 
-$\color{#18bc9c}{38.601}  + \color{#fd7e14}{0.420}_{educ}*2.222-\color{#e74c3c}{6.576}_{female}$]{.fragment}  
-
-
-## { data-menu-title="`ggplot()`" .sparse-slide}
-
-```{r}
-#| label: ggplot
-#| output-location: slide
-
-# Plot using ggplot2
-preds |>
-  ggplot(aes(x = educ, y = Mean, color = sex)) +
-    geom_line(linewidth = 1.2) +
-    labs(
-      title = "Predicted Weekly Work Hours by Education and Gender",
-      x = "Education Level",
-      y = "Predicted Weekly Work Hours",
-      color = " ") +
-    theme_minimal(20) +
-    theme(legend.position = "top")
-```
 
 ##  {data-menu-title="Code Meets Question" .sparse-slide background-image="images/gears-solid-full.png" background-size="80px" background-repeat="repeat"}
 
@@ -732,7 +677,7 @@ model |>
 #| label: regress-05
 #| output-location: slide
 
-my_data <- my_data %>%
+my_data <- my_data |>
   mutate(pol_group = case_when(
     polviews %in% c("extremely liberal", "liberal", "slightly liberal") ~ "Liberal",
     polviews == "moderate, middle of the road" ~ "Moderate",
@@ -744,74 +689,61 @@ model <- lm(tvhours ~ educ + pol_group, data = my_data)
 moderndive::get_regression_table(model)
 ```
 
-## `relevel()` {.sparse-slide}
+## Change reference level {.sparse-slide}
 
 ```{r}
 #| label: relevel
 #| output-location: fragment
 
-# Relevel pol_group so "Moderate" is the reference
+# Change to factor and change order
+my_data$pol_group <- factor(
+  my_data$pol_group,
+  levels = c("Moderate", "Liberal", "Conservative"))
+
+# OR ....
+
+# change to factor and explicitly state reference category
 my_data$pol_group <- relevel(factor(my_data$pol_group), 
                             ref = "Moderate")
+
+table(my_data$pol_group)
+
+```
+
+## Change reference level {.sparse-slide}
+
+```{r}
+#| label: model-relevel
+#| output-location: fragment
 
 model <- lm(tvhours ~ educ + pol_group, data = my_data)
 moderndive::get_regression_table(model)
 ```
-
-
-
-##  {data-menu-title="Code Meets Question" .sparse-slide background-image="images/gears-solid-full.png" background-size="80px" background-repeat="repeat"}
-
-::: task
-{{< fa lightbulb >}} Does the relationship between TV hours and education differ by political identity?
-:::
-
-<br>
-
-. . .
-
+  
+## Change reference level {.sparse-slide}
 
 ```{r}
-#| label: regress-06
+#| label: model-relevel-2
+#| eval: false
 
-model <- lm(tvhours ~ educ * pol_group, data = my_data)
-
-moderndive::get_regression_table(model)
+model <- lm(tvhours ~ educ + relevel(pol_group, ref = "Liberal"), data = my_data)
+moderndive::get_regression_table(model) 
 ```
 
-::: notes
-The coefficient for `educ` is $-0.142	$, meaning that for moderates (the reference group), each additional year of education is associated with -0.142 fewer tv hours per day.
-
-The coefficient for `pol_group: Conservative` is $-0.1$. This is the difference in the outcome between moderates and conservatives when education = 0. Conservatives watch -0.1 TV hours per day fewer than moderates when education is zero. Not statistically significantly different.
-
-The interaction term `educ:pol_groupConservative` is $-0.008$. It tells us whether the relationship between education and TV hours differs between moderates and conservatives It adjusts the slope of education for conservatives So for conservatives, the effect of education is:
-
-$-0.142 -0.008 = -0.15$
-
-This means that for conservatives, each additional unit of education is associated with only $-0.15$ fewer daily TV hours.
-:::
-
-## { data-menu-title="`ggplot()`" .sparse-slide}
-
+<br>  
+  
+::: {style="font-size: 50%"}
+  
 ```{r}
-#| label: ggplot-interaction
-#| output-location: slide
+#| label: model-relevel-2-kable
+#| echo: false
 
-# Get predicted values
-preds <- estimate_means(model, by = c("educ", "pol_group"))
+model <- lm(tvhours ~ educ + relevel(pol_group, ref = "Liberal"), data = my_data)
+moderndive::get_regression_table(model) |>
+  kable()
+```
 
-# Plot using ggplot2
-preds |>
-  ggplot(aes(x = educ, y = Mean, color = pol_group)) +
-    geom_line(linewidth = 1.2) +
-    labs(
-      title = "Predicted Daily TV Hours by Education and Political Identity",
-      x = "Education Level",
-      y = "Predicted TV Hours",
-      color = "Political Identity") +
-    theme_minimal(20) +
-    theme(legend.position = "top")
-``` 
+:::
 
 # Think Like a Statistician {.sparse-slide background-image="images/lightbulb-solid.png" background-size="80px" background-repeat="repeat"}
 

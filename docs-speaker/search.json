@@ -2741,14 +2741,14 @@
     "href": "lecture-07.html#section-2",
     "title": "OLS Regression I",
     "section": "",
-    "text": "\\(PRE = \\frac{E1 - E2}{E1}\\)\n\n\n\nE1\nErrors of prediction made when IV is ignored\n\nEquivalent to the sum of errors we would have if we guessed that every Y was equal to the mean of Y\n\naka Sum of Squares Total (SST)\n\nE2\nErrors of prediction made based on IV\n\nEquivalent to the sum of errors we would have if we used our least squares line to predict Y\n\naka Sum of Squared Errors (SSE)"
+    "text": "\\(R^2 = \\frac{\\sum E1 - \\sum E2}{\\sum E1}\\)\n\n\n\nE1\nErrors of prediction made when IV is ignored\n\nEquivalent to the sum of errors we would have if we guessed that every Y was equal to the mean of Y\n\naka Sum of Squares Total (SST)\n\nE2\nErrors of prediction made based on IV\n\nEquivalent to the sum of errors we would have if we used our least squares line to predict Y\n\naka Sum of Squared Errors (SSE)"
   },
   {
     "objectID": "lecture-07.html#section-3",
     "href": "lecture-07.html#section-3",
     "title": "OLS Regression I",
     "section": "",
-    "text": "Use get_regression_points() to see the residuals.\n\n\n\n\nmodel_01 &lt;- lm(formula = childs ~ year, data = my_data)\n\nmoderndive::get_regression_points(model_01) |&gt;\n  dplyr::slice_sample(n = 10) # preview a random sample\n\n# A tibble: 10 × 5\n      ID childs  year childs_hat residual\n   &lt;int&gt;  &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;\n 1 13090      3  1982       2.04    0.961\n 2 63353      3  2018       1.76    1.24 \n 3 11855      0  1980       2.05   -2.05 \n 4 26350      3  1991       1.97    1.03 \n 5 12713      1  1982       2.04   -1.04 \n 6 45320      3  2004       1.87    1.13 \n 7 42375      0  2002       1.88   -1.88 \n 8 22492      4  1988       1.99    2.01 \n 9 22608      5  1988       1.99    3.01 \n10  2765      3  1973       2.11    0.892"
+    "text": "Use get_regression_points() to see E2.\n\n\n\n\nmodel_01 &lt;- lm(formula = childs ~ year, data = my_data)\n\nmoderndive::get_regression_points(model_01) |&gt;\n  dplyr::slice_sample(n = 5)  |&gt;  # preview a random sample\n  select(ID, year, childs, childs_hat, residual)\n\n\n\n# A tibble: 5 × 5\n     ID  year childs childs_hat residual\n  &lt;int&gt; &lt;dbl&gt;  &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;\n1 27676  1991      0       1.97   -1.97 \n2 57565  2014      3       1.79    1.21 \n3 38784  2000      1       1.90   -0.901\n4 37188  1998      1       1.92   -0.916\n5 62985  2018      1       1.76   -0.762"
   },
   {
     "objectID": "lecture-07.html#section-4",
@@ -2769,14 +2769,14 @@
     "href": "lecture-07.html#section-5",
     "title": "OLS Regression I",
     "section": "",
-    "text": "Use get_regression_summaries() to see \\(R^2\\).\n\n\n\n\nmodel_01 &lt;- lm(formula = childs ~ year, data = my_data)\n\nmoderndive::get_regression_summaries(model_01)\n\n# A tibble: 1 × 9\n  r_squared adj_r_squared   mse  rmse sigma statistic p_value    df  nobs\n      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;\n1     0.005         0.005  3.07  1.75  1.75      357.       0     1 75407\n\n\n\n\\(R^2\\) shows the amount of variance of the DV explained by the IV(s)."
+    "text": "Use get_regression_summaries() to see \\(R^2\\).\n\n\n\n\nmodel_01 &lt;- lm(formula = childs ~ year, data = my_data)\n\nmoderndive::get_regression_summaries(model_01)\n\n# A tibble: 1 × 9\n  r_squared adj_r_squared   mse  rmse sigma statistic p_value    df  nobs\n      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;\n1     0.005         0.005  3.07  1.75  1.75      357.       0     1 75407\n\n\n\n\n\\(R^2\\) shows the amount of variance of the DV explained by the IV(s)."
   },
   {
     "objectID": "lecture-07.html#r2-interpretation",
     "href": "lecture-07.html#r2-interpretation",
     "title": "OLS Regression I",
     "section": "\\(R^2\\) interpretation",
-    "text": "\\(R^2\\) interpretation\nAn \\(R^2\\) of \\(0.61\\) means that knowing the literacy rate of a country reduces our error in predicting college enrollment by 61%.\n\nThe national literacy rate explains 61% of variation in college enrollment."
+    "text": "\\(R^2\\) interpretation\nAn \\(R^2\\) of \\(0.005\\) means that knowing the survey year reduces our error in predicting average number of children by .5% compared with not using survey year at all.\n\nThe survey year explains .5% of variation in average number of children.\n\nThe slope could be strongly negative and highly significant, indicating a clear decline in fertility over time. But if there is still a lot of variation around that trend, the R^2 can remain quite small."
   },
   {
     "objectID": "lecture-07.html#section-6",
@@ -2790,35 +2790,35 @@
     "href": "lecture-07.html#section-8",
     "title": "OLS Regression I",
     "section": "",
-    "text": "model_01 &lt;- lm(formula = childs ~ year, data = my_data)\nmoderndive::get_regression_table(model_01)\n\n# A tibble: 2 × 7\n  term      estimate std_error statistic p_value lower_ci upper_ci\n  &lt;chr&gt;        &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;\n1 intercept   17.2       0.811      21.2       0   15.7     18.8  \n2 year        -0.008     0         -18.9       0   -0.008   -0.007\n\n\n\n\n\nmodel_02 &lt;- lm(formula = childs ~ year + educ, data = my_data)\nmoderndive::get_regression_table(model_02)\n\n\n\n# A tibble: 3 × 7\n  term      estimate std_error statistic p_value lower_ci upper_ci\n  &lt;chr&gt;        &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;\n1 intercept    5.26      0.813      6.47   0        3.66     6.85 \n2 year        -0.001     0         -2.00   0.045   -0.002    0    \n3 educ        -0.131     0.002    -64.5    0       -0.134   -0.127"
+    "text": "model_01 &lt;- lm(formula = childs ~ year, data = my_data)\nmoderndive::get_regression_table(model_01)\n\n# A tibble: 2 × 7\n  term      estimate std_error statistic p_value lower_ci upper_ci\n  &lt;chr&gt;        &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;\n1 intercept   17.2       0.811      21.2       0   15.7     18.8  \n2 year        -0.008     0         -18.9       0   -0.008   -0.007\n\n\n\n\n\nmodel_02 &lt;- lm(formula = childs ~ year + educ, data = my_data)\nmoderndive::get_regression_table(model_02)\n\n\n\n# A tibble: 3 × 7\n  term      estimate std_error statistic p_value lower_ci upper_ci\n  &lt;chr&gt;        &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;\n1 intercept    5.26      0.813      6.47   0        3.66     6.85 \n2 year        -0.001     0         -2.00   0.045   -0.002    0    \n3 educ        -0.131     0.002    -64.5    0       -0.134   -0.127\n\n\n\n[Holding survey year constant]/[After accounting for survey year], a one-year increase in average years of education is associated with a 0.131 decrease in the average number of children, on average.\nThe model predicts an average of 5.26 children for a population with 0 years of education in year 0. (mathematical starting point)"
   },
   {
     "objectID": "lecture-07.html#change-in-pre-measure",
     "href": "lecture-07.html#change-in-pre-measure",
     "title": "OLS Regression I",
     "section": "Change in PRE Measure",
-    "text": "Change in PRE Measure\n\nmoderndive::get_regression_summaries(model_01)\n\n# A tibble: 1 × 9\n  r_squared adj_r_squared   mse  rmse sigma statistic p_value    df  nobs\n      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;\n1     0.005         0.005  3.07  1.75  1.75      357.       0     1 75407\n\n\n\n\n\nmoderndive::get_regression_summaries(model_02)\n\n# A tibble: 1 × 9\n  r_squared adj_r_squared   mse  rmse sigma statistic p_value    df  nobs\n      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;\n1     0.057         0.057  2.90  1.70  1.70     2266.       0     2 75166"
+    "text": "Change in PRE Measure\n\nmoderndive::get_regression_summaries(model_01)\n\n# A tibble: 1 × 9\n  r_squared adj_r_squared   mse  rmse sigma statistic p_value    df  nobs\n      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;\n1     0.005         0.005  3.07  1.75  1.75      357.       0     1 75407\n\n\n\n\n\nmoderndive::get_regression_summaries(model_02)\n\n# A tibble: 1 × 9\n  r_squared adj_r_squared   mse  rmse sigma statistic p_value    df  nobs\n      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;\n1     0.057         0.057  2.90  1.70  1.70     2266.       0     2 75166\n\n\n\nDid the R^2 improve?"
   },
   {
     "objectID": "lecture-07.html#tbl_regression",
     "href": "lecture-07.html#tbl_regression",
     "title": "OLS Regression I",
     "section": "tbl_regression()",
-    "text": "tbl_regression()\nOLS Regression predicting number of children by survey year and years of education\n\nmodel_02 |&gt;\n  tbl_regression(intercept = TRUE)  \n\n\n\n\n\n\n\n\n\nCharacteristic\nBeta\n95% CI\np-value\n\n\n\n\n(Intercept)\n5.3\n3.7, 6.9\n&lt;0.001\n\n\nGSS year for this respondent\n0.00\n0.00, 0.00\n0.045\n\n\neduc\n-0.13\n-0.13, -0.13\n&lt;0.001\n\n\n\nAbbreviation: CI = Confidence Interval\n\n\n\n\n\n\n\n\n\nmodel_02 |&gt; tbl_regression(intercept = TRUE, estimate_fun = ~ style_number(.x, digits = 4))"
+    "text": "tbl_regression()\nOLS Regression predicting number of children by survey year and years of education\n\nmodel_02 |&gt;\n  tbl_regression(intercept = TRUE)  \n\n\n\n\n\n\n\n\n\nCharacteristic\nBeta\n95% CI\np-value\n\n\n\n\n(Intercept)\n5.3\n3.7, 6.9\n&lt;0.001\n\n\ngss year for this respondent\n0.00\n0.00, 0.00\n0.045\n\n\neduc\n-0.13\n-0.13, -0.13\n&lt;0.001\n\n\n\nAbbreviation: CI = Confidence Interval\n\n\n\n\n\n\n\n\n\nmodel_02 |&gt; tbl_regression(intercept = TRUE, estimate_fun = ~ style_number(.x, digits = 4))"
   },
   {
     "objectID": "lecture-07.html#tbl_regression-1",
     "href": "lecture-07.html#tbl_regression-1",
     "title": "OLS Regression I",
     "section": "tbl_regression()",
-    "text": "tbl_regression()\nOLS Regression predicting number of children by survey year and years of education\n\nmodel_02 |&gt;\n  tbl_regression(\n    intercept = TRUE) |&gt;\n  modify_column_hide(conf.low) |&gt;\n  modify_column_unhide(column = std.error) \n\n\n\n\n\n\n\n\n\nCharacteristic\nBeta\nSE\np-value\n\n\n\n\n(Intercept)\n5.3\n0.813\n&lt;0.001\n\n\nGSS year for this respondent\n0.00\n0.000\n0.045\n\n\neduc\n-0.13\n0.002\n&lt;0.001\n\n\n\nAbbreviations: CI = Confidence Interval, SE = Standard Error"
+    "text": "tbl_regression()\nOLS Regression predicting number of children by survey year and years of education\n\nmodel_02 |&gt;\n  tbl_regression(\n    intercept = TRUE) |&gt;\n  modify_column_hide(conf.low) |&gt;\n  modify_column_unhide(column = std.error) \n\n\n\n\n\n\n\n\n\nCharacteristic\nBeta\nSE\np-value\n\n\n\n\n(Intercept)\n5.3\n0.813\n&lt;0.001\n\n\ngss year for this respondent\n0.00\n0.000\n0.045\n\n\neduc\n-0.13\n0.002\n&lt;0.001\n\n\n\nAbbreviations: CI = Confidence Interval, SE = Standard Error"
   },
   {
     "objectID": "lecture-07.html#tbl_regression-2",
     "href": "lecture-07.html#tbl_regression-2",
     "title": "OLS Regression I",
     "section": "tbl_regression()",
-    "text": "tbl_regression()\nOLS Regression predicting number of children by survey year and years of education\n\nmodel_02 |&gt;\n  tbl_regression(\n    intercept = TRUE) |&gt;\n  modify_column_hide(conf.low) |&gt;\n  modify_column_unhide(column = std.error) |&gt;\n  remove_abbreviation() |&gt;\n  add_significance_stars() |&gt;\n  add_glance_table(include = c(\"r.squared\", \"nobs\"))\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nCharacteristic\nBeta1\nSE\n\n\n\n\n(Intercept)\n5.3***\n0.813\n\n\nGSS year for this respondent\n0.00*\n0.000\n\n\neduc\n-0.13***\n0.002\n\n\nR²\n0.057\n\n\n\n\nNo. Obs.\n75,166\n\n\n\n\n\n1 p&lt;0.05; p&lt;0.01; p&lt;0.001"
+    "text": "tbl_regression()\n\nOLS Regression predicting number of children by survey year and years of education\n\n\nmodel_02 |&gt;\n  tbl_regression(\n    intercept = TRUE) |&gt;\n  modify_column_hide(conf.low) |&gt;\n  modify_column_unhide(column = std.error) |&gt;\n  remove_abbreviation() |&gt;\n  add_significance_stars() |&gt;\n  add_glance_table(include = c(\"r.squared\", \"nobs\"))\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nCharacteristic\nBeta1\nSE\n\n\n\n\n(Intercept)\n5.3***\n0.813\n\n\ngss year for this respondent\n0.00*\n0.000\n\n\neduc\n-0.13***\n0.002\n\n\nR²\n0.057\n\n\n\n\nNo. Obs.\n75,166\n\n\n\n\n\n1 p&lt;0.05; p&lt;0.01; p&lt;0.001"
   },
   {
     "objectID": "lecture-07.html#section-9",
@@ -2867,28 +2867,28 @@
     "href": "lecture-07.html#section-10",
     "title": "OLS Regression I",
     "section": "",
-    "text": "# Plot using ggplot2\npreds |&gt;\n  ggplot(aes(x = educ, y = Mean, color = sex)) +\n    geom_line(linewidth = 1.2) +\n    labs(\n      title = \"Predicted Weekly Work Hours by Education and Gender\",\n      x = \"Education Level\",\n      y = \"Predicted Weekly Work Hours\",\n      color = \" \") +\n    theme_minimal(20) +\n    theme(legend.position = \"top\")"
+    "text": "Are weekly hours worked related to education and marital status?\n\n\n\n\nmodel &lt;- lm(hrs1 ~ educ + marital, data = my_data)\nmoderndive::get_regression_table(model)\n\n\n\n# A tibble: 6 × 7\n  term                  estimate std_error statistic p_value lower_ci upper_ci\n  &lt;chr&gt;                    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;\n1 intercept               36.5       0.33    110.      0       35.9     37.1  \n2 educ                     0.378     0.023    16.4     0        0.333    0.424\n3 marital-widowed         -5.94      0.385   -15.4     0       -6.70    -5.19 \n4 marital-divorced         0.605     0.198     3.06    0.002    0.218    0.993\n5 marital-separated       -0.278     0.379    -0.733   0.464   -1.02     0.465\n6 marital-never married   -1.76      0.163   -10.8     0       -2.08    -1.44"
   },
   {
     "objectID": "lecture-07.html#section-11",
     "href": "lecture-07.html#section-11",
     "title": "OLS Regression I",
     "section": "",
-    "text": "Are weekly hours worked related to education and marital status?\n\n\n\n\nmodel &lt;- lm(hrs1 ~ educ + marital, data = my_data)\nmoderndive::get_regression_table(model)\n\n\n\n# A tibble: 6 × 7\n  term                  estimate std_error statistic p_value lower_ci upper_ci\n  &lt;chr&gt;                    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;\n1 intercept               36.5       0.33    110.      0       35.9     37.1  \n2 educ                     0.378     0.023    16.4     0        0.333    0.424\n3 marital-widowed         -5.94      0.385   -15.4     0       -6.70    -5.19 \n4 marital-divorced         0.605     0.198     3.06    0.002    0.218    0.993\n5 marital-separated       -0.278     0.379    -0.733   0.464   -1.02     0.465\n6 marital-never married   -1.76      0.163   -10.8     0       -2.08    -1.44"
+    "text": "Regression Predicting Weekly Work Hours by Years of Education and Marital Status\n\n\nmodel |&gt;\n  tbl_regression(\n    intercept = TRUE,\n    label = list(\n      marital = \"Marital status (ref. = married)\")) |&gt;\n  remove_row_type(type = c(\"reference\")) |&gt;  \n  modify_column_hide(conf.low) |&gt;\n  modify_column_unhide(\n    column = std.error) |&gt;\n  remove_abbreviation() |&gt;\n  add_significance_stars() |&gt;\n  add_glance_table(\n    include = c(\"r.squared\", \"nobs\"))\n\n\n\n\n\n\n\n\n\n\n\n\n\nCharacteristic\nBeta1\nSE\n\n\n\n\n(Intercept)\n37***\n0.330\n\n\neduc\n0.38***\n0.023\n\n\nMarital status (ref. = married)\n\n\n\n\n\n\n    widowed\n-5.9***\n0.385\n\n\n    divorced\n0.61**\n0.198\n\n\n    separated\n-0.28\n0.379\n\n\n    never married\n-1.8***\n0.163\n\n\nR²\n0.015\n\n\n\n\nNo. Obs.\n43,178\n\n\n\n\n\n1 p&lt;0.05; p&lt;0.01; p&lt;0.001"
   },
   {
     "objectID": "lecture-07.html#section-12",
     "href": "lecture-07.html#section-12",
     "title": "OLS Regression I",
     "section": "",
-    "text": "Regression Predicting Weekly Work Hours by Years of Education and Marital Status\n\n\nmodel |&gt;\n  tbl_regression(\n    intercept = TRUE,\n    label = list(\n      marital = \"Marital status (ref. = married)\")) |&gt;\n  remove_row_type(type = c(\"reference\")) |&gt;  \n  modify_column_hide(conf.low) |&gt;\n  modify_column_unhide(\n    column = std.error) |&gt;\n  remove_abbreviation() |&gt;\n  add_significance_stars() |&gt;\n  add_glance_table(\n    include = c(\"r.squared\", \"nobs\"))\n\n\n\n\n\n\n\n\n\n\n\n\n\nCharacteristic\nBeta1\nSE\n\n\n\n\n(Intercept)\n37***\n0.330\n\n\neduc\n0.38***\n0.023\n\n\nMarital status (ref. = married)\n\n\n\n\n\n\n    widowed\n-5.9***\n0.385\n\n\n    divorced\n0.61**\n0.198\n\n\n    separated\n-0.28\n0.379\n\n\n    never married\n-1.8***\n0.163\n\n\nR²\n0.015\n\n\n\n\nNo. Obs.\n43,178\n\n\n\n\n\n1 p&lt;0.05; p&lt;0.01; p&lt;0.001"
+    "text": "Are daily TV hours related to education and political identity?\n\n\n\n\nmy_data &lt;- my_data |&gt;\n  mutate(pol_group = case_when(\n    polviews %in% c(\"extremely liberal\", \"liberal\", \"slightly liberal\") ~ \"Liberal\",\n    polviews == \"moderate, middle of the road\" ~ \"Moderate\",\n    polviews %in% c(\"slightly conservative\", \"conservative\", \"extremely conservative\") ~ \"Conservative\",\n    TRUE ~ NA_character_))\n\nmodel &lt;- lm(tvhours ~ educ + pol_group, data = my_data)\n\nmoderndive::get_regression_table(model)"
   },
   {
     "objectID": "lecture-07.html#section-13",
     "href": "lecture-07.html#section-13",
     "title": "OLS Regression I",
     "section": "",
-    "text": "Are daily TV hours related to education and political identity?\n\n\n\n\nmy_data &lt;- my_data %&gt;%\n  mutate(pol_group = case_when(\n    polviews %in% c(\"extremely liberal\", \"liberal\", \"slightly liberal\") ~ \"Liberal\",\n    polviews == \"moderate, middle of the road\" ~ \"Moderate\",\n    polviews %in% c(\"slightly conservative\", \"conservative\", \"extremely conservative\") ~ \"Conservative\",\n    TRUE ~ NA_character_))\n\nmodel &lt;- lm(tvhours ~ educ + pol_group, data = my_data)\n\nmoderndive::get_regression_table(model)"
+    "text": "Are daily TV hours related to education and political identity?\n\n\n\n\nmy_data &lt;- my_data |&gt;\n  mutate(pol_group = case_when(\n    polviews %in% c(\"extremely liberal\", \"liberal\", \"slightly liberal\") ~ \"Liberal\",\n    polviews == \"moderate, middle of the road\" ~ \"Moderate\",\n    polviews %in% c(\"slightly conservative\", \"conservative\", \"extremely conservative\") ~ \"Conservative\",\n    TRUE ~ NA_character_))\n\nmodel &lt;- lm(tvhours ~ educ + pol_group, data = my_data)\n\nmoderndive::get_regression_table(model)"
   },
   {
     "objectID": "lecture-07.html#section-13-output",
@@ -2923,21 +2923,21 @@
     "href": "lecture-07.html#think-like-a-statistician-1",
     "title": "OLS Regression I",
     "section": "Think Like a Statistician",
-    "text": "Think Like a Statistician\n\n 1. Run and interpret a regression predicting realrinc with hrs1 and educ\n\n\n\n\nmodel &lt;- lm(realrinc ~ hrs1 + educ, data = my_data)\nmoderndive::get_regression_table(model)\n\n# A tibble: 3 × 7\n  term      estimate std_error statistic p_value lower_ci upper_ci\n  &lt;chr&gt;        &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;\n1 intercept  -33065.     802.      -41.2       0  -34637.  -31494.\n2 hrs1          481.      10.5      45.6       0     460.     501.\n3 educ         2746.      50.4      54.5       0    2647.    2845."
+    "text": "Think Like a Statistician\n\n 1. Run and interpret a regression predicting realrinc with hrs1 and educ\n\n\n\n\nmodel &lt;- lm(realrinc ~ hrs1 + educ, data = my_data)\nmoderndive::get_regression_table(model)\n\n# A tibble: 3 × 7\n  term      estimate std_error statistic p_value lower_ci upper_ci\n  &lt;chr&gt;        &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;\n1 intercept  -33305.     783.      -42.5       0  -34840.  -31771.\n2 hrs1          481.      10.3      46.9       0     461.     501.\n3 educ         2763.      49.0      56.3       0    2666.    2859."
   },
   {
     "objectID": "lecture-07.html#think-like-a-statistician-2",
     "href": "lecture-07.html#think-like-a-statistician-2",
     "title": "OLS Regression I",
     "section": "Think Like a Statistician",
-    "text": "Think Like a Statistician\n\n 2. Add childs to the regression. Interpret the output.\n\n\n\n\nmodel &lt;- lm(formula = realrinc ~ hrs1 + educ + childs, data = my_data)\nmoderndive::get_regression_table(model)\n\n# A tibble: 4 × 7\n  term      estimate std_error statistic p_value lower_ci upper_ci\n  &lt;chr&gt;        &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;\n1 intercept  -39248.     851.      -46.1       0  -40917.  -37580.\n2 hrs1          481.      10.5      45.8       0     460.     501.\n3 educ         2959.      51.2      57.8       0    2858.    3059.\n4 childs       1960.      93.9      20.9       0    1776.    2144."
+    "text": "Think Like a Statistician\n\n 2. Add childs to the regression. Interpret the output.\n\n\n\n\nmodel &lt;- lm(formula = realrinc ~ hrs1 + educ + childs, data = my_data)\nmoderndive::get_regression_table(model)\n\n# A tibble: 4 × 7\n  term      estimate std_error statistic p_value lower_ci upper_ci\n  &lt;chr&gt;        &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;\n1 intercept  -39354.     830.      -47.4       0  -40981.  -37727.\n2 hrs1          481.      10.2      47.1       0     461.     501.\n3 educ         2970.      49.8      59.6       0    2872.    3067.\n4 childs       1928.      91.3      21.1       0    1749.    2107."
   },
   {
     "objectID": "lecture-07.html#think-like-a-statistician-3",
     "href": "lecture-07.html#think-like-a-statistician-3",
     "title": "OLS Regression I",
     "section": "Think Like a Statistician",
-    "text": "Think Like a Statistician\n\n 3. Add marital to the regression. Interpret the output.\n\n\n\n\nmodel &lt;- lm(formula = realrinc ~ hrs1 + educ + childs + marital, data = my_data)\nmoderndive::get_regression_table(model)\n\n# A tibble: 8 × 7\n  term                  estimate std_error statistic p_value lower_ci upper_ci\n  &lt;chr&gt;                    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;\n1 intercept              -33122.     886.     -37.4        0  -34859.  -31385.\n2 hrs1                      468.      10.5     44.7        0     448.     489.\n3 educ                     2888.      51.0     56.6        0    2788.    2988.\n4 childs                   1021.     105.       9.76       0     816.    1226.\n5 marital-widowed         -4122.     826.      -4.99       0   -5740.   -2503.\n6 marital-divorced        -4029.     420.      -9.60       0   -4851.   -3206.\n7 marital-separated       -5769.     816.      -7.07       0   -7368.   -4171.\n8 marital-never married   -8792.     394.     -22.3        0   -9564.   -8020."
+    "text": "Think Like a Statistician\n\n 3. Add marital to the regression. Interpret the output.\n\n\n\n\nmodel &lt;- lm(formula = realrinc ~ hrs1 + educ + childs + marital, data = my_data)\nmoderndive::get_regression_table(model)\n\n# A tibble: 8 × 7\n  term                  estimate std_error statistic p_value lower_ci upper_ci\n  &lt;chr&gt;                    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;\n1 intercept              -33073.     865.     -38.2        0  -34768.  -31378.\n2 hrs1                      468.      10.2     46.0        0     448.     488.\n3 educ                     2896.      49.6     58.4        0    2799.    2994.\n4 childs                    976.     101.       9.62       0     778.    1175.\n5 marital-widowed         -4111.     807.      -5.09       0   -5693.   -2529.\n6 marital-divorced        -4144.     408.     -10.1        0   -4945.   -3344.\n7 marital-separated       -5656.     794.      -7.12       0   -7213.   -4099.\n8 marital-never married   -8886.     380.     -23.4        0   -9631.   -8140."
   },
   {
     "objectID": "lecture-06.1.html#packages",
@@ -3330,5 +3330,47 @@
     "title": "Visualizing Bivariate Relationships",
     "section": "Think Like a Statistician",
     "text": "Think Like a Statistician\n\n\n 1. Run and interpret a simple regression using your IPUMS data\n\n\n\n 2. Run and interpret a regression with a categorical IV using your IPUMS data\n\n\n\n 3. Use ggplot() to communicate relationship between your DV and one IV. Use your regression results to support your interpretation."
+  },
+  {
+    "objectID": "lecture-07.html#section-7",
+    "href": "lecture-07.html#section-7",
+    "title": "OLS Regression I",
+    "section": "",
+    "text": "Are the trends explained by increases in education?"
+  },
+  {
+    "objectID": "lecture-07.html#change-reference-level",
+    "href": "lecture-07.html#change-reference-level",
+    "title": "OLS Regression I",
+    "section": "Change reference level",
+    "text": "Change reference level\n\n# Change to factor and change order\nmy_data$pol_group &lt;- factor(\n  my_data$pol_group,\n  levels = c(\"Moderate\", \"Liberal\", \"Conservative\"))\n\n# OR ....\n\n# change to factor and explicitly state reference category\nmy_data$pol_group &lt;- relevel(factor(my_data$pol_group), \n                            ref = \"Moderate\")\n\ntable(my_data$pol_group)\n\n\n\n\n    Moderate      Liberal Conservative \n       25140        18533        22205"
+  },
+  {
+    "objectID": "lecture-07.html#change-reference-level-1",
+    "href": "lecture-07.html#change-reference-level-1",
+    "title": "OLS Regression I",
+    "section": "Change reference level",
+    "text": "Change reference level\n\nmodel &lt;- lm(tvhours ~ educ + pol_group, data = my_data)\nmoderndive::get_regression_table(model)\n\n\n\n# A tibble: 4 × 7\n  term                   estimate std_error statistic p_value lower_ci upper_ci\n  &lt;chr&gt;                     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;\n1 intercept                 5.20      0.054     96.4     0       5.09     5.30 \n2 educ                     -0.159     0.004    -40.4     0      -0.166   -0.151\n3 pol_group-Liberal        -0.035     0.03      -1.15    0.25   -0.093    0.024\n4 pol_group-Conservative   -0.192     0.028     -6.76    0      -0.247   -0.136"
+  },
+  {
+    "objectID": "lecture-07.html#change-reference-level-2",
+    "href": "lecture-07.html#change-reference-level-2",
+    "title": "OLS Regression I",
+    "section": "Change reference level",
+    "text": "Change reference level\n\nmodel &lt;- lm(tvhours ~ educ + relevel(pol_group, ref = \"Liberal\"), data = my_data)\nmoderndive::get_regression_table(model) \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nterm\nestimate\nstd_error\nstatistic\np_value\nlower_ci\nupper_ci\n\n\n\n\nintercept\n5.162\n0.059\n88.013\n0.00\n5.047\n5.277\n\n\neduc\n-0.159\n0.004\n-40.421\n0.00\n-0.166\n-0.151\n\n\nrelevel(pol_group, ref = “Liberal”)-Moderate\n0.035\n0.030\n1.150\n0.25\n-0.024\n0.093\n\n\nrelevel(pol_group, ref = “Liberal”)-Conservative\n-0.157\n0.031\n-5.148\n0.00\n-0.217\n-0.097"
+  },
+  {
+    "objectID": "lecture-07.html#see-e1-e2",
+    "href": "lecture-07.html#see-e1-e2",
+    "title": "OLS Regression I",
+    "section": "See E1 & E2",
+    "text": "See E1 & E2\n\nmoderndive::get_regression_points(model_01) |&gt;\n  dplyr::mutate(\n    mean_pred = mean(childs),\n    E1 = (childs - mean_pred),\n    E2 = residual) |&gt;\n  dplyr::slice_sample(n = 5) |&gt;\n  select(ID, year, childs,  mean_pred, childs_hat, E1, E2)\n\n\n\n# A tibble: 5 × 7\n     ID  year childs mean_pred childs_hat      E1     E2\n  &lt;int&gt; &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;\n1 13418  1982      3      1.91       2.04  1.09    0.961\n2 10494  1978      3      1.91       2.07  1.09    0.931\n3  6577  1976      1      1.91       2.08 -0.909  -1.08 \n4 29029  1993      0      1.91       1.95 -1.91   -1.95 \n5 53790  2010      2      1.91       1.82  0.0906  0.176"
+  },
+  {
+    "objectID": "lecture-07.html#section-12-output",
+    "href": "lecture-07.html#section-12-output",
+    "title": "OLS Regression I",
+    "section": "",
+    "text": "# A tibble: 4 × 7\n  term               estimate std_error statistic p_value lower_ci upper_ci\n  &lt;chr&gt;                 &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;\n1 intercept             5.00      0.056     89.1        0    4.89     5.12 \n2 educ                 -0.159     0.004    -40.4        0   -0.166   -0.151\n3 pol_group-Liberal     0.157     0.031      5.15       0    0.097    0.217\n4 pol_group-Moderate    0.192     0.028      6.76       0    0.136    0.247"
   }
 ]

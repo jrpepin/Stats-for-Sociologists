@@ -1207,53 +1207,15 @@ display:block!important;
 <h2>Simple Regression</h2>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href></a>model_01 <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">formula =</span> childs <span class="sc">~</span> year, <span class="at">data =</span> my_data)</span>
-<span id="cb4-2"><a href></a>moderndive<span class="sc">::</span><span class="fu">get_regression_table</span>(model_01) <span class="sc">|&gt;</span></span>
-<span id="cb4-3"><a href></a>  <span class="fu">kable</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb4-2"><a href></a>moderndive<span class="sc">::</span><span class="fu">get_regression_table</span>(model_01) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell fragment">
-<div class="cell-output-display">
-<table class="caption-top">
-<colgroup>
-<col style="width: 15%">
-<col style="width: 13%">
-<col style="width: 15%">
-<col style="width: 15%">
-<col style="width: 12%">
-<col style="width: 13%">
-<col style="width: 13%">
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: left;">term</th>
-<th style="text-align: right;">estimate</th>
-<th style="text-align: right;">std_error</th>
-<th style="text-align: right;">statistic</th>
-<th style="text-align: right;">p_value</th>
-<th style="text-align: right;">lower_ci</th>
-<th style="text-align: right;">upper_ci</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">intercept</td>
-<td style="text-align: right;">17.242</td>
-<td style="text-align: right;">0.811</td>
-<td style="text-align: right;">21.249</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">15.651</td>
-<td style="text-align: right;">18.832</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">year</td>
-<td style="text-align: right;">-0.008</td>
-<td style="text-align: right;">0.000</td>
-<td style="text-align: right;">-18.896</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">-0.008</td>
-<td style="text-align: right;">-0.007</td>
-</tr>
-</tbody>
-</table>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 7
+  term      estimate std_error statistic p_value lower_ci upper_ci
+  &lt;chr&gt;        &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+1 intercept   17.2       0.811      21.2       0   15.7     18.8  
+2 year        -0.008     0         -18.9       0   -0.008   -0.007</code></pre>
 </div>
 </div>
 <aside class="notes">
@@ -1309,22 +1271,22 @@ Errors of prediction made based on IV</p>
 <p><br></p>
 <div class="fragment">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href></a>model_01 <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">formula =</span> childs <span class="sc">~</span> year, <span class="at">data =</span> my_data)</span>
-<span id="cb5-2"><a href></a></span>
-<span id="cb5-3"><a href></a>moderndive<span class="sc">::</span><span class="fu">get_regression_points</span>(model_01) <span class="sc">|&gt;</span></span>
-<span id="cb5-4"><a href></a>  dplyr<span class="sc">::</span><span class="fu">slice_sample</span>(<span class="at">n =</span> <span class="dv">5</span>)  <span class="sc">|&gt;</span>  <span class="co"># preview a random sample</span></span>
-<span id="cb5-5"><a href></a>  <span class="fu">select</span>(ID, year, childs, childs_hat, residual)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href></a>model_01 <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">formula =</span> childs <span class="sc">~</span> year, <span class="at">data =</span> my_data)</span>
+<span id="cb6-2"><a href></a></span>
+<span id="cb6-3"><a href></a>moderndive<span class="sc">::</span><span class="fu">get_regression_points</span>(model_01) <span class="sc">|&gt;</span></span>
+<span id="cb6-4"><a href></a>  dplyr<span class="sc">::</span><span class="fu">slice_sample</span>(<span class="at">n =</span> <span class="dv">5</span>)  <span class="sc">|&gt;</span>  <span class="co"># preview a random sample</span></span>
+<span id="cb6-5"><a href></a>  <span class="fu">select</span>(ID, year, childs, childs_hat, residual)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell fragment">
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 5 × 5
      ID  year childs childs_hat residual
   &lt;int&gt; &lt;dbl&gt;  &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;
-1 10140  1978      2       2.07   -0.069
-2  7236  1976      3       2.08    0.915
-3 49467  2006      0       1.86   -1.86 
-4 49663  2006      0       1.86   -1.86 
-5 16159  1984      3       2.02    0.977</code></pre>
+1 41065  2002      1       1.88   -0.885
+2 64339  2018      0       1.76   -1.76 
+3 32162  1994      2       1.95    0.053
+4 47250  2006      3       1.86    1.14 
+5 51810  2008      0       1.84   -1.84 </code></pre>
 </div>
 </div>
 </div>
@@ -1332,24 +1294,24 @@ Errors of prediction made based on IV</p>
 <section id="see-e1-e2" class="slide level2 sparse-slide">
 <h2>See E1 &amp; E2</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href></a>moderndive<span class="sc">::</span><span class="fu">get_regression_points</span>(model_01) <span class="sc">|&gt;</span></span>
-<span id="cb7-2"><a href></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
-<span id="cb7-3"><a href></a>    <span class="at">mean_pred =</span> <span class="fu">mean</span>(childs),</span>
-<span id="cb7-4"><a href></a>    <span class="at">E1 =</span> (childs <span class="sc">-</span> mean_pred),</span>
-<span id="cb7-5"><a href></a>    <span class="at">E2 =</span> residual) <span class="sc">|&gt;</span></span>
-<span id="cb7-6"><a href></a>  dplyr<span class="sc">::</span><span class="fu">slice_sample</span>(<span class="at">n =</span> <span class="dv">5</span>) <span class="sc">|&gt;</span></span>
-<span id="cb7-7"><a href></a>  <span class="fu">select</span>(ID, year, childs,  mean_pred, childs_hat, E1, E2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href></a>moderndive<span class="sc">::</span><span class="fu">get_regression_points</span>(model_01) <span class="sc">|&gt;</span></span>
+<span id="cb8-2"><a href></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
+<span id="cb8-3"><a href></a>    <span class="at">mean_pred =</span> <span class="fu">mean</span>(childs),</span>
+<span id="cb8-4"><a href></a>    <span class="at">E1 =</span> (childs <span class="sc">-</span> mean_pred),</span>
+<span id="cb8-5"><a href></a>    <span class="at">E2 =</span> residual) <span class="sc">|&gt;</span></span>
+<span id="cb8-6"><a href></a>  dplyr<span class="sc">::</span><span class="fu">slice_sample</span>(<span class="at">n =</span> <span class="dv">5</span>) <span class="sc">|&gt;</span></span>
+<span id="cb8-7"><a href></a>  <span class="fu">select</span>(ID, year, childs,  mean_pred, childs_hat, E1, E2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell fragment">
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 5 × 7
      ID  year childs mean_pred childs_hat      E1     E2
   &lt;int&gt; &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;
-1 30604  1994      2      1.91       1.95  0.0906  0.053
-2 26778  1991      1      1.91       1.97 -0.909  -0.97 
-3 29279  1993      2      1.91       1.95  0.0906  0.046
-4 42488  2002      3      1.91       1.88  1.09    1.12 
-5 45146  2004      2      1.91       1.87  0.0906  0.13 </code></pre>
+1  2065  1973      2      1.91       2.11  0.0906 -0.108
+2 47076  2006      1      1.91       1.86 -0.909  -0.855
+3 12952  1982      2      1.91       2.04  0.0906 -0.039
+4 32720  1996      0      1.91       1.93 -1.91   -1.93 
+5 60392  2016      1      1.91       1.78 -0.909  -0.778</code></pre>
 </div>
 </div>
 </section>
@@ -1366,17 +1328,17 @@ Errors of prediction made based on IV</p>
 <section id="r2-calculation" class="slide level2 sparse-slide">
 <h2><span class="math inline">\(R^2\)</span> calculation</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href></a>my_test <span class="ot">&lt;-</span> <span class="fu">cor.test</span>(</span>
-<span id="cb9-2"><a href></a>     <span class="sc">~</span> childs <span class="sc">+</span> year,</span>
-<span id="cb9-3"><a href></a>     <span class="at">data =</span> my_data,</span>
-<span id="cb9-4"><a href></a>     <span class="at">method =</span> <span class="st">&quot;pearson&quot;</span>,</span>
-<span id="cb9-5"><a href></a>     <span class="at">na.action =</span> na.omit</span>
-<span id="cb9-6"><a href></a> ) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href></a>my_test <span class="ot">&lt;-</span> <span class="fu">cor.test</span>(</span>
+<span id="cb10-2"><a href></a>     <span class="sc">~</span> childs <span class="sc">+</span> year,</span>
+<span id="cb10-3"><a href></a>     <span class="at">data =</span> my_data,</span>
+<span id="cb10-4"><a href></a>     <span class="at">method =</span> <span class="st">&quot;pearson&quot;</span>,</span>
+<span id="cb10-5"><a href></a>     <span class="at">na.action =</span> na.omit</span>
+<span id="cb10-6"><a href></a> ) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="fragment">
 <p>R</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href></a><span class="fu">round</span>(my_test<span class="sc">$</span>estimate, <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href></a><span class="fu">round</span>(my_test<span class="sc">$</span>estimate, <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   cor 
 -0.069 </code></pre>
@@ -1386,7 +1348,7 @@ Errors of prediction made based on IV</p>
 <div class="fragment">
 <p><span class="math inline">\(R^2\)</span></p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href></a><span class="fu">round</span>((my_test<span class="sc">$</span>estimate)<span class="sc">^</span><span class="dv">2</span>, <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href></a><span class="fu">round</span>((my_test<span class="sc">$</span>estimate)<span class="sc">^</span><span class="dv">2</span>, <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  cor 
 0.005 </code></pre>
@@ -1402,9 +1364,9 @@ Errors of prediction made based on IV</p>
 <p><br></p>
 <div class="fragment">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href></a>model_01 <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">formula =</span> childs <span class="sc">~</span> year, <span class="at">data =</span> my_data)</span>
-<span id="cb14-2"><a href></a></span>
-<span id="cb14-3"><a href></a>moderndive<span class="sc">::</span><span class="fu">get_regression_summaries</span>(model_01)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href></a>model_01 <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">formula =</span> childs <span class="sc">~</span> year, <span class="at">data =</span> my_data)</span>
+<span id="cb15-2"><a href></a></span>
+<span id="cb15-3"><a href></a>moderndive<span class="sc">::</span><span class="fu">get_regression_summaries</span>(model_01)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 9
   r_squared adj_r_squared   mse  rmse sigma statistic p_value    df  nobs
@@ -1451,8 +1413,8 @@ display:block!important;
 <section id="section-8" class="slide level2 sparse-slide" data-menu-title="Multiple Regression">
 <h2></h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href></a>model_01 <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">formula =</span> childs <span class="sc">~</span> year, <span class="at">data =</span> my_data)</span>
-<span id="cb16-2"><a href></a>moderndive<span class="sc">::</span><span class="fu">get_regression_table</span>(model_01)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href></a>model_01 <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">formula =</span> childs <span class="sc">~</span> year, <span class="at">data =</span> my_data)</span>
+<span id="cb17-2"><a href></a>moderndive<span class="sc">::</span><span class="fu">get_regression_table</span>(model_01)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 7
   term      estimate std_error statistic p_value lower_ci upper_ci
@@ -1464,8 +1426,8 @@ display:block!important;
 <p><br></p>
 <div class="fragment">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href></a>model_02 <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">formula =</span> childs <span class="sc">~</span> year <span class="sc">+</span> educ, <span class="at">data =</span> my_data)</span>
-<span id="cb18-2"><a href></a>moderndive<span class="sc">::</span><span class="fu">get_regression_table</span>(model_02)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href></a>model_02 <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">formula =</span> childs <span class="sc">~</span> year <span class="sc">+</span> educ, <span class="at">data =</span> my_data)</span>
+<span id="cb19-2"><a href></a>moderndive<span class="sc">::</span><span class="fu">get_regression_table</span>(model_02)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell fragment">
 <div class="cell-output cell-output-stdout">
@@ -1496,7 +1458,7 @@ display:block!important;
 <section id="change-in-pre-measure" class="slide level2 sparse-slide">
 <h2>Change in PRE Measure</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href></a>moderndive<span class="sc">::</span><span class="fu">get_regression_summaries</span>(model_01)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href></a>moderndive<span class="sc">::</span><span class="fu">get_regression_summaries</span>(model_01)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 9
   r_squared adj_r_squared   mse  rmse sigma statistic p_value    df  nobs
@@ -1507,7 +1469,7 @@ display:block!important;
 <p><br></p>
 <div class="fragment">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href></a>moderndive<span class="sc">::</span><span class="fu">get_regression_summaries</span>(model_02)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href></a>moderndive<span class="sc">::</span><span class="fu">get_regression_summaries</span>(model_02)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 9
   r_squared adj_r_squared   mse  rmse sigma statistic p_value    df  nobs
@@ -1534,25 +1496,25 @@ display:block!important;
 <h2><code>tbl_regression()</code></h2>
 <p>OLS Regression predicting number of children by survey year and years of education</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href></a>model_02 <span class="sc">|&gt;</span></span>
-<span id="cb24-2"><a href></a>  <span class="fu">tbl_regression</span>(<span class="at">intercept =</span> <span class="cn">TRUE</span>)  </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href></a>model_02 <span class="sc">|&gt;</span></span>
+<span id="cb25-2"><a href></a>  <span class="fu">tbl_regression</span>(<span class="at">intercept =</span> <span class="cn">TRUE</span>)  </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell fragment">
 <div class="cell-output-display">
-<div id="xmwybighmp" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#xmwybighmp table {
+<div id="qbryragvrt" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#qbryragvrt table {
 font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 -webkit-font-smoothing: antialiased;
 -moz-osx-font-smoothing: grayscale;
 }
-#xmwybighmp thead, #xmwybighmp tbody, #xmwybighmp tfoot, #xmwybighmp tr, #xmwybighmp td, #xmwybighmp th {
+#qbryragvrt thead, #qbryragvrt tbody, #qbryragvrt tfoot, #qbryragvrt tr, #qbryragvrt td, #qbryragvrt th {
 border-style: none;
 }
-#xmwybighmp p {
+#qbryragvrt p {
 margin: 0;
 padding: 0;
 }
-#xmwybighmp .gt_table {
+#qbryragvrt .gt_table {
 display: table;
 border-collapse: collapse;
 line-height: normal;
@@ -1577,11 +1539,11 @@ border-left-style: none;
 border-left-width: 2px;
 border-left-color: #D3D3D3;
 }
-#xmwybighmp .gt_caption {
+#qbryragvrt .gt_caption {
 padding-top: 4px;
 padding-bottom: 4px;
 }
-#xmwybighmp .gt_title {
+#qbryragvrt .gt_title {
 color: #333333;
 font-size: 125%;
 font-weight: initial;
@@ -1592,7 +1554,7 @@ padding-right: 5px;
 border-bottom-color: #FFFFFF;
 border-bottom-width: 0;
 }
-#xmwybighmp .gt_subtitle {
+#qbryragvrt .gt_subtitle {
 color: #333333;
 font-size: 85%;
 font-weight: initial;
@@ -1603,7 +1565,7 @@ padding-right: 5px;
 border-top-color: #FFFFFF;
 border-top-width: 0;
 }
-#xmwybighmp .gt_heading {
+#qbryragvrt .gt_heading {
 background-color: #FFFFFF;
 text-align: center;
 border-bottom-color: #FFFFFF;
@@ -1614,12 +1576,12 @@ border-right-style: none;
 border-right-width: 1px;
 border-right-color: #D3D3D3;
 }
-#xmwybighmp .gt_bottom_border {
+#qbryragvrt .gt_bottom_border {
 border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#xmwybighmp .gt_col_headings {
+#qbryragvrt .gt_col_headings {
 border-top-style: solid;
 border-top-width: 2px;
 border-top-color: #D3D3D3;
@@ -1633,7 +1595,7 @@ border-right-style: none;
 border-right-width: 1px;
 border-right-color: #D3D3D3;
 }
-#xmwybighmp .gt_col_heading {
+#qbryragvrt .gt_col_heading {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -1652,7 +1614,7 @@ padding-left: 5px;
 padding-right: 5px;
 overflow-x: hidden;
 }
-#xmwybighmp .gt_column_spanner_outer {
+#qbryragvrt .gt_column_spanner_outer {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -1663,13 +1625,13 @@ padding-bottom: 0;
 padding-left: 4px;
 padding-right: 4px;
 }
-#xmwybighmp .gt_column_spanner_outer:first-child {
+#qbryragvrt .gt_column_spanner_outer:first-child {
 padding-left: 0;
 }
-#xmwybighmp .gt_column_spanner_outer:last-child {
+#qbryragvrt .gt_column_spanner_outer:last-child {
 padding-right: 0;
 }
-#xmwybighmp .gt_column_spanner {
+#qbryragvrt .gt_column_spanner {
 border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
@@ -1680,10 +1642,10 @@ overflow-x: hidden;
 display: inline-block;
 width: 100%;
 }
-#xmwybighmp .gt_spanner_row {
+#qbryragvrt .gt_spanner_row {
 border-bottom-style: hidden;
 }
-#xmwybighmp .gt_group_heading {
+#qbryragvrt .gt_group_heading {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -1708,7 +1670,7 @@ border-right-color: #D3D3D3;
 vertical-align: middle;
 text-align: left;
 }
-#xmwybighmp .gt_empty_group_heading {
+#qbryragvrt .gt_empty_group_heading {
 padding: 0.5px;
 color: #333333;
 background-color: #FFFFFF;
@@ -1722,13 +1684,13 @@ border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 vertical-align: middle;
 }
-#xmwybighmp .gt_from_md > :first-child {
+#qbryragvrt .gt_from_md > :first-child {
 margin-top: 0;
 }
-#xmwybighmp .gt_from_md > :last-child {
+#qbryragvrt .gt_from_md > :last-child {
 margin-bottom: 0;
 }
-#xmwybighmp .gt_row {
+#qbryragvrt .gt_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -1746,7 +1708,7 @@ border-right-color: #D3D3D3;
 vertical-align: middle;
 overflow-x: hidden;
 }
-#xmwybighmp .gt_stub {
+#qbryragvrt .gt_stub {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -1758,7 +1720,7 @@ border-right-color: #D3D3D3;
 padding-left: 5px;
 padding-right: 5px;
 }
-#xmwybighmp .gt_stub_row_group {
+#qbryragvrt .gt_stub_row_group {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -1771,13 +1733,13 @@ padding-left: 5px;
 padding-right: 5px;
 vertical-align: top;
 }
-#xmwybighmp .gt_row_group_first td {
+#qbryragvrt .gt_row_group_first td {
 border-top-width: 2px;
 }
-#xmwybighmp .gt_row_group_first th {
+#qbryragvrt .gt_row_group_first th {
 border-top-width: 2px;
 }
-#xmwybighmp .gt_summary_row {
+#qbryragvrt .gt_summary_row {
 color: #333333;
 background-color: #FFFFFF;
 text-transform: inherit;
@@ -1786,14 +1748,14 @@ padding-bottom: 8px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#xmwybighmp .gt_first_summary_row {
+#qbryragvrt .gt_first_summary_row {
 border-top-style: solid;
 border-top-color: #D3D3D3;
 }
-#xmwybighmp .gt_first_summary_row.thick {
+#qbryragvrt .gt_first_summary_row.thick {
 border-top-width: 2px;
 }
-#xmwybighmp .gt_last_summary_row {
+#qbryragvrt .gt_last_summary_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -1802,7 +1764,7 @@ border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#xmwybighmp .gt_grand_summary_row {
+#qbryragvrt .gt_grand_summary_row {
 color: #333333;
 background-color: #FFFFFF;
 text-transform: inherit;
@@ -1811,7 +1773,7 @@ padding-bottom: 8px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#xmwybighmp .gt_first_grand_summary_row {
+#qbryragvrt .gt_first_grand_summary_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -1820,7 +1782,7 @@ border-top-style: double;
 border-top-width: 6px;
 border-top-color: #D3D3D3;
 }
-#xmwybighmp .gt_last_grand_summary_row_top {
+#qbryragvrt .gt_last_grand_summary_row_top {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -1829,10 +1791,10 @@ border-bottom-style: double;
 border-bottom-width: 6px;
 border-bottom-color: #D3D3D3;
 }
-#xmwybighmp .gt_striped {
+#qbryragvrt .gt_striped {
 background-color: rgba(128, 128, 128, 0.05);
 }
-#xmwybighmp .gt_table_body {
+#qbryragvrt .gt_table_body {
 border-top-style: solid;
 border-top-width: 2px;
 border-top-color: #D3D3D3;
@@ -1840,7 +1802,7 @@ border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#xmwybighmp .gt_footnotes {
+#qbryragvrt .gt_footnotes {
 color: #333333;
 background-color: #FFFFFF;
 border-bottom-style: none;
@@ -1853,7 +1815,7 @@ border-right-style: none;
 border-right-width: 2px;
 border-right-color: #D3D3D3;
 }
-#xmwybighmp .gt_footnote {
+#qbryragvrt .gt_footnote {
 margin: 0px;
 font-size: 90%;
 padding-top: 4px;
@@ -1861,7 +1823,7 @@ padding-bottom: 4px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#xmwybighmp .gt_sourcenotes {
+#qbryragvrt .gt_sourcenotes {
 color: #333333;
 background-color: #FFFFFF;
 border-bottom-style: none;
@@ -1874,64 +1836,64 @@ border-right-style: none;
 border-right-width: 2px;
 border-right-color: #D3D3D3;
 }
-#xmwybighmp .gt_sourcenote {
+#qbryragvrt .gt_sourcenote {
 font-size: 90%;
 padding-top: 4px;
 padding-bottom: 4px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#xmwybighmp .gt_left {
+#qbryragvrt .gt_left {
 text-align: left;
 }
-#xmwybighmp .gt_center {
+#qbryragvrt .gt_center {
 text-align: center;
 }
-#xmwybighmp .gt_right {
+#qbryragvrt .gt_right {
 text-align: right;
 font-variant-numeric: tabular-nums;
 }
-#xmwybighmp .gt_font_normal {
+#qbryragvrt .gt_font_normal {
 font-weight: normal;
 }
-#xmwybighmp .gt_font_bold {
+#qbryragvrt .gt_font_bold {
 font-weight: bold;
 }
-#xmwybighmp .gt_font_italic {
+#qbryragvrt .gt_font_italic {
 font-style: italic;
 }
-#xmwybighmp .gt_super {
+#qbryragvrt .gt_super {
 font-size: 65%;
 }
-#xmwybighmp .gt_footnote_marks {
+#qbryragvrt .gt_footnote_marks {
 font-size: 75%;
 vertical-align: 0.4em;
 position: initial;
 }
-#xmwybighmp .gt_asterisk {
+#qbryragvrt .gt_asterisk {
 font-size: 100%;
 vertical-align: 0;
 }
-#xmwybighmp .gt_indent_1 {
+#qbryragvrt .gt_indent_1 {
 text-indent: 5px;
 }
-#xmwybighmp .gt_indent_2 {
+#qbryragvrt .gt_indent_2 {
 text-indent: 10px;
 }
-#xmwybighmp .gt_indent_3 {
+#qbryragvrt .gt_indent_3 {
 text-indent: 15px;
 }
-#xmwybighmp .gt_indent_4 {
+#qbryragvrt .gt_indent_4 {
 text-indent: 20px;
 }
-#xmwybighmp .gt_indent_5 {
+#qbryragvrt .gt_indent_5 {
 text-indent: 25px;
 }
-#xmwybighmp .katex-display {
+#qbryragvrt .katex-display {
 display: inline-flex !important;
 margin-bottom: 0.75em !important;
 }
-#xmwybighmp div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#qbryragvrt div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
 height: 0px !important;
 }
 </style>
@@ -1993,28 +1955,28 @@ display:block!important;
 <h2><code>tbl_regression()</code></h2>
 <p>OLS Regression predicting number of children by survey year and years of education</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25" data-code-line-numbers="4-5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href></a>model_02 <span class="sc">|&gt;</span></span>
-<span id="cb25-2"><a href></a>  <span class="fu">tbl_regression</span>(</span>
-<span id="cb25-3"><a href></a>    <span class="at">intercept =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
-<span id="cb25-4"><a href></a>  <span class="fu">modify_column_hide</span>(conf.low) <span class="sc">|&gt;</span></span>
-<span id="cb25-5"><a href></a>  <span class="fu">modify_column_unhide</span>(<span class="at">column =</span> std.error) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26" data-code-line-numbers="4-5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href></a>model_02 <span class="sc">|&gt;</span></span>
+<span id="cb26-2"><a href></a>  <span class="fu">tbl_regression</span>(</span>
+<span id="cb26-3"><a href></a>    <span class="at">intercept =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb26-4"><a href></a>  <span class="fu">modify_column_hide</span>(conf.low) <span class="sc">|&gt;</span></span>
+<span id="cb26-5"><a href></a>  <span class="fu">modify_column_unhide</span>(<span class="at">column =</span> std.error) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell fragment">
 <div class="cell-output-display">
-<div id="whhrrlfukd" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#whhrrlfukd table {
+<div id="ejxuyjvemm" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#ejxuyjvemm table {
 font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 -webkit-font-smoothing: antialiased;
 -moz-osx-font-smoothing: grayscale;
 }
-#whhrrlfukd thead, #whhrrlfukd tbody, #whhrrlfukd tfoot, #whhrrlfukd tr, #whhrrlfukd td, #whhrrlfukd th {
+#ejxuyjvemm thead, #ejxuyjvemm tbody, #ejxuyjvemm tfoot, #ejxuyjvemm tr, #ejxuyjvemm td, #ejxuyjvemm th {
 border-style: none;
 }
-#whhrrlfukd p {
+#ejxuyjvemm p {
 margin: 0;
 padding: 0;
 }
-#whhrrlfukd .gt_table {
+#ejxuyjvemm .gt_table {
 display: table;
 border-collapse: collapse;
 line-height: normal;
@@ -2039,11 +2001,11 @@ border-left-style: none;
 border-left-width: 2px;
 border-left-color: #D3D3D3;
 }
-#whhrrlfukd .gt_caption {
+#ejxuyjvemm .gt_caption {
 padding-top: 4px;
 padding-bottom: 4px;
 }
-#whhrrlfukd .gt_title {
+#ejxuyjvemm .gt_title {
 color: #333333;
 font-size: 125%;
 font-weight: initial;
@@ -2054,7 +2016,7 @@ padding-right: 5px;
 border-bottom-color: #FFFFFF;
 border-bottom-width: 0;
 }
-#whhrrlfukd .gt_subtitle {
+#ejxuyjvemm .gt_subtitle {
 color: #333333;
 font-size: 85%;
 font-weight: initial;
@@ -2065,7 +2027,7 @@ padding-right: 5px;
 border-top-color: #FFFFFF;
 border-top-width: 0;
 }
-#whhrrlfukd .gt_heading {
+#ejxuyjvemm .gt_heading {
 background-color: #FFFFFF;
 text-align: center;
 border-bottom-color: #FFFFFF;
@@ -2076,12 +2038,12 @@ border-right-style: none;
 border-right-width: 1px;
 border-right-color: #D3D3D3;
 }
-#whhrrlfukd .gt_bottom_border {
+#ejxuyjvemm .gt_bottom_border {
 border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#whhrrlfukd .gt_col_headings {
+#ejxuyjvemm .gt_col_headings {
 border-top-style: solid;
 border-top-width: 2px;
 border-top-color: #D3D3D3;
@@ -2095,7 +2057,7 @@ border-right-style: none;
 border-right-width: 1px;
 border-right-color: #D3D3D3;
 }
-#whhrrlfukd .gt_col_heading {
+#ejxuyjvemm .gt_col_heading {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -2114,7 +2076,7 @@ padding-left: 5px;
 padding-right: 5px;
 overflow-x: hidden;
 }
-#whhrrlfukd .gt_column_spanner_outer {
+#ejxuyjvemm .gt_column_spanner_outer {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -2125,13 +2087,13 @@ padding-bottom: 0;
 padding-left: 4px;
 padding-right: 4px;
 }
-#whhrrlfukd .gt_column_spanner_outer:first-child {
+#ejxuyjvemm .gt_column_spanner_outer:first-child {
 padding-left: 0;
 }
-#whhrrlfukd .gt_column_spanner_outer:last-child {
+#ejxuyjvemm .gt_column_spanner_outer:last-child {
 padding-right: 0;
 }
-#whhrrlfukd .gt_column_spanner {
+#ejxuyjvemm .gt_column_spanner {
 border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
@@ -2142,10 +2104,10 @@ overflow-x: hidden;
 display: inline-block;
 width: 100%;
 }
-#whhrrlfukd .gt_spanner_row {
+#ejxuyjvemm .gt_spanner_row {
 border-bottom-style: hidden;
 }
-#whhrrlfukd .gt_group_heading {
+#ejxuyjvemm .gt_group_heading {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -2170,7 +2132,7 @@ border-right-color: #D3D3D3;
 vertical-align: middle;
 text-align: left;
 }
-#whhrrlfukd .gt_empty_group_heading {
+#ejxuyjvemm .gt_empty_group_heading {
 padding: 0.5px;
 color: #333333;
 background-color: #FFFFFF;
@@ -2184,13 +2146,13 @@ border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 vertical-align: middle;
 }
-#whhrrlfukd .gt_from_md > :first-child {
+#ejxuyjvemm .gt_from_md > :first-child {
 margin-top: 0;
 }
-#whhrrlfukd .gt_from_md > :last-child {
+#ejxuyjvemm .gt_from_md > :last-child {
 margin-bottom: 0;
 }
-#whhrrlfukd .gt_row {
+#ejxuyjvemm .gt_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -2208,7 +2170,7 @@ border-right-color: #D3D3D3;
 vertical-align: middle;
 overflow-x: hidden;
 }
-#whhrrlfukd .gt_stub {
+#ejxuyjvemm .gt_stub {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -2220,7 +2182,7 @@ border-right-color: #D3D3D3;
 padding-left: 5px;
 padding-right: 5px;
 }
-#whhrrlfukd .gt_stub_row_group {
+#ejxuyjvemm .gt_stub_row_group {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -2233,13 +2195,13 @@ padding-left: 5px;
 padding-right: 5px;
 vertical-align: top;
 }
-#whhrrlfukd .gt_row_group_first td {
+#ejxuyjvemm .gt_row_group_first td {
 border-top-width: 2px;
 }
-#whhrrlfukd .gt_row_group_first th {
+#ejxuyjvemm .gt_row_group_first th {
 border-top-width: 2px;
 }
-#whhrrlfukd .gt_summary_row {
+#ejxuyjvemm .gt_summary_row {
 color: #333333;
 background-color: #FFFFFF;
 text-transform: inherit;
@@ -2248,14 +2210,14 @@ padding-bottom: 8px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#whhrrlfukd .gt_first_summary_row {
+#ejxuyjvemm .gt_first_summary_row {
 border-top-style: solid;
 border-top-color: #D3D3D3;
 }
-#whhrrlfukd .gt_first_summary_row.thick {
+#ejxuyjvemm .gt_first_summary_row.thick {
 border-top-width: 2px;
 }
-#whhrrlfukd .gt_last_summary_row {
+#ejxuyjvemm .gt_last_summary_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -2264,7 +2226,7 @@ border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#whhrrlfukd .gt_grand_summary_row {
+#ejxuyjvemm .gt_grand_summary_row {
 color: #333333;
 background-color: #FFFFFF;
 text-transform: inherit;
@@ -2273,7 +2235,7 @@ padding-bottom: 8px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#whhrrlfukd .gt_first_grand_summary_row {
+#ejxuyjvemm .gt_first_grand_summary_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -2282,7 +2244,7 @@ border-top-style: double;
 border-top-width: 6px;
 border-top-color: #D3D3D3;
 }
-#whhrrlfukd .gt_last_grand_summary_row_top {
+#ejxuyjvemm .gt_last_grand_summary_row_top {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -2291,10 +2253,10 @@ border-bottom-style: double;
 border-bottom-width: 6px;
 border-bottom-color: #D3D3D3;
 }
-#whhrrlfukd .gt_striped {
+#ejxuyjvemm .gt_striped {
 background-color: rgba(128, 128, 128, 0.05);
 }
-#whhrrlfukd .gt_table_body {
+#ejxuyjvemm .gt_table_body {
 border-top-style: solid;
 border-top-width: 2px;
 border-top-color: #D3D3D3;
@@ -2302,7 +2264,7 @@ border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#whhrrlfukd .gt_footnotes {
+#ejxuyjvemm .gt_footnotes {
 color: #333333;
 background-color: #FFFFFF;
 border-bottom-style: none;
@@ -2315,7 +2277,7 @@ border-right-style: none;
 border-right-width: 2px;
 border-right-color: #D3D3D3;
 }
-#whhrrlfukd .gt_footnote {
+#ejxuyjvemm .gt_footnote {
 margin: 0px;
 font-size: 90%;
 padding-top: 4px;
@@ -2323,7 +2285,7 @@ padding-bottom: 4px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#whhrrlfukd .gt_sourcenotes {
+#ejxuyjvemm .gt_sourcenotes {
 color: #333333;
 background-color: #FFFFFF;
 border-bottom-style: none;
@@ -2336,64 +2298,64 @@ border-right-style: none;
 border-right-width: 2px;
 border-right-color: #D3D3D3;
 }
-#whhrrlfukd .gt_sourcenote {
+#ejxuyjvemm .gt_sourcenote {
 font-size: 90%;
 padding-top: 4px;
 padding-bottom: 4px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#whhrrlfukd .gt_left {
+#ejxuyjvemm .gt_left {
 text-align: left;
 }
-#whhrrlfukd .gt_center {
+#ejxuyjvemm .gt_center {
 text-align: center;
 }
-#whhrrlfukd .gt_right {
+#ejxuyjvemm .gt_right {
 text-align: right;
 font-variant-numeric: tabular-nums;
 }
-#whhrrlfukd .gt_font_normal {
+#ejxuyjvemm .gt_font_normal {
 font-weight: normal;
 }
-#whhrrlfukd .gt_font_bold {
+#ejxuyjvemm .gt_font_bold {
 font-weight: bold;
 }
-#whhrrlfukd .gt_font_italic {
+#ejxuyjvemm .gt_font_italic {
 font-style: italic;
 }
-#whhrrlfukd .gt_super {
+#ejxuyjvemm .gt_super {
 font-size: 65%;
 }
-#whhrrlfukd .gt_footnote_marks {
+#ejxuyjvemm .gt_footnote_marks {
 font-size: 75%;
 vertical-align: 0.4em;
 position: initial;
 }
-#whhrrlfukd .gt_asterisk {
+#ejxuyjvemm .gt_asterisk {
 font-size: 100%;
 vertical-align: 0;
 }
-#whhrrlfukd .gt_indent_1 {
+#ejxuyjvemm .gt_indent_1 {
 text-indent: 5px;
 }
-#whhrrlfukd .gt_indent_2 {
+#ejxuyjvemm .gt_indent_2 {
 text-indent: 10px;
 }
-#whhrrlfukd .gt_indent_3 {
+#ejxuyjvemm .gt_indent_3 {
 text-indent: 15px;
 }
-#whhrrlfukd .gt_indent_4 {
+#ejxuyjvemm .gt_indent_4 {
 text-indent: 20px;
 }
-#whhrrlfukd .gt_indent_5 {
+#ejxuyjvemm .gt_indent_5 {
 text-indent: 25px;
 }
-#whhrrlfukd .katex-display {
+#ejxuyjvemm .katex-display {
 display: inline-flex !important;
 margin-bottom: 0.75em !important;
 }
-#whhrrlfukd div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#ejxuyjvemm div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
 height: 0px !important;
 }
 </style>
@@ -2444,31 +2406,31 @@ height: 0px !important;
 <p>OLS Regression predicting number of children by survey year and years of education</p>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26" data-code-line-numbers="6-8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href></a>model_02 <span class="sc">|&gt;</span></span>
-<span id="cb26-2"><a href></a>  <span class="fu">tbl_regression</span>(</span>
-<span id="cb26-3"><a href></a>    <span class="at">intercept =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
-<span id="cb26-4"><a href></a>  <span class="fu">modify_column_hide</span>(conf.low) <span class="sc">|&gt;</span></span>
-<span id="cb26-5"><a href></a>  <span class="fu">modify_column_unhide</span>(<span class="at">column =</span> std.error) <span class="sc">|&gt;</span></span>
-<span id="cb26-6"><a href></a>  <span class="fu">remove_abbreviation</span>() <span class="sc">|&gt;</span></span>
-<span id="cb26-7"><a href></a>  <span class="fu">add_significance_stars</span>() <span class="sc">|&gt;</span></span>
-<span id="cb26-8"><a href></a>  <span class="fu">add_glance_table</span>(<span class="at">include =</span> <span class="fu">c</span>(<span class="st">&quot;r.squared&quot;</span>, <span class="st">&quot;nobs&quot;</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27" data-code-line-numbers="6-8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href></a>model_02 <span class="sc">|&gt;</span></span>
+<span id="cb27-2"><a href></a>  <span class="fu">tbl_regression</span>(</span>
+<span id="cb27-3"><a href></a>    <span class="at">intercept =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb27-4"><a href></a>  <span class="fu">modify_column_hide</span>(conf.low) <span class="sc">|&gt;</span></span>
+<span id="cb27-5"><a href></a>  <span class="fu">modify_column_unhide</span>(<span class="at">column =</span> std.error) <span class="sc">|&gt;</span></span>
+<span id="cb27-6"><a href></a>  <span class="fu">remove_abbreviation</span>() <span class="sc">|&gt;</span></span>
+<span id="cb27-7"><a href></a>  <span class="fu">add_significance_stars</span>() <span class="sc">|&gt;</span></span>
+<span id="cb27-8"><a href></a>  <span class="fu">add_glance_table</span>(<span class="at">include =</span> <span class="fu">c</span>(<span class="st">&quot;r.squared&quot;</span>, <span class="st">&quot;nobs&quot;</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell fragment">
 <div class="cell-output-display">
-<div id="gotnqgdpsx" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#gotnqgdpsx table {
+<div id="hipjoagrrm" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#hipjoagrrm table {
 font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 -webkit-font-smoothing: antialiased;
 -moz-osx-font-smoothing: grayscale;
 }
-#gotnqgdpsx thead, #gotnqgdpsx tbody, #gotnqgdpsx tfoot, #gotnqgdpsx tr, #gotnqgdpsx td, #gotnqgdpsx th {
+#hipjoagrrm thead, #hipjoagrrm tbody, #hipjoagrrm tfoot, #hipjoagrrm tr, #hipjoagrrm td, #hipjoagrrm th {
 border-style: none;
 }
-#gotnqgdpsx p {
+#hipjoagrrm p {
 margin: 0;
 padding: 0;
 }
-#gotnqgdpsx .gt_table {
+#hipjoagrrm .gt_table {
 display: table;
 border-collapse: collapse;
 line-height: normal;
@@ -2493,11 +2455,11 @@ border-left-style: none;
 border-left-width: 2px;
 border-left-color: #D3D3D3;
 }
-#gotnqgdpsx .gt_caption {
+#hipjoagrrm .gt_caption {
 padding-top: 4px;
 padding-bottom: 4px;
 }
-#gotnqgdpsx .gt_title {
+#hipjoagrrm .gt_title {
 color: #333333;
 font-size: 125%;
 font-weight: initial;
@@ -2508,7 +2470,7 @@ padding-right: 5px;
 border-bottom-color: #FFFFFF;
 border-bottom-width: 0;
 }
-#gotnqgdpsx .gt_subtitle {
+#hipjoagrrm .gt_subtitle {
 color: #333333;
 font-size: 85%;
 font-weight: initial;
@@ -2519,7 +2481,7 @@ padding-right: 5px;
 border-top-color: #FFFFFF;
 border-top-width: 0;
 }
-#gotnqgdpsx .gt_heading {
+#hipjoagrrm .gt_heading {
 background-color: #FFFFFF;
 text-align: center;
 border-bottom-color: #FFFFFF;
@@ -2530,12 +2492,12 @@ border-right-style: none;
 border-right-width: 1px;
 border-right-color: #D3D3D3;
 }
-#gotnqgdpsx .gt_bottom_border {
+#hipjoagrrm .gt_bottom_border {
 border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#gotnqgdpsx .gt_col_headings {
+#hipjoagrrm .gt_col_headings {
 border-top-style: solid;
 border-top-width: 2px;
 border-top-color: #D3D3D3;
@@ -2549,7 +2511,7 @@ border-right-style: none;
 border-right-width: 1px;
 border-right-color: #D3D3D3;
 }
-#gotnqgdpsx .gt_col_heading {
+#hipjoagrrm .gt_col_heading {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -2568,7 +2530,7 @@ padding-left: 5px;
 padding-right: 5px;
 overflow-x: hidden;
 }
-#gotnqgdpsx .gt_column_spanner_outer {
+#hipjoagrrm .gt_column_spanner_outer {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -2579,13 +2541,13 @@ padding-bottom: 0;
 padding-left: 4px;
 padding-right: 4px;
 }
-#gotnqgdpsx .gt_column_spanner_outer:first-child {
+#hipjoagrrm .gt_column_spanner_outer:first-child {
 padding-left: 0;
 }
-#gotnqgdpsx .gt_column_spanner_outer:last-child {
+#hipjoagrrm .gt_column_spanner_outer:last-child {
 padding-right: 0;
 }
-#gotnqgdpsx .gt_column_spanner {
+#hipjoagrrm .gt_column_spanner {
 border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
@@ -2596,10 +2558,10 @@ overflow-x: hidden;
 display: inline-block;
 width: 100%;
 }
-#gotnqgdpsx .gt_spanner_row {
+#hipjoagrrm .gt_spanner_row {
 border-bottom-style: hidden;
 }
-#gotnqgdpsx .gt_group_heading {
+#hipjoagrrm .gt_group_heading {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -2624,7 +2586,7 @@ border-right-color: #D3D3D3;
 vertical-align: middle;
 text-align: left;
 }
-#gotnqgdpsx .gt_empty_group_heading {
+#hipjoagrrm .gt_empty_group_heading {
 padding: 0.5px;
 color: #333333;
 background-color: #FFFFFF;
@@ -2638,13 +2600,13 @@ border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 vertical-align: middle;
 }
-#gotnqgdpsx .gt_from_md > :first-child {
+#hipjoagrrm .gt_from_md > :first-child {
 margin-top: 0;
 }
-#gotnqgdpsx .gt_from_md > :last-child {
+#hipjoagrrm .gt_from_md > :last-child {
 margin-bottom: 0;
 }
-#gotnqgdpsx .gt_row {
+#hipjoagrrm .gt_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -2662,7 +2624,7 @@ border-right-color: #D3D3D3;
 vertical-align: middle;
 overflow-x: hidden;
 }
-#gotnqgdpsx .gt_stub {
+#hipjoagrrm .gt_stub {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -2674,7 +2636,7 @@ border-right-color: #D3D3D3;
 padding-left: 5px;
 padding-right: 5px;
 }
-#gotnqgdpsx .gt_stub_row_group {
+#hipjoagrrm .gt_stub_row_group {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -2687,13 +2649,13 @@ padding-left: 5px;
 padding-right: 5px;
 vertical-align: top;
 }
-#gotnqgdpsx .gt_row_group_first td {
+#hipjoagrrm .gt_row_group_first td {
 border-top-width: 2px;
 }
-#gotnqgdpsx .gt_row_group_first th {
+#hipjoagrrm .gt_row_group_first th {
 border-top-width: 2px;
 }
-#gotnqgdpsx .gt_summary_row {
+#hipjoagrrm .gt_summary_row {
 color: #333333;
 background-color: #FFFFFF;
 text-transform: inherit;
@@ -2702,14 +2664,14 @@ padding-bottom: 8px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#gotnqgdpsx .gt_first_summary_row {
+#hipjoagrrm .gt_first_summary_row {
 border-top-style: solid;
 border-top-color: #D3D3D3;
 }
-#gotnqgdpsx .gt_first_summary_row.thick {
+#hipjoagrrm .gt_first_summary_row.thick {
 border-top-width: 2px;
 }
-#gotnqgdpsx .gt_last_summary_row {
+#hipjoagrrm .gt_last_summary_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -2718,7 +2680,7 @@ border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#gotnqgdpsx .gt_grand_summary_row {
+#hipjoagrrm .gt_grand_summary_row {
 color: #333333;
 background-color: #FFFFFF;
 text-transform: inherit;
@@ -2727,7 +2689,7 @@ padding-bottom: 8px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#gotnqgdpsx .gt_first_grand_summary_row {
+#hipjoagrrm .gt_first_grand_summary_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -2736,7 +2698,7 @@ border-top-style: double;
 border-top-width: 6px;
 border-top-color: #D3D3D3;
 }
-#gotnqgdpsx .gt_last_grand_summary_row_top {
+#hipjoagrrm .gt_last_grand_summary_row_top {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -2745,10 +2707,10 @@ border-bottom-style: double;
 border-bottom-width: 6px;
 border-bottom-color: #D3D3D3;
 }
-#gotnqgdpsx .gt_striped {
+#hipjoagrrm .gt_striped {
 background-color: rgba(128, 128, 128, 0.05);
 }
-#gotnqgdpsx .gt_table_body {
+#hipjoagrrm .gt_table_body {
 border-top-style: solid;
 border-top-width: 2px;
 border-top-color: #D3D3D3;
@@ -2756,7 +2718,7 @@ border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#gotnqgdpsx .gt_footnotes {
+#hipjoagrrm .gt_footnotes {
 color: #333333;
 background-color: #FFFFFF;
 border-bottom-style: none;
@@ -2769,7 +2731,7 @@ border-right-style: none;
 border-right-width: 2px;
 border-right-color: #D3D3D3;
 }
-#gotnqgdpsx .gt_footnote {
+#hipjoagrrm .gt_footnote {
 margin: 0px;
 font-size: 90%;
 padding-top: 4px;
@@ -2777,7 +2739,7 @@ padding-bottom: 4px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#gotnqgdpsx .gt_sourcenotes {
+#hipjoagrrm .gt_sourcenotes {
 color: #333333;
 background-color: #FFFFFF;
 border-bottom-style: none;
@@ -2790,64 +2752,64 @@ border-right-style: none;
 border-right-width: 2px;
 border-right-color: #D3D3D3;
 }
-#gotnqgdpsx .gt_sourcenote {
+#hipjoagrrm .gt_sourcenote {
 font-size: 90%;
 padding-top: 4px;
 padding-bottom: 4px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#gotnqgdpsx .gt_left {
+#hipjoagrrm .gt_left {
 text-align: left;
 }
-#gotnqgdpsx .gt_center {
+#hipjoagrrm .gt_center {
 text-align: center;
 }
-#gotnqgdpsx .gt_right {
+#hipjoagrrm .gt_right {
 text-align: right;
 font-variant-numeric: tabular-nums;
 }
-#gotnqgdpsx .gt_font_normal {
+#hipjoagrrm .gt_font_normal {
 font-weight: normal;
 }
-#gotnqgdpsx .gt_font_bold {
+#hipjoagrrm .gt_font_bold {
 font-weight: bold;
 }
-#gotnqgdpsx .gt_font_italic {
+#hipjoagrrm .gt_font_italic {
 font-style: italic;
 }
-#gotnqgdpsx .gt_super {
+#hipjoagrrm .gt_super {
 font-size: 65%;
 }
-#gotnqgdpsx .gt_footnote_marks {
+#hipjoagrrm .gt_footnote_marks {
 font-size: 75%;
 vertical-align: 0.4em;
 position: initial;
 }
-#gotnqgdpsx .gt_asterisk {
+#hipjoagrrm .gt_asterisk {
 font-size: 100%;
 vertical-align: 0;
 }
-#gotnqgdpsx .gt_indent_1 {
+#hipjoagrrm .gt_indent_1 {
 text-indent: 5px;
 }
-#gotnqgdpsx .gt_indent_2 {
+#hipjoagrrm .gt_indent_2 {
 text-indent: 10px;
 }
-#gotnqgdpsx .gt_indent_3 {
+#hipjoagrrm .gt_indent_3 {
 text-indent: 15px;
 }
-#gotnqgdpsx .gt_indent_4 {
+#hipjoagrrm .gt_indent_4 {
 text-indent: 20px;
 }
-#gotnqgdpsx .gt_indent_5 {
+#hipjoagrrm .gt_indent_5 {
 text-indent: 25px;
 }
-#gotnqgdpsx .katex-display {
+#hipjoagrrm .katex-display {
 display: inline-flex !important;
 margin-bottom: 0.75em !important;
 }
-#gotnqgdpsx div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#hipjoagrrm div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
 height: 0px !important;
 }
 </style>
@@ -2918,9 +2880,9 @@ height: 0px !important;
 <p><br></p>
 <div class="fragment">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(hrs1 <span class="sc">~</span> educ <span class="sc">+</span> sex, <span class="at">data =</span> my_data)</span>
-<span id="cb27-2"><a href></a></span>
-<span id="cb27-3"><a href></a>moderndive<span class="sc">::</span><span class="fu">get_regression_table</span>(model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(hrs1 <span class="sc">~</span> educ <span class="sc">+</span> sex, <span class="at">data =</span> my_data)</span>
+<span id="cb28-2"><a href></a></span>
+<span id="cb28-3"><a href></a>moderndive<span class="sc">::</span><span class="fu">get_regression_table</span>(model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell fragment">
 <div class="cell-output cell-output-stdout">
@@ -2946,32 +2908,32 @@ height: 0px !important;
 <p>OLS Regression predicting weekly work hours by years of education and gender</p>
 <div class="cell columns column-output-location">
 <div class="column">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href></a>model <span class="sc">|&gt;</span></span>
-<span id="cb29-2"><a href></a>  <span class="fu">tbl_regression</span>(</span>
-<span id="cb29-3"><a href></a>    <span class="at">intercept =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
-<span id="cb29-4"><a href></a>  <span class="fu">modify_column_hide</span>(conf.low) <span class="sc">|&gt;</span></span>
-<span id="cb29-5"><a href></a>  <span class="fu">modify_column_unhide</span>(</span>
-<span id="cb29-6"><a href></a>    <span class="at">column =</span> std.error) <span class="sc">|&gt;</span></span>
-<span id="cb29-7"><a href></a>  <span class="fu">remove_abbreviation</span>() <span class="sc">|&gt;</span></span>
-<span id="cb29-8"><a href></a>  <span class="fu">add_significance_stars</span>() <span class="sc">|&gt;</span></span>
-<span id="cb29-9"><a href></a>  <span class="fu">add_glance_table</span>(</span>
-<span id="cb29-10"><a href></a>    <span class="at">include =</span> <span class="fu">c</span>(<span class="st">&quot;r.squared&quot;</span>, <span class="st">&quot;nobs&quot;</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href></a>model <span class="sc">|&gt;</span></span>
+<span id="cb30-2"><a href></a>  <span class="fu">tbl_regression</span>(</span>
+<span id="cb30-3"><a href></a>    <span class="at">intercept =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb30-4"><a href></a>  <span class="fu">modify_column_hide</span>(conf.low) <span class="sc">|&gt;</span></span>
+<span id="cb30-5"><a href></a>  <span class="fu">modify_column_unhide</span>(</span>
+<span id="cb30-6"><a href></a>    <span class="at">column =</span> std.error) <span class="sc">|&gt;</span></span>
+<span id="cb30-7"><a href></a>  <span class="fu">remove_abbreviation</span>() <span class="sc">|&gt;</span></span>
+<span id="cb30-8"><a href></a>  <span class="fu">add_significance_stars</span>() <span class="sc">|&gt;</span></span>
+<span id="cb30-9"><a href></a>  <span class="fu">add_glance_table</span>(</span>
+<span id="cb30-10"><a href></a>    <span class="at">include =</span> <span class="fu">c</span>(<span class="st">&quot;r.squared&quot;</span>, <span class="st">&quot;nobs&quot;</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div><div class="column fragment">
 <div class="cell-output-display">
-<div id="wtikyuwgjy" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#wtikyuwgjy table {
+<div id="ccciboutkb" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#ccciboutkb table {
 font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 -webkit-font-smoothing: antialiased;
 -moz-osx-font-smoothing: grayscale;
 }
-#wtikyuwgjy thead, #wtikyuwgjy tbody, #wtikyuwgjy tfoot, #wtikyuwgjy tr, #wtikyuwgjy td, #wtikyuwgjy th {
+#ccciboutkb thead, #ccciboutkb tbody, #ccciboutkb tfoot, #ccciboutkb tr, #ccciboutkb td, #ccciboutkb th {
 border-style: none;
 }
-#wtikyuwgjy p {
+#ccciboutkb p {
 margin: 0;
 padding: 0;
 }
-#wtikyuwgjy .gt_table {
+#ccciboutkb .gt_table {
 display: table;
 border-collapse: collapse;
 line-height: normal;
@@ -2996,11 +2958,11 @@ border-left-style: none;
 border-left-width: 2px;
 border-left-color: #D3D3D3;
 }
-#wtikyuwgjy .gt_caption {
+#ccciboutkb .gt_caption {
 padding-top: 4px;
 padding-bottom: 4px;
 }
-#wtikyuwgjy .gt_title {
+#ccciboutkb .gt_title {
 color: #333333;
 font-size: 125%;
 font-weight: initial;
@@ -3011,7 +2973,7 @@ padding-right: 5px;
 border-bottom-color: #FFFFFF;
 border-bottom-width: 0;
 }
-#wtikyuwgjy .gt_subtitle {
+#ccciboutkb .gt_subtitle {
 color: #333333;
 font-size: 85%;
 font-weight: initial;
@@ -3022,7 +2984,7 @@ padding-right: 5px;
 border-top-color: #FFFFFF;
 border-top-width: 0;
 }
-#wtikyuwgjy .gt_heading {
+#ccciboutkb .gt_heading {
 background-color: #FFFFFF;
 text-align: center;
 border-bottom-color: #FFFFFF;
@@ -3033,12 +2995,12 @@ border-right-style: none;
 border-right-width: 1px;
 border-right-color: #D3D3D3;
 }
-#wtikyuwgjy .gt_bottom_border {
+#ccciboutkb .gt_bottom_border {
 border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#wtikyuwgjy .gt_col_headings {
+#ccciboutkb .gt_col_headings {
 border-top-style: solid;
 border-top-width: 2px;
 border-top-color: #D3D3D3;
@@ -3052,7 +3014,7 @@ border-right-style: none;
 border-right-width: 1px;
 border-right-color: #D3D3D3;
 }
-#wtikyuwgjy .gt_col_heading {
+#ccciboutkb .gt_col_heading {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -3071,7 +3033,7 @@ padding-left: 5px;
 padding-right: 5px;
 overflow-x: hidden;
 }
-#wtikyuwgjy .gt_column_spanner_outer {
+#ccciboutkb .gt_column_spanner_outer {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -3082,13 +3044,13 @@ padding-bottom: 0;
 padding-left: 4px;
 padding-right: 4px;
 }
-#wtikyuwgjy .gt_column_spanner_outer:first-child {
+#ccciboutkb .gt_column_spanner_outer:first-child {
 padding-left: 0;
 }
-#wtikyuwgjy .gt_column_spanner_outer:last-child {
+#ccciboutkb .gt_column_spanner_outer:last-child {
 padding-right: 0;
 }
-#wtikyuwgjy .gt_column_spanner {
+#ccciboutkb .gt_column_spanner {
 border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
@@ -3099,10 +3061,10 @@ overflow-x: hidden;
 display: inline-block;
 width: 100%;
 }
-#wtikyuwgjy .gt_spanner_row {
+#ccciboutkb .gt_spanner_row {
 border-bottom-style: hidden;
 }
-#wtikyuwgjy .gt_group_heading {
+#ccciboutkb .gt_group_heading {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -3127,7 +3089,7 @@ border-right-color: #D3D3D3;
 vertical-align: middle;
 text-align: left;
 }
-#wtikyuwgjy .gt_empty_group_heading {
+#ccciboutkb .gt_empty_group_heading {
 padding: 0.5px;
 color: #333333;
 background-color: #FFFFFF;
@@ -3141,13 +3103,13 @@ border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 vertical-align: middle;
 }
-#wtikyuwgjy .gt_from_md > :first-child {
+#ccciboutkb .gt_from_md > :first-child {
 margin-top: 0;
 }
-#wtikyuwgjy .gt_from_md > :last-child {
+#ccciboutkb .gt_from_md > :last-child {
 margin-bottom: 0;
 }
-#wtikyuwgjy .gt_row {
+#ccciboutkb .gt_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -3165,7 +3127,7 @@ border-right-color: #D3D3D3;
 vertical-align: middle;
 overflow-x: hidden;
 }
-#wtikyuwgjy .gt_stub {
+#ccciboutkb .gt_stub {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -3177,7 +3139,7 @@ border-right-color: #D3D3D3;
 padding-left: 5px;
 padding-right: 5px;
 }
-#wtikyuwgjy .gt_stub_row_group {
+#ccciboutkb .gt_stub_row_group {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -3190,13 +3152,13 @@ padding-left: 5px;
 padding-right: 5px;
 vertical-align: top;
 }
-#wtikyuwgjy .gt_row_group_first td {
+#ccciboutkb .gt_row_group_first td {
 border-top-width: 2px;
 }
-#wtikyuwgjy .gt_row_group_first th {
+#ccciboutkb .gt_row_group_first th {
 border-top-width: 2px;
 }
-#wtikyuwgjy .gt_summary_row {
+#ccciboutkb .gt_summary_row {
 color: #333333;
 background-color: #FFFFFF;
 text-transform: inherit;
@@ -3205,14 +3167,14 @@ padding-bottom: 8px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#wtikyuwgjy .gt_first_summary_row {
+#ccciboutkb .gt_first_summary_row {
 border-top-style: solid;
 border-top-color: #D3D3D3;
 }
-#wtikyuwgjy .gt_first_summary_row.thick {
+#ccciboutkb .gt_first_summary_row.thick {
 border-top-width: 2px;
 }
-#wtikyuwgjy .gt_last_summary_row {
+#ccciboutkb .gt_last_summary_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -3221,7 +3183,7 @@ border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#wtikyuwgjy .gt_grand_summary_row {
+#ccciboutkb .gt_grand_summary_row {
 color: #333333;
 background-color: #FFFFFF;
 text-transform: inherit;
@@ -3230,7 +3192,7 @@ padding-bottom: 8px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#wtikyuwgjy .gt_first_grand_summary_row {
+#ccciboutkb .gt_first_grand_summary_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -3239,7 +3201,7 @@ border-top-style: double;
 border-top-width: 6px;
 border-top-color: #D3D3D3;
 }
-#wtikyuwgjy .gt_last_grand_summary_row_top {
+#ccciboutkb .gt_last_grand_summary_row_top {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -3248,10 +3210,10 @@ border-bottom-style: double;
 border-bottom-width: 6px;
 border-bottom-color: #D3D3D3;
 }
-#wtikyuwgjy .gt_striped {
+#ccciboutkb .gt_striped {
 background-color: rgba(128, 128, 128, 0.05);
 }
-#wtikyuwgjy .gt_table_body {
+#ccciboutkb .gt_table_body {
 border-top-style: solid;
 border-top-width: 2px;
 border-top-color: #D3D3D3;
@@ -3259,7 +3221,7 @@ border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#wtikyuwgjy .gt_footnotes {
+#ccciboutkb .gt_footnotes {
 color: #333333;
 background-color: #FFFFFF;
 border-bottom-style: none;
@@ -3272,7 +3234,7 @@ border-right-style: none;
 border-right-width: 2px;
 border-right-color: #D3D3D3;
 }
-#wtikyuwgjy .gt_footnote {
+#ccciboutkb .gt_footnote {
 margin: 0px;
 font-size: 90%;
 padding-top: 4px;
@@ -3280,7 +3242,7 @@ padding-bottom: 4px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#wtikyuwgjy .gt_sourcenotes {
+#ccciboutkb .gt_sourcenotes {
 color: #333333;
 background-color: #FFFFFF;
 border-bottom-style: none;
@@ -3293,64 +3255,64 @@ border-right-style: none;
 border-right-width: 2px;
 border-right-color: #D3D3D3;
 }
-#wtikyuwgjy .gt_sourcenote {
+#ccciboutkb .gt_sourcenote {
 font-size: 90%;
 padding-top: 4px;
 padding-bottom: 4px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#wtikyuwgjy .gt_left {
+#ccciboutkb .gt_left {
 text-align: left;
 }
-#wtikyuwgjy .gt_center {
+#ccciboutkb .gt_center {
 text-align: center;
 }
-#wtikyuwgjy .gt_right {
+#ccciboutkb .gt_right {
 text-align: right;
 font-variant-numeric: tabular-nums;
 }
-#wtikyuwgjy .gt_font_normal {
+#ccciboutkb .gt_font_normal {
 font-weight: normal;
 }
-#wtikyuwgjy .gt_font_bold {
+#ccciboutkb .gt_font_bold {
 font-weight: bold;
 }
-#wtikyuwgjy .gt_font_italic {
+#ccciboutkb .gt_font_italic {
 font-style: italic;
 }
-#wtikyuwgjy .gt_super {
+#ccciboutkb .gt_super {
 font-size: 65%;
 }
-#wtikyuwgjy .gt_footnote_marks {
+#ccciboutkb .gt_footnote_marks {
 font-size: 75%;
 vertical-align: 0.4em;
 position: initial;
 }
-#wtikyuwgjy .gt_asterisk {
+#ccciboutkb .gt_asterisk {
 font-size: 100%;
 vertical-align: 0;
 }
-#wtikyuwgjy .gt_indent_1 {
+#ccciboutkb .gt_indent_1 {
 text-indent: 5px;
 }
-#wtikyuwgjy .gt_indent_2 {
+#ccciboutkb .gt_indent_2 {
 text-indent: 10px;
 }
-#wtikyuwgjy .gt_indent_3 {
+#ccciboutkb .gt_indent_3 {
 text-indent: 15px;
 }
-#wtikyuwgjy .gt_indent_4 {
+#ccciboutkb .gt_indent_4 {
 text-indent: 20px;
 }
-#wtikyuwgjy .gt_indent_5 {
+#ccciboutkb .gt_indent_5 {
 text-indent: 25px;
 }
-#wtikyuwgjy .katex-display {
+#ccciboutkb .katex-display {
 display: inline-flex !important;
 margin-bottom: 0.75em !important;
 }
-#wtikyuwgjy div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#ccciboutkb div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
 height: 0px !important;
 }
 </style>
@@ -3425,34 +3387,34 @@ height: 0px !important;
 <p>OLS Regression predicting weekly work hours by years of education and gender</p>
 <div class="cell columns column-output-location">
 <div class="column">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30" data-code-line-numbers="2-5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href></a>model <span class="sc">|&gt;</span></span>
-<span id="cb30-2"><a href></a>  <span class="fu">tbl_regression</span>(</span>
-<span id="cb30-3"><a href></a>    <span class="at">intercept =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb30-4"><a href></a>    <span class="at">show_single_row =</span> sex,</span>
-<span id="cb30-5"><a href></a>    <span class="at">label =</span> <span class="fu">list</span>(<span class="at">sex =</span> <span class="st">&quot;Women&quot;</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb30-6"><a href></a>  <span class="fu">modify_column_hide</span>(conf.low) <span class="sc">|&gt;</span></span>
-<span id="cb30-7"><a href></a>  <span class="fu">modify_column_unhide</span>(</span>
-<span id="cb30-8"><a href></a>    <span class="at">column =</span> std.error) <span class="sc">|&gt;</span></span>
-<span id="cb30-9"><a href></a>  <span class="fu">remove_abbreviation</span>() <span class="sc">|&gt;</span></span>
-<span id="cb30-10"><a href></a>  <span class="fu">add_significance_stars</span>() <span class="sc">|&gt;</span></span>
-<span id="cb30-11"><a href></a>  <span class="fu">add_glance_table</span>(</span>
-<span id="cb30-12"><a href></a>    <span class="at">include =</span> <span class="fu">c</span>(<span class="st">&quot;r.squared&quot;</span>, <span class="st">&quot;nobs&quot;</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31" data-code-line-numbers="2-5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href></a>model <span class="sc">|&gt;</span></span>
+<span id="cb31-2"><a href></a>  <span class="fu">tbl_regression</span>(</span>
+<span id="cb31-3"><a href></a>    <span class="at">intercept =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb31-4"><a href></a>    <span class="at">show_single_row =</span> sex,</span>
+<span id="cb31-5"><a href></a>    <span class="at">label =</span> <span class="fu">list</span>(<span class="at">sex =</span> <span class="st">&quot;Women&quot;</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb31-6"><a href></a>  <span class="fu">modify_column_hide</span>(conf.low) <span class="sc">|&gt;</span></span>
+<span id="cb31-7"><a href></a>  <span class="fu">modify_column_unhide</span>(</span>
+<span id="cb31-8"><a href></a>    <span class="at">column =</span> std.error) <span class="sc">|&gt;</span></span>
+<span id="cb31-9"><a href></a>  <span class="fu">remove_abbreviation</span>() <span class="sc">|&gt;</span></span>
+<span id="cb31-10"><a href></a>  <span class="fu">add_significance_stars</span>() <span class="sc">|&gt;</span></span>
+<span id="cb31-11"><a href></a>  <span class="fu">add_glance_table</span>(</span>
+<span id="cb31-12"><a href></a>    <span class="at">include =</span> <span class="fu">c</span>(<span class="st">&quot;r.squared&quot;</span>, <span class="st">&quot;nobs&quot;</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div><div class="column fragment">
 <div class="cell-output-display">
-<div id="vhvnqqtogg" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#vhvnqqtogg table {
+<div id="jyntsxrnut" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#jyntsxrnut table {
 font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 -webkit-font-smoothing: antialiased;
 -moz-osx-font-smoothing: grayscale;
 }
-#vhvnqqtogg thead, #vhvnqqtogg tbody, #vhvnqqtogg tfoot, #vhvnqqtogg tr, #vhvnqqtogg td, #vhvnqqtogg th {
+#jyntsxrnut thead, #jyntsxrnut tbody, #jyntsxrnut tfoot, #jyntsxrnut tr, #jyntsxrnut td, #jyntsxrnut th {
 border-style: none;
 }
-#vhvnqqtogg p {
+#jyntsxrnut p {
 margin: 0;
 padding: 0;
 }
-#vhvnqqtogg .gt_table {
+#jyntsxrnut .gt_table {
 display: table;
 border-collapse: collapse;
 line-height: normal;
@@ -3477,11 +3439,11 @@ border-left-style: none;
 border-left-width: 2px;
 border-left-color: #D3D3D3;
 }
-#vhvnqqtogg .gt_caption {
+#jyntsxrnut .gt_caption {
 padding-top: 4px;
 padding-bottom: 4px;
 }
-#vhvnqqtogg .gt_title {
+#jyntsxrnut .gt_title {
 color: #333333;
 font-size: 125%;
 font-weight: initial;
@@ -3492,7 +3454,7 @@ padding-right: 5px;
 border-bottom-color: #FFFFFF;
 border-bottom-width: 0;
 }
-#vhvnqqtogg .gt_subtitle {
+#jyntsxrnut .gt_subtitle {
 color: #333333;
 font-size: 85%;
 font-weight: initial;
@@ -3503,7 +3465,7 @@ padding-right: 5px;
 border-top-color: #FFFFFF;
 border-top-width: 0;
 }
-#vhvnqqtogg .gt_heading {
+#jyntsxrnut .gt_heading {
 background-color: #FFFFFF;
 text-align: center;
 border-bottom-color: #FFFFFF;
@@ -3514,12 +3476,12 @@ border-right-style: none;
 border-right-width: 1px;
 border-right-color: #D3D3D3;
 }
-#vhvnqqtogg .gt_bottom_border {
+#jyntsxrnut .gt_bottom_border {
 border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#vhvnqqtogg .gt_col_headings {
+#jyntsxrnut .gt_col_headings {
 border-top-style: solid;
 border-top-width: 2px;
 border-top-color: #D3D3D3;
@@ -3533,7 +3495,7 @@ border-right-style: none;
 border-right-width: 1px;
 border-right-color: #D3D3D3;
 }
-#vhvnqqtogg .gt_col_heading {
+#jyntsxrnut .gt_col_heading {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -3552,7 +3514,7 @@ padding-left: 5px;
 padding-right: 5px;
 overflow-x: hidden;
 }
-#vhvnqqtogg .gt_column_spanner_outer {
+#jyntsxrnut .gt_column_spanner_outer {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -3563,13 +3525,13 @@ padding-bottom: 0;
 padding-left: 4px;
 padding-right: 4px;
 }
-#vhvnqqtogg .gt_column_spanner_outer:first-child {
+#jyntsxrnut .gt_column_spanner_outer:first-child {
 padding-left: 0;
 }
-#vhvnqqtogg .gt_column_spanner_outer:last-child {
+#jyntsxrnut .gt_column_spanner_outer:last-child {
 padding-right: 0;
 }
-#vhvnqqtogg .gt_column_spanner {
+#jyntsxrnut .gt_column_spanner {
 border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
@@ -3580,10 +3542,10 @@ overflow-x: hidden;
 display: inline-block;
 width: 100%;
 }
-#vhvnqqtogg .gt_spanner_row {
+#jyntsxrnut .gt_spanner_row {
 border-bottom-style: hidden;
 }
-#vhvnqqtogg .gt_group_heading {
+#jyntsxrnut .gt_group_heading {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -3608,7 +3570,7 @@ border-right-color: #D3D3D3;
 vertical-align: middle;
 text-align: left;
 }
-#vhvnqqtogg .gt_empty_group_heading {
+#jyntsxrnut .gt_empty_group_heading {
 padding: 0.5px;
 color: #333333;
 background-color: #FFFFFF;
@@ -3622,13 +3584,13 @@ border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 vertical-align: middle;
 }
-#vhvnqqtogg .gt_from_md > :first-child {
+#jyntsxrnut .gt_from_md > :first-child {
 margin-top: 0;
 }
-#vhvnqqtogg .gt_from_md > :last-child {
+#jyntsxrnut .gt_from_md > :last-child {
 margin-bottom: 0;
 }
-#vhvnqqtogg .gt_row {
+#jyntsxrnut .gt_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -3646,7 +3608,7 @@ border-right-color: #D3D3D3;
 vertical-align: middle;
 overflow-x: hidden;
 }
-#vhvnqqtogg .gt_stub {
+#jyntsxrnut .gt_stub {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -3658,7 +3620,7 @@ border-right-color: #D3D3D3;
 padding-left: 5px;
 padding-right: 5px;
 }
-#vhvnqqtogg .gt_stub_row_group {
+#jyntsxrnut .gt_stub_row_group {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -3671,13 +3633,13 @@ padding-left: 5px;
 padding-right: 5px;
 vertical-align: top;
 }
-#vhvnqqtogg .gt_row_group_first td {
+#jyntsxrnut .gt_row_group_first td {
 border-top-width: 2px;
 }
-#vhvnqqtogg .gt_row_group_first th {
+#jyntsxrnut .gt_row_group_first th {
 border-top-width: 2px;
 }
-#vhvnqqtogg .gt_summary_row {
+#jyntsxrnut .gt_summary_row {
 color: #333333;
 background-color: #FFFFFF;
 text-transform: inherit;
@@ -3686,14 +3648,14 @@ padding-bottom: 8px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#vhvnqqtogg .gt_first_summary_row {
+#jyntsxrnut .gt_first_summary_row {
 border-top-style: solid;
 border-top-color: #D3D3D3;
 }
-#vhvnqqtogg .gt_first_summary_row.thick {
+#jyntsxrnut .gt_first_summary_row.thick {
 border-top-width: 2px;
 }
-#vhvnqqtogg .gt_last_summary_row {
+#jyntsxrnut .gt_last_summary_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -3702,7 +3664,7 @@ border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#vhvnqqtogg .gt_grand_summary_row {
+#jyntsxrnut .gt_grand_summary_row {
 color: #333333;
 background-color: #FFFFFF;
 text-transform: inherit;
@@ -3711,7 +3673,7 @@ padding-bottom: 8px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#vhvnqqtogg .gt_first_grand_summary_row {
+#jyntsxrnut .gt_first_grand_summary_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -3720,7 +3682,7 @@ border-top-style: double;
 border-top-width: 6px;
 border-top-color: #D3D3D3;
 }
-#vhvnqqtogg .gt_last_grand_summary_row_top {
+#jyntsxrnut .gt_last_grand_summary_row_top {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -3729,10 +3691,10 @@ border-bottom-style: double;
 border-bottom-width: 6px;
 border-bottom-color: #D3D3D3;
 }
-#vhvnqqtogg .gt_striped {
+#jyntsxrnut .gt_striped {
 background-color: rgba(128, 128, 128, 0.05);
 }
-#vhvnqqtogg .gt_table_body {
+#jyntsxrnut .gt_table_body {
 border-top-style: solid;
 border-top-width: 2px;
 border-top-color: #D3D3D3;
@@ -3740,7 +3702,7 @@ border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#vhvnqqtogg .gt_footnotes {
+#jyntsxrnut .gt_footnotes {
 color: #333333;
 background-color: #FFFFFF;
 border-bottom-style: none;
@@ -3753,7 +3715,7 @@ border-right-style: none;
 border-right-width: 2px;
 border-right-color: #D3D3D3;
 }
-#vhvnqqtogg .gt_footnote {
+#jyntsxrnut .gt_footnote {
 margin: 0px;
 font-size: 90%;
 padding-top: 4px;
@@ -3761,7 +3723,7 @@ padding-bottom: 4px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#vhvnqqtogg .gt_sourcenotes {
+#jyntsxrnut .gt_sourcenotes {
 color: #333333;
 background-color: #FFFFFF;
 border-bottom-style: none;
@@ -3774,64 +3736,64 @@ border-right-style: none;
 border-right-width: 2px;
 border-right-color: #D3D3D3;
 }
-#vhvnqqtogg .gt_sourcenote {
+#jyntsxrnut .gt_sourcenote {
 font-size: 90%;
 padding-top: 4px;
 padding-bottom: 4px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#vhvnqqtogg .gt_left {
+#jyntsxrnut .gt_left {
 text-align: left;
 }
-#vhvnqqtogg .gt_center {
+#jyntsxrnut .gt_center {
 text-align: center;
 }
-#vhvnqqtogg .gt_right {
+#jyntsxrnut .gt_right {
 text-align: right;
 font-variant-numeric: tabular-nums;
 }
-#vhvnqqtogg .gt_font_normal {
+#jyntsxrnut .gt_font_normal {
 font-weight: normal;
 }
-#vhvnqqtogg .gt_font_bold {
+#jyntsxrnut .gt_font_bold {
 font-weight: bold;
 }
-#vhvnqqtogg .gt_font_italic {
+#jyntsxrnut .gt_font_italic {
 font-style: italic;
 }
-#vhvnqqtogg .gt_super {
+#jyntsxrnut .gt_super {
 font-size: 65%;
 }
-#vhvnqqtogg .gt_footnote_marks {
+#jyntsxrnut .gt_footnote_marks {
 font-size: 75%;
 vertical-align: 0.4em;
 position: initial;
 }
-#vhvnqqtogg .gt_asterisk {
+#jyntsxrnut .gt_asterisk {
 font-size: 100%;
 vertical-align: 0;
 }
-#vhvnqqtogg .gt_indent_1 {
+#jyntsxrnut .gt_indent_1 {
 text-indent: 5px;
 }
-#vhvnqqtogg .gt_indent_2 {
+#jyntsxrnut .gt_indent_2 {
 text-indent: 10px;
 }
-#vhvnqqtogg .gt_indent_3 {
+#jyntsxrnut .gt_indent_3 {
 text-indent: 15px;
 }
-#vhvnqqtogg .gt_indent_4 {
+#jyntsxrnut .gt_indent_4 {
 text-indent: 20px;
 }
-#vhvnqqtogg .gt_indent_5 {
+#jyntsxrnut .gt_indent_5 {
 text-indent: 25px;
 }
-#vhvnqqtogg .katex-display {
+#jyntsxrnut .katex-display {
 display: inline-flex !important;
 margin-bottom: 0.75em !important;
 }
-#vhvnqqtogg div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#jyntsxrnut div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
 height: 0px !important;
 }
 </style>
@@ -3897,8 +3859,8 @@ height: 0px !important;
 <p><br></p>
 <div class="fragment">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(hrs1 <span class="sc">~</span> educ <span class="sc">+</span> marital, <span class="at">data =</span> my_data)</span>
-<span id="cb31-2"><a href></a>moderndive<span class="sc">::</span><span class="fu">get_regression_table</span>(model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(hrs1 <span class="sc">~</span> educ <span class="sc">+</span> marital, <span class="at">data =</span> my_data)</span>
+<span id="cb32-2"><a href></a>moderndive<span class="sc">::</span><span class="fu">get_regression_table</span>(model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell fragment">
 <div class="cell-output cell-output-stdout">
@@ -3920,35 +3882,35 @@ height: 0px !important;
 <p>Regression Predicting Weekly Work Hours by Years of Education and Marital Status</p>
 <div class="cell columns column-output-location">
 <div class="column">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33" data-code-line-numbers="2-6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href></a>model <span class="sc">|&gt;</span></span>
-<span id="cb33-2"><a href></a>  <span class="fu">tbl_regression</span>(</span>
-<span id="cb33-3"><a href></a>    <span class="at">intercept =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb33-4"><a href></a>    <span class="at">label =</span> <span class="fu">list</span>(</span>
-<span id="cb33-5"><a href></a>      <span class="at">marital =</span> <span class="st">&quot;Marital status (ref. = married)&quot;</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb33-6"><a href></a>  <span class="fu">remove_row_type</span>(<span class="at">type =</span> <span class="fu">c</span>(<span class="st">&quot;reference&quot;</span>)) <span class="sc">|&gt;</span>  </span>
-<span id="cb33-7"><a href></a>  <span class="fu">modify_column_hide</span>(conf.low) <span class="sc">|&gt;</span></span>
-<span id="cb33-8"><a href></a>  <span class="fu">modify_column_unhide</span>(</span>
-<span id="cb33-9"><a href></a>    <span class="at">column =</span> std.error) <span class="sc">|&gt;</span></span>
-<span id="cb33-10"><a href></a>  <span class="fu">remove_abbreviation</span>() <span class="sc">|&gt;</span></span>
-<span id="cb33-11"><a href></a>  <span class="fu">add_significance_stars</span>() <span class="sc">|&gt;</span></span>
-<span id="cb33-12"><a href></a>  <span class="fu">add_glance_table</span>(</span>
-<span id="cb33-13"><a href></a>    <span class="at">include =</span> <span class="fu">c</span>(<span class="st">&quot;r.squared&quot;</span>, <span class="st">&quot;nobs&quot;</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34" data-code-line-numbers="2-6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href></a>model <span class="sc">|&gt;</span></span>
+<span id="cb34-2"><a href></a>  <span class="fu">tbl_regression</span>(</span>
+<span id="cb34-3"><a href></a>    <span class="at">intercept =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb34-4"><a href></a>    <span class="at">label =</span> <span class="fu">list</span>(</span>
+<span id="cb34-5"><a href></a>      <span class="at">marital =</span> <span class="st">&quot;Marital status (ref. = married)&quot;</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb34-6"><a href></a>  <span class="fu">remove_row_type</span>(<span class="at">type =</span> <span class="fu">c</span>(<span class="st">&quot;reference&quot;</span>)) <span class="sc">|&gt;</span>  </span>
+<span id="cb34-7"><a href></a>  <span class="fu">modify_column_hide</span>(conf.low) <span class="sc">|&gt;</span></span>
+<span id="cb34-8"><a href></a>  <span class="fu">modify_column_unhide</span>(</span>
+<span id="cb34-9"><a href></a>    <span class="at">column =</span> std.error) <span class="sc">|&gt;</span></span>
+<span id="cb34-10"><a href></a>  <span class="fu">remove_abbreviation</span>() <span class="sc">|&gt;</span></span>
+<span id="cb34-11"><a href></a>  <span class="fu">add_significance_stars</span>() <span class="sc">|&gt;</span></span>
+<span id="cb34-12"><a href></a>  <span class="fu">add_glance_table</span>(</span>
+<span id="cb34-13"><a href></a>    <span class="at">include =</span> <span class="fu">c</span>(<span class="st">&quot;r.squared&quot;</span>, <span class="st">&quot;nobs&quot;</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div><div class="column fragment">
 <div class="cell-output-display">
-<div id="seifufamqu" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#seifufamqu table {
+<div id="dvpbssczhz" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#dvpbssczhz table {
 font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 -webkit-font-smoothing: antialiased;
 -moz-osx-font-smoothing: grayscale;
 }
-#seifufamqu thead, #seifufamqu tbody, #seifufamqu tfoot, #seifufamqu tr, #seifufamqu td, #seifufamqu th {
+#dvpbssczhz thead, #dvpbssczhz tbody, #dvpbssczhz tfoot, #dvpbssczhz tr, #dvpbssczhz td, #dvpbssczhz th {
 border-style: none;
 }
-#seifufamqu p {
+#dvpbssczhz p {
 margin: 0;
 padding: 0;
 }
-#seifufamqu .gt_table {
+#dvpbssczhz .gt_table {
 display: table;
 border-collapse: collapse;
 line-height: normal;
@@ -3973,11 +3935,11 @@ border-left-style: none;
 border-left-width: 2px;
 border-left-color: #D3D3D3;
 }
-#seifufamqu .gt_caption {
+#dvpbssczhz .gt_caption {
 padding-top: 4px;
 padding-bottom: 4px;
 }
-#seifufamqu .gt_title {
+#dvpbssczhz .gt_title {
 color: #333333;
 font-size: 125%;
 font-weight: initial;
@@ -3988,7 +3950,7 @@ padding-right: 5px;
 border-bottom-color: #FFFFFF;
 border-bottom-width: 0;
 }
-#seifufamqu .gt_subtitle {
+#dvpbssczhz .gt_subtitle {
 color: #333333;
 font-size: 85%;
 font-weight: initial;
@@ -3999,7 +3961,7 @@ padding-right: 5px;
 border-top-color: #FFFFFF;
 border-top-width: 0;
 }
-#seifufamqu .gt_heading {
+#dvpbssczhz .gt_heading {
 background-color: #FFFFFF;
 text-align: center;
 border-bottom-color: #FFFFFF;
@@ -4010,12 +3972,12 @@ border-right-style: none;
 border-right-width: 1px;
 border-right-color: #D3D3D3;
 }
-#seifufamqu .gt_bottom_border {
+#dvpbssczhz .gt_bottom_border {
 border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#seifufamqu .gt_col_headings {
+#dvpbssczhz .gt_col_headings {
 border-top-style: solid;
 border-top-width: 2px;
 border-top-color: #D3D3D3;
@@ -4029,7 +3991,7 @@ border-right-style: none;
 border-right-width: 1px;
 border-right-color: #D3D3D3;
 }
-#seifufamqu .gt_col_heading {
+#dvpbssczhz .gt_col_heading {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -4048,7 +4010,7 @@ padding-left: 5px;
 padding-right: 5px;
 overflow-x: hidden;
 }
-#seifufamqu .gt_column_spanner_outer {
+#dvpbssczhz .gt_column_spanner_outer {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -4059,13 +4021,13 @@ padding-bottom: 0;
 padding-left: 4px;
 padding-right: 4px;
 }
-#seifufamqu .gt_column_spanner_outer:first-child {
+#dvpbssczhz .gt_column_spanner_outer:first-child {
 padding-left: 0;
 }
-#seifufamqu .gt_column_spanner_outer:last-child {
+#dvpbssczhz .gt_column_spanner_outer:last-child {
 padding-right: 0;
 }
-#seifufamqu .gt_column_spanner {
+#dvpbssczhz .gt_column_spanner {
 border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
@@ -4076,10 +4038,10 @@ overflow-x: hidden;
 display: inline-block;
 width: 100%;
 }
-#seifufamqu .gt_spanner_row {
+#dvpbssczhz .gt_spanner_row {
 border-bottom-style: hidden;
 }
-#seifufamqu .gt_group_heading {
+#dvpbssczhz .gt_group_heading {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -4104,7 +4066,7 @@ border-right-color: #D3D3D3;
 vertical-align: middle;
 text-align: left;
 }
-#seifufamqu .gt_empty_group_heading {
+#dvpbssczhz .gt_empty_group_heading {
 padding: 0.5px;
 color: #333333;
 background-color: #FFFFFF;
@@ -4118,13 +4080,13 @@ border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 vertical-align: middle;
 }
-#seifufamqu .gt_from_md > :first-child {
+#dvpbssczhz .gt_from_md > :first-child {
 margin-top: 0;
 }
-#seifufamqu .gt_from_md > :last-child {
+#dvpbssczhz .gt_from_md > :last-child {
 margin-bottom: 0;
 }
-#seifufamqu .gt_row {
+#dvpbssczhz .gt_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -4142,7 +4104,7 @@ border-right-color: #D3D3D3;
 vertical-align: middle;
 overflow-x: hidden;
 }
-#seifufamqu .gt_stub {
+#dvpbssczhz .gt_stub {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -4154,7 +4116,7 @@ border-right-color: #D3D3D3;
 padding-left: 5px;
 padding-right: 5px;
 }
-#seifufamqu .gt_stub_row_group {
+#dvpbssczhz .gt_stub_row_group {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -4167,13 +4129,13 @@ padding-left: 5px;
 padding-right: 5px;
 vertical-align: top;
 }
-#seifufamqu .gt_row_group_first td {
+#dvpbssczhz .gt_row_group_first td {
 border-top-width: 2px;
 }
-#seifufamqu .gt_row_group_first th {
+#dvpbssczhz .gt_row_group_first th {
 border-top-width: 2px;
 }
-#seifufamqu .gt_summary_row {
+#dvpbssczhz .gt_summary_row {
 color: #333333;
 background-color: #FFFFFF;
 text-transform: inherit;
@@ -4182,14 +4144,14 @@ padding-bottom: 8px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#seifufamqu .gt_first_summary_row {
+#dvpbssczhz .gt_first_summary_row {
 border-top-style: solid;
 border-top-color: #D3D3D3;
 }
-#seifufamqu .gt_first_summary_row.thick {
+#dvpbssczhz .gt_first_summary_row.thick {
 border-top-width: 2px;
 }
-#seifufamqu .gt_last_summary_row {
+#dvpbssczhz .gt_last_summary_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -4198,7 +4160,7 @@ border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#seifufamqu .gt_grand_summary_row {
+#dvpbssczhz .gt_grand_summary_row {
 color: #333333;
 background-color: #FFFFFF;
 text-transform: inherit;
@@ -4207,7 +4169,7 @@ padding-bottom: 8px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#seifufamqu .gt_first_grand_summary_row {
+#dvpbssczhz .gt_first_grand_summary_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -4216,7 +4178,7 @@ border-top-style: double;
 border-top-width: 6px;
 border-top-color: #D3D3D3;
 }
-#seifufamqu .gt_last_grand_summary_row_top {
+#dvpbssczhz .gt_last_grand_summary_row_top {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -4225,10 +4187,10 @@ border-bottom-style: double;
 border-bottom-width: 6px;
 border-bottom-color: #D3D3D3;
 }
-#seifufamqu .gt_striped {
+#dvpbssczhz .gt_striped {
 background-color: rgba(128, 128, 128, 0.05);
 }
-#seifufamqu .gt_table_body {
+#dvpbssczhz .gt_table_body {
 border-top-style: solid;
 border-top-width: 2px;
 border-top-color: #D3D3D3;
@@ -4236,7 +4198,7 @@ border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#seifufamqu .gt_footnotes {
+#dvpbssczhz .gt_footnotes {
 color: #333333;
 background-color: #FFFFFF;
 border-bottom-style: none;
@@ -4249,7 +4211,7 @@ border-right-style: none;
 border-right-width: 2px;
 border-right-color: #D3D3D3;
 }
-#seifufamqu .gt_footnote {
+#dvpbssczhz .gt_footnote {
 margin: 0px;
 font-size: 90%;
 padding-top: 4px;
@@ -4257,7 +4219,7 @@ padding-bottom: 4px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#seifufamqu .gt_sourcenotes {
+#dvpbssczhz .gt_sourcenotes {
 color: #333333;
 background-color: #FFFFFF;
 border-bottom-style: none;
@@ -4270,64 +4232,64 @@ border-right-style: none;
 border-right-width: 2px;
 border-right-color: #D3D3D3;
 }
-#seifufamqu .gt_sourcenote {
+#dvpbssczhz .gt_sourcenote {
 font-size: 90%;
 padding-top: 4px;
 padding-bottom: 4px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#seifufamqu .gt_left {
+#dvpbssczhz .gt_left {
 text-align: left;
 }
-#seifufamqu .gt_center {
+#dvpbssczhz .gt_center {
 text-align: center;
 }
-#seifufamqu .gt_right {
+#dvpbssczhz .gt_right {
 text-align: right;
 font-variant-numeric: tabular-nums;
 }
-#seifufamqu .gt_font_normal {
+#dvpbssczhz .gt_font_normal {
 font-weight: normal;
 }
-#seifufamqu .gt_font_bold {
+#dvpbssczhz .gt_font_bold {
 font-weight: bold;
 }
-#seifufamqu .gt_font_italic {
+#dvpbssczhz .gt_font_italic {
 font-style: italic;
 }
-#seifufamqu .gt_super {
+#dvpbssczhz .gt_super {
 font-size: 65%;
 }
-#seifufamqu .gt_footnote_marks {
+#dvpbssczhz .gt_footnote_marks {
 font-size: 75%;
 vertical-align: 0.4em;
 position: initial;
 }
-#seifufamqu .gt_asterisk {
+#dvpbssczhz .gt_asterisk {
 font-size: 100%;
 vertical-align: 0;
 }
-#seifufamqu .gt_indent_1 {
+#dvpbssczhz .gt_indent_1 {
 text-indent: 5px;
 }
-#seifufamqu .gt_indent_2 {
+#dvpbssczhz .gt_indent_2 {
 text-indent: 10px;
 }
-#seifufamqu .gt_indent_3 {
+#dvpbssczhz .gt_indent_3 {
 text-indent: 15px;
 }
-#seifufamqu .gt_indent_4 {
+#dvpbssczhz .gt_indent_4 {
 text-indent: 20px;
 }
-#seifufamqu .gt_indent_5 {
+#dvpbssczhz .gt_indent_5 {
 text-indent: 25px;
 }
-#seifufamqu .katex-display {
+#dvpbssczhz .katex-display {
 display: inline-flex !important;
 margin-bottom: 0.75em !important;
 }
-#seifufamqu div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#dvpbssczhz div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
 height: 0px !important;
 }
 </style>
@@ -4415,16 +4377,16 @@ height: 0px !important;
 <p><br></p>
 <div class="fragment">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href></a>my_data <span class="ot">&lt;-</span> my_data <span class="sc">|&gt;</span></span>
-<span id="cb34-2"><a href></a>  <span class="fu">mutate</span>(<span class="at">pol_group =</span> <span class="fu">case_when</span>(</span>
-<span id="cb34-3"><a href></a>    polviews <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;extremely liberal&quot;</span>, <span class="st">&quot;liberal&quot;</span>, <span class="st">&quot;slightly liberal&quot;</span>) <span class="sc">~</span> <span class="st">&quot;Liberal&quot;</span>,</span>
-<span id="cb34-4"><a href></a>    polviews <span class="sc">==</span> <span class="st">&quot;moderate, middle of the road&quot;</span> <span class="sc">~</span> <span class="st">&quot;Moderate&quot;</span>,</span>
-<span id="cb34-5"><a href></a>    polviews <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;slightly conservative&quot;</span>, <span class="st">&quot;conservative&quot;</span>, <span class="st">&quot;extremely conservative&quot;</span>) <span class="sc">~</span> <span class="st">&quot;Conservative&quot;</span>,</span>
-<span id="cb34-6"><a href></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA_character_</span>))</span>
-<span id="cb34-7"><a href></a></span>
-<span id="cb34-8"><a href></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(tvhours <span class="sc">~</span> educ <span class="sc">+</span> pol_group, <span class="at">data =</span> my_data)</span>
-<span id="cb34-9"><a href></a></span>
-<span id="cb34-10"><a href></a>moderndive<span class="sc">::</span><span class="fu">get_regression_table</span>(model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href></a>my_data <span class="ot">&lt;-</span> my_data <span class="sc">|&gt;</span></span>
+<span id="cb35-2"><a href></a>  <span class="fu">mutate</span>(<span class="at">pol_group =</span> <span class="fu">case_when</span>(</span>
+<span id="cb35-3"><a href></a>    polviews <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;extremely liberal&quot;</span>, <span class="st">&quot;liberal&quot;</span>, <span class="st">&quot;slightly liberal&quot;</span>) <span class="sc">~</span> <span class="st">&quot;Liberal&quot;</span>,</span>
+<span id="cb35-4"><a href></a>    polviews <span class="sc">==</span> <span class="st">&quot;moderate, middle of the road&quot;</span> <span class="sc">~</span> <span class="st">&quot;Moderate&quot;</span>,</span>
+<span id="cb35-5"><a href></a>    polviews <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;slightly conservative&quot;</span>, <span class="st">&quot;conservative&quot;</span>, <span class="st">&quot;extremely conservative&quot;</span>) <span class="sc">~</span> <span class="st">&quot;Conservative&quot;</span>,</span>
+<span id="cb35-6"><a href></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA_character_</span>))</span>
+<span id="cb35-7"><a href></a></span>
+<span id="cb35-8"><a href></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(tvhours <span class="sc">~</span> educ <span class="sc">+</span> pol_group, <span class="at">data =</span> my_data)</span>
+<span id="cb35-9"><a href></a></span>
+<span id="cb35-10"><a href></a>moderndive<span class="sc">::</span><span class="fu">get_regression_table</span>(model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 
 </div>
@@ -4442,18 +4404,18 @@ height: 0px !important;
 </div></section><section id="change-reference-level" class="slide level2 sparse-slide">
 <h2>Change reference level</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href></a><span class="co"># Change to factor and change order</span></span>
-<span id="cb36-2"><a href></a>my_data<span class="sc">$</span>pol_group <span class="ot">&lt;-</span> <span class="fu">factor</span>(</span>
-<span id="cb36-3"><a href></a>  my_data<span class="sc">$</span>pol_group,</span>
-<span id="cb36-4"><a href></a>  <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;Moderate&quot;</span>, <span class="st">&quot;Liberal&quot;</span>, <span class="st">&quot;Conservative&quot;</span>))</span>
-<span id="cb36-5"><a href></a></span>
-<span id="cb36-6"><a href></a><span class="co"># OR ....</span></span>
-<span id="cb36-7"><a href></a></span>
-<span id="cb36-8"><a href></a><span class="co"># change to factor and explicitly state reference category</span></span>
-<span id="cb36-9"><a href></a>my_data<span class="sc">$</span>pol_group <span class="ot">&lt;-</span> <span class="fu">relevel</span>(<span class="fu">factor</span>(my_data<span class="sc">$</span>pol_group), </span>
-<span id="cb36-10"><a href></a>                            <span class="at">ref =</span> <span class="st">&quot;Moderate&quot;</span>)</span>
-<span id="cb36-11"><a href></a></span>
-<span id="cb36-12"><a href></a><span class="fu">table</span>(my_data<span class="sc">$</span>pol_group)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href></a><span class="co"># Change to factor and change order</span></span>
+<span id="cb37-2"><a href></a>my_data<span class="sc">$</span>pol_group <span class="ot">&lt;-</span> <span class="fu">factor</span>(</span>
+<span id="cb37-3"><a href></a>  my_data<span class="sc">$</span>pol_group,</span>
+<span id="cb37-4"><a href></a>  <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;Moderate&quot;</span>, <span class="st">&quot;Liberal&quot;</span>, <span class="st">&quot;Conservative&quot;</span>))</span>
+<span id="cb37-5"><a href></a></span>
+<span id="cb37-6"><a href></a><span class="co"># OR ....</span></span>
+<span id="cb37-7"><a href></a></span>
+<span id="cb37-8"><a href></a><span class="co"># change to factor and explicitly state reference category</span></span>
+<span id="cb37-9"><a href></a>my_data<span class="sc">$</span>pol_group <span class="ot">&lt;-</span> <span class="fu">relevel</span>(<span class="fu">factor</span>(my_data<span class="sc">$</span>pol_group), </span>
+<span id="cb37-10"><a href></a>                            <span class="at">ref =</span> <span class="st">&quot;Moderate&quot;</span>)</span>
+<span id="cb37-11"><a href></a></span>
+<span id="cb37-12"><a href></a><span class="fu">table</span>(my_data<span class="sc">$</span>pol_group)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell fragment">
 <div class="cell-output cell-output-stdout">
@@ -4466,8 +4428,8 @@ height: 0px !important;
 <section id="change-reference-level-1" class="slide level2 sparse-slide">
 <h2>Change reference level</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(tvhours <span class="sc">~</span> educ <span class="sc">+</span> pol_group, <span class="at">data =</span> my_data)</span>
-<span id="cb38-2"><a href></a>moderndive<span class="sc">::</span><span class="fu">get_regression_table</span>(model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(tvhours <span class="sc">~</span> educ <span class="sc">+</span> pol_group, <span class="at">data =</span> my_data)</span>
+<span id="cb39-2"><a href></a>moderndive<span class="sc">::</span><span class="fu">get_regression_table</span>(model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell fragment">
 <div class="cell-output cell-output-stdout">
@@ -4484,8 +4446,8 @@ height: 0px !important;
 <section id="change-reference-level-2" class="slide level2 sparse-slide">
 <h2>Change reference level</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(tvhours <span class="sc">~</span> educ <span class="sc">+</span> <span class="fu">relevel</span>(pol_group, <span class="at">ref =</span> <span class="st">&quot;Liberal&quot;</span>), <span class="at">data =</span> my_data)</span>
-<span id="cb40-2"><a href></a>moderndive<span class="sc">::</span><span class="fu">get_regression_table</span>(model) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(tvhours <span class="sc">~</span> educ <span class="sc">+</span> <span class="fu">relevel</span>(pol_group, <span class="at">ref =</span> <span class="st">&quot;Liberal&quot;</span>), <span class="at">data =</span> my_data)</span>
+<span id="cb41-2"><a href></a>moderndive<span class="sc">::</span><span class="fu">get_regression_table</span>(model) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><br></p>
 <div style="font-size: 50%">
@@ -4568,8 +4530,8 @@ height: 0px !important;
 <p><br></p>
 <div class="fragment">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(realrinc <span class="sc">~</span> hrs1 <span class="sc">+</span> educ, <span class="at">data =</span> my_data)</span>
-<span id="cb41-2"><a href></a>moderndive<span class="sc">::</span><span class="fu">get_regression_table</span>(model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(realrinc <span class="sc">~</span> hrs1 <span class="sc">+</span> educ, <span class="at">data =</span> my_data)</span>
+<span id="cb42-2"><a href></a>moderndive<span class="sc">::</span><span class="fu">get_regression_table</span>(model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 7
   term      estimate std_error statistic p_value lower_ci upper_ci
@@ -4589,8 +4551,8 @@ height: 0px !important;
 <p><br></p>
 <div class="fragment">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">formula =</span> realrinc <span class="sc">~</span> hrs1 <span class="sc">+</span> educ <span class="sc">+</span> childs, <span class="at">data =</span> my_data)</span>
-<span id="cb43-2"><a href></a>moderndive<span class="sc">::</span><span class="fu">get_regression_table</span>(model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">formula =</span> realrinc <span class="sc">~</span> hrs1 <span class="sc">+</span> educ <span class="sc">+</span> childs, <span class="at">data =</span> my_data)</span>
+<span id="cb44-2"><a href></a>moderndive<span class="sc">::</span><span class="fu">get_regression_table</span>(model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 4 × 7
   term      estimate std_error statistic p_value lower_ci upper_ci
@@ -4611,8 +4573,8 @@ height: 0px !important;
 <p><br></p>
 <div class="fragment">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">formula =</span> realrinc <span class="sc">~</span> hrs1 <span class="sc">+</span> educ <span class="sc">+</span> childs <span class="sc">+</span> marital, <span class="at">data =</span> my_data)</span>
-<span id="cb45-2"><a href></a>moderndive<span class="sc">::</span><span class="fu">get_regression_table</span>(model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">formula =</span> realrinc <span class="sc">~</span> hrs1 <span class="sc">+</span> educ <span class="sc">+</span> childs <span class="sc">+</span> marital, <span class="at">data =</span> my_data)</span>
+<span id="cb46-2"><a href></a>moderndive<span class="sc">::</span><span class="fu">get_regression_table</span>(model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 8 × 7
   term                  estimate std_error statistic p_value lower_ci upper_ci

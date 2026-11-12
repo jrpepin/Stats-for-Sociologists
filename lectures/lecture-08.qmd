@@ -370,14 +370,18 @@ Adjusted average prediction calculated using the actual characteristics of peopl
 
 model <- lm(formula = realrinc ~ hrs1 + educ + sex + marital, data = my_data)
 
-pred_no_int <- estimate_slopes(
-  model,
-  slope = c("hrs1"),
-  by = "educ",
-  estimate = "average"
-)
+# Predicted income across levels of education
+estimate_means(model, by = "educ")
+estimate_means(model, by = "educ = c(12, 16, 18, 20)")
 
-pred_no_int
+# Across hours worked
+estimate_means(model, by = "hrs1")
+
+
+model_int <- lm(realrinc ~ hrs1 * educ + sex + marital, data = my_data)
+
+# educ at selected values, hrs1 at selected values
+estimate_means(model_int, by = c("educ = c(10, 12, 16)", "hrs1 = c(20, 40, 60)"))
 
 ```
 

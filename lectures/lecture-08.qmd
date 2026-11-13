@@ -48,8 +48,8 @@ scale_colour_discrete <- function(...) scale_color_manual(values = my_palette)
 
 # Agenda {data-menu-title="Agenda" background-image="images/calendar.png" background-size="100px" background-repeat="repeat"}
 
-- xx
-- yy
+- Predictions
+- Interactions
 
 ::: notes
 :::
@@ -58,8 +58,8 @@ scale_colour_discrete <- function(...) scale_color_manual(values = my_palette)
 
 By the end of the lecture, you will be able to ...
 
-- Understand the concept of modelling, interpreting, and visualizing
-  interaction effects and marginal predictions.
+-   Generate and communicate predictions from OLS regression models.
+-   Estimate, visualize, and communicate interaction effects in OLS regression models.
 
 # Code-along 08 {data-menu-title="Code-along" background-image="images/terminal.png"}
 
@@ -101,14 +101,10 @@ gss24 <- gss_get_yr(2024)
 
 ## Variables {.sparse-slide .smaller}
 
-- `year` Survey year
-- `tvhours` Hours per day watching tv
 - `realrinc` R's income in constant \$
 - `age` Age of respondent
 - `educ` Respondents highest edu credit
 - `hrs1` How many hours did you work last week
-- `childs` How many children have you ever had?
-- `polviews` Think of self as liberal or conservative
 - `sex` Respondents sex
 - `marital` R's marital status
 
@@ -125,40 +121,50 @@ continuous variables we'll analyze.
 
 # Categorical Variables
 my_cat <- gss24 |>
-  select(id, year, polviews, sex, marital) |>
+  select(id, sex, marital) |>
   zap_missing() |>
   mutate(
-    polviews = as_factor(polviews),
     sex = as_factor(sex),
     marital = as_factor(marital)) |> 
   droplevels()
 
 # Continuous Variables
 my_con <- gss24 |>
-  select(id, year, tvhours, age, educ, hrs1, realrinc, childs) |>
+  select(id, age, educ, hrs1, realrinc) |>
   mutate(
     age = as.numeric(age),
     educ = as.numeric(educ),
     hrs1 = as.numeric(hrs1),
-    realrinc = as.numeric(realrinc),
-    childs = as.numeric(childs))
+    realrinc = as.numeric(realrinc))
 
 # Combine the two dataframes
-my_data <- full_join(my_cat, my_con, by = c("year", "id")) |> # match by 2 vars
-  drop_na()
+my_data <- full_join(my_cat, my_con, by = c("id")) |> 
+  drop_na() |>
+  mutate(
+    marital = recode(
+      marital,
+      "married"       = "Married",
+      "never married" = "Never married",
+      "widowed"       = "Div/Wid/Sep",
+      "divorced"      = "Div/Wid/Sep",
+      "separated"     = "Div/Wid/Sep"),
+    marital = factor(
+      marital,
+      levels = c("Never married", "Div/Wid/Sep", "Married"))
+  )
 ```
 
 # Predictions {.theme-section}
 
-##  {data-menu-title="Regression Model"}
+## {data-menu-title="Regression Model"}
 
 OLS Regression Predicting Annual Income
 
 ```{r}
-#| label: regress-03
+#| label: regress
 #| echo: false
 
-model <- lm(formula = realrinc ~ hrs1 + educ + sex + marital, data = my_data)
+model <- lm(formula = realrinc ~ educ + hrs1 + sex + marital, data = my_data)
 
 model |>
     tbl_regression(
@@ -166,7 +172,7 @@ model |>
         show_single_row = sex,
     label = list(
       sex = "Women",
-      marital = "Marital status (ref. = married)")) |>
+      marital = "Marital status (ref. = never married)")) |>
   remove_row_type(type = c("reference")) |>  
   modify_column_hide(conf.low) |>
   modify_column_unhide(
@@ -185,25 +191,25 @@ mean?**]{style="color: #3498db; font-size: 125%; font-family: 'Shadows Into Ligh
 
 <br>
 
-For a prediction at the means, we set:  
-  
--    continuous variables to their means  
--    categorical variables to their reference categories
+For a prediction at the means, we set:
+
+- continuous variables to their means\
+- categorical variables to their reference categories
 
 ::::: columns
 ::: {.column width="50%"}
 ```{r}
 #| label: means
 
-mean(my_data$hrs1)
 mean(my_data$educ)
+mean(my_data$hrs1)
 
 ```
 :::
 
 ::: {.column width="50%"}
-Hours worked = 39.56\
-Education = 14.80\
+Education = 14.78\
+Hours worked = 39.79\
 Sex = Male (reference)\
 Marital status = Married (reference)
 :::
@@ -221,25 +227,31 @@ estimate_means(
 
 ## Typical-person predictions {.smaller .sparse-slide}
 
-Typical married man
-$\color{#18bc9c}{-21791.42} +\color{#fd7e14}{405.72}{hrs1}*39.56 +\color{#3498db}{2832.39}{educ}*14.8$
+Typical never-married man  
+$\color{#18bc9c}{-34,540} \color{#3498db}{+2,845}_{educ}*14.8$
+$\color{#fd7e14}{+424}_{hrs1}*39.56$
 
 <br>
 
-[Typical married woman
-$\color{#18bc9c}{-21791.42} +\color{#fd7e14}{405.72}{hrs1}*39.56 +\color{#3498db}{2832.39}{educ}*14.8 -\color{#e74c3c}{6483.85}_{female}$]{.fragment}
+[Typical never married woman  
+$\color{#18bc9c}{-34,540} \color{#3498db}{+2,845}_{educ}*14.8$
+$\color{#fd7e14}{+424}_{hrs1}*39.56$
+$\color{#e74c3c}{-6,544}_{female}$]{.fragment}
 
 <br>
 
-[Typical divorced man
-$\color{#18bc9c}{-21791.42} +\color{#fd7e14}{405.72}{hrs1}*39.56 +\color{#3498db}{2832.39}{educ}*14.8 -\color{#9b59b6}{7439.15}_{divorced}$]{.fragment}
+[Typical married man  
+$\color{#18bc9c}{-34,540} \color{#3498db}{+2,845}_{educ}*14.8$
+$\color{#fd7e14}{+424}_{hrs1}*39.56$
+$\color{#9b59b6}{+11,182}_{married}$]{.fragment}
 
 <br>
 
-[Typical divorced woman
-$\color{#18bc9c}{-21791.42} +\color{#fd7e14}{405.72}_{hrs1}(39.56)$
-$+\color{#3498db}{2832.39}{educ}(14.8) -\color{#e74c3c}{6483.85}{female}$
-$-\color{#9b59b6}{7439.15}_{divorced}$]{.fragment}
+[Typical divorced woman  
+$\color{#18bc9c}{-34,540} \color{#3498db}{+2,845}_{educ}*14.8$
+$\color{#fd7e14}{+424}_{hrs1}*39.56$
+$\color{#e74c3c}{-6,544}_{female}$
+$\color{#9b59b6}{+5,512}_{divorced}$]{.fragment}
 
 ##  {.sparse-slide data-menu-title="Typical-person predictions"}
 
@@ -272,7 +284,8 @@ ggplot(
 ## Marginal Means {.sparse-slide .smaller}
 
 **Marginal means are adjusted group averages**.\
-Calculated from the regression model while accounting for the distribution of the other predictors in the data.  
+Calculated from the regression model while accounting for the
+distribution of the other predictors in the data.
 
 <br>
 
@@ -290,7 +303,8 @@ marginal_means
 ## Average Adjusted Predictions (AAP) {.sparse-slide .smaller}
 
 **Average adjusted predictions are adjusted population averages.**\
-Calculated from the regression model using the actual characteristics of individuals in the dataset.  
+Calculated from the regression model using the actual characteristics of
+individuals in the dataset.
 
 ```{r}
 #| label: aap-sex
@@ -305,9 +319,10 @@ aap
 ```
 
 ::: notes
-Unlike a typical-person prediction, AAPs do not create a hypothetical "average" person. Instead, predictions are generated using the observed characteristics of individuals in the dataset and then averaged.
-:::  
-
+Unlike a typical-person prediction, AAPs do not create a hypothetical
+"average" person. Instead, predictions are generated using the observed
+characteristics of individuals in the dataset and then averaged.
+:::
 
 ##  {.smaller .sparse-slide data-menu-title="Marginal Means & AAP"}
 
@@ -341,223 +356,590 @@ bind_rows(marginal_means, aap) |>
 
 ## Three Types of Predictions {.sparse-slide}
 
-**Typical-person prediction**  
-Prediction for a hypothetical person with average values.  
+**Typical-person prediction**\
+Prediction for a hypothetical person with average values.
 
 <br>
 
-**Marginal mean**
-Adjusted average prediction for a group.
+**Marginal mean** Adjusted average prediction for a group.
 
 <br>
 
-**Average adjusted prediction (AAP)**
-Adjusted average prediction calculated using the actual characteristics of people in the data.
-
+**Average adjusted prediction (AAP)** Adjusted average prediction
+calculated using the actual characteristics of people in the data.
 
 # Interactions {.theme-section}
 
-##  {data-menu-title="Code Meets Question" .sparse-slide background-image="images/gears-solid-full.png" background-size="80px" background-repeat="repeat"}
+##  {.sparse-slide data-menu-title="Interactions"}
 
-::: task
-{{< fa lightbulb >}} Does the relationship between hours worked and income depend on education?
-:::
+Interactions test a conditional relationship
 
+![](images/08/conditional.png)
 
-```{r}
-#| label: regress-03
-#| echo: false
+## Interactions {.sparse-slide .smaller}
 
-model <- lm(formula = realrinc ~ hrs1 + educ + sex + marital, data = my_data)
+Without an interaction, the effect of $X_1$ on Y is $b_1$
 
-# Predicted income across levels of education
-estimate_means(model, by = "educ")
-estimate_means(model, by = "educ = c(12, 16, 18, 20)")
-
-# Across hours worked
-estimate_means(model, by = "hrs1")
-
-
-model_int <- lm(realrinc ~ hrs1 * educ + sex + marital, data = my_data)
-
-# educ at selected values, hrs1 at selected values
-estimate_means(model_int, by = c("educ = c(10, 12, 16)", "hrs1 = c(20, 40, 60)"))
-
-```
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Old slides
-
-## `estimate_means()` {.sparse-slide}
-
-```{r}
-#| label: estimate_means_margins
-#| output-location: fragment
-
-# Get predicted values
-preds <- estimate_means(model, by = c("sex"))
-
-# Preview the new df
-preds |>
-  as_tibble() |> 
-  head()
-```
-
-::: notes
-R calculates the mean values of every variable in the model except sex,
-and sets all of those variables equal to their means. Then (once again)
-it sets female = 0 in every observation, calculates predicted
-probabilities for each individual, and averages those.
-
-Then it goes back and resets female to 1 in every observation, again
-calculates predicted probabilities for each individual and outputs the
-average of those.
-
-Outputs can be interpreted as the predicted probabilities for women and
-men if they were all average in all other respects.
-:::
-
-## `estimate_means()` {.sparse-slide}
-
-```{r, eval = FALSE}
-#| label: estimate_means_code
-
-# Get predicted values
-preds <- estimate_means(model, by = c("educ", "sex"))
-
-# Preview the new df
-preds |>
-  as_tibble() |> 
-  head()
-```
-
-## `estimate_means()` {.sparse-slide .smaller}
-
-$\color{#18bc9c}{38.601} + \color{#fd7e14}{0.420}_{educ} - \color{#e74c3c}{6.576}_{female}$
-
-<br>
-
-```{r, echo = FALSE}
-#| label: estimate_means_results
-
-# Get predicted values
-preds <- estimate_means(model, by = c("educ", "sex"))
-
-# Preview the new df
-preds |>
-  as_tibble() |> 
-  head()
-```
-
-<br>
-
-[men with 0 years of education =
-$\color{#18bc9c}{38.601}  + \color{#fd7e14}{0.420}_{educ}*0$]{.fragment}\
-[women with 0 years of education
-$\color{#18bc9c}{38.601}  + \color{#fd7e14}{0.420}_{educ}*0 -\color{#e74c3c}{6.576}_{female}$]{.fragment}\
-[men with 2.222 years of education
-$\color{#18bc9c}{38.601}  + \color{#fd7e14}{0.420}_{educ}*2.222$]{.fragment}\
-[women with 2.222 years of education
-$\color{#18bc9c}{38.601}  + \color{#fd7e14}{0.420}_{educ}*2.222-\color{#e74c3c}{6.576}_{female}$]{.fragment}
-
-##  {.sparse-slide data-menu-title="`ggplot()`"}
-
-```{r}
-#| label: ggplot
-#| output-location: slide
-
-# Plot using ggplot2
-preds |>
-  ggplot(aes(x = educ, y = Mean, color = sex)) +
-    geom_line(linewidth = 1.2) +
-    labs(
-      title = "Predicted Weekly Work Hours by Education and Gender",
-      x = "Education Level",
-      y = "Predicted Weekly Work Hours",
-      color = " ") +
-    theme_minimal(20) +
-    theme(legend.position = "top")
-```
-
-# Interactions
-
-##  {.sparse-slide data-menu-title="Code Meets Question" background-image="images/gears-solid-full.png" background-size="80px" background-repeat="repeat"}
-
-::: task
-{{< fa lightbulb >}} Does the relationship between TV hours and
-education differ by political identity?
-:::
-
-<br>
+$$
+\hat{Y} = b_0 + b_1X_1 + b_2X_2
+$$
 
 . . .
 
-```{r}
-#| label: regress-06
+<br>
 
-my_data <- my_data |>
-  mutate(pol_group = case_when(
-    polviews %in% c("extremely liberal", "liberal", "slightly liberal") ~ "Liberal",
-    polviews == "moderate, middle of the road" ~ "Moderate",
-    polviews %in% c("slightly conservative", "conservative", "extremely conservative") ~ "Conservative",
-    TRUE ~ NA_character_))
+With an interaction, the effect of $X_1$ on Y changes as $X_2$ changes\
+Effect of $X_1$ on Y depends on the level of $X_2$
 
-model <- lm(tvhours ~ educ * pol_group, data = my_data)
+$$
+\hat{Y} = b_0 + b_1X_1 + b_2X_2 + \color{#18bc9c}{b_3(X_1X_2)}
+$$
 
-moderndive::get_regression_table(model)
-```
+## Categorical X Continuous {.sparse-slide background-image="images/gears-solid-full.png" background-size="80px" background-repeat="repeat"}
 
-::: notes
-The coefficient for `educ` is \$-0.142 \$, meaning that for moderates
-(the reference group), each additional year of education is associated
-with -0.142 fewer tv hours per day.
-
-The coefficient for `pol_group: Conservative` is $-0.1$. This is the
-difference in the outcome between moderates and conservatives when
-education = 0. Conservatives watch -0.1 TV hours per day fewer than
-moderates when education is zero. Not statistically significantly
-different.
-
-The interaction term `educ:pol_groupConservative` is $-0.008$. It tells
-us whether the relationship between education and TV hours differs
-between moderates and conservatives It adjusts the slope of education
-for conservatives So for conservatives, the effect of education is:
-
-$-0.142 -0.008 = -0.15$
-
-This means that for conservatives, each additional unit of education is
-associated with only $-0.15$ fewer daily TV hours.
+::: task
+{{< fa lightbulb >}} Does marital status modify the relationship between education and income?
 :::
 
-##  {.sparse-slide data-menu-title="`ggplot()`"}
-
 ```{r}
-#| label: ggplot-interaction
+#| label: mod01-1
 #| output-location: slide
 
-# Get predicted values
-preds <- estimate_means(model, by = c("educ", "pol_group"))
+model_01 <- lm(formula = realrinc ~ educ + marital + age + hrs1 + sex, data = my_data)
 
-# Plot using ggplot2
-preds |>
-  ggplot(aes(x = educ, y = Mean, color = pol_group)) +
-    geom_line(linewidth = 1.2) +
-    labs(
-      title = "Predicted Daily TV Hours by Education and Political Identity",
-      x = "Education Level",
-      y = "Predicted TV Hours",
-      color = "Political Identity") +
-    theme_minimal(20) +
-    theme(legend.position = "top")
+p_inc <- estimate_means(
+  model_01,
+  by = c("marital", "educ = c(12:20)"),
+  estimate = "typical")
+
+p_inc
 ```
+
+##  {.sparse-slide data-menu-title="Categorical X Continuous"}
+
+```{r}
+#| label: mod01-2
+#| echo: false
+
+p_inc |>
+  ggplot(aes(x = educ, y = Mean, colour = marital, shape = marital)) +
+  geom_line() +
+  geom_point() +
+  labs(
+    title = "Predicted Annual Income",
+    subtitle = "by years of education and marital status",
+    caption = "Adjusted for age, work hours, and gender") +
+  guides(
+    color = guide_legend(reverse = TRUE),
+    shape = guide_legend(reverse = TRUE))
+
+```
+
+##  {.sparse-slide data-menu-title="Categorical X Continuous"}
+
+```{r}
+#| label: mod01-3a
+#| eval: FALSE
+
+model_02 <- lm(formula = realrinc ~ educ * marital
+               + age + hrs1 + sex, data = my_data)
+moderndive::get_regression_table(model_02)
+
+```
+
+<br>
+
+```{r}
+#| label: mod01-3b
+#| echo: FALSE
+
+model_02 <- lm(formula = realrinc ~ educ * marital
+               + age + hrs1 + sex, data = my_data)
+
+moderndive::get_regression_table(model_02) |> 
+  flextable() |>
+  color(color = "#3498DB", i = 2:4) |>
+  color(color = "#E74C3C", i = 8:9) 
+
+```
+
+## Interpretation {.sparse-slide}
+
+**When interactions are included**:\
+Interpret significance levels for interaction coefficients,\
+NOT the significance levels for the main variables.
+
+<br>
+
+**If interactions are significant (or some are)**:\
+then you can still interpret main effects.
+
+## Interpretation {.sparse-slide}
+
+```{r}
+#| label: mod02-1
+#| echo: FALSE
+
+model_02 <- lm(formula = realrinc ~ educ * marital
+               + age + hrs1 + sex, data = my_data)
+
+moderndive::get_regression_table(model_02) |> 
+  flextable() |>
+  color(color = "#3498DB", i = 2:4) |>
+  color(color = "#E74C3C", i = 8:9) 
+
+```
+
+## Interpretation {.sparse-slide .smaller}
+
+The interaction tells you whether the effect of X becomes stronger or
+weaker for a particular group.
+
+<br>  
+
+| Main Effect | Interaction | Result               |
+|-------------|-------------|----------------------|
+| \+          | \+          | stronger effect      |
+| \+          | \-          | weaker effect        |
+| \-          | \+          | less negative effect |
+| \-          | \-          | more negative effect |
+
+
+::: aside
+Compare the sign of the main effect of the continuous variable to the sign of the interaction term. The interaction tells you whether the slope is steeper or flatter. (The sign of the group main effect tells you where the groups start.)
+:::
+
+## Interpretation {.sparse-slide}
+
+```         
+Among never married people, every one year increase in education is associated with a $2,086 increase in income, holding other factors constant (p < .05).
+```
+
+<br>
+
+```         
+At 0 hours of education, married people report -$11,610 less income than never married people, adjusting for other model variables. 
+```
+
+> [Not a realistic effect of 0 education, so not
+> meaningful.]{style="color: #3498DB; font-size: 60%; font-family: 'Shadows Into Light'"}
+
+```
+The effect of education is $1,455 stronger for married respondents compared with never married respondents.
+```
+
+::: aside
+The main coefficients indicates the effect of that variable on the
+outcome when the other variable = 0
+:::
+
+## Interpretation {.sparse-slide}
+
+```{r}
+#| label: mod02-2
+#| output-location: fragment
+
+p_inc <- estimate_means(
+  model_02,
+  by = c("marital", "educ = c(12:20)"),
+  estimate = "typical")
+
+p_inc
+```
+
+## Interpretation {.sparse-slide}
+
+```{r}
+#| label: mod02-3
+#| echo: false
+
+p_inc |>
+  ggplot(aes(x = educ, y = Mean, colour = marital, shape = marital)) +
+  geom_line() +
+  geom_point() +
+  labs(
+    title = "Predicted Annual Income",
+    subtitle = "by years of education and marital status",
+    caption = "Adjusted for age, work hours, and gender") +
+  guides(
+    color = guide_legend(reverse = TRUE),
+    shape = guide_legend(reverse = TRUE))
+
+```
+
+
+## Interpretation {.sparse-slide .smaller}
+
+You can predict the marginal effect of your continuous IV on your DV at different levels of your categorical IV:
+
+::::: columns
+::: {.column width="65%"}
+```{r}
+#| label: mod02-4
+#| echo: FALSE
+
+model_02 <- lm(formula = realrinc ~ educ * marital
+               + age + hrs1 + sex, data = my_data)
+
+moderndive::get_regression_table(model_02) |> 
+  flextable() |>
+  color(color = "#3498DB", i = 2) |>
+  color(color = "#E74C3C", i = 8:9) 
+
+```
+:::
+
+::: {.column width="35%" .smaller}
+never married: $\color{#3498DB}{2086}$
+
+<br>
+
+[div/wid/sep: $\color{#3498DB}{2086} + \color{#E74C3C}{560} = \color{#18BC9C}{2646}$]{.fragment}
+
+<br>
+
+[married: $\color{#3498DB}{2086} + \color{#E74C3C}{1455} = \color{#18BC9C}{3541}$]{.fragment}
+:::
+::::: 
+
+## Interpretation {.sparse-slide}
+
+```{r}
+#| label: mod02-5
+
+estimate_slopes(
+  model_02,
+  trend = "educ",
+  by = "marital"
+)
+```
+
+## Interpretation {.sparse-slide .smaller}
+
+Among never married people, every one year increase in education is associated with a $2,086 rise in annual income, holding other factors constant.  
+
+<br>  
+  
+Among div/wid/sep people, every one year increase in education is associated with a $2,646 rise in annual income, holding other factors constant.  
+  
+<br>  
+
+Among married people, every one year increase in education is associated with a $3,541 rise in annual income, holding other factors constant.  
+
+## Conclusion {.sparse-slide background-image="images/gears-solid-full.png" background-size="80px" background-repeat="repeat" .smaller}
+
+::: task
+{{< fa lightbulb >}} Does marital status modify the relationship between education and income?
+:::
+
+The results are consistent with marital status modifying the relationship between education and income. The increase in income associated with each additional year of education is $1,455 greater among married individuals compared with never-married individuals (p = .001). The increase in income associated with each additional year of education is also $560 greater among previously married individuals than among never-married individuals, although this difference is not statistically significant.
+
+## Categorical X Categorical {.sparse-slide background-image="images/gears-solid-full.png" background-size="80px" background-repeat="repeat" .smaller}
+
+::: task
+{{< fa lightbulb >}} Does marital status modify the relationship between sex and income?
+:::
+
+```{r}
+#| label: mod03-01
+#| echo: FALSE
+
+model_03 <- lm(formula = realrinc ~ sex + marital
+               + age + hrs1 + educ, data = my_data)
+
+moderndive::get_regression_table(model_03) |> 
+  flextable() 
+
+```
+
+##  {.sparse-slide data-menu-title="Categorical X Categorical" .smaller}
+
+```{r}
+#| label: mod03-02
+#| echo: FALSE
+
+model_03 <- lm(formula = realrinc ~ sex * marital
+               + age + hrs1 + educ, data = my_data)
+
+moderndive::get_regression_table(model_03) |> 
+  flextable() |>
+  color(color = "#E74C3C", i = 1)
+
+```
+
+
+<br> 
+
+|               | Men         | Women       | 
+|---------------|-------------|-------------|
+| Never Married | -39,617     |             |
+| Div/Wid/Sep   |             |             |
+| Married       |             |             |
+ 
+
+
+##  {.sparse-slide data-menu-title="Categorical X Categorical" .smaller}
+
+```{r}
+#| label: mod03-03
+#| echo: FALSE
+
+model_03 <- lm(formula = realrinc ~ sex * marital
+               + age + hrs1 + educ, data = my_data)
+
+moderndive::get_regression_table(model_03) |> 
+  flextable() |>
+  color(color = "#E74C3C", i = 2)
+
+```
+
+
+<br> 
+
+|               | Men         | Women       | 
+|---------------|-------------|-------------|
+| Never Married | -39,617     | -3,133      |
+| Div/Wid/Sep   |             |             |
+| Married       |             |             |
+ 
+
+
+##  {.sparse-slide data-menu-title="Categorical X Categorical" .smaller}
+
+```{r}
+#| label: mod03-04
+#| echo: FALSE
+
+model_03 <- lm(formula = realrinc ~ sex * marital
+               + age + hrs1 + educ, data = my_data)
+
+moderndive::get_regression_table(model_03) |> 
+  flextable() |>
+  color(color = "#E74C3C", i = 3:4)
+
+```
+
+
+<br> 
+
+|               | Men         | Women       | 
+|---------------|-------------|-------------|
+| Never Married | -39,617     | -3,133      |
+| Div/Wid/Sep   |   6,175     |             |
+| Married       |  12,861     |             |
+
+
+##  {.sparse-slide data-menu-title="Categorical X Categorical" .smaller}
+
+```{r}
+#| label: mod03-05
+#| echo: FALSE
+
+model_03 <- lm(formula = realrinc ~ sex * marital
+               + age + hrs1 + educ, data = my_data)
+
+moderndive::get_regression_table(model_03) |> 
+  flextable() |>
+  color(color = "#E74C3C", i = c(2, 3, 8))
+
+```
+
+
+<br> 
+
+|               | Men         | Women                         | 
+|---------------|-------------|-------------------------------|
+| Never Married | -39,617     | -3,133                        |
+| Div/Wid/Sep   |   6,175     | -3,133 + 6,175 - 4,366 = 673  |
+| Married       |  12,861     |                               |
+
+##  {.sparse-slide data-menu-title="Categorical X Categorical" .smaller}
+
+```{r}
+#| label: mod03-06
+#| echo: FALSE
+
+model_03 <- lm(formula = realrinc ~ sex * marital
+               + age + hrs1 + educ, data = my_data)
+
+moderndive::get_regression_table(model_03) |> 
+  flextable() |>
+  color(color = "#E74C3C", i = c(2, 4, 9))
+
+```
+
+
+<br> 
+
+|               | Men         | Women                          | 
+|---------------|-------------|--------------------------------|
+| Never Married | -39,617     | -3,133                         |
+| Div/Wid/Sep   |   6,175     | -3,133 + 6,175 - 4,366 = 673   |
+| Married       |  12,861     | -3,133 + 12,861 - 5,822 = 1820 |
+
+
+##  {.sparse-slide data-menu-title="Interpretation" .smaller}
+
+Among never married people, women's income is $3,133 less than men, holding other model variables constant (p = .057).
+
+<br>
+  
+Never div/wid/sep men's income is $6,175 more than never-married men, holding other model variables constant (p <. 01).  
+
+<br>
+  
+Married men's income is $12,861 more than never-married men, holding other model variables constant (p < .001).
+
+<br>
+
+Compared with never-married individuals, being div/wid/sep is associated with a $4,366 smaller increase in income for women than for men, though the difference is not statistically significant.
+
+<br>
+
+The increase in income associated with being married compared with never married is $5,822 smaller for women than for men (p < .05).
+
+::: notes
+**sex-female × Married interaction coefficient**
+
+An estimate of how much smaller the effect of being married on income is among women than among men.
+:::
+
+## Interpretation {.sparse-slide .smaller}
+
+```{r}
+#| label: mod03-07
+
+p_inc  <- estimate_means(
+  model_03,
+  by = c("marital", "sex"),
+  estimate = "typical")
+
+p_inc
+```
+
+## Interpretation {.sparse-slide}
+
+
+```{r}
+#| label: mod03-08
+#| echo: false
+
+p_inc |>
+  ggplot(aes(x = sex, y = Mean, fill = sex)) +
+  geom_col() +
+  geom_errorbar(
+    aes(ymin = CI_low, ymax = CI_high),
+    width = 0.2) +
+  facet_wrap(~marital) +
+  labs(
+    title = "Predicted Annual Income",
+    subtitle = "by gender and marital status",
+    caption = "Adjusted for age, work hours, and education") +
+  theme_minimal(18) +
+  theme(
+    legend.position = "none")
+
+```
+
+## Conclusion {.sparse-slide background-image="images/gears-solid-full.png" background-size="80px" background-repeat="repeat" .smaller}
+
+::: task
+{{< fa lightbulb >}} Does marital status modify the relationship between sex and income?
+:::
+
+The results are consistent with marital status modifying the relationship between gender and income. Compared with never-married individuals, the gender income gap was $5,822 larger among married individuals (p < .05). The gender income gap was also $4,366 larger among previously married individuals than among never-married individuals, although this difference was not statistically significant.
+
+## Continuous X Continuous {.sparse-slide background-image="images/gears-solid-full.png" background-size="80px" background-repeat="repeat" .smaller}
+
+::: task
+{{< fa lightbulb >}} Does the relationship between age and
+income depend on education?
+:::
+
+```{r}
+#| label: mod04-01
+
+model_04 <- lm(formula = realrinc ~ age + educ + hrs1 + sex + marital, data = my_data)
+
+moderndive::get_regression_table(model_04) |> 
+  flextable() 
+```
+
+##  {.sparse-slide data-menu-title="Continuous X Continuous" .smaller}
+
+```{r}
+#| label: mod04-02
+
+model_04 <- lm(formula = realrinc ~ age * educ + hrs1 + sex + marital, data = my_data)
+
+moderndive::get_regression_table(model_04) |> 
+  flextable() |>
+  color(color = "#3498DB", i = 2:3) |>
+  color(color = "#E74C3C", i = 8) 
+```
+
+
+## {.sparse-slide data-menu-title="Interpretation" .smaller}
+
+When education is 0 years, every one-year increase in age predicts a $31 decrease in annual income, adjusting for other model variables.
+
+> [This interpretation is helpful only for people with no formal education.]{style="color: #3498DB; font-size: 80%; font-family: 'Shadows Into Light'"}
+
+<br>  
+
+When age is 0 years, every additional year of education predicts a $2,390 increase in annual income, adjusting for other model variables.
+
+> [This interpretation is helpful only for newborns, so it is not substantively meaningful.]{style="color: #3498DB; font-size: 80%; font-family: 'Shadows Into Light'"}
+
+<br>
+
+For every one-year increase in age, the increase in income associated with an additional year of education is $9.6 greater, adjusting for other model variables, though it is not statistically significant.
+
+
+## {.sparse-slide data-menu-title="Interpretation" .smaller}
+
+```{r}
+#| label: mod04-03
+# age at selected values of educ
+
+p_inc <- estimate_means(
+  model_04,
+  by = c(
+    "educ = c(12, 14, 16)",
+    "age = c(22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44)"  ),
+  estimate = "typical"
+)
+
+```
+
+
+## Interpretation {.sparse-slide}
+
+```{r}
+#| label: mod04-04
+#| echo: false
+
+p_inc |>
+  ggplot(aes(x = age, y = Mean, colour = factor(educ), shape = factor(educ))) +
+  geom_line() +
+  geom_point() +
+  labs(
+    title = "Predicted Annual Income",
+    subtitle = "by age and years of education",
+    caption = "Adjusted for work hours, marital status, and gender") +
+  guides(
+    color = guide_legend(reverse = TRUE),
+    shape = guide_legend(reverse = TRUE))
+
+```
+
+
+## Conclusion {.sparse-slide background-image="images/gears-solid-full.png" background-size="80px" background-repeat="repeat" .smaller}
+
+::: task
+{{< fa lightbulb >}} Does the relationship between age and income depend on education?
+:::
+
+The interaction between age and education was not statistically significant (p = .104), indicating that the relationship between education and income does not differ significantly by age. Therefore, the interaction term was removed, and the model without the interaction was interpreted.  
+  
+Both age and education were independently and positively associated with income. Holding all other variables constant, each additional year of age is associated with an increase in annual income of approximately $111 (p < .01). Each additional year of education is associated with an increase in annual income of approximately $2,813 (p < .001).

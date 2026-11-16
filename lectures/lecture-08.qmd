@@ -191,10 +191,11 @@ mean?**]{style="color: #3498db; font-size: 125%; font-family: 'Shadows Into Ligh
 
 <br>
 
-For a prediction at the means, we set:
+For a typical-person prediction, we set:
 
 - continuous variables to their means\
-- categorical variables to their reference categories
+- categorical variables to the category we want to describe
+  (e.g., a never-married woman)
 
 ::::: columns
 ::: {.column width="50%"}
@@ -210,10 +211,15 @@ mean(my_data$hrs1)
 ::: {.column width="50%"}
 Education = 14.78\
 Hours worked = 39.79\
-Sex = Male (reference)\
-Marital status = Married (reference)
 :::
 :::::
+
+
+::: notes
+Each combination of sex and marital status is a different typical
+person. The reference category is just the baseline the coefficients are
+measured from, not a value we have to plug in. 
+:::
 
 ## Typical-person predictions {.sparse-slide}
 
@@ -222,34 +228,34 @@ Marital status = Married (reference)
 
 estimate_means(
   model,
-  estimate = "typical")
+  estimate = "population")
 ```
 
 ## Typical-person predictions {.smaller .sparse-slide}
 
 Typical never-married man  
 $\color{#18bc9c}{-34,540} \color{#3498db}{+2,845}_{educ}*14.8$
-$\color{#fd7e14}{+424}_{hrs1}*39.56$
+$\color{#fd7e14}{+424}_{hrs1}*39.79$
 
 <br>
 
 [Typical never married woman  
 $\color{#18bc9c}{-34,540} \color{#3498db}{+2,845}_{educ}*14.8$
-$\color{#fd7e14}{+424}_{hrs1}*39.56$
+$\color{#fd7e14}{+424}_{hrs1}*39.79$
 $\color{#e74c3c}{-6,544}_{female}$]{.fragment}
 
 <br>
 
 [Typical married man  
 $\color{#18bc9c}{-34,540} \color{#3498db}{+2,845}_{educ}*14.8$
-$\color{#fd7e14}{+424}_{hrs1}*39.56$
+$\color{#fd7e14}{+424}_{hrs1}*39.79$
 $\color{#9b59b6}{+11,182}_{married}$]{.fragment}
 
 <br>
 
 [Typical divorced woman  
 $\color{#18bc9c}{-34,540} \color{#3498db}{+2,845}_{educ}*14.8$
-$\color{#fd7e14}{+424}_{hrs1}*39.56$
+$\color{#fd7e14}{+424}_{hrs1}*39.79$
 $\color{#e74c3c}{-6,544}_{female}$
 $\color{#9b59b6}{+5,512}_{divorced}$]{.fragment}
 
@@ -261,7 +267,7 @@ $\color{#9b59b6}{+5,512}_{divorced}$]{.fragment}
 
 preds <- estimate_means(
   model,
-  estimate = "typical")
+  estimate = "population")
 
 ggplot(
   preds,
@@ -281,11 +287,17 @@ ggplot(
   theme_minimal(20)
 ```
 
+::: notes
+What if we don't want to pick a marital status? Or don't want to pick a category for every single categorical variable? Then we average over all of them: marginal means (next slide)
+:::
+
+
 ## Marginal Means {.sparse-slide .smaller}
 
 **Marginal means are adjusted group averages**.\
-Calculated from the regression model while accounting for the
-distribution of the other predictors in the data.
+Calculated from the regression model by setting continuous predictors
+to their means and averaging over the categories of other categorical
+predictors, giving each category **equal weight**.
 
 <br>
 
@@ -295,16 +307,28 @@ distribution of the other predictors in the data.
 marginal_means <- estimate_means(
   model,
   by = "sex",
-  estimate = "typical")
+  estimate = "population")
 
 marginal_means
 ```
 
+
+::: notes
+Equal weight means a "typical" marital status is a blend of all
+categories, not the most common one. If 60% of the sample is married and
+10% is divorced, the marginal mean still counts them equally.  
+  
+Notice the footer under the table to see which predictors were
+averaged over.
+:::
+
 ## Average Adjusted Predictions (AAP) {.sparse-slide .smaller}
 
 **Average adjusted predictions are adjusted population averages.**\
-Calculated from the regression model using the actual characteristics of
-individuals in the dataset.
+Calculated by setting everyone in the data to each group in turn
+(first all male, then all female) while keeping their other
+characteristics as observed, then averaging the predictions.
+Categories are weighted by **how common they are** in the data.
 
 ```{r}
 #| label: aap-sex
@@ -312,7 +336,7 @@ individuals in the dataset.
 aap <- estimate_means(
   model,
   by = "sex",
-  estimate = "average")
+  estimate = "population")
 
 aap
 
@@ -354,19 +378,150 @@ bind_rows(marginal_means, aap) |>
   theme_minimal(base_size = 20)
 ```
 
-## Three Types of Predictions {.sparse-slide}
+## 3 ways to hold variables constant:  {.sparse-slide .smaller}
 
-**Typical-person prediction**\
-Prediction for a hypothetical person with average values.
+| | **Continuous predictors** | **Categorical predictors** |
+|:--|:--|:--|
+| **Typical-person prediction**<br>*A hypothetical person* | Set to their means | Set to the category we choose (e.g., never-married woman) |
+| **Marginal mean**<br>*An adjusted group average* | Set to their means | Averaged over categories, equal weight for each |
+| **Average adjusted prediction (AAP)**<br>*An adjusted population average* | Kept at each person's observed values | Everyone set to each group in turn, other characteristics as observed, then averaged |
+
+::: notes
+The marginal mean and AAP differ here only because of marital status.
+Marginal means give each marital category equal weight. AAPs weight
+them by their share of the sample. The sex gap stays the same (-6,544)
+because the model has no interactions. Preview for later: with an
+interaction or a nonlinear model, the three approaches can disagree
+about the gap too.
+:::
+
+## Example
+
+```{r}
+#| label: compare-example
+#| echo: false
+
+#Typical: never-married men and women
+typical <- estimate_means(model, by = c("sex", "marital"), estimate = "typical") |>
+  filter(marital == "Never married") |> 
+  mutate(method = "Typical never-married")
+
+# Marginal means: equal weight on marital categories
+marginal <- estimate_means(model, by = "sex", estimate = "typical") |>
+  mutate(method = "Marginal mean")
+
+# AAP: observed values, sample proportions
+aap <- estimate_means(model, by = "sex", estimate = "population") |>
+  mutate(method = "AAP")
+```
+
+
+```{r}
+#| label: compare-example-table
+#| echo: false
+
+bind_rows(typical, marginal, aap) |>
+  select(method, sex, Mean) |>
+  pivot_wider(names_from = sex, values_from = Mean) |>
+  mutate(gap = .data[[levels(model.frame(model)$sex)[2]]] -
+               .data[[levels(model.frame(model)$sex)[1]]]) |>
+  kable(
+    digits = 0,
+    format.args = list(big.mark = ","),
+    col.names = c("Method", "Men", "Women", "Gap"),
+    align = "lrrr")
+
+```
 
 <br>
 
-**Marginal mean** Adjusted average prediction for a group.
+[In this additive model, the gap between men and women is always the sex coefficient (-6,544). What changes across methods is the predicted income for each group, because each method assumes a different mix of marital statuses.]{.fragment}
+
+## Group-Average Predictions {.sparse-slide .smaller}
+
+[**What if we don't hold anything constant?**]{style="color: #3498db; font-size: 125%; font-family: 'Shadows Into Light'"}\
+Predict income for every person using their own characteristics, then
+average the predictions within each group.  
 
 <br>
 
-**Average adjusted prediction (AAP)** Adjusted average prediction
-calculated using the actual characteristics of people in the data.
+```{r}
+#| label: group-average
+
+group_avg <- estimate_means(
+  model,
+  by = "sex",
+  estimate = "average") |>
+  mutate(method = "Group-average prediction")
+```
+
+```{r}
+#| label: group-average-table
+#| echo: false
+ 
+bind_rows(typical, marginal, aap, group_avg) |>
+  select(method, sex, Mean) |>
+  pivot_wider(names_from = sex, values_from = Mean) |>
+  mutate(gap = female - male) |>
+  kable(
+    digits = 0,
+    format.args = list(big.mark = ","),
+    col.names = c("Method", "Men", "Women", "Gap"),
+    align = "lrrr") |>
+  row_spec(4, bold = TRUE, background = "#fdebd0")
+```
+
+::: notes
+The AAP asks: what if everyone were a man, then a woman? Only sex
+changes, so the gap equals the coefficient.  
+  
+The group-average prediction describes the men and women who are actually in the data,
+so the gap also reflects composition.  
+This is a useful sociological distinction: unequal returns (the coefficient) vs. different
+characteristics (composition)  
+:::
+
+
+## Same Idea, Different Names {.sparse-slide .smaller}
+
+| **In this lecture** | **You may also see** |
+|:--|:--|
+| **Typical-person prediction** | Adjusted prediction at the means (APM); adjusted prediction at representative values (APR); "holding other variables at their means" |
+| **Marginal mean** | Estimated marginal mean (EMM); least-squares mean (LS-mean); predictions on a balanced grid |
+| **Average adjusted prediction (AAP)** | Predictive margins; marginal standardization; average predicted values; "observed values approach" |
+| **Group-average prediction** | Predictions averaged "over" groups; observed group means of predicted values |
+
+::: notes
+**Warning:** authors often write "holding other variables constant"
+without saying which method they used. Check the software and the
+options.  
+  
+Names come from different traditions. Stata and sociology: APM, APR,
+AAP, predictive margins, AME. R and psychology: estimated marginal
+means (emmeans), LS-means (SAS). Statistics and epidemiology:
+marginal standardization, g-computation. The same calculation can
+carry several names, and the same name can be used loosely for
+different calculations.
+:::
+
+## Same Idea, Different Code {.sparse-slide .smaller}
+
+| **Concept** | **modelbased** | **marginaleffects** | **Stata** |
+|:--|:--|:--|:--|
+| Typical person | `estimate = "typical"`, `by = c("sex", "marital")` | `predictions(newdata = datagrid(...))` | `margins sex, atmeans` |
+| Marginal mean | `estimate = "typical"`, `by = "sex"` | `avg_predictions(newdata = "balanced", by = "sex")` | `margins sex, asbalanced` |
+| AAP | `estimate = "population"` | `avg_predictions(variables = "sex")` | `margins sex` |
+| Group-average | `estimate = "average"` | `avg_predictions(by = "sex")` | `margins, over(sex)` |
+
+
+::: notes
+Key contrast: in marginaleffects, variables = changes the variable
+for everyone (counterfactual, AAP), while by = groups people as they
+are (group-average). In Stata, margins sex is the AAP, while
+margins, over(sex) is the group-average version. Argument names vary
+across package versions, so check the documentation.
+:::
+
 
 # Interactions {.theme-section}
 
@@ -410,7 +565,7 @@ model_01 <- lm(formula = realrinc ~ educ + marital + age + hrs1 + sex, data = my
 p_inc <- estimate_means(
   model_01,
   by = c("marital", "educ = c(12:20)"),
-  estimate = "typical")
+  estimate = "population")
 
 p_inc
 ```
@@ -518,7 +673,7 @@ Among never married people, every one year increase in education is associated w
 <br>
 
 ```         
-At 0 hours of education, married people report -$11,610 less income than never married people, adjusting for other model variables. 
+At 0 years of education, married people report -$11,610 less income than never married people, adjusting for other model variables. 
 ```
 
 > [Not a realistic effect of 0 education, so not
@@ -542,7 +697,7 @@ outcome when the other variable = 0
 p_inc <- estimate_means(
   model_02,
   by = c("marital", "educ = c(12:20)"),
-  estimate = "typical")
+  estimate = "population")
 
 p_inc
 ```
@@ -784,7 +939,7 @@ Among never married people, women's income is $3,133 less than men, holding othe
 
 <br>
   
-Never div/wid/sep men's income is $6,175 more than never-married men, holding other model variables constant (p <. 01).  
+Div/wid/sep men's income is $6,175 more than never-married men, holding other model variables constant (p <. 01).  
 
 <br>
   
@@ -812,7 +967,7 @@ An estimate of how much smaller the effect of being married on income is among w
 p_inc  <- estimate_means(
   model_03,
   by = c("marital", "sex"),
-  estimate = "typical")
+  estimate = "population")
 
 p_inc
 ```
@@ -841,13 +996,27 @@ p_inc |>
 
 ```
 
+## Contrasts {.sparse-slide .smaller}
+
+```{r}
+#| label: mod03-09
+#| output-location: fragment
+
+estimate_contrasts(
+  model_03,
+  contrast = "sex",
+  by = "marital",
+  estimate = "population")
+```
+
 ## Conclusion {.sparse-slide background-image="images/gears-solid-full.png" background-size="80px" background-repeat="repeat" .smaller}
 
 ::: task
 {{< fa lightbulb >}} Does marital status modify the relationship between sex and income?
 :::
 
-The results are consistent with marital status modifying the relationship between gender and income. Compared with never-married individuals, the gender income gap was $5,822 larger among married individuals (p < .05). The gender income gap was also $4,366 larger among previously married individuals than among never-married individuals, although this difference was not statistically significant.
+The results suggest that marital status modifies the relationship between sex and income. Among never-married respondents, women earned about $3,133 less than men (p = .057). Among married respondents, the gender gap was $5,822 larger, about $8,955 in total (p = .010). Among previously married respondents, the gender gap was $4,366 larger than among the never-married, about $7,499 in total, but this difference was not statistically significant (p = .126).
+
 
 ## Continuous X Continuous {.sparse-slide background-image="images/gears-solid-full.png" background-size="80px" background-repeat="repeat" .smaller}
 
@@ -907,7 +1076,7 @@ p_inc <- estimate_means(
   by = c(
     "educ = c(12, 14, 16)",
     "age = c(22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44)"  ),
-  estimate = "typical"
+  estimate = "population"
 )
 
 ```

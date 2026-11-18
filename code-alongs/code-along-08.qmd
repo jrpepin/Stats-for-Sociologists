@@ -26,7 +26,7 @@ library(gssr)
 library(gssrdoc)
 library(summarytools)
 library(gtsummary) 
-library(moderndive)
+library(modelbased)
 
 # do not load moderndive(), use it specifically 
 ```
@@ -36,8 +36,8 @@ library(moderndive)
 ```{r}
 #| label: gssdata
 
-# Load all gss
-data(gss_all)
+# Load GSS 2024
+gss24 <- gss_get_yr(2024)
 
 ```
 
@@ -48,118 +48,60 @@ we'll analyze.
 #| label: my-data
 
 # Categorical Variables
-my_cat <- gss_all |>
-  select(id, year, polviews, sex, marital) |>
+my_cat <- gss24 |>
+  select(id, sex, marital) |>
   zap_missing() |>
   mutate(
-    polviews = as_factor(polviews),
     sex = as_factor(sex),
     marital = as_factor(marital)) |> 
   droplevels()
 
 # Continuous Variables
-my_con <- gss_all |>
-  select(id, year, tvhours, age, educ, hrs1, realrinc, childs) |>
+my_con <- gss24 |>
+  select(id, age, educ, hrs1, realrinc) |>
   mutate(
     age = as.numeric(age),
     educ = as.numeric(educ),
     hrs1 = as.numeric(hrs1),
-    realrinc = as.numeric(realrinc),
-    childs = as.numeric(childs))
+    realrinc = as.numeric(realrinc))
 
 # Combine the two dataframes
-my_data <- full_join(my_cat, my_con, by = c("year", "id")) # match by 2 vars
+my_data <- full_join(my_cat, my_con, by = c("id")) |> 
+  drop_na() |>
+  mutate(
+    marital = recode(
+      marital,
+      "married"       = "Married",
+      "never married" = "Never married",
+      "widowed"       = "Div/Wid/Sep",
+      "divorced"      = "Div/Wid/Sep",
+      "separated"     = "Div/Wid/Sep"),
+    marital = factor(
+      marital,
+      levels = c("Never married", "Div/Wid/Sep", "Married"))
+  )
 
+remove(my_con) # clean up the Environment
+remove(my_cat)
 ```
 
-## `estimate_means()`
+# Predictions
 
-R calculates the mean values of every variable in the model except sex,
-and sets all of those variables equal to their means. Then (once again)
-it sets female = 0 in every observation, calculates predicted
-probabilities for each individual, and averages those.
-
-Then it goes back and resets female to 1 in every observation, again
-calculates predicted probabilities for each individual and outputs the
-average of those.
-
-Outputs can be interpreted as the predicted probabilities for women and
-men if they were all average in all other respects.
+**OLS Regression Predicting Annual Income**
 
 ```{r}
-#| label: estimate_means_margins
+#| label: regress
+#| echo: false
 
-# Get predicted values
-preds <- estimate_means(model, by = c("sex"))
-
-# Preview the new df
-preds |>
-  as_tibble() |> 
-  head()
-```
-
-```{r, eval = FALSE}
-#| label: estimate_means_code
-
-# Get predicted values
-preds <- estimate_means(model, by = c("educ", "sex"))
-
-# Preview the new df
-preds |>
-  as_tibble() |> 
-  head()
-```
-
-men with 0 years of education = $38.601 + .420_{educ}*0$\
-women with 0 years of education
-$38.601 + .420_{educ}*0 -6.576_{female}$\
-men with 2.222 years of education $38.601 + .420_{educ}*2.222$\
-women with 2.222 years of education
-$38.601 + .420_{educ}*2.222-6.576_{female}$
-
-**Visualize the predictions:**
-
-```{r}
-#| label: ggplot
-#| message: false
-
-# Get predicted values
-preds <- estimate_means(model, by =c("educ", "sex"))
-
-# Plot using ggplot2
-preds |>
-  ggplot(aes(x = educ, y = Mean, color = sex)) +
-    geom_line(linewidth = 1.2) +
-    labs(
-      title = "Predicted Weekly Work Hours by Education and Gender",
-      x = "Education Level",
-      y = "Predicted Weekly Work Hours",
-      color = " ") +
-    theme_minimal() +
-    theme(legend.position = "top")
-```
-
-> ***Are weekly hours worked related to education and marital status?***
-
-```{r}
-#| label: regress-04
-
-model <- lm(hrs1 ~ educ + marital, data = my_data)
-moderndive::get_regression_table(model)
-
-```
-
-**Regression Predicting Weekly Work Hours by Years of Education and
-Marital Status**
-
-```{r}
-#| label: reference
+model <- lm(formula = realrinc ~ educ + hrs1 + sex + marital, data = my_data)
 
 model |>
-  tbl_regression(
+    tbl_regression(
     intercept = TRUE,
+        show_single_row = sex,
     label = list(
-      marital = "Marital status (ref. = married)")) |>
+      sex = "Women",
+      marital = "Marital status (ref. = never married)")) |>
   remove_row_type(type = c("reference")) |>  
   modify_column_hide(conf.low) |>
   modify_column_unhide(
@@ -171,74 +113,309 @@ model |>
 
 ```
 
-> ***Are daily TV hours related to education and political identity?***
+## Typical-person predictions
+
+Means:
 
 ```{r}
-#| label: regress-05
+#| label: means
 
-my_data <- my_data %>%
-  mutate(pol_group = case_when(
-    polviews %in% c("extremely liberal", "liberal", "slightly liberal") ~ "Liberal",
-    polviews == "moderate, middle of the road" ~ "Moderate",
-    polviews %in% c("slightly conservative", "conservative", "extremely conservative") ~ "Conservative",
-    TRUE ~ NA_character_))
+mean(my_data$educ)
+mean(my_data$hrs1)
 
-model <- lm(tvhours ~ educ + pol_group, data = my_data)
+```
 
-moderndive::get_regression_table(model)
+**Typical-person predictions** using `estimate_means()`
+
+```{r}
+#| label: typical
+
+preds <- estimate_means(
+  model,
+  estimate = "typical")
+
+preds
+```
+
+Visualize it!
+
+```{r}
+#| label: typical-ggplot
+
+ggplot(
+  preds,
+  aes(x = marital, y = Mean, color = sex)) +
+  geom_point(size = 3,
+             position = position_dodge(width = .4)) +
+  geom_errorbar(
+    aes(ymin = CI_low, ymax = CI_high),
+    width = .1,
+    position = position_dodge(width = .4)) +
+  labs(
+    title = "Predicted Income for Typical People",
+    subtitle = "Hours worked and education fixed at their means",
+    x = "Marital Status",
+    y = "Predicted Income",
+    color = "Gender") +
+  theme_minimal()
+```
+
+## Marginal Means
+
+```{r}
+#| label: typical-sex
+
+marginal_means <- estimate_means(
+  model,
+  by = "sex",
+  estimate = "typical")
+
+marginal_means
+```
+
+## Average Adjusted Predictions (AAP)
+
+```{r}
+#| label: aap-sex
+
+aap <- estimate_means(
+  model,
+  by = "sex",
+  estimate = "population")
+
+aap
+
+```
+
+## Group-Average Predictions
+
+```{r}
+#| label: group-average
+
+group_avg <- estimate_means(
+  model,
+  by = "sex",
+  estimate = "average") |>
+  mutate(method = "Group-average prediction")
+
+group_avg
 ```
 
 # Interactions
 
-> ***Does the relationship between TV hours and education differ by
-> political identity?***
+## Categorical X Continuous
+
+Without an interaction:
 
 ```{r}
-#| label: regress-06
+#| label: mod01-1
 
-model <- lm(tvhours ~ educ * pol_group, data = my_data)
+model_01 <- lm(formula = realrinc ~ educ + marital + age + hrs1 + sex, data = my_data)
 
-get_regression_table(model)
+p_inc <- estimate_means(
+  model_01,
+  by = c("marital", "educ = c(12:20)"),
+  estimate = "population")
+
+p_inc
 ```
 
-The coefficient for `educ` is \$-0.142 \$, meaning that for moderates
-(the reference group), each additional year of education is associated
-with -0.142 fewer tv hours per day.
+```{r}
+#| label: mod01-2
 
-The coefficient for `pol_group: Conservative` is $-0.1$. This is the
-difference in the outcome between moderates and conservatives when
-education = 0. Conservatives watch -0.1 TV hours per day fewer than
-moderates when education is zero. Not statistically significantly
-different.
+p_inc |>
+  ggplot(aes(x = educ, y = Mean, colour = marital, shape = marital)) +
+  geom_line() +
+  geom_point() +
+  labs(
+    title = "Predicted Annual Income",
+    subtitle = "by years of education and marital status",
+    caption = "Adjusted for age, work hours, and gender") +
+  guides(
+    color = guide_legend(reverse = TRUE),
+    shape = guide_legend(reverse = TRUE))
 
-The interaction term `educ:pol_groupConservative` is $-0.008$. It tells
-us whether the relationship between education and TV hours differs
-between moderates and conservatives It adjusts the slope of education
-for conservatives So for conservatives, the effect of education is:
+```
 
-$-0.142 -0.008 = -0.15$
-
-This means that for conservatives, each additional unit of education is
-associated with only $-0.15$ fewer daily TV hours.
-
-**Visualize predictions:**
+With an interaction:
 
 ```{r}
-#| label: ggplot-interaction
-#| message: false
+#| label: mod01-3a
 
-# Get predicted values
-preds <- estimate_means(model, by = c("educ", "pol_group"))
+model_02 <- lm(formula = realrinc ~ educ * marital
+               + age + hrs1 + sex, data = my_data)
+moderndive::get_regression_table(model_02)
 
-# Plot using ggplot2
-preds |>
-  ggplot(aes(x = educ, y = Mean, color = pol_group)) +
-    geom_line(linewidth = 1.2) +
-    labs(
-      title = "Predicted Daily TV Hours by Education and Political Identity",
-      x = "Education Level",
-      y = "Predicted TV Hours",
-      color = "Political Identity") +
-    theme_minimal() +
-    theme(legend.position = "top")
+```
+
+**estimate_means()**
+
+```{r}
+#| label: mod02-2
+
+p_inc <- estimate_means(
+  model_02,
+  by = c("marital", "educ = c(12:20)"),
+  estimate = "population")
+
+p_inc
+```
+
+```{r}
+#| label: mod02-3
+
+p_inc |>
+  ggplot(aes(x = educ, y = Mean, colour = marital, shape = marital)) +
+  geom_line() +
+  geom_point() +
+  labs(
+    title = "Predicted Annual Income",
+    subtitle = "by years of education and marital status",
+    caption = "Adjusted for age, work hours, and gender") +
+  guides(
+    color = guide_legend(reverse = TRUE),
+    shape = guide_legend(reverse = TRUE))
+
+```
+
+**`estimate_slopes()`**
+
+```{r}
+#| label: mod02-5
+
+estimate_slopes(
+  model_02,
+  trend = "educ",
+  by = "marital"
+)
+```
+
+## Categorical X Categorical
+
+Without an interaction:
+
+```{r}
+#| label: mod03-01
+
+model_03 <- lm(formula = realrinc ~ sex + marital
+               + age + hrs1 + educ, data = my_data)
+
+moderndive::get_regression_table(model_03) 
+
+```
+
+With an interaction:
+
+```{r}
+#| label: mod03-02
+
+model_03 <- lm(formula = realrinc ~ sex * marital
+               + age + hrs1 + educ, data = my_data)
+
+moderndive::get_regression_table(model_03) 
+
+```
+
+**`estimate_means()`**
+
+```{r}
+#| label: mod03-07
+
+p_inc  <- estimate_means(
+  model_03,
+  by = c("marital", "sex"),
+  estimate = "population")
+
+p_inc
+```
+```{r}
+#| label: mod03-08
+
+p_inc |>
+  ggplot(aes(x = sex, y = Mean, fill = sex)) +
+  geom_col() +
+  geom_errorbar(
+    aes(ymin = CI_low, ymax = CI_high),
+    width = 0.2) +
+  facet_wrap(~marital) +
+  labs(
+    title = "Predicted Annual Income",
+    subtitle = "by gender and marital status",
+    caption = "Adjusted for age, work hours, and education") +
+  theme_minimal(18) +
+  theme(
+    legend.position = "none")
+
+```
+
+**`estimate_contrasts()`**
+
+
+```{r}
+#| label: mod03-09
+
+estimate_contrasts(
+  model_03,
+  contrast = "sex",
+  by = "marital",
+  estimate = "population")
+```
+
+## Continuous X Continuous
+
+Without an interaction:
+
+```{r}
+#| label: mod04-01
+
+model_04 <- lm(formula = realrinc ~ age + educ + hrs1 + sex + marital, data = my_data)
+
+moderndive::get_regression_table(model_04) 
+```
+
+With an interaction:
+
+```{r}
+#| label: mod04-02
+
+model_04 <- lm(formula = realrinc ~ age * educ + hrs1 + sex + marital, data = my_data)
+
+moderndive::get_regression_table(model_04) 
+
+```
+
+
+**`estimate_means()`** 
+```{r}
+#| label: mod04-03
+
+# age at selected values of educ
+p_inc <- estimate_means(
+  model_04,
+  by = c(
+    "educ = c(12, 14, 16)",
+    "age = c(22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44)"  ),
+  estimate = "population"
+)
+
+p_inc |> 
+  head(10)
+
+```
+
+```{r}
+#| label: mod04-04
+
+p_inc |>
+  ggplot(aes(x = age, y = Mean, colour = factor(educ), shape = factor(educ))) +
+  geom_line() +
+  geom_point() +
+  labs(
+    title = "Predicted Annual Income",
+    subtitle = "by age and years of education",
+    caption = "Adjusted for work hours, marital status, and gender") +
+  guides(
+    color = guide_legend(reverse = TRUE),
+    shape = guide_legend(reverse = TRUE))
+
 ```

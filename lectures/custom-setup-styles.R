@@ -3,13 +3,14 @@
 ## Install packages not yet installed & load them
 pacman::p_load(
   tidyverse,
-  gssr, # load U.S. gss data
-  haven, # work with labeled data
-  labelled, # use labels as values
-  kableExtra, # pretty tables
-  flextable, # formatted pretty tables
+  gssr,         # load U.S. gss data
+  haven,        # work with labeled data
+  labelled,     # use labels as values
+  kableExtra,   # pretty tables
+  flextable,    # formatted pretty tables
   summarytools, # easy descriptive statistics
-  conflicted # declare primary packages
+  conflicted,   # declare primary packages
+  equatiomatic  # get model equations
 )
 
 ## Address important conflicts

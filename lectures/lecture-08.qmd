@@ -63,7 +63,7 @@ By the end of the lecture, you will be able to ...
 
 # Code-along 08 {data-menu-title="Code-along" background-image="images/terminal.png"}
 
-Download and open [code-along-08.qmd]()
+Download and open [code-along-08.qmd](https://www.dropbox.com/scl/fi/tapnw643rp19don4z38qe/code-along-08.qmd?rlkey=654vq3lssf7zy4266veaqhway&st=vi14yolc&dl=1)
 
 ## Packages {.sparse-slide}
 
@@ -94,7 +94,7 @@ library(modelbased)
 #| message: false
 #| label: gssdata
 
-# Load all gss
+# Load GSS 2024
 gss24 <- gss_get_yr(2024)
 
 ```
@@ -152,6 +152,9 @@ my_data <- full_join(my_cat, my_con, by = c("id")) |>
       marital,
       levels = c("Never married", "Div/Wid/Sep", "Married"))
   )
+
+remove(my_con) # clean up the Environment
+remove(my_cat)
 ```
 
 # Predictions {.theme-section}
@@ -226,48 +229,61 @@ measured from, not a value we have to plug in.
 ```{r}
 #| label: typical
 
-estimate_means(
+preds <- estimate_means(
   model,
-  estimate = "population")
+  estimate = "typical")
+
+preds
 ```
+
+
 
 ## Typical-person predictions {.smaller .sparse-slide}
 
+::: {style="font-size: 70%;"}
+
+```{r}
+#| label: equation-mod00
+#| echo: false
+
+extract_eq(model) 
+
+```
+
+:::
+  
+  
 Typical never-married man  
-$\color{#18bc9c}{-34,540} \color{#3498db}{+2,845}_{educ}*14.8$
-$\color{#fd7e14}{+424}_{hrs1}*39.79$
+$\color{#18bc9c}{-34,540} \color{#3498db}{+(2,845_{educ}*14.8)}$
+$\color{#fd7e14}{+(424_{hrs1}*39.79)}$
 
 <br>
 
 [Typical never married woman  
-$\color{#18bc9c}{-34,540} \color{#3498db}{+2,845}_{educ}*14.8$
-$\color{#fd7e14}{+424}_{hrs1}*39.79$
-$\color{#e74c3c}{-6,544}_{female}$]{.fragment}
+$\color{#18bc9c}{-34,540} \color{#3498db}{+(2,845_{educ}*14.8)}$
+$\color{#fd7e14}{+(424_{hrs1}*39.79)}$
+$\color{#e74c3c}{-6,544_{female}}$]{.fragment}
 
 <br>
 
 [Typical married man  
-$\color{#18bc9c}{-34,540} \color{#3498db}{+2,845}_{educ}*14.8$
-$\color{#fd7e14}{+424}_{hrs1}*39.79$
-$\color{#9b59b6}{+11,182}_{married}$]{.fragment}
+$\color{#18bc9c}{-34,540} \color{#3498db}{+(2,845_{educ}*14.8)}$
+$\color{#fd7e14}{+(424_{hrs1}*39.79)}$
+$\color{#9b59b6}{+11,182_{married}}$]{.fragment}
 
 <br>
 
 [Typical divorced woman  
-$\color{#18bc9c}{-34,540} \color{#3498db}{+2,845}_{educ}*14.8$
-$\color{#fd7e14}{+424}_{hrs1}*39.79$
-$\color{#e74c3c}{-6,544}_{female}$
-$\color{#9b59b6}{+5,512}_{divorced}$]{.fragment}
+$\color{#18bc9c}{-34,540} \color{#3498db}{+(2,845_{educ}*14.8)}$
+$\color{#fd7e14}{+(424_{hrs1}*39.79)}$
+$\color{#e74c3c}{-6,544_{female}}$
+$\color{#9b59b6}{+5,512_{divorced}}$]{.fragment}
 
 ##  {.sparse-slide data-menu-title="Typical-person predictions"}
 
 ```{r}
 #| label: typical-ggplot
 #| echo: false
-
-preds <- estimate_means(
-  model,
-  estimate = "population")
 
 ggplot(
   preds,
@@ -307,7 +323,7 @@ predictors, giving each category **equal weight**.
 marginal_means <- estimate_means(
   model,
   by = "sex",
-  estimate = "population")
+  estimate = "typical")
 
 marginal_means
 ```
@@ -329,6 +345,8 @@ Calculated by setting everyone in the data to each group in turn
 (first all male, then all female) while keeping their other
 characteristics as observed, then averaging the predictions.
 Categories are weighted by **how common they are** in the data.
+
+<br>
 
 ```{r}
 #| label: aap-sex
@@ -368,6 +386,15 @@ bind_rows(marginal_means, aap) |>
     aes(ymin = CI_low, ymax = CI_high),
     position = position_dodge(width = .4),
     width = .1) +
+  geom_text(
+    aes(y = CI_high, label = scales::dollar(Mean, accuracy = 1)),
+    position = position_dodge(width = .4),
+    vjust = -0.6,
+    size = 5,
+    show.legend = FALSE) +
+  scale_y_continuous(
+    labels = scales::dollar,
+    expand = expansion(mult = c(.05, .12))) +
   labs(
     title = "Marginal Means vs. Average Adjusted Predictions",
     subtitle = "Predicted income for men and women",
@@ -395,7 +422,7 @@ interaction or a nonlinear model, the three approaches can disagree
 about the gap too.
 :::
 
-## Example
+## Example {.sparse-slide .smaller}
 
 ```{r}
 #| label: compare-example
@@ -429,13 +456,18 @@ bind_rows(typical, marginal, aap) |>
     digits = 0,
     format.args = list(big.mark = ","),
     col.names = c("Method", "Men", "Women", "Gap"),
-    align = "lrrr")
+    align = "lrrr") |>
+  column_spec(4, color = "#F39C12",  bold = TRUE)
 
 ```
 
 <br>
 
-[In this additive model, the gap between men and women is always the sex coefficient (-6,544). What changes across methods is the predicted income for each group, because each method assumes a different mix of marital statuses.]{.fragment}
+[In this additive model, the gap between men and women is always the sex coefficient (-6,544).]{.fragment}  
+
+<br>  
+
+[The predicted income for each group changes because each method assumes a different mix of marital statuses.]{.fragment}
 
 ## Group-Average Predictions {.sparse-slide .smaller}
 
@@ -478,7 +510,7 @@ changes, so the gap equals the coefficient.
 The group-average prediction describes the men and women who are actually in the data,
 so the gap also reflects composition.  
 This is a useful sociological distinction: unequal returns (the coefficient) vs. different
-characteristics (composition)  
+characteristics (composition).  
 :::
 
 
@@ -536,7 +568,7 @@ Interactions test a conditional relationship
 Without an interaction, the effect of $X_1$ on Y is $b_1$
 
 $$
-\hat{Y} = b_0 + b_1X_1 + b_2X_2
+\hat{Y} = b_0 + b_1X_1 + b_2X_2 + \epsilon
 $$
 
 . . .
@@ -547,7 +579,7 @@ With an interaction, the effect of $X_1$ on Y changes as $X_2$ changes\
 Effect of $X_1$ on Y depends on the level of $X_2$
 
 $$
-\hat{Y} = b_0 + b_1X_1 + b_2X_2 + \color{#18bc9c}{b_3(X_1X_2)}
+\hat{Y} = b_0 + b_1X_1 + b_2X_2 + {\color{#18bc9c} b_3(X_1X_2)} + \epsilon
 $$
 
 ## Categorical X Continuous {.sparse-slide background-image="images/gears-solid-full.png" background-size="80px" background-repeat="repeat"}
@@ -555,6 +587,8 @@ $$
 ::: task
 {{< fa lightbulb >}} Does marital status modify the relationship between education and income?
 :::
+
+<br>
 
 ```{r}
 #| label: mod01-1
@@ -727,6 +761,8 @@ p_inc |>
 
 You can predict the marginal effect of your continuous IV on your DV at different levels of your categorical IV:
 
+<br>
+
 ::::: columns
 ::: {.column width="65%"}
 ```{r}
@@ -757,7 +793,7 @@ never married: $\color{#3498DB}{2086}$
 :::
 ::::: 
 
-## Interpretation {.sparse-slide}
+## `estimate_slopes()` {.sparse-slide}
 
 ```{r}
 #| label: mod02-5
@@ -959,7 +995,7 @@ The increase in income associated with being married compared with never married
 An estimate of how much smaller the effect of being married on income is among women than among men.
 :::
 
-## Interpretation {.sparse-slide .smaller}
+## `estimate_means()` {.sparse-slide .smaller}
 
 ```{r}
 #| label: mod03-07
@@ -973,7 +1009,6 @@ p_inc
 ```
 
 ## Interpretation {.sparse-slide}
-
 
 ```{r}
 #| label: mod03-08
@@ -996,7 +1031,7 @@ p_inc |>
 
 ```
 
-## Contrasts {.sparse-slide .smaller}
+## `estimate_contrasts()` {.sparse-slide .smaller}
 
 ```{r}
 #| label: mod03-09
@@ -1037,6 +1072,18 @@ moderndive::get_regression_table(model_04) |>
 
 ```{r}
 #| label: mod04-02
+#| eval: false
+
+model_04 <- lm(formula = realrinc ~ age * educ + hrs1 + sex + marital, data = my_data)
+
+moderndive::get_regression_table(model_04) 
+```
+
+<br>
+
+```{r}
+#| label: mod04-02-display
+#| echo: false
 
 model_04 <- lm(formula = realrinc ~ age * educ + hrs1 + sex + marital, data = my_data)
 
@@ -1045,7 +1092,6 @@ moderndive::get_regression_table(model_04) |>
   color(color = "#3498DB", i = 2:3) |>
   color(color = "#E74C3C", i = 8) 
 ```
-
 
 ## {.sparse-slide data-menu-title="Interpretation" .smaller}
 
@@ -1064,12 +1110,12 @@ When age is 0 years, every additional year of education predicts a $2,390 increa
 For every one-year increase in age, the increase in income associated with an additional year of education is $9.6 greater, adjusting for other model variables, though it is not statistically significant.
 
 
-## {.sparse-slide data-menu-title="Interpretation" .smaller}
+## `estimate_means()`  {.sparse-slide .smaller}
 
 ```{r}
 #| label: mod04-03
-# age at selected values of educ
 
+# age at selected values of educ
 p_inc <- estimate_means(
   model_04,
   by = c(
@@ -1077,6 +1123,9 @@ p_inc <- estimate_means(
     "age = c(22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44)"  ),
   estimate = "population"
 )
+
+p_inc |> 
+  head(5)
 
 ```
 
@@ -1108,6 +1157,6 @@ p_inc |>
 {{< fa lightbulb >}} Does the relationship between age and income depend on education?
 :::
 
-The interaction between age and education was not statistically significant (p = .104), indicating that the relationship between education and income does not differ significantly by age. Therefore, the interaction term was removed, and the model without the interaction was interpreted.  
+The interaction between age and education was not statistically significant (p = .104), indicating that the relationship between education and income does not differ significantly by age. **Therefore, the interaction term was removed, and the model without the interaction was interpreted.**  
   
 Both age and education were independently and positively associated with income. Holding all other variables constant, each additional year of age is associated with an increase in annual income of approximately $111 (p < .01). Each additional year of education is associated with an increase in annual income of approximately $2,813 (p < .001).

@@ -294,6 +294,7 @@ ggplot(
     subtitle = "Hours worked and education fixed at their means",
     x = "Marital Status",
     y = "Predicted Income",
+    caption = "Source: US General Social Survey 2022",
     color = "Gender") +
   theme_minimal(20)
 ```
@@ -314,6 +315,7 @@ predictors, giving each category **equal weight**.
 
 ```{r}
 #| label: typical-sex
+#| code-line-numbers: "3"
 
 marginal_means <- estimate_means(
   model,
@@ -474,6 +476,7 @@ average the predictions within each group.
 
 ```{r}
 #| label: group-average
+#| code-line-numbers: "4"
 
 group_avg <- estimate_means(
   model,

@@ -566,7 +566,7 @@ Interactions test a conditional relationship
 Without an interaction, the effect of $X_1$ on Y is $b_1$
 
 $$
-\hat{Y} = b_0 + b_1X_1 + b_2X_2 + \epsilon
+\hat{Y} = b_0 + b_1X_1 + b_2X_2 
 $$
 
 . . .
@@ -577,7 +577,7 @@ With an interaction, the effect of $X_1$ on Y changes as $X_2$ changes\
 Effect of $X_1$ on Y depends on the level of $X_2$
 
 $$
-\hat{Y} = b_0 + b_1X_1 + b_2X_2 + {\color{#18bc9c} b_3(X_1X_2)} + \epsilon
+\hat{Y} = b_0 + b_1X_1 + b_2X_2 + {\color{#18bc9c}{b_3(X_1X_2)}}
 $$
 
 ## Categorical X Continuous {.sparse-slide background-image="images/gears-solid-full.png" background-size="80px" background-repeat="repeat"}
@@ -627,9 +627,11 @@ p_inc |>
 ```{r}
 #| label: mod01-3a
 #| eval: FALSE
+#| code-line-numbers: "1"
 
 model_02 <- lm(formula = realrinc ~ educ * marital
                + age + hrs1 + sex, data = my_data)
+
 moderndive::get_regression_table(model_02)
 
 ```
@@ -861,11 +863,14 @@ moderndive::get_regression_table(model_03) |>
 
 |               | Men         | Women       | 
 |---------------|-------------|-------------|
-| Never Married | -39,617     |             |
+| Never Married | 0 (ref)     |             |
 | Div/Wid/Sep   |             |             |
 | Married       |             |             |
  
 
+::: notes
+each cell is the predicted difference from never-married men with age, hours and education held constant
+:::
 
 ##  {.sparse-slide data-menu-title="Categorical X Categorical" .smaller}
 
@@ -887,7 +892,7 @@ moderndive::get_regression_table(model_03) |>
 
 |               | Men         | Women       | 
 |---------------|-------------|-------------|
-| Never Married | -39,617     | -3,133      |
+| Never Married | 0 (ref)     | -3,133      |
 | Div/Wid/Sep   |             |             |
 | Married       |             |             |
  
@@ -913,7 +918,7 @@ moderndive::get_regression_table(model_03) |>
 
 |               | Men         | Women       | 
 |---------------|-------------|-------------|
-| Never Married | -39,617     | -3,133      |
+| Never Married | 0 (ref)     | -3,133      |
 | Div/Wid/Sep   |   6,175     |             |
 | Married       |  12,861     |             |
 
@@ -936,11 +941,11 @@ moderndive::get_regression_table(model_03) |>
 
 <br> 
 
-|               | Men         | Women                         | 
-|---------------|-------------|-------------------------------|
-| Never Married | -39,617     | -3,133                        |
-| Div/Wid/Sep   |   6,175     | -3,133 + 6,175 - 4,366 = 673  |
-| Married       |  12,861     |                               |
+|               | Men         | Women                            | 
+|---------------|-------------|----------------------------------|
+| Never Married | 0 (ref)     | -3,133                           |
+| Div/Wid/Sep   |   6,175     | -3,133 + 6,175 - 4,366 = -1,324  |
+| Married       |  12,861     |                                  |
 
 ##  {.sparse-slide data-menu-title="Categorical X Categorical" .smaller}
 
@@ -960,11 +965,11 @@ moderndive::get_regression_table(model_03) |>
 
 <br> 
 
-|               | Men         | Women                          | 
-|---------------|-------------|--------------------------------|
-| Never Married | -39,617     | -3,133                         |
-| Div/Wid/Sep   |   6,175     | -3,133 + 6,175 - 4,366 = 673   |
-| Married       |  12,861     | -3,133 + 12,861 - 5,822 = 1820 |
+|               | Men         | Women                            | 
+|---------------|-------------|----------------------------------|
+| Never Married | 0 (ref)     | -3,133                           |
+| Div/Wid/Sep   |   6,175     | -3,133 + 6,175 - 4,366 = -1,324  |
+| Married       |  12,861     | -3,133 + 12,861 - 5,822 = 3,906  |
 
 
 ##  {.sparse-slide data-menu-title="Interpretation" .smaller}

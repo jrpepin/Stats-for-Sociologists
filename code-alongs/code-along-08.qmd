@@ -87,7 +87,6 @@ remove(my_cat)
 
 ```{r}
 #| label: regress
-#| echo: false
 
 model <- lm(formula = realrinc ~ educ + hrs1 + sex + marital, data = my_data)
 
@@ -324,6 +323,7 @@ p_inc  <- estimate_means(
 
 p_inc
 ```
+
 ```{r}
 #| label: mod03-08
 
@@ -338,14 +338,12 @@ p_inc |>
     title = "Predicted Annual Income",
     subtitle = "by gender and marital status",
     caption = "Adjusted for age, work hours, and education") +
-  theme_minimal(18) +
   theme(
     legend.position = "none")
 
 ```
 
 **`estimate_contrasts()`**
-
 
 ```{r}
 #| label: mod03-09
@@ -380,8 +378,8 @@ moderndive::get_regression_table(model_04)
 
 ```
 
+**`estimate_means()`**
 
-**`estimate_means()`** 
 ```{r}
 #| label: mod04-03
 

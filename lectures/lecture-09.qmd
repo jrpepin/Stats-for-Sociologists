@@ -18,10 +18,10 @@ revealjs-plugins:
   - quiz
 filters:
     - openlinksinnewpage
-editor: 
-  markdown: 
+editor:
+  markdown:
     wrap: 72
-execute: 
+execute:
   echo: true
 ---
 
@@ -46,9 +46,26 @@ scale_colour_discrete <- function(...) scale_color_manual(values = my_palette)
 # https://egallic.fr/Recherche/aide-memoire/quarto_equation_colors.html#colors-in-equations-with-revealjs
 ```
 
+```{r}
+#| label: fmt-helpers
+#| include: false
+
+# helpers: fixed decimals, and an APA-style version with no leading zero
+fmt    <- function(x, d = 3) formatC(x, format = "f", digits = d)
+fmt_nz <- function(x, d = 3) sub("^0\\.", ".", fmt(x, d))
+fmt_p  <- function(p) if (p < .001) "< .001" else paste("=", fmt_nz(p))
+sig    <- function(p) if (p < .05) "significant" else "not significant"
+
+# pull one coefficient / p-value / R² from a model
+b   <- function(m, term) unname(coef(m)[term])
+p   <- function(m, term) summary(m)$coefficients[term, "Pr(>|t|)"]
+r2  <- function(m) summary(m)$r.squared
+ar2 <- function(m) summary(m)$adj.r.squared
+```
+
 # Agenda {data-menu-title="Agenda" background-image="images/calendar.png" background-size="100px" background-repeat="repeat"}
 
-- Step-wise regression
+- Building models
 - Logistic regression
 
 ::: notes
@@ -58,8 +75,8 @@ scale_colour_discrete <- function(...) scale_color_manual(values = my_palette)
 
 By the end of the lecture, you will be able to ...
 
--   Generate and communicate predictions from OLS regression models.
--   Estimate, visualize, and communicate interaction effects in OLS regression models.
+-   XXX
+-   YYY
 
 # Code-along 09 {data-menu-title="Code-along" background-image="images/terminal.png"}
 
@@ -73,18 +90,14 @@ Load the standard packages and new package `modelbased`.
 #| message: false
 #| label: load
 
-# install.packages("modelsummary")
-
-library(tidyverse) 
+library(tidyverse)
 library(haven) # not core tidyverse
 library(gssr)
 library(gssrdoc)
 library(summarytools)
-library(gtsummary) 
+library(gtsummary)
 library(modelbased)
 library(modelsummary)
-
-# do not load moderndive(), use it specifically 
 
 ```
 
@@ -102,6 +115,9 @@ gss22 <- gss_get_yr(2022)
 ## Variables {.sparse-slide .smaller}
 
 - `realrinc` R's income in constant \$
+- `lifenow` R's rating of life overall now from 0-10
+- `childs` Number of children
+- `mntlhlth` Days of poor mental health past 30 days
 - `age` Age of respondent
 - `educ` Respondents highest edu credit
 - `hrs1` How many hours did you work last week
@@ -125,17 +141,17 @@ my_cat <- gss22 |>
   zap_missing() |>
   mutate(
     sex = as_factor(sex),
-    marital = as_factor(marital)) |> 
+    marital = as_factor(marital)) |>
   droplevels()
 
 # Continuous Variables
 my_con <- gss22 |>
-  select(id, age, educ, hrs1, realrinc, lifenow, tvhours, childs, mntlhlth) |>
-  mutate(across(c(age, educ, hrs1, realrinc, lifenow, tvhours, childs, mntlhlth),
+  select(id, age, educ, hrs1, realrinc, lifenow, childs, mntlhlth) |>
+  mutate(across(c(age, educ, hrs1, realrinc, lifenow, childs, mntlhlth),
                 as.numeric))
 
 # Combine the two dataframes
-my_data <- full_join(my_cat, my_con, by = c("id")) |> 
+my_data <- full_join(my_cat, my_con, by = c("id")) |>
   drop_na() |>
   mutate(
     marital = recode(
@@ -163,23 +179,25 @@ coef_labels <- c(
   income10k = "Income ($10k)",
   mntlhlth = "Poor mental health days",
   lifenow = "Life satisfaction",
-  "educ:sexfemale" = "Education × Female")
+  "educ:income10k" = "Education × Income")
 ```
 
 
-# Models {.theme-section}
+# Building Models {.theme-section}
 
 ## {data-menu-title="Models" .sparse-slide .smaller}
 
 **Most analysts will run several models predicting a single outcome (Model 1, Model 2, etc.)**
 
+<br>
+
 [**Why?**]{style="color: #3498DB; font-size: 200%; font-family: 'Shadows Into Light'"}
 
 <br>
 
--   Elaborate on an apparent relationship between two variables  
--   Explore alternative (or competing) explanations  
--   Test whether apparent associations “hold up” under more stringent conditions  
+-   Elaborate on an apparent relationship between two variables
+-   Explore alternative (or competing) explanations
+-   Test whether apparent associations “hold up” under more stringent conditions
 
 <br>
 
@@ -191,91 +209,118 @@ Must use a consistent sample size in order to compare across models.
 
 ## {data-menu-title="Models" .sparse-slide .smaller}
 
-[Several relationships may be present when a third variable, Z…is included in the analysis of a two-variable system.]{style="color: #18BC9C; font-size: 150%"}  
+[Several relationships may be present when a third variable (Z) is included in the analysis of two-variables.]{style="color: #18BC9C; font-size: 150%"}
 
-<br>  
+<br>
 
-[**Confounders**  
+[**Confounders**
 The relationship between X and Y is spurious—both predicted by Z]{.fragment}
-  
-[**Covariates**  
-Other variables in the model that predict Y, but mostly unrelated to the relationship between X and Y]{.fragment}  
-  
-[**Moderators**  
-The relationship between X and Y depends on Z  
-*Does a third variable change the relationship between X and Y?*]{.fragment}  
 
-[**Mediators**  
-Explains the relationship between X and Y (X🡪Z🡪Y)  
-*Does a third variable help explain the relationship between X and Y?*]{.fragment}  
+[**Covariates**
+Other variables in the model that predict Y, but mostly unrelated to the relationship between X and Y]{.fragment}
 
-## {data-menu-title="Models" .sparse-slide .smaller}
+[**Moderators**
+The relationship between X and Y depends on Z (*interactions*)
+*Does a third variable change the relationship between X and Y?*]{.fragment}
+
+[**Mediators**
+Explains the relationship between X and Y (X🡪Z🡪Y)
+*Does a third variable help explain the relationship between X and Y?*]{.fragment}
+
+## Mediators {.sparse-slide .smaller}
 
 ![](images/08/conditional.png)
 
 ## Conditions for mediation {.sparse-slide .smaller}
 
-IV🡪DV relationship is significant  
-> Regression 1: regress DV IV  
+IV🡪DV relationship is significant
+> Regression 1: regress DV IV
 
-IV🡪MV relationship is significant  
-> Regression 2: regress MV IV  
+IV🡪MV relationship is significant
+> Regression 2: regress MV IV
 
-MV🡪DV relationship is significant when IV is controlled  
-> Regression 3: regress DV IV MV  
+MV🡪DV relationship is significant when IV is controlled
+> Regression 3: regress DV IV MV
 
 
-<br> 
+<br>
 
 
 ::: {.callout-tip icon="false"}
 ## {{< fa hat-wizard >}} Heads Up!
 
-The IV🡪DV coefficient must be larger when MV is not controlled than in the model when MV is controlled	(Regression 1 & 3)
+The IV🡪DV coefficient must be closer to zero when MV is controlled than when it is not (Regression 1 & 3).
 :::
 
 ::: notes
-mediation can be said to occur when:  
-1.  the IV significantly affects the DV in the absence of the mediator  
-2.  the IV significantly affects the mediator  
-3.  the mediator has a significant unique effect on the DV, and  
-4.  the effect of the IV on the DV shrinks upon the addition of the mediator to the model. 
+mediation can be said to occur when:
+1.  the IV significantly affects the DV in the absence of the mediator
+2.  the IV significantly affects the mediator
+3.  the mediator has a significant unique effect on the DV, and
+4.  the effect of the IV on the DV shrinks upon the addition of the mediator to the model.
 
 :::
 
-##  {data-menu-title="Code Meets Question" .sparse-slide .smaller background-image="images/gears-solid-full.png" background-size="80px" background-repeat="repeat"}
+##  {data-menu-title="Code Meets Question" .sparse-slide  background-image="images/gears-solid-full.png" background-size="80px" background-repeat="repeat"}
 
 ::: task
 {{< fa lightbulb >}} Does income help explain the relationship between education and life satisfaction?
 :::
+
 ```{r}
-#| label: mediator
-#| eval: false
+#| label: mediator-code
+#| eval: FALSE
 
 models <- list(
   "Total Effect" = lm(lifenow ~ educ, data = my_data),
-  "Path A" = lm(realrinc ~ educ, data = my_data),
-  "Direct + Indirect" = lm(lifenow ~ educ + realrinc, data = my_data)
-)
-```
-
-```{r}
-#| label: mediator-table
-#| echo: false
-
-models <- list(
-  "Total Effect" = lm(lifenow ~ educ, data = my_data),
-  "Path A" = lm(realrinc ~ educ, data = my_data),
-  "Direct + Indirect" = lm(lifenow ~ educ + realrinc, data = my_data)
+  "Path A" = lm(income10k ~ educ, data = my_data),
+  "Direct + Indirect" = lm(lifenow ~ educ + income10k, data = my_data)
 )
 
 modelsummary(
   models,
+  title = "Does income mediate the education–life satisfaction association?",
   statistic = "std.error",
-  stars = TRUE,
+  stars = c("*" = .05, "**" = .01, "***" = .001),
   gof_map = c("nobs", "r.squared")
 )
+```
 
+
+## {data-menu-title="Mediator" .sparse-slide .smaller}
+
+```{r}
+#| label: mediator-table
+#| echo: FALSE
+
+models <- list(
+  "Total Effect" = lm(lifenow ~ educ, data = my_data),
+  "Path A" = lm(income10k ~ educ, data = my_data),
+  "Direct + Indirect" = lm(lifenow ~ educ + income10k, data = my_data)
+)
+
+modelsummary(
+  models,
+  title = "Does income mediate the education–life satisfaction association?",
+  statistic = "std.error",
+  stars = c("*" = .05, "**" = .01, "***" = .001),
+  gof_map = c("nobs", "r.squared")
+)
+```
+
+
+```{r}
+#| label: mediator-values
+#| include: false
+
+b_total  <- b(models[["Total Effect"]], "educ")
+b_direct <- b(models[["Direct + Indirect"]], "educ")
+pct_red  <- (b_total - b_direct) / b_total
+
+r2_total <- r2(models[["Total Effect"]])
+r2_full  <- r2(models[["Direct + Indirect"]])
+
+p_direct <- p(models[["Direct + Indirect"]], "educ")
 ```
 
 
@@ -285,158 +330,315 @@ modelsummary(
 {{< fa lightbulb >}} Does income help explain the relationship between education and life satisfaction?
 :::
 
-**Lesson 1:** Coefficients can change when a mediator is added.  
+**Lesson 1:** Coefficients can change when a mediator is added.
 
-- Education's coefficient falls from `0.092` to `0.060`  
-- About a 35% reduction  
+- Education's coefficient falls from `r fmt(b_total)` to `r fmt(b_direct)`
+- About a `r round(pct_red * 100)`% reduction
 
-> $\frac{0.092 - 0.060}{0.092} \approx 0.35$
+> $\frac{`r fmt(b_total)` - `r fmt(b_direct)`}{`r fmt(b_total)`} \approx `r fmt(pct_red, 2)`$
 
-- Evidence of partial mediation because the direct effect remains positive and significant  
+- Evidence of partial mediation because the direct effect remains positive and `r sig(p_direct)`
 
-**Lesson 2:** Model fit can improve when theoretically important variables are included.  
+::: {.fragment}
+**Lesson 2:** Model fit can improve when theoretically important variables are included.
 
-- $R^2$ increases from `.024` to `.053`   
-- Income explains additional variation in life satisfaction beyond education alone  
-
-## {data-menu-title="Moderation vs Mediation" .smaller .sparse-slide}
-
-|  | **Mediation** | **Moderation** |
-|:---|:---|:---|
-| **Question** | Does income help explain the relationship between education and life satisfaction? | Does the relationship between education and life satisfaction depend on income? |
-| **Concept** | Income explains **why** education is associated with life satisfaction. | Income changes **how strongly** education is associated with life satisfaction. |
-| **Model** | `lifenow ~ educ`<br>`realrinc ~ educ`<br>`lifenow ~ educ + realrinc` | `lifenow ~ educ * realrinc` |
-
-::: aside 
-Formal test of the indirect effect: `mediation()` or `lavaan()`
+- $R^2$ increases from `r fmt_nz(r2_total)` to `r fmt_nz(r2_full)`
+- Income explains additional variation in life satisfaction beyond education alone
 :::
 
 ## Mediation in a Paper {.sparse-slide .smaller}
 
 ::: task
-{{< fa lightbulb >}} Does income account for the association between education and TV watching?
+{{< fa lightbulb >}} Does income help explain the association between education and life satisfaction, net of controls?
 :::
+
+<br>
 
 ```{r}
 #| label: paper-mediator
-#| output-location: slide
+#| eval: FALSE
 
 models_med <- list(
-  "Model 1: Education"  = lm(tvhours ~ educ, data = my_data),
-  "Model 2: + Controls" = lm(tvhours ~ educ + age + sex + marital + childs,
+  "Model 1: Education"  = lm(lifenow ~ educ, data = my_data),
+  "Model 2: + Controls" = lm(lifenow ~ educ + age + sex + marital + childs,
                              data = my_data),
-  "Model 3: + Income"   = lm(tvhours ~ educ + age + sex + marital + childs
+  "Model 3: + Income"   = lm(lifenow ~ educ + age + sex + marital + childs
                              + income10k, data = my_data)
 )
 
 modelsummary(
   models_med,
   statistic = "std.error",
-  stars = TRUE,
+  stars = c("*" = .05, "**" = .01, "***" = .001),
+  coef_rename = coef_labels,
+  gof_map = c("nobs", "adj.r.squared")
+  )
+```
+
+## {data-menu-title="Mediation in a Paper" .sparse-slide}
+
+```{r}
+#| label: paper-mediator-table
+#| echo: FALSE
+
+models_med <- list(
+  "Model 1: Education"  = lm(lifenow ~ educ, data = my_data),
+  "Model 2: + Controls" = lm(lifenow ~ educ + age + sex + marital + childs,
+                             data = my_data),
+  "Model 3: + Income"   = lm(lifenow ~ educ + age + sex + marital + childs
+                             + income10k, data = my_data)
+)
+
+modelsummary(
+  models_med,
+  statistic = "std.error",
+  stars = c("*" = .05, "**" = .01, "***" = .001),
   coef_rename = coef_labels,
   gof_map = c("nobs", "adj.r.squared"),
   output = "flextable") |>
-  flextable::fontsize(size = 14, part = "all") |>
+  flextable::fontsize(size = 16, part = "all") |>
   flextable::padding(padding.top = 1, padding.bottom = 1, part = "all") |>
-  flextable::autofit()
+  flextable::autofit() |>
+  flextable::add_header_lines("OLS Regression of Life Satisfaction: Income as a Mediator") |>
+  flextable::fontsize(i = 1, size = 20, part = "header") |>
+  flextable::bold(i = 1, part = "header") |>
+  flextable::align(i = 1, align = "left", part = "header")
+```
+
+
+```{r}
+#| label: paper-mediator-values
+#| include: false
+
+med_b1 <- b(models_med[[1]], "educ")
+med_b2 <- b(models_med[[2]], "educ")
+med_b3 <- b(models_med[[3]], "educ")
+med_pct_ctrl <- (med_b1 - med_b2) / med_b1
+med_pct_med  <- (med_b2 - med_b3) / med_b2
+med_p2 <- p(models_med[[2]], "educ")
+med_p3 <- p(models_med[[3]], "educ")
+
+# path a (education -> income), same controls; not shown in the table
+med_path_a <- lm(income10k ~ educ + age + sex + marital + childs, data = my_data)
+med_b_a    <- b(med_path_a, "educ")
+med_p_a    <- p(med_path_a, "educ")
+
+# path b (income -> life satisfaction, net of education and controls)
+med_b_inc  <- b(models_med[[3]], "income10k")
+med_p_inc  <- p(models_med[[3]], "income10k")
 ```
 
 ::: notes
-Model 1: unadjusted association.  
-Model 2: net of controls (total effect).  
-Model 3: net of controls and income (direct effect). 
-Compare educ in Models 1 to 2 (effect of controls) and Models 2 to 3 (effect of the
-mediator).  
+Same question as the earlier example, now with controls. Only income is added in Model 3.
+Model 1: unadjusted association (educ = `r fmt(med_b1)`).
+Model 2: net of controls, the total effect (educ = `r fmt(med_b2)`, p `r fmt_p(med_p2)`).
+Model 3: net of controls and income, the direct effect (educ = `r fmt(med_b3)`, p `r fmt_p(med_p3)`).
+Controls change the educ coefficient by `r round(med_pct_ctrl * 100)`% (Model 1 to 2);
+adding income changes it by another `r round(med_pct_med * 100)`% (Model 2 to 3).
+Path a (not in table): education → income = `r fmt(med_b_a)` (p `r fmt_p(med_p_a)`).
+Path b: income → life satisfaction = `r fmt(med_b_inc)` (p `r fmt_p(med_p_inc)`).
 The shrinkage is descriptive. It is not a test of the indirect effect.
 :::
 
 ## Moderation in a Paper {.sparse-slide .smaller}
 
 ::: task
-{{< fa lightbulb >}} Does the association between education and TV watching differ for women and men?
+{{< fa lightbulb >}} Does the association between education and life satisfaction depend on income?
 :::
 
 ```{r}
 #| label: paper-moderator
-#| output-location: slide
+#| eval: FALSE
 
 models_mod <- list(
-  "Model 1: Education"     = lm(tvhours ~ educ, data = my_data),
-  "Model 2: + Controls"    = lm(tvhours ~ educ + sex + age + marital + childs,
+  "Model 1: Education"     = lm(lifenow ~ educ, data = my_data),
+  "Model 2: + Income"      = lm(lifenow ~ educ + income10k + age + sex + marital + childs,
                                 data = my_data),
-  "Model 3: + Interaction" = lm(tvhours ~ educ * sex + age + marital + childs,
+  "Model 3: + Interaction" = lm(lifenow ~ educ * income10k + age + sex + marital + childs,
                                 data = my_data)
 )
 
 modelsummary(
   models_mod,
   statistic = "std.error",
-  stars = TRUE,
+  stars = c("*" = .05, "**" = .01, "***" = .001),
+  coef_rename = coef_labels,
+  gof_map = c("nobs", "adj.r.squared")
+)
+```
+
+## {data-menu-title="Moderation in a Paper" .sparse-slide}
+
+```{r}
+#| label: paper-moderator-table
+#| echo: FALSE
+
+models_mod <- list(
+  "Model 1: Education"     = lm(lifenow ~ educ, data = my_data),
+  "Model 2: + Income"      = lm(lifenow ~ educ + income10k + age + sex + marital + childs,
+                                data = my_data),
+  "Model 3: + Interaction" = lm(lifenow ~ educ * income10k + age + sex + marital + childs,
+                                data = my_data)
+)
+
+modelsummary(
+  models_mod,
+  statistic = "std.error",
+  stars = c("*" = .05, "**" = .01, "***" = .001),
   coef_rename = coef_labels,
   gof_map = c("nobs", "adj.r.squared"),
   output = "flextable") |>
   flextable::fontsize(size = 14, part = "all") |>
   flextable::padding(padding.top = 1, padding.bottom = 1, part = "all") |>
-  flextable::autofit()
+  flextable::autofit() |>
+  flextable::add_header_lines("OLS Regression of Life Satisfaction: Education × Income Interaction") |>
+  flextable::fontsize(i = 1, size = 20, part = "header") |>
+  flextable::bold(i = 1, part = "header") |>
+  flextable::align(i = 1, align = "left", part = "header")
+```
 
+```{r}
+#| label: paper-moderator-values
+#| include: false
+
+mod3     <- models_mod[[3]]
+int_term <- grep("^educ:income10k", names(coef(mod3)), value = TRUE)[1]
+
+mod_b_educ <- b(mod3, "educ")      # slope of educ when income = 0
+mod_b_int  <- b(mod3, int_term)    # change in the educ slope per $10k of income
+mod_p_int  <- p(mod3, int_term)
+
+# education slope at representative incomes (in $10k): $10k, $25k, $50k
+incs       <- c(1, 2.5, 5)
+mod_slopes <- setNames(mod_b_educ + mod_b_int * incs, incs)
 ```
 
 ::: notes
-Sex is in Model 2 because an interaction model must include both main
-effects. 
-Model 3 adds one coefficient (Education × Female), so its t-test
-answers "does the slope differ?"  
-In Model 3, the Education coefficient is the slope for men (the reference group), not an overall effect.  
-Show each
-group's slope with estimate_slopes(models_mod[[3]], trend = "educ",
-by = "sex").  
+Model 2 here is the same model as Model 3 on the mediation slide.
+Mediation asked: does the educ coefficient shrink when income enters? (Yes.)
+Moderation asks a different question: does the educ slope itself depend on income?
+Income is in Model 2 because an interaction model must include both main effects.
+Model 3 adds one coefficient (Education × Income = `r fmt(mod_b_int, 4)`,
+p `r fmt_p(mod_p_int)`). Here the change in slope is `r sig(mod_p_int)`.
+Lesson: the same variable can explain *why* (mediation) without changing *how strongly* (moderation).
+In Model 3, the Education coefficient (`r fmt(mod_b_educ)`) is the slope at $0 income,
+the bottom edge of the data.
+Slopes at real incomes:
+$10k = `r fmt(mod_slopes["1"])`, $25k = `r fmt(mod_slopes["2.5"])`,
+$50k = `r fmt(mod_slopes["5"])`.
+Show slopes across incomes with estimate_slopes(models_mod[[3]], trend = "educ", by = "income10k").
 :::
 
-## Theory-Driven Blocks in a Paper {.sparse-slide .smaller}
+## Moderation vs Mediation {.smaller .sparse-slide}
+
+::: {style="font-size: 80%;"}
+
+|  | **Mediation** | **Moderation** |
+|:---|:---|:---|
+| **Question** | Does income help explain the relationship between education and life satisfaction? | Does the relationship between education and life satisfaction depend on income? |
+| **Concept** | Income explains **why** education is associated with life satisfaction. | Income changes **how strongly** education is associated with life satisfaction. |
+| **Model** | `lifenow ~ educ + controls`<br>`income10k ~ educ + controls`<br>`lifenow ~ educ + income10k + controls` | `lifenow ~ educ * income10k + controls` |
+| **Look at** | Does the `educ` coefficient shrink when `income10k` is added? | Is the `educ:income10k` coefficient significant? |
+
+:::
+
+::: aside
+Formal test of the indirect effect: `mediation()` or `lavaan()`
+:::
+
+## Theory-Driven Blocks {.sparse-slide .smaller}
 
 ::: task
-{{< fa lightbulb >}} What predicts TV watching as we add each set of variables?
+{{< fa lightbulb >}} What predicts life satisfaction?
 :::
 
 ```{r}
 #| label: paper-blocks
-#| output-location: slide
+#| eval: FALSE
 
 models_blocks <- list(
-  "Model 1: Demographic"   = lm(tvhours ~ age + sex + educ, data = my_data),
-  "Model 2: + Family"      = lm(tvhours ~ age + sex + educ + marital + childs,
+  "Model 1: Demographic"   = lm(lifenow ~ age + sex + educ, data = my_data),
+  "Model 2: + Family"      = lm(lifenow ~ age + sex + educ + marital + childs,
                                 data = my_data),
-  "Model 3: + Economic"    = lm(tvhours ~ age + sex + educ + marital + childs
+  "Model 3: + Economic"    = lm(lifenow ~ age + sex + educ + marital + childs
                                 + hrs1 + income10k, data = my_data),
-  "Model 4: + Mental health" = lm(tvhours ~ age + sex + educ + marital + childs
-                                + hrs1 + income10k + mntlhlth + lifenow,
+  "Model 4: + Mental health" = lm(lifenow ~ age + sex + educ + marital + childs
+                                + hrs1 + income10k + mntlhlth,
+                                data = my_data)
+)
+
+modelsummary(
+  models_blocks,
+  title = "Table 4. OLS Regression of Life Satisfaction: Nested Blocks of Predictors",
+  statistic = "std.error",
+  stars = c("*" = .05, "**" = .01, "***" = .001),
+  coef_rename = coef_labels,
+  gof_map = c("nobs", "adj.r.squared")
+  )
+```
+
+## {data-menu-title="Theory-Driven Blocks" .sparse-slide}
+
+```{r}
+#| label: paper-blocks-table
+#| echo: FALSE
+
+models_blocks <- list(
+  "Model 1: Demographic"   = lm(lifenow ~ age + sex + educ, data = my_data),
+  "Model 2: + Family"      = lm(lifenow ~ age + sex + educ + marital + childs,
+                                data = my_data),
+  "Model 3: + Economic"    = lm(lifenow ~ age + sex + educ + marital + childs
+                                + hrs1 + income10k, data = my_data),
+  "Model 4: + Mental health" = lm(lifenow ~ age + sex + educ + marital + childs
+                                + hrs1 + income10k + mntlhlth,
                                 data = my_data)
 )
 
 modelsummary(
   models_blocks,
   statistic = "std.error",
-  stars = TRUE,
+  stars = c("*" = .05, "**" = .01, "***" = .001),
   coef_rename = coef_labels,
   gof_map = c("nobs", "adj.r.squared"),
   output = "flextable") |>
   flextable::fontsize(size = 14, part = "all") |>
   flextable::padding(padding.top = 1, padding.bottom = 1, part = "all") |>
-  flextable::autofit()
+  flextable::autofit() |>
+  flextable::add_header_lines("OLS Regression of Life Satisfaction: Nested Blocks of Predictors") |>
+  flextable::fontsize(i = 1, size = 20, part = "header") |>
+  flextable::bold(i = 1, part = "header") |>
+  flextable::align(i = 1, align = "left", part = "header")
+```
+
+
+```{r}
+#| label: paper-blocks-values
+#| include: false
+
+blk_ar2   <- sapply(models_blocks, ar2)
+blk_delta <- diff(blk_ar2)
+blk_n     <- sapply(models_blocks, nobs)
 ```
 
 ::: notes
-Each model keeps all earlier blocks. Read across a row to see how a
-coefficient changes when a block enters, and down the R² row to see how
-much each block adds. Marital status adds two coefficients, so judge the
-block by the change in R², not by one t-test. Block order is a theoretical
-claim: mental health could be a cause or a consequence of TV time.
+Each model keeps all earlier blocks.  
+Read across a row to see how a coefficient changes when a block enters, and down the R² row to see how much each block adds.  
+Adjusted R²: `r paste(fmt_nz(blk_ar2), collapse = " → ")`
+(change: family `r fmt(blk_delta[1])`, economic `r fmt(blk_delta[2])`,
+mental health `r fmt(blk_delta[3])`).
+N across models: `r paste(blk_n, collapse = ", ")`.
+`r if (length(unique(blk_n)) > 1) "Ns differ, so the R² changes partly reflect different samples." else ""`
+Marital status adds two coefficients, so judge the block by the change in R²,
+not by one t-test.  
+Block order is a theoretical claim: mental health could be a cause or a consequence of life satisfaction.  
 :::
+
+## Comparing between models
 
 
 ## Standardized regression coefficients
 
-## Comparing between models
+https://www.r-bloggers.com/2021/02/testing-the-equality-of-regression-coefficients/
 
 ## Survey weights
 

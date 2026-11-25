@@ -311,7 +311,7 @@ modelsummary(
   coef_rename = coef_labels,
   gof_map = c("nobs", "r.squared"),
   output = "flextable") |>
-  flextable::fontsize(size = 14, part = "all") |>
+  flextable::fontsize(size = 18, part = "all") |>
   flextable::padding(padding.top = 1, padding.bottom = 1, part = "all") |>
   flextable::autofit() |>
   flextable::add_header_lines("OLS Regression: Income as a Mediator (No Controls)") |>
@@ -435,7 +435,7 @@ modelsummary(
   coef_rename = coef_labels,
   gof_map = c("nobs", "adj.r.squared"),
   output = "flextable") |>
-  flextable::fontsize(size = 14, part = "all") |>
+  flextable::fontsize(size = 18, part = "all") |>
   flextable::padding(padding.top = 1, padding.bottom = 1, part = "all") |>
   flextable::autofit() |>
   flextable::add_header_lines("OLS Regression of Life Satisfaction: Income as a Mediator, Net of Controls") |>
@@ -534,20 +534,28 @@ models_mod <- list(
                                 data = my_data)
 )
 
-modelsummary(
+ft <- modelsummary(
   models_mod,
   statistic = "std.error",
   stars = c("*" = .05, "**" = .01, "***" = .001),
   coef_rename = coef_labels,
   gof_map = c("nobs", "adj.r.squared"),
   output = "flextable") |>
-  flextable::fontsize(size = 14, part = "all") |>
+  flextable::fontsize(size = 17, part = "all") |>
   flextable::padding(padding.top = 1, padding.bottom = 1, part = "all") |>
   flextable::autofit() |>
   flextable::add_header_lines("OLS Regression of Life Satisfaction: Education × Income Interaction") |>
   flextable::fontsize(i = 1, size = 20, part = "header") |>
   flextable::bold(i = 1, part = "header") |>
   flextable::align(i = 1, align = "left", part = "header")
+
+# rows to highlight: the coefficient rows plus the SE row under each
+hl <- which(ft$body$dataset[[1]] %in% c("Education (years)", "Income ($10k)", "Education × Income"))
+hl <- c(hl, hl + 1)
+
+ft |>
+  flextable::bg(i = hl, bg = "#D6EAF8", part = "body") |>
+  flextable::bold(i = hl, part = "body")
 ```
 
 ```{r}
@@ -669,7 +677,7 @@ modelsummary(
   coef_rename = coef_labels,
   gof_map = c("nobs", "adj.r.squared"),
   output = "flextable") |>
-  flextable::fontsize(size = 14, part = "all") |>
+  flextable::fontsize(size = 17, part = "all") |>
   flextable::padding(padding.top = 1, padding.bottom = 1, part = "all") |>
   flextable::autofit() |>
   flextable::add_header_lines("OLS Regression of Life Satisfaction: Nested Blocks of Predictors") |>
@@ -759,7 +767,7 @@ modelsummary(
   coef_rename = coef_labels,
   gof_map = c("nobs", "adj.r.squared"),
   output = "flextable") |>
-  flextable::fontsize(size = 14, part = "all") |>
+  flextable::fontsize(size = 18, part = "all") |>
   flextable::padding(padding.top = 1, padding.bottom = 1, part = "all") |>
   flextable::autofit() |>
   flextable::add_header_lines("OLS Regression of Life Satisfaction: Separate Models by Gender") |>
@@ -829,7 +837,7 @@ p_educ  <- compare[["p"]]
 
 <br>
 
-::: {.fragment style="font-size: 70%;"}
+::: {.fragment style="font-size: 75%;"}
 
 [**A package is safer than hand-coding the z-test: it estimates both models jointly and uses robust standard errors**]{style="color: #3498DB; font-family: 'Shadows Into Light'"}
 
@@ -990,7 +998,7 @@ modelsummary(
 ```
 
 ::: aside
-[tutorial](https://murraylax.org/rtutorials/multregression_standardized.html)
+For more information, see this [tutorial](https://murraylax.org/rtutorials/multregression_standardized.html)
 :::
 
 ::: notes
@@ -1020,7 +1028,7 @@ ft <- modelsummary(
                   "scale(income10k)" = "Income ($10k)"),
   gof_map = c("nobs", "adj.r.squared"),
   output = "flextable") |>
-  flextable::fontsize(size = 14, part = "all") |>
+  flextable::fontsize(size = 18, part = "all") |>
   flextable::padding(padding.top = 1, padding.bottom = 1, part = "all") |>
   flextable::autofit() |>
   flextable::add_header_lines("OLS Regression of Life Satisfaction: Unstandardized and Standardized Coefficients") |>
@@ -1150,7 +1158,7 @@ modelsummary(
   coef_rename = coef_labels,
   gof_map = c("nobs", "adj.r.squared"),
   output = "flextable") |>
-  flextable::fontsize(size = 14, part = "all") |>
+  flextable::fontsize(size = 18, part = "all") |>
   flextable::padding(padding.top = 1, padding.bottom = 1, part = "all") |>
   flextable::autofit() |>
   flextable::add_header_lines("OLS Regression of Life Satisfaction: Unweighted and Weighted Estimates") |>
@@ -1226,7 +1234,7 @@ ft <- modelsummary(
   coef_rename = coef_labels,
   gof_map = c("nobs", "adj.r.squared"),
   output = "flextable") |>
-  flextable::fontsize(size = 14, part = "all") |>
+  flextable::fontsize(size = 18, part = "all") |>
   flextable::padding(padding.top = 1, padding.bottom = 1, part = "all") |>
   flextable::autofit() |>
   flextable::add_header_lines("OLS vs. Logistic Regression of Above-Average Life Satisfaction") |>
@@ -1377,7 +1385,7 @@ ft <- modelsummary(
   coef_rename = coef_labels,
   gof_map = "nobs",
   output = "flextable") |>
-  flextable::fontsize(size = 14, part = "all") |>
+  flextable::fontsize(size = 18, part = "all") |>
   flextable::padding(padding.top = 1, padding.bottom = 1, part = "all") |>
   flextable::autofit() |>
   flextable::add_header_lines("Logistic Regression of Above-Average Life Satisfaction: Log Odds and Odds Ratios") |>
@@ -1482,7 +1490,7 @@ ft <- modelsummary(
   coef_rename = coef_labels,
   gof_map = "nobs",
   output = "flextable") |>
-  flextable::fontsize(size = 14, part = "all") |>
+  flextable::fontsize(size = 17, part = "all") |>
   flextable::padding(padding.top = 1, padding.bottom = 1, part = "all") |>
   flextable::autofit() |>
   flextable::add_header_lines("Logistic Regression of Above-Average Life Satisfaction: Log Odds, Odds Ratios, and AMEs") |>

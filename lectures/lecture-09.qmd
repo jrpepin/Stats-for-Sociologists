@@ -11,11 +11,9 @@ format:
     slide-number: c
     code-annotations: hover
     title-slide-attributes:
-      data-background-image: "images/08/tophat.png"
+      data-background-image: "images/09/end.png"
       data-background-size: 250px
       data-background-position: bottom center
-revealjs-plugins:
-  - quiz
 filters:
     - openlinksinnewpage
 editor:
@@ -25,16 +23,13 @@ execute:
   echo: true
 ---
 
-```{r echo=FALSE}
-
+```{r}
 #| label: setup
 #| message: false
 #| include: false
 
 ## Load packages, custom functions, and styles
 source("custom-setup-styles.R")
-
-knitr::opts_knit$set(digits = 2)
 
 # Set global theme with base font size 20
 theme_set(theme_minimal(base_size = 20))
@@ -66,6 +61,7 @@ ar2 <- function(m) summary(m)$adj.r.squared
 # Agenda {data-menu-title="Agenda" background-image="images/calendar.png" background-size="100px" background-repeat="repeat"}
 
 - Building models
+- Interpretation in practice
 - Logistic regression
 
 ::: notes
@@ -75,8 +71,9 @@ ar2 <- function(m) summary(m)$adj.r.squared
 
 By the end of the lecture, you will be able to ...
 
-- XXX
-- YYY
+- Build and compare nested OLS models to assess mediation and moderation.
+- Compare coefficients across groups and predictors.
+- Estimate, interpret, and communicate logistic regression results.
 
 # Code-along 09 {data-menu-title="Code-along" background-image="images/terminal.png"}
 
@@ -84,7 +81,7 @@ Download and open [code-along-09.qmd]()
 
 ## Packages {.sparse-slide}
 
-Load the standard packages and new package `modelbased`.
+Load the standard packages and new package `marginaleffects`.
 
 ```{r}
 #| message: false
@@ -98,7 +95,7 @@ library(summarytools)
 library(gtsummary)
 library(modelbased)
 library(modelsummary)
-
+library(marginaleffects)
 ```
 
 ## Load your data {.sparse-slide}
@@ -114,14 +111,14 @@ gss22 <- gss_get_yr(2022)
 
 ## Variables {.sparse-slide .smaller}
 
-- `realrinc` R's income in constant \$
+- `realrinc` R's personal income in constant \$
 - `lifenow` R's rating of life overall now from 0-10
 - `childs` Number of children
 - `mntlhlth` Days of poor mental health past 30 days
-- `age` Age of respondent
-- `educ` Respondents highest edu credit
-- `hrs1` How many hours did you work last week
-- `sex` Respondents sex
+- `age` R's age
+- `educ` R's highest year of school completed
+- `hrs1` Hours R worked last week
+- `sex` R's sex
 - `marital` R's marital status
 - `wtssnrps_as` survey weights
 
@@ -187,8 +184,8 @@ coef_labels <- c(
 
 ##  {.sparse-slide .smaller data-menu-title="Models"}
 
-**Most analysts will run several models predicting a single outcome
-(Model 1, Model 2, etc.)**
+**Most analysts will run several models predicting a single outcome**  
+(Model 1, Model 2, etc.)
 
 <br>
 
@@ -206,7 +203,7 @@ coef_labels <- c(
 ::: {.callout-tip icon="false"}
 ## {{< fa hat-wizard >}} Heads Up!
 
-Must use a consistent sample size in order to compare across models.
+Use the same sample (the same respondents) in every model you compare.
 :::
 
 ##  {.sparse-slide .smaller data-menu-title="Models"}
@@ -239,12 +236,10 @@ help explain the relationship between X and Y?*]{.fragment}
 
 ## Conditions for mediation {.sparse-slide .smaller}
 
-IV🡪DV relationship is significant \> Regression 1: regress DV IV
-
-IV🡪MV relationship is significant \> Regression 2: regress MV IV
-
-MV🡪DV relationship is significant when IV is controlled \> Regression 3:
-regress DV IV MV
+1. IV🡪DV relationship is significant: `lm(DV ~ IV)`
+2. IV🡪MV relationship is significant: `lm(MV ~ IV)`
+3. MV🡪DV relationship is significant when IV is controlled:
+   `lm(DV ~ IV + MV)`
 
 <br>
 
@@ -252,7 +247,7 @@ regress DV IV MV
 ## {{< fa hat-wizard >}} Heads Up!
 
 The IV🡪DV coefficient must be closer to zero when MV is controlled than
-when it is not (Regression 1 & 3).
+when it is not (compare models 1 and 3).
 :::
 
 ::: notes
@@ -275,9 +270,9 @@ education and life satisfaction?
 #| eval: FALSE
 
 models <- list(
-  "Total Effect" = lm(lifenow ~ educ, data = my_data),
-  "Path A" = lm(income10k ~ educ, data = my_data),
-  "Direct + Indirect" = lm(lifenow ~ educ + income10k, data = my_data)
+  "Total Effect"  = lm(lifenow ~ educ, data = my_data),
+  "Path A"        = lm(income10k ~ educ, data = my_data),
+  "Direct Effect" = lm(lifenow ~ educ + income10k, data = my_data)
 )
 
 modelsummary(
@@ -296,18 +291,24 @@ modelsummary(
 #| echo: FALSE
 
 models <- list(
-  "Total Effect" = lm(lifenow ~ educ, data = my_data),
-  "Path A" = lm(income10k ~ educ, data = my_data),
-  "Direct + Indirect" = lm(lifenow ~ educ + income10k, data = my_data)
+  "Total Effect"  = lm(lifenow ~ educ, data = my_data),
+  "Path A"        = lm(income10k ~ educ, data = my_data),
+  "Direct Effect" = lm(lifenow ~ educ + income10k, data = my_data)
 )
 
 modelsummary(
   models,
-  title = "Does income mediate the education–life satisfaction association?",
   statistic = "std.error",
   stars = c("*" = .05, "**" = .01, "***" = .001),
-  gof_map = c("nobs", "r.squared")
-)
+  gof_map = c("nobs", "r.squared"),
+  output = "flextable") |>
+  flextable::fontsize(size = 16, part = "all") |>
+  flextable::padding(padding.top = 1, padding.bottom = 1, part = "all") |>
+  flextable::autofit() |>
+  flextable::add_header_lines("OLS Regression of Life Satisfaction: Income as a Mediator") |>
+  flextable::fontsize(i = 1, size = 20, part = "header") |>
+  flextable::bold(i = 1, part = "header") |>
+  flextable::align(i = 1, align = "left", part = "header")
 ```
 
 ```{r}
@@ -315,13 +316,13 @@ modelsummary(
 #| include: false
 
 b_total  <- b(models[["Total Effect"]], "educ")
-b_direct <- b(models[["Direct + Indirect"]], "educ")
+b_direct <- b(models[["Direct Effect"]], "educ")
 pct_red  <- (b_total - b_direct) / b_total
 
 r2_total <- r2(models[["Total Effect"]])
-r2_full  <- r2(models[["Direct + Indirect"]])
+r2_full  <- r2(models[["Direct Effect"]])
 
-p_direct <- p(models[["Direct + Indirect"]], "educ")
+p_direct <- p(models[["Direct Effect"]], "educ")
 ```
 
 ##  {.sparse-slide .smaller data-menu-title="Conclusion" background-image="images/gears-solid-full.png" background-size="80px" background-repeat="repeat"}
@@ -339,8 +340,8 @@ education and life satisfaction?
 
 > $\frac{`r fmt(b_total)` - `r fmt(b_direct)`}{`r fmt(b_total)`} \approx `r fmt(pct_red, 2)`$
 
-- Evidence of partial mediation because the direct effect remains
-  positive and statistically significant.
+- `r if (p_direct < .05) "Evidence of partial mediation: the direct effect shrinks but remains statistically significant" else "Consistent with full mediation: the direct effect is no longer statistically significant"`
+  (*p* `r fmt_p(p_direct)`)
 
 ::: fragment
 **Lesson 2:** Model fit can improve when theoretically important
@@ -463,7 +464,7 @@ satisfaction depend on income?
 
 models_mod <- list(
   "Model 1: Education"     = lm(lifenow ~ educ, data = my_data),
-  "Model 2: + Income"      = lm(lifenow ~ educ + income10k + age + sex + marital + childs,
+  "Model 2: + Income & Controls" = lm(lifenow ~ educ + income10k + age + sex + marital + childs,
                                 data = my_data),
   "Model 3: + Interaction" = lm(lifenow ~ educ * income10k + age + sex + marital + childs,
                                 data = my_data)
@@ -486,7 +487,7 @@ modelsummary(
 
 models_mod <- list(
   "Model 1: Education"     = lm(lifenow ~ educ, data = my_data),
-  "Model 2: + Income"      = lm(lifenow ~ educ + income10k + age + sex + marital + childs,
+  "Model 2: + Income & Controls" = lm(lifenow ~ educ + income10k + age + sex + marital + childs,
                                 data = my_data),
   "Model 3: + Interaction" = lm(lifenow ~ educ * income10k + age + sex + marital + childs,
                                 data = my_data)
@@ -531,8 +532,8 @@ Mediation asked: does the educ coefficient shrink when income enters?
 depend on income? Income is in Model 2 because an interaction model must
 include both main effects. Model 3 adds one coefficient (Education ×
 Income = `r fmt(mod_b_int, 4)`, p `r fmt_p(mod_p_int)`). Here the change
-in slope is `r sig(mod_p_int)`. Lesson: the same variable can explain
-*why* (mediation) without changing *how strongly* (moderation). In Model
+in slope is `r sig(mod_p_int)`. Lesson: mediation and moderation are different
+questions; a variable can explain *why* without changing *how strongly*, or vice versa. In Model
 3, the Education coefficient (`r fmt(mod_b_educ)`) is the slope at \$0
 income, the bottom edge of the data. Slopes at real incomes: \$10k =
 `r fmt(mod_slopes["1"])`, \$25k = `r fmt(mod_slopes["2.5"])`, \$50k =
@@ -561,7 +562,7 @@ estimate_slopes(models_mod\[\[3\]\], trend = "educ", by = "income10k").
 :::
 
 ::: aside
-Formal test of the indirect effect: `mediation()` or `lavaan()`
+Formal test of the indirect effect: `mediation::mediate()` or `lavaan::sem()`
 :::
 
 ## Theory-driven blocks {.sparse-slide .smaller}
@@ -652,12 +653,12 @@ Block order is a theoretical claim: mental health could be a cause or a
 consequence of life satisfaction.
 :::
 
-# Interpretation 2.0 {.theme-section}
+# Interpretation in Practice {.theme-section}
 
 ## Comparing between models {.sparse-slide .smaller}
 
 ::: task
-{{< fa lightbulb >}} Do men and women benefit equally from education?
+{{< fa lightbulb >}} Is education equally associated with life satisfaction for men and women?
 :::
 
 ```{r}
@@ -707,7 +708,7 @@ modelsummary(
   flextable::add_header_lines("OLS Regression of Life Satisfaction: Separate models by gender") |>
   flextable::fontsize(i = 1, size = 20, part = "header") |>
   flextable::bold(i = 1, part = "header") |>
-  flextable::align(i = 1, align = "left", part = "header") 
+  flextable::align(i = 1, align = "left", part = "header")
 ```
 
 ##  {data-menu-title="Comparing between models" .sparse-slide .smaller}
@@ -740,11 +741,11 @@ $b_{educ,w}$ = education coefficient for women
 #| output-location: fragment
 
 z_test <- function(m1, m2, term, vc = vcov) {
-  b1 <- coef(m1)[term]; 
-  b2 <- coef(m2)[term]
-  se1 <- sqrt(vc(m1)[term, term]); 
+  b1  <- unname(coef(m1)[term])
+  b2  <- unname(coef(m2)[term])
+  se1 <- sqrt(vc(m1)[term, term])
   se2 <- sqrt(vc(m2)[term, term])
-  z <- (b1 - b2) / sqrt(se1^2 + se2^2)
+  z   <- (b1 - b2) / sqrt(se1^2 + se2^2)
   c(b_1 = b1, b_2 = b2, diff = b1 - b2, z = z, p = 2 * pnorm(-abs(z)))
 }
 
@@ -761,16 +762,16 @@ b_men   <- b(m_men, "educ")
 b_women <- b(m_women, "educ")
 p_men   <- p(m_men, "educ")
 p_women <- p(m_women, "educ")
-p_educ <- compare[["p.educ"]]
+p_educ  <- compare[["p"]]
 
 ```
 
 ## Comparing between models {.sparse-slide}
 
 Education was positively and statistically significantly associated with life satisfaction
-among women (*b* = `r round(b_women, 3)`, *p* = `r round(p_women, 3)`) but not among men
-(*b* = `r round(b_men, 3)`, *p* = `r round(p_men, 3)`). However, a formal test showed that
-the two coefficients did not statistically significantly differ (*p* = `r round(p_educ, 3)`). The data therefore do not support the conclusion that education matters more for women's life satisfaction than for men's.
+among women (*b* = `r fmt(b_women)`, *p* `r fmt_p(p_women)`) but not among men
+(*b* = `r fmt(b_men)`, *p* `r fmt_p(p_men)`). However, a formal test showed that
+the two coefficients did not differ significantly (*p* `r fmt_p(p_educ)`). The data therefore do not support the conclusion that education matters more for women's life satisfaction than for men's.
 
 ::: notes
 *How could that be? One coef. was significant and the other was not!... next slide
@@ -803,9 +804,6 @@ preds <- bind_rows(
   pm(m_women,  "educ = c(12:20)", "Separate models", sex = "female")) |>
   mutate(sex      = factor(sex, levels = c("male", "female")),
          approach = factor(approach, levels = c("Pooled", "1 interaction", "Separate models")))
-
-end_labels <- preds |> 
-  filter(educ == max(educ))
 
 ggplot(preds, aes(educ, Mean, color = sex, fill = sex)) +
 #  geom_ribbon(aes(ymin = CI_low, ymax = CI_high), alpha = 0.12, color = NA) +
@@ -870,7 +868,7 @@ Part of the gap comes from men and women having different control values, such a
 ## Standardized regression coefficients {.sparse-slide .smaller}
 
 ::: task
-{{< fa lightbulb >}} Is education or household income more strongly associated with life satisfaction?
+{{< fa lightbulb >}} Is education or income more strongly associated with life satisfaction?
 :::
 
 <br>
@@ -892,7 +890,7 @@ modelsummary(
   stars = c("*" = .05, "**" = .01, "***" = .001),
   coef_rename = coef_labels,
   gof_map = c("nobs", "adj.r.squared")
-  ) 
+  )
 
 ```
 
@@ -926,7 +924,7 @@ modelsummary(
   flextable::add_header_lines("OLS Regression of Life Satisfaction: (un)standardized coefficients") |>
   flextable::fontsize(i = 1, size = 20, part = "header") |>
   flextable::bold(i = 1, part = "header") |>
-  flextable::align(i = 1, align = "left", part = "header") 
+  flextable::align(i = 1, align = "left", part = "header")
 
 ```
 
@@ -951,20 +949,21 @@ sd_income <- sd(my_data$income10k) * 10000
 
 ::: {.fragment}
 
-[**Is the coefficient difference statistically significantly?**]{style="color: #3498DB; font-family: 'Shadows Into Light'"}  
+[**Is the coefficient difference statistically significant?**]{style="color: #3498DB; font-family: 'Shadows Into Light'"}  
 
 ```{r}
 #| label: paper-std-coef-interp02
- 
-V <- vcov(mod_02) 
-b <- coef(mod_02)
-z <- (b["scale(income10k)"] - b["scale(educ)"]) /
-     sqrt(V["scale(income10k)", "scale(income10k)"] + V["scale(educ)", "scale(educ)"] -
-          2 * V["scale(income10k)", "scale(educ)"])
-c(diff = round(unname(b["scale(income10k)"] - b["scale(educ)"]), 3), 
-  z = round(unname(z), 3),
-  p = round(unname(2 * pnorm(-abs(z))),3)
-  )
+
+V_std <- vcov(mod_02)
+b_std <- coef(mod_02)
+inc <- "scale(income10k)"
+edu <- "scale(educ)"
+
+std_diff <- unname(b_std[inc] - b_std[edu])
+std_z    <- std_diff / sqrt(V_std[inc, inc] + V_std[edu, edu] - 2 * V_std[inc, edu])
+std_p    <- 2 * pnorm(-abs(std_z))
+
+round(c(diff = std_diff, z = std_z, p = std_p), 3)
 
 ```
 :::
@@ -974,13 +973,13 @@ A larger β isn't automatically "more important."
 It means a typical amount of variation in that variable goes with more change in the outcome.  
 Standardized coefficients depend on how spread out each variable is in this sample.  
   
-Bigger isn't the same as significantly bigger. 
+Bigger isn't the same as significantly bigger.
 To test whether the education and income β's actually differ, use the formula from earlier (plus account for covariance since in same model)  
 :::
 
 ## Standardized regression coefficients {.sparse-slide}
   
-Holding the other variables constant, a one-standard-deviation increase in education (`r round(sd_educ, 1)` years) is associated with a 0.14-point increase in life satisfaction, and a one-standard-deviation increase in household income ($`r format(round(sd_income, -3), big.mark = ",")`) with a 0.19-point increase. Therefore, income is somewhat more strongly associated with life satisfaction than education but the difference is not statistically significant.
+Holding the other variables constant, a one-standard-deviation increase in education (`r round(sd_educ, 1)` years) is associated with a `r fmt(unname(b_std[edu]), 2)`-point increase in life satisfaction, and a one-standard-deviation increase in income (\$`r format(round(sd_income, -3), big.mark = ",")`) with a `r fmt(unname(b_std[inc]), 2)`-point increase. `r if (std_diff > 0) "Income" else "Education"` is therefore somewhat more strongly associated with life satisfaction, `r if (std_p < .05) "and the difference is statistically significant" else "but the difference is not statistically significant"` (*p* `r fmt_p(std_p)`).
 
 ::: notes
 the coefficients for female, age, marital status and children are identical in the two columns, because those variables weren't rescaled. The intercept changes because education and income are now centered at their means. The new intercept is the predicted life satisfaction at average education and income, for the reference groups (male, never married) at age 0 with no children. Adjusted R² is the same in both columns, so standardizing changes the units of the coefficients and nothing about how well the model fits.
@@ -1004,6 +1003,7 @@ m_wt   <- lm(lifenow ~ educ + income10k + sex + age + marital + childs,
              data = my_data, weights = wtssnrps_as)
 
 modelsummary(list("Unweighted" = m_unwt, "Weighted" = m_wt),
+             coef_rename = coef_labels,
              stars = c("*" = .05, "**" = .01, "***" = .001),
              gof_map = c("nobs", "adj.r.squared"))
 ```
@@ -1022,6 +1022,7 @@ m_wt   <- lm(lifenow ~ educ + income10k + sex + age + marital + childs,
              data = my_data, weights = wtssnrps_as)
 
 modelsummary(list("Unweighted" = m_unwt, "Weighted" = m_wt),
+             coef_rename = coef_labels,
              stars = c("*" = .05, "**" = .01, "***" = .001),
              gof_map = c("nobs", "adj.r.squared"),
   output = "flextable") |>
@@ -1031,7 +1032,7 @@ modelsummary(list("Unweighted" = m_unwt, "Weighted" = m_wt),
   flextable::add_header_lines("OLS Regression of Life Satisfaction: using survey weights") |>
   flextable::fontsize(i = 1, size = 20, part = "header") |>
   flextable::bold(i = 1, part = "header") |>
-  flextable::align(i = 1, align = "left", part = "header") 
+  flextable::align(i = 1, align = "left", part = "header")
 
 ```
 
@@ -1050,19 +1051,20 @@ Weights mainly change the **coefficients**, so the weighted model describes the 
 #| eval: FALSE
 #| code-line-numbers: "2,3,4,5|8,9|10,11"
 
-# Dichotomous lifenow (0-10) at the sample mean 
+# Dichotomize lifenow (0-10) at the sample mean
 avg_life <- mean(my_data$lifenow)
 
 my_data <- my_data |>
   mutate(sat_high = if_else(lifenow > avg_life, 1, 0))
 
-# The two models 
+# The two models
 m_ols   <- lm(sat_high ~ educ + income10k + sex + age + marital + childs,
               data = my_data)
 m_logit <- glm(sat_high ~ educ + income10k + sex + age + marital + childs,
                data = my_data, family = binomial)
 
 modelsummary(list("OLS" = m_ols, "Logit" = m_logit),
+             coef_rename = coef_labels,
              stars = c("*" = .05, "**" = .01, "***" = .001),
              gof_map = c("nobs", "adj.r.squared"))
 
@@ -1078,29 +1080,30 @@ modelsummary(list("OLS" = m_ols, "Logit" = m_logit),
 #| label: logit-compare
 #| echo: FALSE
 
-# Dichotomous lifenow (0-10) at the sample mean 
+# Dichotomize lifenow (0-10) at the sample mean
 avg_life <- mean(my_data$lifenow)
 
 my_data <- my_data |>
   mutate(sat_high = if_else(lifenow > avg_life, 1, 0))
 
-# The two models 
+# The two models
 m_ols   <- lm(sat_high ~ educ + income10k + sex + age + marital + childs,
               data = my_data)
 m_logit <- glm(sat_high ~ educ + income10k + sex + age + marital + childs,
                data = my_data, family = binomial)
 
 modelsummary(list("OLS" = m_ols, "Logit" = m_logit),
+             coef_rename = coef_labels,
              stars = c("*" = .05, "**" = .01, "***" = .001),
              gof_map = c("nobs", "adj.r.squared"),
   output = "flextable") |>
   flextable::fontsize(size = 14, part = "all") |>
   flextable::padding(padding.top = 1, padding.bottom = 1, part = "all") |>
   flextable::autofit() |>
-  flextable::add_header_lines("OLS Regression vs Logit Regression: Average Life Satisfaction") |>
+  flextable::add_header_lines("OLS Regression vs Logit Regression: Above-Average Life Satisfaction") |>
   flextable::fontsize(i = 1, size = 20, part = "header") |>
   flextable::bold(i = 1, part = "header") |>
-  flextable::align(i = 1, align = "left", part = "header") 
+  flextable::align(i = 1, align = "left", part = "header")
 
 ```
 
@@ -1189,45 +1192,17 @@ modelsummary(
   list("Log odds"    = m_logit,
        "Odds ratios" = m_logit),
   exponentiate = c(FALSE, TRUE),
-  coef_rename  = c(educ      = "Education (years)",
-                   income10k = "Income ($10k)",
-                   age       = "Age",
-                   childs    = "Number of children"),
+  coef_rename  = coef_labels,
              stars = c("*" = .05, "**" = .01, "***" = .001),
              gof_map = c("nobs", "adj.r.squared"))
 ```
-
-
-## {data-menu-title="Logistic Regression" .sparse-slide}
-
-```{r}
-#| label: log-odds-ratios-table
-#| eval: FALSE
-#| code-line-numbers: "8"
-
-m_logit <- glm(sat_high ~ educ + income10k + sex + age + marital + childs,
-               data = my_data, family = binomial)
-
-# One table, two scales
-modelsummary(
-  list("Log odds"    = m_logit,
-       "Odds ratios" = m_logit),
-  exponentiate = c(FALSE, TRUE),
-  coef_rename  = c(educ      = "Education (years)",
-                   income10k = "Income ($10k)",
-                   age       = "Age",
-                   childs    = "Number of children"),
-             stars = c("*" = .05, "**" = .01, "***" = .001),
-             gof_map = c("nobs", "adj.r.squared"))
-```
-
 
 
 ## {data-menu-title="Logistic Regression" .sparse-slide .smaller}
 
 :::: {.columns}
 
-::: {.column width = "60%"}
+::: {.column width="60%"}
 
 ```{r}
 #| label: logit-table
@@ -1241,31 +1216,28 @@ modelsummary(
   list("Log odds"    = m_logit,
        "Odds ratios" = m_logit),
   exponentiate = c(FALSE, TRUE),
-  coef_rename  = c(educ      = "Education (years)",
-                   income10k = "Income ($10k)",
-                   age       = "Age",
-                   childs    = "Number of children"),
+  coef_rename  = coef_labels,
              stars = c("*" = .05, "**" = .01, "***" = .001),
              gof_map = c("nobs", "adj.r.squared"),
   output = "flextable") |>
   flextable::fontsize(size = 14, part = "all") |>
   flextable::padding(padding.top = 1, padding.bottom = 1, part = "all") |>
   flextable::autofit() |>
-  flextable::add_header_lines("Log Odds vs Odds Ratios: Average Life Satisfaction") |>
+  flextable::add_header_lines("Log Odds vs Odds Ratios: Above-Average Life Satisfaction") |>
   flextable::fontsize(i = 1, size = 20, part = "header") |>
   flextable::bold(i = 1, part = "header") |>
-  flextable::align(i = 1, align = "left", part = "header") 
+  flextable::align(i = 1, align = "left", part = "header")
 ```
 
 :::
 
-::: {.column width = "40%"}
+::: {.column width="40%"}
 
 $e^{`r b_educ`}$ = **`r or_educ`** (an *odds ratio*).
 
 Each extra year of education multiplies the odds by `r or_educ`, a **`r pct_educ`%** change in the odds.  
   
-- OR > 1 means higher odds 
+- OR > 1 means higher odds
 - OR < 1 means lower odds
 - OR = 1 means no effect
 
@@ -1273,6 +1245,7 @@ Each extra year of education multiplies the odds by `r or_educ`, a **`r pct_educ
 ::::
 
 ## Log Odds, Odds, & Probabilities {.sparse-slide .smaller}
+
 | Step | Formula | Range |
 |---|---|---|
 | Probability | $p$ | 0 to 1 |
@@ -1294,7 +1267,7 @@ ggplot(aap_inc, aes(income10k, Probability)) +
   geom_ribbon(aes(ymin = CI_low, ymax = CI_high), fill = "#3498DB", alpha = 0.2) +
   geom_line(colour = "#3498DB", linewidth = 1.2) +
   scale_y_continuous(limits = c(0, 1), labels = scales::percent) +
-  labs(x = "Family income ($10k)",
+  labs(x = "Income ($10k)",
        y = "Average adjusted predicted probability",
        title = "Predicted probability of above average life satisfaction",
        caption = "Data: US General Social Survey (2022)") +
@@ -1310,13 +1283,11 @@ ggplot(aap_inc, aes(income10k, Probability)) +
 
 :::: {.columns}
 
-::: {.column width = "65%"}
+::: {.column width="65%"}
 
 ```{r}
 #| label: AME-table
 #| echo: FALSE
-
-library(marginaleffects)
 
 ame <- avg_slopes(m_logit)
 
@@ -1335,16 +1306,16 @@ modelsummary(
        "Odds ratios" = m_logit,
        "AME"         = ame),
   exponentiate = c(FALSE, TRUE, FALSE),
-  coef_rename  = c(educ = "Education (years)", income10k = "Income ($10k)",
-                   age = "Age", childs = "Number of children"),
-  stars = TRUE, gof_map = "nobs", fmt = 3,
+  coef_rename  = coef_labels,
+  stars = c("*" = .05, "**" = .01, "***" = .001),
+  gof_map = "nobs", fmt = 3,
   output = "flextable") |>
   flextable::fontsize(size = 16, part = "all") |>
   flextable::padding(padding.top = 1, padding.bottom = 1, part = "all") |>
   flextable::autofit() |>
   flextable::fontsize(i = 1, size = 14, part = "header") |>
   flextable::bold(i = 1, part = "header") |>
-  flextable::align(i = 1, align = "left", part = "header") 
+  flextable::align(i = 1, align = "left", part = "header")
 
 
 ```
@@ -1352,16 +1323,14 @@ modelsummary(
 [**Current best practice is to report AME in logit tables.**]{style="color: #3498DB; font-family: 'Shadows Into Light'"}  
 :::
 
-::: {.column width = "35%"}
+::: {.column width="35%"}
 
 ```{r}
 #| label: ame-values
 #| include: false
 
 # AME for education (convert to percentage points)
-ame_educ    <- round(ame$estimate[ame$term == "educ"] * 100, 1)
-ame_educ_p  <- round(ame$p.value[ame$term == "educ"], 3)
-ame_educ_4  <- round(ame_educ * 4, 1)
+ame_educ <- round(ame$estimate[ame$term == "educ"] * 100, 1)
 
 # AME for married vs. never married
 # (row is "maritalMarried" after the renaming step; if you skipped that step,
@@ -1369,24 +1338,16 @@ ame_educ_4  <- round(ame_educ * 4, 1)
 married_row <- ame$term == "maritalMarried" |
   (ame$term == "marital" & str_detect(ame$contrast, "^(mean\\()?Married"))
 
-ame_mar     <- round(ame$estimate[married_row] * 100, 1)
-ame_mar_p   <- ame$p.value[married_row]
-
-# Formats p: "< .001" if tiny, otherwise "= .012" (APA style, no leading zero)
-fmt_p <- function(p) {
-  if_else(p < .001, "< .001",
-          paste("=", sub("^0", "", sprintf("%.3f", p))))
-}
-
-ame_mar_p <- fmt_p(ame$p.value[married_row])
+ame_mar   <- round(ame$estimate[married_row] * 100, 1)
+ame_mar_p <- fmt_p(ame$p.value[married_row])  # fmt_p() from the fmt-helpers chunk
 
 ```
 
-Each extra year of education raises the probability of above-average life satisfaction by **`r ame_educ` percentage points**.  
+On average, each extra year of education is associated with a **`r ame_educ` percentage-point** higher probability of above-average life satisfaction.  
   
-Married people's probability of above-average life satisfaction is **`r ame_mar` percentage points** greater than that of never-married people (*p* `r ame_mar_p`).  
+On average, married respondents' probability of above-average life satisfaction is **`r ame_mar` percentage points** higher than never-married respondents' (*p* `r ame_mar_p`).  
   
-`marginaleffects::avg_slopes()` 
+`marginaleffects::avg_slopes()`
   
 :::
 
@@ -1396,16 +1357,16 @@ Married people's probability of above-average life satisfaction is **`r ame_mar`
 
 ## {data-menu-title="Comparing between models" .smaller .sparse-slide}
 
-[**Compare between models using a package instead of hard-coding equations.... is beneficial because they use robust standard errors**]{style="color: #3498DB; font-family: 'Shadows Into Light'"}
+[**A package is safer than hand-coding the z-test: it estimates both models jointly and uses robust standard errors**]{style="color: #3498DB; font-family: 'Shadows Into Light'"}
 
 ```{r}
 #| label: paper-compare-suest
+#| eval: false
 
 # install.packages("remotes")
 # remotes::install_github("tdmize/suest")
 
-library("suest")
-library("marginaleffects")
+library(suest)
 
 combined <- suest(m_men, m_women)
 

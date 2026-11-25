@@ -1,0 +1,375 @@
+---
+title: "Code-along 09"
+author: "FirstName LastName"
+editor: visual
+execute:
+  error: true
+format: pdf # or replace 'pdf' with 'typst'
+---
+
+# Setup
+
+## Packages
+
+Load the standard packages.
+
+```{r}
+#| message: false
+#| label: load
+
+library(tidyverse)
+library(haven) # not core tidyverse
+library(gssr)
+library(gssrdoc)
+library(summarytools)
+library(gtsummary)
+library(modelbased)
+library(modelsummary)
+
+```
+
+## Load your data
+
+```{r}
+#| label: gssdata
+
+# Load GSS 2022
+gss22 <- gss_get_yr(2022)
+
+```
+
+Make a df with only the (pretty) categorical and continuous variables
+we'll analyze.
+
+```{r}
+#| label: my-data
+
+# Categorical Variables
+my_cat <- gss22 |>
+  select(id, sex, marital) |>
+  zap_missing() |>
+  mutate(
+    sex = as_factor(sex),
+    marital = as_factor(marital)) |>
+  droplevels()
+
+# Continuous Variables
+my_con <- gss22 |>
+  select(id, wtssnrps_as, age, educ, hrs1, realrinc, lifenow, childs, mntlhlth) |>
+  mutate(across(c(age, educ, hrs1, realrinc, lifenow, childs, mntlhlth),
+                as.numeric))
+
+# Combine the two dataframes
+my_data <- full_join(my_cat, my_con, by = c("id")) |>
+  drop_na() |>
+  mutate(
+    marital = recode(
+      marital,
+      "married"       = "Married",
+      "never married" = "Never married",
+      "widowed"       = "Div/Wid/Sep",
+      "divorced"      = "Div/Wid/Sep",
+      "separated"     = "Div/Wid/Sep"),
+    marital = factor(
+      marital,
+      levels = c("Never married", "Div/Wid/Sep", "Married")),
+    income10k = realrinc / 10000
+  )
+
+remove(my_con) # clean up the Environment
+remove(my_cat)
+
+# show pretty labels in regression table
+coef_labels <- c(
+  age = "Age",
+  sexfemale = "Female",
+  "maritalDiv/Wid/Sep" = "Div/Wid/Sep (ref. = never married)",
+  maritalMarried = "Married",
+  childs = "Children",
+  educ = "Education (years)",
+  hrs1 = "Work hours",
+  income10k = "Income ($10k)",
+  mntlhlth = "Poor mental health days",
+  lifenow = "Life satisfaction",
+  "educ:income10k" = "Education × Income")
+```
+
+# Building Models
+
+## Mediation
+
+```{r}
+#| label: mediator
+
+models <- list(
+  "Total Effect"  = lm(lifenow ~ educ, data = my_data),
+  "Path A"        = lm(income10k ~ educ, data = my_data),
+  "Direct Effect" = lm(lifenow ~ educ + income10k, data = my_data)
+)
+
+modelsummary(
+  models,
+  title         = "OLS Regression: Income as a Mediator (No Controls)",
+  statistic     = "std.error",
+  stars         = c("*" = .05, "**" = .01, "***" = .001),
+  coef_rename   = coef_labels,
+  gof_map       = c("nobs", "r.squared")
+)
+```
+
+## Mediation in a paper
+
+```{r}
+#| label: paper-mediator
+
+models_med <- list(
+  "Model 1: Education"  = lm(lifenow ~ educ, data = my_data),
+  "Model 2: + Controls" = lm(lifenow ~ educ + age + sex + marital + childs,
+                             data = my_data),
+  "Model 3: + Income"   = lm(lifenow ~ educ + age + sex + marital + childs
+                             + income10k, data = my_data)
+)
+
+modelsummary(
+  models_med,
+  title = "OLS Regression of Life Satisfaction: Income as a Mediator, Net of Controls",
+  statistic   = "std.error",
+  stars       = c("*" = .05, "**" = .01, "***" = .001),
+  coef_rename = coef_labels,
+  gof_map     = c("nobs", "adj.r.squared")
+)
+```
+
+## Moderation in a paper
+
+```{r}
+#| label: paper-moderator
+
+models_mod <- list(
+  "Model 1: Education"           = lm(lifenow ~ educ, data = my_data),
+  "Model 2: + Income & Controls" = lm(lifenow ~ educ + income10k + age + sex 
+                                      + marital + childs, data = my_data),
+  "Model 3: + Interaction" = lm(lifenow ~ educ * income10k + age + sex 
+                                + marital + childs, data = my_data)
+)
+
+modelsummary(
+  models_mod,
+  title = "OLS Regression of Life Satisfaction: Education × Income Interaction",
+  statistic   = "std.error",
+  stars       = c("*" = .05, "**" = .01, "***" = .001),
+  coef_rename = coef_labels,
+  gof_map     = c("nobs", "adj.r.squared")
+)
+```
+
+## Theory-driven blocks
+
+```{r}
+#| label: paper-blocks
+
+models_blocks <- list(
+  "Model 1: Demographic"   = lm(lifenow ~ age + sex + educ, data = my_data),
+  "Model 2: + Family"      = lm(lifenow ~ age + sex + educ + marital + childs,
+                                data = my_data),
+  "Model 3: + Economic"    = lm(lifenow ~ age + sex + educ + marital + childs
+                                + hrs1 + income10k, data = my_data),
+  "Model 4: + Mental health" = lm(lifenow ~ age + sex + educ + marital + childs
+                                + hrs1 + income10k + mntlhlth, data = my_data)
+)
+
+modelsummary(
+  models_blocks,
+  title = "OLS Regression of Life Satisfaction: Nested Blocks of Predictors",
+  statistic   = "std.error",
+  stars       = c("*" = .05, "**" = .01, "***" = .001),
+  coef_rename = coef_labels,
+  gof_map     = c("nobs", "adj.r.squared")
+)
+```
+
+# Interpretation in Practice
+
+## Comparing between models
+
+```{r}
+#| label: paper-compare
+
+m_men <- lm(lifenow ~ educ + age + marital + childs + income10k,
+            data = subset(my_data, sex == "male"))
+
+m_women <- lm(lifenow ~ educ + age + marital + childs + income10k,
+              data = subset(my_data, sex == "female"))
+
+modelsummary(
+  list("Men" = m_men, "Women" = m_women),
+  title = "OLS Regression of Life Satisfaction: Separate Models by Gender",
+  statistic   = "std.error",
+  stars       = c("*" = .05, "**" = .01, "***" = .001),
+  coef_rename = coef_labels,
+  gof_map     = c("nobs", "adj.r.squared")
+)
+```
+
+**Coefficient difference test**
+
+```{r}
+#| label: paper-compare-z-test
+
+z_test <- function(m1, m2, term, vc = vcov) {
+  b1  <- unname(coef(m1)[term])
+  b2  <- unname(coef(m2)[term])
+  se1 <- sqrt(vc(m1)[term, term])
+  se2 <- sqrt(vc(m2)[term, term])
+  z   <- (b1 - b2) / sqrt(se1^2 + se2^2)
+  c(b_1 = b1, b_2 = b2, diff = b1 - b2, z = z, p = 2 * pnorm(-abs(z)))
+}
+
+compare <- z_test(m_men, m_women, "educ")
+
+compare
+
+```
+
+**Using a package**
+
+```{r}
+#| label: paper-compare-suest
+#| eval: false
+
+# DON'T RUN THIS CODE CHUNK -- FOR FUTURE REFERENCE
+
+# install.packages("remotes")
+# remotes::install_github("tdmize/suest")
+
+library(suest)
+library(marginaleffects)
+
+combined <- suest(m_men, m_women)
+
+effects_groups <- marginaleffects::avg_comparisons(combined, variables = "educ",
+                                  newdata = suest_newdata(combined))
+effects_groups
+
+marginaleffects::hypotheses(effects_groups, hypothesis = difference ~ revpairwise)
+
+```
+
+## Standardized regression coefficients
+
+```{r}
+#| label: std-coef
+
+mod_01 <- lm(lifenow ~ educ + income10k + sex + age + marital + childs,
+            data = my_data)
+
+mod_02 <- lm(lifenow ~ scale(educ) + scale(income10k) + sex + age + marital 
+             + childs, data = my_data)
+
+modelsummary(
+  list("Unstandardized" = mod_01, "Standardized" = mod_02),
+  title = "OLS Regression of Life Satisfaction: Unstandardized and Standardized Coefficients",
+  statistic   = "std.error",
+  stars       = c("*" = .05, "**" = .01, "***" = .001),
+  coef_rename = coef_labels,
+  gof_map     = c("nobs", "adj.r.squared")
+)
+```
+
+How much is 1 standard deviation change?
+
+```{r}
+#| label: sd
+
+sd(my_data$educ)
+sd(my_data$income10k) * 10000
+```
+
+Is the coefficient difference statistically significant?
+
+```{r}
+#| label: std-diff
+
+V_std <- vcov(mod_02)
+b_std <- coef(mod_02)
+inc <- "scale(income10k)"
+edu <- "scale(educ)"
+
+std_diff <- unname(b_std[inc] - b_std[edu])
+std_z    <- std_diff / sqrt(V_std[inc, inc] + V_std[edu, edu] - 2 * V_std[inc, edu])
+std_p    <- 2 * pnorm(-abs(std_z))
+
+round(c(diff = std_diff, z = std_z, p = std_p), 3)
+
+```
+
+## Survey weights
+
+```{r}
+#| label: survey-weights
+
+m_unwt <- lm(lifenow ~ educ + income10k + sex + age + marital + childs,
+             data = my_data)
+
+m_wt   <- lm(lifenow ~ educ + income10k + sex + age + marital + childs,
+             data = my_data, weights = wtssnrps_as)
+
+modelsummary(
+  list("Unweighted" = m_unwt, "Weighted" = m_wt),
+  title = "OLS Regression of Life Satisfaction: Unweighted and Weighted Estimates",
+  statistic   = "std.error",
+  stars       = c("*" = .05, "**" = .01, "***" = .001),
+  coef_rename = coef_labels,
+  gof_map     = c("nobs", "adj.r.squared")
+)
+```
+
+# Logistic Regression
+
+## OLS vs. logit
+
+```{r}
+#| label: logit
+
+# Dichotomize lifenow (0-10) at the sample mean
+avg_life <- mean(my_data$lifenow)
+
+my_data <- my_data |>
+  mutate(sat_high = if_else(lifenow > avg_life, 1, 0))
+
+# The two models
+m_ols   <- lm(sat_high ~ educ + income10k + sex + age + marital + childs,
+              data = my_data)
+m_logit <- glm(sat_high ~ educ + income10k + sex + age + marital + childs,
+               data = my_data, family = binomial)
+
+modelsummary(
+  list("OLS" = m_ols, "Logit" = m_logit),
+  title = "OLS vs. Logistic Regression of Above-Average Life Satisfaction",
+  statistic   = "std.error",
+  stars       = c("*" = .05, "**" = .01, "***" = .001),
+  coef_rename = coef_labels,
+  gof_map     = c("nobs", "adj.r.squared")
+)
+```
+
+## Log odds and odds ratios
+
+```{r}
+#| label: log-odds-ratios
+
+m_logit <- glm(sat_high ~ educ + income10k + sex + age + marital + childs,
+               data = my_data, family = binomial)
+
+# Same model with different scales
+modelsummary(
+  list("Log odds"    = m_logit,
+       "Odds ratios" = m_logit),
+  exponentiate = c(FALSE, TRUE),
+  title = "Logistic Regression of Above-Average Life Satisfaction: Log Odds and Odds Ratios",
+  statistic   = "std.error",
+  stars       = c("*" = .05, "**" = .01, "***" = .001),
+  coef_rename = coef_labels,
+  gof_map     = "nobs"
+)
+```

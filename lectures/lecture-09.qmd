@@ -81,7 +81,7 @@ Download and open [code-along-09.qmd]()
 
 ## Packages {.sparse-slide}
 
-Load the standard packages and new package `marginaleffects`.
+Load the standard packages.
 
 ```{r}
 #| message: false
@@ -95,7 +95,6 @@ library(summarytools)
 library(gtsummary)
 library(modelbased)
 library(modelsummary)
-library(marginaleffects)
 ```
 
 ## Load your data {.sparse-slide}
@@ -164,6 +163,9 @@ my_data <- full_join(my_cat, my_con, by = c("id")) |>
       levels = c("Never married", "Div/Wid/Sep", "Married")),
     income10k = realrinc / 10000
   )
+
+remove(my_con) # clean up the Environment
+remove(my_cat)
 
 # show pretty labels in regression table
 coef_labels <- c(
@@ -277,10 +279,11 @@ models <- list(
 
 modelsummary(
   models,
-  title = "Does income mediate the education–life satisfaction association?",
-  statistic = "std.error",
-  stars = c("*" = .05, "**" = .01, "***" = .001),
-  gof_map = c("nobs", "r.squared")
+  title         = "OLS Regression: Income as a Mediator (No Controls)",
+  statistic     = "std.error",
+  stars         = c("*" = .05, "**" = .01, "***" = .001),
+  coef_rename   = coef_labels,
+  gof_map       = c("nobs", "r.squared")
 )
 ```
 
@@ -300,12 +303,13 @@ modelsummary(
   models,
   statistic = "std.error",
   stars = c("*" = .05, "**" = .01, "***" = .001),
+  coef_rename = coef_labels,
   gof_map = c("nobs", "r.squared"),
   output = "flextable") |>
-  flextable::fontsize(size = 16, part = "all") |>
+  flextable::fontsize(size = 14, part = "all") |>
   flextable::padding(padding.top = 1, padding.bottom = 1, part = "all") |>
   flextable::autofit() |>
-  flextable::add_header_lines("OLS Regression of Life Satisfaction: Income as a Mediator") |>
+  flextable::add_header_lines("OLS Regression: Income as a Mediator (No Controls)") |>
   flextable::fontsize(i = 1, size = 20, part = "header") |>
   flextable::bold(i = 1, part = "header") |>
   flextable::align(i = 1, align = "left", part = "header")
@@ -376,11 +380,12 @@ models_med <- list(
 
 modelsummary(
   models_med,
-  statistic = "std.error",
-  stars = c("*" = .05, "**" = .01, "***" = .001),
+  title = "OLS Regression of Life Satisfaction: Income as a Mediator, Net of Controls",
+  statistic   = "std.error",
+  stars       = c("*" = .05, "**" = .01, "***" = .001),
   coef_rename = coef_labels,
-  gof_map = c("nobs", "adj.r.squared")
-  )
+  gof_map     = c("nobs", "adj.r.squared")
+)
 ```
 
 ##  {.sparse-slide data-menu-title="Mediation in a Paper"}
@@ -404,10 +409,10 @@ modelsummary(
   coef_rename = coef_labels,
   gof_map = c("nobs", "adj.r.squared"),
   output = "flextable") |>
-  flextable::fontsize(size = 16, part = "all") |>
+  flextable::fontsize(size = 14, part = "all") |>
   flextable::padding(padding.top = 1, padding.bottom = 1, part = "all") |>
   flextable::autofit() |>
-  flextable::add_header_lines("OLS Regression of Life Satisfaction: Income as a Mediator") |>
+  flextable::add_header_lines("OLS Regression of Life Satisfaction: Income as a Mediator, Net of Controls") |>
   flextable::fontsize(i = 1, size = 20, part = "header") |>
   flextable::bold(i = 1, part = "header") |>
   flextable::align(i = 1, align = "left", part = "header")
@@ -472,10 +477,11 @@ models_mod <- list(
 
 modelsummary(
   models_mod,
-  statistic = "std.error",
-  stars = c("*" = .05, "**" = .01, "***" = .001),
+  title = "OLS Regression of Life Satisfaction: Education × Income Interaction",
+  statistic   = "std.error",
+  stars       = c("*" = .05, "**" = .01, "***" = .001),
   coef_rename = coef_labels,
-  gof_map = c("nobs", "adj.r.squared")
+  gof_map     = c("nobs", "adj.r.squared")
 )
 ```
 
@@ -589,11 +595,11 @@ models_blocks <- list(
 modelsummary(
   models_blocks,
   title = "OLS Regression of Life Satisfaction: Nested Blocks of Predictors",
-  statistic = "std.error",
-  stars = c("*" = .05, "**" = .01, "***" = .001),
+  statistic   = "std.error",
+  stars       = c("*" = .05, "**" = .01, "***" = .001),
   coef_rename = coef_labels,
-  gof_map = c("nobs", "adj.r.squared")
-  )
+  gof_map     = c("nobs", "adj.r.squared")
+)
 ```
 
 ##  {.sparse-slide data-menu-title="Theory-driven blocks"}
@@ -609,8 +615,7 @@ models_blocks <- list(
   "Model 3: + Economic"    = lm(lifenow ~ age + sex + educ + marital + childs
                                 + hrs1 + income10k, data = my_data),
   "Model 4: + Mental health" = lm(lifenow ~ age + sex + educ + marital + childs
-                                + hrs1 + income10k + mntlhlth,
-                                data = my_data)
+                                + hrs1 + income10k + mntlhlth, data = my_data)
 )
 
 modelsummary(
@@ -674,12 +679,12 @@ m_women <- lm(lifenow ~ educ + age + marital + childs + income10k,
 
 modelsummary(
   list("Men" = m_men, "Women" = m_women),
-  title = "OLS Regression of Life Satisfaction: Separate models by gender",
-  statistic = "std.error",
-  stars = c("*" = .05, "**" = .01, "***" = .001),
+  title = "OLS Regression of Life Satisfaction: Separate Models by Gender",
+  statistic   = "std.error",
+  stars       = c("*" = .05, "**" = .01, "***" = .001),
   coef_rename = coef_labels,
-  gof_map = c("nobs", "adj.r.squared")
-  )
+  gof_map     = c("nobs", "adj.r.squared")
+)
 ```
 
 
@@ -705,7 +710,7 @@ modelsummary(
   flextable::fontsize(size = 14, part = "all") |>
   flextable::padding(padding.top = 1, padding.bottom = 1, part = "all") |>
   flextable::autofit() |>
-  flextable::add_header_lines("OLS Regression of Life Satisfaction: Separate models by gender") |>
+  flextable::add_header_lines("OLS Regression of Life Satisfaction: Separate Models by Gender") |>
   flextable::fontsize(i = 1, size = 20, part = "header") |>
   flextable::bold(i = 1, part = "header") |>
   flextable::align(i = 1, align = "left", part = "header")
@@ -765,6 +770,34 @@ p_women <- p(m_women, "educ")
 p_educ  <- compare[["p"]]
 
 ```
+
+<br>
+
+::: {.fragment style="font-size: 70%;"}
+
+[**A package is safer than hand-coding the z-test: it estimates both models jointly and uses robust standard errors**]{style="color: #3498DB; font-family: 'Shadows Into Light'"}
+
+```{r}
+#| label: paper-compare-suest
+#| eval: false
+
+# install.packages("remotes")
+# remotes::install_github("tdmize/suest")
+
+library(suest)
+library(marginaleffects)
+
+combined <- suest(m_men, m_women)
+
+effects_groups <- marginaleffects::avg_comparisons(combined, variables = "educ",
+                                  newdata = suest_newdata(combined))
+effects_groups
+
+marginaleffects::hypotheses(effects_groups, hypothesis = difference ~ revpairwise)
+
+```
+
+:::
 
 ## Comparing between models {.sparse-slide}
 
@@ -874,7 +907,7 @@ Part of the gap comes from men and women having different control values, such a
 <br>
 
 ```{r}
-#| label: paper-std-coef
+#| label: std-coef
 #| eval: FALSE
 #| code-line-numbers: "1,2|4,5"
 
@@ -886,12 +919,12 @@ mod_02 <- lm(lifenow ~ scale(educ) + scale(income10k) + sex + age + marital + ch
 
 modelsummary(
   list("Unstandardized" = mod_01, "Standardized" = mod_02),
-  statistic = "std.error",
-  stars = c("*" = .05, "**" = .01, "***" = .001),
+  title = "OLS Regression of Life Satisfaction: Unstandardized and Standardized Coefficients",
+  statistic   = "std.error",
+  stars       = c("*" = .05, "**" = .01, "***" = .001),
   coef_rename = coef_labels,
-  gof_map = c("nobs", "adj.r.squared")
-  )
-
+  gof_map     = c("nobs", "adj.r.squared")
+)
 ```
 
 ::: notes
@@ -921,11 +954,10 @@ modelsummary(
   flextable::fontsize(size = 14, part = "all") |>
   flextable::padding(padding.top = 1, padding.bottom = 1, part = "all") |>
   flextable::autofit() |>
-  flextable::add_header_lines("OLS Regression of Life Satisfaction: (un)standardized coefficients") |>
+  flextable::add_header_lines("OLS Regression of Life Satisfaction: Unstandardized and Standardized Coefficients") |>
   flextable::fontsize(i = 1, size = 20, part = "header") |>
   flextable::bold(i = 1, part = "header") |>
   flextable::align(i = 1, align = "left", part = "header")
-
 ```
 
 
@@ -985,9 +1017,9 @@ Holding the other variables constant, a one-standard-deviation increase in educa
 the coefficients for female, age, marital status and children are identical in the two columns, because those variables weren't rescaled. The intercept changes because education and income are now centered at their means. The new intercept is the predicted life satisfaction at average education and income, for the reference groups (male, never married) at age 0 with no children. Adjusted R² is the same in both columns, so standardizing changes the units of the coefficients and nothing about how well the model fits.
 :::
 
-## Survey weights {.sparse-slide}
+## Survey weights {.sparse-slide .smaller}
 
-Weights let respondents who are under-represented in the survey compared with the population count more, and those who are over-represented count less.
+[Weights let respondents who are under-represented in the survey compared with the population count more, and those who are over-represented count less.]{style="color: #3498DB; font-family: 'Shadows Into Light'"}  
 
 <br>  
 
@@ -1002,10 +1034,14 @@ m_unwt <- lm(lifenow ~ educ + income10k + sex + age + marital + childs,
 m_wt   <- lm(lifenow ~ educ + income10k + sex + age + marital + childs,
              data = my_data, weights = wtssnrps_as)
 
-modelsummary(list("Unweighted" = m_unwt, "Weighted" = m_wt),
-             coef_rename = coef_labels,
-             stars = c("*" = .05, "**" = .01, "***" = .001),
-             gof_map = c("nobs", "adj.r.squared"))
+modelsummary(
+  list("Unweighted" = m_unwt, "Weighted" = m_wt),
+  title = "OLS Regression of Life Satisfaction: Unweighted and Weighted Estimates",
+  statistic   = "std.error",
+  stars       = c("*" = .05, "**" = .01, "***" = .001),
+  coef_rename = coef_labels,
+  gof_map     = c("nobs", "adj.r.squared")
+)
 ```
 
 
@@ -1021,19 +1057,20 @@ m_unwt <- lm(lifenow ~ educ + income10k + sex + age + marital + childs,
 m_wt   <- lm(lifenow ~ educ + income10k + sex + age + marital + childs,
              data = my_data, weights = wtssnrps_as)
 
-modelsummary(list("Unweighted" = m_unwt, "Weighted" = m_wt),
-             coef_rename = coef_labels,
-             stars = c("*" = .05, "**" = .01, "***" = .001),
-             gof_map = c("nobs", "adj.r.squared"),
+modelsummary(
+  list("Unweighted" = m_unwt, "Weighted" = m_wt),
+  statistic = "std.error",
+  stars = c("*" = .05, "**" = .01, "***" = .001),
+  coef_rename = coef_labels,
+  gof_map = c("nobs", "adj.r.squared"),
   output = "flextable") |>
   flextable::fontsize(size = 14, part = "all") |>
   flextable::padding(padding.top = 1, padding.bottom = 1, part = "all") |>
   flextable::autofit() |>
-  flextable::add_header_lines("OLS Regression of Life Satisfaction: using survey weights") |>
+  flextable::add_header_lines("OLS Regression of Life Satisfaction: Unweighted and Weighted Estimates") |>
   flextable::fontsize(i = 1, size = 20, part = "header") |>
   flextable::bold(i = 1, part = "header") |>
   flextable::align(i = 1, align = "left", part = "header")
-
 ```
 
 ::: notes
@@ -1063,11 +1100,14 @@ m_ols   <- lm(sat_high ~ educ + income10k + sex + age + marital + childs,
 m_logit <- glm(sat_high ~ educ + income10k + sex + age + marital + childs,
                data = my_data, family = binomial)
 
-modelsummary(list("OLS" = m_ols, "Logit" = m_logit),
-             coef_rename = coef_labels,
-             stars = c("*" = .05, "**" = .01, "***" = .001),
-             gof_map = c("nobs", "adj.r.squared"))
-
+modelsummary(
+  list("OLS" = m_ols, "Logit" = m_logit),
+  title = "OLS vs. Logistic Regression of Above-Average Life Satisfaction",
+  statistic   = "std.error",
+  stars       = c("*" = .05, "**" = .01, "***" = .001),
+  coef_rename = coef_labels,
+  gof_map     = c("nobs", "adj.r.squared")
+)
 ```
 
 
@@ -1092,19 +1132,20 @@ m_ols   <- lm(sat_high ~ educ + income10k + sex + age + marital + childs,
 m_logit <- glm(sat_high ~ educ + income10k + sex + age + marital + childs,
                data = my_data, family = binomial)
 
-modelsummary(list("OLS" = m_ols, "Logit" = m_logit),
-             coef_rename = coef_labels,
-             stars = c("*" = .05, "**" = .01, "***" = .001),
-             gof_map = c("nobs", "adj.r.squared"),
+modelsummary(
+  list("OLS" = m_ols, "Logit" = m_logit),
+  statistic = "std.error",
+  stars = c("*" = .05, "**" = .01, "***" = .001),
+  coef_rename = coef_labels,
+  gof_map = c("nobs", "adj.r.squared"),
   output = "flextable") |>
   flextable::fontsize(size = 14, part = "all") |>
   flextable::padding(padding.top = 1, padding.bottom = 1, part = "all") |>
   flextable::autofit() |>
-  flextable::add_header_lines("OLS Regression vs Logit Regression: Above-Average Life Satisfaction") |>
+  flextable::add_header_lines("OLS vs. Logistic Regression of Above-Average Life Satisfaction") |>
   flextable::fontsize(i = 1, size = 20, part = "header") |>
   flextable::bold(i = 1, part = "header") |>
   flextable::align(i = 1, align = "left", part = "header")
-
 ```
 
 ```{r}
@@ -1118,6 +1159,8 @@ rng_ols  <- round(range(fit_ols), 2)
 b_educ   <- round(coef(m_logit)["educ"], 3)
 or_educ  <- round(exp(coef(m_logit)["educ"]), 3)
 pct_educ <- round((exp(coef(m_logit)["educ"]) - 1) * 100, 1)
+or_mar   <- round(exp(coef(m_logit)["maritalMarried"]), 1)
+pct_mar  <- round((exp(coef(m_logit)["maritalMarried"]) - 1) * 100, 1)
 ```
 
 :::
@@ -1187,14 +1230,17 @@ In the full OLS model, **`r n_out`** predicted values fall outside 0–1 (range:
 m_logit <- glm(sat_high ~ educ + income10k + sex + age + marital + childs,
                data = my_data, family = binomial)
 
-# One table, two scales
+# Same model with different scales
 modelsummary(
   list("Log odds"    = m_logit,
        "Odds ratios" = m_logit),
   exponentiate = c(FALSE, TRUE),
-  coef_rename  = coef_labels,
-             stars = c("*" = .05, "**" = .01, "***" = .001),
-             gof_map = c("nobs", "adj.r.squared"))
+  title = "Logistic Regression of Above-Average Life Satisfaction: Log Odds and Odds Ratios",
+  statistic   = "std.error",
+  stars       = c("*" = .05, "**" = .01, "***" = .001),
+  coef_rename = coef_labels,
+  gof_map     = "nobs"
+)
 ```
 
 
@@ -1216,14 +1262,15 @@ modelsummary(
   list("Log odds"    = m_logit,
        "Odds ratios" = m_logit),
   exponentiate = c(FALSE, TRUE),
-  coef_rename  = coef_labels,
-             stars = c("*" = .05, "**" = .01, "***" = .001),
-             gof_map = c("nobs", "adj.r.squared"),
+  statistic = "std.error",
+  stars = c("*" = .05, "**" = .01, "***" = .001),
+  coef_rename = coef_labels,
+  gof_map = "nobs",
   output = "flextable") |>
   flextable::fontsize(size = 14, part = "all") |>
   flextable::padding(padding.top = 1, padding.bottom = 1, part = "all") |>
   flextable::autofit() |>
-  flextable::add_header_lines("Log Odds vs Odds Ratios: Above-Average Life Satisfaction") |>
+  flextable::add_header_lines("Logistic Regression of Above-Average Life Satisfaction: Log Odds and Odds Ratios") |>
   flextable::fontsize(i = 1, size = 20, part = "header") |>
   flextable::bold(i = 1, part = "header") |>
   flextable::align(i = 1, align = "left", part = "header")
@@ -1236,6 +1283,12 @@ modelsummary(
 $e^{`r b_educ`}$ = **`r or_educ`** (an *odds ratio*).
 
 Each extra year of education multiplies the odds by `r or_educ`, a **`r pct_educ`%** change in the odds.  
+
+<br>
+
+Married respondents' odds of above-average life satisfaction are about **`r or_mar`** times those of never-married respondents, a **`r pct_mar`%** increase in the odds.
+
+<br>
   
 - OR > 1 means higher odds
 - OR < 1 means lower odds
@@ -1289,9 +1342,9 @@ ggplot(aap_inc, aes(income10k, Probability)) +
 #| label: AME-table
 #| echo: FALSE
 
-ame <- avg_slopes(m_logit)
+ame <- marginaleffects::avg_slopes(m_logit)
 
-# Rename factor AMEs (e.g., "sex" / "female - male") to match glm's "sexfemale"
+# Rename factor AMEs (e.g., "female - male") to match glm's names (e.g., "sexfemale")
 ame$term <- if_else(
   ame$contrast %in% c("dY/dX", "dY/dX "),
   ame$term,
@@ -1306,18 +1359,18 @@ modelsummary(
        "Odds ratios" = m_logit,
        "AME"         = ame),
   exponentiate = c(FALSE, TRUE, FALSE),
-  coef_rename  = coef_labels,
+  statistic = "std.error",
   stars = c("*" = .05, "**" = .01, "***" = .001),
-  gof_map = "nobs", fmt = 3,
+  coef_rename = coef_labels,
+  gof_map = "nobs",
   output = "flextable") |>
-  flextable::fontsize(size = 16, part = "all") |>
+  flextable::fontsize(size = 14, part = "all") |>
   flextable::padding(padding.top = 1, padding.bottom = 1, part = "all") |>
   flextable::autofit() |>
-  flextable::fontsize(i = 1, size = 14, part = "header") |>
+  flextable::add_header_lines("Logistic Regression of Above-Average Life Satisfaction: Log Odds, Odds Ratios, and AMEs") |>
+  flextable::fontsize(i = 1, size = 20, part = "header") |>
   flextable::bold(i = 1, part = "header") |>
   flextable::align(i = 1, align = "left", part = "header")
-
-
 ```
   
 [**Current best practice is to report AME in logit tables.**]{style="color: #3498DB; font-family: 'Shadows Into Light'"}  
@@ -1345,35 +1398,37 @@ ame_mar_p <- fmt_p(ame$p.value[married_row])  # fmt_p() from the fmt-helpers chu
 
 On average, each extra year of education is associated with a **`r ame_educ` percentage-point** higher probability of above-average life satisfaction.  
   
+<br>
+  
 On average, married respondents' probability of above-average life satisfaction is **`r ame_mar` percentage points** higher than never-married respondents' (*p* `r ame_mar_p`).  
   
+<br>
+
 `marginaleffects::avg_slopes()`
   
 :::
 
 ::::
 
-# Appendix {.theme-section}
+## Bonus: Recommended Reading {background-color="#F39C12" style="color: white;" .sparse-slide}
 
-## {data-menu-title="Comparing between models" .smaller .sparse-slide}
+:::: {.columns}
 
-[**A package is safer than hand-coding the z-test: it estimates both models jointly and uses robust standard errors**]{style="color: #3498DB; font-family: 'Shadows Into Light'"}
+::: {.column}
+![](images/09/Allison.jpg){fig-alt="Cover of <Book Title>" width="80%"}
+:::
 
-```{r}
-#| label: paper-compare-suest
-#| eval: false
 
-# install.packages("remotes")
-# remotes::install_github("tdmize/suest")
+::: {.column style="color: white;"}
 
-library(suest)
+<br>
 
-combined <- suest(m_men, m_women)
+Allison, Paul D. 1999. Multiple Regression: A Primer. Thousand Oaks, Calif: Pine Forge Press.
 
-effects_groups <- marginaleffects::avg_comparisons(combined, variables = "educ",
-                                  newdata = suest_newdata(combined))
-effects_groups
+<br>
 
-hypotheses(effects_groups, hypothesis = difference ~ revpairwise)
+[{{< fa book >}} Find it at the library](https://librarysearch.library.utoronto.ca/permalink/01UTORONTO_INST/1dl2m71/alma991106321724806196){style="color: white; text-decoration: underline;"}
 
-```
+:::
+
+::::

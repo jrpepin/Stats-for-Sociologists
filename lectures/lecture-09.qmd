@@ -183,7 +183,8 @@ coef_labels <- c(
 ```
 
 ::: notes
-note creating `coef_labels` to use for all our `modelsummary()` tables 
+note creating `coef_labels` to use for all our `modelsummary()` tables  
+also tranform income into units of $10,000 for readability.  
 :::
 
 # Building Models {.theme-section}
@@ -236,6 +237,14 @@ The relationship between X and Y depends on Z (*interactions*).\
 Explains the relationship between X and Y (X🡪Z🡪Y)\
 *Does a third variable help explain the relationship between X and Y?*]{.fragment}
 
+::: notes
+**Theory** tells you where Z sits in the causal story: before X, after X, or changing X's effect.  
+
+**Data** tells you whether Z matters: whether X's coefficient changes, whether the interaction is significant, and whether R² or SEs improve.  
+
+**Coefficient** change is evidence that fits a confounder or mediator story, but it doesn't prove one or tell them apart.  
+:::
+
 ## Mediators {.sparse-slide .smaller}
 
 ![](images/08/conditional.png)
@@ -243,16 +252,16 @@ Explains the relationship between X and Y (X🡪Z🡪Y)\
 ## Conditions for mediation {.sparse-slide .smaller}
 
 1. IV🡪DV relationship is significant: `lm(DV ~ IV)`
-2. IV🡪MV relationship is significant: `lm(MV ~ IV)`
+2. IV🡪MV relationship is significant: `lm(CV ~ IV)`
 3. MV🡪DV relationship is significant when IV is controlled:
-   `lm(DV ~ IV + MV)`
+   `lm(DV ~ IV + CV)`
 
 <br>
 
 ::: {.callout-tip icon="false"}
 ## {{< fa hat-wizard >}} Heads Up!
 
-The IV🡪DV coefficient must be closer to zero when MV is controlled than
+The IV🡪DV coefficient must be closer to zero when CV is controlled than
 when it is not (compare models 1 and 3).
 :::
 
@@ -577,7 +586,7 @@ mod_slopes <- setNames(mod_b_educ + mod_b_int * incs, incs)
 
 ::: notes
 In Model 3, the Education coefficient (`r fmt(mod_b_educ)`) is the edu slope for someone with $0 income.  
-Income coefficient (`r fmt(mod_b_educ)`) is the inc slope for someone with 0 years of education, which nobody in the sample has.  
+Income coefficient (`r fmt(mod_b_inc)`) is the inc slope for someone with 0 years of education, which nobody in the sample has.  
   
 Each additional $10,000 of income increases the education slope by 0.006 points of life satisfaction, but the interaction is not statistically significant.  
   
@@ -677,7 +686,7 @@ modelsummary(
   coef_rename = coef_labels,
   gof_map = c("nobs", "adj.r.squared"),
   output = "flextable") |>
-  flextable::fontsize(size = 17, part = "all") |>
+  flextable::fontsize(size = 16, part = "all") |>
   flextable::padding(padding.top = 1, padding.bottom = 1, part = "all") |>
   flextable::autofit() |>
   flextable::add_header_lines("OLS Regression of Life Satisfaction: Nested Blocks of Predictors") |>
